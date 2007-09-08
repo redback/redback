@@ -16,22 +16,82 @@
   -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.codehaus.plexus</groupId>
-    <artifactId>plexus</artifactId>
-    <version>1.0.10</version>
-  </parent>
   <groupId>org.codehaus.plexus.redback</groupId>
   <artifactId>redback</artifactId>
   <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Redback</name>
   <packaging>pom</packaging>
   <url>http://redback.codehaus.org/</url>
+  <inceptionYear>2006</inceptionYear>
+  
   <issueManagement>
     <system>Jira</system>
     <url>http://jira.codehaus.org/browse/REDBACK</url>
   </issueManagement>
-
+  
+  <ciManagement>
+    <notifiers>
+      <notifier>
+        <type>mail</type>
+        <configuration>
+          <address>dev@redback.codehaus.org</address>
+        </configuration>
+      </notifier>
+      <notifier>
+        <type>irc</type>
+        <configuration>
+          <host>irc.codehaus.org</host>
+          <port>6667</port>
+          <channel>#redback</channel>
+        </configuration>
+      </notifier>      
+    </notifiers>
+  </ciManagement>
+ 
+   <mailingLists>
+    <mailingList>
+      <name>Redback User List</name>
+      <subscribe>http://xircles.codehaus.org/manage_email/user%40redback.codehaus.org</subscribe>
+      <unsubscribe>http://xircles.codehaus.org/manage_email/user%40redback.codehaus.org</unsubscribe>
+      <archive>http://archive.redback.codehaus.org/user</archive>
+    </mailingList>
+    <mailingList>
+      <name>Redback Developer List</name>
+      <subscribe>http://xircles.codehaus.org/manage_email/dev%40redback.codehaus.org</subscribe>
+      <unsubscribe>http://xircles.codehaus.org/manage_email/dev%40redback.codehaus.org</unsubscribe>
+      <archive>http://archive.redback.codehaus.org/dev</archive>
+    </mailingList>
+    <mailingList>
+      <name>Redback Announce List</name>
+      <subscribe>http://xircles.codehaus.org/manage_email/announce%40redback.codehaus.org</subscribe>
+      <unsubscribe>http://xircles.codehaus.org/manage_email/announce%40redback.codehaus.org</unsubscribe>
+      <archive>http://archive.redback.codehaus.org/announce</archive>
+    </mailingList>
+    <mailingList>
+      <name>Redback Commit List</name>
+      <subscribe>http://xircles.codehaus.org/manage_email/scm%40redback.codehaus.org</subscribe>
+      <unsubscribe>http://xircles.codehaus.org/manage_email/scm%40redback.codehaus.org</unsubscribe>
+      <archive>http://archive.redback.codehaus.org/scm</archive>
+    </mailingList>
+  </mailingLists>
+  
+  <distributionManagement>
+    <repository>
+      <id>codehaus.org</id>
+      <name>Redback Central Repository</name>
+      <url>dav:https://dav.codehaus.org/repository/redback</url>
+    </repository>
+    <snapshotRepository>
+      <id>codehaus.org</id>
+      <name>Redback Central Development Repository</name>
+      <url>dav:https://dav.codehaus.org/snapshots.repository/redback</url>
+    </snapshotRepository>
+    <site>
+      <id>codehaus.org</id>
+      <url>dav:https://dav.codehaus.org/redback</url>
+    </site>
+  </distributionManagement>
+  
   <developers>
     <developer>
       <id>joakime</id>
@@ -51,6 +111,11 @@
     </developer>
   </developers>
 
+  <organization>
+    <name>Codehaus</name>
+    <url>http://www.codehaus.org/</url>
+  </organization>
+  
   <licenses>
     <license>
       <name>Apache Source License 2.0</name>
@@ -59,6 +124,14 @@
   </licenses>
 
   <repositories>
+    <repository>
+      <id>codehaus.snapshots</id>
+      <name>Codehaus Snapshot Development Repository</name>
+      <url>http://snapshots.repository.codehaus.org</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
     <!-- needed for plexus-registry's dependencies (such as commons-configuration) -->
     <repository>
       <id>apache.snapshots</id>
@@ -406,6 +479,13 @@
         <version>2.3</version>
       </plugin>
     </plugins>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-webdav</artifactId>
+        <version>1.0-beta-2</version>
+      </extension>
+    </extensions>
   </build>
 
   <modules>
