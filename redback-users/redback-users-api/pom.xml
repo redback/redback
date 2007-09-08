@@ -22,11 +22,11 @@
     <version>1.0-alpha-4-SNAPSHOT</version>
   </parent>
   <artifactId>redback-users-api</artifactId>
-  <name>Plexus Redback :: User Management API</name>
+  <name>Redback :: User Management API</name>
 
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/plexus/plexus-redback/trunk/redback-users/redback-users-api</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/plexus/plexus-redback/trunk/redback-users/redback-users-api</developerConnection>
+    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-users/redback-users-api</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-users/redback-users-api</developerConnection>
     <url>http://fisheye.codehaus.org/browse/plexus/plexus-security/trunk/plexus-security-user-management/plexus-security-user-management-api</url>
   </scm>
 

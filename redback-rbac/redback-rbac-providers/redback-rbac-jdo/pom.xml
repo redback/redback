@@ -22,7 +22,7 @@
     <version>1.0-alpha-4-SNAPSHOT</version>
   </parent>
   <artifactId>redback-rbac-jdo</artifactId>
-  <name>Plexus Redback :: RBAC Provider :: JDO</name>
+  <name>Redback :: RBAC Provider :: JDO</name>
   <packaging>jar</packaging>
   <dependencies>
     <dependency>
@@ -86,8 +86,8 @@
     </dependency>
   </dependencies>
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/plexus/plexus-redback/trunk/redback-rbac/redback-rbac-providers/redback-rbac-jdo</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/plexus/plexus-redback/trunk/redback-rbac/redback-rbac-providers/redback-rbac-jdo</developerConnection>
+    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-rbac/redback-rbac-providers/redback-rbac-jdo</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-rbac/redback-rbac-providers/redback-rbac-jdo</developerConnection>
     <url>http://fisheye.codehaus.org/browse/plexus/plexus-security/trunk/plexus-security-authorization/plexus-security-authorization-rbac/plexus-security-authorization-rbac-stores/plexus-security-authorization-rbac-store-jdo</url>
   </scm>
   <build>

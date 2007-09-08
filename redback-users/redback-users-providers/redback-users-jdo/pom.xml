@@ -22,7 +22,7 @@
     <version>1.0-alpha-4-SNAPSHOT</version>
   </parent>
   <artifactId>redback-users-jdo</artifactId>
-  <name>Plexus Redback :: Users Provider :: JDO</name>
+  <name>Redback :: Users Provider :: JDO</name>
 
   <dependencies>
     <dependency>
@@ -73,8 +73,8 @@
   </dependencies>
 
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/plexus/plexus-redback/trunk/redback-users/redback-users-providers/redback-users-jdo</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/plexus/plexus-redback/trunk/redback-users/redback-users-providers/redback-users-jdo</developerConnection>
+    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-users/redback-users-providers/redback-users-jdo</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-users/redback-users-providers/redback-users-jdo</developerConnection>
     <url>http://fisheye.codehaus.org/browse/plexus/plexus-security/trunk/plexus-security-user-management/plexus-security-user-management-providers/plexus-security-user-management-provider-jdo</url>
   </scm>
 

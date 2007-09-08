@@ -23,7 +23,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>redback-xwork-example</artifactId>
   <packaging>war</packaging>
-  <name>Plexus Redback :: Integration :: XWork Example Webapp</name>
+  <name>Redback :: Integration :: XWork Example Webapp</name>
   <pluginRepositories>
     <pluginRepository>
       <releases>
@@ -191,8 +191,8 @@
   </build>
 
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/plexus/plexus-redback/trunk/redback-integrations/redback-xwork/redback-xwork-example</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/plexus/plexus-redback/trunk/redback-integrations/redback-xwork/redback-xwork-example</developerConnection>
+    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-integrations/redback-xwork/redback-xwork-example</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-integrations/redback-xwork/redback-xwork-example</developerConnection>
     <url>http://fisheye.codehaus.org/browse/plexus/plexus-redback/trunk/redback-integrations/redback-xwork/redback-xwork-example</url>
   </scm>
   

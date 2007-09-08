@@ -22,7 +22,7 @@
     <version>1.0-alpha-4-SNAPSHOT</version>
   </parent>
   <artifactId>redback-authentication-users</artifactId>
-  <name>Plexus Redback :: Authentication Provider :: Users</name>
+  <name>Redback :: Authentication Provider :: Users</name>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.plexus.redback</groupId>
@@ -47,8 +47,8 @@
     </dependency>
   </dependencies>
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/plexus/plexus-redback/trunk/redback-users/redback-authentication-users</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/plexus/plexus-redback/trunk/redback-users/redback-authentication-users</developerConnection>
+    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-users/redback-authentication-users</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-users/redback-authentication-users</developerConnection>
     <url>http://fisheye.codehaus.org/browse/plexus/plexus-redback/trunk/redback-authentication/redback-authentication-providers/redback-authentication-provider-users</url>
   </scm>
   <build>

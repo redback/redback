@@ -9,7 +9,7 @@
   
   <artifactId>redback-users-ldap</artifactId>
   
-  <name>Plexus Redback :: Users Provider :: LDAP</name>
+  <name>Redback :: Users Provider :: LDAP</name>
   
   <dependencies>
     <dependency>

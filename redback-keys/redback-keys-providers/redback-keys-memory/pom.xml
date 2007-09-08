@@ -22,7 +22,7 @@
     <version>1.0-alpha-4-SNAPSHOT</version>
   </parent>
   <artifactId>redback-keys-memory</artifactId>
-  <name>Plexus Redback :: Key Management Provider :: Memory</name>
+  <name>Redback :: Key Management Provider :: Memory</name>
   <packaging>jar</packaging>
   <dependencies>
     <dependency>
@@ -36,8 +36,8 @@
     </dependency>
   </dependencies>
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/plexus/plexus-redback/trunk/redback-keys/redback-keys-providers/redback-keys-memory</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/plexus/plexus-redback/trunk/redback-keys/redback-keys-providers/redback-keys-memory</developerConnection>
+    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-keys/redback-keys-providers/redback-keys-memory</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-keys/redback-keys-providers/redback-keys-memory</developerConnection>
     <url>http://fisheye.codehaus.org/browse/plexus/plexus-security/trunk/plexus-security-authentication/plexus-security-keys-parent/plexus-security-keys-stores/plexus-security-keys-memory</url>
   </scm>
 </project>

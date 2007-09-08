@@ -6,7 +6,7 @@
     <version>1.0-alpha-4-SNAPSHOT</version>
   </parent>
   <artifactId>redback-rbac-memory</artifactId>
-  <name>Plexus Redback :: RBAC Provider :: Memory</name>
+  <name>Redback :: RBAC Provider :: Memory</name>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.plexus.redback</groupId>
@@ -27,8 +27,8 @@
     </dependency>
   </dependencies>
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/plexus/plexus-redback/trunk/redback-rbac/redback-rbac-providers/redback-rbac-memory</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/plexus/plexus-redback/trunk/redback-rbac/redback-rbac-providers/redback-rbac-memory</developerConnection>
+    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-rbac/redback-rbac-providers/redback-rbac-memory</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-rbac/redback-rbac-providers/redback-rbac-memory</developerConnection>
     <url>http://fisheye.codehaus.org/browse/plexus/plexus-security/trunk/plexus-security-authorization/plexus-security-authorization-rbac/plexus-security-authorization-rbac-stores/plexus-security-authorization-rbac-store-memory</url>
   </scm>
   <build>

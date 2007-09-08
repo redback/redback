@@ -22,7 +22,7 @@
     <version>1.0-alpha-4-SNAPSHOT</version>
   </parent>
   <artifactId>redback-users-tests</artifactId>
-  <name>Plexus Redback :: User Tests</name>
+  <name>Redback :: User Tests</name>
 
   <dependencies>
     <dependency>
@@ -42,8 +42,8 @@
   </dependencies>
 
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/plexus/plexus-redback/trunk/redback-users/redback-users-tests</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/plexus/plexus-redback/trunk/redback-users/redback-users-tests</developerConnection>
+    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-users/redback-users-tests</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-users/redback-users-tests</developerConnection>
     <url>http://fisheye.codehaus.org/browse/plexus/plexus-security/trunk/plexus-security-user-management/plexus-security-user-management-providers/plexus-security-user-management-provider-test</url>
   </scm>
 </project>

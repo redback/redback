@@ -6,7 +6,7 @@
     <version>1.0-alpha-4-SNAPSHOT</version>
   </parent>
   <artifactId>redback-site</artifactId>
-  <name>Plexus Redback :: Site</name>
+  <name>Redback :: Site</name>
   <packaging>pom</packaging>
   <build>
     <plugins>
@@ -45,7 +45,7 @@
   <distributionManagement>
    <site>
       <id>redback-site</id>
-      <name>Plexus Redback Website</name>
+      <name>Redback Website</name>
       <url>dav:https://dav.codehaus.org/plexus/redback/</url>
     </site>
   </distributionManagement>

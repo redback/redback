@@ -22,7 +22,7 @@
     <version>1.0-alpha-1-SNAPSHOT</version>
   </parent>
   <artifactId>redback-acegi</artifactId>
-  <name>Plexus Redback :: Integration :: Acegi</name>
+  <name>Redback :: Integration :: Acegi</name>
   <repositories>
    <repository>
       <id>acegi-snapshot</id>
@@ -55,8 +55,8 @@
     </dependency>
   </dependencies>
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/plexus/plexus-redback/trunk/redback-integrations/redback-acegi</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/plexus/plexus-redback/trunk/redback-integrations/redback-acegi</developerConnection>
+    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-integrations/redback-acegi</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-integrations/redback-acegi</developerConnection>
     <url>http://fisheye.codehaus.org/browse/plexus/plexus-redback/trunk/redback-integrations/redback-acegi</url>
   </scm>
   <build>

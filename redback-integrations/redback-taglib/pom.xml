@@ -22,7 +22,7 @@
     <version>1.0-alpha-4-SNAPSHOT</version>
   </parent>
   <artifactId>redback-taglib</artifactId>
-  <name>Plexus Redback :: Integration :: Taglib</name>
+  <name>Redback :: Integration :: Taglib</name>
   <dependencies>
   <!-- TODO is this required or not, if so then either clear dep or move into xwork
     <dependency>
@@ -62,8 +62,8 @@
     </dependency>
   </dependencies>
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/plexus/plexus-redback/trunk/redback-integrations/redback-xwork/taglib</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/plexus/plexus-redback/trunk/redback-integrations/redback-xwork/taglib</developerConnection>
+    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-integrations/redback-taglib</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-integrations/redback-taglib</developerConnection>
     <url>http://fisheye.codehaus.org/browse/plexus/plexus-redback/trunk/redback-integrations/redback-xwork/taglib</url>
   </scm>
 </project>
