@@ -46,7 +46,7 @@
    <site>
       <id>redback-site</id>
       <name>Redback Website</name>
-      <url>dav:https://dav.codehaus.org/plexus/redback/</url>
+      <url>dav:https://dav.codehaus.org/redback/</url>
     </site>
   </distributionManagement>
 </project>

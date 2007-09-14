@@ -11,7 +11,9 @@ Redback Authentication
   * username/password for redback-users 
 
   * keystore based for redback-keys
-
+  
+  * read only LDAP
+  
   []
 
   Support is being actively worked on or considered for:

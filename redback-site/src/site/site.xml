@@ -21,7 +21,7 @@
 <project name="Redback">
   <bannerLeft>
     <name>Redback</name>
-    <href>http://plexus.codehaus.org/redback</href>
+    <href>http://redback.codehaus.org</href>
   </bannerLeft>
   <!--
   <bannerRight>
@@ -38,8 +38,8 @@
  
   <body>
     <links>
-      <item name="Plexus" href="http://plexus.codehaus.org/"/>
       <item name="The Codehaus" href="http://codehaus.org" />
+      <item name="Plexus" href="http://plexus.codehaus.org/"/>
     </links>
 
     <menu name="Overview">
