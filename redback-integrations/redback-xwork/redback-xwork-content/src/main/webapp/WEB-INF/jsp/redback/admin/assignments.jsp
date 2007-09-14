@@ -48,7 +48,7 @@
       
       <h4>Resource Roles</h4>
       <c:choose>
-        <c:when test="${!empty availableRoles}"> 
+        <c:when test="${!empty dynamicroles}"> 
           <c:set var="numtemplates" value="0"/>
           <table border="1">
            <tr>
