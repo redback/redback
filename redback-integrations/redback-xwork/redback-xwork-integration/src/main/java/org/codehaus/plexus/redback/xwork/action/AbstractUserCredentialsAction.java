@@ -16,6 +16,9 @@ package org.codehaus.plexus.redback.xwork.action;
  * limitations under the License.
  */
 
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+
 import org.codehaus.plexus.redback.policy.PasswordRuleViolationException;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.User;
@@ -77,10 +80,14 @@ public abstract class AbstractUserCredentialsAction
     {
         validateCredentialsLoose();
 
-        // TODO: Figure out email validation.
-        // EmailValidator emailvalidator = new EmailValidator();
-        // emailvalidator.setFieldName( "user.email" );
-        // emailvalidator.validate( internalUser.getEmail() );
+        try
+        {
+            new InternetAddress( internalUser.getEmail(), true );
+        }
+        catch ( AddressException e )
+        {
+            addFieldError( "user.email", getText( "email.invalid" ) );
+        }
 
         User tmpuser = internalUser.createUser( securitySystem.getUserManager() );
 
