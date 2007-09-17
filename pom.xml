@@ -109,6 +109,14 @@
         <role>Developer</role>
       </roles>
     </developer>
+    <developer>
+      <id>henry</id>
+      <name>Henry Isidro</name>
+      <email>hisidro@codehaus.org</email>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
   </developers>
 
   <organization>
