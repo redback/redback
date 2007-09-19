@@ -29,7 +29,7 @@
     <url>http://jira.codehaus.org/browse/REDBACK</url>
   </issueManagement>
   
-  <ciManagement>
+  <!-- ciManagement>
     <notifiers>
       <notifier>
         <type>mail</type>
@@ -46,7 +46,7 @@
         </configuration>
       </notifier>      
     </notifiers>
-  </ciManagement>
+  </ciManagement -->
  
    <mailingLists>
     <mailingList>
