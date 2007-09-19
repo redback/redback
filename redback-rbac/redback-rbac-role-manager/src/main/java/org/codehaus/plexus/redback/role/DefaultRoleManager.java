@@ -35,6 +35,7 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
+import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.redback.role.merger.RoleModelMerger;
@@ -279,18 +280,17 @@ public class DefaultRoleManager extends AbstractLogEnabled implements RoleManage
 
             // remove the user assignments
             List rolesList = new ArrayList();
-            rolesList.add( role );
+            rolesList.add( role.getName() );
 
             List userAssignments = rbacManager.getUserAssignmentsForRoles( rolesList );
 
             for ( Iterator i = userAssignments.iterator(); i.hasNext(); )
             {
                 UserAssignment assignment = (UserAssignment) i.next();
-                assignment.removeRoleName( role );
+                assignment.removeRoleName( oldRoleName );
                 assignment.addRoleName( newRoleName );
                 rbacManager.saveUserAssignment( assignment );
             }
-
         }
         catch ( RbacManagerException e )
         {
@@ -332,7 +332,41 @@ public class DefaultRoleManager extends AbstractLogEnabled implements RoleManage
         }
     }
     
-    
+    public void assignTemplatedRole( String templateId, String resource, String principal ) throws RoleManagerException
+    {
+        ModelTemplate modelTemplate = RoleModelUtils.getModelTemplate( blessedModel, templateId );
+
+        if ( modelTemplate == null )
+        {
+            throw new RoleManagerException( "Unable to assign role: " + templateId + " does not exist." );
+        }
+        try
+        {
+        	if ( !rbacManager.resourceExists( resource ) )
+        	{
+        		Resource newResource = rbacManager.createResource( resource );
+        		rbacManager.saveResource( newResource );
+        	}
+        
+            UserAssignment userAssignment;
+
+            if ( rbacManager.userAssignmentExists( principal ) )
+            {
+                userAssignment = rbacManager.getUserAssignment( principal );
+            }
+            else
+            {
+                userAssignment = rbacManager.createUserAssignment( principal );
+            }
+            
+            userAssignment.addRoleName( modelTemplate.getNamePrefix() + modelTemplate.getDelimiter() + resource );
+            rbacManager.saveUserAssignment( userAssignment );
+        }
+        catch ( RbacManagerException e )
+        {
+            throw new RoleManagerException( "Unable to assign role: unable to manage user assignment", e );
+        }
+    }
 
     public void unassignRole( String roleId, String principal ) throws RoleManagerException
     {

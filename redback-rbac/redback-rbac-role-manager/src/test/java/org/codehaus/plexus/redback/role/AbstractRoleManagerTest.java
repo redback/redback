@@ -16,8 +16,12 @@ package org.codehaus.plexus.redback.role;
  * limitations under the License.
  */
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.redback.rbac.RBACManager;
+import org.codehaus.plexus.redback.rbac.UserAssignment;
 
 /**
  * AbstractRoleManagerTest:
@@ -59,6 +63,32 @@ public abstract class AbstractRoleManagerTest extends PlexusTestCase
         roleManager.createTemplatedRole( "test-template-2", "hot" );
         
         assertTrue( roleManager.templatedRoleExists( "test-template-2", "hot" ) );
+    }
+    
+    public void testUserAssignmentUpdate() throws Exception
+    {
+    	String principal = "joe";
+    	
+    	roleManager.assignRole("test-role", principal );
+    	roleManager.createTemplatedRole( "test-template-2", "cold" );
+    	roleManager.assignTemplatedRole( "test-template-2", "cold", principal);
+    	
+    	roleManager.updateRole("test-template-2", "cold", "frigid" );
+    	
+    	assertTrue( roleManager.templatedRoleExists("test-template-2", "frigid" ) );
+    	
+    	UserAssignment assignment = rbacManager.getUserAssignment( principal );
+    	
+    	List assignments = assignment.getRoleNames();
+    	
+    	assertEquals( 2, assignments.size() );
+    	
+    	for ( Iterator i = assignments.iterator(); i.hasNext(); )
+    	{
+    		String roleName = (String)i.next();
+    		System.out.println( roleName );
+    		assertTrue( "Test Role".equals( roleName ) || "Foo 2 - frigid".equals( roleName ) );
+    	}
     }
 
 }

@@ -86,6 +86,17 @@ public interface RoleManager
     public void assignRole( String roleId, String principal ) throws RoleManagerException;
     
     /**
+     * Assigns the templated role indicated by the templateId
+     * 
+     * fails if the templated role has not been created
+     * 
+     * @param templateId
+     * @param resource
+     * @param principal
+     */
+    public void assignTemplatedRole( String templateId, String resource, String principal ) throws RoleManagerException;
+    
+    /**
      * Unassigns the role indicated by the role id from the given principal
      * 
      * @param roleId
