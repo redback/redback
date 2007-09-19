@@ -48,10 +48,6 @@
       <groupId>org.codehaus.plexus.redback</groupId>
       <artifactId>redback-authentication-ldap</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus.redback</groupId>
-      <artifactId>redback-users-ldap</artifactId>
-    </dependency>
     <!-- Keys Management / Authentication -->
     <dependency>
       <groupId>org.codehaus.plexus.redback</groupId>
@@ -73,6 +69,10 @@
     <dependency>
       <groupId>org.codehaus.plexus.redback</groupId>
       <artifactId>redback-users-ldap</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus.redback</groupId>
+      <artifactId>redback-users-configurable</artifactId>
     </dependency>
     <!-- ================================================================ -->
     <!-- OTHER Dependencies -->
