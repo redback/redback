@@ -24,6 +24,7 @@ import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.RbacObjectInvalidException;
 import org.codehaus.plexus.redback.rbac.RbacObjectNotFoundException;
 import org.codehaus.plexus.redback.rbac.Resource;
+import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.xwork.action.AbstractSecurityAction;
@@ -62,6 +63,8 @@ public class UserDeleteAction extends AbstractSecurityAction implements Cancella
     // ------------------------------------------------------------------
 
     private String username;
+    
+    private User user;
 
     // ------------------------------------------------------------------
     // Action Entry Points - (aka Names)
@@ -72,6 +75,18 @@ public class UserDeleteAction extends AbstractSecurityAction implements Cancella
         if ( username == null )
         {
             addActionError( getText( "cannot.remove.user.null.username" ) );
+            return SUCCESS;
+        }
+        
+        try
+        {
+        	user = userManager.findUser( username );
+        }
+        catch ( UserNotFoundException e )
+        {
+        	List list = new ArrayList();
+            list.add( username );
+        	addActionError( getText( "cannot.remove.user.not.found", list ) );
             return SUCCESS;
         }
 
@@ -156,7 +171,15 @@ public class UserDeleteAction extends AbstractSecurityAction implements Cancella
         this.username = username;
     }
 
-    public SecureActionBundle initSecureActionBundle() throws SecureActionException
+    public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public SecureActionBundle initSecureActionBundle() throws SecureActionException
     {
         SecureActionBundle bundle = new SecureActionBundle();
         bundle.setRequiresAuthentication( true );

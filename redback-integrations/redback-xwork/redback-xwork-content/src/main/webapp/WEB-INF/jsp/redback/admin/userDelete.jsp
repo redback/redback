@@ -28,7 +28,12 @@
 
 <ww:form action="userdelete!submit" namespace="/security">
   <p>
-    <ww:text name="user.delete.message"/>: <b><ww:property value="username"/></b>
+    <ww:text name="user.delete.message"/>:
+  </p>
+  <p>
+  	<ww:text name="username"/>: <ww:property value="user.username"/><br/>
+  	<ww:text name="full.name"/>: <ww:property value="user.fullName"/><br/>
+  	<ww:text name="email"/>: <ww:property value="user.email"/><br/>
   </p>
   <ww:hidden label="Username" name="username" />
   <ww:submit value="%{getText('user.delete')}" />
