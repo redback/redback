@@ -147,6 +147,12 @@ public class PolicyEnforcementInterceptor
             getLogger().debug( "Enforcement: skipping force password check on login action" );
             return false;
         }
+        
+        if ( "org.codehaus.plexus.redback.xwork.action.LogoutAction".equals( actionInvocation.getAction().getClass().getName() ) )
+        {
+            getLogger().debug( "Enforcement: skipping force password check on logout action" );
+            return false;
+        }
 
         if ( config.getBoolean( "security.policy.strict.force.password.change.enabled" ) )
         {
