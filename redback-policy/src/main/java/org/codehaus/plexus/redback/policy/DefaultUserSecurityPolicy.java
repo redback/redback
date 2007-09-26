@@ -253,7 +253,6 @@ public class DefaultUserSecurityPolicy
 
         user.setPreviousEncodedPasswords( previousPasswords );
         user.setPasswordChangeRequired( false );
-        user.setLocked( false );
 
         // Update timestamp for password change.
         user.setLastPasswordChange( new Date() );
