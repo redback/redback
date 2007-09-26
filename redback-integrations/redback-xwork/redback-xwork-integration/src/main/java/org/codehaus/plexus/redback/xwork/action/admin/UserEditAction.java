@@ -67,12 +67,16 @@ public class UserEditAction
 
     private String updateButton;
 
+    private boolean emailValidationRequired;
+    
     // ------------------------------------------------------------------
     // Action Entry Points - (aka Names)
     // ------------------------------------------------------------------
 
     public String edit()
     {
+    	emailValidationRequired = securitySystem.getPolicy().getUserValidationSettings().isEmailValidationRequired();
+    	
         if ( getUsername() == null )
         {
             addActionError( getText( "cannot.edit.user.null.username" ) );
@@ -264,4 +268,10 @@ public class UserEditAction
         return effectivelyAssignedRoles;
     }
 
+	public boolean isEmailValidationRequired() {
+		return emailValidationRequired;
+	}
+
+    
+    
 }

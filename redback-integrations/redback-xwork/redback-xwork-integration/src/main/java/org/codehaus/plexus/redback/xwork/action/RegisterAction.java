@@ -27,6 +27,7 @@ import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
+import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
 import org.codehaus.plexus.redback.xwork.mail.Mailer;
@@ -49,6 +50,8 @@ public class RegisterAction
 
     private static final String VALIDATION_NOTE = "validation-note";
 
+    private static final String RESEND_VALIDATION_EMAIL = "security-resend-validation-email";
+    
     // ------------------------------------------------------------------
     // Plexus Component Requirements
     // ------------------------------------------------------------------
@@ -72,6 +75,8 @@ public class RegisterAction
 
     private boolean emailValidationRequired;
 
+    private String username;
+    
     // ------------------------------------------------------------------
     // Action Entry Points - (aka Names)
     // ------------------------------------------------------------------
@@ -184,6 +189,39 @@ public class RegisterAction
         return REGISTER_SUCCESS;
     }
 
+    public String resendRegistrationEmail()
+    {
+    	UserSecurityPolicy securityPolicy = securitySystem.getPolicy();
+    	   	
+        try
+        {
+        	User user = super.securitySystem.getUserManager().findUser( username );        	
+        	
+            AuthenticationKey authkey = securitySystem.getKeyManager().createKey( user.getPrincipal().toString(),
+                                                                                  "New User Email Validation",
+                                                                                  securityPolicy.getUserValidationSettings().getEmailValidationTimeout() );
+            
+            List recipients = new ArrayList();
+            recipients.add( user.getEmail() );
+
+            mailer.sendAccountValidationEmail( recipients, authkey, getBaseUrl() );
+
+            return RESEND_VALIDATION_EMAIL;
+        }
+        catch ( KeyManagerException e )
+        {
+            addActionError( getText( "cannot.register.user" ) );
+            getLogger().error( "Unable to register a new user.", e );
+            return ERROR;
+        } 
+        catch ( UserNotFoundException e ) 
+        {
+			addActionError( getText( "cannot.find.user" ) );
+            getLogger().error( "Unable to find user.", e );
+            return ERROR;
+		} 	
+    }
+    
     public String cancel()
     {
         return CANCEL;
@@ -212,8 +250,16 @@ public class RegisterAction
     {
         this.emailValidationRequired = emailValidationRequired;
     }
+    
+    public String getUsername() {
+		return username;
+	}
 
-    public SecureActionBundle initSecureActionBundle()
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public SecureActionBundle initSecureActionBundle()
         throws SecureActionException
     {
         return SecureActionBundle.OPEN;

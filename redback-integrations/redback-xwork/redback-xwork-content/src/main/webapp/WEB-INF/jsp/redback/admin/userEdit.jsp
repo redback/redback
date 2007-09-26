@@ -42,6 +42,16 @@
       <ww:submit value="%{getText('cancel')}" method="cancel" />
     </redback:isNotReadOnlyUserManager>
   </ww:form>
+  
+  <c:if test="${ emailValidationRequired}">
+  <p>
+    <ww:form action="register!resendRegistrationEmail" namespace="/security" theme="xhtml"
+         id="resendRegistationForm" method="post" name="resendRegistration" cssClass="security userEdit">
+         <ww:hidden label="Username"    name="username" />
+         <ww:submit value="Resend Validation" method="submit" />
+    </ww:form>
+  </p>
+  </c:if>
 </redback:ifAuthorized>
 
 <redback:ifAuthorized permission="user-management-user-role" resource="${user.username}">
