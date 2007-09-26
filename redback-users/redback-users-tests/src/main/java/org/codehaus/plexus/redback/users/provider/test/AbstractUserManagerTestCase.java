@@ -161,6 +161,40 @@ public class AbstractUserManagerTestCase
         assertEquals( 0, getEventTracker().updatedUsernames.size() );
     }
 
+    public void testAddFindUserLockedStatus() throws UserNotFoundException {
+		assertCleanUserManager();
+		securityPolicy.setEnabled(false);
+
+		User smcqueen = getUserManager().createUser("smcqueen", "Steve McQueen", "the cooler king");
+
+		smcqueen.setLocked( true );
+		
+		/*
+		 * Keep a reference to the object that was added. Since it has the
+		 * actual principal that was managed by jpox/jdo.
+		 */
+		User added = userManager.addUser( smcqueen );
+
+		assertTrue( added.isLocked() );
+		
+		assertEquals(1, userManager.getUsers().size());
+
+		/* Fetch user from userManager using principal returned earlier */
+		User actual = userManager.findUser(added.getPrincipal());
+		assertEquals(added, actual);
+
+		assertTrue( actual.isLocked() );
+		
+		/* Check into the event tracker. */
+		assertEquals(1, getEventTracker().countInit);
+		assertNotNull(getEventTracker().lastDbFreshness);
+		assertTrue(getEventTracker().lastDbFreshness.booleanValue());
+
+		assertEquals(1, getEventTracker().addedUsernames.size());
+		assertEquals(0, getEventTracker().removedUsernames.size());
+		assertEquals(0, getEventTracker().updatedUsernames.size());
+	}
+    
     public void testAddFindUserByUsername()
         throws UserNotFoundException
     {
