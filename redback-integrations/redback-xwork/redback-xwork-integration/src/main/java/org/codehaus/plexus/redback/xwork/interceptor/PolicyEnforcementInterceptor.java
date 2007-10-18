@@ -140,7 +140,7 @@ public class PolicyEnforcementInterceptor
                     
                     Calendar expirationDate = Calendar.getInstance();
                     expirationDate.setTime( user.getLastPasswordChange() );
-                    expirationNotifyDate.add( Calendar.DAY_OF_MONTH, policy.getPasswordExpirationDays() );
+                    expirationDate.add( Calendar.DAY_OF_MONTH, policy.getPasswordExpirationDays() );
                     Map session = ServletActionContext.getContext().getSession();
                     session.put( "passwordExpirationNotification", expirationDate.getTime().toString() );
                 }                                
