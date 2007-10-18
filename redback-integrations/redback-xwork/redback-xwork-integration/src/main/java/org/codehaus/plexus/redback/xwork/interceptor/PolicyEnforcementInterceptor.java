@@ -16,12 +16,15 @@ package org.codehaus.plexus.redback.xwork.interceptor;
  * limitations under the License.
  */
 
+import java.util.Calendar;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
+import org.codehaus.plexus.redback.policy.MustChangePasswordException;
+import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.system.DefaultSecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySystem;
@@ -87,6 +90,8 @@ public class PolicyEnforcementInterceptor
             SecuritySession securitySession =
                     (SecuritySession) context.getSession().get( SecuritySystemConstants.SECURITY_SESSION_KEY );
 
+            UserSecurityPolicy policy = securitySystem.getPolicy();            
+            
             if ( securitySession != null )
             {
                 UserManager userManager = securitySystem.getUserManager();
@@ -115,6 +120,32 @@ public class PolicyEnforcementInterceptor
                 return SECURITY_USER_MUST_CHANGE_PASSWORD;
             }
             
+            if ( config.getBoolean( "security.policy.password.expiration.enabled" ) )
+            {
+                getLogger().debug( "checking password expiration notification" );
+                
+                UserManager userManager = securitySystem.getUserManager();
+                User user = userManager.findUser( securitySession.getUser().getPrincipal() );             
+                
+                Calendar expirationNotifyDate = Calendar.getInstance();
+                expirationNotifyDate.setTime( user.getLastPasswordChange() );
+                // add on the total days to expire minus the notification days
+                expirationNotifyDate.add( Calendar.DAY_OF_MONTH, policy.getPasswordExpirationDays() - config.getInt( "security.policy.password.expiration.notify.days" ) );
+                
+                Calendar now = Calendar.getInstance();
+
+                if ( now.after( expirationNotifyDate ) )
+                {
+                    getLogger().debug( "setting password expiration notification" );
+                    
+                    Calendar expirationDate = Calendar.getInstance();
+                    expirationDate.setTime( user.getLastPasswordChange() );
+                    expirationNotifyDate.add( Calendar.DAY_OF_MONTH, policy.getPasswordExpirationDays() );
+                    Map session = ServletActionContext.getContext().getSession();
+                    session.put( "passwordExpirationNotification", expirationDate.getTime().toString() );
+                }                                
+            }
+            
             return actionInvocation.invoke();
         }
         else
@@ -123,7 +154,6 @@ public class PolicyEnforcementInterceptor
             return actionInvocation.invoke();
         }
     }
-
 
     private boolean checkForcePasswordChange( SecuritySession securitySession, ActionInvocation actionInvocation )
     {

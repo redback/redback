@@ -45,6 +45,10 @@
     - <ww:a href="%{accountUrl}" cssClass="edit"><ww:text name="edit.details"/></ww:a>
     </redback:isNotReadOnlyUserManager>
     - <ww:a href="%{logoutUrl}" cssClass="logout"><ww:text name="logout"/></ww:a>
+    
+    <c:if test="${sessionScope.passwordExpirationNotification != null}">
+    - <ww:text name="notify.password.expiration"/> ${sessionScope.passwordExpirationNotification}
+    </c:if>
   </c:otherwise>
 </c:choose>
 
