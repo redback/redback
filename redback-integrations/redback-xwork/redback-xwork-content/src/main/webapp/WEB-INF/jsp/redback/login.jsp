@@ -32,8 +32,8 @@
 
 <ww:form action="login" namespace="/security" theme="xhtml" 
          id="loginForm" method="post" name="login" cssClass="security login">
-  <ww:textfield label="%{getText('username')}" name="username" size="30" required="true" />
-  <ww:password  label="%{getText('password')}" name="password" size="20" required="true" />
+  <ww:textfield label="%{getText('username')}" name="username" size="30" />
+  <ww:password  label="%{getText('password')}" name="password" size="20" />
   <ww:checkbox label="%{getText('login.remember.me')}" name="rememberMe" value="false" />
   <ww:submit value="%{getText('login')}" method="login" />
   <ww:submit value="%{getText('cancel')}" method="cancel" />
