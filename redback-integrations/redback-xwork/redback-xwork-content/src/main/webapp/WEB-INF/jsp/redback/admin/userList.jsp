@@ -39,7 +39,7 @@
 <ww:set name="locked" value="%{getText('user.list.locked')}"/>
 <ww:set name="tasks" value="%{getText('user.list.tasks')}"/>
 
-<h2><ww:text name="user.list.section.title.1"/>${roleName}<ww:text name="user.list.section.title.2"/></h2>
+<h2><ww:text name="user.list.section.title"><ww:param>${roleName}</ww:param></ww:text></h2>
 
 <table class="outerTableRegion" cellpadding="0" cellspacing="0">
 <tr>

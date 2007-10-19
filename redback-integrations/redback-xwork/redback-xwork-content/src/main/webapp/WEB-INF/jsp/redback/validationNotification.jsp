@@ -30,11 +30,11 @@
 <h2><ww:text name="validation.notification.section.title"/></h2>
 
 <p>
-  <ww:text name="validation.notification.message.1"/>(${user.email}).  <ww:text name="validation.notification.message.2"/>
+  <ww:text name="validation.notification.message.1"><ww:param>(${user.email}).</ww:param></ww:text>
 </p>
 
 <p>
-  <ww:text name="validation.notification.message.3"/>(${user.email}) <ww:text name="validation.notification.message.4"/>
+  <ww:text name="validation.notification.message.2"/><ww:param>${user.email}</ww:param></ww:text>
 </p>
 
 </body>
