@@ -23,19 +23,18 @@ package org.codehaus.plexus.redback.common.ldap.connection;
  * SOFTWARE.
  */
 
-import javax.naming.Context;
-import javax.naming.NamingException;
-import javax.naming.ldap.LdapName;
-import javax.naming.ldap.Rdn;
-import javax.naming.directory.DirContext;
-import javax.naming.directory.InitialDirContext;
-
-
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Collections;
-import java.util.Properties;
 import java.util.Map;
+import java.util.Properties;
+
+import javax.naming.Context;
+import javax.naming.NamingException;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.InitialDirContext;
+import javax.naming.ldap.LdapName;
+import javax.naming.ldap.Rdn;
 
 /**
  * The configuration for a connection will not change.

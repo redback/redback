@@ -16,9 +16,9 @@ package org.codehaus.plexus.redback.role;
  * limitations under the License.
  */
 
-import java.net.URL;
-
 import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
+
+import java.net.URL;
 
 /**
  * RoleProfileManager:

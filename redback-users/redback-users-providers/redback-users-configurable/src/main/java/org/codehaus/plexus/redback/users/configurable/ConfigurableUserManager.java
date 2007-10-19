@@ -16,11 +16,8 @@ package org.codehaus.plexus.redback.users.configurable;
  * limitations under the License.
  */
 
-import java.util.List;
-
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
@@ -29,6 +26,8 @@ import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.users.UserQuery;
+
+import java.util.List;
 
 /**
  * 

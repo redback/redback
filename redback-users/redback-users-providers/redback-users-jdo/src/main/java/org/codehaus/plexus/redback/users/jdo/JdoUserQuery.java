@@ -20,7 +20,10 @@ import org.codehaus.plexus.redback.users.AbstractUserQuery;
 import org.codehaus.plexus.redback.users.UserQuery;
 import org.codehaus.plexus.util.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 public class JdoUserQuery

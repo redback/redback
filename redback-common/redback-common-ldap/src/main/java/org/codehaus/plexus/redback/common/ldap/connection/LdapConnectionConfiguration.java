@@ -24,12 +24,13 @@ package org.codehaus.plexus.redback.common.ldap.connection;
 
 import org.codehaus.plexus.util.StringUtils;
 
-import javax.naming.InvalidNameException;
-import javax.naming.ldap.LdapName;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.TreeMap;
+
+import javax.naming.InvalidNameException;
+import javax.naming.ldap.LdapName;
 
 /**
  * This class contains the configuration for a ldap connection.

@@ -16,12 +16,6 @@ package org.codehaus.plexus.redback.role.processor;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import org.codehaus.plexus.redback.rbac.Operation;
 import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
@@ -36,6 +30,12 @@ import org.codehaus.plexus.redback.role.model.ModelRole;
 import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
 import org.codehaus.plexus.redback.role.util.RoleModelUtils;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * DefaultRoleModelProcessor: inserts the components of the model that can be populated into the rbac manager

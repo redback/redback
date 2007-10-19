@@ -16,19 +16,11 @@ package org.codehaus.plexus.redback.rbac.jdo;
  * limitations under the License.
  */
 
-import junit.framework.TestCase;
-import org.codehaus.plexus.redback.rbac.jdo.JdoOperation;
-import org.codehaus.plexus.redback.rbac.jdo.JdoPermission;
-import org.codehaus.plexus.redback.rbac.jdo.JdoResource;
-import org.codehaus.plexus.redback.rbac.jdo.JdoRole;
-import org.codehaus.plexus.redback.rbac.jdo.JdoUserAssignment;
-import org.codehaus.plexus.redback.rbac.jdo.RbacDatabase;
-import org.codehaus.plexus.redback.rbac.jdo.io.stax.RbacJdoModelStaxReader;
-import org.codehaus.plexus.redback.rbac.jdo.io.stax.RbacJdoModelStaxWriter;
 import org.codehaus.plexus.redback.rbac.Operation;
 import org.codehaus.plexus.redback.rbac.Resource;
+import org.codehaus.plexus.redback.rbac.jdo.io.stax.RbacJdoModelStaxReader;
+import org.codehaus.plexus.redback.rbac.jdo.io.stax.RbacJdoModelStaxWriter;
 
-import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -37,6 +29,10 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+
+import javax.xml.stream.XMLStreamException;
+
+import junit.framework.TestCase;
 
 /**
  * Test the StAX reader and writer generated.

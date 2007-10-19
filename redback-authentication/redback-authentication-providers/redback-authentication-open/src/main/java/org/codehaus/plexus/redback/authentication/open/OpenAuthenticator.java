@@ -22,7 +22,6 @@ import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authentication.Authenticator;
 import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
-import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 
 /**
  * OpenAuthenticator - Does not test user / password.

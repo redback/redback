@@ -29,10 +29,11 @@ import org.codehaus.plexus.redback.keys.KeyNotFoundException;
 import org.codehaus.plexus.util.StringUtils;
 import org.jpox.PersistenceManagerFactoryImpl;
 
-import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
 import java.util.Calendar;
 import java.util.List;
+
+import javax.jdo.PersistenceManager;
+import javax.jdo.PersistenceManagerFactory;
 
 /**
  * JdoKeyManager

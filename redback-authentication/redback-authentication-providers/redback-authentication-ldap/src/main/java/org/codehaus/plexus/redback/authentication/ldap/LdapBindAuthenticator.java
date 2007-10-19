@@ -16,18 +16,6 @@ package org.codehaus.plexus.redback.authentication.ldap;
  * limitations under the License.
  */
 
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.naming.Context;
-import javax.naming.NamingEnumeration;
-import javax.naming.NamingException;
-import javax.naming.directory.DirContext;
-import javax.naming.directory.InitialDirContext;
-import javax.naming.directory.SearchControls;
-import javax.naming.directory.SearchResult;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.redback.authentication.AuthenticationDataSource;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
@@ -38,6 +26,12 @@ import org.codehaus.plexus.redback.common.ldap.UserMapper;
 import org.codehaus.plexus.redback.common.ldap.connection.LdapConnectionFactory;
 import org.codehaus.plexus.redback.common.ldap.connection.LdapException;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
+
+import javax.naming.NamingEnumeration;
+import javax.naming.NamingException;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.SearchControls;
+import javax.naming.directory.SearchResult;
 
 /**
  * LdapBindAuthenticator:

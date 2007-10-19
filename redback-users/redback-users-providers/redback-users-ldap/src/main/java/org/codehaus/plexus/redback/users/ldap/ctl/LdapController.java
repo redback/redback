@@ -16,14 +16,14 @@ package org.codehaus.plexus.redback.users.ldap.ctl;
  * limitations under the License.
  */
 
+import org.codehaus.plexus.logging.Logger;
+import org.codehaus.plexus.redback.common.ldap.LdapUser;
+import org.codehaus.plexus.redback.common.ldap.MappingException;
+import org.codehaus.plexus.redback.users.User;
+
 import java.util.Collection;
 
 import javax.naming.directory.DirContext;
-
-import org.codehaus.plexus.logging.Logger;
-import org.codehaus.plexus.redback.users.User;
-import org.codehaus.plexus.redback.common.ldap.LdapUser;
-import org.codehaus.plexus.redback.common.ldap.MappingException;
 
 public interface LdapController {
 

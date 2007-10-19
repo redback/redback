@@ -18,12 +18,6 @@ package org.codehaus.plexus.redback.rbac.jdo;
 
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
-import org.codehaus.plexus.redback.rbac.jdo.JdoOperation;
-import org.codehaus.plexus.redback.rbac.jdo.JdoPermission;
-import org.codehaus.plexus.redback.rbac.jdo.JdoResource;
-import org.codehaus.plexus.redback.rbac.jdo.JdoRole;
-import org.codehaus.plexus.redback.rbac.jdo.JdoUserAssignment;
-import org.codehaus.plexus.redback.rbac.jdo.RbacJdoModelModelloMetadata;
 import org.codehaus.plexus.redback.rbac.AbstractRBACManager;
 import org.codehaus.plexus.redback.rbac.Operation;
 import org.codehaus.plexus.redback.rbac.Permission;
@@ -37,12 +31,13 @@ import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
 
-import javax.jdo.JDOHelper;
-import javax.jdo.PersistenceManager;
-import javax.jdo.Transaction;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.jdo.JDOHelper;
+import javax.jdo.PersistenceManager;
+import javax.jdo.Transaction;
 
 /**
  * JdoRbacManager:

@@ -18,10 +18,10 @@ package org.codehaus.plexus.redback.users.ldap.ctl;
 
 import org.codehaus.plexus.logging.LogEnabled;
 import org.codehaus.plexus.logging.Logger;
-import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.common.ldap.LdapUser;
 import org.codehaus.plexus.redback.common.ldap.MappingException;
 import org.codehaus.plexus.redback.common.ldap.UserMapper;
+import org.codehaus.plexus.redback.users.User;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;

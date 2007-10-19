@@ -16,6 +16,11 @@ package org.codehaus.plexus.redback.role;
  * limitations under the License.
  */
 
+import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
+import org.codehaus.plexus.jdo.JdoFactory;
+import org.codehaus.plexus.redback.rbac.RBACManager;
+import org.jpox.SchemaTool;
+
 import java.io.File;
 import java.net.URL;
 import java.util.Iterator;
@@ -24,13 +29,6 @@ import java.util.Properties;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
-
-import org.codehaus.plexus.PlexusTestCase;
-import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
-import org.codehaus.plexus.jdo.JdoFactory;
-import org.codehaus.plexus.redback.rbac.AbstractRBACManager;
-import org.codehaus.plexus.redback.rbac.RBACManager;
-import org.jpox.SchemaTool;
 
 /**
  * RoleManagerTest:

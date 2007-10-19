@@ -17,6 +17,7 @@ package org.codehaus.plexus.redback.taglib.jsp;
  */
 
 import com.opensymphony.xwork.ActionContext;
+
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.redback.authorization.AuthorizationException;

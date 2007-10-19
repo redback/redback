@@ -21,7 +21,6 @@ import org.codehaus.plexus.redback.authorization.AuthorizationDataSource;
 import org.codehaus.plexus.redback.authorization.AuthorizationException;
 import org.codehaus.plexus.redback.authorization.AuthorizationResult;
 import org.codehaus.plexus.redback.authorization.Authorizer;
-import org.codehaus.plexus.redback.users.User;
 
 /**
  * @author: Jesse McConnell <jesse@codehaus.org>

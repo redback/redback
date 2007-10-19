@@ -18,9 +18,9 @@ package org.codehaus.plexus.redback.rbac.jdo;
 
 import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
 import org.codehaus.plexus.jdo.JdoFactory;
-import org.codehaus.plexus.redback.tests.AbstractRbacManagerTestCase;
 import org.codehaus.plexus.redback.rbac.AbstractRBACManager;
 import org.codehaus.plexus.redback.rbac.RBACManager;
+import org.codehaus.plexus.redback.tests.AbstractRbacManagerTestCase;
 import org.jpox.SchemaTool;
 
 import java.io.File;

@@ -17,11 +17,6 @@ package org.codehaus.plexus.redback.users.ldap;
 
 
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.naming.directory.DirContext;
-
 import org.codehaus.plexus.logging.LogEnabled;
 import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
@@ -37,6 +32,11 @@ import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.users.UserQuery;
 import org.codehaus.plexus.redback.users.ldap.ctl.LdapController;
 import org.codehaus.plexus.redback.users.ldap.ctl.LdapControllerException;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.naming.directory.DirContext;
 
 /**
  * 

@@ -16,8 +16,6 @@ package org.codehaus.plexus.redback.role.template;
  * limitations under the License.
  */
 
-import java.io.File;
-
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
@@ -27,6 +25,8 @@ import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
 import org.codehaus.plexus.redback.role.model.io.stax.RedbackRoleModelStaxReader;
 import org.codehaus.plexus.redback.role.processor.RoleModelProcessor;
 import org.codehaus.plexus.redback.role.util.RoleModelUtils;
+
+import java.io.File;
 
 /**
  * RoleProfileTest:

@@ -16,11 +16,6 @@ package org.codehaus.plexus.redback.role.util;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.codehaus.plexus.redback.role.model.ModelOperation;
 import org.codehaus.plexus.redback.role.model.ModelResource;
 import org.codehaus.plexus.redback.role.model.ModelRole;
@@ -29,6 +24,11 @@ import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 import org.codehaus.plexus.util.dag.DAG;
 import org.codehaus.plexus.util.dag.TopologicalSorter;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * RoleModelUtils:

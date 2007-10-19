@@ -16,13 +16,17 @@ package org.codehaus.plexus.redback.users.ldap;
  * limitations under the License.
  */
 
-import java.net.URL;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.apacheds.ApacheDs;
+import org.codehaus.plexus.redback.common.ldap.connection.LdapConnection;
+import org.codehaus.plexus.redback.common.ldap.connection.LdapConnectionFactory;
+import org.codehaus.plexus.redback.policy.PasswordEncoder;
+import org.codehaus.plexus.redback.policy.encoders.SHA1PasswordEncoder;
+import org.codehaus.plexus.redback.users.User;
+import org.codehaus.plexus.redback.users.UserManager;
 
-import javax.naming.Context;
+import java.util.List;
+
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
@@ -33,16 +37,6 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
-
-import org.codehaus.plexus.PlexusTestCase;
-import org.codehaus.plexus.apacheds.ApacheDs;
-import org.codehaus.plexus.redback.common.ldap.connection.LdapConnection;
-import org.codehaus.plexus.redback.common.ldap.connection.LdapConnectionFactory;
-import org.codehaus.plexus.redback.policy.PasswordEncoder;
-import org.codehaus.plexus.redback.policy.encoders.SHA1PasswordEncoder;
-import org.codehaus.plexus.redback.policy.encoders.SHA256PasswordEncoder;
-import org.codehaus.plexus.redback.users.User;
-import org.codehaus.plexus.redback.users.UserManager;
 
 
 /**

@@ -16,13 +16,13 @@ package org.codehaus.plexus.redback.role.validator;
  * limitations under the License.
  */
 
-import java.io.File;
-import java.util.Iterator;
-import java.util.List;
-
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
 import org.codehaus.plexus.redback.role.model.io.stax.RedbackRoleModelStaxReader;
+
+import java.io.File;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * RoleModelMergerTest:

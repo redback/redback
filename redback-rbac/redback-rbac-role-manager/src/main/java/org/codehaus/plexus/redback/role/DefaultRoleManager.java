@@ -16,19 +16,6 @@ package org.codehaus.plexus.redback.role;
  * limitations under the License.
  */
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.xml.stream.XMLStreamException;
-
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
@@ -47,6 +34,19 @@ import org.codehaus.plexus.redback.role.processor.RoleModelProcessor;
 import org.codehaus.plexus.redback.role.template.RoleTemplateProcessor;
 import org.codehaus.plexus.redback.role.util.RoleModelUtils;
 import org.codehaus.plexus.redback.role.validator.RoleModelValidator;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.stream.XMLStreamException;
 
 /**
  * RoleProfileManager:

@@ -16,12 +16,12 @@ package org.codehaus.plexus.redback.role;
  * limitations under the License.
  */
 
-import java.util.Iterator;
-import java.util.List;
-
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
+
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * AbstractRoleManagerTest:

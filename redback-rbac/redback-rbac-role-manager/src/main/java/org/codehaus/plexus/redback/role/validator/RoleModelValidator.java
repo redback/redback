@@ -16,10 +16,10 @@ package org.codehaus.plexus.redback.role.validator;
  * limitations under the License.
  */
 
-import java.util.List;
-
 import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
+
+import java.util.List;
 
 /**
  * RoleModelValidator:

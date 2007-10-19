@@ -16,10 +16,6 @@ package org.codehaus.plexus.redback.role.validator;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.role.model.ModelOperation;
 import org.codehaus.plexus.redback.role.model.ModelPermission;
@@ -29,6 +25,10 @@ import org.codehaus.plexus.redback.role.model.ModelTemplate;
 import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
 import org.codehaus.plexus.redback.role.util.RoleModelUtils;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * DefaultRoleModelValidator: validates completeness of the model

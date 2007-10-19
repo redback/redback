@@ -17,13 +17,10 @@ package org.codehaus.plexus.redback.taglib.jsp;
  */
 
 import com.opensymphony.xwork.ActionContext;
+
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-import org.codehaus.plexus.redback.authorization.AuthorizationException;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
-import org.codehaus.plexus.redback.system.SecuritySession;
-import org.codehaus.plexus.redback.system.SecuritySystem;
-import org.codehaus.plexus.redback.system.SecuritySystemConstants;
 import org.codehaus.plexus.xwork.PlexusLifecycleListener;
 
 import javax.servlet.jsp.JspTagException;

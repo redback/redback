@@ -16,11 +16,11 @@ package org.codehaus.plexus.redback.role.merger;
  * limitations under the License.
  */
 
-import java.io.File;
-
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
 import org.codehaus.plexus.redback.role.model.io.stax.RedbackRoleModelStaxReader;
+
+import java.io.File;
 
 /**
  * RoleModelMergerTest:

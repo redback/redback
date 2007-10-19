@@ -17,7 +17,6 @@ package org.codehaus.plexus.redback.rbac.memory;
  */
 
 import org.codehaus.plexus.redback.rbac.RBACManager;
-import org.codehaus.plexus.redback.rbac.memory.MemoryRbacManager;
 import org.codehaus.plexus.redback.tests.AbstractRbacManagerTestCase;
 
 /**

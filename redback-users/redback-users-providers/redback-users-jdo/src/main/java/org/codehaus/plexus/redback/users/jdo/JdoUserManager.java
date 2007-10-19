@@ -23,15 +23,21 @@ import org.codehaus.plexus.jdo.PlexusStoreException;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
-import org.codehaus.plexus.redback.users.*;
+import org.codehaus.plexus.redback.users.AbstractUserManager;
+import org.codehaus.plexus.redback.users.PermanentUserException;
+import org.codehaus.plexus.redback.users.User;
+import org.codehaus.plexus.redback.users.UserManagerException;
+import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.codehaus.plexus.redback.users.UserQuery;
 import org.codehaus.plexus.util.StringUtils;
+
+import java.util.List;
 
 import javax.jdo.Extent;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
-import java.util.List;
 
 /**
  * JdoUserManager

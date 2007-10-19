@@ -1,10 +1,6 @@
 package org.codehaus.plexus.redback.authentication.ldap;
 
 import org.codehaus.plexus.PlexusTestCase;
-import org.codehaus.plexus.redback.authentication.AuthenticationDataSource;
-import org.codehaus.plexus.redback.authentication.AuthenticationResult;
-import org.codehaus.plexus.redback.authentication.Authenticator;
-import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
 
 public class LdapBindAuthenticatorTest extends PlexusTestCase
 {

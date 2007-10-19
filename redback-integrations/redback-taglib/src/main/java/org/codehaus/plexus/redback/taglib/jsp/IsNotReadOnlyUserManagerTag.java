@@ -16,15 +16,15 @@ package org.codehaus.plexus.redback.taglib.jsp;
  * limitations under the License.
  */
 
-import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
+import com.opensymphony.xwork.ActionContext;
 
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.xwork.PlexusLifecycleListener;
 
-import com.opensymphony.xwork.ActionContext;
+import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
 
 /**
  * IsReadOnlyUserManagerTag:

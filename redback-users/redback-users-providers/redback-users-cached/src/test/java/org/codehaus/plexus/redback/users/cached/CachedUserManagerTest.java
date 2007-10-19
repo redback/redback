@@ -20,7 +20,6 @@ import net.sf.ehcache.CacheManager;
 
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.provider.test.AbstractUserManagerTestCase;
-import org.codehaus.plexus.redback.users.cached.CachedUserManager;
 
 /**
  * CachedUserManagerTest 

@@ -19,7 +19,6 @@ package org.codehaus.plexus.redback.rbac.cached;
 import net.sf.ehcache.CacheManager;
 
 import org.codehaus.plexus.redback.rbac.RBACManager;
-import org.codehaus.plexus.redback.rbac.cached.CachedRbacManager;
 import org.codehaus.plexus.redback.tests.AbstractRbacManagerTestCase;
 
 public class CachedRbacManagerTest

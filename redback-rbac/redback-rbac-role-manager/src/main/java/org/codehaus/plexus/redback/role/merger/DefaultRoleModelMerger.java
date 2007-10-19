@@ -16,10 +16,6 @@ package org.codehaus.plexus.redback.role.merger;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.role.model.ModelOperation;
 import org.codehaus.plexus.redback.role.model.ModelResource;
@@ -27,6 +23,10 @@ import org.codehaus.plexus.redback.role.model.ModelRole;
 import org.codehaus.plexus.redback.role.model.ModelTemplate;
 import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
 import org.codehaus.plexus.redback.role.util.RoleModelUtils;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * DefaultRoleModelValidator: validates completeness of the model
