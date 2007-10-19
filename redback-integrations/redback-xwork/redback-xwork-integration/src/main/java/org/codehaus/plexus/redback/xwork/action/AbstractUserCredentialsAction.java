@@ -25,6 +25,8 @@ import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.xwork.model.UserCredentials;
 import org.codehaus.plexus.util.StringUtils;
 
+import sun.rmi.runtime.GetThreadPoolAction;
+
 /**
  * AbstractUserCredentialsAction
  *
@@ -59,7 +61,12 @@ public abstract class AbstractUserCredentialsAction
         {
             addFieldError( "user.username", getText( "username.required" ) );
         }
-
+        
+        if ( internalUser.getUsername() != null && " ".indexOf( internalUser.getUsername() ) != -1 )
+        {
+        	addFieldError( "user.username", getText( "username.has.spaces") );
+        }
+        
         if ( StringUtils.isEmpty( internalUser.getFullName() ) )
         {
             addFieldError( "user.fullName", getText( "fullName.required" ) );
