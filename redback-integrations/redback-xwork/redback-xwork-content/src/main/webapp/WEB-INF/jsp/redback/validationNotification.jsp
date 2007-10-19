@@ -34,7 +34,7 @@
 </p>
 
 <p>
-  <ww:text name="validation.notification.message.2"/><ww:param>${user.email}</ww:param></ww:text>
+  <ww:text name="validation.notification.message.2"><ww:param>${user.email}</ww:param></ww:text>
 </p>
 
 </body>
