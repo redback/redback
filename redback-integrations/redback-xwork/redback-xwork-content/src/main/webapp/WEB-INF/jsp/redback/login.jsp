@@ -26,19 +26,23 @@
 
 <body onload="javascript:document.forms['login'].username.focus();">
 
-<h2><ww:text name="login.section.title"/></h2>
 
-<%@ include file="/WEB-INF/jsp/redback/include/formValidationResults.jsp" %>
+<c:choose>
+  <c:when test="${sessionScope.securitySession.authenticated != true}">
+  
+  <h2><ww:text name="login.section.title"/></h2>
 
-<ww:form action="login" namespace="/security" theme="xhtml" 
+  <%@ include file="/WEB-INF/jsp/redback/include/formValidationResults.jsp" %>
+  
+  
+    <ww:form action="login" namespace="/security" theme="xhtml" 
          id="loginForm" method="post" name="login" cssClass="security login">
-  <ww:textfield label="%{getText('username')}" name="username" size="30" />
-  <ww:password  label="%{getText('password')}" name="password" size="20" />
-  <ww:checkbox label="%{getText('login.remember.me')}" name="rememberMe" value="false" />
-  <ww:submit value="%{getText('login')}" method="login" />
-  <ww:submit value="%{getText('cancel')}" method="cancel" />
-</ww:form>
-
+      <ww:textfield label="%{getText('username')}" name="username" size="30" />
+      <ww:password  label="%{getText('password')}" name="password" size="20" />
+      <ww:checkbox label="%{getText('login.remember.me')}" name="rememberMe" value="false" />
+      <ww:submit value="%{getText('login')}" method="login" />
+      <ww:submit value="%{getText('cancel')}" method="cancel" />
+  </ww:form>
 <%-- TODO: Figure out how to auto-focus to first field --%>
 
 <ul class="tips">
@@ -62,7 +66,13 @@
   </li>
   </redback:isNotReadOnlyUserManager>
 </ul>
-
+</c:when>
+<c:otherwise>
+  <p/>
+	<ww:text name="login.already.logged.in"/>
+  <p/>
+</c:otherwise>
+</c:choose>
 </body>
 </ww:i18n>
 </html>
