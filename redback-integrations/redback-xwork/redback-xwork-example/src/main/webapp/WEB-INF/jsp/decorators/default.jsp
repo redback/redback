@@ -66,6 +66,14 @@
     </redback:elseAuthorized>
   </p>
 
+  <p class="note">
+    <c:if test="${sessionScope.securitySession.user != null}">
+    	Encoded Password: <c:out value="${sessionScope.securitySession.user.encodedPassword}"/><br/>
+    	Password Change Required Password: <c:out value="${sessionScope.securitySession.user.passwordChangeRequired}"/>
+    </c:if>
+  </p>
+
+
   <p class="note">The gray content is arriving via the /WEB-INF/jsp/decorators/default.jsp managed by sitemesh.<br/>
   Everything within the white box below is the actual jsp content.</p>
   <div id="nestedContent">

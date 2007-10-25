@@ -110,7 +110,7 @@ public class PasswordAction
         // Test existing Password.
         PasswordEncoder encoder = securitySystem.getPolicy().getPasswordEncoder();
 
-        if ( provideExisting )
+        if ( provideExisting  )
         {
             if ( !encoder.isPasswordValid( user.getEncodedPassword(), existingPassword ) )
             {
@@ -184,6 +184,15 @@ public class PasswordAction
                     addFieldError( "newPassword", violation );
                 }
             }
+            // [REDBACK-30] when the password is one of the previous 6, it throws exception here, but since the user
+            // object is in the session we need to clear out the encodedPassword otherwise the flow will change and think
+            // it needs to have existingPassword which isn't set on some reset password checks
+            if ( !provideExisting )
+            {
+                user.setEncodedPassword( "" );
+                user.setPassword( "" );
+            }
+            
             return ERROR;
         }
 

@@ -140,6 +140,8 @@ public class Mailer
                 }*/
             }
 
+            getLogger().debug( message.getContent() );
+            
             mailSender.send( message );
         }
         catch ( MailSenderException e )
