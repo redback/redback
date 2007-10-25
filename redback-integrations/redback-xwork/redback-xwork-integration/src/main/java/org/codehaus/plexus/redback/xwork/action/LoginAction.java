@@ -348,6 +348,11 @@ public class LoginAction
                 }
                 autologinCookies.setSignonCookie( authdatasource.getPrincipal() );
 
+                if ( securitySession.getUser().isLocked() )
+                {
+                    return ACCOUNT_LOCKED;
+                }
+                
                 // check if user is forced to change their password (also see policy enforcement interceptor)
                 if( securitySession.getUser().isPasswordChangeRequired() )
                 {
