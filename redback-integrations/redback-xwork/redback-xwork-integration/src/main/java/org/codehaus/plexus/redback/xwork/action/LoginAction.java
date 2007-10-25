@@ -27,6 +27,7 @@ import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
 import org.codehaus.plexus.redback.authentication.TokenBasedAuthenticationDataSource;
+import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.keys.KeyManagerException;
 import org.codehaus.plexus.redback.keys.KeyNotFoundException;
@@ -87,6 +88,11 @@ public class LoginAction
      */
     private AutoLoginCookies autologinCookies;
 
+    /**
+     * @plexus.requirement
+     */
+    private UserConfiguration config;
+    
     // ------------------------------------------------------------------
     // Action Entry Points - (aka Names)
     // ------------------------------------------------------------------
@@ -322,6 +328,20 @@ public class LoginAction
                 // Success!  Create tokens.
                 setAuthTokens( securitySession );
 
+                if ( securitySystem.getPolicy().getUserValidationSettings().isEmailValidationRequired() )
+                {
+                    if ( !securitySession.getUser().getUsername().equals( config.getString( "redback.default.admin" ) ) )
+                    {
+                        if ( !securitySession.getUser().isValidated() )
+                        {
+                            setAuthTokens( null );
+                            // NOTE: this text is the same as incorrect.username.password to avoid exposing actual account existence
+                            addActionError( getText( "account.validation.required" ) );
+                            return ERROR;
+                        }
+                    }
+                }
+                
                 if ( rememberMe )
                 {
                     autologinCookies.setRememberMeCookie( authdatasource.getPrincipal() );
