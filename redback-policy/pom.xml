@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.plexus.redback</groupId>
     <artifactId>redback</artifactId>
-    <version>1.0-alpha-4-SNAPSHOT</version>
+    <version>1.0-alpha-4</version>
   </parent>
   <artifactId>redback-policy</artifactId>
   <name>Redback :: Policy</name>
@@ -35,9 +35,9 @@
   </dependencies>
 
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-policy</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-policy</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/plexus/plexus-security/trunk/plexus-security-policy</url>
+    <connection>scm:svn:http://svn.codehaus.org/redback/redback/tags/redback-1.0-alpha-4/redback-policy</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0-alpha-4/redback-policy</developerConnection>
+    <url>http://fisheye.codehaus.org/browse/plexus/plexus-security/tags/redback-1.0-alpha-4/redback-policy</url>
   </scm>
 
   <build>
