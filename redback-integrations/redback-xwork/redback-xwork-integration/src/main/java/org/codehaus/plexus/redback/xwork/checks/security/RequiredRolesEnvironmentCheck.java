@@ -56,17 +56,17 @@ public class RequiredRolesEnvironmentCheck
         {
             getLogger().info( "Checking the existance of required roles." );
             
-            if ( rbacManager.roleExists( "registered-user" ) )
+            if ( !rbacManager.roleExists( "registered-user" ) )
             {
                violations.add( "unable to validate existence of the registered-user role" );
             }
             
-            if ( rbacManager.roleExists( "user-administrator" ) )
+            if ( !rbacManager.roleExists( "user-administrator" ) )
             {
                violations.add( "unable to validate existence of the user-administator role" );
             }
             
-            if ( rbacManager.roleExists( "system-administrator" ) )
+            if ( !rbacManager.roleExists( "system-administrator" ) )
             {
                violations.add( "unable to validate existence of the system-administrator role" );
             }
