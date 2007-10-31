@@ -78,8 +78,8 @@
   <distributionManagement>
     <repository>
       <id>codehaus.org</id>
-      <name>Redback Central Repository</name>
-      <url>dav:https://dav.codehaus.org/repository/redback</url>
+      <name>Plexus Central Repository</name>
+      <url>dav:https://dav.codehaus.org/repository/plexus</url>
     </repository>
     <snapshotRepository>
       <id>codehaus.org</id>
