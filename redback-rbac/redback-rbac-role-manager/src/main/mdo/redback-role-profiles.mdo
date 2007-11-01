@@ -47,6 +47,73 @@
           <required>true</required>          
         </field>
         <field>
+          <name>applications</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>Application</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>resources</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>ModelResource</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>operations</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>ModelOperation</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>roles</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>ModelRole</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>templates</name>
+          <version>1.0.0+</version>
+          <association>
+            <type>ModelTemplate</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>Application</name>
+      <description>
+        container for applications
+      </description>
+      <version>1.0.0+</version>
+      <fields>
+        <field>
+          <name>modelVersion</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <required>true</required>          
+        </field>
+        <field>
+          <name>version</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <required>true</required>          
+        </field>
+        <field>
+          <name>application</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <required>true</required>          
+        </field>
+        <field>
           <name>resources</name>
           <version>1.0.0+</version>
           <association>
