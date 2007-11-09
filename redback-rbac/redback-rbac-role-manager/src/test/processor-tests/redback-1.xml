@@ -3,6 +3,7 @@
 <applications>
 <application>
   <id>Processor Test 1</id>
+    <version>1.0</version>
   <resources>
     <resource>
       <id>cornflakes</id>

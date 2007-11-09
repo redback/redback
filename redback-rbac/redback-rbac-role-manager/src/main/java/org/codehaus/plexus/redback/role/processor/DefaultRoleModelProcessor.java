@@ -16,26 +16,13 @@ package org.codehaus.plexus.redback.role.processor;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.redback.rbac.Operation;
-import org.codehaus.plexus.redback.rbac.Permission;
-import org.codehaus.plexus.redback.rbac.RBACManager;
-import org.codehaus.plexus.redback.rbac.RbacManagerException;
-import org.codehaus.plexus.redback.rbac.Resource;
-import org.codehaus.plexus.redback.rbac.Role;
+import org.codehaus.plexus.redback.rbac.*;
 import org.codehaus.plexus.redback.role.RoleManagerException;
-import org.codehaus.plexus.redback.role.model.ModelOperation;
-import org.codehaus.plexus.redback.role.model.ModelPermission;
-import org.codehaus.plexus.redback.role.model.ModelResource;
-import org.codehaus.plexus.redback.role.model.ModelRole;
-import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
+import org.codehaus.plexus.redback.role.model.*;
 import org.codehaus.plexus.redback.role.util.RoleModelUtils;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * DefaultRoleModelProcessor: inserts the components of the model that can be populated into the rbac manager
@@ -66,9 +53,14 @@ public class DefaultRoleModelProcessor implements RoleModelProcessor
         processRoles( model );
     }
 
+
     private void processResources( RedbackRoleModel model ) throws RoleManagerException
     {
-        for ( Iterator i = model.getResources().iterator(); i.hasNext(); )
+        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        {
+            ModelApplication application =  (ModelApplication) k.next();
+
+        for ( Iterator i = application.getResources().iterator(); i.hasNext(); )
         {
             ModelResource profileResource = (ModelResource) i.next();
 
@@ -95,11 +87,15 @@ public class DefaultRoleModelProcessor implements RoleModelProcessor
                 throw new RoleManagerException( "error creating resource '" + profileResource.getName() + "'", e );
             }
         }
+        }
     }
 
     private void processOperations( RedbackRoleModel model ) throws RoleManagerException
     {
-        for ( Iterator i = model.getOperations().iterator(); i.hasNext(); )
+        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        {
+            ModelApplication application =  (ModelApplication) k.next();
+        for ( Iterator i = application.getOperations().iterator(); i.hasNext(); )
         {
             ModelOperation profileOperation = (ModelOperation) i.next();
 
@@ -126,6 +122,7 @@ public class DefaultRoleModelProcessor implements RoleModelProcessor
             {
                 throw new RoleManagerException( "error creating operation '" + profileOperation.getName() + "'", e );
             }
+        }
         }
     }
 

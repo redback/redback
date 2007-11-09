@@ -3,7 +3,8 @@
 	<applications>
 		<application>
 			<id>test app</id>
-			<operations>
+            <version>1.0</version>
+            <operations>
 				<operation>
 					<id>test-operation-2</id>
 					<name>Test Operation 2</name>

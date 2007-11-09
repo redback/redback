@@ -133,34 +133,18 @@ public class DefaultRoleManager extends AbstractLogEnabled implements RoleManage
             throw new RoleManagerException( "error parsing redback profile", e );
         }
     }
- 
-	public void loadRoleModel( RedbackRoleModel roleModel ) throws RoleManagerException
-    {
-        try
-        {
 
-            for ( Iterator i = roleModel.getApplications().iterator(); i.hasNext(); )
-            {
-                ModelApplication app = (ModelApplication) i.next();
+    public void loadRoleModel(RedbackRoleModel roleModel) throws RoleManagerException {
 
-                if ( !knownResources.containsKey( app.getId() ) )
-                {
-                    loadApplication( app );
-                }
+
+        for (Iterator i = roleModel.getApplications().iterator(); i.hasNext();) {
+            ModelApplication app = (ModelApplication) i.next();
+
+            if (!knownResources.containsKey(app.getId())) {
+                loadApplication(app);
             }
         }
-        catch ( MalformedURLException e )
-        {
-            throw new RoleManagerException( "error locating redback profile", e );
-        }
-        catch ( IOException e )
-        {
-            throw new RoleManagerException( "error reading redback profile", e );
-        }
-        catch ( XMLStreamException e )
-        {
-            throw new RoleManagerException( "error parsing redback profile", e );
-        }
+
     }
 	
     public void loadApplication( ModelApplication app ) throws RoleManagerException 
@@ -170,7 +154,7 @@ public class DefaultRoleManager extends AbstractLogEnabled implements RoleManage
             unblessedModel = new RedbackRoleModel();
         }
         
-        unblessedModel = unblessedModel.addApplication(app);
+        unblessedModel.addApplication(app);
 
 		if ( modelValidator.validate( unblessedModel ) )
         {
@@ -180,14 +164,14 @@ public class DefaultRoleManager extends AbstractLogEnabled implements RoleManage
         {
             List validationErrors = modelValidator.getValidationErrors();
 
-            getLogger().error( "Validation Error: " + unblessedModel.getApplication() );
+            getLogger().error( "Role Model Validation Errors:");
 
             for ( Iterator i = validationErrors.iterator(); i.hasNext(); )
             {
                 getLogger().error( (String) i.next() );
             }
 
-            throw new RoleManagerException( "Validation Error: " + unblessedModel.getApplication() );
+            throw new RoleManagerException( "Role Model Validation Error" );
         }
 
         modelProcessor.process( blessedModel );

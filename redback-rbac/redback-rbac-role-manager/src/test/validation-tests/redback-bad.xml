@@ -2,7 +2,6 @@
 	<modelVersion>1.0.0</modelVersion>
 	<applications>
 		<application>
-			<id>bad</id>
 			<resources>
 				<resource>
 					<id>cornflakes</id>

@@ -3,7 +3,8 @@
 	<applications>
 		<application>
 			<id>validator test</id>
-			<resources>
+            <version>1.0</version>
+            <resources>
 				<resource>
 					<id>cornflakes</id>
 					<name>cornflakes</name>

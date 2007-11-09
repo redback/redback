@@ -16,19 +16,9 @@ package org.codehaus.plexus.redback.role.template;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.redback.rbac.Operation;
-import org.codehaus.plexus.redback.rbac.Permission;
-import org.codehaus.plexus.redback.rbac.RBACManager;
-import org.codehaus.plexus.redback.rbac.RbacManagerException;
-import org.codehaus.plexus.redback.rbac.Resource;
-import org.codehaus.plexus.redback.rbac.Role;
+import org.codehaus.plexus.redback.rbac.*;
 import org.codehaus.plexus.redback.role.RoleManagerException;
-import org.codehaus.plexus.redback.role.model.ModelOperation;
-import org.codehaus.plexus.redback.role.model.ModelPermission;
-import org.codehaus.plexus.redback.role.model.ModelResource;
-import org.codehaus.plexus.redback.role.model.ModelRole;
-import org.codehaus.plexus.redback.role.model.ModelTemplate;
-import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
+import org.codehaus.plexus.redback.role.model.*;
 import org.codehaus.plexus.redback.role.util.RoleModelUtils;
 
 import java.util.ArrayList;
@@ -53,7 +43,11 @@ public class DefaultRoleTemplateProcessor implements RoleTemplateProcessor
 
     public void create( RedbackRoleModel model, String templateId, String resource ) throws RoleManagerException
     {
-        for ( Iterator i = model.getTemplates().iterator(); i.hasNext(); )
+        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        {
+            ModelApplication application = (ModelApplication) k.next();
+
+        for ( Iterator i = application.getTemplates().iterator(); i.hasNext(); )
         {
             ModelTemplate template = (ModelTemplate) i.next();
 
@@ -68,13 +62,18 @@ public class DefaultRoleTemplateProcessor implements RoleTemplateProcessor
                 return;
             }
         }
+        }
 
         throw new RoleManagerException( "unknown template '" + templateId + "'" );
     }
 
     public void remove( RedbackRoleModel model, String templateId, String resource ) throws RoleManagerException
     {
-        for ( Iterator i = model.getTemplates().iterator(); i.hasNext(); )
+        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        {
+            ModelApplication application = (ModelApplication) k.next();
+
+        for ( Iterator i = application.getTemplates().iterator(); i.hasNext(); )
         {
             ModelTemplate template = (ModelTemplate) i.next();
 
@@ -84,7 +83,8 @@ public class DefaultRoleTemplateProcessor implements RoleTemplateProcessor
                 return;
             }
         }
-
+        }
+        
         throw new RoleManagerException( "unknown template '" + templateId + "'" );
     }
 

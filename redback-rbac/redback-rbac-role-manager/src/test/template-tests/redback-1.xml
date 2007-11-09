@@ -2,7 +2,9 @@
 	<modelVersion>1.0.0</modelVersion>
 	<applications>
 		<application>
-			<resources>
+            <id>template test</id>
+            <version>1.0</version>
+            <resources>
 				<resource>
 					<id>cornflakes</id>
 					<name>cornflakes name</name>
@@ -46,10 +48,7 @@
 				</role>
 				<role>
 					<id>can-drink-the-milk</id>
-					<name>
-						Role for cornflake eaters drinking milk in the
-						bowl
-					</name>
+					<name>Role for cornflake eaters drinking milk in the bowl</name>
 					<permissions>
 						<permission>
 							<id>drink-milk-permission</id>

@@ -16,11 +16,7 @@ package org.codehaus.plexus.redback.role.util;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.redback.role.model.ModelOperation;
-import org.codehaus.plexus.redback.role.model.ModelResource;
-import org.codehaus.plexus.redback.role.model.ModelRole;
-import org.codehaus.plexus.redback.role.model.ModelTemplate;
-import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
+import org.codehaus.plexus.redback.role.model.*;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 import org.codehaus.plexus.util.dag.DAG;
 import org.codehaus.plexus.util.dag.TopologicalSorter;
@@ -43,10 +39,14 @@ public class RoleModelUtils
     {
         List operationsIdList = new ArrayList();
 
-        for ( Iterator i = model.getOperations().iterator(); i.hasNext(); )
+        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        {
+            ModelApplication application = (ModelApplication)k.next();
+        for ( Iterator i = application.getOperations().iterator(); i.hasNext(); )
         {
             ModelOperation operation = (ModelOperation) i.next();
             operationsIdList.add( operation.getId() );
+        }
         }
 
         return operationsIdList;
@@ -56,10 +56,14 @@ public class RoleModelUtils
     {
         List resourceIdList = new ArrayList();
 
-        for ( Iterator i = model.getResources().iterator(); i.hasNext(); )
+        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        {
+            ModelApplication application = (ModelApplication)k.next();
+        for ( Iterator i = application.getResources().iterator(); i.hasNext(); )
         {
             ModelResource resource = (ModelResource) i.next();
             resourceIdList.add( resource.getId() );
+        }
         }
 
         return resourceIdList;
@@ -69,10 +73,14 @@ public class RoleModelUtils
     {
         List roleIdList = new ArrayList();
 
-        for ( Iterator i = model.getRoles().iterator(); i.hasNext(); )
+        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        {
+            ModelApplication application = (ModelApplication)k.next();
+        for ( Iterator i = application.getRoles().iterator(); i.hasNext(); )
         {
             ModelRole role = (ModelRole) i.next();
             roleIdList.add( role.getId() );
+        }
         }
 
         return roleIdList;
@@ -82,10 +90,14 @@ public class RoleModelUtils
     {
         List templateIdList = new ArrayList();
 
-        for ( Iterator i = model.getTemplates().iterator(); i.hasNext(); )
+        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        {
+            ModelApplication application = (ModelApplication)k.next();
+        for ( Iterator i = application.getTemplates().iterator(); i.hasNext(); )
         {
             ModelTemplate template = (ModelTemplate) i.next();
             templateIdList.add( template.getId() );
+        }
         }
 
         return templateIdList;
@@ -103,7 +115,10 @@ public class RoleModelUtils
     {
         ModelRole mrole = null;
 
-        for ( Iterator i = model.getRoles().iterator(); i.hasNext(); )
+        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        {
+            ModelApplication application = (ModelApplication)k.next();
+        for ( Iterator i = application.getRoles().iterator(); i.hasNext(); )
         {
             ModelRole role = (ModelRole) i.next();
 
@@ -112,6 +127,8 @@ public class RoleModelUtils
                 mrole = role;
             }
         }
+        }
+
         return mrole;
     }
     
@@ -127,7 +144,10 @@ public class RoleModelUtils
     {
         ModelTemplate mtemplate = null;
 
-        for ( Iterator i = model.getTemplates().iterator(); i.hasNext(); )
+        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        {
+            ModelApplication application = (ModelApplication)k.next();
+        for ( Iterator i = application.getTemplates().iterator(); i.hasNext(); )
         {
             ModelTemplate template = (ModelTemplate) i.next();
 
@@ -136,6 +156,8 @@ public class RoleModelUtils
                 mtemplate = template;
             }
         }
+        }
+
         return mtemplate;
     }
     
@@ -150,7 +172,10 @@ public class RoleModelUtils
     {
         ModelOperation moperation = null;
 
-        for ( Iterator i = model.getOperations().iterator(); i.hasNext(); )
+        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        {
+            ModelApplication application = (ModelApplication)k.next();
+        for ( Iterator i = application.getOperations().iterator(); i.hasNext(); )
         {
             ModelOperation operation = (ModelOperation) i.next();
 
@@ -159,6 +184,8 @@ public class RoleModelUtils
                 moperation = operation;
             }
         }
+        }
+
         return moperation;
     }
     
@@ -166,7 +193,10 @@ public class RoleModelUtils
     {
         ModelResource mresource = null;
 
-        for ( Iterator i = model.getResources().iterator(); i.hasNext(); )
+        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        {
+            ModelApplication application = (ModelApplication)k.next();
+        for ( Iterator i = application.getResources().iterator(); i.hasNext(); )
         {
             ModelResource resource = (ModelResource) i.next();
 
@@ -175,6 +205,8 @@ public class RoleModelUtils
                 mresource = resource;
             }
         }
+        }
+
         return mresource;
     }
 
@@ -182,7 +214,10 @@ public class RoleModelUtils
     {
         DAG roleGraph = new DAG();
 
-        for ( Iterator i = model.getRoles().iterator(); i.hasNext(); )
+        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        {
+            ModelApplication application = (ModelApplication)k.next();
+        for ( Iterator i = application.getRoles().iterator(); i.hasNext(); )
         {
             ModelRole role = (ModelRole) i.next();
 
@@ -210,6 +245,7 @@ public class RoleModelUtils
                 }
             }
         }
+        }
 
         return roleGraph;
     }
@@ -218,7 +254,10 @@ public class RoleModelUtils
     {
         DAG templateGraph = generateRoleGraph( model );
 
-        for ( Iterator i = model.getTemplates().iterator(); i.hasNext(); )
+        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        {
+            ModelApplication application = (ModelApplication)k.next();
+        for ( Iterator i = application.getTemplates().iterator(); i.hasNext(); )
         {
             ModelTemplate template = (ModelTemplate) i.next();
 
@@ -267,6 +306,7 @@ public class RoleModelUtils
                     templateGraph.addEdge( parentTemplates, template.getId() );
                 }
             }
+        }
         }
 
         return templateGraph;

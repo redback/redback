@@ -3,7 +3,8 @@
 	<applications>
 		<application>
 			<id>Redback XWork Integration Security Core</id>
-			<resources>
+            <version>1.0</version>
+            <resources>
 				<resource>
 					<id>global</id>
 					<name>*</name>
