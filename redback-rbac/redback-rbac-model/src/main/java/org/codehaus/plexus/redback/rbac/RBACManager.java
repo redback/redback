@@ -56,7 +56,7 @@ public interface RBACManager
     public Role createRole( String name );
 
     /**
-     * Tests for the existance of a Role.
+     * Tests for the existence of a Role.
      *
      * @return true if role exists in store.
      * @throws RbacManagerException
@@ -149,7 +149,7 @@ public interface RBACManager
         throws RbacManagerException;
 
     /**
-     * Tests for the existance of a permission.
+     * Tests for the existence of a permission.
      *
      * @param name the name to test for.
      * @return true if permission exists.

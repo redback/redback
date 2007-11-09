@@ -27,7 +27,7 @@ import com.opensymphony.xwork.config.ConfigurationManager;
 
 /**
  * <p/>
- * ExpectedXworkConfiguration reason for existance is to validate that the executing
+ * ExpectedXworkConfiguration reason for existence is to validate that the executing
  * environment has everything needed for a proper execution of
  * Plexus Security :: UI Web components and javascript and jsps.
  * </p>

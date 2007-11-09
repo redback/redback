@@ -54,7 +54,7 @@ public class RequiredRolesEnvironmentCheck
     {
         if ( !checked )
         {
-            getLogger().info( "Checking the existance of required roles." );
+            getLogger().info( "Checking the existence of required roles." );
             
             if ( !rbacManager.roleExists( "registered-user" ) )
             {

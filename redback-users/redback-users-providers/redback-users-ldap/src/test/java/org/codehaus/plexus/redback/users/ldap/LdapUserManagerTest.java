@@ -135,7 +135,7 @@ public class LdapUserManagerTest extends PlexusTestCase
     	
     }
     	
-    public void testDirectUsersExistance() throws Exception
+    public void testDirectUsersExistence() throws Exception
     {
     	LdapConnection connection = connectionFactory.getConnection();
     	
