@@ -35,13 +35,7 @@
       <version>1.0.0+</version>
       <fields>
         <field>
-          <name>version</name>
-          <version>1.0.0+</version>
-          <type>String</type>
-          <required>true</required>          
-        </field>
-        <field>
-          <name>application</name>
+          <name>modelVersion</name>
           <version>1.0.0+</version>
           <type>String</type>
           <required>true</required>          
@@ -50,57 +44,19 @@
           <name>applications</name>
           <version>1.0.0+</version>
           <association>
-            <type>Application</type>
-            <multiplicity>*</multiplicity>
-          </association>
-        </field>
-        <field>
-          <name>resources</name>
-          <version>1.0.0+</version>
-          <association>
-            <type>ModelResource</type>
-            <multiplicity>*</multiplicity>
-          </association>
-        </field>
-        <field>
-          <name>operations</name>
-          <version>1.0.0+</version>
-          <association>
-            <type>ModelOperation</type>
-            <multiplicity>*</multiplicity>
-          </association>
-        </field>
-        <field>
-          <name>roles</name>
-          <version>1.0.0+</version>
-          <association>
-            <type>ModelRole</type>
-            <multiplicity>*</multiplicity>
-          </association>
-        </field>
-        <field>
-          <name>templates</name>
-          <version>1.0.0+</version>
-          <association>
-            <type>ModelTemplate</type>
+            <type>ModelApplication</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>
       </fields>
     </class>
-    <class>
-      <name>Application</name>
+    <class xml.tagName="application">
+      <name>ModelApplication</name>
       <description>
         container for applications
       </description>
       <version>1.0.0+</version>
       <fields>
-        <field>
-          <name>modelVersion</name>
-          <version>1.0.0+</version>
-          <type>String</type>
-          <required>true</required>          
-        </field>
         <field>
           <name>version</name>
           <version>1.0.0+</version>
@@ -108,7 +64,19 @@
           <required>true</required>          
         </field>
         <field>
-          <name>application</name>
+          <name>id</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <required>true</required>          
+        </field>
+        <field>
+          <name>description</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <required>true</required>          
+        </field>
+        <field>
+          <name>longDescription</name>
           <version>1.0.0+</version>
           <type>String</type>
           <required>true</required>          
@@ -229,17 +197,6 @@
           </association>
         </field>
       </fields>
-      <codeSegments>
-        <codeSegment>
-          <version>1.0.0</version>
-          <code><![CDATA[
-              public String toString()
-              {
-                return "[" + getId() + "," + getName() + "]";
-              }
-          ]]></code>
-        </codeSegment>
-      </codeSegments>
     </class>
     <class>
       <name>ModelTemplate</name>
@@ -361,17 +318,6 @@
           </association>
         </field>
       </fields>
-      <codeSegments>
-        <codeSegment>
-          <version>1.0.0</version>
-          <code><![CDATA[
-              public String toString()
-              {
-                return "[" + getId() + "," + getNamePrefix() + "]";
-              }
-          ]]></code>
-        </codeSegment>
-      </codeSegments>
     </class>
     <class>
       <name>ModelResource</name>
@@ -415,17 +361,6 @@
           <type>String</type>
         </field>
       </fields>
-      <codeSegments>
-        <codeSegment>
-          <version>1.0.0</version>
-          <code><![CDATA[
-              public String toString()
-              {
-                return "[" + getId() + "," + getName() + "]";
-              }
-          ]]></code>
-        </codeSegment>
-      </codeSegments>
     </class>
     <class>
       <name>ModelOperation</name>
@@ -460,17 +395,6 @@
           <defaultValue>false</defaultValue>
         </field>
       </fields>
-      <codeSegments>
-        <codeSegment>
-          <version>1.0.0</version>
-          <code><![CDATA[
-              public String toString()
-              {
-                return "[" + getId() + "," + getName() + "]";
-              }
-          ]]></code>
-        </codeSegment>
-      </codeSegments>
     </class>
     <class>
       <name>ModelPermission</name>
@@ -524,17 +448,6 @@
           <type>String</type>
         </field>
       </fields>
-      <codeSegments>
-        <codeSegment>
-          <version>1.0.0</version>
-          <code><![CDATA[
-              public String toString()
-              {
-                return "[" + getId() + "," + getName() + "," + getOperation() + "," + getResource() + "]";
-              }
-          ]]></code>
-        </codeSegment>
-      </codeSegments>
     </class>
   </classes>
 </model>

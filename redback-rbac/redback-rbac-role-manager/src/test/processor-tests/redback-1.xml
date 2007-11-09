@@ -1,6 +1,8 @@
 <redback-role-model>
-  <application>Processor Test 1</application>
-  <version>1.0.0</version>
+<modelVersion>1.0.0</modelVersion>
+<applications>
+<application>
+  <id>Processor Test 1</id>
   <resources>
     <resource>
       <id>cornflakes</id>
@@ -91,4 +93,6 @@
       </childTemplates>
     </template>
   </templates>
+  </application>
+  </applications>
 </redback-role-model>

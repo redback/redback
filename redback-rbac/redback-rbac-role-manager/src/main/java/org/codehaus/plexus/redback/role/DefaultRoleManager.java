@@ -25,7 +25,7 @@ import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
-import org.codehaus.plexus.redback.role.merger.RoleModelMerger;
+import org.codehaus.plexus.redback.role.model.ModelApplication;
 import org.codehaus.plexus.redback.role.model.ModelRole;
 import org.codehaus.plexus.redback.role.model.ModelTemplate;
 import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
@@ -68,17 +68,12 @@ public class DefaultRoleManager extends AbstractLogEnabled implements RoleManage
     /**
      * the merged model that can be validated as complete
      */
-    private RedbackRoleModel mergedModel;
+    private RedbackRoleModel unblessedModel;
     
     /**
      * a map of the resources, and the model that they loaded
      */
     private Map knownResources = new HashMap();
-    
-    /**
-     * @plexus.requirement role-hint="default"
-     */
-    private RoleModelMerger modelMerger;
     
     /**
      * @plexus.requirement role-hint="default"
@@ -113,23 +108,16 @@ public class DefaultRoleManager extends AbstractLogEnabled implements RoleManage
         {
             RedbackRoleModel roleModel = reader.read( new InputStreamReader( resource.openStream() ) );
             
-            boolean loaded = false; 
+            boolean loaded = false;                        
             
-            for ( Iterator i = knownResources.keySet().iterator(); i.hasNext(); )
+            for ( Iterator i = roleModel.getApplications().iterator(); i.hasNext(); )
             {
-                String applicationName = (String)i.next();
-                
-                if ( applicationName.equals( roleModel.getApplication() ) )
-                {
-                    loaded = true;
-                }
-            }
-            
-            if ( !loaded )
-            {
-                knownResources.put( roleModel.getApplication(), roleModel );
-            
-                loadRoleModel( roleModel );
+            	ModelApplication app = (ModelApplication) i.next();
+            	
+            	if ( !knownResources.containsKey( app.getId() ) )
+            	{
+            		loadApplication( app );
+            	}
             }
         }
         catch ( MalformedURLException e )
@@ -146,75 +134,70 @@ public class DefaultRoleManager extends AbstractLogEnabled implements RoleManage
         }
     }
  
-    public void loadRoleModel( RedbackRoleModel model ) throws RoleManagerException 
+	public void loadRoleModel( RedbackRoleModel roleModel ) throws RoleManagerException
     {
-        if ( mergedModel == null )
+        try
         {
-            mergedModel = model;
-            
-            if ( modelValidator.validate( mergedModel ) )
-            {
-                blessedModel = mergedModel;
-            }
-            else
-            {
-                List validationErrors = modelValidator.getValidationErrors();
 
-                getLogger().error( "Validation Error: " + model.getApplication() );
-                
-                for ( Iterator i = validationErrors.iterator(); i.hasNext(); )
-                {                                  
-                    getLogger().error( (String)i.next() );
+            for ( Iterator i = roleModel.getApplications().iterator(); i.hasNext(); )
+            {
+                ModelApplication app = (ModelApplication) i.next();
+
+                if ( !knownResources.containsKey( app.getId() ) )
+                {
+                    loadApplication( app );
                 }
-                
-                throw new RoleManagerException( "Validation Error: " + mergedModel.getApplication() );
             }
+        }
+        catch ( MalformedURLException e )
+        {
+            throw new RoleManagerException( "error locating redback profile", e );
+        }
+        catch ( IOException e )
+        {
+            throw new RoleManagerException( "error reading redback profile", e );
+        }
+        catch ( XMLStreamException e )
+        {
+            throw new RoleManagerException( "error parsing redback profile", e );
+        }
+    }
+	
+    public void loadApplication( ModelApplication app ) throws RoleManagerException 
+    {
+        if ( unblessedModel == null )
+        {
+            unblessedModel = new RedbackRoleModel();
+        }
+        
+        unblessedModel = unblessedModel.addApplication(app);
+
+		if ( modelValidator.validate( unblessedModel ) )
+        {
+            blessedModel = unblessedModel;
         }
         else
         {
-            mergedModel = modelMerger.merge( blessedModel, model );
-            
-            if ( modelMerger.hasMergeErrors() )
+            List validationErrors = modelValidator.getValidationErrors();
+
+            getLogger().error( "Validation Error: " + unblessedModel.getApplication() );
+
+            for ( Iterator i = validationErrors.iterator(); i.hasNext(); )
             {
-                List mergeErrors = modelMerger.getMergeErrors();
-                
-                getLogger().error( "Merge Error: " + mergedModel.getApplication() );
-                
-                for ( Iterator i = mergeErrors.iterator(); i.hasNext(); )
-                {                                  
-                    getLogger().error( (String)i.next() );
-                }
-                
-                throw new RoleManagerException( "Merge Error: " + mergedModel.getApplication() );
+                getLogger().error( (String) i.next() );
             }
-            
-            if ( modelValidator.validate( mergedModel ) )
-            {
-                blessedModel = mergedModel;
-            }
-            else
-            {
-                List validationErrors = modelValidator.getValidationErrors();
-                
-                getLogger().error( "Validation Error: " + mergedModel.getApplication() );
-                
-                for ( Iterator i = validationErrors.iterator(); i.hasNext(); )
-                {                                  
-                    getLogger().error( (String)i.next() );
-                }
-                
-                throw new RoleManagerException( "Validation Error: " + mergedModel.getApplication() );
-            }
+
+            throw new RoleManagerException( "Validation Error: " + unblessedModel.getApplication() );
         }
-        
+
         modelProcessor.process( blessedModel );
     }
 	
     /**
-     * create a role for the given roleName using the resource passed in for resolving the
-     * ${resource} expression
-     * 
-     */
+	 * create a role for the given roleName using the resource passed in for
+	 * resolving the ${resource} expression
+	 * 
+	 */
     public void createTemplatedRole( String templateId, String resource ) throws RoleManagerException
     {
         templateProcessor.create( blessedModel, templateId, resource );

@@ -90,19 +90,19 @@ public class DefaultRoleModelValidator implements RoleModelValidator
     private void validateRequiredStructure( RedbackRoleModel model )
     {
         // validate model has name
-        if ( model.getApplication() == null )
-        {
-            addValidationError( "model is missing application name" );
-        }
+//        if ( model.getApplication() == null )
+//        {
+//            addValidationError( "model is missing application name" );
+ //       }
         
         // validate model has version
-        if ( model.getVersion() == null )
-        {
-            addValidationError( model.getApplication() + " is missing version" );
-        }
+ //       if ( model.getVersion() == null )
+ //       {
+ //           addValidationError( model.getApplication() + " is missing version" );
+ //       }
         
         // validate resource bits
-        for ( Iterator i = model.getResources().iterator(); i.hasNext(); )
+   /*     for ( Iterator i = model.getResources().iterator(); i.hasNext(); )
         {
             ModelResource resource = (ModelResource)i.next();
             
@@ -217,7 +217,7 @@ public class DefaultRoleModelValidator implements RoleModelValidator
                     }                        
                 }
             }
-        }
+        }*/
     }
 
     /**
@@ -228,10 +228,10 @@ public class DefaultRoleModelValidator implements RoleModelValidator
      */
     private void validateOperationClosure( RedbackRoleModel model )
     {
-        List operationIdList = RoleModelUtils.getOperationIdList( model );
+     //   List operationIdList = RoleModelUtils.getOperationIdList( model );
 
         // check the operations in role permissions
-        for ( Iterator i = model.getRoles().iterator(); i.hasNext(); )
+ /*       for ( Iterator i = model.getRoles().iterator(); i.hasNext(); )
         {
             ModelRole role = (ModelRole) i.next();
 
@@ -268,13 +268,13 @@ public class DefaultRoleModelValidator implements RoleModelValidator
                     }
                 }
             }
-        }
+        }*/
     }
 
     private void validateResourceClosure( RedbackRoleModel model )
     {
-        List resourceIdList = RoleModelUtils.getResourceIdList( model );
-
+    //    List resourceIdList = RoleModelUtils.getResourceIdList( model );
+/*
         for ( Iterator i = model.getRoles().iterator(); i.hasNext(); )
         {
             ModelRole role = (ModelRole) i.next();
@@ -292,12 +292,12 @@ public class DefaultRoleModelValidator implements RoleModelValidator
                     }
                 }
             }
-        }
+        }*/
     }
 
     private void validateChildRoleClosure( RedbackRoleModel model )
     {
-        List roleIdList = RoleModelUtils.getRoleIdList( model );
+  /*      List roleIdList = RoleModelUtils.getRoleIdList( model );
 
         for ( Iterator i = model.getRoles().iterator(); i.hasNext(); )
         {
@@ -335,12 +335,12 @@ public class DefaultRoleModelValidator implements RoleModelValidator
                     }
                 }
             }
-        }
+        }*/
     }
 
     private void validateParentRoleClosure( RedbackRoleModel model )
     {
-        List roleIdList = RoleModelUtils.getRoleIdList( model );
+    /*    List roleIdList = RoleModelUtils.getRoleIdList( model );
 
         for ( Iterator i = model.getRoles().iterator(); i.hasNext(); )
         {
@@ -378,12 +378,12 @@ public class DefaultRoleModelValidator implements RoleModelValidator
                     }
                 }
             }
-        }
+        }*/
     }
 
     private void validateTemplateClosure( RedbackRoleModel model )
     {
-        List templateIdList = RoleModelUtils.getTemplateIdList( model );
+   /*    List templateIdList = RoleModelUtils.getTemplateIdList( model );
         
         // template name prefix must be unique
         List templateNamePrefixList = new ArrayList();
@@ -428,7 +428,7 @@ public class DefaultRoleModelValidator implements RoleModelValidator
             {
                 addValidationError( "duplicate name prefix detected: " + template.getNamePrefix() );
             }
-        }
+        }*/
     }
 
     /**
@@ -438,14 +438,14 @@ public class DefaultRoleModelValidator implements RoleModelValidator
      */
     private void validateNoRoleCycles( RedbackRoleModel model )
     {
-        try
+ /*       try
         {
-            RoleModelUtils.generateRoleGraph( model );
+           RoleModelUtils.generateRoleGraph( model );
         }
         catch ( CycleDetectedException e )
         {
             addValidationError( "cycle detected: " + e.getMessage() );
-        }
+        }*/
     }
     
    
@@ -461,13 +461,13 @@ public class DefaultRoleModelValidator implements RoleModelValidator
      */
     private void validateNoTemplateCycles( RedbackRoleModel model )
     {
-        try
+ /*       try
         {
-            RoleModelUtils.generateTemplateGraph( model );
+   //         RoleModelUtils.generateTemplateGraph( model );
         }
         catch ( CycleDetectedException e )
         {
             addValidationError( "template cycle detected: " + e.getMessage() );
-        }
+        } */
     }
 }
