@@ -35,6 +35,34 @@ import java.util.List;
 public class RoleModelUtils
 {
 
+    public static List getRoles( RedbackRoleModel model )
+    {
+        List roleList = new ArrayList();
+
+        for ( Iterator i = model.getApplications().iterator(); i.hasNext(); )
+        {
+            ModelApplication application = (ModelApplication) i.next();
+
+            roleList.addAll( application.getRoles() );
+        }
+
+        return roleList;
+    }
+
+    public static List getTemplates( RedbackRoleModel model )
+    {
+        List templateList = new ArrayList();
+
+        for ( Iterator i = model.getApplications().iterator(); i.hasNext(); )
+        {
+            ModelApplication application = (ModelApplication) i.next();
+
+            templateList.addAll( application.getTemplates() );
+        }
+
+        return templateList;
+    }
+
     public static List getOperationIdList( RedbackRoleModel model )
     {
         List operationsIdList = new ArrayList();

@@ -1,6 +1,7 @@
 <redback-role-model>
     <modelVersion>1.0.0</modelVersion>
     <applications>
+        <application>
         <id>redback-xwork-integration-core</id>
         <description>Redback XWork Integration Security Core</description>
         <version>1.0.0</version>
@@ -194,5 +195,6 @@
                 </permissions>
             </role>
         </roles>
+        </application>
     </applications>
 </redback-role-model>

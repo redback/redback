@@ -16,23 +16,12 @@ package org.codehaus.plexus.redback.xwork.action.admin;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.codehaus.plexus.redback.rbac.Permission;
-import org.codehaus.plexus.redback.rbac.RBACManager;
-import org.codehaus.plexus.redback.rbac.RbacManagerException;
-import org.codehaus.plexus.redback.rbac.Resource;
-import org.codehaus.plexus.redback.rbac.Role;
-import org.codehaus.plexus.redback.rbac.TemplatedRole;
-import org.codehaus.plexus.redback.rbac.UserAssignment;
+import org.codehaus.plexus.redback.rbac.*;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.model.ModelRole;
 import org.codehaus.plexus.redback.role.model.ModelTemplate;
 import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
+import org.codehaus.plexus.redback.role.util.RoleModelUtils;
 import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySystemConstants;
 import org.codehaus.plexus.redback.users.User;
@@ -46,6 +35,8 @@ import org.codehaus.plexus.redback.xwork.role.RoleConstants;
 import org.codehaus.plexus.redback.xwork.util.ModelTemplateSorter;
 import org.codehaus.plexus.redback.xwork.util.TemplatedRoleSorter;
 import org.codehaus.plexus.util.StringUtils;
+
+import java.util.*;
 
 /**
  * AssignmentsAction
@@ -225,7 +216,7 @@ public class AssignmentsAction
         // get NONDYNAMIC roles
 
         RedbackRoleModel model = rmanager.getModel();
-        List tmp = model.getRoles();
+        List tmp = RoleModelUtils.getRoles( model );
 
         try
         {
@@ -266,7 +257,7 @@ public class AssignmentsAction
         
         this.templates = new ArrayList();
 
-        List temp = model.getTemplates();
+        List temp = RoleModelUtils.getTemplates( model );
         for ( Iterator i = temp.iterator(); i.hasNext(); )
         {
             ModelTemplate template = (ModelTemplate) i.next();
