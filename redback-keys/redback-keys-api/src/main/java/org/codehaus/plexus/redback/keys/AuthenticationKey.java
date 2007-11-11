@@ -34,7 +34,7 @@ public interface AuthenticationKey
     public String getKey();
     
     /**
-     * A String representation of what the purpose of existance is for this key.
+     * A String representation of what the purpose of existence is for this key.
      * 
      * Examples: "selfservice password reset", "inter system communications", "remember me"
      * 
