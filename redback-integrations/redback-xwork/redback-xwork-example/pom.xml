@@ -60,7 +60,7 @@
     <dependency>
       <groupId>org.codehaus.plexus.redback</groupId>
       <artifactId>redback-taglib</artifactId>
-    </dependency> 
+    </dependency>
    <dependency>
       <groupId>org.codehaus.plexus.redback</groupId>
       <artifactId>redback-users-ldap</artifactId>

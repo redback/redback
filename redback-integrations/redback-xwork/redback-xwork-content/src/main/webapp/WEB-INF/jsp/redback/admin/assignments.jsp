@@ -35,20 +35,92 @@
         <ww:label label="%{getText('email')}" name="user.email"/>
       </table>
     </div>
-    
-<h3><ww:text name="assignments.available.roles"/></h3>
+
+<!--<h3><ww:text name="assignments.available.roles"/></h3>-->
 
     <ww:form action="addRolesToUser" namespace="/security" name="addRoles">
       <ww:hidden name="principal"/>
       <ww:hidden name="addRolesButton" value="true"/>
-      
+
+      <ww:iterator id="application" value="applicationRoleDetails">
+
+        <h3>${application.name}</h3>
+        <i>${application.description}</i><br/>
+
+          <c:if test="${!empty assignedRoles}">
+
+       <h5>Assigned Roles:</h5>
+        <table>
+        <ww:iterator id="assignedRole" value="assignedRoles">
+           <ww:checkbox label="${assignedRole}" labelPosition="left" name="addNDSelectedRoles" fieldValue="${assignedRole}"/>
+        </ww:iterator>
+        </table>
+
+           </c:if>
+          <c:if test="${!empty availableRoles}">
+        <h5>Available Roles:</h5>
+        <table>
+        <ww:iterator id="availableRole" value="availableRoles">
+           <ww:checkbox label="${availableRole}" labelPosition="left" name="addNDSelectedRoles" value="false" fieldValue="${availableRole}"/>
+        </ww:iterator>
+        </table>
+          </c:if>
+
+        <c:if test="${!empty table}">
+        <h5>Resource Roles:</h5>
+        <table>
+            <tr>
+                <td></td>
+                <ww:iterator id="column" value="tableHeader">
+                    <td>${column.namePrefix}</td>
+                </ww:iterator>
+            </tr>
+
+            <c:forEach var="row" items="${table}">
+
+                    <c:forEach var="column" items="${row}">
+
+                        <c:choose>
+                            <c:when test="${column.label}">
+                                <td>${column.name}</td>
+                            </c:when>
+                            <c:when test="${column.assigned}">
+                                <td>
+                                    <center>
+                                  <input type="checkbox" name="addDSelectedRoles" value="${column.name}" checked="yes"/>
+                                        </center>
+                                </td>
+                            </c:when>
+                            <c:when test="${column.effectivelyAssigned}">
+                                <td>
+                                    <center>
+                                  <input type="checkbox" name="addDSelectedRoles" value="${column.name}" disabled="true"/>
+                                        </center>
+                                </td>
+                            </c:when>
+                            <c:otherwise>
+                                <td>
+                                    <center>
+                                  <input type="checkbox" name="addDSelectedRoles" value="${column.name}"/>
+                                        </center>
+                                </td>
+                            </c:otherwise>
+                        </c:choose>
+
+                    </c:forEach>
+
+            </c:forEach>
+        </table>
+        </c:if>
+      </ww:iterator>
+   <%--
       <h4>Global Roles</h4>
       <ww:checkboxlist list="nondynamicroles" name="addNDSelectedRoles" value="NDRoles" theme="redback"/>
       <br/>
-      
+
       <h4>Resource Roles</h4>
       <c:choose>
-        <c:when test="${!empty dynamicroles}"> 
+        <c:when test="${!empty dynamicroles}">
           <c:set var="numtemplates" value="0"/>
           <table border="1">
            <tr>
@@ -59,7 +131,7 @@
               </ww:iterator>
            </tr>
            <tr>
-             <c:set var="count" value="0"/>        
+             <c:set var="count" value="0"/>
              <ww:iterator id="dynamicrole" value="dynamicroles" status="row_status">
                <c:if test="${count == 0}">
                  <td>${dynamicrole.resource}</td>
@@ -90,13 +162,13 @@
           <p><em><ww:text name="assignments.no.roles.to.grant"/></em></p>
         </c:otherwise>
       </c:choose>
-
+--%>
       <br/>
       <ww:submit value="%{getText('assignments.submit')}" name="submitRolesButton" theme="simple" />
       <br/>
       <ww:reset type="button" value="%{getText('assignments.reset')}" name="resetRolesButton" theme="simple" />
     </ww:form>
-  
+
 </body>
 </ww:i18n>
 </html>

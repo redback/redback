@@ -116,7 +116,8 @@ public class DefaultRoleManager extends AbstractLogEnabled implements RoleManage
             	
             	if ( !knownResources.containsKey( app.getId() ) )
             	{
-            		loadApplication( app );
+                    getLogger().info( "loading " + app.getId() );
+                    loadApplication( app );
             	}
             }
         }
@@ -175,6 +176,8 @@ public class DefaultRoleManager extends AbstractLogEnabled implements RoleManage
         }
 
         modelProcessor.process( blessedModel );
+
+        knownResources.put( app.getId(), app );
     }
 	
     /**

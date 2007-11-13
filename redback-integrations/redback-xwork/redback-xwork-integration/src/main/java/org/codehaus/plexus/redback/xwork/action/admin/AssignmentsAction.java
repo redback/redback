@@ -17,11 +17,10 @@ package org.codehaus.plexus.redback.xwork.action.admin;
  */
 
 import org.codehaus.plexus.redback.rbac.*;
+
+import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.role.RoleManager;
-import org.codehaus.plexus.redback.role.model.ModelRole;
-import org.codehaus.plexus.redback.role.model.ModelTemplate;
-import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
-import org.codehaus.plexus.redback.role.util.RoleModelUtils;
+import org.codehaus.plexus.redback.role.model.ModelApplication;
 import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySystemConstants;
 import org.codehaus.plexus.redback.users.User;
@@ -31,9 +30,8 @@ import org.codehaus.plexus.redback.xwork.action.AbstractUserCredentialsAction;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
 import org.codehaus.plexus.redback.xwork.model.AdminEditUserCredentials;
+import org.codehaus.plexus.redback.xwork.model.ApplicationRoleDetails;
 import org.codehaus.plexus.redback.xwork.role.RoleConstants;
-import org.codehaus.plexus.redback.xwork.util.ModelTemplateSorter;
-import org.codehaus.plexus.redback.xwork.util.TemplatedRoleSorter;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.util.*;
@@ -104,15 +102,23 @@ public class AssignmentsAction
 
     private List DRoles;
 
+    private List applicationRoleDetails = new ArrayList();
+
     // ------------------------------------------------------------------
     // Action Entry Points - (aka Names)
     // ------------------------------------------------------------------
+
+    public List getApplicationRoleDetails()
+    {
+        return applicationRoleDetails;
+    }
 
     public List getTemplates()
     {
         return templates;
     }
 
+    
     public void setTemplates( List templates )
     {
         this.templates = templates;
@@ -167,175 +173,34 @@ public class AssignmentsAction
             return ERROR;
         }
 
-        // Empty any selected options ...
-        this.effectivelyAssignedRoles = new ArrayList();
-
         try
         {
-            if ( manager.userAssignmentExists( principal ) )
-            {
-                this.assignedRoles = new ArrayList( manager.getAssignedRoles( principal ) );
-
-                // get effectively assigned roles
-                List tmpList = new ArrayList( manager.getEffectivelyAssignedRoles( principal ) );
-
-                // drop ones that can't be assigned
-                for ( Iterator i = tmpList.iterator(); i.hasNext(); )
-                {
-                    Role role = (Role) i.next();
-                    if ( role.isAssignable() )
-                    {
-                        effectivelyAssignedRoles.add( role );
-                    }
-                }
-            }
-            else
-            {
-                this.assignedRoles = new ArrayList();
-            }
-
-            if ( manager.userAssignmentExists( principal ) )
-            {
-                this.availableRoles = new ArrayList( manager.getEffectivelyUnassignedRoles( principal ) );
-            }
-            else
-            {
-                this.availableRoles = new ArrayList( manager.getAllAssignableRoles() );
-            }
-
-            // filter the roles through the hack method below
-            assignedRoles = filterRolesForCurrentUserAccess( assignedRoles );
-            availableRoles = filterRolesForCurrentUserAccess( availableRoles );
-        }
-        catch ( RbacManagerException e )
+        for ( Iterator i = rmanager.getModel().getApplications().iterator(); i.hasNext(); )
         {
-            addActionError( e.getMessage() );
-            return ERROR;
+            ModelApplication application = (ModelApplication)i.next();
+
+            ApplicationRoleDetails details = new ApplicationRoleDetails();
+
+            details.setName( application.getId() );
+            details.setDescription( application.getDescription() );
+            details.setAllAssignedRoles( new ArrayList( manager.getAssignedRoles( principal ) ) );
+            details.setEffectivelyAssignedRoles( new ArrayList( manager.getEffectivelyAssignedRoles( principal ) )  );
+            details.setApplicationRoles( application.getRoles() );
+            details.setApplicationTemplates( application.getTemplates() );
+            details.setRoles( manager.getAllRoles() );
+
+            applicationRoleDetails.add( details );
+        }
+        }
+        catch ( RbacObjectNotFoundException re )
+        {
+           re.printStackTrace();
+        }
+        catch ( RbacManagerException rme )
+        {
+            rme.printStackTrace();
         }
 
-        // get NONDYNAMIC roles
-
-        RedbackRoleModel model = rmanager.getModel();
-        List tmp = RoleModelUtils.getRoles( model );
-
-        try
-        {
-            tmp = filterRolesForCurrentUserAccess( tmp );
-        }
-        catch ( RbacManagerException e )
-        {
-            addActionError( e.getMessage() );
-            return ERROR;
-        }
-
-        boolean flag = false;
-        ModelRole ndrole = null;
-
-        this.NDRoles = new ArrayList();
-        this.nondynamicroles = new ArrayList();
-       
-        for ( Iterator j = tmp.iterator(); j.hasNext(); )
-        {
-            ndrole = (ModelRole) j.next();
-
-            if ( ndrole.isAssignable() )
-            {
-                nondynamicroles.add( ndrole.getName() );
-                for ( Iterator k = assignedRoles.iterator(); k.hasNext(); )
-                {
-                    Role role = (Role) k.next();
-                    if ( ndrole.getName().equals( role.getName() ) )
-                    {
-                        NDRoles.add( ndrole.getName() );
-                    }    
-                }
-            }
-        }
-        Collections.sort( nondynamicroles );
-
-        //get TemplateModels
-        
-        this.templates = new ArrayList();
-
-        List temp = RoleModelUtils.getTemplates( model );
-        for ( Iterator i = temp.iterator(); i.hasNext(); )
-        {
-            ModelTemplate template = (ModelTemplate) i.next();
-            templates.add( template );
-        }
-
-        Collections.sort( templates, new ModelTemplateSorter() );
-        //Collections.reverse( templates );
-
-        //get DYNAMIC roles
-        
-        this.DRoles = new ArrayList();
-        this.dynamicroles = new ArrayList();
-
-        List dtemp = new ArrayList();
-
-        flag = false;
-        ndrole = null;
-        
-        List allRoles = new ArrayList();
-        allRoles.addAll( assignedRoles );
-        allRoles.addAll( availableRoles );
-        
-        for ( Iterator i = allRoles.iterator(); i.hasNext(); )
-        {
-            Role drole = (Role) i.next();
-
-            flag = false;
-
-            for ( Iterator j = nondynamicroles.iterator(); j.hasNext(); )
-            {
-                String ndr = (String) j.next();
-                if ( ndr.equals( drole.getName() ) )
-                {
-                    flag = true;
-                }
-            }
-            if ( !flag )
-            {
-                dtemp.add( drole );
-            }
-        }
-
-        for ( Iterator j = dtemp.iterator(); j.hasNext(); )
-        {
-            Role drole = (Role) j.next();
-
-            if ( drole.isAssignable() )
-            {
-                String templateNamePrefix = "";
-                String delimiter = "";
-                
-                for (Iterator q=templates.iterator(); q.hasNext();)
-                {
-                    ModelTemplate t = (ModelTemplate) q.next();
-                    if( drole.getName().startsWith( t.getNamePrefix() ) )
-                    {
-                        templateNamePrefix = t.getNamePrefix();
-                        delimiter = t.getDelimiter();
-                        break;   
-                    }
-                }
-                TemplatedRole templatedRole = new TemplatedRole( drole, templateNamePrefix, delimiter);
-                dynamicroles.add( templatedRole );
-                
-                for ( Iterator k = assignedRoles.iterator(); k.hasNext(); )
-                {
-                    Role role = (Role) k.next();
-                    if ( drole.getName().equals( role.getName() ) )
-                    {
-                        DRoles.add( drole.getName() );
-                    }    
-                }
-            }
-         }
-
-        Collections.sort( dynamicroles, new TemplatedRoleSorter() );
-        
         return SUCCESS;
     }
 
