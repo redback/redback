@@ -133,6 +133,7 @@ public class UserCreateAction
             else
             {
                 securityPolicy.setEnabled( false );
+                u.setValidated( true );
                 manager.addUser( u );
             }
         }
