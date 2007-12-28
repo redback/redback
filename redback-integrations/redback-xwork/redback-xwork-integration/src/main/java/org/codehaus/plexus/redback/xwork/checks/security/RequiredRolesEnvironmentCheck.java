@@ -21,6 +21,8 @@ import java.util.List;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.system.check.EnvironmentCheck;
+import org.codehaus.plexus.redback.role.RoleManager;
+import org.codehaus.plexus.redback.role.RoleManagerException;
 
 /**
  * RequiredRolesEnvironmentCheck: this environment check will check that the
@@ -37,10 +39,10 @@ public class RequiredRolesEnvironmentCheck
     implements EnvironmentCheck
 {
 
-    /**
-     * @plexus.requirement role-hint="cached"
+   /**
+     * @plexus.requirement role-hint="default"
      */
-    private RBACManager rbacManager;
+    private RoleManager roleManager;
 
     /**
      * boolean detailing if this environment check has been executed
@@ -55,22 +57,29 @@ public class RequiredRolesEnvironmentCheck
         if ( !checked )
         {
             getLogger().info( "Checking the existence of required roles." );
-            
-            if ( !rbacManager.roleExists( "registered-user" ) )
+
+            try
             {
-               violations.add( "unable to validate existence of the registered-user role" );
+                if ( !roleManager.roleExists( "registered-user" ) )
+                {
+                    violations.add( "unable to validate existence of the registered-user role" );
+                }
+
+                if ( !roleManager.roleExists( "user-administrator" ) )
+                {
+                    violations.add( "unable to validate existence of the user-administator role" );
+                }
+
+                if ( !roleManager.roleExists( "system-administrator" ) )
+                {
+                    violations.add( "unable to validate existence of the system-administrator role" );
+                }
             }
-            
-            if ( !rbacManager.roleExists( "user-administrator" ) )
+            catch ( RoleManagerException e )
             {
-               violations.add( "unable to validate existence of the user-administator role" );
+                violations.add( "unable to check required roles: " + e.getMessage() );
             }
-            
-            if ( !rbacManager.roleExists( "system-administrator" ) )
-            {
-               violations.add( "unable to validate existence of the system-administrator role" );
-            }
-           
+
             checked = true;
         }
     }
