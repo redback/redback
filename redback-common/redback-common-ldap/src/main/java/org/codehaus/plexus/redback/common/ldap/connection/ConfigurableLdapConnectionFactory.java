@@ -26,14 +26,14 @@ package org.codehaus.plexus.redback.common.ldap.connection;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
-
-import java.util.Properties;
+import org.codehaus.plexus.redback.configuration.UserConfiguration;
 
 import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
 import javax.naming.spi.ObjectFactory;
 import javax.naming.spi.StateFactory;
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -88,6 +88,11 @@ public class ConfigurableLdapConnectionFactory
 
     private LdapConnectionConfiguration configuration;
 
+    /**
+     * @plexus.configuration
+     */
+    private UserConfiguration userConf;
+
     // ----------------------------------------------------------------------
     // Component Lifecycle
     // ----------------------------------------------------------------------
@@ -98,13 +103,13 @@ public class ConfigurableLdapConnectionFactory
         try
         {
             configuration = new LdapConnectionConfiguration();
-            configuration.setHostname( hostname );
-            configuration.setPort( port );
-            configuration.setBaseDn( baseDn );
-            configuration.setContextFactory( contextFactory );
-            configuration.setBindDn( bindDn );
-            configuration.setPassword( password );
-            configuration.setAuthenticationMethod( authenticationMethod );
+            configuration.setHostname( userConf.getString( "ldap.config.hostname", hostname ) );
+            configuration.setPort( userConf.getInt( "ldap.config.port", port ) );
+            configuration.setBaseDn( userConf.getString( "ldap.config.base.dn", baseDn ) );
+            configuration.setContextFactory( userConf.getString( "ldap.config.context.factory", contextFactory ) );
+            configuration.setBindDn( userConf.getString( "ldap.config.bind.dn", bindDn ) );
+            configuration.setPassword( userConf.getString( "ldap.config.password", password ) );
+            configuration.setAuthenticationMethod( userConf.getString( "ldap.config.authentication.method", authenticationMethod ) );
             configuration.setExtraProperties( extraProperties );
         }
         catch ( InvalidNameException e )
