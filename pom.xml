@@ -151,6 +151,14 @@
         <enabled>true</enabled>
       </snapshots>
     </repository>
+    <repository>
+      <id>java.net</id>
+      <url>http://download.java.net/maven/2</url>
+      <layout>default</layout>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+   </repository>
   </repositories>
 
   <pluginRepositories>
@@ -508,7 +516,6 @@
     <module>redback-users</module>
     <module>redback-data-management</module>
     <module>redback-integrations</module>
-    <module>redback-site</module>
   </modules>
   <properties>
     <security.version>1.0-beta-1-SNAPSHOT</security.version>
