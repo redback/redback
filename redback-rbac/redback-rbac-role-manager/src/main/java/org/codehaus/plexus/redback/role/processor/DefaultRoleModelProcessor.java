@@ -16,7 +16,13 @@ package org.codehaus.plexus.redback.role.processor;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.redback.rbac.*;
+import org.codehaus.plexus.redback.rbac.RBACManager;
+import org.codehaus.plexus.redback.rbac.Resource;
+import org.codehaus.plexus.redback.rbac.RbacManagerException;
+import org.codehaus.plexus.redback.rbac.Operation;
+import org.codehaus.plexus.redback.rbac.Role;
+import org.codehaus.plexus.redback.rbac.Permission;
+
 import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.role.model.*;
 import org.codehaus.plexus.redback.role.util.RoleModelUtils;
