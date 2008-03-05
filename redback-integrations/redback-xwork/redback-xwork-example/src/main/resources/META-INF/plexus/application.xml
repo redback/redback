@@ -79,6 +79,12 @@
         <password>secret</password>
         <bindDn>uid=admin,ou=system</bindDn>
       </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.redback.configuration.UserConfiguration</role>
+          <field-name>userConf</field-name>
+        </requirement>
+      </requirements>
     </component>
     <component>
       <role>org.codehaus.plexus.redback.users.ldap.mapping.UserMapper</role>

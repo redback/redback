@@ -89,7 +89,7 @@ public class ConfigurableLdapConnectionFactory
     private LdapConnectionConfiguration configuration;
 
     /**
-     * @plexus.configuration
+     * @plexus.requirement
      */
     private UserConfiguration userConf;
 
