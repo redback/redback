@@ -33,6 +33,8 @@ import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
 import javax.naming.spi.ObjectFactory;
 import javax.naming.spi.StateFactory;
+
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -105,9 +107,9 @@ public class ConfigurableLdapConnectionFactory
             configuration = new LdapConnectionConfiguration();
             configuration.setHostname( userConf.getString( "ldap.config.hostname", hostname ) );
             configuration.setPort( userConf.getInt( "ldap.config.port", port ) );
-            configuration.setBaseDn( userConf.getString( "ldap.config.base.dn", baseDn ) );
-            configuration.setContextFactory( userConf.getString( "ldap.config.context.factory", contextFactory ) );
-            configuration.setBindDn( userConf.getString( "ldap.config.bind.dn", bindDn ) );
+            configuration.setBaseDn( getConcatenatedList( "ldap.config.base.dn", baseDn ) );            
+            configuration.setContextFactory( userConf.getString( "ldap.config.context.factory", contextFactory ) );                        
+            configuration.setBindDn( getConcatenatedList( "ldap.config.bind.dn", bindDn ) );           
             configuration.setPassword( userConf.getString( "ldap.config.password", password ) );
             configuration.setAuthenticationMethod( userConf.getString( "ldap.config.authentication.method", authenticationMethod ) );
             configuration.setExtraProperties( extraProperties );
@@ -173,6 +175,23 @@ public class ConfigurableLdapConnectionFactory
         return "{ConfigurableLdapConnectionFactory: configuration: " + configuration + "}";
     }
     
-    
+    private String getConcatenatedList( String key, String defaultValue )
+    {
+    	String concatenatedList = "";
+        List<String> list = userConf.getList( key );
+        if( !list.isEmpty() )
+        {
+            for( String value : list )
+            {            	
+            	concatenatedList = concatenatedList + value + ",";
+            }
+        }
+        else
+        {
+        	concatenatedList = defaultValue;
+        }            
+        
+        return concatenatedList;
+    }
     
 }
