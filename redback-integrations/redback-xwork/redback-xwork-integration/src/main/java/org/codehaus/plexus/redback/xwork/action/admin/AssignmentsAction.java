@@ -19,8 +19,11 @@ package org.codehaus.plexus.redback.xwork.action.admin;
 import org.codehaus.plexus.redback.rbac.*;
 
 import org.codehaus.plexus.redback.rbac.RBACManager;
+import org.codehaus.plexus.redback.rbac.jdo.JdoRole;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.model.ModelApplication;
+import org.codehaus.plexus.redback.role.model.ModelRole;
+import org.codehaus.plexus.redback.role.model.ModelTemplate;
 import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySystemConstants;
 import org.codehaus.plexus.redback.users.User;
@@ -229,6 +232,52 @@ public class AssignmentsAction
               List roles = new ArrayList();
               
               assignment.setRoleNames( roles );
+
+            List allAssignedRoles = null;
+            List allRoles = manager.getAllRoles();
+            List applicationRoles = new ArrayList();
+            List resourceRoles = new ArrayList();
+
+            try
+            {
+                allAssignedRoles = new ArrayList( manager.getAssignedRoles( principal ) );
+
+                for ( Iterator i = rmanager.getModel().getApplications().iterator(); i.hasNext(); )
+                {
+                    ModelApplication application = (ModelApplication) i.next();
+
+                    applicationRoles.addAll( application.getRoles() );
+                    resourceRoles.addAll( getResourceRoles( application.getTemplates(), allRoles ) );
+                }
+            }
+            catch ( RbacObjectNotFoundException re )
+            {
+
+            }
+            catch ( RbacManagerException rme )
+            {
+
+            }
+
+            if ( allAssignedRoles != null )
+            {
+                for ( Iterator j = allAssignedRoles.iterator(); j.hasNext(); )
+                {
+                    Role assignedRole = (Role) j.next();
+
+                    boolean found = checkRoleName( assignedRole.getName(), applicationRoles );
+
+                    if ( !found )
+                    {
+                        found = checkRoleName( assignedRole.getName(), resourceRoles );
+                    }
+
+                    if ( !found )
+                    {
+                        assignment.addRoleName( assignedRole.getName() );
+                    }
+                }
+            }
               
               if ( addNDSelectedRoles != null )
               {
@@ -259,6 +308,59 @@ public class AssignmentsAction
               return ERROR; 
         }
         return SUCCESS;
+    }
+
+    private Set getResourceRoles( List applicationTemplates, List roles )
+    {
+        Set resources = new HashSet();
+
+        for ( Iterator i = applicationTemplates.iterator(); i.hasNext(); )
+        {
+            ModelTemplate template = (ModelTemplate)i.next();
+
+            for ( Iterator j = roles.iterator(); j.hasNext(); )
+            {
+                JdoRole role = (JdoRole) j.next();
+
+                if ( role.getName().startsWith( template.getNamePrefix() ) )
+                {
+                    resources.add( role );
+                }
+            }
+        }
+
+        return resources;
+    }
+
+    private boolean checkRoleName( String roleName, List roles )
+    {
+        boolean found = false;
+
+        for ( Iterator i = roles.iterator(); i.hasNext() && !found; )
+        {
+            Object obj = i.next();
+
+            if ( obj instanceof ModelRole )
+            {
+                ModelRole role = (ModelRole) obj;
+
+                if ( role.getName().equals( roleName ) )
+                {
+                    found = true;
+                }
+            }
+            else if ( obj instanceof JdoRole )
+            {
+                JdoRole role = (JdoRole) obj;
+
+                if ( role.getName().equals( roleName ) )
+                {
+                    found = true;
+                }
+            }
+        }
+
+        return found;
     }
 
     /**
