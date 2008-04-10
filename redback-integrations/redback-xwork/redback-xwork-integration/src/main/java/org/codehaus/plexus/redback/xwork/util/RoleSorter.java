@@ -59,6 +59,6 @@ public class RoleSorter
         Role r1 = (Role) o1;
         Role r2 = (Role) o2;
         
-        return r1.getName().compareTo( r2.getName() );
+        return r1.getName().compareToIgnoreCase( r2.getName() );
     }
 }

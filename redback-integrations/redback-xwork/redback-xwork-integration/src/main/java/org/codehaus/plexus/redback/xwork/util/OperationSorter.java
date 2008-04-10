@@ -60,7 +60,7 @@ public class OperationSorter
         Operation r1 = (Operation) o1;
         Operation r2 = (Operation) o2;
 
-        return r1.getName().compareTo( r2.getName() );
+        return r1.getName().compareToIgnoreCase( r2.getName() );
     }
 
 }

@@ -64,7 +64,7 @@ public class TemplatedRoleSorter
         }
         else
         {
-            return r1.getResource().compareTo( r2.getResource() );
+            return r1.getResource().compareToIgnoreCase( r2.getResource() );
         }
     }
 }

@@ -17,6 +17,7 @@ package org.codehaus.plexus.redback.xwork.action.admin;
  */
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.codehaus.plexus.redback.policy.PasswordRuleViolationException;
@@ -34,6 +35,7 @@ import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
 import org.codehaus.plexus.redback.xwork.model.AdminEditUserCredentials;
 import org.codehaus.plexus.redback.xwork.role.RoleConstants;
+import org.codehaus.plexus.redback.xwork.util.RoleSorter;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
@@ -116,6 +118,7 @@ public class UserEditAction
             try
             {
                 this.effectivelyAssignedRoles = new ArrayList( rbacManager.getEffectivelyAssignedRoles( u.getPrincipal().toString() ) );
+                Collections.sort( this.effectivelyAssignedRoles, new RoleSorter() );
             }
             catch ( RbacManagerException rme )
             {
