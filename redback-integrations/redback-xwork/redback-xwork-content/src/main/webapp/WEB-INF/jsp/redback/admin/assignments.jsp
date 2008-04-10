@@ -77,7 +77,7 @@
             </tr>
 
             <c:forEach var="row" items="${table}">
-
+                <tr>
                     <c:forEach var="column" items="${row}">
 
                         <c:choose>
@@ -108,7 +108,7 @@
                         </c:choose>
 
                     </c:forEach>
-
+                </tr>
             </c:forEach>
         </table>
         </c:if>
