@@ -149,7 +149,7 @@ public class UserComparator
             return 1;
         }
 
-        return s1.compareTo( s2 );
+        return s1.toLowerCase().compareTo( s2.toLowerCase() );
     }
 
     private int compareBooleans( boolean b1, boolean b2 )
