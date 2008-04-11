@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.plexus.redback</groupId>
     <artifactId>redback-keys-providers</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
   </parent>
   <artifactId>redback-keys-cached</artifactId>
   <name>Redback :: Key Management Provider :: Cached</name>
@@ -55,9 +55,9 @@
   </dependencies>
 
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-keys/redback-keys-providers/redback-keys-cached</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-keys/redback-keys-providers/redback-keys-cached</developerConnection>
-    <url>https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-keys/redback-keys-providers/redback-keys-cached</url>
+    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-keys/redback-keys-providers/redback-keys-cached</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-keys/redback-keys-providers/redback-keys-cached</developerConnection>
+    <url>http://fisheye.codehaus.org/browse/plexus/plexus-security/trunk/plexus-security-authentication/plexus-security-keys-parent/plexus-security-keys-stores/plexus-security-keys-cached</url>
   </scm>
 
   <build>
