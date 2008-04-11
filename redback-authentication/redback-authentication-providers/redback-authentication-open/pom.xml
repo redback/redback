@@ -30,9 +30,9 @@
     </dependency>
   </dependencies>
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-authentication/redback-authentication-providers/redback-authentication-open</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-authentication/redback-authentication-providers/redback-authentication-open</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/plexus/plexus-security/trunk/plexus-security-authentication/plexus-security-authentication-providers/plexus-security-authentication-provider-open</url>
+    <connection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-authentication/redback-authentication-providers/redback-authentication-open</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-authentication/redback-authentication-providers/redback-authentication-open</developerConnection>
+    <url>https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-authentication/redback-authentication-providers/redback-authentication-open</url>
   </scm>
   <build>
     <plugins>
