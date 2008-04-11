@@ -27,9 +27,9 @@
     </dependency>
   </dependencies>
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-rbac/redback-rbac-providers/redback-rbac-memory</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-rbac/redback-rbac-providers/redback-rbac-memory</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/plexus/plexus-security/trunk/plexus-security-authorization/plexus-security-authorization-rbac/plexus-security-authorization-rbac-stores/plexus-security-authorization-rbac-store-memory</url>
+    <connection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-rbac/redback-rbac-providers/redback-rbac-memory</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-rbac/redback-rbac-providers/redback-rbac-memory</developerConnection>
+    <url>https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-rbac/redback-rbac-providers/redback-rbac-memory</url>
   </scm>
   <build>
     <plugins>

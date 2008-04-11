@@ -47,9 +47,9 @@
     </dependency>
   </dependencies>
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-users/redback-authentication-users</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-users/redback-authentication-users</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/plexus/plexus-redback/trunk/redback-authentication/redback-authentication-providers/redback-authentication-provider-users</url>
+    <connection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-users/redback-authentication-users</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-users/redback-authentication-users</developerConnection>
+    <url>https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-users/redback-authentication-users</url>
   </scm>
   <build>
     <plugins>
