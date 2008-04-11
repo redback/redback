@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.codehaus.plexus.redback</groupId>
   <artifactId>redback</artifactId>
-  <version>1.1-SNAPSHOT</version>
+  <version>1.0.2-SNAPSHOT</version>
   <name>Redback</name>
   <packaging>pom</packaging>
   <url>http://redback.codehaus.org/</url>
@@ -529,6 +529,6 @@
     <module>redback-integrations</module>
   </modules>
   <properties>
-    <security.version>1.1-SNAPSHOT</security.version>
+    <security.version>1.0.2-SNAPSHOT</security.version>
   </properties>
 </project>
