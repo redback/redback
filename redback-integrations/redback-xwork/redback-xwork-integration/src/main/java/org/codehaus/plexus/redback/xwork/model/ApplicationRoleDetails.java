@@ -177,6 +177,9 @@ public class ApplicationRoleDetails
                 }
             }
         }
+        
+        Collections.sort( assignedRoles, String.CASE_INSENSITIVE_ORDER );
+        Collections.sort( availableRoles, String.CASE_INSENSITIVE_ORDER );
     }
 
     private void gatherResources()
@@ -213,7 +216,10 @@ public class ApplicationRoleDetails
             tableHeader.add( template );
         }
 
-        for ( Iterator k = resources.iterator(); k.hasNext(); )
+        List<String> resourcesList = new ArrayList<String>( resources );
+        Collections.sort( resourcesList, String.CASE_INSENSITIVE_ORDER );
+        
+        for ( Iterator k = resourcesList.iterator(); k.hasNext(); )
         {
             String resource = (String)k.next();
             LinkedList tableRow = new LinkedList();

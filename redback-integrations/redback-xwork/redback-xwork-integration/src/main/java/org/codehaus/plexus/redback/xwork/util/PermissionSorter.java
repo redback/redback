@@ -60,7 +60,7 @@ public class PermissionSorter
         Permission r1 = (Permission) o1;
         Permission r2 = (Permission) o2;
 
-        return r1.getName().compareTo( r2.getName() );
+        return r1.getName().compareToIgnoreCase( r2.getName() );
     }
 
 }

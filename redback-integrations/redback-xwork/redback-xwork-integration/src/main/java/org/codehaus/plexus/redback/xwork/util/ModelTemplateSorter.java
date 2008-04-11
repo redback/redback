@@ -58,6 +58,6 @@ public class ModelTemplateSorter
         ModelTemplate r1 = (ModelTemplate) o1;
         ModelTemplate r2 = (ModelTemplate) o2;
 
-        return r1.getNamePrefix().compareTo( r2.getNamePrefix() );
+        return r1.getNamePrefix().compareToIgnoreCase( r2.getNamePrefix() );
     }
 }

@@ -60,7 +60,7 @@ public class ResourceSorter
         Resource r1 = (Resource) o1;
         Resource r2 = (Resource) o2;
 
-        return r1.getIdentifier().compareTo( r2.getIdentifier() );
+        return r1.getIdentifier().compareToIgnoreCase( r2.getIdentifier() );
     }
 
 }

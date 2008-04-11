@@ -16,6 +16,9 @@ package org.codehaus.plexus.redback.common.ldap;
  * limitations under the License.
  */
 
+import java.util.List;
+
+import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -61,7 +64,12 @@ public class LdapUserMapper
      * @plexus.configuration default-value="inetOrgPerson"
      */
     String userObjectClass;
-
+    
+    /**
+     * @plexus.requirement
+     */
+    private UserConfiguration userConf;
+    
     public Attributes getCreationAttributes( User user, boolean encodePasswordIfChanged )
         throws MappingException
     {
@@ -199,6 +207,16 @@ public class LdapUserMapper
 
     public String getUserBaseDn()
     {
+    	if( userBaseDn == null )
+    	{
+    		userBaseDn = "";
+    		List<String> list = userConf.getList( "ldap.config.base.dn" );
+    		for ( String item : list )
+    		{
+    			userBaseDn = userBaseDn + item + ",";
+    		}
+    	}
+    	
         return userBaseDn;
     }
 
