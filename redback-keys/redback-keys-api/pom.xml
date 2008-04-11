@@ -27,7 +27,7 @@
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/redback/redback/tags/redback-1.0.1/redback-keys/redback-keys-api</connection>
     <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.1/redback-keys/redback-keys-api</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/plexus/plexus-security/tags/redback-1.0.1/redback-keys/redback-keys-api</url>
+    <url>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.1/redback-keys/redback-keys-api</url>
   </scm>
   <dependencies>
     <dependency>

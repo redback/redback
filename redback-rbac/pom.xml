@@ -27,7 +27,7 @@
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/redback/redback/tags/redback-1.0.1/redback-rbac</connection>
     <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.1/redback-rbac</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/plexus/plexus-security/tags/redback-1.0.1/redback-rbac</url>
+    <url>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.1/redback-rbac</url>
   </scm>
   <modules>
     <module>redback-rbac-model</module>

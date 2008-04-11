@@ -27,7 +27,7 @@
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/redback/redback/tags/redback-1.0.1/redback-users</connection>
     <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.1/redback-users</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/plexus/plexus-security/tags/redback-1.0.1/redback-users</url>
+    <url>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.1/redback-users</url>
   </scm>
   <modules>
     <module>redback-users-api</module>

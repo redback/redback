@@ -92,7 +92,7 @@
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/redback/redback/tags/redback-1.0.1/redback-rbac/redback-rbac-role-manager</connection>
     <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.1/redback-rbac/redback-rbac-role-manager</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/plexus/plexus-security/tags/redback-1.0.1/redback-rbac/redback-rbac-role-manager</url>
+    <url>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.1/redback-rbac/redback-rbac-role-manager</url>
   </scm>
   <build>
     <plugins>

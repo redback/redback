@@ -49,7 +49,7 @@
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/redback/redback/tags/redback-1.0.1/redback-users/redback-authentication-users</connection>
     <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.1/redback-users/redback-authentication-users</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/plexus/plexus-redback/tags/redback-1.0.1/redback-users/redback-authentication-users</url>
+    <url>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.1/redback-users/redback-authentication-users</url>
   </scm>
   <build>
     <plugins>

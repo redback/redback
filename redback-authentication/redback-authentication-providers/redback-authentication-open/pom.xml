@@ -32,7 +32,7 @@
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/redback/redback/tags/redback-1.0.1/redback-authentication/redback-authentication-providers/redback-authentication-open</connection>
     <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.1/redback-authentication/redback-authentication-providers/redback-authentication-open</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/plexus/plexus-security/tags/redback-1.0.1/redback-authentication/redback-authentication-providers/redback-authentication-open</url>
+    <url>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.1/redback-authentication/redback-authentication-providers/redback-authentication-open</url>
   </scm>
   <build>
     <plugins>

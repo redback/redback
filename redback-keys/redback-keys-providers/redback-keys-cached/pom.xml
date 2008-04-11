@@ -57,7 +57,7 @@
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/redback/redback/tags/redback-1.0.1/redback-keys/redback-keys-providers/redback-keys-cached</connection>
     <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.1/redback-keys/redback-keys-providers/redback-keys-cached</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/plexus/plexus-security/tags/redback-1.0.1/redback-keys/redback-keys-providers/redback-keys-cached</url>
+    <url>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.1/redback-keys/redback-keys-providers/redback-keys-cached</url>
   </scm>
 
   <build>
