@@ -531,4 +531,29 @@
   <properties>
     <security.version>1.1-SNAPSHOT</security.version>
   </properties>
+
+  <contributors>
+    <contributor>
+      <name>Lester Ecarma</name>
+    </contributor>
+    <contributor>
+      <name>Teodoro Cue</name>
+    </contributor>
+    <contributor>
+      <name>Eirik Bjørsnøs</name>
+    </contributor>
+    <contributor>
+      <name>Jan Ancajas</name>
+    </contributor>
+    <contributor>
+      <name>Damien Blugeon</name>
+    </contributor>
+    <contributor>
+      <name>John Michael Luy</name>
+    </contributor>
+    <contributor>
+      <name>Maria Catherine Tan</name>
+    </contributor>
+  </contributors>
 </project>
+
