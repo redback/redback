@@ -25,8 +25,6 @@ import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.xwork.model.UserCredentials;
 import org.codehaus.plexus.util.StringUtils;
 
-import sun.rmi.runtime.GetThreadPoolAction;
-
 /**
  * AbstractUserCredentialsAction
  *
