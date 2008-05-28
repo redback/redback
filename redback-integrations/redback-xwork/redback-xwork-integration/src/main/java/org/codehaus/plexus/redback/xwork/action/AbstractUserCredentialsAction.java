@@ -59,8 +59,7 @@ public abstract class AbstractUserCredentialsAction
         {
             addFieldError( "user.username", getText( "username.required" ) );
         }
-        
-        if ( internalUser.getUsername() != null && " ".indexOf( internalUser.getUsername() ) != -1 )
+        else if ( internalUser.getUsername().indexOf( " " ) != -1 )
         {
         	addFieldError( "user.username", getText( "username.has.spaces") );
         }
@@ -87,7 +86,10 @@ public abstract class AbstractUserCredentialsAction
 
         try
         {
-            new InternetAddress( internalUser.getEmail(), true );
+            if ( !StringUtils.isEmpty( internalUser.getEmail() ) )
+            {
+                new InternetAddress( internalUser.getEmail(), true );
+            }
         }
         catch ( AddressException e )
         {
