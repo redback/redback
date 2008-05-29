@@ -64,7 +64,6 @@
    <dependency>
       <groupId>org.codehaus.plexus.redback</groupId>
       <artifactId>redback-users-ldap</artifactId>
-      <version>1.1-SNAPSHOT</version>
     </dependency> 
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
