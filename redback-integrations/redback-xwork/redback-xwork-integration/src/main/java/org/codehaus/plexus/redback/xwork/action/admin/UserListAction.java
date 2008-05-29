@@ -16,21 +16,13 @@ package org.codehaus.plexus.redback.xwork.action.admin;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.RbacObjectNotFoundException;
 import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
+import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.xwork.action.AbstractSecurityAction;
@@ -39,6 +31,15 @@ import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
 import org.codehaus.plexus.redback.xwork.reports.ReportManager;
 import org.codehaus.plexus.redback.xwork.role.RoleConstants;
 import org.codehaus.plexus.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * UserListAction
@@ -57,9 +58,9 @@ public class UserListAction
     // ------------------------------------------------------------------
 
     /**
-     * @plexus.requirement role-hint="cached"
+     * @plexus.requirement
      */
-    private UserManager manager;
+    private SecuritySystem securitySystem;
 
     /**
      * @plexus.requirement role-hint="cached"
@@ -98,7 +99,7 @@ public class UserListAction
 
         if ( StringUtils.isEmpty( roleName ) )
         {
-            users = manager.getUsers();
+            users = getUserManager().getUsers();
         }
         else
         {
@@ -149,7 +150,7 @@ public class UserListAction
     private List findUsers( Collection roleNames )
     {
         List usernames = getUsernamesForRoles( roleNames );
-        List users = manager.getUsers();
+        List users = getUserManager().getUsers();
         List filteredUsers = new ArrayList();
 
         for ( Iterator i = users.iterator(); i.hasNext(); )
@@ -186,6 +187,11 @@ public class UserListAction
         }
 
         return new ArrayList( usernames );
+    }
+
+    private UserManager getUserManager()
+    {
+        return securitySystem.getUserManager();
     }
 
     // ------------------------------------------------------------------
