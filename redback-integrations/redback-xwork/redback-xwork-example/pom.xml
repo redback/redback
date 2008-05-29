@@ -18,7 +18,7 @@
   <parent>
     <groupId>org.codehaus.plexus.redback</groupId>
     <artifactId>redback-xwork</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>redback-xwork-example</artifactId>
@@ -64,7 +64,6 @@
    <dependency>
       <groupId>org.codehaus.plexus.redback</groupId>
       <artifactId>redback-users-ldap</artifactId>
-      <version>1.1-SNAPSHOT</version>
     </dependency> 
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
