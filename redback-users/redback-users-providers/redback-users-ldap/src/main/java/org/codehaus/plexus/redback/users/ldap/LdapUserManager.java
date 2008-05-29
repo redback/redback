@@ -16,7 +16,6 @@ package org.codehaus.plexus.redback.users.ldap;
  */
 
 
-
 import org.codehaus.plexus.logging.LogEnabled;
 import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
@@ -33,47 +32,44 @@ import org.codehaus.plexus.redback.users.UserQuery;
 import org.codehaus.plexus.redback.users.ldap.ctl.LdapController;
 import org.codehaus.plexus.redback.users.ldap.ctl.LdapControllerException;
 
+import javax.naming.directory.DirContext;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.naming.directory.DirContext;
-
 /**
- * 
  * @author <a href="jesse@codehaus.org"> jesse
  * @version "$Id$"
- *
  * @plexus.component role="org.codehaus.plexus.redback.users.UserManager" role-hint="ldap"
  */
 public class LdapUserManager
     implements UserManager, LogEnabled
 {
-	
-	/**
-	 * @plexus.requirement role-hint="configurable"
-	 */
-	private LdapConnectionFactory connectionFactory;
-	
+
+    /**
+     * @plexus.requirement role-hint="configurable"
+     */
+    private LdapConnectionFactory connectionFactory;
+
 
     private List<UserManagerListener> listeners = new ArrayList<UserManagerListener>();
 
     private Logger logger;
 
     /**
-	 * @plexus.requirement role-hint="default"
-	 */
+     * @plexus.requirement role-hint="default"
+     */
     private LdapController controller;
 
     /**
-	 * @plexus.requirement role-hint="ldap"
-	 */
+     * @plexus.requirement role-hint="ldap"
+     */
     private UserMapper mapper;
 
     public boolean isReadOnly()
     {
         return true;
     }
-    
+
     public void addUserManagerListener( UserManagerListener listener )
     {
         if ( !listeners.contains( listener ) )
@@ -210,9 +206,10 @@ public class LdapUserManager
         // TODO Implement erase!
     }
 
-    public User findUser( String username ) throws UserNotFoundException
+    public User findUser( String username )
+        throws UserNotFoundException
     {
-    	try
+        try
         {
             return controller.getUser( username, newDirContext() );
         }
@@ -282,24 +279,23 @@ public class LdapUserManager
 
     public List getUsers()
     {
-    	try 
-    	{
-    		List users = new ArrayList();
-    		users.addAll( controller.getUsers( newDirContext() ) );
-    		return users;
-    	}
-    	catch ( Exception e )
-    	{
-    		e.printStackTrace();
-    	}
-    	
+        try
+        {
+            List users = new ArrayList();
+            users.addAll( controller.getUsers( newDirContext() ) );
+            return users;
+        }
+        catch ( Exception e )
+        {
+            e.printStackTrace();
+        }
+
         return null;
     }
 
     public List getUsers( boolean orderAscending )
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getUsers();
     }
 
     public User updateUser( User user )
@@ -337,17 +333,17 @@ public class LdapUserManager
 
     private DirContext newDirContext()
     {
-    	try
-    	{
-    		LdapConnection connection = connectionFactory.getConnection();
-    		
-    		return connection.getDirContext();
-    	}
-    	catch ( LdapException le )
-    	{
-    		le.printStackTrace();
-    		return null;
-    	}    	       
+        try
+        {
+            LdapConnection connection = connectionFactory.getConnection();
+
+            return connection.getDirContext();
+        }
+        catch ( LdapException le )
+        {
+            le.printStackTrace();
+            return null;
+        }
     }
 
     protected Logger getLogger()
@@ -366,12 +362,14 @@ public class LdapUserManager
         this.logger = logger;
     }
 
-	public LdapConnectionFactory getConnectionFactory() {
-		return connectionFactory;
-	}
+    public LdapConnectionFactory getConnectionFactory()
+    {
+        return connectionFactory;
+    }
 
-	public void setConnectionFactory(LdapConnectionFactory connectionFactory) {
-		this.connectionFactory = connectionFactory;
-	}
-    
+    public void setConnectionFactory( LdapConnectionFactory connectionFactory )
+    {
+        this.connectionFactory = connectionFactory;
+    }
+
 }
