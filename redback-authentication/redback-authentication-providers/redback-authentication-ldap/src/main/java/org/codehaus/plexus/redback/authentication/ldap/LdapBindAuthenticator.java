@@ -38,29 +38,28 @@ import javax.naming.directory.SearchResult;
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
  * @version: $ID:$
- *
- * @plexus.component
- *   role="org.codehaus.plexus.redback.authentication.Authenticator"
- *   role-hint="ldap"
+ * @plexus.component role="org.codehaus.plexus.redback.authentication.Authenticator"
+ * role-hint="ldap"
  */
-public class LdapBindAuthenticator extends AbstractLogEnabled
+public class LdapBindAuthenticator
+    extends AbstractLogEnabled
     implements Authenticator
 {
     /**
      * @plexus.requirement role-hint="ldap"
      */
     private UserMapper mapper;
-    
+
     /**
      * @plexus.requirement role-hint="configurable"
      */
     private LdapConnectionFactory connectionFactory;
-    
+
     /**
      * @plexus.requirement role-hint="default"
      */
     private UserConfiguration config;
-    
+
     public String getId()
     {
         return "LdapBindAuthenticator";
@@ -70,7 +69,7 @@ public class LdapBindAuthenticator extends AbstractLogEnabled
         throws AuthenticationException
     {
         PasswordBasedAuthenticationDataSource source = (PasswordBasedAuthenticationDataSource) s;
-        
+
         if ( !config.getBoolean( "ldap.bind.authenticator.enabled" ) )
         {
             return new AuthenticationResult( false, source.getPrincipal(), null );
@@ -83,28 +82,31 @@ public class LdapBindAuthenticator extends AbstractLogEnabled
         ctls.setDerefLinkFlag( true );
         ctls.setSearchScope( SearchControls.SUBTREE_SCOPE );
 
-        String filter = "(&(objectClass=" + mapper.getUserObjectClass() + ")(" + mapper.getUserIdAttribute() + "=" +  source.getPrincipal() + "))";
-        
-        getLogger().info( "Searching for users with filter: \'" + filter + "\'" + " from base dn: " + mapper.getUserBaseDn() );
+        String filter = "(&(objectClass=" + mapper.getUserObjectClass() + ")" +
+            ( mapper.getUserFilter() != null ? mapper.getUserFilter() : "" ) + "(" + mapper.getUserIdAttribute() + "=" +
+            source.getPrincipal() + "))";
+
+        getLogger().info(
+            "Searching for users with filter: \'" + filter + "\'" + " from base dn: " + mapper.getUserBaseDn() );
 
         try
         {
             DirContext context = connectionFactory.getConnection().getDirContext();
-        
+
             NamingEnumeration<SearchResult> results = context.search( mapper.getUserBaseDn(), filter, ctls );
-            
+
             getLogger().info( "Found user?: " + results.hasMoreElements() );
-            
+
             if ( results.hasMoreElements() )
             {
                 SearchResult result = results.nextElement();
-                
+
                 String userDn = result.getNameInNamespace();
-                
+
                 getLogger().info( "Attempting Authenication: + " + userDn );
-                
+
                 connectionFactory.getConnection( userDn, source.getPassword() );
-                
+
                 return new AuthenticationResult( true, source.getPrincipal(), null );
             }
             else
@@ -121,7 +123,7 @@ public class LdapBindAuthenticator extends AbstractLogEnabled
             return new AuthenticationResult( false, source.getPrincipal(), e );
         }
     }
-    
+
     public boolean supportsDataSource( AuthenticationDataSource source )
     {
         return ( source instanceof PasswordBasedAuthenticationDataSource );
