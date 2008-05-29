@@ -23,15 +23,20 @@ import javax.naming.directory.Attributes;
 
 public final class LdapUtils
 {
-
     private LdapUtils()
     {
     }
 
     @SuppressWarnings("unchecked")
-    public static String getLabeledUriValue( Attributes attributes, String attrName, String label, String attributeDescription )
+    public static String getLabeledUriValue( Attributes attributes, String attrName, String label,
+                                             String attributeDescription )
         throws MappingException
     {
+        if ( attrName == null )
+        {
+            return null;
+        }
+
         Attribute attribute = attributes.get( attrName );
         if ( attribute != null )
         {
@@ -42,8 +47,8 @@ public final class LdapUtils
             }
             catch ( NamingException e )
             {
-                throw new MappingException( "Failed to retrieve " + attributeDescription + " (attribute: \'" + attrName
-                    + "\').", e );
+                throw new MappingException(
+                    "Failed to retrieve " + attributeDescription + " (attribute: \'" + attrName + "\').", e );
             }
 
             while ( attrs.hasMoreElements() )
@@ -65,6 +70,11 @@ public final class LdapUtils
     public static String getAttributeValue( Attributes attributes, String attrName, String attributeDescription )
         throws MappingException
     {
+        if ( attrName == null )
+        {
+            return null;
+        }
+
         Attribute attribute = attributes.get( attrName );
         if ( attribute != null )
         {
@@ -76,17 +86,23 @@ public final class LdapUtils
             }
             catch ( NamingException e )
             {
-                throw new MappingException( "Failed to retrieve " + attributeDescription + " (attribute: \'" + attrName
-                    + "\').", e );
+                throw new MappingException(
+                    "Failed to retrieve " + attributeDescription + " (attribute: \'" + attrName + "\').", e );
             }
         }
 
         return null;
     }
 
-    public static String getAttributeValueFromByteArray( Attributes attributes, String attrName, String attributeDescription )
+    public static String getAttributeValueFromByteArray( Attributes attributes, String attrName,
+                                                         String attributeDescription )
         throws MappingException
     {
+        if ( attrName == null )
+        {
+            return null;
+        }
+
         Attribute attribute = attributes.get( attrName );
         if ( attribute != null )
         {
@@ -98,15 +114,11 @@ public final class LdapUtils
             }
             catch ( NamingException e )
             {
-                throw new MappingException( "Failed to retrieve " + attributeDescription + " (attribute: \'" + attrName
-                    + "\').", e );
+                throw new MappingException(
+                    "Failed to retrieve " + attributeDescription + " (attribute: \'" + attrName + "\').", e );
             }
         }
 
         return null;
     }
-    
-    
- 
-    
 }
