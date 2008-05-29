@@ -23,21 +23,18 @@ import org.codehaus.plexus.redback.common.ldap.MappingException;
 import org.codehaus.plexus.redback.common.ldap.UserMapper;
 import org.codehaus.plexus.redback.users.User;
 
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
- * 
  * @author <a href="jesse@codehaus.org"> jesse
  * @version "$Id$"
- *
  * @plexus.component role="org.codehaus.plexus.redback.users.ldap.ctl.LdapController" role-hint="default"
  */
 public class DefaultLdapController
@@ -57,7 +54,7 @@ public class DefaultLdapController
     public void removeUser( Object principal, DirContext context )
         throws LdapControllerException
     {
-   
+
     }
 
     /* (non-Javadoc)
@@ -66,7 +63,7 @@ public class DefaultLdapController
     public void updateUser( User user, DirContext context )
         throws LdapControllerException, MappingException
     {
-    	
+
     }
 
     /* (non-Javadoc)
@@ -121,12 +118,14 @@ public class DefaultLdapController
 
         ctls.setDerefLinkFlag( true );
         ctls.setSearchScope( SearchControls.SUBTREE_SCOPE );
-        ctls.setReturningAttributes( new String[] { "*" } );
+        ctls.setReturningAttributes( new String[]{"*"} );
 
-        String filter = "(&(objectClass=" + mapper.getUserObjectClass() + ")(" + mapper.getUserIdAttribute() + "=" + ( key != null ? key : "*" ) + "))";
-                
-        log.info( "Searching for users with filter: \'" + filter + "\'" + " from base dn: " + mapper.getUserBaseDn());
-        
+        String filter = "(&(objectClass=" + mapper.getUserObjectClass() + ")" +
+            ( mapper.getUserFilter() != null ? mapper.getUserFilter() : "" ) + "(" +
+            mapper.getUserIdAttribute() + "=" + ( key != null ? key : "*" ) + "))";
+
+        log.info( "Searching for users with filter: \'" + filter + "\'" + " from base dn: " + mapper.getUserBaseDn() );
+
         return context.search( mapper.getUserBaseDn(), filter, ctls );
     }
 
@@ -140,14 +139,14 @@ public class DefaultLdapController
         {
             NamingEnumeration<SearchResult> results = searchUsers( null, context, null );
             Set<User> users = new LinkedHashSet<User>();
-            
+
             while ( results.hasMoreElements() )
             {
                 SearchResult result = results.nextElement();
-                
+
                 users.add( mapper.getUser( result.getAttributes() ) );
             }
-            
+
             return users;
         }
         catch ( NamingException e )
@@ -164,7 +163,7 @@ public class DefaultLdapController
     public void createUser( User user, DirContext context, boolean encodePasswordIfChanged )
         throws LdapControllerException, MappingException
     {
-    	
+
     }
 
     /* (non-Javadoc)
@@ -184,7 +183,7 @@ public class DefaultLdapController
             if ( result.hasMoreElements() )
             {
                 SearchResult next = result.nextElement();
-                
+
                 return mapper.getUser( next.getAttributes() );
             }
             else

@@ -16,20 +16,17 @@ package org.codehaus.plexus.redback.common.ldap;
  * limitations under the License.
  */
 
-import java.util.List;
-
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.util.StringUtils;
 
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttributes;
+import java.util.List;
 
 /**
- * 
  * @author <a href="jesse@codehaus.org"> jesse
  * @version "$Id: BasicUserMapper.java 6784 2007-08-23 19:21:13Z jesse $"
- *
  * @plexus.component role="org.codehaus.plexus.redback.common.ldap.UserMapper" role-hint="ldap"
  */
 public class LdapUserMapper
@@ -64,12 +61,17 @@ public class LdapUserMapper
      * @plexus.configuration default-value="inetOrgPerson"
      */
     String userObjectClass;
-    
+
+    /**
+     * @plexus.configuration default-value=""
+     */
+    String userFilter;
+
     /**
      * @plexus.requirement
      */
     private UserConfiguration userConf;
-    
+
     public Attributes getCreationAttributes( User user, boolean encodePasswordIfChanged )
         throws MappingException
     {
@@ -112,7 +114,7 @@ public class LdapUserMapper
 
     public String[] getUserAttributeNames()
     {
-        return new String[] { emailAttribute, fullNameAttribute, passwordAttribute, userIdAttribute };
+        return new String[]{emailAttribute, fullNameAttribute, passwordAttribute, userIdAttribute};
     }
 
     public UserUpdate getUpdate( LdapUser user )
@@ -146,7 +148,7 @@ public class LdapUserMapper
                 modAttrs.put( getEmailAddressAttribute(), user.getEmail() );
             }
         }
-        
+
         return null;
     }
 
@@ -162,19 +164,19 @@ public class LdapUserMapper
 
         LdapUser user = new LdapUser( userId );
         user.setOriginalAttributes( attributes );
-        
+
         user.setEmail( LdapUtils.getAttributeValue( attributes, emailAddressAttribute, "email address" ) );
         user.setFullName( LdapUtils.getAttributeValue( attributes, nameAttribute, "name" ) );
-        
+
         String encodedPassword = LdapUtils.getAttributeValueFromByteArray( attributes, passwordAttribute, "password" );
-        
+
         // it seems to be a common convention for the password to come back prepended with the encoding type..
         // however we deal with that via configuration right now so just smoke it.
         if ( encodedPassword != null && encodedPassword.startsWith( "{" ) )
         {
             encodedPassword = encodedPassword.substring( encodedPassword.indexOf( "}" ) + 1 );
         }
-        
+
         user.setEncodedPassword( encodedPassword );
 
         return user;
@@ -207,16 +209,16 @@ public class LdapUserMapper
 
     public String getUserBaseDn()
     {
-    	if( userBaseDn == null )
-    	{
-    		userBaseDn = "";
-    		List<String> list = userConf.getList( "ldap.config.base.dn" );
-    		for ( String item : list )
-    		{
-    			userBaseDn = userBaseDn + item + ",";
-    		}
-    	}
-    	
+        if ( userBaseDn == null )
+        {
+            userBaseDn = "";
+            List<String> list = userConf.getList( "ldap.config.base.dn" );
+            for ( String item : list )
+            {
+                userBaseDn = userBaseDn + item + ",";
+            }
+        }
+
         return userBaseDn;
     }
 
@@ -228,6 +230,16 @@ public class LdapUserMapper
     public String getUserObjectClass()
     {
         return userObjectClass;
+    }
+
+    public String getUserFilter()
+    {
+        return userFilter;
+    }
+
+    public void setUserFilter( String userFilter )
+    {
+        this.userFilter = userFilter;
     }
 
     public void setUserObjectClass( String userObjectClass )
