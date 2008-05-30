@@ -229,7 +229,11 @@ public class LdapUserMapper
             List<String> list = userConf.getList( "ldap.config.base.dn" );
             for ( String item : list )
             {
-                userBaseDn = userBaseDn + item + ",";
+                if ( userBaseDn.length() > 0 )
+                {
+                    userBaseDn = userBaseDn + ",";
+                }
+                userBaseDn = userBaseDn + item;
             }
         }
 
