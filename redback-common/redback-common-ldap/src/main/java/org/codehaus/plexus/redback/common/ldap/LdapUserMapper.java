@@ -16,6 +16,8 @@ package org.codehaus.plexus.redback.common.ldap;
  * limitations under the License.
  */
 
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.util.StringUtils;
@@ -30,7 +32,7 @@ import java.util.List;
  * @plexus.component role="org.codehaus.plexus.redback.common.ldap.UserMapper" role-hint="ldap"
  */
 public class LdapUserMapper
-    implements UserMapper
+    implements UserMapper, Initializable
 {
     /**
      * @plexus.configuration default-value="mail"
@@ -71,6 +73,18 @@ public class LdapUserMapper
      * @plexus.requirement
      */
     private UserConfiguration userConf;
+
+    public void initialize()
+        throws InitializationException
+    {
+        emailAttribute = userConf.getString( "ldap.config.mapper.attribute.email", emailAttribute );
+        fullNameAttribute = userConf.getString( "ldap.config.mapper.attribute.fullname", fullNameAttribute );
+        passwordAttribute = userConf.getString( "ldap.config.mapper.attribute.password", passwordAttribute );
+        userIdAttribute = userConf.getString( "ldap.config.mapper.attribute.user.id", userIdAttribute );
+        userBaseDn = userConf.getString( "ldap.config.mapper.attribute.user.base.dn", userBaseDn );
+        userObjectClass = userConf.getString( "ldap.config.mapper.attribute.user.object.class", userObjectClass );
+        userFilter = userConf.getString( "ldap.config.mapper.attribute.user.filter", userFilter );
+    }
 
     public Attributes getCreationAttributes( User user, boolean encodePasswordIfChanged )
         throws MappingException

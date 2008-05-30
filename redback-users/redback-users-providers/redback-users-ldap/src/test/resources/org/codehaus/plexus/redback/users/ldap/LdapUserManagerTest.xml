@@ -33,6 +33,11 @@
         <user-base-dn>dc=redback,dc=plexus,dc=codehaus,dc=org</user-base-dn>
         <user-object-class>inetOrgPerson</user-object-class>
       </configuration>
+      <requirements>
+        <requirement>
+          <role>org.codehaus.plexus.redback.configuration.UserConfiguration</role>
+        </requirement>
+      </requirements>
     </component>
     <component>
       <role>org.codehaus.plexus.apacheds.ApacheDs</role>
