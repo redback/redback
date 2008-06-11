@@ -1,9 +1,5 @@
 package org.codehaus.plexus.redback.xwork.mail;
 
-import org.codehaus.plexus.redback.keys.AuthenticationKey;
-
-import java.util.Collection;
-
 /*
  * Copyright 2005-2006 The Codehaus.
  *
@@ -19,6 +15,10 @@ import java.util.Collection;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import org.codehaus.plexus.redback.keys.AuthenticationKey;
+
+import java.util.Collection;
 
 /**
  * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
