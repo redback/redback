@@ -16,137 +16,19 @@ package org.codehaus.plexus.redback.xwork.mail;
  * limitations under the License.
  */
 
-import java.util.Collection;
-import java.util.Iterator;
-
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.mailsender.MailMessage;
-import org.codehaus.plexus.mailsender.MailSender;
-import org.codehaus.plexus.mailsender.MailSenderException;
-import org.codehaus.plexus.mailsender.javamail.JndiJavamailMailSender;
-import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
-import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
-import org.codehaus.plexus.redback.policy.UserValidationSettings;
-import org.codehaus.plexus.redback.system.SecuritySystem;
-import org.codehaus.plexus.util.StringUtils;
+
+import java.util.Collection;
 
 /**
- * Mailer
- *
- * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
+ * @author <a href="mailto:evenisse@codehaus.org">Emmanuel Venisse</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.xwork.mail.Mailer"
  */
-public class Mailer
-    extends AbstractLogEnabled
+public interface Mailer
 {
-    /**
-     * @plexus.requirement role-hint="velocity"
-     */
-    private MailGenerator generator;
+    void sendAccountValidationEmail( Collection recipients, AuthenticationKey authkey, String baseUrl );
 
-    /**
-     * @plexus.requirement
-     */
-    private MailSender mailSender;
+    void sendPasswordResetEmail( Collection recipients, AuthenticationKey authkey, String baseUrl );
 
-    /**
-     * @plexus.requirement
-     */
-    private SecuritySystem securitySystem;
-
-    /**
-     * @plexus.requirement
-     */
-    private UserConfiguration config;
-
-    public void sendAccountValidationEmail( Collection recipients, AuthenticationKey authkey, String baseUrl )
-    {
-        String content = generator.generateMail( "newAccountValidationEmail", authkey, baseUrl );
-
-        UserSecurityPolicy policy = securitySystem.getPolicy();
-        UserValidationSettings validation = policy.getUserValidationSettings();
-        sendMessage( recipients, validation.getEmailSubject(), content );
-    }
-
-    public void sendPasswordResetEmail( Collection recipients, AuthenticationKey authkey, String baseUrl )
-    {
-        String content = generator.generateMail( "passwordResetEmail", authkey, baseUrl );
-
-        UserSecurityPolicy policy = securitySystem.getPolicy();
-        UserValidationSettings validation = policy.getUserValidationSettings();
-        sendMessage( recipients, validation.getEmailSubject(), content );
-    }
-
-    public void sendMessage( Collection recipients, String subject, String content )
-    {
-        if ( recipients.isEmpty() )
-        {
-            getLogger().warn( "Mail Not Sent - No mail recipients for email. subject [" + subject + "]" );
-            return;
-        }
-
-        String fromAddress = config.getString( "email.from.address" );
-        String fromName = config.getString( "email.from.name" );
-
-        if ( StringUtils.isEmpty( fromAddress ) )
-        {
-            fromAddress = System.getProperty("user.name") + "@localhost";
-        }
-
-        MailMessage message = new MailMessage();
-
-        // TODO: Allow for configurable message headers.
-
-        try
-        {
-            message.setSubject( subject );
-            message.setContent( content );
-
-            MailMessage.Address from = new MailMessage.Address( fromAddress, fromName );
-
-            message.setFrom( from );
-
-            Iterator it = recipients.iterator();
-            while ( it.hasNext() )
-            {
-                String mailbox = (String) it.next();
-
-                MailMessage.Address to = new MailMessage.Address( mailbox );
-                message.addTo( to );
-            }
-
-            if ( mailSender instanceof JndiJavamailMailSender )
-            {
-                JndiJavamailMailSender jndiSender = (JndiJavamailMailSender) mailSender;
-                jndiSender.setJndiSessionName( config.getString( "email.jndiSessionName" ) );
-            }
-            else
-            {
-                mailSender.setSmtpHost( config.getString( "email.smtp.host" ) );
-                mailSender.setSmtpPort( config.getInt( "email.smtp.port" ) );
-                mailSender.setUsername( config.getString( "email.smtp.username" ) );
-                mailSender.setPassword( config.getString( "email.smtp.password" ) );
-                mailSender.setSslMode( config.getBoolean( "email.smtp.ssl.enabled" ),
-                                       config.getBoolean( "email.smtp.tls.enabled" ) );
-
-                /* Not supported for now
-                if ( mailSender.isSslMode() && ( mailSender instanceof JavamailMailSender ) )
-                {
-                    JavamailMailSender jmsender = (JavamailMailSender) mailSender;
-                    jmsender.updateProps();
-                    jmsender.setSslProvider( config.getString( "email.smtp.ssl.provider" ) );
-                }*/
-            }
-
-            getLogger().debug( message.getContent() );
-            
-            mailSender.send( message );
-        }
-        catch ( MailSenderException e )
-        {
-            getLogger().error( "Unable to send message, subject [" + subject + "]", e );
-        }
-    }
+    void sendMessage( Collection recipients, String subject, String content );
 }
