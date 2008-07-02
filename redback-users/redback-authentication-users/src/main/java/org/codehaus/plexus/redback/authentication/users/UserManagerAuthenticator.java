@@ -107,8 +107,13 @@ public class UserManagerAuthenticator
                 }
                 
                 authenticationSuccess = true;
-                user.setCountFailedLoginAttempts( 0 );
-                userManager.updateUser( user );
+                
+                //REDBACK-151 do not make unnessesary updates to the user object
+                if (user.getCountFailedLoginAttempts() > 0)
+                {
+                    user.setCountFailedLoginAttempts( 0 );
+                    userManager.updateUser( user );
+                }
                 
                 return new AuthenticationResult( true, source.getPrincipal(), null );
             }
