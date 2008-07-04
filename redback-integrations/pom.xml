@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.plexus.redback</groupId>
     <artifactId>redback</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
   </parent>
   <artifactId>redback-integrations</artifactId>
   <name>Redback :: Integrations</name>
@@ -31,9 +31,9 @@
     </dependency>
   </dependencies>
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-integrations</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-integrations</developerConnection>
-    <url>https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-integrations</url>
+    <connection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.2/redback-integrations</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.2/redback-integrations</developerConnection>
+    <url>https://svn.codehaus.org/redback/redback/tags/redback-1.0.2/redback-integrations</url>
   </scm>
   <modules>
     <module>redback-xwork</module>

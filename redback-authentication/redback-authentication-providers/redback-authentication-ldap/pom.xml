@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.plexus.redback</groupId>
     <artifactId>redback-authentication-providers</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
   </parent>
   <artifactId>redback-authentication-ldap</artifactId>
   <name>Redback :: Authentication Provider :: Ldap</name>
@@ -38,9 +38,9 @@
     </dependency>
   </dependencies>
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-authentication/redback-authentication-providers/redback-authentication-ldap</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-authentication/redback-authentication-providers/redback-authentication-ldap</developerConnection>
-    <url>https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-authentication/redback-authentication-providers/redback-authentication-ldap</url>
+    <connection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.2/redback-authentication/redback-authentication-providers/redback-authentication-ldap</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.2/redback-authentication/redback-authentication-providers/redback-authentication-ldap</developerConnection>
+    <url>https://svn.codehaus.org/redback/redback/tags/redback-1.0.2/redback-authentication/redback-authentication-providers/redback-authentication-ldap</url>
   </scm>
   <build>
     <plugins>
