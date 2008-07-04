@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.plexus.redback</groupId>
     <artifactId>redback-users</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
   </parent>
   <artifactId>redback-users-providers</artifactId>
   <name>Redback :: Users Providers</name>
@@ -31,9 +31,9 @@
     </dependency>
   </dependencies>
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.2/redback-users/redback-users-providers</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.2/redback-users/redback-users-providers</developerConnection>
-    <url>https://svn.codehaus.org/redback/redback/tags/redback-1.0.2/redback-users/redback-users-providers</url>
+    <connection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-users/redback-users-providers</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-users/redback-users-providers</developerConnection>
+    <url>https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-users/redback-users-providers</url>
   </scm>
   <modules>
     <module>redback-users-cached</module>
