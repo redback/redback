@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.plexus.redback</groupId>
     <artifactId>redback</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
   </parent>
   <artifactId>redback-configuration</artifactId>
   <name>Redback :: Configuration</name>
@@ -40,9 +40,9 @@
     </dependency>
   </dependencies>
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-configuration</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-configuration</developerConnection>
-    <url>https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-configuration</url>
+    <connection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.2/redback-configuration</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.2/redback-configuration</developerConnection>
+    <url>https://svn.codehaus.org/redback/redback/tags/redback-1.0.2/redback-configuration</url>
   </scm>
   <build>
     <plugins>

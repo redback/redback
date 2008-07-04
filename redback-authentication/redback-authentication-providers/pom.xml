@@ -19,15 +19,15 @@
   <parent>
     <groupId>org.codehaus.plexus.redback</groupId>
     <artifactId>redback-authentication</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
   </parent>
   <artifactId>redback-authentication-providers</artifactId>
   <name>Redback :: Authentication Providers</name>
   <packaging>pom</packaging>
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-authentication/redback-authentication-providers</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-authentication/redback-authentication-providers</developerConnection>
-    <url>https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-authentication/redback-authentication-providers</url>
+    <connection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.2/redback-authentication/redback-authentication-providers</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.2/redback-authentication/redback-authentication-providers</developerConnection>
+    <url>https://svn.codehaus.org/redback/redback/tags/redback-1.0.2/redback-authentication/redback-authentication-providers</url>
   </scm>
   <modules>
     <module>redback-authentication-open</module>
