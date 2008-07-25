@@ -20,6 +20,7 @@ SCRIPTHOME=`pwd`
 cd $BASEDIR
 
 SVNURL=`svn info | grep URL | sed -e "s@URL: http[s]://@@"`
+FISHEYEURL=`echo $SVNURL | sed -e "s@svn.codehaus.org@fisheye.codehaus.org/browse@g"`
 
 BACKUP=pom.xml-${NOW}~
 
@@ -32,7 +33,7 @@ POMREL=`pwd | sed -e "s@$SCRIPTHOME@@"`
 
 echo "Fixing <scm> in $POMREL/pom.xml"
 
-cat $BACKUP | sed -e "s@scm:svn:\(http[s]*\)[^< ]*@scm:svn:\1://$SVNURL@g" > pom.xml
+cat $BACKUP | sed -e "s@scm:svn:\(http[s]*\)[^< ]*@scm:svn:\1://$SVNURL@g" | sed "s@http://fisheye[^<]*@http://$FISHEYEURL@g" > pom.xml
 
 cd $CURDIR
 
