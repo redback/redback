@@ -63,7 +63,7 @@
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-rbac/redback-rbac-providers/redback-rbac-cached</connection>
     <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-rbac/redback-rbac-providers/redback-rbac-cached</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/plexus/plexus-security/trunk/plexus-security-authorization/plexus-security-authorization-rbac/plexus-security-authorization-rbac-stores/plexus-security-authorization-rbac-store-cached</url>
+    <url>http://fisheye.codehaus.org/browse/redback/redback/trunk/redback-rbac/redback-rbac-providers/redback-rbac-cached</url>
   </scm>
   <build>
     <plugins>

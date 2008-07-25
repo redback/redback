@@ -43,6 +43,6 @@
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-integrations/redback-jee</connection>
     <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-integrations/redback-jee</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/plexus/plexus-redback/trunk/redback-integrations/redback-jee</url>
+    <url>http://fisheye.codehaus.org/browse/redback/redback/trunk/redback-integrations/redback-jee</url>
   </scm>
 </project>

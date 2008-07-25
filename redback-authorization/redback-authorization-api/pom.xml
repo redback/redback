@@ -26,7 +26,7 @@
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-authorization/redback-authorization-api</connection>
     <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-authorization/redback-authorization-api</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/plexus/plexus-security/trunk/plexus-security-authorization/plexus-security-authorization-api</url>
+    <url>http://fisheye.codehaus.org/browse/redback/redback/trunk/redback-authorization/redback-authorization-api</url>
   </scm>
   <build>
     <plugins>
