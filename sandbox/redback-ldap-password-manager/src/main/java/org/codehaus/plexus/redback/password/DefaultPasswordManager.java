@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 /**
  * 
  * @author <a href="jesse@codehaus.org"> jesse
- * @version "$Id:$"
+ * @version "$Id$"
  *
  * @plexus.component role="org.codehaus.plexus.redback.password.PasswordManager" role-hint="default"
  */

@@ -16,7 +16,7 @@
   -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.codehaus.plexus.redback</groupId>
+  <groupId>org.codehaus.redback</groupId>
   <artifactId>redback</artifactId>
   <version>1.1-SNAPSHOT</version>
   <name>Redback</name>
@@ -132,25 +132,7 @@
   </licenses>
 
   <repositories>
-    <repository>
-      <id>codehaus.snapshots</id>
-      <name>Codehaus Snapshot Development Repository</name>
-      <url>http://snapshots.repository.codehaus.org</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-    </repository>
-    <!-- needed for plexus-registry's dependencies (such as commons-configuration) -->
-    <repository>
-      <id>apache.snapshots</id>
-      <url>http://people.apache.org/repo/m2-snapshot-repository/</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
+    <!-- TODO: remove -->
     <repository>
       <id>java.net</id>
       <url>http://download.java.net/maven/2</url>
@@ -161,194 +143,181 @@
    </repository>
   </repositories>
 
-  <pluginRepositories>
-    <!-- needed for the modello-maven-plugin -->
-    <pluginRepository>
-      <id>codehaus.snapshots</id>
-      <url>http://snapshots.repository.codehaus.org</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-configuration</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-system</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-policy</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-common-jdo</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-common-ldap</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-authentication-api</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-keys-api</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-keys-tests</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-keys-cached</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-keys-memory</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-keys-jdo</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-authentication-users</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-authentication-ldap</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-authentication-=keys=</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-authentication-memory</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-authentication-keys</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-authorization-api</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-users-api</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-users-jdo</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-users-memory</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-users-configurable</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-users-ldap</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-users-cached</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-users-tests</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-authorization-rbac</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-rbac-model</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-rbac-tests</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-rbac-memory</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-rbac-cached</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-rbac-jdo</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-rbac-role-manager</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-xwork-integration</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-taglib</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-xwork-content</artifactId>
         <type>war</type>
         <version>${security.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.redback</groupId>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-xwork-integration</artifactId>
         <version>${security.version}</version>
       </dependency>

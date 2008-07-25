@@ -17,21 +17,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.codehaus.plexus.redback</groupId>
+    <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-integrations</artifactId>
     <version>1.1-SNAPSHOT</version>
   </parent>
   <artifactId>redback-taglib</artifactId>
   <name>Redback :: Integration :: Taglib</name>
   <dependencies>
-  <!-- TODO is this required or not, if so then either clear dep or move into xwork
     <dependency>
-      <groupId>org.codehaus.plexus.redback</groupId>
-      <artifactId>plexus-security-ui-web-integration</artifactId>
-    </dependency>
-  -->
-    <dependency>
-      <groupId>org.codehaus.plexus.redback</groupId>
+      <groupId>org.codehaus.redback</groupId>
       <artifactId>redback-system</artifactId>
     </dependency>
     <dependency>
