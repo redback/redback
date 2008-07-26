@@ -28,9 +28,6 @@ import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
 import org.codehaus.plexus.redback.xwork.model.CreateUserCredentials;
 import org.codehaus.plexus.redback.xwork.role.RoleConstants;
-import org.codehaus.plexus.redback.xwork.mail.Mailer;
-import org.codehaus.plexus.redback.keys.AuthenticationKey;
-import org.codehaus.plexus.redback.keys.KeyManagerException;
 
 /**
  * UserCreateAction
@@ -44,14 +41,6 @@ import org.codehaus.plexus.redback.keys.KeyManagerException;
 public class UserCreateAction
     extends AbstractUserCredentialsAction
 {
-
-    /**
-     * @plexus.requirement
-     */
-    private Mailer mailer;
-
-    private static final String VALIDATION_NOTE = "validation-note";
-
     // ------------------------------------------------------------------
     // Action Parameters
     // ------------------------------------------------------------------
@@ -113,35 +102,10 @@ public class UserCreateAction
         UserSecurityPolicy securityPolicy = securitySystem.getPolicy();
         try
         {
-            if ( securityPolicy.getUserValidationSettings().isEmailValidationRequired() )
-            {
-                u.setLocked( true );
-
-                AuthenticationKey authkey = securitySystem.getKeyManager().createKey( u.getPrincipal().toString(),
-                        "New User Email Validation",
-                        securityPolicy.getUserValidationSettings().getEmailValidationTimeout() );
-
-                List recipients = new ArrayList();
-                recipients.add( u.getEmail() );
-
-                mailer.sendAccountValidationEmail( recipients, authkey, getBaseUrl() );
-
-                securityPolicy.setEnabled( false );
-                manager.addUser( u );
-
-            }
-            else
-            {
-                securityPolicy.setEnabled( false );
-                u.setValidated( true );
-                manager.addUser( u );
-            }
-        }
-        catch ( KeyManagerException e )
-        {
-            addActionError( getText( "cannot.register.user" ) );
-            getLogger().error( "Unable to create a new user.", e );
-            return ERROR;
+        	// REDBACK-156
+            securityPolicy.setEnabled( false );
+            u.setValidated( true );
+            manager.addUser( u );
         }
         finally
         {
