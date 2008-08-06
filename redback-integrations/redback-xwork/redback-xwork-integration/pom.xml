@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.plexus.redback</groupId>
     <artifactId>redback-xwork</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4-SNAPSHOT</version>
   </parent>
   <artifactId>redback-xwork-integration</artifactId>
   <name>Redback :: Integration :: XWork Integration</name>
@@ -163,9 +163,9 @@
     </dependency>
   </dependencies>
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.3/redback-integrations/redback-xwork/redback-xwork-integration</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.3/redback-integrations/redback-xwork/redback-xwork-integration</developerConnection>
-    <url>https://svn.codehaus.org/redback/redback/tags/redback-1.0.3/redback-integrations/redback-xwork/redback-xwork-integration</url>
+    <connection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-integrations/redback-xwork/redback-xwork-integration</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-integrations/redback-xwork/redback-xwork-integration</developerConnection>
+    <url>https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-integrations/redback-xwork/redback-xwork-integration</url>
   </scm>
   <build>
     <plugins>

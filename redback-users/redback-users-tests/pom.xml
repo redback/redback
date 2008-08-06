@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.plexus.redback</groupId>
     <artifactId>redback-users</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4-SNAPSHOT</version>
   </parent>
   <artifactId>redback-users-tests</artifactId>
   <name>Redback :: User Tests</name>
@@ -42,8 +42,8 @@
   </dependencies>
 
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.3/redback-users/redback-users-tests</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.3/redback-users/redback-users-tests</developerConnection>
-    <url>https://svn.codehaus.org/redback/redback/tags/redback-1.0.3/redback-users/redback-users-tests</url>
+    <connection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-users/redback-users-tests</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-users/redback-users-tests</developerConnection>
+    <url>https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-users/redback-users-tests</url>
   </scm>
 </project>
