@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.plexus.redback</groupId>
     <artifactId>redback-authentication-providers</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.3</version>
   </parent>
   <artifactId>redback-authentication-keys</artifactId>
   <name>Redback :: Authentication Provider :: Keys</name>
@@ -38,9 +38,9 @@
     </dependency>
   </dependencies>
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-keys/redback-authentication-keys</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-keys/redback-authentication-keys</developerConnection>
-    <url>https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-keys/redback-authentication-keys</url>
+    <connection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.3/redback-keys/redback-authentication-keys</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.3/redback-keys/redback-authentication-keys</developerConnection>
+    <url>https://svn.codehaus.org/redback/redback/tags/redback-1.0.3/redback-keys/redback-authentication-keys</url>
   </scm>
   <build>
     <plugins>

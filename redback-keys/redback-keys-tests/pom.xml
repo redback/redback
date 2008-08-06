@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.plexus.redback</groupId>
     <artifactId>redback-keys</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.3</version>
   </parent>
   <artifactId>redback-keys-tests</artifactId>
   <name>Redback :: Key Management Test Harness</name>
@@ -36,8 +36,8 @@
     </dependency>
   </dependencies>
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-keys/redback-keys-tests</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-keys/redback-keys-tests</developerConnection>
-    <url>https://svn.codehaus.org/redback/redback/tags/redback-1.0.x/redback-keys/redback-keys-tests</url>
+    <connection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.3/redback-keys/redback-keys-tests</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.0.3/redback-keys/redback-keys-tests</developerConnection>
+    <url>https://svn.codehaus.org/redback/redback/tags/redback-1.0.3/redback-keys/redback-keys-tests</url>
   </scm>
 </project>
