@@ -183,7 +183,11 @@ public class ConfigurableLdapConnectionFactory
         {
             for( String value : list )
             {            	
-            	concatenatedList = concatenatedList + value + ",";
+            	if ( (concatenatedList.length() > 0)  )
+                {
+                	concatenatedList = concatenatedList + ",";
+                }
+            	concatenatedList = concatenatedList + value;
             }
         }
         else
