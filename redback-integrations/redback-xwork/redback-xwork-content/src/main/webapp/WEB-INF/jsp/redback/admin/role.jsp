@@ -1,4 +1,21 @@
-<%@ taglib uri="/webwork" prefix="ww" %>
+<%--
+  ~ Copyright 2005-2006 The Codehaus.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  --%>
+
+<%@ taglib prefix="ww" uri="/webwork"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
 <ww:i18n name="org.codehaus.plexus.redback.xwork.default">
@@ -7,44 +24,67 @@
 </head>
 
 <body>
-<p>
-  <ww:text name="role.section.title"/>
 
-</p>
-<ww:actionerror/>
-<ww:form action="saveRole" method="post">
-  <ww:hidden name="roleName"/>
+  <%@ include file="/WEB-INF/jsp/redback/include/formValidationResults.jsp" %>
 
-  <ww:textfield label="%{getText('name')}" name="name"/> <br/>
-  <ww:textfield label="%{getText('description')}" name="description"/> <br/>
-  <ww:checkbox label="%{getText('role.assignable')}" name="assignable"/><br/>
-  <br/>
-  <ww:text name="role.currently.assigned.permissions"/><br/>
-  <ww:iterator id="permission" value="permissions">
-    <ww:url id="removeAssignedPermissionUrl" action="removeAssignedPermission">
-      <ww:param name="roleName" value="roleName"/>
-      <ww:param name="removePermissionName">${permission.name}</ww:param>
-    </ww:url>
-    ${permission.name} | <ww:a href="%{removeAssignedPermissionUrl}"><ww:text name="remove"/></ww:a><br/>
-  </ww:iterator>
-  <br/>
-  <ww:select label="%{getText('role.add.new.permission')}" name="assignPermissionName" list="assignablePermissions"  listKey="name" listValue="name" emptyOption="true"/><br/>
-  <br/>
-  <ww:text name="role.currently.assigned.roles"/><br/>
-  <ww:iterator id="arole" value="childRoles.roles">
-    <ww:url id="removeAssignedRoleUrl" action="removeAssignedRole">
-      <ww:param name="roleName" value="roleName"/>
-      <ww:param name="removeRoleName" value="${arole.name}"/>
-    </ww:url>
-    ${arole.name} | <ww:a href="%{removeAssignedRoleUrl}"><ww:text name="remove"/></ww:a><br/>
-  </ww:iterator>
-  <br/>
-  <ww:select label="%{getText('role.add.sub.role')}" name="assignedRoleName" list="assignableRoles" listKey="name" listValue="name" emptyOption="true"/><br/>
+  <h2><ww:text name="role"/></h2>
 
-  <p>
-    <ww:submit/>
-  </p>
-</ww:form>
+  <div class="axial">
+    <table border="1" cellspacing="2" cellpadding="3" width="100%">
+      <ww:label label="%{getText('name')}" name="name"/>
+      <ww:label label="%{getText('description')}" name="description"/>
+    </table>
+  </div>
+
+  <div class="functnbar3">
+    <form action="roleedit.action">
+      <input type="hidden" name="name" value="${name}"/>
+      <input type="submit" value="Edit"/>
+    </form>
+  </div>
+
+  <h3><ww:text name="role.model.child.roles"/></h3>
+  <c:if test="${empty childRoleNames}">
+    <ww:text name="role.edit.no.childrole.defined"/>
+  </c:if>
+  <c:if test="${!empty childRoleNames}">
+    <ul>
+    <ww:iterator id="childRoleName" value="childRoleNames">
+      <ww:url id="roleUrl" action="role" includeParams="false">
+        <ww:param name="name">${childRoleName}</ww:param>
+      </ww:url>
+      <li><ww:a href="%{roleeditUrl}">${childRoleName}</ww:a></li>
+    </ww:iterator>
+    </ul>
+  </c:if>
+
+  <h3><ww:text name="permissions"/></h3>
+  <c:if test="${empty permissions}">
+    <ww:text name="role.create.no.permissions.defined"/>
+  </c:if>
+  <c:if test="${!empty permissions}">
+    <ul>
+    <ww:iterator id="permission" value="permissions">
+      <li>P[${permission.name}] (${permission.operation.name}, ${permission.resource.identifier})</li>
+    </ww:iterator>
+    </ul>
+  </c:if>
+
+
+  <h3><ww:text name="role.edit.section.users"/></h3>
+  <c:if test="${empty users}">
+    <ww:text name="role.edit.no.user.defined"/>
+  </c:if>
+  <c:if test="${!empty users}">
+    <ul>
+      <ww:iterator id="user" value="users">
+        <ww:url id="usereditUrl" action="useredit" includeParams="false">
+          <ww:param name="username">${user.username}</ww:param>
+        </ww:url>
+        <li><ww:a href="%{usereditUrl}">${user.fullName} (${user.username} - ${user.email})</ww:a></li>
+      </ww:iterator>
+    </ul>
+  </c:if>
 
 </body>
 </ww:i18n>

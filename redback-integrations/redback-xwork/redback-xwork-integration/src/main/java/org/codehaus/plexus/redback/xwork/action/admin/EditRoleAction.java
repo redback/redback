@@ -75,6 +75,8 @@ public class EditRoleAction
 
     private List users = new ArrayList();
 
+    private List allUsers = new ArrayList();
+
     // ------------------------------------------------------------------
     // Action Entry Points - (aka Names)
     // ------------------------------------------------------------------
@@ -109,7 +111,28 @@ public class EditRoleAction
                 return ERROR;
             }
 
-            populateFields( role );
+            description = role.getDescription();
+            childRoleNames = role.getChildRoleNames();
+            permissions = role.getPermissions();
+            List roles = new ArrayList();
+            roles.add( name );
+            List userAssignments = manager.getUserAssignmentsForRoles( roles );
+            if ( userAssignments != null )
+            {
+                for ( Iterator i = userAssignments.iterator(); i.hasNext(); )
+                {
+                    UserAssignment userAssignment = (UserAssignment) i.next();
+                    try
+                    {
+                        User user = getUserManager().findUser( userAssignment.getPrincipal() );
+                        users.add( user );
+                    }
+                    catch ( UserNotFoundException e )
+                    {
+                        getLogger().warn( "User '" + userAssignment.getPrincipal() + "' doesn't exist.", e );
+                    }
+                }
+            }
         }
         catch ( RbacManagerException e )
         {
@@ -121,6 +144,25 @@ public class EditRoleAction
         }
 
         return INPUT;
+    }
+
+    public String edit()
+    {
+        String result = input();
+
+        //TODO: Remove all users defined in parent roles too
+        allUsers = getUserManager().getUsers();
+        getLogger().info( "edit:" + allUsers.size() );
+        for ( Iterator i = users.iterator(); i.hasNext(); )
+        {
+            User user = (User) i.next();
+            if ( allUsers.contains( user ) )
+            {
+                allUsers.remove( user );
+            }
+        }
+
+        return result;
     }
 
     public String submit()
@@ -150,8 +192,8 @@ public class EditRoleAction
             }
 
             role.setDescription( description );
-            role.setChildRoleNames( childRoleNames );
-            role.setPermissions( permissions );
+            //role.setChildRoleNames( childRoleNames );
+            //role.setPermissions( permissions );
 
             manager.saveRole( role );
 
@@ -169,33 +211,6 @@ public class EditRoleAction
         }
 
         return SUCCESS;
-    }
-
-    private void populateFields( Role role )
-        throws RbacManagerException
-    {
-        description = role.getDescription();
-        childRoleNames = role.getChildRoleNames();
-        permissions = role.getPermissions();
-        List roles = new ArrayList();
-        roles.add( name );
-        List userAssignments = manager.getUserAssignmentsForRoles( roles );
-        if ( userAssignments != null )
-        {
-            for ( Iterator i = userAssignments.iterator(); i.hasNext(); )
-            {
-                UserAssignment userAssignment = (UserAssignment) i.next();
-                try
-                {
-                    User user = getUserManager().findUser( userAssignment.getPrincipal() );
-                    users.add( user );
-                }
-                catch ( UserNotFoundException e )
-                {
-                    getLogger().warn( "User '" + userAssignment.getPrincipal() + "' doesn't exist.", e );
-                }
-            }
-        }
     }
 
     private UserManager getUserManager()
@@ -255,6 +270,16 @@ public class EditRoleAction
     public void setUsers( List users )
     {
         this.users = users;
+    }
+
+    public List getAllUsers()
+    {
+        return allUsers;
+    }
+
+    public void setAllUsers( List allUsers )
+    {
+        this.allUsers = allUsers;
     }
 // ------------------------------------------------------------------
     // Internal Support Methods

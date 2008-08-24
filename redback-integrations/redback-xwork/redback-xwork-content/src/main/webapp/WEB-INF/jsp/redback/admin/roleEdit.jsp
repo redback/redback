@@ -16,6 +16,8 @@
 
 <%@ taglib prefix="ww" uri="/webwork"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.extremecomponents.org" prefix="ec" %>
+
 
 <html>
 <ww:i18n name="org.codehaus.plexus.redback.xwork.default">
@@ -27,14 +29,18 @@
 
   <%@ include file="/WEB-INF/jsp/redback/include/formValidationResults.jsp" %>
 
-  <!-- h2><ww:text name="role.edit.section.title"/></h2 -->
+  <h2><ww:text name="role"/></h2>
 
   <div class="axial">
     <table border="1" cellspacing="2" cellpadding="3" width="100%">
       <ww:label label="%{getText('name')}" name="name"/>
-      <ww:label label="%{getText('description')}" name="description"/>
+      <ww:textfield label="%{getText('description')}" name="description"/>
     </table>
   </div>
+
+  <form action="rolesave.action">
+  <input type="hidden" name="name" value="${name}"/>
+  <input type="submit" value="Save"/>
 
   <h3><ww:text name="role.model.child.roles"/></h3>
   <c:if test="${empty childRoleNames}">
@@ -51,33 +57,59 @@
     </ul>
   </c:if>
 
-  <h3><ww:text name="role.edit.section.permissions"/></h3>
+  <h3><ww:text name="permissions"/></h3>
   <c:if test="${empty permissions}">
     <ww:text name="role.create.no.permissions.defined"/>
   </c:if>
   <c:if test="${!empty permissions}">
-    <ul>
-    <ww:iterator id="permission" value="permissions">
-      <li>P[${permission.name}] (${permission.operation.name}, ${permission.resource.identifier})</li>
-    </ww:iterator>
-    </ul>
+    <ec:table var="permission"
+        items="permissions"
+        cellspacing="2"
+        cellpadding="3"
+        showExports="flase"
+        showPagination="false"
+        showTitle="false"
+        showStatusBar="false"
+        filterable="false">
+      <ec:row>
+        <ec:column property="name" title="Name"/>
+        <ec:column property="operation.name" title="Operation"/>
+        <ec:column property="resource.identifier" title="Resource"/>
+      </ec:row>
+    </ec:table>
   </c:if>
   
 
   <h3><ww:text name="role.edit.section.users"/></h3>
-  <c:if test="${empty users}">
-    <ww:text name="role.edit.no.user.defined"/>
-  </c:if>
-  <c:if test="${!empty users}">
-    <ul>
-      <ww:iterator id="user" value="users">
-        <ww:url id="usereditUrl" action="useredit" includeParams="false">
-          <ww:param name="username">${user.username}</ww:param>
-        </ww:url>
-        <li><ww:a href="%{usereditUrl}">${user.username} (${user.email})</ww:a></li>
-      </ww:iterator>
-    </ul>
-  </c:if>
+  <table>
+    <tr>
+      <td>
+        <select size="20" multiple="true" id="allUsers" name="availableUsers">
+          <ww:iterator id="user" value="allUsers">
+            <option id="${user.username}">${user.fullName} - ${user.username}</option>
+          </ww:iterator>
+        </select>
+      </td>
+      <td>
+        <input type="button" value="--&gt;"/>
+        <br/>
+        <input type="button" value="&lt;--"/>
+      </td>
+      <td>
+        <c:if test="${!empty users}">
+          <select size="20" multiple="true" id="users" name="currentUsers">
+            <ww:iterator id="user" value="users">
+              <option id="${user.username}">${user.fullName} - ${user.username}</option>
+            </ww:iterator>
+          </select>
+        </c:if>
+        <c:if test="${empty users}">
+          <select size="20" multiple="true" id="users" name="currentUsers"/>
+        </c:if>
+      </td>
+    </tr>
+  </table>
+  </form>
 
 </body>
 </ww:i18n>
