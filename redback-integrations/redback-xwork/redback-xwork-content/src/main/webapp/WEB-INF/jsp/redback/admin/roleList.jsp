@@ -34,15 +34,15 @@
 
 <ww:form action="roles!remove" method="post" theme="simple">
 
-  <table>
+  <table width="100%">
 
     <c:choose>
       <c:when test="${!empty allRoles}">
         <thead>
           <tr>
-            <th>&nbsp;</th>
-            <th><ww:text name="role.name"/></th>
-            <th><ww:text name="role.description"/></th>
+            <th width="2%">&nbsp;</th>
+            <th width="49%"><ww:text name="role.name"/></th>
+            <th width="49%"><ww:text name="role.description"/></th>
           </tr>
         </thead>
         
@@ -52,8 +52,8 @@
               <ww:checkbox name="selectedRoles" value="${role.name}" />
             </td>
             <td>
-              <ww:url id="roleUrl" action="role-edit">
-                <ww:param name="roleName" value="${role.name}" />
+              <ww:url id="roleUrl" action="role">
+                <ww:param name="name">${role.name}</ww:param>
               </ww:url>
               <ww:a href="%{roleUrl}">${role.name}</ww:a>
             </td>

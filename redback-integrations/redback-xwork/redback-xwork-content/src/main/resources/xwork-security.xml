@@ -220,6 +220,18 @@
       <result name="success" type="redirect-action">userlist</result>
     </action>
 
+    <action name="role" class="redback-role-edit" method="input">
+      <result name="input">/WEB-INF/jsp/redback/admin/role.jsp</result>
+      <result name="error">/WEB-INF/jsp/redback/admin/role.jsp</result>
+      <result name="success" type="redirect-action">roles</result>
+    </action>
+
+    <action name="roleedit" class="redback-role-edit" method="edit">
+      <result name="input">/WEB-INF/jsp/redback/admin/roleEdit.jsp</result>
+      <result name="error">/WEB-INF/jsp/redback/admin/roleEdit.jsp</result>
+      <result name="success" type="redirect-action">roles</result>
+    </action>
+
     <action name="roleSummary" class="redback-roles" method="list">
        <result name="list">/WEB-INF/jsp/redback/admin/roleSummary.jsp</result>
     </action>

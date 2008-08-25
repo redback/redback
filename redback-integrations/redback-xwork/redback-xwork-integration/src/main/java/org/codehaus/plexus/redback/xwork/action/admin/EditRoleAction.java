@@ -16,18 +16,24 @@ package org.codehaus.plexus.redback.xwork.action.admin;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.Role;
+import org.codehaus.plexus.redback.rbac.UserAssignment;
+import org.codehaus.plexus.redback.system.SecuritySystem;
+import org.codehaus.plexus.redback.users.User;
+import org.codehaus.plexus.redback.users.UserManager;
+import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.xwork.action.AbstractSecurityAction;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
 import org.codehaus.plexus.redback.xwork.role.RoleConstants;
 import org.codehaus.plexus.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * EditRoleAction
@@ -46,6 +52,11 @@ public class EditRoleAction
     // ------------------------------------------------------------------
 
     /**
+     * @plexus.requirement
+     */
+    private SecuritySystem securitySystem;
+
+    /**
      * @plexus.requirement role-hint="cached"
      */
     private RBACManager manager;
@@ -61,6 +72,10 @@ public class EditRoleAction
     private List childRoleNames = new ArrayList();
 
     private List permissions = new ArrayList();
+
+    private List users = new ArrayList();
+
+    private List allUsers = new ArrayList();
 
     // ------------------------------------------------------------------
     // Action Entry Points - (aka Names)
@@ -99,6 +114,25 @@ public class EditRoleAction
             description = role.getDescription();
             childRoleNames = role.getChildRoleNames();
             permissions = role.getPermissions();
+            List roles = new ArrayList();
+            roles.add( name );
+            List userAssignments = manager.getUserAssignmentsForRoles( roles );
+            if ( userAssignments != null )
+            {
+                for ( Iterator i = userAssignments.iterator(); i.hasNext(); )
+                {
+                    UserAssignment userAssignment = (UserAssignment) i.next();
+                    try
+                    {
+                        User user = getUserManager().findUser( userAssignment.getPrincipal() );
+                        users.add( user );
+                    }
+                    catch ( UserNotFoundException e )
+                    {
+                        getLogger().warn( "User '" + userAssignment.getPrincipal() + "' doesn't exist.", e );
+                    }
+                }
+            }
         }
         catch ( RbacManagerException e )
         {
@@ -110,6 +144,25 @@ public class EditRoleAction
         }
 
         return INPUT;
+    }
+
+    public String edit()
+    {
+        String result = input();
+
+        //TODO: Remove all users defined in parent roles too
+        allUsers = getUserManager().getUsers();
+        getLogger().info( "edit:" + allUsers.size() );
+        for ( Iterator i = users.iterator(); i.hasNext(); )
+        {
+            User user = (User) i.next();
+            if ( allUsers.contains( user ) )
+            {
+                allUsers.remove( user );
+            }
+        }
+
+        return result;
     }
 
     public String submit()
@@ -139,8 +192,8 @@ public class EditRoleAction
             }
 
             role.setDescription( description );
-            role.setChildRoleNames( childRoleNames );
-            role.setPermissions( permissions );
+            //role.setChildRoleNames( childRoleNames );
+            //role.setPermissions( permissions );
 
             manager.saveRole( role );
 
@@ -158,6 +211,11 @@ public class EditRoleAction
         }
 
         return SUCCESS;
+    }
+
+    private UserManager getUserManager()
+    {
+        return securitySystem.getUserManager();
     }
 
     // ------------------------------------------------------------------
@@ -204,7 +262,26 @@ public class EditRoleAction
         this.permissions = permissions;
     }
 
-    // ------------------------------------------------------------------
+    public List getUsers()
+    {
+        return users;
+    }
+
+    public void setUsers( List users )
+    {
+        this.users = users;
+    }
+
+    public List getAllUsers()
+    {
+        return allUsers;
+    }
+
+    public void setAllUsers( List allUsers )
+    {
+        this.allUsers = allUsers;
+    }
+// ------------------------------------------------------------------
     // Internal Support Methods
     // ------------------------------------------------------------------
 
