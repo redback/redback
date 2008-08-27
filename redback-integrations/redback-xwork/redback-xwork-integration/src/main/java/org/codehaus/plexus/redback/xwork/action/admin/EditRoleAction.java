@@ -21,6 +21,7 @@ import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
+import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
@@ -61,6 +62,11 @@ public class EditRoleAction
      */
     private RBACManager manager;
 
+    /**
+     * @plexus.requirement
+     */
+    private RoleManager roleManager;
+
     // ------------------------------------------------------------------
     // Action Parameters
     // ------------------------------------------------------------------
@@ -76,6 +82,12 @@ public class EditRoleAction
     private List users = new ArrayList();
 
     private List allUsers = new ArrayList();
+
+    private List/*<String>*/ usersList;
+
+    private List/*<String>*/ availableUsers = new ArrayList();
+
+    private List/*<String>*/ currentUsers = new ArrayList();
 
     // ------------------------------------------------------------------
     // Action Entry Points - (aka Names)
@@ -117,6 +129,7 @@ public class EditRoleAction
             List roles = new ArrayList();
             roles.add( name );
             List userAssignments = manager.getUserAssignmentsForRoles( roles );
+            users = new ArrayList();
             if ( userAssignments != null )
             {
                 for ( Iterator i = userAssignments.iterator(); i.hasNext(); )
@@ -152,7 +165,7 @@ public class EditRoleAction
 
         //TODO: Remove all users defined in parent roles too
         allUsers = getUserManager().getUsers();
-        getLogger().info( "edit:" + allUsers.size() );
+
         for ( Iterator i = users.iterator(); i.hasNext(); )
         {
             User user = (User) i.next();
@@ -165,8 +178,10 @@ public class EditRoleAction
         return result;
     }
 
-    public String submit()
+    public String save()
     {
+        input();
+
         if ( name == null )
         {
             addActionError( getText( "cannot.edit.null.role" ) );
@@ -191,6 +206,7 @@ public class EditRoleAction
                 role = manager.createRole( name );
             }
 
+            //TODO: allow to modify childRoleNames and permissions
             role.setDescription( description );
             //role.setChildRoleNames( childRoleNames );
             //role.setPermissions( permissions );
@@ -210,6 +226,110 @@ public class EditRoleAction
             return ERROR;
         }
 
+        return SUCCESS;
+    }
+
+    public String addUsers()
+    {
+        if ( availableUsers == null || availableUsers.isEmpty() )
+        {
+            return INPUT;
+        }
+
+        for ( Iterator i = availableUsers.iterator(); i.hasNext(); )
+        {
+            String principal = (String) i.next();
+
+            if ( !getUserManager().userExists( principal ) )
+            {
+                // Means that the role name doesn't exist.
+                // We need to fail fast and return to the previous page.
+                List list = new ArrayList();
+                list.add( principal );
+                addActionError( getText( "user.does.not.exist", list ) );
+                return ERROR;
+            }
+
+            try
+            {
+                UserAssignment assignment;
+
+                if ( manager.userAssignmentExists( principal ) )
+                {
+                    assignment = manager.getUserAssignment( principal );
+                }
+                else
+                {
+                    assignment = manager.createUserAssignment( principal );
+                }
+
+                assignment.addRoleName( name );
+                assignment = manager.saveUserAssignment( assignment );
+                getLogger().info( name + " role assigned to " + principal );
+            }
+            catch ( RbacManagerException e )
+            {
+                List list = new ArrayList();
+                list.add( principal );
+                list.add( e.getMessage() );
+                addActionError( getText( "cannot.assign.role", list ) );
+                return ERROR;
+            }
+        }
+
+        edit();
+        return SUCCESS;
+    }
+
+    public String removeUsers()
+    {
+        if ( currentUsers == null || currentUsers.isEmpty() )
+        {
+            return INPUT;
+        }
+
+        for ( Iterator i = currentUsers.iterator(); i.hasNext(); )
+        {
+            String principal = (String) i.next();
+
+            if ( !getUserManager().userExists( principal ) )
+            {
+                // Means that the role name doesn't exist.
+                // We need to fail fast and return to the previous page.
+                List list = new ArrayList();
+                list.add( principal );
+                addActionError( getText( "user.does.not.exist", list ) );
+                return ERROR;
+            }
+
+            try
+            {
+                UserAssignment assignment;
+
+                if ( manager.userAssignmentExists( principal ) )
+                {
+                    assignment = manager.getUserAssignment( principal );
+                }
+                else
+                {
+                    assignment = manager.createUserAssignment( principal );
+                }
+
+                assignment.removeRoleName( name );
+                assignment = manager.saveUserAssignment( assignment );
+                getLogger().info( name + " role unassigned to " + principal );
+            }
+            catch ( RbacManagerException e )
+            {
+                List list = new ArrayList();
+                list.add( principal );
+                list.add( e.getMessage() );
+                addActionError( getText( "cannot.assign.role", list ) );
+                return ERROR;
+            }
+        }
+
+        edit();
         return SUCCESS;
     }
 
@@ -281,7 +401,38 @@ public class EditRoleAction
     {
         this.allUsers = allUsers;
     }
-// ------------------------------------------------------------------
+
+    public List getUsersList()
+    {
+        return usersList;
+    }
+
+    public void setUsersList( List usersList )
+    {
+        this.usersList = usersList;
+    }
+
+    public List getAvailableUsers()
+    {
+        return availableUsers;
+    }
+
+    public void setAvailableUsers( List availableUsers )
+    {
+        this.availableUsers = availableUsers;
+    }
+
+    public List getCurrentUsers()
+    {
+        return currentUsers;
+    }
+
+    public void setCurrentUsers( List currentUsers )
+    {
+        this.currentUsers = currentUsers;
+    }
+
+    // ------------------------------------------------------------------
     // Internal Support Methods
     // ------------------------------------------------------------------
 
