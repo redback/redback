@@ -32,15 +32,12 @@
 
 <%@ include file="/WEB-INF/jsp/redback/include/formValidationResults.jsp" %>
 
-<ww:form action="roles!remove" method="post" theme="simple">
-
   <table width="100%">
 
     <c:choose>
       <c:when test="${!empty allRoles}">
         <thead>
           <tr>
-            <th width="2%">&nbsp;</th>
             <th width="49%"><ww:text name="role.name"/></th>
             <th width="49%"><ww:text name="role.description"/></th>
           </tr>
@@ -48,9 +45,6 @@
         
         <c:forEach var="role" items="${allRoles}">
           <tr>
-            <td>
-              <ww:checkbox name="selectedRoles" value="${role.name}" />
-            </td>
             <td>
               <ww:url id="roleUrl" action="role">
                 <ww:param name="name">${role.name}</ww:param>
@@ -67,16 +61,7 @@
         <p><em><ww:text name="role.list.no.roles.available"/></em></p>
       </c:otherwise>
     </c:choose>
-    
-    <tr>
-      <td colspan="3">
-        <ww:submit value="%{getText('remove.selected.roles')}" />
-      </td>
-    </tr>
-
   </table>
-  
-</ww:form>
 
 </body>
 </ww:i18n>

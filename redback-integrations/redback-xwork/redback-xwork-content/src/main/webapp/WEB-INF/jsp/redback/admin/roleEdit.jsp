@@ -31,16 +31,21 @@
 
   <h2><ww:text name="role"/></h2>
 
-  <div class="axial">
-    <table border="1" cellspacing="2" cellpadding="3" width="100%">
-      <ww:label label="%{getText('name')}" name="name"/>
-      <ww:textfield label="%{getText('description')}" name="description"/>
-    </table>
-  </div>
+  <ww:actionerror/>
 
-  <form action="rolesave.action">
-  <input type="hidden" name="name" value="${name}"/>
-  <input type="submit" value="Save"/>
+  <form action="rolesave.action" name="rolesave">
+    <input type="hidden" name="name" value="${name}"/>
+    <input type="hidden" name="usersList"/>
+    <div class="axial">
+      <table border="1" cellspacing="2" cellpadding="3" width="100%">
+        <ww:label label="%{getText('name')}" name="name"/>
+        <ww:textfield label="%{getText('description')}" name="description"/>
+      </table>
+    </div>
+    <div class="functnbar3">
+        <input type="submit" value="Save"/>
+    </div>
+  </form>
 
   <h3><ww:text name="role.model.child.roles"/></h3>
   <c:if test="${empty childRoleNames}">
@@ -78,33 +83,35 @@
       </ec:row>
     </ec:table>
   </c:if>
-  
 
   <h3><ww:text name="role.edit.section.users"/></h3>
+
+  <form name="roleusers">
+    <input type="hidden" name="name" value="${name}"/>
   <table>
     <tr>
       <td>
-        <select size="20" multiple="true" id="allUsers" name="availableUsers">
+        <select size="20" multiple="multiple" id="allUsers" name="availableUsers">
           <ww:iterator id="user" value="allUsers">
-            <option id="${user.username}">${user.fullName} - ${user.username}</option>
+            <option value="${user.username}">${user.fullName} - ${user.username}</option>
           </ww:iterator>
         </select>
       </td>
       <td>
-        <input type="button" value="--&gt;"/>
+        <input type="submit" value="--&gt;" onclick="this.form.action='roleusersadd.action'; this.form.submit();"/>
         <br/>
-        <input type="button" value="&lt;--"/>
+        <input type="submit" value="&lt;--" onclick="this.form.action='roleusersremove.action'; this.form.submit();"/>
       </td>
       <td>
         <c:if test="${!empty users}">
-          <select size="20" multiple="true" id="users" name="currentUsers">
+          <select size="20" multiple="multiple" id="users" name="currentUsers">
             <ww:iterator id="user" value="users">
-              <option id="${user.username}">${user.fullName} - ${user.username}</option>
+              <option value="${user.username}">${user.fullName} - ${user.username}</option>
             </ww:iterator>
           </select>
         </c:if>
         <c:if test="${empty users}">
-          <select size="20" multiple="true" id="users" name="currentUsers"/>
+          <select size="20" multiple="multiple" id="users" name="usersList"/>
         </c:if>
       </td>
     </tr>
