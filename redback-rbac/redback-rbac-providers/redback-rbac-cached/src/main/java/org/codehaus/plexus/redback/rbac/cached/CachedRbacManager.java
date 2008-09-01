@@ -17,7 +17,6 @@ package org.codehaus.plexus.redback.rbac.cached;
  */
 
 import net.sf.ehcache.Element;
-
 import org.codehaus.plexus.ehcache.EhcacheComponent;
 import org.codehaus.plexus.ehcache.EhcacheUtils;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -43,7 +42,6 @@ import java.util.Set;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * 
  * @plexus.component role="org.codehaus.plexus.redback.rbac.RBACManager" role-hint="cached"
  */
 public class CachedRbacManager
@@ -57,42 +55,42 @@ public class CachedRbacManager
 
     /**
      * cache used for operations
-     * 
+     *
      * @plexus.requirement role-hint="operations"
      */
     private EhcacheComponent operationsCache;
 
     /**
      * cache used for permissions
-     * 
+     *
      * @plexus.requirement role-hint="permissions"
      */
     private EhcacheComponent permissionsCache;
 
     /**
      * cache used for resources
-     * 
+     *
      * @plexus.requirement role-hint="resources"
      */
     private EhcacheComponent resourcesCache;
 
     /**
      * cache used for roles
-     * 
+     *
      * @plexus.requirement role-hint="roles"
      */
     private EhcacheComponent rolesCache;
 
     /**
      * cache used for user assignments
-     * 
+     *
      * @plexus.requirement role-hint="userAssignments"
      */
     private EhcacheComponent userAssignmentsCache;
 
     /**
      * cache used for user permissions
-     * 
+     *
      * @plexus.requirement role-hint="userPermissions"
      */
     private EhcacheComponent userPermissionsCache;
@@ -263,6 +261,13 @@ public class CachedRbacManager
     {
         getLogger().debug( "NOT CACHED - .getChildRoles(Role)" );
         return this.rbacImpl.getChildRoles( role );
+    }
+
+    public Map/*<String, Role>*/ getParentRoles( Role role )
+        throws RbacManagerException
+    {
+        getLogger().debug( "NOT CACHED - .getParentRoles(Role)" );
+        return this.rbacImpl.getParentRoles( role );
     }
 
     public Collection getEffectivelyAssignedRoles( String principal )

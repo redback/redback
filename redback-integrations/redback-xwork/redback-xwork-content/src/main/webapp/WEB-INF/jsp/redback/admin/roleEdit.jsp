@@ -18,7 +18,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.extremecomponents.org" prefix="ec" %>
 
-
 <html>
 <ww:i18n name="org.codehaus.plexus.redback.xwork.default">
 <head>
@@ -39,13 +38,28 @@
     <div class="axial">
       <table border="1" cellspacing="2" cellpadding="3" width="100%">
         <ww:label label="%{getText('name')}" name="name"/>
-        <ww:textfield label="%{getText('description')}" name="description"/>
+        <ww:textfield label="%{getText('description')}" name="newDescription"/>
       </table>
     </div>
     <div class="functnbar3">
         <input type="submit" value="Save"/>
     </div>
   </form>
+
+  <h3><ww:text name="role.model.parent.roles"/></h3>
+  <c:if test="${empty parentRoleNames}">
+    <ww:text name="role.edit.no.parent.defined"/>
+  </c:if>
+  <c:if test="${!empty parentRoleNames}">
+    <ul>
+    <ww:iterator id="parentRoleName" value="parentRoleNames">
+      <ww:url id="roleeditUrl" action="roleedit" includeParams="none">
+        <ww:param name="name">${parentRoleName}</ww:param>
+      </ww:url>
+      <li><ww:a href="%{roleeditUrl}">${parentRoleName}</ww:a></li>
+    </ww:iterator>
+    </ul>
+  </c:if>
 
   <h3><ww:text name="role.model.child.roles"/></h3>
   <c:if test="${empty childRoleNames}">
@@ -54,7 +68,7 @@
   <c:if test="${!empty childRoleNames}">
     <ul>
     <ww:iterator id="childRoleName" value="childRoleNames">
-      <ww:url id="roleeditUrl" action="roleedit" includeParams="false">
+      <ww:url id="roleeditUrl" action="roleedit" includeParams="none">
         <ww:param name="name">${childRoleName}</ww:param>
       </ww:url>
       <li><ww:a href="%{roleeditUrl}">${childRoleName}</ww:a></li>
@@ -86,6 +100,18 @@
 
   <h3><ww:text name="role.edit.section.users"/></h3>
 
+  <c:if test="${!empty parentUsers}">
+    <h4><ww:text name="role.edit.users.defined.in.parent.roles"/></h4>
+    <ul>
+      <ww:iterator id="user" value="parentUsers">
+        <ww:url id="usereditUrl" action="useredit" includeParams="none">
+          <ww:param name="username">${user.username}</ww:param>
+        </ww:url>
+        <li><ww:a href="%{usereditUrl}">${user.fullName} (${user.username} - ${user.email})</ww:a></li>
+      </ww:iterator>
+    </ul>
+  </c:if>
+  <h4><ww:text name="role.edit.users.defined.in.current.role"/></h4>
   <form name="roleusers">
     <input type="hidden" name="name" value="${name}"/>
   <table>

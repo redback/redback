@@ -89,6 +89,9 @@ public interface RBACManager
     public Map getChildRoles( Role role )
         throws RbacManagerException;
 
+    public Map/*<String, Role>*/ getParentRoles( Role role )
+        throws RbacManagerException;
+
     /**
      * Method getRoles
      */
@@ -396,7 +399,9 @@ public interface RBACManager
      * @throws RbacManagerException
      */
     public Map getAssignedPermissionMap( String principal )
-        throws RbacObjectNotFoundException, RbacManagerException;;
+        throws RbacObjectNotFoundException, RbacManagerException;
+
+    ;
 
     /**
      * returns a list of all assignable roles

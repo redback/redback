@@ -35,6 +35,7 @@ import org.codehaus.plexus.util.StringUtils;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * EditRoleAction
@@ -75,15 +76,21 @@ public class EditRoleAction
 
     private String description;
 
+    private String newDescription;
+
     private List childRoleNames = new ArrayList();
+
+    private List parentRoleNames = new ArrayList();
 
     private List permissions = new ArrayList();
 
     private List users = new ArrayList();
 
+    private List parentUsers = new ArrayList();
+
     private List allUsers = new ArrayList();
 
-    private List/*<String>*/ usersList;
+    private List/*<String>*/ usersList = new ArrayList();
 
     private List/*<String>*/ availableUsers = new ArrayList();
 
@@ -125,7 +132,15 @@ public class EditRoleAction
 
             description = role.getDescription();
             childRoleNames = role.getChildRoleNames();
+            Map parentRoles = manager.getParentRoles( role );
+            for ( Iterator i = parentRoles.keySet().iterator(); i.hasNext(); )
+            {
+                String roleName = (String) i.next();
+                parentRoleNames.add( roleName );
+            }
             permissions = role.getPermissions();
+
+            //Get users of the current role
             List roles = new ArrayList();
             roles.add( name );
             List userAssignments = manager.getUserAssignmentsForRoles( roles );
@@ -146,6 +161,29 @@ public class EditRoleAction
                     }
                 }
             }
+
+            //Get users of the parent roles
+            parentUsers = new ArrayList();
+            if ( parentRoles != null && !parentRoles.isEmpty() )
+            {
+                List userParentAssignments = manager.getUserAssignmentsForRoles( parentRoles.keySet() );
+                if ( userParentAssignments != null )
+                {
+                    for ( Iterator i = userParentAssignments.iterator(); i.hasNext(); )
+                    {
+                        UserAssignment userAssignment = (UserAssignment) i.next();
+                        try
+                        {
+                            User user = getUserManager().findUser( userAssignment.getPrincipal() );
+                            parentUsers.add( user );
+                        }
+                        catch ( UserNotFoundException e )
+                        {
+                            getLogger().warn( "User '" + userAssignment.getPrincipal() + "' doesn't exist.", e );
+                        }
+                    }
+                }
+            }
         }
         catch ( RbacManagerException e )
         {
@@ -162,11 +200,21 @@ public class EditRoleAction
     public String edit()
     {
         String result = input();
+        newDescription = description;
 
         //TODO: Remove all users defined in parent roles too
         allUsers = getUserManager().getUsers();
 
         for ( Iterator i = users.iterator(); i.hasNext(); )
+        {
+            User user = (User) i.next();
+            if ( allUsers.contains( user ) )
+            {
+                allUsers.remove( user );
+            }
+        }
+
+        for ( Iterator i = parentUsers.iterator(); i.hasNext(); )
         {
             User user = (User) i.next();
             if ( allUsers.contains( user ) )
@@ -207,7 +255,7 @@ public class EditRoleAction
             }
 
             //TODO: allow to modify childRoleNames and permissions
-            role.setDescription( description );
+            role.setDescription( newDescription );
             //role.setChildRoleNames( childRoleNames );
             //role.setPermissions( permissions );
 
@@ -372,6 +420,16 @@ public class EditRoleAction
         this.description = description;
     }
 
+    public String getNewDescription()
+    {
+        return newDescription;
+    }
+
+    public void setNewDescription( String newDescription )
+    {
+        this.newDescription = newDescription;
+    }
+
     public List getPermissions()
     {
         return permissions;
@@ -432,7 +490,26 @@ public class EditRoleAction
         this.currentUsers = currentUsers;
     }
 
-    // ------------------------------------------------------------------
+    public List getParentRoleNames()
+    {
+        return parentRoleNames;
+    }
+
+    public void setParentRoleNames( List parentRoleNames )
+    {
+        this.parentRoleNames = parentRoleNames;
+    }
+
+    public List getParentUsers()
+    {
+        return parentUsers;
+    }
+
+    public void setParentUsers( List parentUsers )
+    {
+        this.parentUsers = parentUsers;
+    }
+// ------------------------------------------------------------------
     // Internal Support Methods
     // ------------------------------------------------------------------
 

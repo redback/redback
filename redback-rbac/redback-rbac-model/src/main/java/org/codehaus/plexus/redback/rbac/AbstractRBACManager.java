@@ -601,11 +601,11 @@ public abstract class AbstractRBACManager
             while ( it.hasNext() )
             {
                 String roleName = (String) it.next();
-                
+
                 try
-                {                
-                    Role crole = getRole( roleName );               
-                 
+                {
+                    Role crole = getRole( roleName );
+
                     if ( !roleSet.contains( crole ) )
                     {
                         gatherEffectiveRoles( crole, roleSet );
@@ -615,7 +615,7 @@ public abstract class AbstractRBACManager
                 {
                     // the client application might not manage role clean up totally correctly so we want to notify
                     // of a child role issue and offer a clean up process at some point
-                    getLogger().warn( "dangling child role: " + roleName  + " on " + role.getName() );
+                    getLogger().warn( "dangling child role: " + roleName + " on " + role.getName() );
                 }
             }
         }
@@ -756,6 +756,35 @@ public abstract class AbstractRBACManager
         }
 
         return childRoles;
+    }
+
+    public Map/*<String, Role>*/ getParentRoles( Role role )
+        throws RbacManagerException
+    {
+        List roles = getAllRoles();
+        Map parentRoles = new HashMap();
+
+        for ( Iterator i = roles.iterator(); i.hasNext(); )
+        {
+            Role r = (Role) i.next();
+            if ( !r.getName().equals( role.getName() ) )
+            {
+                Set effectiveRoles = getEffectiveRoles( r );
+                for ( Iterator j = effectiveRoles.iterator(); j.hasNext(); )
+                {
+                    Role currentRole = (Role) j.next();
+
+                    if ( currentRole.getName().equals( role.getName() ) )
+                    {
+                        if ( !parentRoles.containsKey( r.getName() ) )
+                        {
+                            parentRoles.put( r.getName(), r );
+                        }
+                    }
+                }
+            }
+        }
+        return parentRoles;
     }
 
     public Set getEffectiveRoles( Role role )
