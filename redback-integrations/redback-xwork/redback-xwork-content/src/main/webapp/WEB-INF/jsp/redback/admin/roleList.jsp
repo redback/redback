@@ -26,7 +26,7 @@
 
 <body>
 
-<%@ include file="/WEB-INF/jsp/redback/include/rbacListNavigation.jsp" %>
+<!-- %@ include file="/WEB-INF/jsp/redback/include/rbacListNavigation.jsp" % -->
 
 <h2><ww:text name="role.list.section.title"/></h2>
 

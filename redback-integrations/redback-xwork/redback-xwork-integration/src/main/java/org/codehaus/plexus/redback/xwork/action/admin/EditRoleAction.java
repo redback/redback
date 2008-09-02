@@ -509,7 +509,8 @@ public class EditRoleAction
     {
         this.parentUsers = parentUsers;
     }
-// ------------------------------------------------------------------
+
+    // ------------------------------------------------------------------
     // Internal Support Methods
     // ------------------------------------------------------------------
 
@@ -518,8 +519,7 @@ public class EditRoleAction
     {
         SecureActionBundle bundle = new SecureActionBundle();
         bundle.setRequiresAuthentication( true );
-        bundle.addRequiredAuthorization( RoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION, Resource.GLOBAL );
+        bundle.addRequiredAuthorization( RoleConstants.USER_MANAGEMENT_ROLE_GRANT_OPERATION, name );
         return bundle;
     }
-
 }
