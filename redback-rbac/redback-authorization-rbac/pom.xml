@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-authorization-providers</artifactId>
-    <version>1.1</version>
+    <version>1.2-SNAPSHOT</version>
   </parent>
   <artifactId>redback-authorization-rbac</artifactId>
   <name>Redback :: Authorization Provider :: RBAC</name>
@@ -47,9 +47,9 @@
     </dependency>
   </dependencies>
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/redback/redback/tags/redback-1.1/redback-rbac/redback-authorization-rbac</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.1/redback-rbac/redback-authorization-rbac</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/redback/redback/tags/redback-1.1/redback-rbac/redback-authorization-rbac</url>
+    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-rbac/redback-authorization-rbac</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-rbac/redback-authorization-rbac</developerConnection>
+    <url>http://fisheye.codehaus.org/browse/redback/redback/trunk/redback-rbac/redback-authorization-rbac</url>
   </scm>
   <build>
     <plugins>
