@@ -405,7 +405,7 @@ public class LoginAction
         catch ( AccountLockedException e )
         {
             addActionError( getText( "account.locked" ) );
-            return ACCOUNT_LOCKED;
+            return ERROR;
         }
     }
 }
