@@ -19,11 +19,10 @@ package org.codehaus.plexus.redback.users;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
- * AbstractUserManager 
+ * AbstractUserManager
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
@@ -32,7 +31,7 @@ public abstract class AbstractUserManager
     extends AbstractLogEnabled
     implements UserManager
 {
-    private List listeners = new ArrayList();
+    private List<UserManagerListener> listeners = new ArrayList<UserManagerListener>();
 
     public void addUserManagerListener( UserManagerListener listener )
     {
@@ -49,11 +48,8 @@ public abstract class AbstractUserManager
 
     protected void fireUserManagerInit( boolean freshDatabase )
     {
-        Iterator it = listeners.iterator();
-        while ( it.hasNext() )
+        for ( UserManagerListener listener : listeners )
         {
-            UserManagerListener listener = (UserManagerListener) it.next();
-
             try
             {
                 listener.userManagerInit( freshDatabase );
@@ -67,11 +63,8 @@ public abstract class AbstractUserManager
 
     protected void fireUserManagerUserAdded( User addedUser )
     {
-        Iterator it = listeners.iterator();
-        while ( it.hasNext() )
+        for ( UserManagerListener listener : listeners )
         {
-            UserManagerListener listener = (UserManagerListener) it.next();
-
             try
             {
                 listener.userManagerUserAdded( addedUser );
@@ -85,11 +78,8 @@ public abstract class AbstractUserManager
 
     protected void fireUserManagerUserRemoved( User removedUser )
     {
-        Iterator it = listeners.iterator();
-        while ( it.hasNext() )
+        for ( UserManagerListener listener : listeners )
         {
-            UserManagerListener listener = (UserManagerListener) it.next();
-
             try
             {
                 listener.userManagerUserRemoved( removedUser );
@@ -103,11 +93,8 @@ public abstract class AbstractUserManager
 
     protected void fireUserManagerUserUpdated( User updatedUser )
     {
-        Iterator it = listeners.iterator();
-        while ( it.hasNext() )
+        for ( UserManagerListener listener : listeners )
         {
-            UserManagerListener listener = (UserManagerListener) it.next();
-
             try
             {
                 listener.userManagerUserUpdated( updatedUser );
@@ -119,4 +106,31 @@ public abstract class AbstractUserManager
         }
     }
 
+    public User getGuestUser()
+        throws UserNotFoundException
+    {
+        return findUser( GUEST_USERNAME );
+    }
+
+    public User createGuestUser()
+    {
+        try
+        {
+            User u = getGuestUser();
+            if ( u != null )
+            {
+                return u;
+            }
+        }
+        catch ( UserNotFoundException e )
+        {
+            //Nothing to do
+        }
+
+        User user = createUser( GUEST_USERNAME, "Guest", "" );
+        user.setPermanent( true );
+        user.setPasswordChangeRequired( false );
+        user = addUser( user );
+        return user;
+    }
 }

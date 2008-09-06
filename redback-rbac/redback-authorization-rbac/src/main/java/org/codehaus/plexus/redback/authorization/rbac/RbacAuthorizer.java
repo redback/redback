@@ -42,10 +42,8 @@ import java.util.Map;
  *
  * @author Jesse McConnell <jmcconnell@apache.org>
  * @version $Id:$
- *
- * @plexus.component
- *   role="org.codehaus.plexus.redback.authorization.Authorizer"
- *   role-hint="rbac"
+ * @plexus.component role="org.codehaus.plexus.redback.authorization.Authorizer"
+ * role-hint="rbac"
  */
 public class RbacAuthorizer
     extends AbstractLogEnabled
@@ -71,7 +69,7 @@ public class RbacAuthorizer
      * @plexus.requirement role-hint="default"
      */
     private UserConfiguration config;
-    
+
     public String getId()
     {
         return "RBAC Authorizer - " + this.getClass().getName();
@@ -114,8 +112,8 @@ public class RbacAuthorizer
                 }
             }
             // check if guest user is enabled, if so check the global permissions
-            User guest = userManager.findUser( config.getString( "redback.default.guest" ) );
-            
+            User guest = userManager.getGuestUser();
+
             if ( !guest.isLocked() )
             {
                 // Set permissions = manager.getAssignedPermissions( principal.toString(), operation );

@@ -19,7 +19,7 @@ package org.codehaus.plexus.redback.system.check;
 import java.util.List;
 
 /**
- * EnvironmentCheck - Perform an Environment Check. 
+ * EnvironmentCheck - Perform an Environment Check.
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
@@ -30,7 +30,7 @@ public interface EnvironmentCheck
 
     /**
      * Validate the environment.
-     * 
+     *
      * @param violations list to populate with environment violations.
      */
     public void validateEnvironment( List violations );

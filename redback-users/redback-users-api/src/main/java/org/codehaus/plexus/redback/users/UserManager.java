@@ -28,13 +28,15 @@ public interface UserManager
 {
     public static final String ROLE = UserManager.class.getName();
 
+    public static final String GUEST_USERNAME = "guest";
+
     /**
      * Is the UserManager read only?  if so then create and modify actions are to be disabled
-     * 
+     *
      * @return boolean true if user manager is disabled
      */
     public boolean isReadOnly();
-    
+
     /**
      * And Identifier for the UserManager.
      *
@@ -70,6 +72,13 @@ public interface UserManager
      * @return the new user object ready to use.
      */
     User createUser( String username, String fullName, String emailAddress );
+
+    /**
+     * Factory method to create the guest user.
+     *
+     * @return The guest user
+     */
+    User createGuestUser();
 
     /**
      * Factory method to create {@link UserQuery}s based on provider specific
@@ -114,6 +123,14 @@ public interface UserManager
      * @throws UserNotFoundException if the user was not found.
      */
     User findUser( String username )
+        throws UserNotFoundException;
+
+    /**
+     * Get the gueust user.
+     *
+     * @return the guest user.
+     */
+    User getGuestUser()
         throws UserNotFoundException;
 
     List findUsersByUsernameKey( String usernameKey, boolean orderAscending );

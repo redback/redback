@@ -30,47 +30,49 @@ import org.codehaus.plexus.redback.users.UserQuery;
 import java.util.List;
 
 /**
- * 
  * @author <a href="jesse@codehaus.org"> jesse
  * @version "$Id:$"
- *
  * @plexus.component role="org.codehaus.plexus.redback.users.UserManager" role-hint="configurable"
  */
-public class ConfigurableUserManager extends AbstractUserManager implements Initializable
+public class ConfigurableUserManager
+    extends AbstractUserManager
+    implements Initializable
 {
     /**
      * @plexus.requirement
      */
     private UserConfiguration config;
-    
+
     /**
      * @plexus.requirement role-hint="default"
      */
     private PlexusContainer container;
-    
-    private UserManager userManagerImpl;  
-    
-    public static final String USER_MANAGER_IMPL = "user.manager.impl"; 
-    
-    public void initialize() throws InitializationException
+
+    private UserManager userManagerImpl;
+
+    public static final String USER_MANAGER_IMPL = "user.manager.impl";
+
+    public void initialize()
+        throws InitializationException
     {
-       String userManagerRole = config.getString( USER_MANAGER_IMPL );
-       
-       if ( userManagerRole == null )
-       {
-           throw new InitializationException( "User Manager Configuration Missing: " + USER_MANAGER_IMPL + " configuration property"  );
-       }
-       
-       try
-       {
-           userManagerImpl = (UserManager)container.lookup( UserManager.class.getName(), userManagerRole );
-       }
-       catch ( ComponentLookupException e )
-       {
-           throw new InitializationException( "unable to resolve user manager implementation", e );
-       }
+        String userManagerRole = config.getString( USER_MANAGER_IMPL );
+
+        if ( userManagerRole == null )
+        {
+            throw new InitializationException(
+                "User Manager Configuration Missing: " + USER_MANAGER_IMPL + " configuration property" );
+        }
+
+        try
+        {
+            userManagerImpl = (UserManager) container.lookup( UserManager.class.getName(), userManagerRole );
+        }
+        catch ( ComponentLookupException e )
+        {
+            throw new InitializationException( "unable to resolve user manager implementation", e );
+        }
     }
- 
+
     public User addUser( User user )
     {
         return userManagerImpl.addUser( user );
@@ -91,12 +93,14 @@ public class ConfigurableUserManager extends AbstractUserManager implements Init
         return userManagerImpl.createUserQuery();
     }
 
-    public void deleteUser( Object principal ) throws UserNotFoundException
+    public void deleteUser( Object principal )
+        throws UserNotFoundException
     {
         userManagerImpl.deleteUser( principal );
     }
 
-    public void deleteUser( String username ) throws UserNotFoundException
+    public void deleteUser( String username )
+        throws UserNotFoundException
     {
         userManagerImpl.deleteUser( username );
     }
@@ -106,14 +110,22 @@ public class ConfigurableUserManager extends AbstractUserManager implements Init
         userManagerImpl.eraseDatabase();
     }
 
-    public User findUser( String username ) throws UserNotFoundException
+    public User findUser( String username )
+        throws UserNotFoundException
     {
         return userManagerImpl.findUser( username );
     }
 
-    public User findUser( Object principal ) throws UserNotFoundException
+    public User findUser( Object principal )
+        throws UserNotFoundException
     {
         return userManagerImpl.findUser( principal );
+    }
+
+    public User getGuestUser()
+        throws UserNotFoundException
+    {
+        return userManagerImpl.getGuestUser();
     }
 
     public List findUsersByEmailKey( String emailKey, boolean orderAscending )
@@ -156,7 +168,8 @@ public class ConfigurableUserManager extends AbstractUserManager implements Init
         return userManagerImpl.isReadOnly();
     }
 
-    public User updateUser( User user ) throws UserNotFoundException
+    public User updateUser( User user )
+        throws UserNotFoundException
     {
         return userManagerImpl.updateUser( user );
     }

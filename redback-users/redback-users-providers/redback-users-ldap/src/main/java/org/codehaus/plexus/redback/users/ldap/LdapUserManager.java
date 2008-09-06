@@ -16,17 +16,13 @@ package org.codehaus.plexus.redback.users.ldap;
  */
 
 
-import org.codehaus.plexus.logging.LogEnabled;
-import org.codehaus.plexus.logging.Logger;
-import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.codehaus.plexus.redback.common.ldap.MappingException;
 import org.codehaus.plexus.redback.common.ldap.UserMapper;
 import org.codehaus.plexus.redback.common.ldap.connection.LdapConnection;
 import org.codehaus.plexus.redback.common.ldap.connection.LdapConnectionFactory;
 import org.codehaus.plexus.redback.common.ldap.connection.LdapException;
+import org.codehaus.plexus.redback.users.AbstractUserManager;
 import org.codehaus.plexus.redback.users.User;
-import org.codehaus.plexus.redback.users.UserManager;
-import org.codehaus.plexus.redback.users.UserManagerListener;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.users.UserQuery;
 import org.codehaus.plexus.redback.users.ldap.ctl.LdapController;
@@ -42,18 +38,12 @@ import java.util.List;
  * @plexus.component role="org.codehaus.plexus.redback.users.UserManager" role-hint="ldap"
  */
 public class LdapUserManager
-    implements UserManager, LogEnabled
+    extends AbstractUserManager
 {
-
     /**
      * @plexus.requirement role-hint="configurable"
      */
     private LdapConnectionFactory connectionFactory;
-
-
-    private List<UserManagerListener> listeners = new ArrayList<UserManagerListener>();
-
-    private Logger logger;
 
     /**
      * @plexus.requirement role-hint="default"
@@ -65,94 +55,35 @@ public class LdapUserManager
      */
     private UserMapper mapper;
 
+    private User guestUser;
+
     public boolean isReadOnly()
     {
         return true;
     }
 
-    public void addUserManagerListener( UserManagerListener listener )
-    {
-        if ( !listeners.contains( listener ) )
-        {
-            listeners.add( listener );
-        }
-    }
-
-    public void removeUserManagerListener( UserManagerListener listener )
-    {
-        listeners.remove( listener );
-    }
-
-    protected void fireUserAdded( User addedUser )
-    {
-        for ( UserManagerListener listener : listeners )
-        {
-            try
-            {
-                listener.userManagerUserAdded( addedUser );
-            }
-            catch ( Exception e )
-            {
-                getLogger().debug( "Failed to fire user-added event to user-manager: " + e.getMessage(), e );
-            }
-        }
-    }
-
-    protected void fireUserRemoved( User removedUser )
-    {
-        for ( UserManagerListener listener : listeners )
-        {
-            try
-            {
-                listener.userManagerUserRemoved( removedUser );
-            }
-            catch ( Exception e )
-            {
-                getLogger().debug( "Failed to fire user-removed event to user-manager: " + e.getMessage(), e );
-            }
-        }
-    }
-
-    protected void fireUserUpdated( User updatedUser )
-    {
-        for ( UserManagerListener listener : listeners )
-        {
-            try
-            {
-                listener.userManagerUserUpdated( updatedUser );
-            }
-            catch ( Exception e )
-            {
-                getLogger().debug( "Failed to fire user-updated event to user-manager: " + e.getMessage(), e );
-            }
-        }
-    }
-
     public User addUser( User user )
     {
-        DirContext context = newDirContext();
-        try
-        {
-            controller.createUser( user, context, true );
-        }
-        catch ( LdapControllerException e )
-        {
-            getLogger().error( "Error mapping user: " + user.getPrincipal() + " to LDAP attributes.", e );
-        }
-        catch ( MappingException e )
-        {
-            getLogger().error( "Error mapping user: " + user.getPrincipal() + " to LDAP attributes.", e );
-        }
-
-        return user;
+        return addUser( user, true );
     }
 
     public void addUserUnchecked( User user )
     {
+        addUser( user, false );
+    }
+
+    private User addUser( User user, boolean checked )
+    {
+        if ( user != null && GUEST_USERNAME.equals( user.getUsername() ) )
+        {
+            guestUser = user;
+            return guestUser;
+        }
+
         DirContext context = newDirContext();
         try
         {
-            controller.createUser( user, context, false );
+            controller.createUser( user, context, checked );
         }
         catch ( LdapControllerException e )
         {
@@ -162,6 +93,7 @@ public class LdapUserManager
         {
             getLogger().error( "Error mapping user: " + user.getPrincipal() + " to LDAP attributes.", e );
         }
+        return user;
     }
 
     public User createUser( String username, String fullName, String emailAddress )
@@ -209,6 +141,16 @@ public class LdapUserManager
     public User findUser( String username )
         throws UserNotFoundException
     {
+        if ( username == null )
+        {
+            throw new UserNotFoundException( "Unable to find user based on null username." );
+        }
+
+        if ( GUEST_USERNAME.equals( username ) )
+        {
+            return getGuestUser();
+        }
+
         try
         {
             return controller.getUser( username, newDirContext() );
@@ -225,9 +167,25 @@ public class LdapUserManager
         }
     }
 
+    public User getGuestUser()
+        throws UserNotFoundException
+    {
+        return guestUser;
+    }
+
     public User findUser( Object principal )
         throws UserNotFoundException
     {
+        if ( principal == null )
+        {
+            throw new UserNotFoundException( "Unable to find user based on null principal." );
+        }
+
+        if ( GUEST_USERNAME.equals( principal.toString() ) )
+        {
+            return getGuestUser();
+        }
+
         try
         {
             return controller.getUser( principal, newDirContext() );
@@ -281,8 +239,21 @@ public class LdapUserManager
     {
         try
         {
-            List users = new ArrayList();
+            List<User> users = new ArrayList<User>();
             users.addAll( controller.getUsers( newDirContext() ) );
+            //We add the guest user because it isn't in LDAP
+            try
+            {
+                User u = getGuestUser();
+                if ( u != null )
+                {
+                    users.add( u );
+                }
+            }
+            catch ( UserNotFoundException e )
+            {
+                //Nothing to do
+            }
             return users;
         }
         catch ( Exception e )
@@ -344,22 +315,6 @@ public class LdapUserManager
             le.printStackTrace();
             return null;
         }
-    }
-
-    protected Logger getLogger()
-    {
-        if ( logger == null )
-        {
-            logger = new ConsoleLogger( Logger.LEVEL_DEBUG, "internally-initialized" );
-        }
-
-        return logger;
-    }
-
-
-    public void enableLogging( Logger logger )
-    {
-        this.logger = logger;
     }
 
     public LdapConnectionFactory getConnectionFactory()

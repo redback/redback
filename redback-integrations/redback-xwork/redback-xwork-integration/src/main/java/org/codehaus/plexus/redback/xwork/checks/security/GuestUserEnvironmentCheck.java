@@ -16,12 +16,9 @@ package org.codehaus.plexus.redback.xwork.checks.security;
  * limitations under the License.
  */
 
-import java.util.List;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
-import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.system.SecuritySystem;
@@ -29,6 +26,8 @@ import org.codehaus.plexus.redback.system.check.EnvironmentCheck;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
+
+import java.util.List;
 
 /**
  * RequiredRolesEnvironmentCheck:
@@ -47,7 +46,7 @@ public class GuestUserEnvironmentCheck
      * @plexus.requirement role-hint="default"
      */
     private UserConfiguration config;
-    
+
     /**
      * @plexus.requirement role-hint="default"
      */
@@ -74,30 +73,20 @@ public class GuestUserEnvironmentCheck
             UserSecurityPolicy policy = securitySystem.getPolicy();
 
             User guest;
-
-            String guestString = config.getString( "redback.default.guest", "guest" );
-                        
             try
             {
-                guest = userManager.findUser( guestString );
+                guest = userManager.getGuestUser();
             }
-            catch ( UserNotFoundException ne )
+            catch ( UserNotFoundException e )
             {
                 policy.setEnabled( false );
-
-                guest = userManager.createUser( guestString, "Guest", "" );
-                guest.setPermanent( true );
-                guest = userManager.addUser( guest );
-
-            }
-            finally
-            {
+                guest = userManager.createGuestUser();
                 policy.setEnabled( true );
             }
 
             try
             {
-                roleManager.assignRole( "guest", guest.getPrincipal().toString() );           
+                roleManager.assignRole( "guest", guest.getPrincipal().toString() );
             }
             catch ( RoleManagerException rpe )
             {

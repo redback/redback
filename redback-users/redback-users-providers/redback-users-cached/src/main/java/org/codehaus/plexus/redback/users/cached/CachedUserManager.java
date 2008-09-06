@@ -17,7 +17,6 @@ package org.codehaus.plexus.redback.users.cached;
  */
 
 import net.sf.ehcache.Element;
-
 import org.codehaus.plexus.ehcache.EhcacheComponent;
 import org.codehaus.plexus.ehcache.EhcacheUtils;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -30,11 +29,10 @@ import org.codehaus.plexus.redback.users.UserQuery;
 import java.util.List;
 
 /**
- * CachedUserManager 
+ * CachedUserManager
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * 
  * @plexus.component role="org.codehaus.plexus.redback.users.UserManager" role-hint="cached"
  */
 public class CachedUserManager
@@ -48,7 +46,7 @@ public class CachedUserManager
 
     /**
      * Cache used for users
-     * 
+     *
      * @plexus.requirement role-hint="users"
      */
     private EhcacheComponent usersCache;
@@ -57,7 +55,12 @@ public class CachedUserManager
     {
         return userImpl.isReadOnly();
     }
-    
+
+    public User createGuestUser()
+    {
+        return userImpl.createGuestUser();
+    }
+
     public User addUser( User user )
     {
         if ( user != null )
@@ -116,6 +119,11 @@ public class CachedUserManager
     public User findUser( String username )
         throws UserNotFoundException
     {
+        if ( GUEST_USERNAME.equals( username ) )
+        {
+            return getGuestUser();
+        }
+
         Element el = usersCache.getElement( username );
         if ( el != null )
         {
@@ -125,6 +133,22 @@ public class CachedUserManager
         {
             User user = this.userImpl.findUser( username );
             usersCache.putElement( new Element( username, user ) );
+            return user;
+        }
+    }
+
+    public User getGuestUser()
+        throws UserNotFoundException
+    {
+        Element el = usersCache.getElement( GUEST_USERNAME );
+        if ( el != null )
+        {
+            return (User) el.getObjectValue();
+        }
+        else
+        {
+            User user = this.userImpl.getGuestUser();
+            usersCache.putElement( new Element( GUEST_USERNAME, user ) );
             return user;
         }
     }
@@ -156,7 +180,7 @@ public class CachedUserManager
         getLogger().debug( "NOT CACHED - .findUsersByQuery(UserQuery)" );
         return this.userImpl.findUsersByQuery( query );
     }
-    
+
     public List findUsersByEmailKey( String emailKey, boolean orderAscending )
     {
         getLogger().debug( "NOT CACHED - .findUsersByEmailKey(String, boolean)" );

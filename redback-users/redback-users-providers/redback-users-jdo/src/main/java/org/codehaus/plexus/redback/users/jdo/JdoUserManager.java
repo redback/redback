@@ -31,13 +31,12 @@ import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.users.UserQuery;
 import org.codehaus.plexus.util.StringUtils;
 
-import java.util.List;
-
 import javax.jdo.Extent;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
+import java.util.List;
 
 /**
  * JdoUserManager
@@ -73,7 +72,7 @@ public class JdoUserManager
     {
         return false;
     }
-    
+
     public UserQuery createUserQuery()
     {
         return new JdoUserQuery();
@@ -215,7 +214,7 @@ public class JdoUserManager
         }
 
         userSecurityPolicy.extensionChangePassword( user );
-        
+
         fireUserManagerUserAdded( user );
 
         // TODO: find a better solution
@@ -230,7 +229,7 @@ public class JdoUserManager
         {
             user.setPasswordChangeRequired( true );
         }
-        
+
         return (User) addObject( user );
     }
 
@@ -247,7 +246,7 @@ public class JdoUserManager
 
             fireUserManagerUserRemoved( user );
 
-            removeObject( (JdoUser) user );
+            removeObject( user );
         }
         catch ( UserNotFoundException e )
         {
@@ -268,7 +267,7 @@ public class JdoUserManager
 
             fireUserManagerUserRemoved( user );
 
-            PlexusJdoUtils.removeObject( getPersistenceManager(), (JdoUser) user );
+            PlexusJdoUtils.removeObject( getPersistenceManager(), user );
         }
         catch ( UserNotFoundException e )
         {
@@ -333,7 +332,6 @@ public class JdoUserManager
         return (User) getObjectById( JdoUser.class, username );
     }
 
-
     public boolean userExists( Object principal )
     {
         try
@@ -363,7 +361,7 @@ public class JdoUserManager
             userSecurityPolicy.extensionChangePassword( user );
         }
 
-        updateObject( (JdoUser) user );
+        updateObject( user );
 
         fireUserManagerUserUpdated( user );
 
@@ -439,7 +437,7 @@ public class JdoUserManager
     {
         if ( o == null )
         {
-            throw new UserManagerException( "Unable to remove null object '" + o.getClass().getName() + "'" );
+            throw new UserManagerException( "Unable to remove null object" );
         }
 
         PlexusJdoUtils.removeObject( getPersistenceManager(), o );

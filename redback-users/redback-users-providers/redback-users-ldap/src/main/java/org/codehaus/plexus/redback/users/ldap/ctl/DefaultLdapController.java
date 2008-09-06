@@ -22,6 +22,7 @@ import org.codehaus.plexus.redback.common.ldap.LdapUser;
 import org.codehaus.plexus.redback.common.ldap.MappingException;
 import org.codehaus.plexus.redback.common.ldap.UserMapper;
 import org.codehaus.plexus.redback.users.User;
+import org.codehaus.plexus.redback.users.UserManager;
 
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
@@ -163,6 +164,15 @@ public class DefaultLdapController
     public void createUser( User user, DirContext context, boolean encodePasswordIfChanged )
         throws LdapControllerException, MappingException
     {
+        if ( user == null )
+        {
+            return;
+        }
+        if ( user.getUsername().equals( UserManager.GUEST_USERNAME ) )
+        {
+            //We don't store guest
+            return;
+        }
 
     }
 
