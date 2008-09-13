@@ -104,12 +104,6 @@ public class DefaultLdapController
     protected NamingEnumeration<SearchResult> searchUsers( Object key, DirContext context, String[] returnAttributes )
         throws NamingException
     {
-        String[] userAttributes = returnAttributes;
-        if ( userAttributes == null )
-        {
-            userAttributes = mapper.getUserAttributeNames();
-        }
-
         SearchControls ctls = new SearchControls();
 
         if ( key != null )
