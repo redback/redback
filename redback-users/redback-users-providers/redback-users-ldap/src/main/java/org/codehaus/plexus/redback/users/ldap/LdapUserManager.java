@@ -74,7 +74,12 @@ public class LdapUserManager
 
     private User addUser( User user, boolean checked )
     {
-        if ( user != null && GUEST_USERNAME.equals( user.getUsername() ) )
+        if ( user == null )
+        {
+            return null;
+        }
+
+        if ( GUEST_USERNAME.equals( user.getUsername() ) )
         {
             guestUser = user;
             return guestUser;
@@ -170,6 +175,10 @@ public class LdapUserManager
     public User getGuestUser()
         throws UserNotFoundException
     {
+        if ( guestUser == null )
+        {
+            throw new UserNotFoundException( "Guest user doesn't exist." );
+        }
         return guestUser;
     }
 
