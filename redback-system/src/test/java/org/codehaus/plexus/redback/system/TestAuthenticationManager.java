@@ -1,6 +1,6 @@
 package org.codehaus.plexus.redback.system;
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 import org.codehaus.plexus.redback.authentication.AuthenticationManager;
 /*
  * Copyright 2006 The Apache Software Foundation.
@@ -25,7 +25,7 @@ import org.codehaus.plexus.redback.authentication.AuthenticationManager;
  * @version: $ID:$
  */
 public class TestAuthenticationManager
-    extends PlexusTestCase
+    extends PlexusInSpringTestCase
 {
 
     protected void setUp()

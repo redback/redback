@@ -16,7 +16,7 @@ package org.codehaus.plexus.redback.users.ldap;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 import org.codehaus.plexus.apacheds.ApacheDs;
 import org.codehaus.plexus.redback.common.ldap.connection.LdapConnection;
 import org.codehaus.plexus.redback.common.ldap.connection.LdapConnectionFactory;
@@ -45,7 +45,7 @@ import javax.naming.directory.SearchResult;
  * @author <a href="mailto:jesse@codehaus.org">Jesse McConnell</a>
  * @version $Id:$
  */  
-public class LdapUserManagerTest extends PlexusTestCase
+public class LdapUserManagerTest extends PlexusInSpringTestCase
 {
 	private UserManager userManager;
 

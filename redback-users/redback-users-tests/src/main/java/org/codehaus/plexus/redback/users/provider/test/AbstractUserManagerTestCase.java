@@ -16,7 +16,7 @@ package org.codehaus.plexus.redback.users.provider.test;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.users.*;
 
@@ -29,7 +29,7 @@ import java.util.List;
  * @version $Id$
  */
 public class AbstractUserManagerTestCase
-    extends PlexusTestCase
+    extends PlexusInSpringTestCase
 {
     /**
      * This value is set by the sub classes of this test case.

@@ -16,7 +16,7 @@ package org.codehaus.plexus.redback.xwork.mail;
 * limitations under the License.
 */
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.keys.KeyManager;
 import org.codehaus.plexus.redback.keys.KeyManagerException;
@@ -26,7 +26,7 @@ import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
  * Test the Mailer class.
  */
 public class MailGeneratorTest
-    extends PlexusTestCase
+    extends PlexusInSpringTestCase
 {
     private MailGenerator generator;
 

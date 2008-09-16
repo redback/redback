@@ -16,7 +16,7 @@ package org.codehaus.plexus.redback.authentication.memory;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authentication.Authenticator;
 import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
@@ -28,7 +28,7 @@ import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDat
  * @version: $ID:$
  */
 public class MemoryAuthenticatorTest
-    extends PlexusTestCase
+    extends PlexusInSpringTestCase
 {
     public void testSimpleAuthentication()
         throws Exception

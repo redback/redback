@@ -16,7 +16,7 @@ package org.codehaus.plexus.redback.role;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
 
@@ -29,7 +29,7 @@ import java.util.List;
  * @author: Jesse McConnell <jesse@codehaus.org>
  * @version: $Id:$
  */
-public abstract class AbstractRoleManagerTest extends PlexusTestCase
+public abstract class AbstractRoleManagerTest extends PlexusInSpringTestCase
 {
 
     protected RBACManager rbacManager;

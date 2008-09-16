@@ -16,7 +16,7 @@ package org.codehaus.plexus.redback.role.validator;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
 import org.codehaus.plexus.redback.role.model.io.stax.RedbackRoleModelStaxReader;
 
@@ -31,7 +31,7 @@ import java.util.List;
  * @version: $Id:$
  */
 public class RoleModelValidatorTest
-    extends PlexusTestCase
+    extends PlexusInSpringTestCase
 {
 
     /**

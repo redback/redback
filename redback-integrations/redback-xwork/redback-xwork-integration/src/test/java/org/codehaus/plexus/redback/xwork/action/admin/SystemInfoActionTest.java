@@ -16,7 +16,7 @@ package org.codehaus.plexus.redback.xwork.action.admin;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 
 /**
  * SystemInfoActionTest
@@ -25,7 +25,7 @@ import org.codehaus.plexus.PlexusTestCase;
  * @version $Id$
  */
 public class SystemInfoActionTest
-    extends PlexusTestCase
+    extends PlexusInSpringTestCase
 {
     private SystemInfoAction systeminfo;
 

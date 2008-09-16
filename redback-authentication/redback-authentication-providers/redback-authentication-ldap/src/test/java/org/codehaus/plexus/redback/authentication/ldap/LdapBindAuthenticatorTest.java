@@ -1,8 +1,8 @@
 package org.codehaus.plexus.redback.authentication.ldap;
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 
-public class LdapBindAuthenticatorTest extends PlexusTestCase
+public class LdapBindAuthenticatorTest extends PlexusInSpringTestCase
 {
     
 

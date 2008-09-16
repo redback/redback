@@ -16,7 +16,7 @@ package org.codehaus.plexus.redback.management;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.redback.common.jdo.UserConfigurableJdoFactory;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class DataManagementTest
-    extends PlexusTestCase
+    extends PlexusInSpringTestCase
 {
     private DataManagementTool dataManagementTool;
 

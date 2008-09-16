@@ -33,10 +33,6 @@
       <groupId>org.codehaus.redback</groupId>
       <artifactId>redback-taglib</artifactId>
     </dependency>
-    <dependency>
-      <groupId>commons-logging</groupId>
-      <artifactId>commons-logging</artifactId>
-    </dependency>
   </dependencies>
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-integrations/redback-xwork/redback-xwork-content</connection>
