@@ -17,6 +17,7 @@ package org.codehaus.plexus.redback.xwork.action.admin;
  */
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -186,14 +187,14 @@ public class AssignmentsAction
             return ERROR;
         }
 
+        List assignableRoles = filterRolesForCurrentUserAccess( manager.getAllRoles() );
         for ( Iterator i = rmanager.getModel().getApplications().iterator(); i.hasNext(); )
         {
             ModelApplication application = (ModelApplication) i.next();
 
             ApplicationRoleDetails details =
                 new ApplicationRoleDetails( application, manager.getEffectivelyAssignedRoles( principal ),
-                                            manager.getAssignedRoles( principal ),
-                                            filterRolesForCurrentUserAccess( manager.getAllRoles() ) );
+                                            manager.getAssignedRoles( principal ), assignableRoles );
 
             applicationRoleDetails.add( details );
         }
@@ -208,12 +209,14 @@ public class AssignmentsAction
      */
     public String edituser()
     {
-        getLogger().info( "in edit user now" );
-        
-        // TODO: add checking if user has permission to update the user's roles
-
         try
         {
+            List<Role> assignableRoles = filterRolesForCurrentUserAccess( manager.getAllRoles() );
+            
+            List<String> roles = new ArrayList<String>();
+            addSelectedRoles( assignableRoles, roles, addNDSelectedRoles );
+            addSelectedRoles( assignableRoles, roles, addDSelectedRoles );
+            
             UserAssignment assignment;
 
             if ( manager.userAssignmentExists( principal ) )
@@ -225,65 +228,9 @@ public class AssignmentsAction
                 assignment = manager.createUserAssignment( principal );
             }
 
-            List roles = new ArrayList();
-
             assignment.setRoleNames( roles );
 
-            List allAssignedRoles = null;
-            List allRoles = manager.getAllRoles();
-            List applicationRoles = new ArrayList();
-            List resourceRoles = new ArrayList();
-
-            allAssignedRoles = new ArrayList( manager.getAssignedRoles( principal ) );
-
-            for ( Iterator i = rmanager.getModel().getApplications().iterator(); i.hasNext(); )
-            {
-                ModelApplication application = (ModelApplication) i.next();
-
-                applicationRoles.addAll( application.getRoles() );
-                resourceRoles.addAll( getResourceRoles( application.getTemplates(), allRoles ) );
-            }
-
-            if ( allAssignedRoles != null )
-            {
-                for ( Iterator j = allAssignedRoles.iterator(); j.hasNext(); )
-                {
-                    Role assignedRole = (Role) j.next();
-
-                    boolean found = checkRoleName( assignedRole.getName(), applicationRoles );
-
-                    if ( !found )
-                    {
-                        found = checkRoleName( assignedRole.getName(), resourceRoles );
-                    }
-
-                    if ( !found )
-                    {
-                        assignment.addRoleName( assignedRole.getName() );
-                    }
-                }
-            }
-
-            if ( addNDSelectedRoles != null )
-            {
-                for ( Iterator i = addNDSelectedRoles.iterator(); i.hasNext(); )
-                {
-                    String r = (String) i.next();
-                    getLogger().info( "-------- adding ND Role: " + r );
-                    assignment.addRoleName( r );
-                }
-            }
-            if ( addDSelectedRoles != null )
-            {
-                for ( Iterator i = addDSelectedRoles.iterator(); i.hasNext(); )
-                {
-                    assignment.addRoleName( (String) i.next() );
-                }
-            }
             assignment = manager.saveUserAssignment( assignment );
-
-            getLogger().info( "roles assigned = " + assignment.getRoleNames().size() );
-
         }
         catch ( RbacManagerException ne )
         {
@@ -295,57 +242,31 @@ public class AssignmentsAction
         return SUCCESS;
     }
 
-    private Set getResourceRoles( List applicationTemplates, List roles )
+    private void addSelectedRoles( List<Role> assignableRoles, List<String> roles, List selectedRoles )
     {
-        Set resources = new HashSet();
-
-        for ( Iterator i = applicationTemplates.iterator(); i.hasNext(); )
+        if ( selectedRoles != null )
         {
-            ModelTemplate template = (ModelTemplate) i.next();
-
-            for ( Iterator j = roles.iterator(); j.hasNext(); )
+            for ( Iterator<String> i = selectedRoles.iterator(); i.hasNext(); )
             {
-                Role role = (Role) j.next();
-
-                if ( role.getName().startsWith( template.getNamePrefix() ) )
+                String r = i.next();
+                if ( checkRoleName( assignableRoles, r ) )
                 {
-                    resources.add( role );
+                    roles.add( r );
                 }
             }
         }
-
-        return resources;
     }
 
-    private boolean checkRoleName( String roleName, List roles )
+    private boolean checkRoleName( List<Role> assignableRoles, String r )
     {
-        boolean found = false;
-
-        for ( Iterator i = roles.iterator(); i.hasNext() && !found; )
+        for ( Role role : assignableRoles )
         {
-            Object obj = i.next();
-
-            if ( obj instanceof ModelRole )
+            if ( role.getName().equals( r ) )
             {
-                ModelRole role = (ModelRole) obj;
-
-                if ( role.getName().equals( roleName ) )
-                {
-                    found = true;
-                }
-            }
-            else if ( obj instanceof JdoRole )
-            {
-                JdoRole role = (JdoRole) obj;
-
-                if ( role.getName().equals( roleName ) )
-                {
-                    found = true;
-                }
+                return true;
             }
         }
-
-        return found;
+        return false;
     }
 
     /**

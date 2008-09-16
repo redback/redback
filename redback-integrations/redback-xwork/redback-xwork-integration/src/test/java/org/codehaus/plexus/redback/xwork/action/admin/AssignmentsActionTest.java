@@ -17,6 +17,7 @@ package org.codehaus.plexus.redback.xwork.action.admin;
  */
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -203,10 +204,10 @@ public class AssignmentsActionTest
         // This table rendering code clearly has to go
         List table = details.getTable();
         assertEquals( 1, table.size() );
-        assertRow( table, 0, "default", "Project Administrator - default", false );        
+        assertRow( table, 0, "default", "Project Administrator - default", false );
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     private void assertRow( List table, int index, String name, String label, boolean assigned )
     {
         List<RoleTableCell> row = (List<RoleTableCell>) table.get( index );
@@ -220,69 +221,117 @@ public class AssignmentsActionTest
      * resource
      */
     // TODO: currently returns all roles - we really want all templated roles
-//    public void testRoleGrantFilteringOnShowGlobalGrant()
-//        throws RbacObjectInvalidException, RbacManagerException
-//    {
-//        addAssignment( "user", "Global Grant Administrator" );
-//
-//        assertEquals( Action.SUCCESS, action.show() );
-//
-//        assertEquals( 2, action.getApplicationRoleDetails().size() );
-//        ApplicationRoleDetails details = (ApplicationRoleDetails) action.getApplicationRoleDetails().get( 0 );
-//        assertEquals( "redback-xwork-integration-core", details.getName() );
-//        assertEquals( 0, details.getAvailableRoles().size() );
-//
-//        details = (ApplicationRoleDetails) action.getApplicationRoleDetails().get( 1 );
-//        assertEquals( "Continuum", details.getName() );
-//        assertEquals( 0, details.getAvailableRoles().size() );
-//
-//        List table = details.getTable();
-//        assertEquals( 2, table.size() );
-//        assertRow( table, 0, "default", "Project Administrator - default", false );
-//        assertRow( table, 1, "other", "Project Administrator - other", false );
-//    }
-
+    // public void testRoleGrantFilteringOnShowGlobalGrant()
+    // throws RbacObjectInvalidException, RbacManagerException
+    // {
+    // addAssignment( "user", "Global Grant Administrator" );
+    //
+    // assertEquals( Action.SUCCESS, action.show() );
+    //
+    // assertEquals( 2, action.getApplicationRoleDetails().size() );
+    // ApplicationRoleDetails details = (ApplicationRoleDetails) action.getApplicationRoleDetails().get( 0 );
+    // assertEquals( "redback-xwork-integration-core", details.getName() );
+    // assertEquals( 0, details.getAvailableRoles().size() );
+    //
+    // details = (ApplicationRoleDetails) action.getApplicationRoleDetails().get( 1 );
+    // assertEquals( "Continuum", details.getName() );
+    // assertEquals( 0, details.getAvailableRoles().size() );
+    //
+    // List table = details.getTable();
+    // assertEquals( 2, table.size() );
+    // assertRow( table, 0, "default", "Project Administrator - default", false );
+    // assertRow( table, 1, "other", "Project Administrator - other", false );
+    // }
     /**
-     * Check security - edituser should fail if adding a role that 'user-management-role-grant' is not present for
+     * Check security - edituser should skip adding a role that 'user-management-role-grant' is not present for a
+     * non-templated role
      */
-    public void testRoleGrantFilteringOnAddRolesNotPermitted()
-    	throws RbacObjectInvalidException, RbacManagerException
+    public void testRoleGrantFilteringOnAddRolesNotPermittedTemplated()
+        throws RbacObjectInvalidException, RbacManagerException
     {
         addAssignment( "user", "Project Administrator - default" );
-    	
-    	// set addDSelectedRoles (dynamic --> Resource Roles) and addNDSelectedRoles (non-dynamic --> Available Roles)?
-    	List dSelectedRoles = new ArrayList();
-    	dSelectedRoles.add( "Continuum Group Project Administrator" );
-    	
-    	List ndSelectedRoles = new ArrayList();
-    	ndSelectedRoles.add( "Project Administrator - no_permission" );
-    	
-    	action.setAddDSelectedRoles( dSelectedRoles );
-    	action.setAddNDSelectedRoles( ndSelectedRoles );
-    	
-    	//TODO assertEquals( Action.ERROR, action.edituser() );    	    	
+
+        // set addDSelectedRoles (dynamic --> Resource Roles) and addNDSelectedRoles (non-dynamic --> Available Roles)
+        List<String> dSelectedRoles = new ArrayList<String>();
+        dSelectedRoles.add( "Project Administrator - other" );
+
+        action.setAddDSelectedRoles( dSelectedRoles );
+
+        assertTrue( rbacManager.getUserAssignment( "user2" ).getRoleNames().isEmpty() );
+
+        assertEquals( Action.SUCCESS, action.edituser() );
+
+        assertTrue( rbacManager.getUserAssignment( "user2" ).getRoleNames().isEmpty() );
+    }
+
+    /**
+     * Check security - edituser should skip adding a role that 'user-management-role-grant' is not present for a
+     * templated role
+     */
+    public void testRoleGrantFilteringOnAddRolesNotPermittedNotTemplated()
+        throws RbacObjectInvalidException, RbacManagerException
+    {
+        addAssignment( "user", "Project Administrator - default" );
+
+        // set addDSelectedRoles (dynamic --> Resource Roles) and addNDSelectedRoles (non-dynamic --> Available Roles)
+        List<String> ndSelectedRoles = new ArrayList<String>();
+        ndSelectedRoles.add( "Continuum Group Project Administrator" );
+
+        action.setAddNDSelectedRoles( ndSelectedRoles );
+
+        assertTrue( rbacManager.getUserAssignment( "user2" ).getRoleNames().isEmpty() );
+
+        assertEquals( Action.SUCCESS, action.edituser() );
+
+        assertTrue( rbacManager.getUserAssignment( "user2" ).getRoleNames().isEmpty() );
     }
 
     /**
      * Check security - edituser should succeed if adding a role that 'user-management-role-grant' is present for
+     * untemplated roles
      */
-    public void testRoleGrantFilteringOnAddRolesPermitted()
-    	throws RbacObjectInvalidException, RbacManagerException
+    public void testRoleGrantFilteringOnAddRolesPermittedNotTemplated()
+        throws RbacObjectInvalidException, RbacManagerException, AccountLockedException, AuthenticationException,
+        UserNotFoundException
     {
-    	addAssignment( "user", "Project Administrator - default" );
-    	
-    	List dSelectedRoles = new ArrayList();
-    	dSelectedRoles.add( "Continuum Group Project Administrator" );
-    	
-    	List ndSelectedRoles = new ArrayList();
-    	ndSelectedRoles.add( "Project Administrator - no_permission" );
-    	
-    	action.setAddDSelectedRoles( dSelectedRoles );
-    	action.setAddNDSelectedRoles( ndSelectedRoles );
-    	
-    	// TODO: assertEquals( Action.ERROR, action.edituser() );    	
-    	// TODO: check if user role was successfully added
-    	//Collection assignedRoles = rbacManager.getAssignedRoles( "user2" );
+        login( "user-admin", PASSWORD );
+
+        // set addDSelectedRoles (dynamic --> Resource Roles) and addNDSelectedRoles (non-dynamic --> Available Roles)
+        List<String> ndSelectedRoles = new ArrayList<String>();
+        ndSelectedRoles.add( "Continuum Group Project Administrator" );
+
+        action.setAddNDSelectedRoles( ndSelectedRoles );
+
+        assertTrue( rbacManager.getUserAssignment( "user2" ).getRoleNames().isEmpty() );
+
+        assertEquals( Action.SUCCESS, action.edituser() );
+
+        assertEquals( Arrays.asList( "Continuum Group Project Administrator" ),
+                      rbacManager.getUserAssignment( "user2" ).getRoleNames() );
+    }
+
+    /**
+     * Check security - edituser should succeed if adding a role that 'user-management-role-grant' is present for
+     * templated roles
+     */
+    public void testRoleGrantFilteringOnAddRolesPermittedTemplated()
+        throws RbacObjectInvalidException, RbacManagerException, AccountLockedException, AuthenticationException,
+        UserNotFoundException
+    {
+        addAssignment( "user", "Project Administrator - default" );
+
+        // set addDSelectedRoles (dynamic --> Resource Roles) and addNDSelectedRoles (non-dynamic --> Available Roles)
+        List<String> ndSelectedRoles = new ArrayList<String>();
+        ndSelectedRoles.add( "Project Administrator - default" );
+
+        action.setAddNDSelectedRoles( ndSelectedRoles );
+
+        assertTrue( rbacManager.getUserAssignment( "user2" ).getRoleNames().isEmpty() );
+
+        assertEquals( Action.SUCCESS, action.edituser() );
+
+        assertEquals( Arrays.asList( "Project Administrator - default" ),
+                      rbacManager.getUserAssignment( "user2" ).getRoleNames() );
     }
 
     /**
