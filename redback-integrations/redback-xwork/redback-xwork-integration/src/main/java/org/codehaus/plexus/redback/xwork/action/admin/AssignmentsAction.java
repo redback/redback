@@ -216,6 +216,20 @@ public class AssignmentsAction
             List<String> roles = new ArrayList<String>();
             addSelectedRoles( assignableRoles, roles, addNDSelectedRoles );
             addSelectedRoles( assignableRoles, roles, addDSelectedRoles );
+
+            Collection<Role> assignedRoles = (Collection<Role>) manager.getAssignedRoles( principal );
+            for ( Role assignedRole : assignedRoles )
+            {
+                if ( !roles.contains( assignedRole.getName() ) )
+                {
+                    // removing a currently assigned role, check if we have permission
+                    if ( !checkRoleName( assignableRoles, assignedRole.getName() ))
+                    {
+                        addActionError( getText( "error.removing.selected.roles", Collections.EMPTY_LIST ) );
+                        return ERROR;
+                    }
+                }
+            }
             
             UserAssignment assignment;
 

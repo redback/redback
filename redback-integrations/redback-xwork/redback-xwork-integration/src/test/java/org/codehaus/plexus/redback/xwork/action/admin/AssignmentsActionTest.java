@@ -321,10 +321,10 @@ public class AssignmentsActionTest
         addAssignment( "user", "Project Administrator - default" );
 
         // set addDSelectedRoles (dynamic --> Resource Roles) and addNDSelectedRoles (non-dynamic --> Available Roles)
-        List<String> ndSelectedRoles = new ArrayList<String>();
-        ndSelectedRoles.add( "Project Administrator - default" );
+        List<String> dSelectedRoles = new ArrayList<String>();
+        dSelectedRoles.add( "Project Administrator - default" );
 
-        action.setAddNDSelectedRoles( ndSelectedRoles );
+        action.setAddDSelectedRoles( dSelectedRoles );
 
         assertTrue( rbacManager.getUserAssignment( "user2" ).getRoleNames().isEmpty() );
 
@@ -336,18 +336,97 @@ public class AssignmentsActionTest
 
     /**
      * Check security - edituser should fail if removing a role that 'user-management-role-grant' is not present for
+     * untemplated roles
      */
-    public void testRoleGrantFilteringOnRemoveRolesNotPermitted()
+    public void testRoleGrantFilteringOnRemoveRolesNotPermittedNotTemplated()
+        throws RbacObjectInvalidException, RbacManagerException
     {
-        // TODO
+        addAssignment( "user", "Project Administrator - default" );
+
+        addAssignment( "user2", "Continuum Group Project Administrator" );
+
+        // set addDSelectedRoles (dynamic --> Resource Roles) and addNDSelectedRoles (non-dynamic --> Available Roles)
+        List<String> ndSelectedRoles = new ArrayList<String>();
+        action.setAddNDSelectedRoles( ndSelectedRoles );
+
+        assertEquals( Arrays.asList( "Continuum Group Project Administrator" ),
+                      rbacManager.getUserAssignment( "user2" ).getRoleNames() );
+
+        assertEquals( Action.ERROR, action.edituser() );
+
+        assertEquals( Arrays.asList( "Continuum Group Project Administrator" ),
+                      rbacManager.getUserAssignment( "user2" ).getRoleNames() );
+    }
+
+    /**
+     * Check security - edituser should fail if removing a role that 'user-management-role-grant' is not present for
+     * templated roles
+     */
+    public void testRoleGrantFilteringOnRemoveRolesNotPermittedTemplated()
+        throws RbacObjectInvalidException, RbacManagerException
+    {
+        addAssignment( "user", "Project Administrator - other" );
+
+        addAssignment( "user2", "Project Administrator - default" );
+
+        // set addDSelectedRoles (dynamic --> Resource Roles) and addNDSelectedRoles (non-dynamic --> Available Roles)
+        List<String> dSelectedRoles = new ArrayList<String>();
+        action.setAddDSelectedRoles( dSelectedRoles );
+
+        assertEquals( Arrays.asList( "Project Administrator - default" ),
+                      rbacManager.getUserAssignment( "user2" ).getRoleNames() );
+
+        assertEquals( Action.ERROR, action.edituser() );
+
+        assertEquals( Arrays.asList( "Project Administrator - default" ),
+                      rbacManager.getUserAssignment( "user2" ).getRoleNames() );
     }
 
     /**
      * Check security - edituser should succeed if removing a role that 'user-management-role-grant' is present for
+     * untemplated roles
      */
-    public void testRoleGrantFilteringOnRemoveRolesPermitted()
+    public void testRoleGrantFilteringOnRemoveRolesPermittedNotTemplated()
+        throws RbacObjectInvalidException, RbacManagerException, AccountLockedException, AuthenticationException,
+        UserNotFoundException
     {
-        // TODO
+        login( "user-admin", PASSWORD );
+
+        addAssignment( "user2", "Continuum Group Project Administrator" );
+
+        // set addDSelectedRoles (dynamic --> Resource Roles) and addNDSelectedRoles (non-dynamic --> Available Roles)
+        List<String> ndSelectedRoles = new ArrayList<String>();
+        action.setAddNDSelectedRoles( ndSelectedRoles );
+
+        assertEquals( Arrays.asList( "Continuum Group Project Administrator" ),
+                      rbacManager.getUserAssignment( "user2" ).getRoleNames() );
+
+        assertEquals( Action.SUCCESS, action.edituser() );
+
+        assertTrue( rbacManager.getUserAssignment( "user2" ).getRoleNames().isEmpty() );
+    }
+
+    /**
+     * Check security - edituser should succeed if removing a role that 'user-management-role-grant' is present for
+     * templated roles
+     */
+    public void testRoleGrantFilteringOnRemoveRolesPermittedTemplated()
+        throws RbacObjectInvalidException, RbacManagerException
+    {
+        addAssignment( "user", "Project Administrator - default" );
+
+        addAssignment( "user2", "Project Administrator - default" );
+
+        // set addDSelectedRoles (dynamic --> Resource Roles) and addNDSelectedRoles (non-dynamic --> Available Roles)
+        List<String> dSelectedRoles = new ArrayList<String>();
+        action.setAddDSelectedRoles( dSelectedRoles );
+
+        assertEquals( Arrays.asList( "Project Administrator - default" ),
+                      rbacManager.getUserAssignment( "user2" ).getRoleNames() );
+
+        assertEquals( Action.SUCCESS, action.edituser() );
+
+        assertTrue( rbacManager.getUserAssignment( "user2" ).getRoleNames().isEmpty() );
     }
 
     /**
