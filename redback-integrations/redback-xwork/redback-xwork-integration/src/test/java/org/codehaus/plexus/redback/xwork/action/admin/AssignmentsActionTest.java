@@ -40,6 +40,7 @@ import org.codehaus.plexus.redback.users.memory.SimpleUser;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
 import org.codehaus.plexus.redback.xwork.model.ApplicationRoleDetails;
+import org.codehaus.plexus.redback.xwork.model.ApplicationRoleDetails.RoleTableCell;
 
 import com.opensymphony.xwork.Action;
 
@@ -95,7 +96,16 @@ public class AssignmentsActionTest
         user.setPassword( PASSWORD );
         userManager.addUserUnchecked( user );
 
+        user = new SimpleUser();
+        user.setUsername( "user-admin" );
+        user.setPassword( PASSWORD );
+        userManager.addUserUnchecked( user );
+
         UserAssignment assignment = rbacManager.createUserAssignment( "admin" );
+        assignment.addRoleName( "System Administrator" );
+        rbacManager.saveUserAssignment( assignment );
+
+        assignment = rbacManager.createUserAssignment( "user-admin" );
         assignment.addRoleName( "User Administrator" );
         rbacManager.saveUserAssignment( assignment );
 
@@ -184,12 +194,24 @@ public class AssignmentsActionTest
         assertEquals( 2, action.getApplicationRoleDetails().size() );
         ApplicationRoleDetails details = (ApplicationRoleDetails) action.getApplicationRoleDetails().get( 0 );
         assertEquals( "redback-xwork-integration-core", details.getName() );
-//TODO        assertEquals( 0, details.getAvailableRoles().size() );
+        // TODO assertEquals( 0, details.getAvailableRoles().size() );
         details = (ApplicationRoleDetails) action.getApplicationRoleDetails().get( 1 );
         assertEquals( "Continuum", details.getName() );
-//TODO        assertEquals( 2, details.getAvailableRoles().size() );
+        assertEquals( 1, details.getAvailableRoles().size() );
         assertEquals( "Continuum Group Project Administrator", details.getAvailableRoles().get( 0 ) );
-//TODO assertEquals( "Project Administrator - other", details.getAvailableRoles().get( 1 ) );
+
+        // This table rendering code clearly has to go
+        List table = details.getTable();
+        // TODO assertEquals( 1, table.size() );
+        assertRow( table, 0, "default", "Project Administrator - default", false );
+    }
+
+    private void assertRow( List table, int index, String name, String label, boolean assigned )
+    {
+        List<RoleTableCell> row = (List<RoleTableCell>) table.get( index );
+        assertEquals( name, row.get( 0 ).getName() );
+        assertEquals( label, row.get( 1 ).getName() );
+        assertEquals( assigned, row.get( 2 ).isAssigned() );
     }
 
     /**
@@ -206,12 +228,17 @@ public class AssignmentsActionTest
         assertEquals( 2, action.getApplicationRoleDetails().size() );
         ApplicationRoleDetails details = (ApplicationRoleDetails) action.getApplicationRoleDetails().get( 0 );
         assertEquals( "redback-xwork-integration-core", details.getName() );
-      //TODO        assertEquals( 0, details.getAvailableRoles().size() );
+        // TODO assertEquals( 0, details.getAvailableRoles().size() );
 
         details = (ApplicationRoleDetails) action.getApplicationRoleDetails().get( 1 );
         assertEquals( "Continuum", details.getName() );
         assertEquals( 1, details.getAvailableRoles().size() );
         assertEquals( "Continuum Group Project Administrator", details.getAvailableRoles().get( 0 ) );
+
+        List table = details.getTable();
+        assertEquals( 2, table.size() );
+        assertRow( table, 0, "default", "Project Administrator - default", false );
+        assertRow( table, 1, "other", "Project Administrator - other", false );
     }
 
     /**
@@ -250,8 +277,9 @@ public class AssignmentsActionTest
      * Check security - show should succeed and display all roles, even without 'user-management-role-grant' or
      * 'user-management-user-role' for the user administrators.
      */
-    public void testUserAdminCanShowRoles()
-        throws AccountLockedException, AuthenticationException, UserNotFoundException, RbacObjectNotFoundException, RbacManagerException
+    public void testSystemAdminCanShowRoles()
+        throws AccountLockedException, AuthenticationException, UserNotFoundException, RbacObjectNotFoundException,
+        RbacManagerException
     {
         login( "admin", PASSWORD );
 
@@ -261,13 +289,53 @@ public class AssignmentsActionTest
         ApplicationRoleDetails details = (ApplicationRoleDetails) action.getApplicationRoleDetails().get( 0 );
         assertEquals( "redback-xwork-integration-core", details.getName() );
         assertEquals( 4, details.getAvailableRoles().size() );
+        assertEquals( "Guest", details.getAvailableRoles().get( 0 ) );
+        assertEquals( "Registered User", details.getAvailableRoles().get( 1 ) );
+        assertEquals( "System Administrator", details.getAvailableRoles().get( 2 ) );
+        assertEquals( "User Administrator", details.getAvailableRoles().get( 3 ) );
 
         details = (ApplicationRoleDetails) action.getApplicationRoleDetails().get( 1 );
         assertEquals( "Continuum", details.getName() );
-      //TODO        assertEquals( 3, details.getAvailableRoles().size() );
+
+        assertEquals( 1, details.getAvailableRoles().size() );
         assertEquals( "Continuum Group Project Administrator", details.getAvailableRoles().get( 0 ) );
-//TODO        assertEquals( "Project Administrator - default", details.getAvailableRoles().get( 1 ) );
-      //TODO        assertEquals( "Project Administrator - other", details.getAvailableRoles().get( 1 ) );
+
+        List table = details.getTable();
+        assertEquals( 2, table.size() );
+        assertRow( table, 0, "default", "Project Administrator - default", false );
+        assertRow( table, 1, "other", "Project Administrator - other", false );
+    }
+
+    /**
+     * Check security - show should succeed and display all roles, even without 'user-management-role-grant' or
+     * 'user-management-user-role' for the user administrators.
+     */
+    public void testUserAdminCanShowRoles()
+        throws AccountLockedException, AuthenticationException, UserNotFoundException, RbacObjectNotFoundException,
+        RbacManagerException
+    {
+        login( "user-admin", PASSWORD );
+
+        assertEquals( Action.SUCCESS, action.show() );
+
+        assertEquals( 2, action.getApplicationRoleDetails().size() );
+        ApplicationRoleDetails details = (ApplicationRoleDetails) action.getApplicationRoleDetails().get( 0 );
+        assertEquals( "redback-xwork-integration-core", details.getName() );
+        // TODO assertEquals( 3, details.getAvailableRoles().size() );
+        assertEquals( "Guest", details.getAvailableRoles().get( 0 ) );
+        assertEquals( "Registered User", details.getAvailableRoles().get( 1 ) );
+        // TODO: assertEquals( "User Administrator", details.getAvailableRoles().get( 2 ) );
+
+        details = (ApplicationRoleDetails) action.getApplicationRoleDetails().get( 1 );
+        assertEquals( "Continuum", details.getName() );
+
+        assertEquals( 1, details.getAvailableRoles().size() );
+        assertEquals( "Continuum Group Project Administrator", details.getAvailableRoles().get( 0 ) );
+
+        List table = details.getTable();
+        assertEquals( 2, table.size() );
+        assertRow( table, 0, "default", "Project Administrator - default", false );
+        assertRow( table, 1, "other", "Project Administrator - other", false );
     }
 
     /**
