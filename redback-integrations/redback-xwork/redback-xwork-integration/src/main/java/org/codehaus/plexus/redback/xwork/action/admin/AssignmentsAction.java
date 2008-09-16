@@ -133,8 +133,10 @@ public class AssignmentsAction
      * also have a column of checkboxes that can be selected and then removed from the user. <p/> A table of roles that
      * can be assigned. This table should have a set of checkboxes that can be selected and then added to the user. <p/>
      * Duplicate role assignment needs to be taken care of.
+     * @throws RbacManagerException 
+     * @throws RbacObjectNotFoundException 
      */
-    public String show()
+    public String show() throws RbacObjectNotFoundException, RbacManagerException
     {
         this.addNDSelectedRoles = new ArrayList();
         this.addDSelectedRoles = new ArrayList();
@@ -176,8 +178,6 @@ public class AssignmentsAction
             return ERROR;
         }
 
-        try
-        {
         for ( Iterator i = rmanager.getModel().getApplications().iterator(); i.hasNext(); )
         {
             ModelApplication application = (ModelApplication)i.next();
@@ -193,15 +193,6 @@ public class AssignmentsAction
             details.setRoles( manager.getAllRoles() );
 
             applicationRoleDetails.add( details );
-        }
-        }
-        catch ( RbacObjectNotFoundException re )
-        {
-           re.printStackTrace();
-        }
-        catch ( RbacManagerException rme )
-        {
-            rme.printStackTrace();
         }
 
         return SUCCESS;
@@ -238,25 +229,14 @@ public class AssignmentsAction
             List applicationRoles = new ArrayList();
             List resourceRoles = new ArrayList();
 
-            try
+            allAssignedRoles = new ArrayList( manager.getAssignedRoles( principal ) );
+
+            for ( Iterator i = rmanager.getModel().getApplications().iterator(); i.hasNext(); )
             {
-                allAssignedRoles = new ArrayList( manager.getAssignedRoles( principal ) );
+                ModelApplication application = (ModelApplication) i.next();
 
-                for ( Iterator i = rmanager.getModel().getApplications().iterator(); i.hasNext(); )
-                {
-                    ModelApplication application = (ModelApplication) i.next();
-
-                    applicationRoles.addAll( application.getRoles() );
-                    resourceRoles.addAll( getResourceRoles( application.getTemplates(), allRoles ) );
-                }
-            }
-            catch ( RbacObjectNotFoundException re )
-            {
-
-            }
-            catch ( RbacManagerException rme )
-            {
-
+                applicationRoles.addAll( application.getRoles() );
+                resourceRoles.addAll( getResourceRoles( application.getTemplates(), allRoles ) );
             }
 
             if ( allAssignedRoles != null )
