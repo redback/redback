@@ -11,6 +11,25 @@
           <assignable>true</assignable>
           <permanent>true</permanent>
         </role>
+        <role>
+          <id>global-grant-administrator</id>
+          <name>Global Grant Administrator</name>
+          <assignable>true</assignable>
+          <permissions>
+            <permission>
+              <id>continuum-manage-users-roles</id>
+              <name>Continuum Manage User Roles</name>
+              <operation>user-management-user-role</operation>
+              <resource>global</resource>
+            </permission>
+            <permission>
+              <id>continuum-group-role-grant</id>
+              <name>Continuum Grant Group Roles</name>
+              <operation>user-management-role-grant</operation>
+              <resource>global</resource>
+            </permission>
+          </permissions>
+        </role>
       </roles>
       <templates>
         <template>
