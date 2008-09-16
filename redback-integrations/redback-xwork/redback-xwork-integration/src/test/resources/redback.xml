@@ -6,8 +6,7 @@
       <version>1.0</version>
       <roles>
         <role>
-          <id>continuum-group-project-administrator
-          </id>
+          <id>continuum-group-project-administrator</id>
           <name>Continuum Group Project Administrator</name>
           <assignable>true</assignable>
           <permanent>true</permanent>
@@ -20,25 +19,20 @@
           <assignable>true</assignable>
           <permissions>
             <permission>
-              <id>continuum-manage-users-roles
-              </id>
+              <id>continuum-manage-users-roles</id>
               <name>Continuum Manage User Roles</name>
-              <operation>user-management-user-role
-              </operation>
+              <operation>user-management-user-role</operation>
               <resource>global</resource>
             </permission>
             <permission>
-              <id>continuum-group-role-grant
-              </id>
+              <id>continuum-group-role-grant</id>
               <name>Continuum Grant Group Roles</name>
-              <operation>user-management-role-grant
-              </operation>
+              <operation>user-management-role-grant</operation>
               <resource>${resource}</resource>
             </permission>
           </permissions>
           <parentRoles>
-            <parentRole>continuum-group-project-administrator
-            </parentRole>
+            <parentRole>continuum-group-project-administrator</parentRole>
           </parentRoles>
         </template>
         <template>
@@ -47,17 +41,14 @@
           <assignable>true</assignable>
           <permissions>
             <permission>
-              <id>continuum-group-role-grant
-              </id>
+              <id>continuum-group-role-grant</id>
               <name>Continuum Grant Group Roles</name>
-              <operation>user-management-role-grant
-              </operation>
+              <operation>user-management-role-grant</operation>
               <resource>${resource}</resource>
             </permission>
           </permissions>
           <parentRoles>
-            <parentRole>continuum-group-project-administrator
-            </parentRole>
+            <parentRole>continuum-group-project-administrator</parentRole>
           </parentRoles>
         </template>
       </templates>
