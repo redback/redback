@@ -437,6 +437,34 @@ public class AssignmentsActionTest
 
     /**
      * Check security - edituser should succeed if removing a role that 'user-management-role-grant' is present for
+     * templated roles and there is an existing role that is not assignable by the current user.
+     */
+    public void testRoleGrantFilteringOnRemoveRolesPermittedTemplatedExistingRole()
+        throws RbacObjectInvalidException, RbacManagerException
+    {
+        addAssignment( "user", "Project Administrator - default" );
+
+        addAssignment( "user2", "Project Administrator - default" );
+        addAssignment( "user2", "Project Administrator - other" );
+        addAssignment( "user2", "Registered User" );
+
+        // set addDSelectedRoles (dynamic --> Resource Roles) and addNDSelectedRoles (non-dynamic --> Available Roles)
+        List<String> dSelectedRoles = new ArrayList<String>();
+        dSelectedRoles.add( "Project Administrator - other" );
+        dSelectedRoles.add( "Registered User" );
+        action.setAddDSelectedRoles( dSelectedRoles );
+
+        assertEquals( Arrays.asList( "Project Administrator - default", "Project Administrator - other",
+                                     "Registered User" ), rbacManager.getUserAssignment( "user2" ).getRoleNames() );
+
+        assertEquals( Action.SUCCESS, action.edituser() );
+
+        assertEquals( Arrays.asList( "Project Administrator - other", "Registered User" ),
+                      rbacManager.getUserAssignment( "user2" ).getRoleNames() );
+    }
+
+    /**
+     * Check security - edituser should succeed if removing a role that 'user-management-role-grant' is present for
      * templated roles
      */
     public void testRoleGrantFilteringOnRemoveRolesPermittedTemplated()

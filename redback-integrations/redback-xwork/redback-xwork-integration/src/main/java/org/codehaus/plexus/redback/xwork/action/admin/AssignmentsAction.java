@@ -218,13 +218,16 @@ public class AssignmentsAction
     {
         try
         {
+            Collection<Role> assignedRoles = (Collection<Role>) manager.getAssignedRoles( principal );
             List<Role> assignableRoles = filterRolesForCurrentUserAccess( manager.getAllRoles() );
             
+            Set<Role> availableRoles = new HashSet<Role>( assignedRoles );
+            availableRoles.addAll( assignableRoles );
+            
             List<String> roles = new ArrayList<String>();
-            addSelectedRoles( assignableRoles, roles, addNDSelectedRoles );
-            addSelectedRoles( assignableRoles, roles, addDSelectedRoles );
+            addSelectedRoles( availableRoles, roles, addNDSelectedRoles );
+            addSelectedRoles( availableRoles, roles, addDSelectedRoles );
 
-            Collection<Role> assignedRoles = (Collection<Role>) manager.getAssignedRoles( principal );
             for ( Role assignedRole : assignedRoles )
             {
                 if ( !roles.contains( assignedRole.getName() ) )
@@ -263,7 +266,7 @@ public class AssignmentsAction
         return SUCCESS;
     }
 
-    private void addSelectedRoles( List<Role> assignableRoles, List<String> roles, List selectedRoles )
+    private void addSelectedRoles( Collection<Role> assignableRoles, List<String> roles, List selectedRoles )
     {
         if ( selectedRoles != null )
         {
@@ -278,7 +281,7 @@ public class AssignmentsAction
         }
     }
 
-    private boolean checkRoleName( List<Role> assignableRoles, String r )
+    private boolean checkRoleName( Collection<Role> assignableRoles, String r )
     {
         for ( Role role : assignableRoles )
         {
