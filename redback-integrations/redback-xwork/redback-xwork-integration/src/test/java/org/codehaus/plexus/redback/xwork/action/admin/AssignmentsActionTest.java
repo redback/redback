@@ -178,7 +178,16 @@ public class AssignmentsActionTest
     private void addAssignment( String principal, String roleName )
         throws RbacManagerException, RbacObjectInvalidException
     {
-        UserAssignment assignment = rbacManager.createUserAssignment( principal );
+        UserAssignment assignment;
+
+        if ( rbacManager.userAssignmentExists( principal ) )
+        {
+            assignment = rbacManager.getUserAssignment( principal );
+        }
+        else
+        {
+            assignment = rbacManager.createUserAssignment( principal );
+        }
         assignment.addRoleName( roleName );
         rbacManager.saveUserAssignment( assignment );
     }
@@ -552,32 +561,5 @@ public class AssignmentsActionTest
         assertEquals( Action.SUCCESS, action.edituser() );
 
         assertTrue( rbacManager.getUserAssignment( "user2" ).getRoleNames().isEmpty() );
-    }
-
-    /**
-     * Check security - show should succeed for current user to see all their roles, even without
-     * 'user-management-role-grant' or 'user-management-user-role'
-     */
-    public void testCurrentUserShowRoles()
-    {
-        // TODO
-    }
-
-    /**
-     * Check security - edituser should fail for current user removing their own role without
-     * 'user-management-role-grant' or 'user-management-user-role'
-     */
-    public void testCurrentUserCannotRemoveRoles()
-    {
-        // TODO
-    }
-
-    /**
-     * Check security - edituser should fail for current user adding a role without 'user-management-role-grant' or
-     * 'user-management-user-role'
-     */
-    public void testCurrentUserCannotAddRoles()
-    {
-        // TODO
     }
 }
