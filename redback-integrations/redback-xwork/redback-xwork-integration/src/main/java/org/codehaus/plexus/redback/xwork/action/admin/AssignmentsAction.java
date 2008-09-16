@@ -228,6 +228,8 @@ public class AssignmentsAction
             addSelectedRoles( availableRoles, roles, addNDSelectedRoles );
             addSelectedRoles( availableRoles, roles, addDSelectedRoles );
 
+            List<String> newRoles = new ArrayList<String>( roles );
+            String currentUser = getCurrentUser();
             for ( Role assignedRole : assignedRoles )
             {
                 if ( !roles.contains( assignedRole.getName() ) )
@@ -235,10 +237,22 @@ public class AssignmentsAction
                     // removing a currently assigned role, check if we have permission
                     if ( !checkRoleName( assignableRoles, assignedRole.getName() ))
                     {
-                        addActionError( getText( "error.removing.selected.roles", Collections.EMPTY_LIST ) );
-                        return ERROR;
+                        // it may have not been on the page. Leave it assigned.
+                        roles.add( assignedRole.getName() );
+                    }
+                    else
+                    {
+                        logChange( currentUser, "removing role '" + assignedRole.getName() + "' from " );
                     }
                 }
+                else
+                {
+                    newRoles.remove( assignedRole.getName() );
+                }
+            }
+            for ( String r : newRoles )
+            {
+                logChange( currentUser, "adding role '" + r + "' to " );
             }
             
             UserAssignment assignment;
@@ -264,6 +278,11 @@ public class AssignmentsAction
             return ERROR;
         }
         return SUCCESS;
+    }
+
+    private void logChange( String currentUser, String string )
+    {
+        getLogger().info( string + principal + " (by " + currentUser + ")" );
     }
 
     private void addSelectedRoles( Collection<Role> assignableRoles, List<String> roles, List selectedRoles )
@@ -306,7 +325,7 @@ public class AssignmentsAction
     private List filterRolesForCurrentUserAccess( List roleList )
         throws RbacManagerException
     {
-        String currentUser = getSecuritySession().getUser().getPrincipal().toString();
+        String currentUser = getCurrentUser();
 
         List filteredRoleList = new ArrayList();
 
@@ -356,6 +375,11 @@ public class AssignmentsAction
         }
 
         return filteredRoleList;
+    }
+
+    private String getCurrentUser()
+    {
+        return getSecuritySession().getUser().getPrincipal().toString();
     }
 
     // ------------------------------------------------------------------
