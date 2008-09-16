@@ -94,6 +94,11 @@ public class AssignmentsActionTest
         userManager.addUserUnchecked( user );
 
         user = new SimpleUser();
+        user.setUsername( "user3" );
+        user.setPassword( PASSWORD );
+        userManager.addUserUnchecked( user );
+
+        user = new SimpleUser();
         user.setUsername( "admin" );
         user.setPassword( PASSWORD );
         userManager.addUserUnchecked( user );
@@ -190,6 +195,21 @@ public class AssignmentsActionTest
         }
         assignment.addRoleName( roleName );
         rbacManager.saveUserAssignment( assignment );
+    }
+
+    /**
+     * Check roles can be assigned if the user has no previous assignments.
+     */
+    public void testShowWhenUserHasNoAssignments()
+        throws Exception
+    {
+        addAssignment( "user", "Project Administrator - default" );
+
+        action.setPrincipal( "user3" );
+
+        assertEquals( Action.SUCCESS, action.show() );
+
+        assertEquals( 2, action.getApplicationRoleDetails().size() );
     }
 
     /**

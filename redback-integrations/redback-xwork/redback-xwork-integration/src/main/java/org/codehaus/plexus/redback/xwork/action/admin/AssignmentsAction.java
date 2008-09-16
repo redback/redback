@@ -187,6 +187,13 @@ public class AssignmentsAction
             return ERROR;
         }
 
+        // check first if role assignments for user exist
+        if ( !manager.userAssignmentExists( principal ) )
+        {
+            UserAssignment assignment = manager.createUserAssignment( principal );
+            manager.saveUserAssignment( assignment );
+        }
+        
         List assignableRoles = filterRolesForCurrentUserAccess( manager.getAllRoles() );
         for ( Iterator i = rmanager.getModel().getApplications().iterator(); i.hasNext(); )
         {
