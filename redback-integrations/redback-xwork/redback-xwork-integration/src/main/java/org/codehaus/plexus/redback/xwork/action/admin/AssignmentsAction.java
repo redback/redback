@@ -207,6 +207,7 @@ public class AssignmentsAction
     {
         getLogger().info( "in edit user now" );
         
+        // TODO: add checking if user has permission to update the user's roles
         try 
         { 
               UserAssignment assignment;
@@ -300,7 +301,7 @@ public class AssignmentsAction
 
             for ( Iterator j = roles.iterator(); j.hasNext(); )
             {
-                JdoRole role = (JdoRole) j.next();
+                Role role = (Role) j.next();
 
                 if ( role.getName().startsWith( template.getNamePrefix() ) )
                 {

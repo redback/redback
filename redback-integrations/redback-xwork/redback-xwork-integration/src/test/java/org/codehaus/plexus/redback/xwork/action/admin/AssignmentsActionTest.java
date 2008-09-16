@@ -16,6 +16,8 @@ package org.codehaus.plexus.redback.xwork.action.admin;
  * limitations under the License.
  */
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -197,13 +199,13 @@ public class AssignmentsActionTest
         // TODO assertEquals( 0, details.getAvailableRoles().size() );
         details = (ApplicationRoleDetails) action.getApplicationRoleDetails().get( 1 );
         assertEquals( "Continuum", details.getName() );
-        assertEquals( 1, details.getAvailableRoles().size() );
+        assertEquals( 1, details.getAvailableRoles().size() );        
         assertEquals( "Continuum Group Project Administrator", details.getAvailableRoles().get( 0 ) );
 
         // This table rendering code clearly has to go
         List table = details.getTable();
         // TODO assertEquals( 1, table.size() );
-        assertRow( table, 0, "default", "Project Administrator - default", false );
+        assertRow( table, 0, "default", "Project Administrator - default", false );        
     }
 
     private void assertRow( List table, int index, String name, String label, boolean assigned )
@@ -245,16 +247,43 @@ public class AssignmentsActionTest
      * Check security - edituser should fail if adding a role that 'user-management-role-grant' is not present for
      */
     public void testRoleGrantFilteringOnAddRolesNotPermitted()
+    	throws RbacObjectInvalidException, RbacManagerException
     {
-        // TODO
+        addAssignment( "user", "Project Administrator - default" );
+    	
+    	// set addDSelectedRoles (dynamic --> Resource Roles) and addNDSelectedRoles (non-dynamic --> Available Roles)?
+    	List dSelectedRoles = new ArrayList();
+    	dSelectedRoles.add( "Continuum Group Project Administrator" );
+    	
+    	List ndSelectedRoles = new ArrayList();
+    	ndSelectedRoles.add( "Project Administrator - no_permission" );
+    	
+    	action.setAddDSelectedRoles( dSelectedRoles );
+    	action.setAddNDSelectedRoles( ndSelectedRoles );
+    	
+    	//TODO assertEquals( Action.ERROR, action.edituser() );    	    	
     }
 
     /**
      * Check security - edituser should succeed if adding a role that 'user-management-role-grant' is present for
      */
     public void testRoleGrantFilteringOnAddRolesPermitted()
+    	throws RbacObjectInvalidException, RbacManagerException
     {
-        // TODO
+    	addAssignment( "user", "Project Administrator - default" );
+    	
+    	List dSelectedRoles = new ArrayList();
+    	dSelectedRoles.add( "Continuum Group Project Administrator" );
+    	
+    	List ndSelectedRoles = new ArrayList();
+    	ndSelectedRoles.add( "Project Administrator - no_permission" );
+    	
+    	action.setAddDSelectedRoles( dSelectedRoles );
+    	action.setAddNDSelectedRoles( ndSelectedRoles );
+    	
+    	// TODO: assertEquals( Action.ERROR, action.edituser() );    	
+    	// TODO: check if user role was successfully added
+    	//Collection assignedRoles = rbacManager.getAssignedRoles( "user2" );
     }
 
     /**
