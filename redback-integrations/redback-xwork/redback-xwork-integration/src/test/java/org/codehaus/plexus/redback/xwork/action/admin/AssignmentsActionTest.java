@@ -294,7 +294,7 @@ public class AssignmentsActionTest
         throws RbacObjectInvalidException, RbacManagerException, AccountLockedException, AuthenticationException,
         UserNotFoundException
     {
-        login( "user-admin", PASSWORD );
+        addAssignment( "user", "Global Grant Administrator" );
 
         // set addDSelectedRoles (dynamic --> Resource Roles) and addNDSelectedRoles (non-dynamic --> Available Roles)
         List<String> ndSelectedRoles = new ArrayList<String>();
@@ -390,7 +390,7 @@ public class AssignmentsActionTest
         throws RbacObjectInvalidException, RbacManagerException, AccountLockedException, AuthenticationException,
         UserNotFoundException
     {
-        login( "user-admin", PASSWORD );
+        addAssignment( "user", "Global Grant Administrator" );
 
         addAssignment( "user2", "Continuum Group Project Administrator" );
 
@@ -501,8 +501,29 @@ public class AssignmentsActionTest
      * 'user-management-user-role' for the user administrators.
      */
     public void testUserAdminCanAddRoles()
+        throws RbacObjectNotFoundException, RbacManagerException, AccountLockedException, AuthenticationException,
+        UserNotFoundException
     {
-        // TODO
+        login( "user-admin", PASSWORD );
+
+        // set addDSelectedRoles (dynamic --> Resource Roles) and addNDSelectedRoles (non-dynamic --> Available Roles)
+        List<String> ndSelectedRoles = new ArrayList<String>();
+        ndSelectedRoles.add( "Continuum Group Project Administrator" );
+
+        action.setAddNDSelectedRoles( ndSelectedRoles );
+
+        // set addDSelectedRoles (dynamic --> Resource Roles) and addNDSelectedRoles (non-dynamic --> Available Roles)
+        List<String> dSelectedRoles = new ArrayList<String>();
+        dSelectedRoles.add( "Project Administrator - default" );
+
+        action.setAddDSelectedRoles( dSelectedRoles );
+
+        assertTrue( rbacManager.getUserAssignment( "user2" ).getRoleNames().isEmpty() );
+
+        assertEquals( Action.SUCCESS, action.edituser() );
+
+        assertEquals( Arrays.asList( "Continuum Group Project Administrator", "Project Administrator - default" ),
+                      rbacManager.getUserAssignment( "user2" ).getRoleNames() );
     }
 
     /**
@@ -510,8 +531,27 @@ public class AssignmentsActionTest
      * 'user-management-user-role' for the user administrators.
      */
     public void testUserAdminCanRemoveRoles()
+        throws RbacObjectNotFoundException, RbacManagerException, AccountLockedException, AuthenticationException,
+        UserNotFoundException
     {
-        // TODO
+        login( "user-admin", PASSWORD );
+
+        addAssignment( "user2", "Continuum Group Project Administrator" );
+        addAssignment( "user2", "Project Administrator - default" );
+
+        // set addDSelectedRoles (dynamic --> Resource Roles) and addNDSelectedRoles (non-dynamic --> Available Roles)
+        List<String> ndSelectedRoles = new ArrayList<String>();
+        action.setAddNDSelectedRoles( ndSelectedRoles );
+
+        List<String> dSelectedRoles = new ArrayList<String>();
+        action.setAddDSelectedRoles( dSelectedRoles );
+
+        assertEquals( Arrays.asList( "Continuum Group Project Administrator", "Project Administrator - default" ),
+                      rbacManager.getUserAssignment( "user2" ).getRoleNames() );
+
+        assertEquals( Action.SUCCESS, action.edituser() );
+
+        assertTrue( rbacManager.getUserAssignment( "user2" ).getRoleNames().isEmpty() );
     }
 
     /**
