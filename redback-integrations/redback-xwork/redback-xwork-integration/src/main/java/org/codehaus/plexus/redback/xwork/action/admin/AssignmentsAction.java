@@ -16,16 +16,27 @@ package org.codehaus.plexus.redback.xwork.action.admin;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.redback.rbac.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
+import org.codehaus.plexus.redback.rbac.RbacManagerException;
+import org.codehaus.plexus.redback.rbac.RbacObjectNotFoundException;
+import org.codehaus.plexus.redback.rbac.Resource;
+import org.codehaus.plexus.redback.rbac.Role;
+import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.redback.rbac.jdo.JdoRole;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.model.ModelApplication;
 import org.codehaus.plexus.redback.role.model.ModelRole;
 import org.codehaus.plexus.redback.role.model.ModelTemplate;
-import org.codehaus.plexus.redback.system.SecuritySession;
-import org.codehaus.plexus.redback.system.SecuritySystemConstants;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
@@ -37,16 +48,13 @@ import org.codehaus.plexus.redback.xwork.model.ApplicationRoleDetails;
 import org.codehaus.plexus.redback.xwork.role.RoleConstants;
 import org.codehaus.plexus.util.StringUtils;
 
-import java.util.*;
-
 /**
  * AssignmentsAction
- *
+ * 
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="com.opensymphony.xwork.Action"
- * role-hint="redback-assignments"
- * instantiation-strategy="per-lookup"
+ * @plexus.component role="com.opensymphony.xwork.Action" role-hint="redback-assignments"
+ *                   instantiation-strategy="per-lookup"
  */
 public class AssignmentsAction
     extends AbstractUserCredentialsAction
@@ -121,24 +129,27 @@ public class AssignmentsAction
         return templates;
     }
 
-    
     public void setTemplates( List templates )
     {
         this.templates = templates;
     }
-      
+
     /**
      * Display the edit user panel. <p/> This should consist of the Role details for the specified user. <p/> A table of
      * currently assigned roles. This table should have a column to remove the role from the user. This table should
      * also have a column of checkboxes that can be selected and then removed from the user. <p/> A table of roles that
      * can be assigned. This table should have a set of checkboxes that can be selected and then added to the user. <p/>
      * Duplicate role assignment needs to be taken care of.
+     * 
+     * @throws RbacManagerException
+     * @throws RbacObjectNotFoundException
      */
     public String show()
+        throws RbacObjectNotFoundException, RbacManagerException
     {
         this.addNDSelectedRoles = new ArrayList();
         this.addDSelectedRoles = new ArrayList();
-        
+
         if ( StringUtils.isEmpty( principal ) )
         {
             addActionError( getText( "rbac.edit.user.empty.principal" ) );
@@ -176,32 +187,16 @@ public class AssignmentsAction
             return ERROR;
         }
 
-        try
-        {
+        List assignableRoles = filterRolesForCurrentUserAccess( manager.getAllRoles() );
         for ( Iterator i = rmanager.getModel().getApplications().iterator(); i.hasNext(); )
         {
-            ModelApplication application = (ModelApplication)i.next();
+            ModelApplication application = (ModelApplication) i.next();
 
-            ApplicationRoleDetails details = new ApplicationRoleDetails();
-
-            details.setName( application.getId() );
-            details.setDescription( application.getDescription() );
-            details.setAllAssignedRoles( new ArrayList( manager.getAssignedRoles( principal ) ) );
-            details.setEffectivelyAssignedRoles( new ArrayList( manager.getEffectivelyAssignedRoles( principal ) )  );
-            details.setApplicationRoles( application.getRoles() );
-            details.setApplicationTemplates( application.getTemplates() );
-            details.setRoles( manager.getAllRoles() );
+            ApplicationRoleDetails details =
+                new ApplicationRoleDetails( application, manager.getEffectivelyAssignedRoles( principal ),
+                                            manager.getAssignedRoles( principal ), assignableRoles );
 
             applicationRoleDetails.add( details );
-        }
-        }
-        catch ( RbacObjectNotFoundException re )
-        {
-           re.printStackTrace();
-        }
-        catch ( RbacManagerException rme )
-        {
-            rme.printStackTrace();
         }
 
         return SUCCESS;
@@ -214,173 +209,94 @@ public class AssignmentsAction
      */
     public String edituser()
     {
-        getLogger().info( "in edit user now" );
-        
-        try 
-        { 
-              UserAssignment assignment;
-              
-              if ( manager.userAssignmentExists( principal ) )
-              { 
-                  assignment = manager.getUserAssignment( principal ); 
-              }
-              else 
-              { 
-                  assignment = manager.createUserAssignment( principal );
-              }
-                
-              List roles = new ArrayList();
-              
-              assignment.setRoleNames( roles );
-
-            List allAssignedRoles = null;
-            List allRoles = manager.getAllRoles();
-            List applicationRoles = new ArrayList();
-            List resourceRoles = new ArrayList();
-
-            try
-            {
-                allAssignedRoles = new ArrayList( manager.getAssignedRoles( principal ) );
-
-                for ( Iterator i = rmanager.getModel().getApplications().iterator(); i.hasNext(); )
-                {
-                    ModelApplication application = (ModelApplication) i.next();
-
-                    applicationRoles.addAll( application.getRoles() );
-                    resourceRoles.addAll( getResourceRoles( application.getTemplates(), allRoles ) );
-                }
-            }
-            catch ( RbacObjectNotFoundException re )
-            {
-
-            }
-            catch ( RbacManagerException rme )
-            {
-
-            }
-
-            if ( allAssignedRoles != null )
-            {
-                for ( Iterator j = allAssignedRoles.iterator(); j.hasNext(); )
-                {
-                    Role assignedRole = (Role) j.next();
-
-                    boolean found = checkRoleName( assignedRole.getName(), applicationRoles );
-
-                    if ( !found )
-                    {
-                        found = checkRoleName( assignedRole.getName(), resourceRoles );
-                    }
-
-                    if ( !found )
-                    {
-                        assignment.addRoleName( assignedRole.getName() );
-                    }
-                }
-            }
-              
-              if ( addNDSelectedRoles != null )
-              {
-                for ( Iterator i = addNDSelectedRoles.iterator(); i.hasNext(); )
-                {
-                  String r = ( String ) i.next();
-                  getLogger().info( "-------- adding ND Role: " +  r );
-                  assignment.addRoleName( r );
-                }
-              }
-              if ( addDSelectedRoles != null )
-              {
-                for ( Iterator i = addDSelectedRoles.iterator(); i.hasNext(); )
-                {
-                  assignment.addRoleName( (String) i.next() );
-                }
-              }
-              assignment = manager.saveUserAssignment( assignment );
-              
-              getLogger().info( "roles assigned = " + assignment.getRoleNames().size() );
-                
-        }
-        catch ( RbacManagerException ne ) 
+        try
         {
-              List list = new ArrayList(); 
-              list.add( ne.getMessage() ); 
-              addActionError( getText("error.removing.selected.roles", list ) ); 
-              return ERROR; 
+            List<Role> assignableRoles = filterRolesForCurrentUserAccess( manager.getAllRoles() );
+            
+            List<String> roles = new ArrayList<String>();
+            addSelectedRoles( assignableRoles, roles, addNDSelectedRoles );
+            addSelectedRoles( assignableRoles, roles, addDSelectedRoles );
+
+            Collection<Role> assignedRoles = (Collection<Role>) manager.getAssignedRoles( principal );
+            for ( Role assignedRole : assignedRoles )
+            {
+                if ( !roles.contains( assignedRole.getName() ) )
+                {
+                    // removing a currently assigned role, check if we have permission
+                    if ( !checkRoleName( assignableRoles, assignedRole.getName() ))
+                    {
+                        addActionError( getText( "error.removing.selected.roles", Collections.EMPTY_LIST ) );
+                        return ERROR;
+                    }
+                }
+            }
+            
+            UserAssignment assignment;
+
+            if ( manager.userAssignmentExists( principal ) )
+            {
+                assignment = manager.getUserAssignment( principal );
+            }
+            else
+            {
+                assignment = manager.createUserAssignment( principal );
+            }
+
+            assignment.setRoleNames( roles );
+
+            assignment = manager.saveUserAssignment( assignment );
+        }
+        catch ( RbacManagerException ne )
+        {
+            List list = new ArrayList();
+            list.add( ne.getMessage() );
+            addActionError( getText( "error.removing.selected.roles", list ) );
+            return ERROR;
         }
         return SUCCESS;
     }
 
-    private Set getResourceRoles( List applicationTemplates, List roles )
+    private void addSelectedRoles( List<Role> assignableRoles, List<String> roles, List selectedRoles )
     {
-        Set resources = new HashSet();
-
-        for ( Iterator i = applicationTemplates.iterator(); i.hasNext(); )
+        if ( selectedRoles != null )
         {
-            ModelTemplate template = (ModelTemplate)i.next();
-
-            for ( Iterator j = roles.iterator(); j.hasNext(); )
+            for ( Iterator<String> i = selectedRoles.iterator(); i.hasNext(); )
             {
-                JdoRole role = (JdoRole) j.next();
-
-                if ( role.getName().startsWith( template.getNamePrefix() ) )
+                String r = i.next();
+                if ( checkRoleName( assignableRoles, r ) )
                 {
-                    resources.add( role );
+                    roles.add( r );
                 }
             }
         }
-
-        return resources;
     }
 
-    private boolean checkRoleName( String roleName, List roles )
+    private boolean checkRoleName( List<Role> assignableRoles, String r )
     {
-        boolean found = false;
-
-        for ( Iterator i = roles.iterator(); i.hasNext() && !found; )
+        for ( Role role : assignableRoles )
         {
-            Object obj = i.next();
-
-            if ( obj instanceof ModelRole )
+            if ( role.getName().equals( r ) )
             {
-                ModelRole role = (ModelRole) obj;
-
-                if ( role.getName().equals( roleName ) )
-                {
-                    found = true;
-                }
-            }
-            else if ( obj instanceof JdoRole )
-            {
-                JdoRole role = (JdoRole) obj;
-
-                if ( role.getName().equals( roleName ) )
-                {
-                    found = true;
-                }
+                return true;
             }
         }
-
-        return found;
+        return false;
     }
 
     /**
-     * this is a hack.
-     * 
-     * this is a hack around the requirements of putting RBAC constraits into the model.
-     * 
-     * this adds one very major restriction to this security system, that a role name must contain the identifiers of
-     * the resource that is being constrained for adding and granting of roles, this is unacceptable in the long term
-     * and we need to get the model refactored to include this RBAC concept
-     * 
+     * this is a hack. this is a hack around the requirements of putting RBAC constraits into the model. this adds one
+     * very major restriction to this security system, that a role name must contain the identifiers of the resource
+     * that is being constrained for adding and granting of roles, this is unacceptable in the long term and we need to
+     * get the model refactored to include this RBAC concept
      * 
      * @param roleList
      * @return
      * @throws RbacManagerException
      */
-    private List filterRolesForCurrentUserAccess( List roleList ) throws RbacManagerException
+    private List filterRolesForCurrentUserAccess( List roleList )
+        throws RbacManagerException
     {
-        String currentUser =
-            ( (SecuritySession) session.get( SecuritySystemConstants.SECURITY_SESSION_KEY ) ).getUser().getPrincipal().toString();
+        String currentUser = getSecuritySession().getUser().getPrincipal().toString();
 
         List filteredRoleList = new ArrayList();
 
@@ -431,7 +347,7 @@ public class AssignmentsAction
 
         return filteredRoleList;
     }
-    
+
     // ------------------------------------------------------------------
     // Parameter Accessor Methods
     // ------------------------------------------------------------------
@@ -486,7 +402,8 @@ public class AssignmentsAction
         return user;
     }
 
-    public SecureActionBundle initSecureActionBundle() throws SecureActionException
+    public SecureActionBundle initSecureActionBundle()
+        throws SecureActionException
     {
         SecureActionBundle bundle = new SecureActionBundle();
         bundle.setRequiresAuthentication( true );
