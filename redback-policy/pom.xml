@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback</artifactId>
-    <version>1.1</version>
+    <version>1.1.1-SNAPSHOT</version>
   </parent>
   <artifactId>redback-policy</artifactId>
   <name>Redback :: Policy</name>
@@ -33,12 +33,6 @@
       <artifactId>redback-users-api</artifactId>
     </dependency>
   </dependencies>
-
-  <scm>
-    <connection>scm:svn:http://svn.codehaus.org/redback/redback/tags/redback-1.1/redback-policy</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.1/redback-policy</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/redback/redback/tags/redback-1.1/redback-policy</url>
-  </scm>
 
   <build>
     <plugins>

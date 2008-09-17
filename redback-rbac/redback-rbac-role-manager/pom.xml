@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-rbac</artifactId>
-    <version>1.1</version>
+    <version>1.1.1-SNAPSHOT</version>
   </parent>
   <artifactId>redback-rbac-role-manager</artifactId>
   <name>Redback :: RBAC Role Manager</name>
@@ -89,11 +89,6 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  <scm>
-    <connection>scm:svn:http://svn.codehaus.org/redback/redback/tags/redback-1.1/redback-rbac/redback-rbac-role-manager</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.1/redback-rbac/redback-rbac-role-manager</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/redback/redback/tags/redback-1.1/redback-rbac/redback-rbac-role-manager</url>
-  </scm>
   <build>
     <plugins>
       <plugin>

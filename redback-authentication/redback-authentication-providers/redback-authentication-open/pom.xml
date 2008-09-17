@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-authentication-providers</artifactId>
-    <version>1.1</version>
+    <version>1.1.1-SNAPSHOT</version>
   </parent>
   <artifactId>redback-authentication-open</artifactId>
   <name>Redback :: Authentication Provider :: Open</name>
@@ -29,11 +29,6 @@
       <artifactId>redback-authentication-api</artifactId>
     </dependency>
   </dependencies>
-  <scm>
-    <connection>scm:svn:http://svn.codehaus.org/redback/redback/tags/redback-1.1/redback-authentication/redback-authentication-providers/redback-authentication-open</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.1/redback-authentication/redback-authentication-providers/redback-authentication-open</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/redback/redback/tags/redback-1.1/redback-authentication/redback-authentication-providers/redback-authentication-open</url>
-  </scm>
   <build>
     <plugins>
       <plugin>
