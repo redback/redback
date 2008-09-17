@@ -228,6 +228,8 @@ public class AssignmentsAction
             addSelectedRoles( availableRoles, roles, addNDSelectedRoles );
             addSelectedRoles( availableRoles, roles, addDSelectedRoles );
 
+            // TODO: rather than assuming missing roles are removals, we should track which were actually on the page
+            // (and if possible, changed)
             List<String> newRoles = new ArrayList<String>( roles );
             String currentUser = getCurrentUser();
             for ( Role assignedRole : assignedRoles )
