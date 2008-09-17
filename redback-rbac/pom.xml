@@ -24,11 +24,6 @@
   <artifactId>redback-rbac</artifactId>
   <name>Redback :: Role Based Access Control</name>
   <packaging>pom</packaging>
-  <scm>
-    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-rbac</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-rbac</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/redback/redback/trunk/redback-rbac</url>
-  </scm>
   <modules>
     <module>redback-rbac-model</module>
     <module>redback-rbac-providers</module>

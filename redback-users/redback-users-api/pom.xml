@@ -24,11 +24,6 @@
   <artifactId>redback-users-api</artifactId>
   <name>Redback :: User Management API</name>
 
-  <scm>
-    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-users/redback-users-api</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-users/redback-users-api</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/redback/redback/trunk/redback-users/redback-users-api</url>
-  </scm>
 
   <build>
     <plugins>

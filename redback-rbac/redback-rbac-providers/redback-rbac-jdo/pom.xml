@@ -85,11 +85,6 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  <scm>
-    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-rbac/redback-rbac-providers/redback-rbac-jdo</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-rbac/redback-rbac-providers/redback-rbac-jdo</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/redback/redback/trunk/redback-rbac/redback-rbac-providers/redback-rbac-jdo</url>
-  </scm>
   <build>
     <plugins>
       <plugin>

@@ -30,11 +30,6 @@
       <artifactId>redback-users-api</artifactId>
     </dependency>
   </dependencies>
-  <scm>
-    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-users/redback-users-providers</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-users/redback-users-providers</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/redback/redback/trunk/redback-users/redback-users-providers</url>
-  </scm>
   <modules>
     <module>redback-users-cached</module>
     <module>redback-users-memory</module>
