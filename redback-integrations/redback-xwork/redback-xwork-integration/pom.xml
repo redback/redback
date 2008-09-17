@@ -161,6 +161,21 @@
       <artifactId>redback-keys-memory</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.codehaus.redback</groupId>
+      <artifactId>redback-authentication-memory</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.redback</groupId>
+      <artifactId>redback-rbac-memory</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.redback</groupId>
+      <artifactId>redback-users-memory</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/redback/redback/tags/redback-1.1/redback-integrations/redback-xwork/redback-xwork-integration</connection>
