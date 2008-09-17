@@ -40,9 +40,14 @@ import org.codehaus.plexus.util.IOUtil;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -76,7 +81,7 @@ public class JdoDataManagementTool
         database.setResources( manager.getAllResources() );
 
         RbacJdoModelStaxWriter writer = new RbacJdoModelStaxWriter();
-        FileWriter fileWriter = new FileWriter( new File( backupDirectory, RBAC_XML_NAME ) );
+        Writer fileWriter = createWriter( backupDirectory, RBAC_XML_NAME, database.getModelEncoding() );
         try
         {
             writer.write( fileWriter, database );
@@ -94,7 +99,7 @@ public class JdoDataManagementTool
         database.setUsers( manager.getUsers() );
 
         UsersManagementStaxWriter writer = new UsersManagementStaxWriter();
-        FileWriter fileWriter = new FileWriter( new File( backupDirectory, USERS_XML_NAME ) );
+        Writer fileWriter = createWriter( backupDirectory, USERS_XML_NAME, database.getModelEncoding() );
         try
         {
             writer.write( fileWriter, database );
@@ -112,7 +117,7 @@ public class JdoDataManagementTool
         database.setKeys( manager.getAllKeys() );
 
         RedbackKeyManagementJdoStaxWriter writer = new RedbackKeyManagementJdoStaxWriter();
-        FileWriter fileWriter = new FileWriter( new File( backupDirectory, KEYS_XML_NAME ) );
+        Writer fileWriter = createWriter( backupDirectory, KEYS_XML_NAME, database.getModelEncoding() );
         try
         {
             writer.write( fileWriter, database );
@@ -280,5 +285,13 @@ public class JdoDataManagementTool
     public void eraseKeysDatabase( KeyManager manager )
     {
         manager.eraseDatabase();
+    }
+
+    private Writer createWriter( File directory, String file, String encoding )
+        throws FileNotFoundException
+    {
+        File f = new File( directory, file );
+        FileOutputStream out = new FileOutputStream( f );
+        return new OutputStreamWriter( out, Charset.forName( encoding ) );
     }
 }
