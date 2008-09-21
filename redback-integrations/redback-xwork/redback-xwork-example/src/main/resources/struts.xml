@@ -12,6 +12,10 @@
 
   <package name="root" extends="struts-default" namespace="/">
 
+    <result-types>
+        <result-type name="redirect-action" class="org.apache.struts2.dispatcher.ServletActionRedirectResult" /> 
+    </result-types>
+    
     <interceptors>
       <interceptor name="redbackForceAdminUser" class="redbackForceAdminUserInterceptor"/>
       <interceptor name="redbackEnvCheck" class="redbackEnvironmentCheckInterceptor"/>

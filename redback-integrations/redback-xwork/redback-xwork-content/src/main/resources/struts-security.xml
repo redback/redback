@@ -22,7 +22,7 @@
        within this package.
        ==================================================================  -->
 
-  <package name="security" extends="webwork-default" namespace="/security">
+  <package name="security" extends="struts-default" namespace="/security">
     <result-types>
       <result-type name="security-external" class="securityExternalResult" />
     </result-types>
