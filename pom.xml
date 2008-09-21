@@ -325,7 +325,7 @@
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-spring</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2-SNAPSHOT</version>
         <exclusions>
           <exclusion>
             <groupId>org.codehaus.plexus</groupId>
@@ -638,7 +638,7 @@
     <module>redback-keys</module>
     <module>redback-users</module>
     <module>redback-data-management</module>
-    <!-- <module>redback-integrations</module>  -->
+    <module>redback-integrations</module>
   </modules>
   <properties>
     <security.version>1.2-SNAPSHOT</security.version>
