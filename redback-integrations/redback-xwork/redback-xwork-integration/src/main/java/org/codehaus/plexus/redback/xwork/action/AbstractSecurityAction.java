@@ -20,6 +20,7 @@ import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.struts2.ServletActionContext;
 import org.codehaus.plexus.redback.policy.PasswordRuleViolationException;
 import org.codehaus.plexus.redback.policy.PasswordRuleViolations;
 import org.codehaus.plexus.redback.system.SecuritySession;
@@ -27,9 +28,6 @@ import org.codehaus.plexus.redback.system.SecuritySystemConstants;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureAction;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
-import org.codehaus.plexus.xwork.action.PlexusActionSupport;
-
-import com.opensymphony.webwork.ServletActionContext;
 
 /**
  * AbstractSecurityAction
@@ -38,7 +36,7 @@ import com.opensymphony.webwork.ServletActionContext;
  * @version $Id$
  */
 public abstract class AbstractSecurityAction
-    extends PlexusActionSupport
+    extends RedbackActionSupport
     implements SecureAction
 {
     protected static final String REQUIRES_AUTHENTICATION = "requires-authentication";

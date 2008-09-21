@@ -26,7 +26,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.xwork.filter.authentication.AbstractHttpAuthenticationFilter;
 import org.codehaus.plexus.redback.xwork.filter.authentication.HttpAuthenticator;
@@ -42,19 +41,13 @@ public class HttpBasicAuthenticationFilter
 {
     private HttpAuthenticator httpAuthentication;
 
+    @Override
     public void init( FilterConfig filterConfig )
         throws ServletException
     {
         super.init( filterConfig );
 
-        try
-        {
-            httpAuthentication = (HttpAuthenticator) getContainer().lookup( HttpAuthenticator.ROLE, "basic" );
-        }
-        catch ( ComponentLookupException e )
-        {
-            throw new ServletException( "Unable to lookup the HttpBasicAuthentication component.", e );
-        }
+        httpAuthentication = (HttpAuthenticator) lookup( HttpAuthenticator.ROLE, "basic" );
     }
 
     public void doFilter( ServletRequest request, ServletResponse response, FilterChain chain )

@@ -24,11 +24,11 @@ import org.codehaus.plexus.redback.rbac.Operation;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.Resource;
+import org.codehaus.plexus.redback.xwork.action.RedbackActionSupport;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
 import org.codehaus.plexus.redback.xwork.role.RoleConstants;
 import org.codehaus.plexus.redback.xwork.util.OperationSorter;
-import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 
 /**
  * OperationsAction:
@@ -40,7 +40,7 @@ import org.codehaus.plexus.xwork.action.PlexusActionSupport;
  * instantiation-strategy="per-lookup"
  */
 public class OperationsAction
-    extends PlexusActionSupport
+    extends RedbackActionSupport
 {
     private static final String LIST = "list";
 

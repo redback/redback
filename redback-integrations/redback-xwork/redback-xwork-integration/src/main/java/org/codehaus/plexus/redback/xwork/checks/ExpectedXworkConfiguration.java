@@ -22,8 +22,8 @@ import java.util.List;
 import org.codehaus.plexus.redback.system.check.EnvironmentCheck;
 import org.codehaus.plexus.redback.xwork.checks.xwork.XworkPackageConfig;
 
-import com.opensymphony.xwork.config.Configuration;
-import com.opensymphony.xwork.config.ConfigurationManager;
+import com.opensymphony.xwork2.config.Configuration;
+import com.opensymphony.xwork2.config.ConfigurationManager;
 
 /**
  * <p/>
@@ -53,7 +53,8 @@ public class ExpectedXworkConfiguration
     public void validateEnvironment( List violations )
     {
         // Get the configuration.
-        Configuration xworkConfig = ConfigurationManager.getConfiguration();
+        
+        Configuration xworkConfig = new ConfigurationManager().getConfiguration();
 
         if ( xworkConfig != null )
         {

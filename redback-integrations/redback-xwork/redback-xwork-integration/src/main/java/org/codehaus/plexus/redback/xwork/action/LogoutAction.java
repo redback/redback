@@ -16,17 +16,11 @@ package org.codehaus.plexus.redback.xwork.action;
  * limitations under the License.
  */
 
-import javax.servlet.http.HttpSession;
-
+import org.apache.struts2.dispatcher.SessionMap;
 import org.codehaus.plexus.ehcache.EhcacheComponent;
-import org.codehaus.plexus.redback.system.SecuritySession;
-import org.codehaus.plexus.redback.system.SecuritySystemConstants;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
 import org.codehaus.plexus.redback.xwork.util.AutoLoginCookies;
-
-import com.opensymphony.webwork.ServletActionContext;
-import com.opensymphony.webwork.dispatcher.SessionMap;
 
 /**
  * LogoutAction

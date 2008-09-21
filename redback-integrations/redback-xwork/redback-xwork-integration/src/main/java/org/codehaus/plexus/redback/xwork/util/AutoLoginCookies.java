@@ -20,6 +20,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts2.ServletActionContext;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.keys.KeyManager;
@@ -28,8 +29,6 @@ import org.codehaus.plexus.redback.keys.KeyNotFoundException;
 import org.codehaus.plexus.redback.policy.CookieSettings;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.util.StringUtils;
-
-import com.opensymphony.webwork.ServletActionContext;
 
 /**
  * AutoLoginCookies

@@ -17,7 +17,6 @@ package org.codehaus.plexus.redback.xwork.action;
  */
 
 import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 
 /**
  * SecurityRedirectAction
@@ -29,7 +28,7 @@ import org.codehaus.plexus.xwork.action.PlexusActionSupport;
  * instantiation-strategy="per-lookup"
  */
 public class SecurityRedirectAction
-    extends PlexusActionSupport
+    extends RedbackActionSupport
 {
     private String externalResult;
 

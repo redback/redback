@@ -33,7 +33,7 @@ import org.codehaus.plexus.redback.xwork.reports.ReportManager;
 import org.codehaus.plexus.redback.xwork.role.RoleConstants;
 
 import com.opensymphony.module.sitemesh.filter.PageResponseWrapper;
-import com.opensymphony.webwork.ServletActionContext;
+import org.apache.struts2.ServletActionContext;
 
 /**
  * ReportAction

@@ -24,9 +24,9 @@ import org.codehaus.plexus.redback.xwork.checks.xwork.XworkActionConfig;
 import org.codehaus.plexus.redback.xwork.checks.xwork.XworkPackageConfig;
 import org.codehaus.plexus.util.StringUtils;
 
-import com.opensymphony.xwork.config.Configuration;
-import com.opensymphony.xwork.config.entities.ActionConfig;
-import com.opensymphony.xwork.config.entities.PackageConfig;
+import com.opensymphony.xwork2.config.Configuration;
+import com.opensymphony.xwork2.config.entities.ActionConfig;
+import com.opensymphony.xwork2.config.entities.PackageConfig;
 
 /**
  * AbstractXworkConfigurationCheck

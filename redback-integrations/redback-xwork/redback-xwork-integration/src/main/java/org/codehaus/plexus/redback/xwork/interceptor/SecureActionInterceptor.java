@@ -26,12 +26,11 @@ import org.codehaus.plexus.redback.authorization.AuthorizationResult;
 import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.system.SecuritySystemConstants;
-import org.codehaus.plexus.xwork.interceptor.AbstractHttpRequestTrackerInterceptor;
 
-import com.opensymphony.webwork.ServletActionContext;
-import com.opensymphony.xwork.Action;
-import com.opensymphony.xwork.ActionContext;
-import com.opensymphony.xwork.ActionInvocation;
+import com.opensymphony.xwork2.Action;
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionInvocation;
+import org.apache.struts2.ServletActionContext;
 
 /**
  * SecureActionInterceptor: Interceptor that will detect webwork actions that implement the SecureAction
@@ -59,12 +58,13 @@ public class SecureActionInterceptor
      * @plexus.configuration default-value="simple"
      */
     private String trackerName;
-    
+
+    @Override
     public void destroy()
     {
-
     }
 
+    @Override
     public void init()
     {
         getLogger().info( this.getClass().getName() + " initialized!" );
@@ -83,6 +83,7 @@ public class SecureActionInterceptor
      * @return
      * @throws Exception
      */
+    @Override
     public String intercept( ActionInvocation invocation )
         throws Exception
     {

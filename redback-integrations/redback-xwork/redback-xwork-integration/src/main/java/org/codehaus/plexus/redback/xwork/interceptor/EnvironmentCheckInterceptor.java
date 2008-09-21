@@ -25,8 +25,8 @@ import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.codehaus.plexus.redback.system.check.EnvironmentCheck;
 
-import com.opensymphony.xwork.ActionInvocation;
-import com.opensymphony.xwork.interceptor.Interceptor;
+import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.interceptor.Interceptor;
 
 /**
  * EnvironmentCheckInterceptor
@@ -100,6 +100,7 @@ public class EnvironmentCheckInterceptor
         EnvironmentCheckInterceptor.checked = true;
     }
 
+    @Override
     protected Logger getLogger()
     {
         if ( logger == null )

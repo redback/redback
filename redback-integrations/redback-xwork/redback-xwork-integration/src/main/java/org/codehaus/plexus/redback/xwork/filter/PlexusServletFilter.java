@@ -20,13 +20,12 @@ import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 
-import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.logging.LoggerManager;
-import org.codehaus.plexus.xwork.PlexusLifecycleListener;
 
-import com.opensymphony.xwork.ActionContext;
+import org.codehaus.plexus.spring.PlexusToSpringUtils;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * PlexusServletFilter
@@ -37,7 +36,7 @@ import com.opensymphony.xwork.ActionContext;
 public abstract class PlexusServletFilter
     implements Filter
 {
-    private PlexusContainer container;
+    private ApplicationContext applicationContext;
 
     private Logger logger;
 
@@ -46,52 +45,42 @@ public abstract class PlexusServletFilter
         // Do nothing here.
     }
 
-    protected PlexusContainer getContainer()
-    {
-        return container;
+    protected ApplicationContext getApplicationContext() {
+        return applicationContext;
     }
 
     public Object lookup( String role )
         throws ServletException
     {
-        try
+        Object o = getApplicationContext().getBean(PlexusToSpringUtils.buildSpringId(role));
+        if (o == null)
         {
-            return getContainer().lookup( role );
+            throw new ServletException( "Unable to lookup plexus component '" + role + "'.");
         }
-        catch ( ComponentLookupException e )
-        {
-            throw new ServletException( "Unable to lookup plexus component '" + role + "'.", e );
-        }
+        return o;
     }
 
     public Object lookup( String role, String hint )
         throws ServletException
     {
-        try
+        Object o = getApplicationContext().getBean(PlexusToSpringUtils.buildSpringId(role, hint));
+        if (o == null)
         {
-            return getContainer().lookup( role, hint );
+            throw new ServletException( "Unable to lookup plexus component '" + role + "'.");
         }
-        catch ( ComponentLookupException e )
-        {
-            throw new ServletException( "Unable to lookup plexus component '" + role + "'.", e );
-        }
+        return o;
     }
 
     public void init( FilterConfig filterConfig )
         throws ServletException
     {
-        ActionContext context = ActionContext.getContext();
+        applicationContext = WebApplicationContextUtils.getWebApplicationContext(filterConfig.getServletContext());
 
-        container = (PlexusContainer) context.getApplication().get( PlexusLifecycleListener.KEY );
-
-        try
+        LoggerManager loggerManager = (LoggerManager) getApplicationContext().getBean(PlexusToSpringUtils.buildSpringId(LoggerManager.ROLE));
+        logger = loggerManager.getLoggerForComponent( this.getClass().getName() );
+        if (logger == null)
         {
-            LoggerManager loggerManager = (LoggerManager) container.lookup( LoggerManager.ROLE );
-            logger = loggerManager.getLoggerForComponent( this.getClass().getName() );
-        }
-        catch ( ComponentLookupException e )
-        {
-            throw new ServletException( "Unable to lookup Logger from plexus.", e );
+            throw new ServletException( "Unable to lookup Logger from plexus.");
         }
     }
 

@@ -32,7 +32,6 @@ import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
 import org.codehaus.plexus.redback.xwork.util.AutoLoginCookies;
 import org.codehaus.plexus.util.StringUtils;
-import com.opensymphony.webwork.dispatcher.SessionMap;
 
 /**
  * PasswordAction
@@ -82,10 +81,7 @@ public class PasswordAction
 
     public String show()
     {
-        SecuritySession session = getSecuritySession();
-
-        provideExisting = StringUtils.isNotEmpty( session.getUser().getEncodedPassword() );
-
+        provideExisting = StringUtils.isNotEmpty( getSecuritySession().getUser().getEncodedPassword() );
         return INPUT;
     }
 

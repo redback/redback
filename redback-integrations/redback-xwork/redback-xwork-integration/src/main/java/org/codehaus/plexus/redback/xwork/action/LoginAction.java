@@ -19,7 +19,6 @@ package org.codehaus.plexus.redback.xwork.action;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
 
 import org.codehaus.plexus.redback.authentication.AuthenticationConstants;
 import org.codehaus.plexus.redback.authentication.AuthenticationDataSource;
@@ -34,15 +33,12 @@ import org.codehaus.plexus.redback.keys.KeyNotFoundException;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
 import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySystem;
-import org.codehaus.plexus.redback.system.SecuritySystemConstants;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
 import org.codehaus.plexus.redback.xwork.util.AutoLoginCookies;
 import org.codehaus.plexus.util.StringUtils;
-
-import com.opensymphony.webwork.ServletActionContext;
 
 /**
  * LoginAction
