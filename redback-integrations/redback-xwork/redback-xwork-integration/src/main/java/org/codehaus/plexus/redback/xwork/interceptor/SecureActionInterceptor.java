@@ -39,7 +39,7 @@ import org.apache.struts2.ServletActionContext;
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @author Jesse McConnell <jesse@codehaus.org>
  * @version $Id: SecureActionInterceptor.java 4035 2006-09-14 12:59:40Z joakime $
- * @plexus.component role="com.opensymphony.xwork.interceptor.Interceptor"
+ * @plexus.component role="com.opensymphony.xwork2.interceptor.Interceptor"
  * role-hint="redbackSecureActionInterceptor"
  */
 public class SecureActionInterceptor
@@ -59,12 +59,10 @@ public class SecureActionInterceptor
      */
     private String trackerName;
 
-    @Override
     public void destroy()
     {
     }
 
-    @Override
     public void init()
     {
         getLogger().info( this.getClass().getName() + " initialized!" );
@@ -83,7 +81,6 @@ public class SecureActionInterceptor
      * @return
      * @throws Exception
      */
-    @Override
     public String intercept( ActionInvocation invocation )
         throws Exception
     {

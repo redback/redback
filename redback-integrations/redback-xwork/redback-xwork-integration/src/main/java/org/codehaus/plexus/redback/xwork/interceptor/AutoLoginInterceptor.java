@@ -39,7 +39,7 @@ import org.apache.struts2.ServletActionContext;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="com.opensymphony.xwork.interceptor.Interceptor"
+ * @plexus.component role="com.opensymphony.xwork2.interceptor.Interceptor"
  * role-hint="redbackAutoLoginInterceptor"
  */
 public class AutoLoginInterceptor

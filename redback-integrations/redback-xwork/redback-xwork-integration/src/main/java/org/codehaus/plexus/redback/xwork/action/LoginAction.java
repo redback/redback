@@ -46,7 +46,7 @@ import org.codehaus.plexus.util.StringUtils;
  * @author Jesse McConnell <jmcconnell@apache.org>
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="com.opensymphony.xwork.Action"
+ * @plexus.component role="com.opensymphony.xwork2.Action"
  * role-hint="redback-login"
  * instantiation-strategy="per-lookup"
  */

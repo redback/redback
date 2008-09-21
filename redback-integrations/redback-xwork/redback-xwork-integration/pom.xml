@@ -173,6 +173,12 @@
       <artifactId>redback-keys-memory</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.easymock</groupId>
+      <artifactId>easymock</artifactId>
+      <version>2.2</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <scm>
     <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-integrations/redback-xwork/redback-xwork-integration</connection>

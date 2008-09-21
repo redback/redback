@@ -34,7 +34,7 @@ import org.codehaus.plexus.redback.xwork.role.RoleConstants;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="com.opensymphony.xwork.Action"
+ * @plexus.component role="com.opensymphony.xwork2.Action"
  * role-hint="redback-admin-user-create"
  * instantiation-strategy="per-lookup"
  */

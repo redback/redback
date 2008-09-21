@@ -19,7 +19,6 @@ package org.codehaus.plexus.redback.xwork.interceptor;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.role.RoleManager;
-import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
@@ -32,7 +31,7 @@ import com.opensymphony.xwork2.interceptor.Interceptor;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id: EnvironmentCheckInterceptor.java 4057 2006-09-15 23:43:16Z joakime $
- * @plexus.component role="com.opensymphony.xwork.interceptor.Interceptor"
+ * @plexus.component role="com.opensymphony.xwork2.interceptor.Interceptor"
  * role-hint="redbackForceAdminUserInterceptor"
  */
 public class ForceAdminUserInterceptor

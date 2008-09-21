@@ -33,7 +33,7 @@ import com.opensymphony.xwork2.interceptor.Interceptor;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="com.opensymphony.xwork.interceptor.Interceptor"
+ * @plexus.component role="com.opensymphony.xwork2.interceptor.Interceptor"
  * role-hint="redbackEnvironmentCheckInterceptor"
  */
 public class EnvironmentCheckInterceptor

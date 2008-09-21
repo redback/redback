@@ -34,7 +34,7 @@ public class SystemInfoActionTest
     {
         super.setUp();
 
-        systeminfo = (SystemInfoAction) lookup( "com.opensymphony.xwork.Action", "redback-sysinfo" );
+        systeminfo = (SystemInfoAction) lookup( "com.opensymphony.xwork2.Action", "redback-sysinfo" );
     }
 
     public void testSystemInfoDump()

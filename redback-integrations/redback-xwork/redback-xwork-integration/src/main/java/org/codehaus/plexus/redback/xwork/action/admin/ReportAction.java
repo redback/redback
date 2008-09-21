@@ -40,7 +40,7 @@ import org.apache.struts2.ServletActionContext;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="com.opensymphony.xwork.Action"
+ * @plexus.component role="com.opensymphony.xwork2.Action"
  * role-hint="redback-report"
  * instantiation-strategy="per-lookup"
  */

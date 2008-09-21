@@ -29,7 +29,7 @@ import org.codehaus.plexus.redback.xwork.role.RoleConstants;
  *
  * @author <a href="mailto:jmcconnell@apache.org">Jesse McConnell</a>
  * @version $Id: RolesAction.java 6386 2007-05-02 21:51:16Z jesse $
- * @plexus.component role="com.opensymphony.xwork.Action"
+ * @plexus.component role="com.opensymphony.xwork2.Action"
  * role-hint="redback-role-model"
  * instantiation-strategy="per-lookup"
  */

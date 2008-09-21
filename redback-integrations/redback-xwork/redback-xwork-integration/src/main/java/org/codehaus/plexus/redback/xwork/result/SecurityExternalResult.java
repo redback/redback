@@ -1,5 +1,7 @@
 package org.codehaus.plexus.redback.xwork.result;
 
+import com.opensymphony.xwork2.ActionInvocation;
+
 /*
  * Copyright 2005-2006 The Codehaus.
  *
@@ -15,10 +17,6 @@ package org.codehaus.plexus.redback.xwork.result;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import org.codehaus.plexus.xwork.result.AbstractBackTrackingResult;
-
-import com.opensymphony.xwork.ActionInvocation;
 
 /**
  * SecurityExternalResult
@@ -39,6 +37,7 @@ public class SecurityExternalResult
 
     private String externalResult;
 
+    @Override
     public void execute( ActionInvocation invocation )
         throws Exception
     {

@@ -16,15 +16,12 @@ package org.codehaus.plexus.redback.xwork.interceptor;
  * limitations under the License.
  */
 
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.Interceptor;
-import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import java.util.Map;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import com.opensymphony.xwork2.spring.interceptor.ActionAutowiringInterceptor;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.spring.PlexusToSpringUtils;
 import org.springframework.context.ApplicationContextAware;

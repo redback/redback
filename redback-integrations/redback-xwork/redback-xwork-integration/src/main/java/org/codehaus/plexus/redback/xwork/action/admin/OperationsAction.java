@@ -35,7 +35,7 @@ import org.codehaus.plexus.redback.xwork.util.OperationSorter;
  *
  * @author Jesse McConnell <jmcconnell@apache.org>
  * @version $Id$
- * @plexus.component role="com.opensymphony.xwork.Action"
+ * @plexus.component role="com.opensymphony.xwork2.Action"
  * role-hint="redback-operations"
  * instantiation-strategy="per-lookup"
  */

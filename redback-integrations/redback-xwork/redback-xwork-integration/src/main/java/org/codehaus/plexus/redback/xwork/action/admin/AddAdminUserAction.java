@@ -17,7 +17,6 @@ package org.codehaus.plexus.redback.xwork.action.admin;
  */
 
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
-import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.users.User;
@@ -25,14 +24,13 @@ import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
 import org.codehaus.plexus.redback.xwork.model.EditUserCredentials;
-import org.codehaus.plexus.redback.xwork.role.RoleConstants;
 
 /**
  * AddAdminUserAction
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id: AddAdminUserAction.java 448077 2006-09-20 05:42:22Z joakime $
- * @plexus.component role="com.opensymphony.xwork.Action"
+ * @plexus.component role="com.opensymphony.xwork2.Action"
  * role-hint="redback-admin-account"
  * instantiation-strategy="per-lookup"
  */

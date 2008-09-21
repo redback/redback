@@ -39,7 +39,7 @@ import org.codehaus.plexus.util.StringUtils;
  * 
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="com.opensymphony.xwork.Action" role-hint="redback-admin-user-delete"
+ * @plexus.component role="com.opensymphony.xwork2.Action" role-hint="redback-admin-user-delete"
  *                   instantiation-strategy="per-lookup"
  */
 public class UserDeleteAction extends AbstractSecurityAction implements CancellableAction

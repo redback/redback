@@ -40,7 +40,7 @@ import org.apache.struts2.ServletActionContext;
  * Interceptor to force the user to perform actions, when required.
  *
  * @author Edwin Punzalan
- * @plexus.component role="com.opensymphony.xwork.interceptor.Interceptor" role-hint="redbackPolicyEnforcementInterceptor"
+ * @plexus.component role="com.opensymphony.xwork2.interceptor.Interceptor" role-hint="redbackPolicyEnforcementInterceptor"
  */
 public class PolicyEnforcementInterceptor
         extends AbstractLogEnabled
