@@ -16,8 +16,7 @@ package org.codehaus.plexus.redback.example.web.action;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.xwork.action.PlexusActionSupport;
-
+import org.codehaus.plexus.redback.xwork.action.RedbackActionSupport;
 /**
  * PlexusSecuritySystemAction:
 22 *
@@ -25,11 +24,11 @@ import org.codehaus.plexus.xwork.action.PlexusActionSupport;
  * @version $Id:$
  *
  * @plexus.component
- *   role="com.opensymphony.xwork.Action"
+ *   role="com.opensymphony.xwork2.Action"
  *   role-hint="status"
  */
 public class StatusAction
-    extends PlexusActionSupport
+    extends RedbackActionSupport
 {
 
     public String status()

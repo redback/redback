@@ -14,7 +14,7 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/webwork" %>
+<%@ taglib prefix="ww" uri="/struts-tags" %>
 <%@ taglib prefix="redback" uri="http://plexus.codehaus.org/redback/taglib-1.0" %>
 
 <html>

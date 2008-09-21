@@ -14,7 +14,7 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/webwork"%>
+<%@ taglib prefix="ww" uri="/struts-tags"%>
 
 <ww:form cssClass="find" action="user" name="find" method="post" namespace="/security/admin">
   <ww:textfield label="%{getText('user.find')}" name="username" />

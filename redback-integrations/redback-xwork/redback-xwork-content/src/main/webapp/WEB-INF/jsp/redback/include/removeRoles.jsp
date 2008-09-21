@@ -5,7 +5,7 @@
   Time: 1:50:21 AM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ taglib uri="/webwork" prefix="ww" %>
+<%@ taglib uri="/struts-tags" prefix="ww" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
     <ww:form action="user" name="removeRole" method="post" namespace="/security/admin">
       <ww:hidden name="principal" value="${username}" />

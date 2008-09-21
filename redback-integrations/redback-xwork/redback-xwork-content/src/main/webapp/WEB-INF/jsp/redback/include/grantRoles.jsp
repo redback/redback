@@ -5,7 +5,7 @@
   Time: 1:48:21 AM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ taglib uri="/webwork" prefix="ww" %>
+<%@ taglib uri="/struts-tags" prefix="ww" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
     <ww:set name="availableRoles" value="${availableRoles}"/>

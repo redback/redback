@@ -14,7 +14,7 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/webwork" %>
+<%@ taglib prefix="ww" uri="/struts-tags" %>
 
 <div id="results">
   <%-- This is where the "Account Created Successfully" type message goes. --%>

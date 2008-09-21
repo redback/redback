@@ -17,9 +17,9 @@ package org.codehaus.plexus.redback.example.web.action;
  */
 
 import org.codehaus.plexus.redback.system.SecuritySystem;
-import org.codehaus.plexus.xwork.action.PlexusActionSupport;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
+import org.codehaus.plexus.redback.xwork.action.RedbackActionSupport;
 
 /**
  * MainAction 
@@ -28,11 +28,11 @@ import org.codehaus.plexus.redback.role.RoleManagerException;
  * @version $Id$
  * 
  * @plexus.component
- *   role="com.opensymphony.xwork.Action"
+ *   role="com.opensymphony.xwork2.Action"
  *   role-hint="main"
  */
 public class MainAction
-    extends PlexusActionSupport
+    extends RedbackActionSupport
 {
     /**
      * @plexus.requirement
