@@ -16,18 +16,18 @@ package org.codehaus.plexus.redback.taglib.jsp;
  * limitations under the License.
  */
 
-import com.opensymphony.xwork.ActionContext;
+import com.opensymphony.xwork2.ActionContext;
 
-import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.redback.authorization.AuthorizationException;
 import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.system.SecuritySystemConstants;
-import org.codehaus.plexus.xwork.PlexusLifecycleListener;
 
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
+import org.codehaus.plexus.spring.PlexusToSpringUtils;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * IfAuthorizedTag:
@@ -55,6 +55,7 @@ public class IfAuthorizedTag
     protected boolean condition()
         throws JspTagException
     {
+        ApplicationContext applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(pageContext.getServletContext());
 
         Boolean authzStatusBool = (Boolean) pageContext.getAttribute( "redbackCache" + permission + resource );
         boolean authzStatus;
@@ -65,20 +66,20 @@ public class IfAuthorizedTag
         {
             ActionContext context = ActionContext.getContext();
 
-            PlexusContainer container = (PlexusContainer) context.getApplication().get( PlexusLifecycleListener.KEY );
             SecuritySession securitySession =
                 (SecuritySession) context.getSession().get( SecuritySystemConstants.SECURITY_SESSION_KEY );
 
+            
             try
             {
-                SecuritySystem securitySystem = (SecuritySystem) container.lookup( SecuritySystem.ROLE );
-
+                SecuritySystem securitySystem = (SecuritySystem) applicationContext.getBean(PlexusToSpringUtils.buildSpringId(SecuritySystem.ROLE));
+                if (securitySystem == null)
+                {
+                    throw new JspTagException( "unable to locate security system" );
+                }
+                
                 authzStatus = securitySystem.isAuthorized( securitySession, permission, resource );
                 pageContext.setAttribute( "redbackCache" + permission + resource, Boolean.valueOf( authzStatus ) );
-            }
-            catch ( ComponentLookupException cle )
-            {
-                throw new JspTagException( "unable to locate security system", cle );
             }
             catch ( AuthorizationException ae )
             {
