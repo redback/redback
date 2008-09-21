@@ -19,7 +19,6 @@ import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authentication.Authenticator;
 import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
-import org.codehaus.plexus.redback.authentication.users.UserManagerAuthenticator;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
@@ -37,6 +36,7 @@ public class UserManagerAuthenticatorTest
      */
     private UserSecurityPolicy userSecurityPolicy;
     
+    @Override
     protected void setUp()
         throws Exception
     {
