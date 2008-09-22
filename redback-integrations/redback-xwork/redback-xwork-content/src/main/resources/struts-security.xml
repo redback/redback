@@ -24,6 +24,7 @@
 
   <package name="security" extends="struts-default" namespace="/security">
     <result-types>
+      <result-type name="redirect-action" class="org.apache.struts2.dispatcher.ServletActionRedirectResult" />
       <result-type name="security-external" class="securityExternalResult" />
     </result-types>
 
