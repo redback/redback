@@ -325,7 +325,7 @@
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-spring</artifactId>
-        <version>1.0.1</version>
+        <version>1.1-SNAPSHOT</version>
         <exclusions>
           <exclusion>
             <groupId>org.codehaus.plexus</groupId>
