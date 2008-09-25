@@ -108,7 +108,7 @@
               <ww:url id="userdeleteUrl" action="userdelete">
                 <ww:param name="username">${user.username}</ww:param>
               </ww:url>
-              <ww:a href="%{userdeleteUrl}" title="%{getText('delete')} ${user.username}">
+              <ww:a href="#userdeleteUrl" title="getText('delete') #user.username">
                 <img src="<c:url value="/images/redback/delete.gif"/>" border="none"/>
               </ww:a>              
             </redback:ifAuthorized>
