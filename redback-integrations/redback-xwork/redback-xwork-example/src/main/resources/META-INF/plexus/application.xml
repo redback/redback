@@ -20,6 +20,7 @@
       <implementation>org.codehaus.plexus.logging.log4j.Log4JLoggerManager</implementation>
       <lifecycle-handler>basic</lifecycle-handler>
     </component>
+ <!--
     <component>
       <role>org.codehaus.plexus.ldap.helper.LdapConnectionFactory</role>
       <role-hint>configurable</role-hint>
@@ -65,6 +66,7 @@
         <port>10389</port>
       </configuration>
     </component>
+ -->
  <!-- 
     <component>
       <role>org.codehaus.plexus.redback.users.UserManager</role>
