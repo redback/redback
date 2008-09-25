@@ -23,7 +23,7 @@ import com.opensymphony.xwork2.ActionInvocation;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="com.opensymphony.xwork.Result"
+ * @plexus.component role="com.opensymphony.xwork2.Result"
  * role-hint="securityExternalResult"
  * instantiation-strategy="per-lookup"
  */
