@@ -24,7 +24,6 @@
 
   <package name="security" extends="struts-default" namespace="/security">
     <result-types>
-      <result-type name="redirect-action" class="org.apache.struts2.dispatcher.ServletActionRedirectResult" />
       <result-type name="security-external" class="securityExternalResult" />
     </result-types>
 
@@ -62,17 +61,17 @@
     <default-interceptor-ref name="securedStack"/>
 
     <global-results>
-      <result name="security-admin-user-needed" type="redirect-action">
+      <result name="security-admin-user-needed" type="redirectAction">
         <param name="actionName">addadmin</param>
         <param name="namespace">/security</param>
       </result>
       <result name="requires-authentication">/WEB-INF/jsp/redback/requiresAuthentication.jsp</result>
       <result name="requires-authorization">/WEB-INF/jsp/redback/accessDenied.jsp</result>
-      <result name="security-must-change-password" type="redirect-action">
+      <result name="security-must-change-password" type="redirectAction">
         <param name="actionName">password</param>
         <param name="namespace">/security</param>        
       </result>
-      <result name="security-resend-validation-email" type="redirect-action">
+      <result name="security-resend-validation-email" type="redirectAction">
         <param name="actionName">userlist</param>
         <param name="namespace">/security</param>        
       </result>
@@ -131,7 +130,7 @@
         <param name="externalResult">security-register-success</param>
       </result>      
       <result name="success" type="redirect">${targetUrl}</result>
-      <result name="cancel" type="redirect-action">
+      <result name="cancel" type="redirectAction">
         <param name="actionName">logout</param>
         <param name="namespace">/security</param>
       </result>
@@ -166,7 +165,7 @@
     </action>
 
     <action name="report" class="redback-report" method="generate">
-      <result name="error" type="redirect-action">userlist</result>
+      <result name="error" type="redirectAction">userlist</result>
     </action>
 
     <action name="userlist" class="redback-admin-user-list" method="show">
@@ -177,14 +176,14 @@
     <action name="useredit" class="redback-admin-user-edit" method="edit">
       <result name="input">/WEB-INF/jsp/redback/admin/userEdit.jsp</result>
       <result name="error">/WEB-INF/jsp/redback/admin/userEdit.jsp</result>
-      <result name="success" type="redirect-action">userlist</result>
-      <result name="cancel" type="redirect-action">userlist</result>
+      <result name="success" type="redirectAction">userlist</result>
+      <result name="cancel" type="redirectAction">userlist</result>
     </action>
 
     <action name="usercreate" class="redback-admin-user-create" method="show">
       <result name="input">/WEB-INF/jsp/redback/admin/userCreate.jsp</result>
       <result name="error">/WEB-INF/jsp/redback/admin/userCreate.jsp</result>
-      <result name="success" type="redirect-action">
+      <result name="success" type="redirectAction">
         <param name="actionName">assignments</param>
         <param name="principal">${user.username}</param>
       </result>
@@ -192,9 +191,9 @@
 
     <action name="userdelete" class="redback-admin-user-delete" method="confirm">
       <result name="input">/WEB-INF/jsp/redback/admin/userDelete.jsp</result>
-      <result name="error" type="redirect-action">userlist</result>
-      <result name="success" type="redirect-action">userlist</result>
-      <result name="cancel" type="redirect-action">userlist</result>
+      <result name="error" type="redirectAction">userlist</result>
+      <result name="success" type="redirectAction">userlist</result>
+      <result name="cancel" type="redirectAction">userlist</result>
     </action>
 
     <!-- ==== RBAC Actions ========================================== -->
@@ -209,35 +208,35 @@
     </action>
 
     <action name="addRolesToUser" class="redback-assignments" method="edituser">
-      <result name="success" type="redirect-action">userlist</result>
+      <result name="success" type="redirectAction">userlist</result>
     </action>
 
     <action name="removeRolesFromUser" class="redback-assignments" method="edituser">
-      <result name="success" type="redirect-action">userlist</result>
+      <result name="success" type="redirectAction">userlist</result>
     </action>
 
     <action name="rolecreate" class="redback-role-create" method="show">
       <result name="input">/WEB-INF/jsp/redback/admin/roleCreate.jsp</result>
       <result name="error">/WEB-INF/jsp/redback/admin/roleCreate.jsp</result>
-      <result name="success" type="redirect-action">userlist</result>
+      <result name="success" type="redirectAction">userlist</result>
     </action>
 
     <action name="role" class="redback-role-edit" method="input">
       <result name="input">/WEB-INF/jsp/redback/admin/role.jsp</result>
       <result name="error">/WEB-INF/jsp/redback/admin/role.jsp</result>
-      <result name="success" type="redirect-action">roles</result>
+      <result name="success" type="redirectAction">roles</result>
     </action>
 
     <action name="roleedit" class="redback-role-edit" method="edit">
       <result name="input">/WEB-INF/jsp/redback/admin/roleEdit.jsp</result>
       <result name="error">/WEB-INF/jsp/redback/admin/roleEdit.jsp</result>
-      <result name="success" type="redirect-action">roles</result>
+      <result name="success" type="redirectAction">roles</result>
     </action>
 
     <action name="rolesave" class="redback-role-edit" method="save">
       <result name="input">/WEB-INF/jsp/redback/admin/roleEdit.jsp</result>
       <result name="error">/WEB-INF/jsp/redback/admin/roleEdit.jsp</result>
-      <result name="success" type="redirect-action">roles</result>
+      <result name="success" type="redirectAction">roles</result>
     </action>
 
     <action name="roleusersadd" class="redback-role-edit" method="addUsers">
