@@ -18,7 +18,7 @@
 
 <html>
 
-<ww:i18n name="org.codehaus.plexus.redback.xwork.default">
+<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
   <title><ww:text name="requires.authentication.page.title"/></title>
 </head>

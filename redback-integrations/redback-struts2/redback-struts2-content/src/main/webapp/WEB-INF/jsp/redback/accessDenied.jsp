@@ -17,7 +17,7 @@
 <%@ taglib prefix="ww" uri="/struts-tags" %>
 
 <html>
-<ww:i18n name="org.codehaus.plexus.redback.xwork.default">
+<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
   <title><ww:text name="access.denied.page.title"/></title>
 </head>

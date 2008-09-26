@@ -19,7 +19,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <html>
-<ww:i18n name="org.codehaus.plexus.redback.xwork.default">
+<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
   <title><ww:text name="assignments.page.title"/></title>
 </head>

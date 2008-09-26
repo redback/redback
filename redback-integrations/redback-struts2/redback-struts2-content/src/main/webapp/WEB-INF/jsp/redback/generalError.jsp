@@ -18,7 +18,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
-<ww:i18n name="org.codehaus.plexus.redback.xwork.default">
+<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
   <title><ww:text name="general.error.page.title"/></title>
 </head>

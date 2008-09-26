@@ -20,7 +20,7 @@
 <%@ taglib uri="http://www.extremecomponents.org" prefix="ec" %>
 
 <html> 
-<ww:i18n name="org.codehaus.plexus.redback.xwork.default">
+<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
   <title><ww:text name="user.list.page.title"/></title>
   <link rel="stylesheet" type="text/css" href="<ww:url value="/css/redback/table.css"/>" media="screen"/>
@@ -53,8 +53,8 @@
     filterable="true"
     showTitle="false"
     showExports="false"
-    view="org.codehaus.plexus.redback.xwork.eXc.views.SecurityView" 
-    sortRowsCallback="org.codehaus.plexus.redback.xwork.eXc.ProcessUserRowsCallback"
+    view="org.codehaus.plexus.redback.struts2.eXc.views.SecurityView" 
+    sortRowsCallback="org.codehaus.plexus.redback.struts2.eXc.ProcessUserRowsCallback"
     cellspacing="2"
     cellpadding="3"
     >
@@ -71,7 +71,7 @@
        tooltip="Export Table to Excel format."/>
     <ec:row>          
         <ec:column property="username" title="${username}" 
-        	filterCell="org.codehaus.plexus.redback.xwork.eXc.SecurityFilterCell">
+        	filterCell="org.codehaus.plexus.redback.struts2.eXc.SecurityFilterCell">
           <img src="<c:url value="/images/redback/icon-user.gif"/>" />
           <redback:ifAuthorized permission="user-management-user-edit" resource="${user.username}">
             <ww:url id="usereditUrl" action="useredit">
@@ -92,14 +92,14 @@
           </redback:elseAuthorized>
         </ec:column>
         <ec:column property="fullName" title="${fullName}" alias="fullname" 
-        	filterCell="org.codehaus.plexus.redback.xwork.eXc.SecurityFilterCell" />
-        <ec:column property="email" title="${email}" cell="org.codehaus.plexus.redback.xwork.eXc.MailtoCell" 
-        	filterCell="org.codehaus.plexus.redback.xwork.eXc.SecurityFilterCell" />
-        <ec:column property="permanent" cell="org.codehaus.plexus.redback.xwork.eXc.CheckboxImageCell" 
+        	filterCell="org.codehaus.plexus.redback.struts2.eXc.SecurityFilterCell" />
+        <ec:column property="email" title="${email}" cell="org.codehaus.plexus.redback.struts2.eXc.MailtoCell" 
+        	filterCell="org.codehaus.plexus.redback.struts2.eXc.SecurityFilterCell" />
+        <ec:column property="permanent" cell="org.codehaus.plexus.redback.struts2.eXc.CheckboxImageCell" 
         	style="text-align: center" title="${permanent}" filterable="false"/> <%-- Boolean's can't be filtered --%>
-        <ec:column property="validated" cell="org.codehaus.plexus.redback.xwork.eXc.CheckboxImageCell" 
+        <ec:column property="validated" cell="org.codehaus.plexus.redback.struts2.eXc.CheckboxImageCell" 
         	style="text-align: center" title="${validated}" filterable="false"/> <%-- Boolean's can't be filtered --%>
-        <ec:column property="locked" cell="org.codehaus.plexus.redback.xwork.eXc.CheckboxImageCell" 
+        <ec:column property="locked" cell="org.codehaus.plexus.redback.struts2.eXc.CheckboxImageCell" 
         	style="text-align: center" title="${locked}" filterable="false"/> <%-- Boolean's can't be filtered --%>
         
         <ec:column title="${tasks}" alias="tasks" sortable="false" filterable="false" styleClass="tasks">

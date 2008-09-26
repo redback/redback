@@ -19,7 +19,7 @@
 <%@ taglib prefix="redback" uri="http://plexus.codehaus.org/redback/taglib-1.0"%>
 
 <html>
-<ww:i18n name="org.codehaus.plexus.redback.xwork.default">
+<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
   <title><ww:text name="account.details.page.title"/></title>
 </head>
