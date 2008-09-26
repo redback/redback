@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.taglib.jsp;
+package org.codehaus.plexus.redback.xwork.taglib.jsp;
 
 /*
  * Copyright 2006 The Codehaus.
@@ -20,35 +20,21 @@ import com.opensymphony.xwork.ActionContext;
 
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-import org.codehaus.plexus.redback.configuration.UserConfiguration;
+import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.xwork.PlexusLifecycleListener;
 
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
 
 /**
- * IfConfiguredTag:
+ * IsReadOnlyUserManagerTag:
  *
  * @author Jesse McConnell <jesse@codehaus.org>
  * @version $Id$
  */
-public class IfConfiguredTag
+public class IsNotReadOnlyUserManagerTag
     extends ConditionalTagSupport
 {
-    private String option;
-
-    private String value;
-    
-    public void setOption( String option )
-    {
-        this.option = option;
-    }
-   
-    public void setValue( String value )
-    {
-        this.value = value;
-    }
-
     protected boolean condition()
         throws JspTagException
     { 
@@ -59,25 +45,9 @@ public class IfConfiguredTag
 
         try
         {
-            UserConfiguration config = (UserConfiguration) container.lookup( UserConfiguration.ROLE );            
+            UserManager config = (UserManager) container.lookup( UserManager.ROLE, "configurable" );            
             
-            if ( value != null )
-            {
-                String configValue = config.getString( option );
-                
-                if ( value.equals( configValue ) )
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return config.getBoolean( option );
-            }
+            return !config.isReadOnly();
         }
         catch ( ComponentLookupException cle )
         {
