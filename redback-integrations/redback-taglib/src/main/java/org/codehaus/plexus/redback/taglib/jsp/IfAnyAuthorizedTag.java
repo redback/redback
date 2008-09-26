@@ -18,18 +18,18 @@ package org.codehaus.plexus.redback.taglib.jsp;
 
 import com.opensymphony.xwork.ActionContext;
 
-import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.redback.authorization.AuthorizationException;
 import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.system.SecuritySystemConstants;
-import org.codehaus.plexus.xwork.PlexusLifecycleListener;
 
 import java.util.StringTokenizer;
 
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
+import org.codehaus.plexus.spring.PlexusToSpringUtils;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * IfAnyAuthorizedTag:
@@ -60,6 +60,8 @@ public class IfAnyAuthorizedTag
     protected boolean condition()
         throws JspTagException
     {
+        ApplicationContext applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(pageContext.getServletContext());
+
         ActionContext context = ActionContext.getContext();
 
         if ( context.getApplication() == null )
@@ -67,14 +69,16 @@ public class IfAnyAuthorizedTag
             return false;
         }
 
-        PlexusContainer container = (PlexusContainer) context.getApplication().get( PlexusLifecycleListener.KEY );
-
         SecuritySession securitySession =
             (SecuritySession) context.getSession().get( SecuritySystemConstants.SECURITY_SESSION_KEY );
 
         try
         {
-            SecuritySystem securitySystem = (SecuritySystem) container.lookup( SecuritySystem.ROLE );
+            final SecuritySystem securitySystem = (SecuritySystem) applicationContext.getBean(PlexusToSpringUtils.buildSpringId(SecuritySystem.ROLE));
+            if (securitySystem == null)
+            {
+                throw new JspTagException( "unable to locate the security system");
+            }
 
             StringTokenizer strtok = new StringTokenizer( permissions, "," );
 
@@ -87,10 +91,6 @@ public class IfAnyAuthorizedTag
                     return true;
                 }
             }
-        }
-        catch ( ComponentLookupException cle )
-        {
-            throw new JspTagException( "unable to locate the security system", cle );
         }
         catch ( AuthorizationException ae )
         {

@@ -16,15 +16,13 @@ package org.codehaus.plexus.redback.taglib.jsp;
  * limitations under the License.
  */
 
-import com.opensymphony.xwork.ActionContext;
-
-import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.redback.users.UserManager;
-import org.codehaus.plexus.xwork.PlexusLifecycleListener;
 
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
+import org.codehaus.plexus.spring.PlexusToSpringUtils;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * IsReadOnlyUserManagerTag:
@@ -38,20 +36,14 @@ public class IsNotReadOnlyUserManagerTag
     protected boolean condition()
         throws JspTagException
     { 
-        
-        ActionContext context = ActionContext.getContext();
+        ApplicationContext applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(pageContext.getServletContext());
 
-        PlexusContainer container = (PlexusContainer) context.getApplication().get( PlexusLifecycleListener.KEY );
+        UserManager config = (UserManager) applicationContext.getBean(PlexusToSpringUtils.buildSpringId(UserManager.ROLE, "configurable"));           
+        if (config == null)
+        {
+            throw new JspTagException( "unable to locate security system" );
+        }
 
-        try
-        {
-            UserManager config = (UserManager) container.lookup( UserManager.ROLE, "configurable" );            
-            
-            return !config.isReadOnly();
-        }
-        catch ( ComponentLookupException cle )
-        {
-            throw new JspTagException( "unable to locate security system", cle );
-        }
+        return !config.isReadOnly();
     }
 }

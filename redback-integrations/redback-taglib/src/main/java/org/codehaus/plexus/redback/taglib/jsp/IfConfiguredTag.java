@@ -16,15 +16,13 @@ package org.codehaus.plexus.redback.taglib.jsp;
  * limitations under the License.
  */
 
-import com.opensymphony.xwork.ActionContext;
-
-import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
-import org.codehaus.plexus.xwork.PlexusLifecycleListener;
 
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
+import org.codehaus.plexus.spring.PlexusToSpringUtils;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * IfConfiguredTag:
@@ -52,36 +50,26 @@ public class IfConfiguredTag
     protected boolean condition()
         throws JspTagException
     { 
-        
-        ActionContext context = ActionContext.getContext();
+        ApplicationContext applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(pageContext.getServletContext());
 
-        PlexusContainer container = (PlexusContainer) context.getApplication().get( PlexusLifecycleListener.KEY );
+        UserConfiguration config = (UserConfiguration) applicationContext.getBean(PlexusToSpringUtils.buildSpringId(UserConfiguration.ROLE));            
 
-        try
+        if ( value != null )
         {
-            UserConfiguration config = (UserConfiguration) container.lookup( UserConfiguration.ROLE );            
-            
-            if ( value != null )
+            String configValue = config.getString( option );
+
+            if ( value.equals( configValue ) )
             {
-                String configValue = config.getString( option );
-                
-                if ( value.equals( configValue ) )
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return true;
             }
             else
             {
-                return config.getBoolean( option );
+                return false;
             }
         }
-        catch ( ComponentLookupException cle )
+        else
         {
-            throw new JspTagException( "unable to locate security system", cle );
+            return config.getBoolean( option );
         }
     }
 }
