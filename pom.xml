@@ -321,11 +321,33 @@
         <artifactId>redback-xwork-integration</artifactId>
         <version>${security.version}</version>
       </dependency>
+      <!-- spring -->
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-web</artifactId>
+        <version>2.5.5</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-core</artifactId>
+        <version>2.5.5</version>
+      </dependency>
       <!-- Plexus -->
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-spring</artifactId>
         <version>1.1-SNAPSHOT</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-container-default</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-xwork-integration</artifactId>
+        <version>1.0-alpha-7</version>
         <exclusions>
           <exclusion>
             <groupId>org.codehaus.plexus</groupId>
@@ -608,7 +630,6 @@
                 <bannedDependencies>
                   <excludes>
                     <exclude>org.codehaus.plexus:plexus-container-default</exclude>
-                    <exclude>org.codehaus.plexus:plexus-xwork-integration</exclude>
                     <!-- <exclude>commons-logging:commons-logging</exclude> -->
                   </excludes>
                 </bannedDependencies>
@@ -638,7 +659,7 @@
     <module>redback-keys</module>
     <module>redback-users</module>
     <module>redback-data-management</module>
-    <!-- <module>redback-integrations</module>  -->
+    <module>redback-integrations</module>
   </modules>
   <properties>
     <security.version>1.2-SNAPSHOT</security.version>
