@@ -13,9 +13,9 @@
       </configuration>
     </component>
     <component>
-      <role>org.codehaus.plexus.redback.xwork.mail.MailGenerator</role>
+      <role>org.codehaus.plexus.redback.struts2.mail.MailGenerator</role>
       <role-hint>custom-url</role-hint>
-      <implementation>org.codehaus.plexus.redback.xwork.mail.VelocityMailGenerator</implementation>
+      <implementation>org.codehaus.plexus.redback.struts2.mail.VelocityMailGenerator</implementation>
       <description>Mail generator component implementation using velocity.</description>
       <requirements>
         <requirement>
@@ -31,9 +31,9 @@
     </component>
 
     <component>
-      <role>org.codehaus.plexus.redback.xwork.mail.MailGenerator</role>
+      <role>org.codehaus.plexus.redback.struts2.mail.MailGenerator</role>
       <role-hint>velocity</role-hint>
-      <implementation>org.codehaus.plexus.redback.xwork.mail.VelocityMailGenerator</implementation>
+      <implementation>org.codehaus.plexus.redback.struts2.mail.VelocityMailGenerator</implementation>
       <description>Mail generator component implementation using velocity.</description>
       <requirements>
         <requirement>

@@ -19,21 +19,21 @@
     <component>
       <role>com.opensymphony.xwork2.Action</role>
       <role-hint>testAction</role-hint>
-      <implementation>org.codehaus.plexus.redback.xwork.action.TestPlexusAction</implementation>
+      <implementation>org.codehaus.plexus.redback.struts2.action.TestPlexusAction</implementation>
     </component>
     <component>
       <role>com.opensymphony.xwork2.interceptor.Interceptor</role>
       <role-hint>testCustomInterceptor</role-hint>
-      <implementation>org.codehaus.plexus.redback.xwork.interceptor.MockCustomInterceptor</implementation>
+      <implementation>org.codehaus.plexus.redback.struts2.interceptor.MockCustomInterceptor</implementation>
       <requirements>
         <requirement>
-          <role>org.codehaus.plexus.redback.xwork.interceptor.MockComponent</role>
+          <role>org.codehaus.plexus.redback.struts2.interceptor.MockComponent</role>
         </requirement>
       </requirements>
     </component>
     <component>
-      <role>org.codehaus.plexus.redback.xwork.interceptor.MockComponent</role>
-      <implementation>org.codehaus.plexus.redback.xwork.interceptor.MockComponentImpl</implementation>
+      <role>org.codehaus.plexus.redback.struts2.interceptor.MockComponent</role>
+      <implementation>org.codehaus.plexus.redback.struts2.interceptor.MockComponentImpl</implementation>
     </component>
   </components>
 </component-set>
