@@ -21,7 +21,7 @@
     <artifactId>redback-struts2</artifactId>
     <version>1.2-SNAPSHOT</version>
   </parent>
-  <artifactId>redback-xwork-integration</artifactId>
+  <artifactId>redback-struts2-integration</artifactId>
   <name>Redback :: Integration :: Struts 2 Integration</name>
   <packaging>jar</packaging>
   <dependencies> 

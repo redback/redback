@@ -43,6 +43,11 @@ public class ActionProxyStub
         actionName = name;
     }
 
+    public void prepare() throws Exception
+    {
+        //Do nothing
+    }
+
     public String getActionName()
     {
         if ( actionName != null )

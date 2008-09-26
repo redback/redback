@@ -28,10 +28,12 @@
     <dependency>
       <groupId>org.codehaus.redback</groupId>
       <artifactId>redback-struts2-integration</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.redback</groupId>
       <artifactId>redback-struts2-taglib</artifactId>
+      <version>${project.version}</version>
     </dependency>
   </dependencies>
   <scm>
