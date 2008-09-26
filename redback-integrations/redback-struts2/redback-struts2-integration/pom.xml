@@ -18,11 +18,11 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.codehaus.redback</groupId>
-    <artifactId>redback-xwork</artifactId>
+    <artifactId>redback-struts2</artifactId>
     <version>1.2-SNAPSHOT</version>
   </parent>
   <artifactId>redback-xwork-integration</artifactId>
-  <name>Redback :: Integration :: XWork Integration</name>
+  <name>Redback :: Integration :: Struts 2 Integration</name>
   <packaging>jar</packaging>
   <dependencies> 
     <!-- ================================================================ -->
@@ -89,10 +89,6 @@
       <groupId>com.opensymphony</groupId>
       <artifactId>xwork</artifactId>
     </dependency> 
-    <dependency>
-      <groupId>org.apache.struts</groupId>
-      <artifactId>struts2-spring-plugin</artifactId>
-    </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
@@ -192,7 +188,7 @@
             <configuration>
               <roleDefaults>
                 <roleDefault>
-                  <role>com.opensymphony.xwork.Action</role>
+                  <role>com.opensymphony.xwork2.Action</role>
                   <instantiation-strategy>per-lookup</instantiation-strategy>
                 </roleDefault>
               </roleDefaults>

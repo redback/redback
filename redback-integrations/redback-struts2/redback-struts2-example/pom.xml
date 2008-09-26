@@ -17,13 +17,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>org.codehaus.redback</groupId>
-    <artifactId>redback-xwork</artifactId>
+    <artifactId>redback-struts2</artifactId>
     <version>1.2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>redback-xwork-example</artifactId>
+  <artifactId>redback-struts2-example</artifactId>
   <packaging>war</packaging>
-  <name>Redback :: Integration :: XWork Example Webapp</name>
+  <name>Redback :: Integration :: Struts 2 Example Webapp</name>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.redback</groupId>
@@ -33,7 +33,7 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.redback</groupId>
-      <artifactId>redback-xwork-integration</artifactId>
+      <artifactId>redback-struts2-integration</artifactId>
     </dependency>
     <dependency>
       <groupId>org.codehaus.redback</groupId>
@@ -41,7 +41,7 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.redback</groupId>
-      <artifactId>redback-taglib</artifactId>
+      <artifactId>redback-struts2-taglib</artifactId>
     </dependency>
    <dependency>
       <groupId>org.codehaus.redback</groupId>

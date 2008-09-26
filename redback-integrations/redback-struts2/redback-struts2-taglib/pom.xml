@@ -21,8 +21,8 @@
     <artifactId>redback-integrations</artifactId>
     <version>1.2-SNAPSHOT</version>
   </parent>
-  <artifactId>redback-taglib</artifactId>
-  <name>Redback :: Integration :: Taglib</name>
+  <artifactId>redback-struts2-taglib</artifactId>
+  <name>Redback :: Integration :: Struts 2 Taglib</name>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.redback</groupId>
