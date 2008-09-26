@@ -14,29 +14,29 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/struts-tags" %>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
-<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
+<s:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
-  <title><ww:text name="validation.notification.page.title"/></title>
+  <title><s:text name="validation.notification.page.title"/></title>
 </head>
 
 <body>
 
 <%@ include file="/WEB-INF/jsp/redback/include/formValidationResults.jsp" %>
 
-<h2><ww:text name="validation.notification.section.title"/></h2>
+<h2><s:text name="validation.notification.section.title"/></h2>
 
 <p>
-  <ww:text name="validation.notification.message.1"><ww:param>(${user.email}).</ww:param></ww:text>
+  <s:text name="validation.notification.message.1"><s:param>(${user.email}).</s:param></s:text>
 </p>
 
 <p>
-  <ww:text name="validation.notification.message.2"><ww:param>${user.email}</ww:param></ww:text>
+  <s:text name="validation.notification.message.2"><s:param>${user.email}</s:param></s:text>
 </p>
 
 </body>
-</ww:i18n>
+</s:i18n>
 </html>

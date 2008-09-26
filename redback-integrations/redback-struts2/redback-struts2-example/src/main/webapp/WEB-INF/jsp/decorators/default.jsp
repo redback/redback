@@ -15,7 +15,7 @@
   --%>
 
 <%@ taglib uri="http://www.opensymphony.com/sitemesh/decorator" prefix="decorator" %>
-<%@ taglib uri="/struts-tags" prefix="ww" %>
+<%@ taglib uri="/struts-tags" prefix="s" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="redback" uri="http://plexus.codehaus.org/redback/taglib-1.0" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -36,8 +36,8 @@
 <body onload="<decorator:getProperty property="body.onload" />" class="composite">
 
 <div id="banner">
-  <ww:url id="main" action="main" namespace="/" includeParams="none"/>
-  <h1><ww:a href="%{main}">Plexus Redback XWork Example Webapp</ww:a></h1>
+  <s:url id="main" action="main" namespace="/" includeParams="none"/>
+  <h1><s:a href="%{main}">Plexus Redback XWork Example Webapp</s:a></h1>
   <div class="clear">
   </div>
 </div>

@@ -14,13 +14,13 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/struts-tags" %>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
-<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
+<s:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
-  <title><ww:text name="alert.page.title"/></title>
+  <title><s:text name="alert.page.title"/></title>
 </head>
 
 <body>
@@ -28,7 +28,7 @@
 <div id="contentArea">
   <div id="searchBox">
     <div id="results">
-      <ww:text name="alert.message"/>
+      <s:text name="alert.message"/>
     </div>
   </div>
 </div>
@@ -38,5 +38,5 @@
 </div>
 
 </body>
-</ww:i18n>
+</s:i18n>
 </html>

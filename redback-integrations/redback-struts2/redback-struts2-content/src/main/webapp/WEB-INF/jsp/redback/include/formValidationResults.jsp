@@ -14,15 +14,15 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/struts-tags" %>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 
 <div id="results">
   <%-- This is where the "Account Created Successfully" type message goes. --%>
   <div class="success">
-    <ww:actionmessage />
+    <s:actionmessage />
   </div>
   <%-- This is where errors from the action and other non-form field specific errors appear. --%>
   <div class="errors">
-    <ww:actionerror />
+    <s:actionerror />
   </div>
 </div>

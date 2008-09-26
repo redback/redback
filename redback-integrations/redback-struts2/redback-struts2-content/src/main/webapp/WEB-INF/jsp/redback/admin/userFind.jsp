@@ -14,9 +14,9 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/struts-tags"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 
-<ww:form cssClass="find" action="user" name="find" method="post" namespace="/security/admin">
-  <ww:textfield label="%{getText('user.find')}" name="username" />
-  <ww:submit value="%{getText('search')}" />
-</ww:form>
+<s:form cssClass="find" action="user" name="find" method="post" namespace="/security/admin">
+  <s:textfield label="%{getText('user.find')}" name="username" />
+  <s:submit value="%{getText('search')}" />
+</s:form>

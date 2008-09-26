@@ -14,36 +14,36 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/struts-tags"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="redback" uri="http://plexus.codehaus.org/redback/taglib-1.0"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
-<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
+<s:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
-  <title><ww:text name="role.create.page.title"/></title>
+  <title><s:text name="role.create.page.title"/></title>
 </head>
 
 <body>
 
 <%@ include file="/WEB-INF/jsp/redback/include/formValidationResults.jsp" %>
 
-<h2><ww:text name="role.create.section.title"/></h2>
+<h2><s:text name="role.create.section.title"/></h2>
 
-<ww:form action="rolecreate!submit" method="post" theme="xhtml"
+<s:form action="rolecreate!submit" method="post" theme="xhtml"
          name="roleCreateForm" cssClass="securiy rolecreate">
-  <ww:textfield label="%{getText('role.name')}" name="roleName" />
-  <ww:textfield label="%{getText('role.description')}" name="description" />
+  <s:textfield label="%{getText('role.name')}" name="roleName" />
+  <s:textfield label="%{getText('role.description')}" name="description" />
   <tr>
-    <td valign="top"><ww:text name="permissions"/></td>
+    <td valign="top"><s:text name="permissions"/></td>
     <td>
     
       <table cellspacing="0" cellpadding="2" cssClass="permission">
         <thead>
         <tr>
-          <th><ww:text name="name"/></th>
-          <th><ww:text name="role.create.operation"/></th>
-          <th><ww:text name="role.create.resource"/></th>
+          <th><s:text name="name"/></th>
+          <th><s:text name="role.create.operation"/></th>
+          <th><s:text name="role.create.resource"/></th>
         </tr>
         </thead>
       <c:choose>
@@ -66,22 +66,22 @@
           </c:forEach>
         </c:when>
         <c:otherwise>
-          <em><ww:text name="role.create.no.permissions.defined"/></em>
+          <em><s:text name="role.create.no.permissions.defined"/></em>
         </c:otherwise>
       </c:choose>
       
       <tr class="addPermission">
         <td>
-          <ww:textfield name="addpermission.name" theme="simple"/>
+          <s:textfield name="addpermission.name" theme="simple"/>
         </td>
         <td>
-          <ww:textfield name="addpermission.operationName" theme="simple" />
+          <s:textfield name="addpermission.operationName" theme="simple" />
         </td>
         <td>
-          <ww:textfield name="addpermission.resourceIdentifier" theme="simple" />
+          <s:textfield name="addpermission.resourceIdentifier" theme="simple" />
         </td>
         <td>
-          <ww:submit value="%{getText('role.create.add.permission')}" theme="simple" 
+          <s:submit value="%{getText('role.create.add.permission')}" theme="simple" 
                      onclick="setSubmitMode('addPermission')" />
         </td>
       </tr>
@@ -89,9 +89,9 @@
       
     </td>
   </tr>
-  <ww:hidden name="submitMode" value="normal" />
-  <ww:submit value="%{getText('submit')}" onclick="setSubmitMode('normal')" />
-</ww:form>
+  <s:hidden name="submitMode" value="normal" />
+  <s:submit value="%{getText('submit')}" onclick="setSubmitMode('normal')" />
+</s:form>
 
 <script language="javascript">
   function setSubmitMode(mode)
@@ -101,5 +101,5 @@
 </script>
 
 </body>
-</ww:i18n>
+</s:i18n>
 </html>

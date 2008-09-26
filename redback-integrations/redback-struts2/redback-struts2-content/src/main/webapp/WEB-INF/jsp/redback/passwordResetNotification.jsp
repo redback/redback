@@ -14,26 +14,26 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/struts-tags" %>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
-<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
+<s:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
-  <title><ww:text name="password.reset.page.title"/></title>
+  <title><s:text name="password.reset.page.title"/></title>
 </head>
 
 <body>
 
 <p>
-  <ww:text name="password.reset.message"/>
+  <s:text name="password.reset.message"/>
 </p>
 
 <p>
-<ww:url id="loginUrl" action="login" />
-<ww:text name="password.reset.go.to"/><ww:a href="%{loginUrl}"><ww:text name="login"/></ww:a>
+<s:url id="loginUrl" action="login" />
+<s:text name="password.reset.go.to"/><s:a href="%{loginUrl}"><s:text name="login"/></s:a>
 </p>
 
 </body>
-</ww:i18n>
+</s:i18n>
 </html>

@@ -14,28 +14,28 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/struts-tags" %>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
-<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
+<s:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
-  <title><ww:text name="request.password.reset.page.title"/></title>
+  <title><s:text name="request.password.reset.page.title"/></title>
 </head>
 
 <body onload="javascript:document.forms['passwordReset'].username.focus();">
 
-<h2><ww:text name="request.password.reset.section.title"/></h2>
+<h2><s:text name="request.password.reset.section.title"/></h2>
 
 <%@ include file="/WEB-INF/jsp/redback/include/formValidationResults.jsp" %>
 
-<ww:form action="passwordReset" namespace="/security" theme="xhtml" 
+<s:form action="passwordReset" namespace="/security" theme="xhtml" 
          id="passwordResetForm" method="post" name="passwordReset" cssClass="security passwordReset">
-  <ww:textfield label="%{getText('username')}" name="username" size="30" required="true" />
-  <ww:submit value="%{getText('request.password.reset')}" method="reset" />
-  <ww:submit value="%{getText('cancel')}" method="cancel" />
-</ww:form>
+  <s:textfield label="%{getText('username')}" name="username" size="30" required="true" />
+  <s:submit value="%{getText('request.password.reset')}" method="reset" />
+  <s:submit value="%{getText('cancel')}" method="cancel" />
+</s:form>
 
 </body>
-</ww:i18n>
+</s:i18n>
 </html>

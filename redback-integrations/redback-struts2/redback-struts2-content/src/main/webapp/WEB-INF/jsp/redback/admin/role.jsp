@@ -14,26 +14,26 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/struts-tags"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.extremecomponents.org" prefix="ec" %>
 
 <html>
-<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
+<s:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
-  <title><ww:text name="role.page.title"/></title>
+  <title><s:text name="role.page.title"/></title>
 </head>
 
 <body>
 
   <%@ include file="/WEB-INF/jsp/redback/include/formValidationResults.jsp" %>
 
-  <h2><ww:text name="role"/></h2>
+  <h2><s:text name="role"/></h2>
 
   <div class="axial">
     <table border="1" cellspacing="2" cellpadding="3" width="100%">
-      <ww:label label="%{getText('name')}" name="name"/>
-      <ww:label label="%{getText('description')}" name="description"/>
+      <s:label label="%{getText('name')}" name="name"/>
+      <s:label label="%{getText('description')}" name="description"/>
     </table>
   </div>
 
@@ -44,39 +44,39 @@
     </form>
   </div>
 
-  <h3><ww:text name="role.model.parent.roles"/></h3>
+  <h3><s:text name="role.model.parent.roles"/></h3>
   <c:if test="${empty parentRoleNames}">
-    <ww:text name="role.edit.no.parent.defined"/>
+    <s:text name="role.edit.no.parent.defined"/>
   </c:if>
   <c:if test="${!empty parentRoleNames}">
     <ul>
-    <ww:iterator id="parentRoleName" value="parentRoleNames">
-      <ww:url id="roleUrl" action="role" includeParams="none">
-        <ww:param name="name">${parentRoleName}</ww:param>
-      </ww:url>
-      <li><ww:a href="%{roleUrl}">${parentRoleName}</ww:a></li>
-    </ww:iterator>
+    <s:iterator id="parentRoleName" value="parentRoleNames">
+      <s:url id="roleUrl" action="role" includeParams="none">
+        <s:param name="name">${parentRoleName}</s:param>
+      </s:url>
+      <li><s:a href="%{roleUrl}">${parentRoleName}</s:a></li>
+    </s:iterator>
     </ul>
   </c:if>
 
-  <h3><ww:text name="role.model.child.roles"/></h3>
+  <h3><s:text name="role.model.child.roles"/></h3>
   <c:if test="${empty childRoleNames}">
-    <ww:text name="role.edit.no.childrole.defined"/>
+    <s:text name="role.edit.no.childrole.defined"/>
   </c:if>
   <c:if test="${!empty childRoleNames}">
     <ul>
-    <ww:iterator id="childRoleName" value="childRoleNames">
-      <ww:url id="roleUrl" action="role" includeParams="none">
-        <ww:param name="name">${childRoleName}</ww:param>
-      </ww:url>
-      <li><ww:a href="%{roleUrl}">${childRoleName}</ww:a></li>
-    </ww:iterator>
+    <s:iterator id="childRoleName" value="childRoleNames">
+      <s:url id="roleUrl" action="role" includeParams="none">
+        <s:param name="name">${childRoleName}</s:param>
+      </s:url>
+      <li><s:a href="%{roleUrl}">${childRoleName}</s:a></li>
+    </s:iterator>
     </ul>
   </c:if>
 
-  <h3><ww:text name="permissions"/></h3>
+  <h3><s:text name="permissions"/></h3>
   <c:if test="${empty permissions}">
-    <ww:text name="role.create.no.permissions.defined"/>
+    <s:text name="role.create.no.permissions.defined"/>
   </c:if>
   <c:if test="${!empty permissions}">
     <ec:table var="permission"
@@ -96,33 +96,33 @@
     </ec:table>
   </c:if>
 
-  <h3><ww:text name="role.edit.section.users"/></h3>
+  <h3><s:text name="role.edit.section.users"/></h3>
   <c:if test="${!empty parentUsers}">
-    <h4><ww:text name="role.edit.users.defined.in.parent.roles"/></h4>
+    <h4><s:text name="role.edit.users.defined.in.parent.roles"/></h4>
     <ul>
-      <ww:iterator id="user" value="parentUsers">
-        <ww:url id="usereditUrl" action="useredit" includeParams="none">
-          <ww:param name="username">${user.username}</ww:param>
-        </ww:url>
-        <li><ww:a href="%{usereditUrl}">${user.fullName} (${user.username} - ${user.email})</ww:a></li>
-      </ww:iterator>
+      <s:iterator id="user" value="parentUsers">
+        <s:url id="usereditUrl" action="useredit" includeParams="none">
+          <s:param name="username">${user.username}</s:param>
+        </s:url>
+        <li><s:a href="%{usereditUrl}">${user.fullName} (${user.username} - ${user.email})</s:a></li>
+      </s:iterator>
     </ul>
   </c:if>
-  <h4><ww:text name="role.edit.users.defined.in.current.role"/></h4>
+  <h4><s:text name="role.edit.users.defined.in.current.role"/></h4>
   <c:if test="${empty users}">
-    <ww:text name="role.edit.no.user.defined"/>
+    <s:text name="role.edit.no.user.defined"/>
   </c:if>
   <c:if test="${!empty users}">
     <ul>
-      <ww:iterator id="user" value="users">
-        <ww:url id="usereditUrl" action="useredit" includeParams="none">
-          <ww:param name="username">${user.username}</ww:param>
-        </ww:url>
-        <li><ww:a href="%{usereditUrl}">${user.fullName} (${user.username} - ${user.email})</ww:a></li>
-      </ww:iterator>
+      <s:iterator id="user" value="users">
+        <s:url id="usereditUrl" action="useredit" includeParams="none">
+          <s:param name="username">${user.username}</s:param>
+        </s:url>
+        <li><s:a href="%{usereditUrl}">${user.fullName} (${user.username} - ${user.email})</s:a></li>
+      </s:iterator>
     </ul>
   </c:if>
 
 </body>
-</ww:i18n>
+</s:i18n>
 </html>

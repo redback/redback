@@ -14,32 +14,32 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/struts-tags"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 
 <html>
-<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
+<s:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
-  <title><ww:text name="user.delete.page.title"/></title>
+  <title><s:text name="user.delete.page.title"/></title>
 </head>
 
 <body>
 
-<h2><ww:text name="user.delete.section.title"/></h2>
+<h2><s:text name="user.delete.section.title"/></h2>
 
-<ww:form action="userdelete!submit" namespace="/security">
+<s:form action="userdelete!submit" namespace="/security">
   <p>
-    <ww:text name="user.delete.message"/>:
+    <s:text name="user.delete.message"/>:
   </p>
   <p>
-  	<ww:text name="username"/>: <ww:property value="user.username"/><br/>
-  	<ww:text name="full.name"/>: <ww:property value="user.fullName"/><br/>
-  	<ww:text name="email"/>: <ww:property value="user.email"/><br/>
+  	<s:text name="username"/>: <s:property value="user.username"/><br/>
+  	<s:text name="full.name"/>: <s:property value="user.fullName"/><br/>
+  	<s:text name="email"/>: <s:property value="user.email"/><br/>
   </p>
-  <ww:hidden label="Username" name="username" />
-  <ww:submit value="%{getText('user.delete')}" />
-  <ww:submit value="%{getText('cancel')}" action="userdelete!cancel"/>
-</ww:form>
+  <s:hidden label="Username" name="username" />
+  <s:submit value="%{getText('user.delete')}" />
+  <s:submit value="%{getText('cancel')}" action="userdelete!cancel"/>
+</s:form>
 
 </body>
-</ww:i18n>
+</s:i18n>
 </html>

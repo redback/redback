@@ -13,21 +13,21 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   --%>
-<%@ taglib prefix="ww" uri="/struts-tags" %>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://plexus.codehaus.org/redback/taglib-1.0" prefix="redback" %>
 
 <c:choose>
   <c:when test="${user.edit}">
-    <ww:label label="%{getText('username')}"         name="user.username" />
-    <ww:hidden name="user.username" />
+    <s:label label="%{getText('username')}"         name="user.username" />
+    <s:hidden name="user.username" />
   </c:when>
   <c:otherwise> 
   	<redback:isReadOnlyUserManager>
-	  <ww:label label="%{getText('username')}"         name="user.username" />
+	  <s:label label="%{getText('username')}"         name="user.username" />
 	</redback:isReadOnlyUserManager>
 	<redback:isNotReadOnlyUserManager>
-      <ww:textfield label="%{getText('username')}"         name="user.username" size="30" required="true"/>
+      <s:textfield label="%{getText('username')}"         name="user.username" size="30" required="true"/>
 	</redback:isNotReadOnlyUserManager>
   </c:otherwise>
 </c:choose>
@@ -35,40 +35,40 @@
  
   
   <redback:isReadOnlyUserManager>
-    <ww:label label="%{getText('full.name')}"         name="user.fullName" />
+    <s:label label="%{getText('full.name')}"         name="user.fullName" />
   </redback:isReadOnlyUserManager>
   <redback:isNotReadOnlyUserManager>
-    <ww:textfield label="%{getText('full.name')}"        name="user.fullName" size="30" required="true"/>
+    <s:textfield label="%{getText('full.name')}"        name="user.fullName" size="30" required="true"/>
   </redback:isNotReadOnlyUserManager>
   
   <redback:isReadOnlyUserManager>
-    <ww:label label="%{getText('email.address')}"         name="user.email" />
+    <s:label label="%{getText('email.address')}"         name="user.email" />
   </redback:isReadOnlyUserManager>
   <redback:isNotReadOnlyUserManager>
-    <ww:textfield label="%{getText('email.address')}"    name="user.email" size="50"    required="true"/>
+    <s:textfield label="%{getText('email.address')}"    name="user.email" size="50"    required="true"/>
   </redback:isNotReadOnlyUserManager>
   
   <redback:isNotReadOnlyUserManager>
   <c:choose>
     <c:when test="${self}">
-      <ww:password  label="%{getText('current.password')}"         name="oldPassword" size="20" required="true"/>
-      <ww:password  label="%{getText('new.password')}"         name="user.password" size="20" required="true"/>
+      <s:password  label="%{getText('current.password')}"         name="oldPassword" size="20" required="true"/>
+      <s:password  label="%{getText('new.password')}"         name="user.password" size="20" required="true"/>
     </c:when>
     <c:otherwise>
-      <ww:password  label="%{getText('password')}"         name="user.password" size="20" required="true"/>
+      <s:password  label="%{getText('password')}"         name="user.password" size="20" required="true"/>
     </c:otherwise>
   </c:choose>
-  <ww:password  label="%{getText('confirm.password')}" name="user.confirmPassword" size="20" required="true"/>
+  <s:password  label="%{getText('confirm.password')}" name="user.confirmPassword" size="20" required="true"/>
   </redback:isNotReadOnlyUserManager>
 
-<ww:if test="%{user.timestampAccountCreation != null}">
-  <ww:label     label="%{getText('account.creation')}"     name="user.timestampAccountCreation" />
-</ww:if>
+<s:if test="%{user.timestampAccountCreation != null}">
+  <s:label     label="%{getText('account.creation')}"     name="user.timestampAccountCreation" />
+</s:if>
 
-<ww:if test="%{user.timestampLastLogin != null}">
-  <ww:label     label="%{getText('last.login')}"           name="user.timestampLastLogin" />
-</ww:if>
+<s:if test="%{user.timestampLastLogin != null}">
+  <s:label     label="%{getText('last.login')}"           name="user.timestampLastLogin" />
+</s:if>
 
-<ww:if test="%{user.timestampLastPasswordChange != null}">
-  <ww:label     label="%{getText('last.password.change')}" name="user.timestampLastPasswordChange" />
-</ww:if>
+<s:if test="%{user.timestampLastPasswordChange != null}">
+  <s:label     label="%{getText('last.password.change')}" name="user.timestampLastPasswordChange" />
+</s:if>

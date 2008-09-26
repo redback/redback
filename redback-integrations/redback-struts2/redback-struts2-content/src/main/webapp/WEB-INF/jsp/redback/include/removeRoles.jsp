@@ -5,10 +5,10 @@
   Time: 1:50:21 AM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ taglib uri="/struts-tags" prefix="ww" %>
+<%@ taglib uri="/struts-tags" prefix="s" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-    <ww:form action="user" name="removeRole" method="post" namespace="/security/admin">
-      <ww:hidden name="principal" value="${username}" />
-      <ww:select name="roleName" list="assignedRoles" labelposition="top" />
-      <ww:submit value="%{getText('remove')}" />
-    </ww:form>
+    <s:form action="user" name="removeRole" method="post" namespace="/security/admin">
+      <s:hidden name="principal" value="${username}" />
+      <s:select name="roleName" list="assignedRoles" labelposition="top" />
+      <s:submit value="%{getText('remove')}" />
+    </s:form>

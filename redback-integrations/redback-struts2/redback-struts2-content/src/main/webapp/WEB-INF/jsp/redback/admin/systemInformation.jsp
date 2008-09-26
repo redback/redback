@@ -14,23 +14,23 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/struts-tags"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
-<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
+<s:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
-  <title><ww:text name="system.info.page.title"/></title>
+  <title><s:text name="system.info.page.title"/></title>
 </head>
 
 <body>
 
-<h4><ww:text name="system.info.section.title"/></h4>
+<h4><s:text name="system.info.section.title"/></h4>
 
 <pre>
 ${details}
 </pre>
 
 </body>
-</ww:i18n>
+</s:i18n>
 </html>

@@ -14,16 +14,16 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/struts-tags" %>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://plexus.codehaus.org/redback/taglib-1.0" prefix="redback" %>
 <%@ taglib uri="http://www.extremecomponents.org" prefix="ec" %>
 
 <html> 
-<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
+<s:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
-  <title><ww:text name="user.list.page.title"/></title>
-  <link rel="stylesheet" type="text/css" href="<ww:url value="/css/redback/table.css"/>" media="screen"/>
+  <title><s:text name="user.list.page.title"/></title>
+  <link rel="stylesheet" type="text/css" href="<s:url value="/css/redback/table.css"/>" media="screen"/>
 </head>
 
 <body>
@@ -31,15 +31,15 @@
 <%@ include file="/WEB-INF/jsp/redback/include/formValidationResults.jsp" %>
 
 <!-- ec on redback should not be dependent on the resource bundle of the project using it -->
-<ww:set name="username" value="%{getText('username')}"/>
-<ww:set name="fullName" value="%{getText('full.name')}"/>
-<ww:set name="email" value="%{getText('email')}"/>
-<ww:set name="permanent" value="%{getText('user.list.permanent')}"/>
-<ww:set name="validated" value="%{getText('user.list.validated')}"/>
-<ww:set name="locked" value="%{getText('user.list.locked')}"/>
-<ww:set name="tasks" value="%{getText('user.list.tasks')}"/>
+<s:set name="username" value="%{getText('username')}"/>
+<s:set name="fullName" value="%{getText('full.name')}"/>
+<s:set name="email" value="%{getText('email')}"/>
+<s:set name="permanent" value="%{getText('user.list.permanent')}"/>
+<s:set name="validated" value="%{getText('user.list.validated')}"/>
+<s:set name="locked" value="%{getText('user.list.locked')}"/>
+<s:set name="tasks" value="%{getText('user.list.tasks')}"/>
 
-<h2><ww:text name="user.list.section.title"><ww:param>${roleName}</ww:param></ww:text></h2>
+<h2><s:text name="user.list.section.title"><s:param>${roleName}</s:param></s:text></h2>
 
 <table class="outerTableRegion" cellpadding="0" cellspacing="0">
 <tr>
@@ -74,17 +74,17 @@
         	filterCell="org.codehaus.plexus.redback.struts2.eXc.SecurityFilterCell">
           <img src="<c:url value="/images/redback/icon-user.gif"/>" />
           <redback:ifAuthorized permission="user-management-user-edit" resource="${user.username}">
-            <ww:url id="usereditUrl" action="useredit">
-              <ww:param name="username">${user.username}</ww:param>
-            </ww:url>
-            <ww:a href="%{usereditUrl}">${user.username}</ww:a>
+            <s:url id="usereditUrl" action="useredit">
+              <s:param name="username">${user.username}</s:param>
+            </s:url>
+            <s:a href="%{usereditUrl}">${user.username}</s:a>
           </redback:ifAuthorized>
           <redback:elseAuthorized>
             <redback:ifAuthorized permission="user-management-user-role" resource="${user.username}">
-              <ww:url id="usereditUrl" action="useredit">
-                <ww:param name="username">${user.username}</ww:param>
-              </ww:url>
-              <ww:a href="%{usereditUrl}">${user.username}</ww:a>
+              <s:url id="usereditUrl" action="useredit">
+                <s:param name="username">${user.username}</s:param>
+              </s:url>
+              <s:a href="%{usereditUrl}">${user.username}</s:a>
             </redback:ifAuthorized>
             <redback:elseAuthorized>
               ${user.username}
@@ -105,12 +105,12 @@
         <ec:column title="${tasks}" alias="tasks" sortable="false" filterable="false" styleClass="tasks">
           <c:if test="${user.permanent eq false}">
             <redback:ifAuthorized permission="user-management-user-delete" resource="${user.username}">
-              <ww:url id="userdeleteUrl" action="userdelete">
-                <ww:param name="username">${user.username}</ww:param>
-              </ww:url>
-              <ww:a href="#userdeleteUrl" title="getText('delete') #user.username">
+              <s:url id="userdeleteUrl" action="userdelete">
+                <s:param name="username">${user.username}</s:param>
+              </s:url>
+              <s:a href="#userdeleteUrl" title="getText('delete') #user.username">
                 <img src="<c:url value="/images/redback/delete.gif"/>" border="none"/>
-              </ww:a>              
+              </s:a>              
             </redback:ifAuthorized>
           </c:if>
         </ec:column>
@@ -125,9 +125,9 @@
 <td>
     <redback:ifAuthorized permission="user-management-user-create">
       <div class="task createUser">
-        <ww:form action="usercreate!show" namespace="/security" theme="simple" method="post">
-          <ww:submit cssClass="button" value="Create New User" />
-        </ww:form>
+        <s:form action="usercreate!show" namespace="/security" theme="simple" method="post">
+          <s:submit cssClass="button" value="Create New User" />
+        </s:form>
       </div>
     </redback:ifAuthorized>
 </td>
@@ -136,42 +136,42 @@
 
 <br>
 <br>
-<b><ww:text name="user.list.tools"/></b>
+<b><s:text name="user.list.tools"/></b>
 <br>
 
 <table class="tools" border="0" cellspacing="1" cellpadding="0">
 
 <tr>
-  <th class="toolHeading"><ww:text name="user.list.tasks"/></th>
-  <th class="toolHeading column"><ww:text name="user.list.reports"/></th>
+  <th class="toolHeading"><s:text name="user.list.tasks"/></th>
+  <th class="toolHeading column"><s:text name="user.list.reports"/></th>
 </tr>
 
 <tr>
   <td valign="top">
-    <p class="description"><ww:text name="user.list.message"/></p>
+    <p class="description"><s:text name="user.list.message"/></p>
      
     <redback:isNotReadOnlyUserManager>
     <redback:ifAuthorized permission="user-management-user-create">
       <div class="task createUser">
-        <ww:form action="usercreate!show" namespace="/security" theme="simple" method="post">
-          <ww:submit cssClass="button" value="%{getText('user.list.create.new.user')}" />
-        </ww:form>
+        <s:form action="usercreate!show" namespace="/security" theme="simple" method="post">
+          <s:submit cssClass="button" value="%{getText('user.list.create.new.user')}" />
+        </s:form>
       </div>
     </redback:ifAuthorized>
     </redback:isNotReadOnlyUserManager>
 
     <div class="task showRoles">
-      <ww:form action="userlist!show" namespace="/security" theme="simple" method="get">
-        <ww:submit cssClass="button" value="%{getText('user.list.show.users.in.role')}" />
+      <s:form action="userlist!show" namespace="/security" theme="simple" method="get">
+        <s:submit cssClass="button" value="%{getText('user.list.show.users.in.role')}" />
         
-        <ww:select list="roles"
+        <s:select list="roles"
                    name="roleName"
                    value="roleName"
                    listKey="name"
                    listValue="name"
                    headerKey=""
                    headerValue="Any"/>
-      </ww:form>
+      </s:form>
     </div>
     
   </td>
@@ -179,8 +179,8 @@
   <td valign="top" class="column">
     <table cellspacing="0" cellpadding="0" border="0" class="reports">
       <tr>
-        <th><ww:text name="name"/></th>
-        <th><ww:text name="user.list.types"/></th>
+        <th><s:text name="name"/></th>
+        <th><s:text name="user.list.types"/></th>
       </tr>
       
       <c:forEach items="${reportMap}" var="reportEntry">
@@ -208,5 +208,5 @@
 </table>
 
 </body>
-</ww:i18n>
+</s:i18n>
 </html>

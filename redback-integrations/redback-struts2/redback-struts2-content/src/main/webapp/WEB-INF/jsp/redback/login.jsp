@@ -14,14 +14,14 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/struts-tags" %>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://plexus.codehaus.org/redback/taglib-1.0" prefix="redback" %>
 
 <html>
-<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
+<s:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
-  <title><ww:text name="login.page.title"/></title>
+  <title><s:text name="login.page.title"/></title>
 </head>
 
 <body onload="javascript:document.forms['login'].username.focus();">
@@ -30,49 +30,49 @@
 <c:choose>
   <c:when test="${sessionScope.securitySession.authenticated != true}">
   
-  <h2><ww:text name="login.section.title"/></h2>
+  <h2><s:text name="login.section.title"/></h2>
 
   <%@ include file="/WEB-INF/jsp/redback/include/formValidationResults.jsp" %>
   
   
-    <ww:form action="login" namespace="/security" theme="xhtml" 
+    <s:form action="login" namespace="/security" theme="xhtml" 
          id="loginForm" method="post" name="login" cssClass="security login">
-      <ww:textfield label="%{getText('username')}" name="username" size="30" />
-      <ww:password  label="%{getText('password')}" name="password" size="20" />
-      <ww:checkbox label="%{getText('login.remember.me')}" name="rememberMe" value="false" />
-      <ww:submit value="%{getText('login')}" method="login" />
-      <ww:submit value="%{getText('cancel')}" method="cancel" />
-  </ww:form>
+      <s:textfield label="%{getText('username')}" name="username" size="30" />
+      <s:password  label="%{getText('password')}" name="password" size="20" />
+      <s:checkbox label="%{getText('login.remember.me')}" name="rememberMe" value="false" />
+      <s:submit value="%{getText('login')}" method="login" />
+      <s:submit value="%{getText('cancel')}" method="cancel" />
+  </s:form>
 <%-- TODO: Figure out how to auto-focus to first field --%>
 
 <ul class="tips">
   <%--
   <li>
      Forgot your Username? 
-     <ww:url id="forgottenAccount" action="findAccount" />
-     <ww:a href="%{forgottenAccount}">Email me my account information.</ww:a>
+     <s:url id="forgottenAccount" action="findAccount" />
+     <s:a href="%{forgottenAccount}">Email me my account information.</s:a>
   </li>
     --%>
   <redback:isNotReadOnlyUserManager>
   <li>
-     <ww:text name="login.need.an.account"/>
-     <ww:url id="registerUrl" action="register" />
-     <ww:a href="%{registerUrl}"><ww:text name="login.register"/></ww:a>
+     <s:text name="login.need.an.account"/>
+     <s:url id="registerUrl" action="register" />
+     <s:a href="%{registerUrl}"><s:text name="login.register"/></s:a>
   </li>
   <li>
-     <ww:text name="login.forgot.your.password"/>
-     <ww:url id="forgottenPassword" action="passwordReset" />
-     <ww:a href="%{forgottenPassword}"><ww:text name="login.request.password.reset"/></ww:a>
+     <s:text name="login.forgot.your.password"/>
+     <s:url id="forgottenPassword" action="passwordReset" />
+     <s:a href="%{forgottenPassword}"><s:text name="login.request.password.reset"/></s:a>
   </li>
   </redback:isNotReadOnlyUserManager>
 </ul>
 </c:when>
 <c:otherwise>
   <p/>
-	<ww:text name="login.already.logged.in"/>
+	<s:text name="login.already.logged.in"/>
   <p/>
 </c:otherwise>
 </c:choose>
 </body>
-</ww:i18n>
+</s:i18n>
 </html>

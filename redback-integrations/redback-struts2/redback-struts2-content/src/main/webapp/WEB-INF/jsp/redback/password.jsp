@@ -14,36 +14,36 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/struts-tags" %>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
-<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
+<s:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
-  <title><ww:text name="password.page.title"/></title>
+  <title><s:text name="password.page.title"/></title>
 </head>
 
 <body onload="javascript:document.forms['password'].existingPassword.focus();">
 
-<h2><ww:text name="password.section.title"/></h2>
+<h2><s:text name="password.section.title"/></h2>
 
 <%@ include file="/WEB-INF/jsp/redback/include/formValidationResults.jsp" %>
 
-<ww:form action="password" namespace="/security" theme="xhtml" 
+<s:form action="password" namespace="/security" theme="xhtml" 
          id="passwordForm" method="post" name="password" cssClass="security password">
   <c:if test="${provideExisting}">
-    <ww:password  label="%{getText('password.existing')}" name="existingPassword" size="20" required="true" />
+    <s:password  label="%{getText('password.existing')}" name="existingPassword" size="20" required="true" />
   </c:if>
-  <ww:password  label="%{getText('password.new')}" name="newPassword" size="20" required="true" />
-  <ww:password  label="%{getText('password.new.confirm')}" name="newPasswordConfirm" size="20" required="true" />
-  <ww:submit value="%{getText('password.change')}" method="submit" />
-  <ww:submit value="%{getText('cancel')}" method="cancel" />
-</ww:form>
+  <s:password  label="%{getText('password.new')}" name="newPassword" size="20" required="true" />
+  <s:password  label="%{getText('password.new.confirm')}" name="newPasswordConfirm" size="20" required="true" />
+  <s:submit value="%{getText('password.change')}" method="submit" />
+  <s:submit value="%{getText('cancel')}" method="cancel" />
+</s:form>
 
 <ul class="tips">
 
 </ul>
 
 </body>
-</ww:i18n>
+</s:i18n>
 </html>

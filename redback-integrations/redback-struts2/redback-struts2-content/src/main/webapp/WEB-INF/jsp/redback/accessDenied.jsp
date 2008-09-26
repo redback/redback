@@ -14,26 +14,26 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/struts-tags" %>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 
 <html>
-<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
+<s:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
-  <title><ww:text name="access.denied.page.title"/></title>
+  <title><s:text name="access.denied.page.title"/></title>
 </head>
 
 <body>
 
-<h4><ww:text name="access.denied.section.title"/></h4>
+<h4><s:text name="access.denied.section.title"/></h4>
 
 <div id="results">
   <%-- This is where the "Account Created Successfully" type message goes. --%>
   <div class="success">
-    <ww:actionmessage />
+    <s:actionmessage />
   </div>
   <%-- This is where errors from the action and other non-form field specific errors appear. --%>
   <div class="errors">
-    <ww:actionerror />
+    <s:actionerror />
   </div>
 </div>
 
@@ -42,5 +42,5 @@
 </p>
 
 </body>
-</ww:i18n>
+</s:i18n>
 </html>

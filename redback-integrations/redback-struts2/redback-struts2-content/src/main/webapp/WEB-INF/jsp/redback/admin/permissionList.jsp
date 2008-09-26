@@ -14,24 +14,24 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/struts-tags"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
-<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
+<s:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
-  <title><ww:text name="permission.list.page.title"/></title>
+  <title><s:text name="permission.list.page.title"/></title>
 </head>
 
 <body>
 
 <%@ include file="/WEB-INF/jsp/redback/include/rbacListNavigation.jsp" %>
 
-<h2><ww:text name="permission.list.section.title"/></h2>
+<h2><s:text name="permission.list.section.title"/></h2>
 
 <%@ include file="/WEB-INF/jsp/redback/include/formValidationResults.jsp" %>
 
-<ww:form action="permissions!remove" method="post" theme="simple">
+<s:form action="permissions!remove" method="post" theme="simple">
 
   <table>
 
@@ -40,21 +40,21 @@
         <thead>
           <tr>
             <th>&nbsp;</th>
-            <th><ww:text name="name"/></th>
-            <th><ww:text name="description"/></th>
+            <th><s:text name="name"/></th>
+            <th><s:text name="description"/></th>
           </tr>
         </thead>
         
         <c:forEach var="permission" items="${allPermissions}">
           <tr>
             <td>
-              <ww:checkbox name="selectedPermissions" value="${permission.name}" />
+              <s:checkbox name="selectedPermissions" value="${permission.name}" />
             </td>
             <td>
-              <ww:url id="permissionUrl" action="permission-edit">
-                <ww:param name="permissionName" value="${permission.name}" />
-              </ww:url>
-              <ww:a href="%{permissionUrl}"><c:out value="${permission.name}" /></ww:a>
+              <s:url id="permissionUrl" action="permission-edit">
+                <s:param name="permissionName" value="${permission.name}" />
+              </s:url>
+              <s:a href="%{permissionUrl}"><c:out value="${permission.name}" /></s:a>
             </td>
             <td>
               <c:out value="${permission.description}" />
@@ -63,20 +63,20 @@
         </c:forEach>
       </c:when>
       <c:otherwise>
-        <p><em><ww:text name="permission.list.no.permissions.available"/></em></p>
+        <p><em><s:text name="permission.list.no.permissions.available"/></em></p>
       </c:otherwise>
     </c:choose>
     
     <tr>
       <td colspan="3">
-        <ww:submit value="%{getText('remove.selected.roles')}" />
+        <s:submit value="%{getText('remove.selected.roles')}" />
       </td>
     </tr>
 
   </table>
   
-</ww:form>
+</s:form>
 
 </body>
-</ww:i18n>
+</s:i18n>
 </html>

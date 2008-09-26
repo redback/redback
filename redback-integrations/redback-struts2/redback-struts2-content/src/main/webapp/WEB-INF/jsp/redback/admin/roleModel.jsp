@@ -14,151 +14,151 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/struts-tags"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="redback" uri="http://plexus.codehaus.org/redback/taglib-1.0"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
-<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
+<s:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
-  <title><ww:text name="role.model.page.title"/></title>
+  <title><s:text name="role.model.page.title"/></title>
 </head>
 
 <body>
 
 <%@ include file="/WEB-INF/jsp/redback/include/rbacListNavigation.jsp" %>
 
-<h2><ww:text name="role.model.section.title"/></h2>
+<h2><s:text name="role.model.section.title"/></h2>
 
-	<p><ww:text name="role.model.message"/></p>
+	<p><s:text name="role.model.message"/></p>
 
 <%@ include file="/WEB-INF/jsp/redback/include/formValidationResults.jsp" %>
 
 	<h4>${model.application}</h4>
 
-	<h5><ww:text name="resources"/>:</h5>
+	<h5><s:text name="resources"/>:</h5>
     <ul>
-      <ww:iterator id="resource" value="model.resources">
+      <s:iterator id="resource" value="model.resources">
       <li>
-        <ww:text name="role.model.id"/>: ${resource.id}<br/>
-        <ww:text name="role.model.name"/>: ${resource.name}<br/>
-        <ww:text name="role.model.permanent"/>: ${resource.permanent}<br/>
+        <s:text name="role.model.id"/>: ${resource.id}<br/>
+        <s:text name="role.model.name"/>: ${resource.name}<br/>
+        <s:text name="role.model.permanent"/>: ${resource.permanent}<br/>
         <br/>
       </li>
-      </ww:iterator>
+      </s:iterator>
     </ul>
 
-	<h5><ww:text name="operations"/>:</h5>
+	<h5><s:text name="operations"/>:</h5>
     <ul>
-      <ww:iterator id="operation" value="model.operations">
+      <s:iterator id="operation" value="model.operations">
         <li>
-	        <ww:text name="role.model.id"/>: ${operation.id}<br/>
-        	<ww:text name="role.model.name"/>: ${operation.name}<br/>
-        	<ww:text name="role.model.permanent"/>: ${operation.permanent}<br/>
+	        <s:text name="role.model.id"/>: ${operation.id}<br/>
+        	<s:text name="role.model.name"/>: ${operation.name}<br/>
+        	<s:text name="role.model.permanent"/>: ${operation.permanent}<br/>
         	<br/>
        	</li>
-      </ww:iterator>
+      </s:iterator>
     </ul>
     
-    <h5><ww:text name="roles"/>:</h5>
+    <h5><s:text name="roles"/>:</h5>
     <ul>
-      <ww:iterator id="role" value="model.roles">        
+      <s:iterator id="role" value="model.roles">        
         <li>
-            <ww:text name="role.model.id"/>: ${role.id}<br/>
-       		<ww:text name="role.model.name"/>: ${role.name}<br/>
-       		<ww:text name="role.model.permanent"/>: ${role.permanent}<br/>
-       		<ww:text name="role.model.assignable"/>: ${role.assignable}<br/>
-       		<ww:text name="permissions"/>:
+            <s:text name="role.model.id"/>: ${role.id}<br/>
+       		<s:text name="role.model.name"/>: ${role.name}<br/>
+       		<s:text name="role.model.permanent"/>: ${role.permanent}<br/>
+       		<s:text name="role.model.assignable"/>: ${role.assignable}<br/>
+       		<s:text name="permissions"/>:
        		<ul>
-       		  <ww:iterator id="permission" value="#role.permissions">
+       		  <s:iterator id="permission" value="#role.permissions">
        		  	<li>
-       		  	  <ww:text name="role.model.id"/>: ${permission.id}<br/>
-       		  	  <ww:text name="role.model.name"/>: ${permission.name}<br/>
-       		  	  <ww:text name="role.model.permanent"/>: ${permission.permanent}<br/>
-       		  	  <ww:text name="role.model.operation.id"/>: ${permission.operation}<br/>
-       		  	  <ww:text name="role.model.resource.id"/>: ${permission.resource}<br/>
+       		  	  <s:text name="role.model.id"/>: ${permission.id}<br/>
+       		  	  <s:text name="role.model.name"/>: ${permission.name}<br/>
+       		  	  <s:text name="role.model.permanent"/>: ${permission.permanent}<br/>
+       		  	  <s:text name="role.model.operation.id"/>: ${permission.operation}<br/>
+       		  	  <s:text name="role.model.resource.id"/>: ${permission.resource}<br/>
        		  	</li>
-       		  </ww:iterator>
+       		  </s:iterator>
        		</ul>
-       		<ww:text name="role.model.child.roles"/>:
+       		<s:text name="role.model.child.roles"/>:
        		<ul>
-       		  <ww:iterator id="childRole" value="#role.childRoles">
+       		  <s:iterator id="childRole" value="#role.childRoles">
        		  	<li>
-       		  	  <ww:text name="role.model.role.id"/>: ${childRole}<br/>
+       		  	  <s:text name="role.model.role.id"/>: ${childRole}<br/>
        		  	</li>
-       		  </ww:iterator>
+       		  </s:iterator>
        		</ul> 
-       		<ww:text name="role.model.parent.roles"/>:
+       		<s:text name="role.model.parent.roles"/>:
        		<ul>
-       		  <ww:iterator id="parentRole" value="#role.parentRoles">
+       		  <s:iterator id="parentRole" value="#role.parentRoles">
        		  	<li>
-       		  	  <ww:text name="role.model.role.id"/>: ${parentRole}<br/>
+       		  	  <s:text name="role.model.role.id"/>: ${parentRole}<br/>
        		  	</li>
-       		  </ww:iterator>
+       		  </s:iterator>
        		</ul> 
        	</li>
        	<br/>
-      </ww:iterator>
+      </s:iterator>
     </ul>
     
-    <h5><ww:text name="role.model.templates"/>:</h5>
+    <h5><s:text name="role.model.templates"/>:</h5>
     <ul>
-        <ww:iterator id="template" value="model.templates">        
+        <s:iterator id="template" value="model.templates">        
         <li>
-            <ww:text name="role.model.id"/>: ${template.id}<br/>
-       		<ww:text name="role.model.name.prefix"/>: ${template.namePrefix}<br/>
-       		<ww:text name="role.model.permanent"/>: ${template.permanent}<br/>
-       		<ww:text name="role.model.assignable"/>: ${template.assignable}<br/>
-       		<ww:text name="role.model.delimeter"/>: ${template.delimiter}<br/>
-       		<ww:text name="permissions"/>:
+            <s:text name="role.model.id"/>: ${template.id}<br/>
+       		<s:text name="role.model.name.prefix"/>: ${template.namePrefix}<br/>
+       		<s:text name="role.model.permanent"/>: ${template.permanent}<br/>
+       		<s:text name="role.model.assignable"/>: ${template.assignable}<br/>
+       		<s:text name="role.model.delimeter"/>: ${template.delimiter}<br/>
+       		<s:text name="permissions"/>:
        		<ul>
-       		  <ww:iterator id="permission" value="#template.permissions">
+       		  <s:iterator id="permission" value="#template.permissions">
        		  	<li>
-       		  	  <ww:text name="role.model.id"/>: ${permission.id}<br/>
-       		  	  <ww:text name="role.model.name"/>: ${permission.name}<br/>
-       		  	  <ww:text name="role.model.permanent"/>: ${permission.permanent}<br/>
-       		  	  <ww:text name="role.model.operation.id"/>: ${permission.operation}<br/>
-       		  	  <ww:text name="role.model.resource.id"/>: ${permission.resource}<br/>
+       		  	  <s:text name="role.model.id"/>: ${permission.id}<br/>
+       		  	  <s:text name="role.model.name"/>: ${permission.name}<br/>
+       		  	  <s:text name="role.model.permanent"/>: ${permission.permanent}<br/>
+       		  	  <s:text name="role.model.operation.id"/>: ${permission.operation}<br/>
+       		  	  <s:text name="role.model.resource.id"/>: ${permission.resource}<br/>
        		  	</li>
-       		  </ww:iterator>
+       		  </s:iterator>
        		</ul>
-       		<ww:text name="role.model.child.roles"/>:
+       		<s:text name="role.model.child.roles"/>:
        		<ul>
-       		  <ww:iterator id="childRole" value="#template.childRoles">
+       		  <s:iterator id="childRole" value="#template.childRoles">
        		  	<li>
-       		  	  <ww:text name="role.model.role.id"/>: ${childRole}<br/>
+       		  	  <s:text name="role.model.role.id"/>: ${childRole}<br/>
        		  	</li>
-       		  </ww:iterator>
+       		  </s:iterator>
        		</ul> 
-       		<ww:text name="role.model.parent.roles"/>:
+       		<s:text name="role.model.parent.roles"/>:
        		<ul>
-       		  <ww:iterator id="parentRole" value="#template.parentRoles">
+       		  <s:iterator id="parentRole" value="#template.parentRoles">
        		  	<li>
-       		  	  <ww:text name="role.model.role.id"/>: ${parentRole}<br/>
+       		  	  <s:text name="role.model.role.id"/>: ${parentRole}<br/>
        		  	</li>
-       		  </ww:iterator>
+       		  </s:iterator>
        		</ul> 
-       		<ww:text name="role.model.child.templates"/>:
+       		<s:text name="role.model.child.templates"/>:
        		<ul>
-       		  <ww:iterator id="childTemplate" value="#template.childTemplates">
+       		  <s:iterator id="childTemplate" value="#template.childTemplates">
        		  	<li>
-       		  	  <ww:text name="role.model.template.id"/>: ${childTemplate}<br/>
+       		  	  <s:text name="role.model.template.id"/>: ${childTemplate}<br/>
        		  	</li>
-       		  </ww:iterator>
+       		  </s:iterator>
        		</ul> 
-       		<ww:text name="role.model.parent.templates"/>:
+       		<s:text name="role.model.parent.templates"/>:
        		<ul>
-       		  <ww:iterator id="parentTemplate" value="#template.parentTemplates">
+       		  <s:iterator id="parentTemplate" value="#template.parentTemplates">
        		  	<li>
-       		  	  <ww:text name="role.model.template.id"/>: ${parentTemplate}<br/>
+       		  	  <s:text name="role.model.template.id"/>: ${parentTemplate}<br/>
        		  	</li>
-       		  </ww:iterator>
+       		  </s:iterator>
        		</ul> 
        	</li>
        	<br/>
-      </ww:iterator>
+      </s:iterator>
     </ul>
 
 </body>
-</ww:i18n>
+</s:i18n>
 </html>

@@ -14,27 +14,27 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/struts-tags"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
-<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
+<s:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
-  <title><ww:text name="user.create.page.title"/></title>
+  <title><s:text name="user.create.page.title"/></title>
 </head>
 
 <body>
 
 <%@ include file="/WEB-INF/jsp/redback/include/formValidationResults.jsp" %>
 
-<h2><ww:text name="user.create.section.title"/></h2>
+<h2><s:text name="user.create.section.title"/></h2>
 
-<ww:form action="usercreate!submit" namespace="/security" theme="xhtml"
+<s:form action="usercreate!submit" namespace="/security" theme="xhtml"
          id="userCreateForm" method="post" name="usercreate" cssClass="security userCreate">
   <%@ include file="/WEB-INF/jsp/redback/include/userCredentials.jsp" %>
-  <ww:submit value="%{getText('user.create')}" />
-</ww:form>
+  <s:submit value="%{getText('user.create')}" />
+</s:form>
 
 </body>
-</ww:i18n>
+</s:i18n>
 </html>

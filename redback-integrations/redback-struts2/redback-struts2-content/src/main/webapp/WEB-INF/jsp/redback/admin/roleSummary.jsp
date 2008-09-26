@@ -14,35 +14,35 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/struts-tags"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="redback" uri="http://plexus.codehaus.org/redback/taglib-1.0"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
-<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
+<s:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
-  <title><ww:text name="role.summary.page.title"/></title>
+  <title><s:text name="role.summary.page.title"/></title>
 </head>
 
 <body>
 
 <%@ include file="/WEB-INF/jsp/redback/include/rbacListNavigation.jsp" %>
 
-<h2><ww:text name="role.summary.section.title"/></h2>
+<h2><s:text name="role.summary.section.title"/></h2>
 
 <%@ include file="/WEB-INF/jsp/redback/include/formValidationResults.jsp" %>
 
     <ul>
-      <ww:iterator id="role" value="allRoles">
-        <li><ww:text name="role"/>: ${role.name}</li>
+      <s:iterator id="role" value="allRoles">
+        <li><s:text name="role"/>: ${role.name}</li>
         <ul>
-        <ww:iterator id="permission" value="#role.permissions">
+        <s:iterator id="permission" value="#role.permissions">
           <li>P[${permission.name}] (${permission.operation.name}, ${permission.resource.identifier})</li>
-        </ww:iterator>
+        </s:iterator>
         </ul>
-      </ww:iterator>
+      </s:iterator>
     </ul>
 
 </body>
-</ww:i18n>
+</s:i18n>
 </html>

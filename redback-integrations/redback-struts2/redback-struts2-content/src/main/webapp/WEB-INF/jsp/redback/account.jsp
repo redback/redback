@@ -14,34 +14,34 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/struts-tags" %>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="redback" uri="http://plexus.codehaus.org/redback/taglib-1.0"%>
 
 <html>
-<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
+<s:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
-  <title><ww:text name="account.details.page.title"/></title>
+  <title><s:text name="account.details.page.title"/></title>
 </head>
 
 <body>
 
 <%@ include file="/WEB-INF/jsp/redback/include/formValidationResults.jsp" %>
 
-<h2><ww:text name="account.details.section.title"/></h2>
+<h2><s:text name="account.details.section.title"/></h2>
    
-<ww:form action="account" namespace="/security" theme="xhtml"
+<s:form action="account" namespace="/security" theme="xhtml"
          id="registerForm" method="post" name="register" cssClass="security register">     
   <%@ include file="/WEB-INF/jsp/redback/include/userCredentials.jsp" %>
   <redback:isReadOnlyUserManager>
-  	<ww:submit value="Go Back" method="cancel" />
+  	<s:submit value="Go Back" method="cancel" />
   </redback:isReadOnlyUserManager>
   <redback:isNotReadOnlyUserManager>
-    <ww:submit value="%{getText('submit')}" method="submit" />
-    <ww:submit value="%{getText('cancel')}" method="cancel" />
+    <s:submit value="%{getText('submit')}" method="submit" />
+    <s:submit value="%{getText('cancel')}" method="cancel" />
   </redback:isNotReadOnlyUserManager>
-</ww:form>
+</s:form>
 
 </body>
-</ww:i18n>
+</s:i18n>
 </html>

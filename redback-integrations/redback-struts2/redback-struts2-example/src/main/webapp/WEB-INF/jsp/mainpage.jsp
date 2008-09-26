@@ -14,14 +14,14 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/struts-tags" %>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib prefix="redback" uri="http://plexus.codehaus.org/redback/taglib-1.0" %>
 
 <html>
 
 <head>
   <title>Plexus Security Example Webapp</title>
-  <ww:head />
+  <s:head />
 </head>
 
 <body>
@@ -31,11 +31,11 @@
 <div id="results">
   <%-- This is where the "Account Created Successfully" type message goes. --%>
   <div class="success">
-    <ww:actionmessage />
+    <s:actionmessage />
   </div>
   <%-- This is where errors from the action and other non-form field specific errors appear. --%>
   <div class="errors">
-    <ww:actionerror />
+    <s:actionerror />
   </div>
 </div>
 
@@ -45,9 +45,9 @@
     You are authorized to see this content!
     <p/>
 
-    <ww:url id="userlistUrl" action="userlist" namespace="/security"/>
+    <s:url id="userlistUrl" action="userlist" namespace="/security"/>
     <ul>
-      <li>Go see the <ww:a href="%{userlistUrl}">userlist</ww:a>.</li>
+      <li>Go see the <s:a href="%{userlistUrl}">userlist</s:a>.</li>
     </ul>
 
   </redback:ifAuthorized>
@@ -56,8 +56,8 @@
       Your logged in, you just don't have access to much...
     </redback:ifAuthorized>
     <redback:elseAuthorized>
-      <ww:url id="login" action="login" namespace="/security" />
-      Go Ahead <ww:a href="%{login}">Login.</ww:a>
+      <s:url id="login" action="login" namespace="/security" />
+      Go Ahead <s:a href="%{login}">Login.</s:a>
     </redback:elseAuthorized>
   </redback:elseAuthorized>
 

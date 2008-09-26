@@ -14,63 +14,63 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/struts-tags"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="redback" uri="http://plexus.codehaus.org/redback/taglib-1.0"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
-<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
+<s:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
-  <title><ww:text name="user.edit.page.title"/></title>
+  <title><s:text name="user.edit.page.title"/></title>
 </head>
 
 <body>
 
 <%@ include file="/WEB-INF/jsp/redback/include/formValidationResults.jsp" %>
 
-<h2><ww:text name="user.edit.section.title"/></h2>
+<h2><s:text name="user.edit.section.title"/></h2>
 
 <redback:ifAuthorized permission="user-management-user-edit" resource="${user.username}">
-  <ww:form action="useredit" namespace="/security" theme="xhtml"
+  <s:form action="useredit" namespace="/security" theme="xhtml"
          id="userEditForm" method="post" name="useredit" cssClass="security userEdit">
     <%@ include file="/WEB-INF/jsp/redback/include/userCredentials.jsp" %>
     <redback:isNotReadOnlyUserManager>
-      <ww:checkbox label="%{getText('user.edit.locked.user')}" name="user.locked" />
-      <ww:checkbox label="%{getText('user.edit.force.user.change.password')}" name="user.passwordChangeRequired" />    
-      <ww:hidden label="Username"    name="username" />
-      <ww:submit value="%{getText('update')}" method="submit" />
-      <ww:submit value="%{getText('cancel')}" method="cancel" />
+      <s:checkbox label="%{getText('user.edit.locked.user')}" name="user.locked" />
+      <s:checkbox label="%{getText('user.edit.force.user.change.password')}" name="user.passwordChangeRequired" />    
+      <s:hidden label="Username"    name="username" />
+      <s:submit value="%{getText('update')}" method="submit" />
+      <s:submit value="%{getText('cancel')}" method="cancel" />
     </redback:isNotReadOnlyUserManager>
-  </ww:form>
+  </s:form>
   
   <c:if test="${ emailValidationRequired}">
   <p>
-    <ww:form action="register!resendRegistrationEmail" namespace="/security" theme="xhtml"
+    <s:form action="register!resendRegistrationEmail" namespace="/security" theme="xhtml"
          id="resendRegistationForm" method="post" name="resendRegistration" cssClass="security userEdit">
-         <ww:hidden label="Username"    name="username" />
-         <ww:submit value="Resend Validation" method="submit" />
-    </ww:form>
+         <s:hidden label="Username"    name="username" />
+         <s:submit value="Resend Validation" method="submit" />
+    </s:form>
   </p>
   </c:if>
 </redback:ifAuthorized>
 
 <redback:ifAuthorized permission="user-management-user-role" resource="${user.username}">
   <c:if test="${!empty effectivelyAssignedRoles}">
-  <h3><ww:text name="effective.roles"/></h3>
+  <h3><s:text name="effective.roles"/></h3>
 
   <ul>
-    <ww:iterator id="role" value="effectivelyAssignedRoles">
+    <s:iterator id="role" value="effectivelyAssignedRoles">
       <li>${role.name}</li>
-    </ww:iterator>
+    </s:iterator>
   </ul>
 
 </c:if>
 
-  <ww:url id="assignmentUrl" action="assignments">
-    <ww:param name="username">${user.username}</ww:param>
-  </ww:url>
-  <ww:a href="%{assignmentUrl}"><ww:text name="user.edit.roles"/></ww:a>
+  <s:url id="assignmentUrl" action="assignments">
+    <s:param name="username">${user.username}</s:param>
+  </s:url>
+  <s:a href="%{assignmentUrl}"><s:text name="user.edit.roles"/></s:a>
 </redback:ifAuthorized>
 </body>
-</ww:i18n>
+</s:i18n>
 </html>

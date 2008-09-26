@@ -14,18 +14,18 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/struts-tags"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
 
 <div class="rbac-navigation-bar">
 
-<ww:url id="rolesUrl" action="roles" namespace="/security" method="list"/>
-<ww:url id="permissionsUrl" action="permissions" namespace="/security" method="list"/>
-<ww:url id="operationsUrl" action="operations" namespace="/security" method="list"/>
-<ww:url id="resourcesUrl" action="resources" namespace="/security" method="list"/>
+<s:url id="rolesUrl" action="roles" namespace="/security" method="list"/>
+<s:url id="permissionsUrl" action="permissions" namespace="/security" method="list"/>
+<s:url id="operationsUrl" action="operations" namespace="/security" method="list"/>
+<s:url id="resourcesUrl" action="resources" namespace="/security" method="list"/>
 
-<ww:a href="%{rolesUrl}"><ww:text name="roles"/></ww:a> | 
-<ww:a href="%{permissionsUrl}"><ww:text name="permissions"/></ww:a> | 
-<ww:a href="%{operationsUrl}"><ww:text name="operations"/></ww:a> | 
-<ww:a href="%{resourcesUrl}"><ww:text name="resources"/></ww:a> 
+<s:a href="%{rolesUrl}"><s:text name="roles"/></s:a> | 
+<s:a href="%{permissionsUrl}"><s:text name="permissions"/></s:a> | 
+<s:a href="%{operationsUrl}"><s:text name="operations"/></s:a> | 
+<s:a href="%{resourcesUrl}"><s:text name="resources"/></s:a> 
 
 </div>

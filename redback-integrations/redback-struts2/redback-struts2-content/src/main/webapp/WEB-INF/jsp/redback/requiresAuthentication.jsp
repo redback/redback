@@ -14,41 +14,41 @@
   ~ limitations under the License.
   --%>
 
-<%@ taglib prefix="ww" uri="/struts-tags" %>
+<%@ taglib prefix="s" uri="/struts-tags" %>
 
 <html>
 
-<ww:i18n name="org.codehaus.plexus.redback.struts2.default">
+<s:i18n name="org.codehaus.plexus.redback.struts2.default">
 <head>
-  <title><ww:text name="requires.authentication.page.title"/></title>
+  <title><s:text name="requires.authentication.page.title"/></title>
 </head>
 
 <body>
 
-<h4><ww:text name="requires.authentication.section.title"/></h4>
+<h4><s:text name="requires.authentication.section.title"/></h4>
 
 <div id="results">
   <%-- This is where the "Account Created Successfully" type message goes. --%>
   <div class="success">
-    <ww:actionmessage />
+    <s:actionmessage />
   </div>
   <%-- This is where errors from the action and other non-form field specific errors appear. --%>
   <div class="errors">
-    <ww:actionerror />
+    <s:actionerror />
   </div>
 </div>
 
 <p>
-  <ww:text name="requires.authentication.message"/>
+  <s:text name="requires.authentication.message"/>
 </p>
 
 <ol>
 <li>
-  <ww:url id="login" action="login" namespace="/security" />
-  <ww:text name="requires.authentication.go.ahead"/><ww:a href="%{login}"><ww:text name="login"/></ww:a>
+  <s:url id="login" action="login" namespace="/security" />
+  <s:text name="requires.authentication.go.ahead"/><s:a href="%{login}"><s:text name="login"/></s:a>
 </li>
 </ol>
 
 </body>
-</ww:i18n>
+</s:i18n>
 </html>
