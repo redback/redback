@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
 import org.codehaus.plexus.redback.authorization.AuthorizationResult;
@@ -45,12 +44,13 @@ import org.codehaus.plexus.redback.xwork.model.ApplicationRoleDetails;
 import org.codehaus.plexus.redback.xwork.model.ApplicationRoleDetails.RoleTableCell;
 
 import com.opensymphony.xwork.Action;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 
 /**
  * @todo missing tests for success/fail on standard show/edit functions (non security testing related)
  */
 public class AssignmentsActionTest
-    extends PlexusTestCase
+    extends PlexusInSpringTestCase
 {
     private static final String PASSWORD = "password1";
 
