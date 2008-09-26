@@ -15,7 +15,7 @@ package org.codehaus.plexus.redback.acegi;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authentication.Authenticator;
@@ -30,7 +30,7 @@ import java.util.Map;
  * @version: $ID:$
  */
 public class TestAcegiAuthenticator
-    extends PlexusTestCase
+    extends PlexusInSpringTestCase
 {
 
     public void testLookup()

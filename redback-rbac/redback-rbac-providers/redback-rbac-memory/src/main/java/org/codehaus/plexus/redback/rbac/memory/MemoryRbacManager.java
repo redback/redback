@@ -46,8 +46,7 @@ import java.util.Map;
  * @author Jesse McConnell <jmcconnell@apache.org>
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id:$
- * @plexus.component role="org.codehaus.plexus.redback.rbac.RBACManager"
- * role-hint="memory"
+ * @plexus.component role="org.codehaus.plexus.redback.rbac.RBACManager" role-hint="memory"
  */
 public class MemoryRbacManager
     extends AbstractRBACManager

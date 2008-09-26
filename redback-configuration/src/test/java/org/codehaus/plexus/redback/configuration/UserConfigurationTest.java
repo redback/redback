@@ -16,7 +16,7 @@ package org.codehaus.plexus.redback.configuration;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
@@ -26,14 +26,12 @@ import org.codehaus.plexus.util.StringUtils;
  * @version $Id$
  */
 public class UserConfigurationTest
-    extends PlexusTestCase
+    extends PlexusInSpringTestCase
 {
     protected void setUp()
         throws Exception
     {
         super.setUp();
-        
-        System.setProperty( "plexus.home", (String) getContainer().getContext().get( "plexus.home" ) );
     }
 
     private void assertEmpty( String str )

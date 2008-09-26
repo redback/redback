@@ -16,7 +16,7 @@ package org.codehaus.plexus.redback.role.template;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.Role;
@@ -35,7 +35,7 @@ import java.io.File;
  * @version: $Id:$
  */
 public class RoleTemplateProcessorTest
-    extends PlexusTestCase
+    extends PlexusInSpringTestCase
 {
     private RBACManager rbacManager;
 

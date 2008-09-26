@@ -33,10 +33,6 @@
       <groupId>org.codehaus.redback</groupId>
       <artifactId>redback-taglib</artifactId>
     </dependency>
-    <dependency>
-      <groupId>commons-logging</groupId>
-      <artifactId>commons-logging</artifactId>
-    </dependency>
   </dependencies>
   <build>
     <plugins>

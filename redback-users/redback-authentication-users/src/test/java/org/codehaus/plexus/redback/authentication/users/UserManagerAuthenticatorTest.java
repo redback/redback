@@ -15,11 +15,10 @@ package org.codehaus.plexus.redback.authentication.users;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authentication.Authenticator;
 import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
-import org.codehaus.plexus.redback.authentication.users.UserManagerAuthenticator;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
@@ -30,13 +29,14 @@ import org.codehaus.plexus.redback.users.UserNotFoundException;
  * @author <a href='mailto:rahul.thakur.xdev@gmail.com'>Rahul Thakur</a>
  */
 public class UserManagerAuthenticatorTest
-    extends PlexusTestCase
+    extends PlexusInSpringTestCase
 {
     /**
      * @plexus.requirement
      */
     private UserSecurityPolicy userSecurityPolicy;
     
+    @Override
     protected void setUp()
         throws Exception
     {

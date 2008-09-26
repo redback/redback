@@ -16,7 +16,7 @@ package org.codehaus.plexus.redback.policy;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 
 /**
  * PasswordEncoderTest 
@@ -25,7 +25,7 @@ import org.codehaus.plexus.PlexusTestCase;
  * @version $Id$
  */
 public class PasswordEncoderTest
-    extends PlexusTestCase
+    extends PlexusInSpringTestCase
 {
     private static final String PASSWORD = "s3cret";
     private static final String ENCODED_SHA1 = "/vNB+F2HQ559kaLUZbmHHvZrXpg=";

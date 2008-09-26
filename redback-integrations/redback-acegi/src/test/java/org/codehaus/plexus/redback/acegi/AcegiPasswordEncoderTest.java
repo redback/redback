@@ -16,7 +16,7 @@ package org.codehaus.plexus.redback.acegi;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 import org.codehaus.plexus.redback.policy.PasswordEncoder;
 
 /**
@@ -26,7 +26,7 @@ import org.codehaus.plexus.redback.policy.PasswordEncoder;
  * @version $Id$
  */
 public class AcegiPasswordEncoderTest
-    extends PlexusTestCase
+    extends PlexusInSpringTestCase
 {
     public void testEncodePasswordTechniqueMatchesDefault()
         throws Exception

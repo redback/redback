@@ -16,7 +16,7 @@ package org.codehaus.plexus.redback.tests;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 import org.codehaus.plexus.redback.rbac.Operation;
 import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
@@ -29,7 +29,7 @@ import org.codehaus.plexus.redback.tests.utils.RBACDefaults;
 import java.util.Collections;
 
 public class AbstractRbacManagerPerformanceTestCase
-    extends PlexusTestCase
+    extends PlexusInSpringTestCase
 {
     private RBACManager rbacManager;
 
