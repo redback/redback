@@ -19,7 +19,7 @@ package org.codehaus.plexus.redback.example.web.action;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
-import org.codehaus.plexus.redback.xwork.action.RedbackActionSupport;
+import org.codehaus.plexus.redback.struts2.action.RedbackActionSupport;
 
 /**
  * MainAction 

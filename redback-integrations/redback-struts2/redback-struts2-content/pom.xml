@@ -21,7 +21,7 @@
     <artifactId>redback-struts2</artifactId>
     <version>1.2-SNAPSHOT</version>
   </parent> 
-  <artifactId>redback-xwork-content</artifactId>
+  <artifactId>redback-struts2-content</artifactId>
   <name>Redback :: Integration :: Struts 2 Content War</name>
   <packaging>war</packaging>
   <dependencies>

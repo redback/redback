@@ -20,9 +20,6 @@ import java.util.Map;
 import org.codehaus.plexus.redback.struts2.ActionContextStub;
 import org.codehaus.plexus.redback.struts2.ActionInvocationStub;
 import org.codehaus.plexus.redback.struts2.ActionProxyStub;
-import org.codehaus.plexus.redback.struts2.interceptor.ActionInvocationTracker;
-import org.codehaus.plexus.redback.struts2.interceptor.SavedActionInvocation;
-import org.codehaus.plexus.redback.struts2.interceptor.SimpleActionInvocationTracker;
 import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 
 public class SimpleActionInvocationTrackerTest

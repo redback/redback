@@ -16,7 +16,8 @@ package org.codehaus.plexus.redback.example.web.action;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.redback.xwork.action.RedbackActionSupport;
+import org.codehaus.plexus.redback.struts2.action.RedbackActionSupport;
+
 /**
  * PlexusSecuritySystemAction:
 22 *

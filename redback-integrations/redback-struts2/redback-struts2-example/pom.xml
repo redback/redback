@@ -27,7 +27,7 @@
   <dependencies>
     <dependency>
       <groupId>org.codehaus.redback</groupId>
-      <artifactId>redback-xwork-content</artifactId>
+      <artifactId>redback-struts2-content</artifactId>
       <version>${project.version}</version>
       <type>war</type>
       <scope>runtime</scope>
