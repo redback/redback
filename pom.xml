@@ -346,6 +346,17 @@
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-xwork-integration</artifactId>
+        <version>1.0-alpha-7</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-container-default</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-utils</artifactId>
         <version>1.2</version>
         <exclusions>
@@ -608,7 +619,6 @@
                 <bannedDependencies>
                   <excludes>
                     <exclude>org.codehaus.plexus:plexus-container-default</exclude>
-                    <exclude>org.codehaus.plexus:plexus-xwork-integration</exclude>
                     <!-- <exclude>commons-logging:commons-logging</exclude> -->
                   </excludes>
                 </bannedDependencies>
