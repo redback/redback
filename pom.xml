@@ -638,7 +638,7 @@
     <module>redback-keys</module>
     <module>redback-users</module>
     <module>redback-data-management</module>
-    <!-- <module>redback-integrations</module>  -->
+    <module>redback-integrations</module>
   </modules>
   <properties>
     <security.version>1.2-SNAPSHOT</security.version>
