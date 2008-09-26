@@ -307,7 +307,7 @@
       </dependency>
       <dependency>
         <groupId>org.codehaus.redback</groupId>
-        <artifactId>redback-taglib</artifactId>
+        <artifactId>redback-xwork-taglib</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>

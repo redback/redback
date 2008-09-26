@@ -32,7 +32,6 @@
   </dependencies>
   <modules>
     <module>redback-xwork</module>
-    <module>redback-taglib</module>
     <module>redback-jee</module>
 <!--
     <module>redback-swing</module>

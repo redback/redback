@@ -31,7 +31,7 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.redback</groupId>
-      <artifactId>redback-taglib</artifactId>
+      <artifactId>redback-xwork-taglib</artifactId>
     </dependency>
   </dependencies>
   <build>

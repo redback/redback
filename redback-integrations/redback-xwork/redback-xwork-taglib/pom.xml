@@ -18,11 +18,11 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.codehaus.redback</groupId>
-    <artifactId>redback-integrations</artifactId>
+    <artifactId>redback-xwork</artifactId>
     <version>1.2-SNAPSHOT</version>
   </parent>
-  <artifactId>redback-taglib</artifactId>
-  <name>Redback :: Integration :: Taglib</name>
+  <artifactId>redback-xwork-taglib</artifactId>
+  <name>Redback :: Integration :: XWork Taglib</name>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.redback</groupId>
