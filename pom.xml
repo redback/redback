@@ -648,6 +648,7 @@
         </executions>
       </plugin>
     </plugins>
+    <!--
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
@@ -655,6 +656,7 @@
         <version>1.0-beta-2</version>
       </extension>
     </extensions>
+    -->
   </build>
 
   <modules>

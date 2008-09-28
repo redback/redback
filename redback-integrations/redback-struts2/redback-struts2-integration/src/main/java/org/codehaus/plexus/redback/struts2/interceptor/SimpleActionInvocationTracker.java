@@ -20,13 +20,13 @@ import com.opensymphony.xwork2.ActionInvocation;
 import java.util.Stack;
 
 /**
- * @plexus.component role="org.codehaus.plexus.xwork.interceptor.ActionInvocationTracker"
+ * @plexus.component role="org.codehaus.plexus.redback.struts2.interceptor.ActionInvocationTracker"
  * role-hint="simple"      
  * instantiation-strategy="per-lookup"
  */
 public class SimpleActionInvocationTracker
     implements ActionInvocationTracker
-{
+{ 
     /**
      * @plexus.configuration default-value="5"
      */
