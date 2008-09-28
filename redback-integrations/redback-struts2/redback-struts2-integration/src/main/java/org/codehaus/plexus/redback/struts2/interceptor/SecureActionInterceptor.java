@@ -63,11 +63,6 @@ public class SecureActionInterceptor
     {
     }
 
-    public void init()
-    {
-        getLogger().info( this.getClass().getName() + " initialized!" );
-    }
-
     protected String getTrackerName()
     {
         return trackerName;

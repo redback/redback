@@ -52,7 +52,7 @@
        <h5>Assigned Roles:</h5>
         <table>
         <s:iterator id="assignedRole" value="assignedRoles">
-           <s:checkbox label="${assignedRole}" labelPosition="left" name="addNDSelectedRoles" fieldValue="${assignedRole}"/>
+           <s:checkbox label="%{assignedRole}" name="addNDSelectedRoles" fieldValue="%{assignedRole}"/><br/>
         </s:iterator>
         </table>
 
@@ -61,7 +61,7 @@
         <h5>Available Roles:</h5>
         <table>
         <s:iterator id="availableRole" value="availableRoles">
-           <s:checkbox label="${availableRole}" labelPosition="left" name="addNDSelectedRoles" value="false" fieldValue="${availableRole}"/>
+           <s:checkbox label="%{availableRole}" name="addNDSelectedRoles" value="false" fieldValue="%{availableRole}"/><br/>
         </s:iterator>
         </table>
           </c:if>

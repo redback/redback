@@ -17,36 +17,30 @@ package org.codehaus.plexus.redback.struts2.interceptor;
  */
 
 import com.opensymphony.xwork2.ActionInvocation;
-import com.opensymphony.xwork2.interceptor.Interceptor;
+import com.opensymphony.xwork2.spring.interceptor.ActionAutowiringInterceptor;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import java.util.Map;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.logging.LogEnabled;
+import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.spring.PlexusToSpringUtils;
-import org.springframework.context.ApplicationContextAware;
 
 public abstract class AbstractHttpRequestTrackerInterceptor
-    extends AbstractLogEnabled
-    implements Interceptor, ApplicationContextAware
+    extends ActionAutowiringInterceptor
+    implements LogEnabled
 {
     public static final String TRACKER_NAME = ActionInvocationTracker.ROLE + ":name";
     
-    private ApplicationContext applicationContext;
-
-    public void setApplicationContext(ApplicationContext applicationContext)
-        throws BeansException
-    {
-        this.applicationContext = applicationContext;
-    }
-
-    protected ApplicationContext getApplicationContext()
-    {
-        return applicationContext;
-    }
+    private Logger logger;
     
     protected abstract String getTrackerName();
 
+    @Override
+    public void init()
+    {
+        super.init();
+        getLogger().info( this.getClass().getName() + " initialized!" );
+    }
+    
     protected synchronized ActionInvocationTracker addActionInvocation( ActionInvocation invocation )
         throws ComponentLookupException
     {
@@ -65,5 +59,39 @@ public abstract class AbstractHttpRequestTrackerInterceptor
         tracker.addActionInvocation( invocation );
 
         return tracker;
+    }
+
+    public void enableLogging( Logger logger )
+    {
+        this.logger = logger;
+    }
+
+    protected Logger getLogger()
+    {
+        return logger;
+    }
+
+    protected void setupLogger( Object component )
+    {
+        setupLogger( component, logger );
+    }
+
+    protected void setupLogger( Object component, String subCategory )
+    {
+        if ( subCategory == null )
+        {
+            throw new IllegalStateException( "Logging category must be defined." );
+        }
+
+        final Logger childLogger = this.logger.getChildLogger( subCategory );
+        setupLogger( component, childLogger );
+    }
+
+    protected void setupLogger( Object component, Logger logger )
+    {
+        if ( component instanceof LogEnabled )
+        {
+            ( (LogEnabled) component ).enableLogging( logger );
+        }
     }
 }
