@@ -100,5 +100,9 @@
         </requirement>
       </requirements>
     </component>
+    <component>
+      <role>org.springframework.mail.javamail.JavaMailSender</role>
+      <implementation>org.codehaus.plexus.redback.xwork.mail.MockJavaMailSender</implementation>
+    </component>    
   </components>
 </component-set>

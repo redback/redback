@@ -141,6 +141,18 @@
         <enabled>true</enabled>
       </releases>
    </repository>
+    <repository>
+      <id>maven1-repository.dev.java.net</id>
+      <name>Java.net Repository for Maven 1</name>
+      <url>http://download.java.net/maven/1/</url>
+      <layout>legacy</layout>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>      
+    </repository>   
   </repositories>
 
   <dependencyManagement>
@@ -379,28 +391,6 @@
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-mail-sender-api</artifactId>
-        <version>1.0-alpha-6</version>
-        <exclusions>
-          <exclusion>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-container-default</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-mail-sender-javamail</artifactId>
-        <version>1.0-alpha-6</version>
-        <exclusions>
-          <exclusion>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-container-default</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-expression-evaluator</artifactId>
         <version>1.0-alpha-1</version>
         <exclusions>
@@ -442,10 +432,10 @@
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-container-default</artifactId>
           </exclusion>
-	  <exclusion>
+          <exclusion>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
-	  </exclusion>
+          </exclusion>
         </exclusions>
       </dependency>
       <dependency>
@@ -543,23 +533,38 @@
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-core</artifactId>
-        <version>2.5.5</version>
+        <version>${springVersion}</version>
       </dependency>
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-web</artifactId>
-        <version>2.5.5</version>
+        <version>${springVersion}</version>
       </dependency>
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-beans</artifactId>
-        <version>2.5.5</version>
+        <version>${springVersion}</version>
       </dependency>
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-context</artifactId>
-        <version>2.5.5</version>
+        <version>${springVersion}</version>
       </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>${springVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context-support</artifactId>
+        <version>${springVersion}</version>
+      </dependency>       
+      <dependency>
+        <groupId>javax.mail</groupId>
+        <artifactId>mail</artifactId>
+        <version>1.4</version>
+      </dependency>      
     </dependencies>
   </dependencyManagement>
   <dependencies>
@@ -674,6 +679,7 @@
   </modules>
   <properties>
     <security.version>1.2-SNAPSHOT</security.version>
+    <springVersion>2.5.5</springVersion>
   </properties>
 
   <contributors>

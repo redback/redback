@@ -16,20 +16,27 @@ package org.codehaus.plexus.redback.xwork.mail;
  * limitations under the License.
  */
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.mail.Address;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.mailsender.MailMessage;
-import org.codehaus.plexus.mailsender.MailSender;
-import org.codehaus.plexus.mailsender.MailSenderException;
-import org.codehaus.plexus.mailsender.javamail.JndiJavamailMailSender;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.policy.UserValidationSettings;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.util.StringUtils;
-
-import java.util.Collection;
-import java.util.Iterator;
+import org.springframework.mail.javamail.JavaMailSender;
 
 /**
  * Mailer
@@ -48,10 +55,10 @@ public class MailerImpl
     private MailGenerator generator;
 
     /**
-     * @plexus.requirement
+     * @plexus.requirement role="mailSender"
      */
-    private MailSender mailSender;
-
+    private JavaMailSender javaMailSender;    
+    
     /**
      * @plexus.requirement
      */
@@ -96,58 +103,52 @@ public class MailerImpl
             fromAddress = System.getProperty( "user.name" ) + "@localhost";
         }
 
-        MailMessage message = new MailMessage();
+        
 
         // TODO: Allow for configurable message headers.
 
         try
         {
+            
+            MimeMessage message = javaMailSender.createMimeMessage();
+            
             message.setSubject( subject );
-            message.setContent( content );
+            message.setText( content );
 
-            MailMessage.Address from = new MailMessage.Address( fromAddress, fromName );
+            InternetAddress from = new InternetAddress( fromAddress, fromName );
 
             message.setFrom( from );
 
             Iterator it = recipients.iterator();
+            List<Address> tos = new ArrayList<Address>();
             while ( it.hasNext() )
             {
                 String mailbox = (String) it.next();
 
-                MailMessage.Address to = new MailMessage.Address( mailbox );
-                message.addTo( to );
+                
+                InternetAddress to = new InternetAddress( mailbox.trim() );
+
+                tos.add( to );                
             }
 
-            if ( mailSender instanceof JndiJavamailMailSender )
-            {
-                JndiJavamailMailSender jndiSender = (JndiJavamailMailSender) mailSender;
-                jndiSender.setJndiSessionName( config.getString( "email.jndiSessionName" ) );
-            }
-            else
-            {
-                mailSender.setSmtpHost( config.getString( "email.smtp.host" ) );
-                mailSender.setSmtpPort( config.getInt( "email.smtp.port" ) );
-                mailSender.setUsername( config.getString( "email.smtp.username" ) );
-                mailSender.setPassword( config.getString( "email.smtp.password" ) );
-                mailSender.setSslMode( config.getBoolean( "email.smtp.ssl.enabled" ),
-                                       config.getBoolean( "email.smtp.tls.enabled" ) );
+            message.setRecipients(Message.RecipientType.TO, tos.toArray(new Address[tos.size()]));
 
-                /* Not supported for now
-                if ( mailSender.isSslMode() && ( mailSender instanceof JavamailMailSender ) )
-                {
-                    JavamailMailSender jmsender = (JavamailMailSender) mailSender;
-                    jmsender.updateProps();
-                    jmsender.setSslProvider( config.getString( "email.smtp.ssl.provider" ) );
-                }*/
-            }
 
-            getLogger().debug( message.getContent() );
+            getLogger().debug( content );
 
-            mailSender.send( message );
+            javaMailSender.send( message );
         }
-        catch ( MailSenderException e )
+        catch ( AddressException e )
         {
             getLogger().error( "Unable to send message, subject [" + subject + "]", e );
         }
+        catch ( MessagingException e )
+        {
+            getLogger().error( "Unable to send message, subject [" + subject + "]", e );
+        }       
+        catch ( UnsupportedEncodingException e )
+        {
+            getLogger().error( "Unable to send message, subject [" + subject + "]", e );
+        }                
     }
 }
