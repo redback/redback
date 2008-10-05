@@ -34,7 +34,7 @@ import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.xwork.util.RoleSorter;
-import org.codehaus.plexus.redback.xwork.util.UserComparator;
+import org.codehaus.redback.integration.util.UserComparator;
 
 /**
  * CsvRolesMatrix

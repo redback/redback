@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.xwork.eXc.views;
+package org.codehaus.redback.integration.eXc.views;
 
 /*
  * Copyright 2005-2006 The Codehaus.

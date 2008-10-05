@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.xwork.eXc;
+package org.codehaus.redback.integration.eXc;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.codehaus.plexus.redback.xwork.util.UserComparator;
+import org.codehaus.redback.integration.util.UserComparator;
 import org.extremecomponents.table.callback.ProcessRowsCallback;
 import org.extremecomponents.table.core.TableConstants;
 import org.extremecomponents.table.core.TableModel;

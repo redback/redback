@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.struts2.eXc;
+package org.codehaus.redback.integration.eXc;
 
 /*
  * Copyright 2001-2007 The Codehaus.

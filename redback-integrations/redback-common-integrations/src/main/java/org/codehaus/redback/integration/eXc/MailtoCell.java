@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.xwork.eXc;
+package org.codehaus.redback.integration.eXc;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -16,48 +16,30 @@ package org.codehaus.plexus.redback.xwork.eXc;
  * limitations under the License.
  */
 
+import org.apache.commons.lang.StringUtils;
 import org.extremecomponents.table.bean.Column;
 import org.extremecomponents.table.cell.AbstractCell;
 import org.extremecomponents.table.core.TableModel;
-import org.extremecomponents.table.view.html.BuilderUtils;
 
 /**
- * CheckboxImageCell
+ * MailtoCell
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
-public class CheckboxImageCell
+public class MailtoCell
     extends AbstractCell
 {
 
-    private static final String CHECKBOX_TRUE = "icon_success_sml";
-
-    private static final String CHECKBOX_FALSE = "checkbox-false";
-
     protected String getCellValue( TableModel model, Column column )
     {
-        Object value = column.getPropertyValue();
-        if ( value == null )
+        String value = column.getPropertyValueAsString();
+        if ( StringUtils.isBlank( value ) )
         {
             return "";
         }
 
-        Boolean bool = (Boolean) value;
-
-        String cellValue = "<img src=\"";
-
-        if ( bool.booleanValue() )
-        {
-            cellValue = cellValue + BuilderUtils.getImage( model, CHECKBOX_TRUE );
-        }
-        else
-        {
-            cellValue = cellValue + BuilderUtils.getImage( model, CHECKBOX_FALSE );
-        }
-
-        cellValue = cellValue + "\" alt=\"" + bool.toString() + "\"/>";
-
-        return cellValue;
+        return "<a href=\"mailto:" + value + "\">" + value + "</a>";
     }
+
 }
