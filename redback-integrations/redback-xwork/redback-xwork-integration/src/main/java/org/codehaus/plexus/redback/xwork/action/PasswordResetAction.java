@@ -29,8 +29,8 @@ import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
-import org.codehaus.plexus.redback.xwork.mail.Mailer;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.redback.integration.mail.Mailer;
 
 /**
  * PasswordResetAction

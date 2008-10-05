@@ -18,11 +18,11 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.codehaus.redback</groupId>
-    <artifactId>redback-xwork</artifactId>
+    <artifactId>redback-struts2</artifactId>
     <version>1.2-SNAPSHOT</version>
   </parent>
-  <artifactId>redback-xwork-integration</artifactId>
-  <name>Redback :: Integration :: XWork Integration</name>
+  <artifactId>redback-common-integrations</artifactId>
+  <name>Redback :: Integration :: Common</name>
   <packaging>jar</packaging>
   <dependencies> 
     <!-- ================================================================ -->
@@ -78,12 +78,6 @@
       <groupId>org.codehaus.redback</groupId>
       <artifactId>redback-users-configurable</artifactId>
     </dependency>
-
-    <dependency>
-      <groupId>org.codehaus.redback</groupId>
-      <artifactId>redback-common-integrations</artifactId>
-    </dependency>        
-    
     <!-- ================================================================ -->
     <!-- OTHER Dependencies -->
     <dependency>
@@ -95,9 +89,10 @@
       <artifactId>spring-web</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-xwork-integration</artifactId>
-    </dependency>
+      <groupId>javax.mail</groupId>
+      <artifactId>mail</artifactId>
+      <scope>provided</scope>
+    </dependency>      
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
@@ -105,12 +100,8 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context-support</artifactId>
-    </dependency> 
-    <dependency>
-      <groupId>javax.mail</groupId>
-      <artifactId>mail</artifactId>
-      <scope>provided</scope>
-    </dependency>      
+    </dependency>     
+
     <dependency>
       <groupId>org.extremecomponents</groupId>
       <artifactId>extremecomponents</artifactId>
@@ -153,11 +144,6 @@
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
     </dependency>
-    <dependency>
-      <groupId>opensymphony</groupId>
-      <artifactId>sitemesh</artifactId>
-      <version>2.2.1</version>
-    </dependency>
     <!-- === Test Dependencies ======================= -->
     <dependency>
       <groupId>hsqldb</groupId>
@@ -170,50 +156,30 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.redback</groupId>
-      <artifactId>redback-authentication-memory</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.redback</groupId>
-      <artifactId>redback-rbac-memory</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.redback</groupId>
-      <artifactId>redback-users-memory</artifactId>
+      <groupId>org.easymock</groupId>
+      <artifactId>easymock</artifactId>
+      <version>2.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <scm>
+    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-integrations/redback-common-integrations</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-integrations/redback-common-integrations</developerConnection>
+    <url>http://fisheye.codehaus.org/browse/redback/redback/trunk/redback-integrations/redback-common-integrations</url>
+  </scm>
   <build>
     <plugins>
       <plugin>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-maven-plugin</artifactId>
-        <version>1.3.3</version>
         <executions>
           <execution>
-            <id>merge</id>
-            <configuration>
-              <roleDefaults>
-                <roleDefault>
-                  <role>com.opensymphony.xwork.Action</role>
-                  <instantiation-strategy>per-lookup</instantiation-strategy>
-                </roleDefault>
-              </roleDefaults>
-              <descriptors>
-                <descriptor>${basedir}/src/main/resources/META-INF/plexus/components.xml</descriptor>
-                <descriptor>
-                  ${project.build.directory}/generated-resources/plexus/META-INF/plexus/components.xml
-                </descriptor>
-              </descriptors>
-            </configuration>
             <goals>
-              <goal>merge-descriptors</goal>
+              <goal>descriptor</goal>
             </goals>
           </execution>
         </executions>
       </plugin>
     </plugins>
-  </build>
+  </build>  
 </project>

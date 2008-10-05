@@ -24,6 +24,15 @@
   <artifactId>redback-integrations</artifactId>
   <name>Redback :: Integrations</name>
   <packaging>pom</packaging>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.codehaus.redback</groupId>
+        <artifactId>redback-common-integrations</artifactId>
+        <version>${pom.version}</version>
+      </dependency>    
+    </dependencies>  
+  </dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.redback</groupId>
@@ -31,6 +40,7 @@
     </dependency>
   </dependencies>
   <modules>
+    <module>redback-common-integrations</module>
     <module>redback-xwork</module>
     <module>redback-struts2</module>
     <module>redback-jee</module>

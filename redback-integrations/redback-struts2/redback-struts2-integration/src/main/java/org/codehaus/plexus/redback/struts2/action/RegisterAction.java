@@ -25,13 +25,13 @@ import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
+import org.codehaus.plexus.redback.struts2.interceptor.SecureActionBundle;
+import org.codehaus.plexus.redback.struts2.interceptor.SecureActionException;
+import org.codehaus.plexus.redback.struts2.model.CreateUserCredentials;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
-import org.codehaus.plexus.redback.struts2.interceptor.SecureActionBundle;
-import org.codehaus.plexus.redback.struts2.interceptor.SecureActionException;
-import org.codehaus.plexus.redback.struts2.mail.Mailer;
-import org.codehaus.plexus.redback.struts2.model.CreateUserCredentials;
+import org.codehaus.redback.integration.mail.Mailer;
 
 /**
  * RegisterAction
