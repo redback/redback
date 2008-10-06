@@ -27,7 +27,6 @@ import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.struts2.action.CancellableAction;
 import org.codehaus.plexus.redback.struts2.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.struts2.interceptor.SecureActionException;
-import org.codehaus.plexus.redback.struts2.model.AdminEditUserCredentials;
 import org.codehaus.plexus.redback.system.DefaultSecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySystemConstants;
@@ -35,6 +34,7 @@ import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.redback.integration.model.AdminEditUserCredentials;
 import org.codehaus.redback.integration.role.RoleConstants;
 import org.codehaus.redback.integration.util.RoleSorter;
 

@@ -24,9 +24,9 @@ import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.struts2.action.AbstractUserCredentialsAction;
 import org.codehaus.plexus.redback.struts2.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.struts2.interceptor.SecureActionException;
-import org.codehaus.plexus.redback.struts2.model.CreateUserCredentials;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
+import org.codehaus.redback.integration.model.CreateUserCredentials;
 import org.codehaus.redback.integration.role.RoleConstants;
 
 /**

@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.xwork.model;
+package org.codehaus.redback.integration.model;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -17,16 +17,21 @@ package org.codehaus.plexus.redback.xwork.model;
  */
 
 /**
- * CreateRoleDetails
+ * CreateUserCredentials
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
-public class CreateRoleDetails
-    extends RoleDetails
+public class CreateUserCredentials
+    extends UserCredentials
 {
-    public CreateRoleDetails()
+    public CreateUserCredentials()
     {
         super();
+    }
+
+    public boolean isEdit()
+    {
+        return false;
     }
 }

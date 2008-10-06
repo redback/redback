@@ -23,7 +23,7 @@ import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
-import org.codehaus.plexus.redback.xwork.model.EditUserCredentials;
+import org.codehaus.redback.integration.model.EditUserCredentials;
 
 /**
  * AddAdminUserAction

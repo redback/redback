@@ -22,8 +22,8 @@ import javax.mail.internet.InternetAddress;
 import org.codehaus.plexus.redback.policy.PasswordRuleViolationException;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.User;
-import org.codehaus.plexus.redback.struts2.model.UserCredentials;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.redback.integration.model.UserCredentials;
 
 /**
  * AbstractUserCredentialsAction

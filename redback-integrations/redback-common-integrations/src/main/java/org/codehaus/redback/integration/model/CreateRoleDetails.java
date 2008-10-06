@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.struts2.model;
+package org.codehaus.redback.integration.model;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -17,21 +17,16 @@ package org.codehaus.plexus.redback.struts2.model;
  */
 
 /**
- * CreateUserCredentials
+ * CreateRoleDetails
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
-public class CreateUserCredentials
-    extends UserCredentials
+public class CreateRoleDetails
+    extends RoleDetails
 {
-    public CreateUserCredentials()
+    public CreateRoleDetails()
     {
         super();
-    }
-
-    public boolean isEdit()
-    {
-        return false;
     }
 }

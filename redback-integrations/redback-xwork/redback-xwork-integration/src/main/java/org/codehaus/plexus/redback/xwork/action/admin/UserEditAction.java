@@ -33,8 +33,8 @@ import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.xwork.action.CancellableAction;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
-import org.codehaus.plexus.redback.xwork.model.AdminEditUserCredentials;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.redback.integration.model.AdminEditUserCredentials;
 import org.codehaus.redback.integration.role.RoleConstants;
 import org.codehaus.redback.integration.util.RoleSorter;
 

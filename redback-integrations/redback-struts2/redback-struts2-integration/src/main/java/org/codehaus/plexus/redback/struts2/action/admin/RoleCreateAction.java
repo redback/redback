@@ -27,8 +27,8 @@ import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.struts2.action.AbstractSecurityAction;
 import org.codehaus.plexus.redback.struts2.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.struts2.interceptor.SecureActionException;
-import org.codehaus.plexus.redback.struts2.model.SimplePermission;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.redback.integration.model.SimplePermission;
 import org.codehaus.redback.integration.role.RoleConstants;
 
 /**

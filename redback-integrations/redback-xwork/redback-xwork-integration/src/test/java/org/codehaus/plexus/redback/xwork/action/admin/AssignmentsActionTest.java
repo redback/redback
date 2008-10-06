@@ -42,9 +42,9 @@ import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
 import org.codehaus.plexus.redback.xwork.model.ApplicationRoleDetails;
 import org.codehaus.plexus.redback.xwork.model.ApplicationRoleDetails.RoleTableCell;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 
 import com.opensymphony.xwork.Action;
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 
 /**
  * @todo missing tests for success/fail on standard show/edit functions (non security testing related)

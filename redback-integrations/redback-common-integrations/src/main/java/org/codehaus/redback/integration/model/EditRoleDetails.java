@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.xwork.model;
+package org.codehaus.redback.integration.model;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -20,6 +20,7 @@ import java.util.Iterator;
 
 import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.Role;
+import org.codehaus.redback.integration.model.RoleDetails;
 
 /**
  * EditRoleDetails - Existing user Role Details.
