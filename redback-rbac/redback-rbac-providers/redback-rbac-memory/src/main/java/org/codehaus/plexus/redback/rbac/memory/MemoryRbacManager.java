@@ -488,7 +488,8 @@ public class MemoryRbacManager
 
             for ( Iterator j = roleNames.iterator(); j.hasNext(); )
             {
-                String roleName = (String) j.next();
+            	Role role = (Role) j.next();
+                String roleName = role.getName();
 
                 if ( ua.getRoleNames().contains( roleName ) )
                 {
