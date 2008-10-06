@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.xwork.filter.authentication.digest;
+package org.codehaus.redback.integration.filter.authentication.digest;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -17,6 +17,8 @@ package org.codehaus.plexus.redback.xwork.filter.authentication.digest;
  */
 
 import junit.framework.TestCase;
+
+import org.codehaus.plexus.digest.Hex;
 
 public class HexTest
     extends TestCase

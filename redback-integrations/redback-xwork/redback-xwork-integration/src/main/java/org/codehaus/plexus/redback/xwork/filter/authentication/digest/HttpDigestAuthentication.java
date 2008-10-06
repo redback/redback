@@ -33,6 +33,7 @@ import org.codehaus.plexus.redback.xwork.filter.authentication.HttpAuthenticatio
 import org.codehaus.plexus.redback.xwork.filter.authentication.HttpAuthenticator;
 import org.codehaus.plexus.util.Base64;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.redback.integration.filter.authentication.digest.Digest;
 
 /**
  * HttpDigestAuthentication methods for working with <a href="http://www.faqs.org/rfcs/rfc2617.html">RFC 2617 HTTP Authentication</a>.

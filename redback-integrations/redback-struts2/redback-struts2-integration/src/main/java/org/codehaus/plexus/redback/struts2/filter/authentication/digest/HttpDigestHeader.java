@@ -23,6 +23,7 @@ import org.codehaus.plexus.redback.struts2.filter.authentication.HttpAuthenticat
 import org.codehaus.plexus.util.Base64;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.redback.integration.HttpUtils;
+import org.codehaus.redback.integration.filter.authentication.digest.Digest;
 
 /**
  * HttpDigestHeader

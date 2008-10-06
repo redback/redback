@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.xwork.filter.authentication.digest;
+package org.codehaus.redback.integration.filter.authentication.digest;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -16,33 +16,34 @@ package org.codehaus.plexus.redback.xwork.filter.authentication.digest;
  * limitations under the License.
  */
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 /**
- * Digest
+ * Hex
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @todo move to plexus-utils in future
+ * @todo should probably move this to plexus-utils or plexus-security-common
  */
-public class Digest
+public class Hex
 {
-    public static String md5Hex( String data )
+    private static final byte[] DIGITS = "0123456789abcdef".getBytes();
+
+    public static String encode( byte[] data )
     {
-        MessageDigest digest = getDigest( "MD5" );
-        return Hex.encode( digest.digest( data.getBytes() ) );
+        int l = data.length;
+
+        byte[] raw = new byte[l * 2];
+
+        for ( int i = 0, j = 0; i < l; i++ )
+        {
+            raw[j++] = DIGITS[( 0xF0 & data[i] ) >>> 4];
+            raw[j++] = DIGITS[0x0F & data[i]];
+        }
+
+        return new String( raw );
     }
 
-    public static MessageDigest getDigest( String algorithm )
+    public static String encode( String raw )
     {
-        try
-        {
-            return MessageDigest.getInstance( algorithm );
-        }
-        catch ( NoSuchAlgorithmException e )
-        {
-            throw new RuntimeException( "Error initializing MessageDigest: " + e.getMessage(), e );
-        }
+        return encode( raw.getBytes() );
     }
 }

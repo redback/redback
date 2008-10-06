@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.struts2.filter.authentication.digest;
+package org.codehaus.redback.integration.filter.authentication.digest;
 
 /*
  * Copyright 2005-2006 The Codehaus.
