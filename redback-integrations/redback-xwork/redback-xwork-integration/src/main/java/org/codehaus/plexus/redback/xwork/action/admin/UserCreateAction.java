@@ -27,7 +27,7 @@ import org.codehaus.plexus.redback.xwork.action.AbstractUserCredentialsAction;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
 import org.codehaus.plexus.redback.xwork.model.CreateUserCredentials;
-import org.codehaus.plexus.redback.xwork.role.RoleConstants;
+import org.codehaus.redback.integration.role.RoleConstants;
 
 /**
  * UserCreateAction

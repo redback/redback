@@ -30,7 +30,7 @@ import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
 import org.codehaus.plexus.redback.xwork.reports.Report;
 import org.codehaus.plexus.redback.xwork.reports.ReportException;
 import org.codehaus.plexus.redback.xwork.reports.ReportManager;
-import org.codehaus.plexus.redback.xwork.role.RoleConstants;
+import org.codehaus.redback.integration.role.RoleConstants;
 
 import com.opensymphony.module.sitemesh.filter.PageResponseWrapper;
 import com.opensymphony.webwork.ServletActionContext;

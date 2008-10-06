@@ -28,12 +28,12 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.Resource;
-import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.struts2.action.AbstractSecurityAction;
 import org.codehaus.plexus.redback.struts2.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.struts2.interceptor.SecureActionException;
-import org.codehaus.plexus.redback.struts2.role.RoleConstants;
+import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.registry.Registry;
+import org.codehaus.redback.integration.role.RoleConstants;
 
 /**
  * SystemInfoAction

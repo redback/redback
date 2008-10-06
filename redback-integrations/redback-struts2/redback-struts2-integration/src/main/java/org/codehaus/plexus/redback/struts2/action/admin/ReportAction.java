@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts2.ServletActionContext;
 import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.struts2.action.AbstractSecurityAction;
 import org.codehaus.plexus.redback.struts2.interceptor.SecureActionBundle;
@@ -30,10 +31,9 @@ import org.codehaus.plexus.redback.struts2.interceptor.SecureActionException;
 import org.codehaus.plexus.redback.struts2.reports.Report;
 import org.codehaus.plexus.redback.struts2.reports.ReportException;
 import org.codehaus.plexus.redback.struts2.reports.ReportManager;
-import org.codehaus.plexus.redback.struts2.role.RoleConstants;
+import org.codehaus.redback.integration.role.RoleConstants;
 
 import com.opensymphony.module.sitemesh.filter.PageResponseWrapper;
-import org.apache.struts2.ServletActionContext;
 
 /**
  * ReportAction

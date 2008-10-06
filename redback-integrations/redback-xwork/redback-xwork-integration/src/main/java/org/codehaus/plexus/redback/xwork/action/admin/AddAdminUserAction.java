@@ -17,7 +17,6 @@ package org.codehaus.plexus.redback.xwork.action.admin;
  */
 
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
-import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.users.User;
@@ -25,7 +24,6 @@ import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
 import org.codehaus.plexus.redback.xwork.model.EditUserCredentials;
-import org.codehaus.plexus.redback.xwork.role.RoleConstants;
 
 /**
  * AddAdminUserAction

@@ -28,7 +28,7 @@ import org.codehaus.plexus.redback.system.check.EnvironmentCheck;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
-import org.codehaus.plexus.redback.xwork.role.RoleConstants;
+import org.codehaus.redback.integration.role.RoleConstants;
 
 /**
  * LockedAdminEnvironmentCheck: checks if accounts marked as system administrator are locked
