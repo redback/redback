@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.xwork.reports;
+package org.codehaus.redback.integration.reports;
 
 /*
  * Copyright 2005-2006 The Codehaus.

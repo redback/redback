@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.struts2.reports;
+package org.codehaus.redback.integration.reports;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -41,7 +41,7 @@ import org.codehaus.redback.integration.util.UserComparator;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.struts2.reports.Report" role-hint="rolesmatrix-csv"
+ * @plexus.component role="org.codehaus.plexus.redback.xwork.reports.Report" role-hint="rolesmatrix-csv"
  */
 public class CsvRolesMatrix
     implements Report

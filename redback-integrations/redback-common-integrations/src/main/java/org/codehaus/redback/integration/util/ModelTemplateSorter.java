@@ -24,6 +24,7 @@ import org.codehaus.plexus.redback.role.model.ModelTemplate;
  * ModelTemplateSorter
  *
  * @author <a href="mailto:hisidro@exist.com">Henry Isidro</a>
+ * @version $Id$
  */
 public class ModelTemplateSorter
     implements Comparator

@@ -27,9 +27,9 @@ import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.xwork.action.AbstractSecurityAction;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
-import org.codehaus.plexus.redback.xwork.reports.Report;
-import org.codehaus.plexus.redback.xwork.reports.ReportException;
-import org.codehaus.plexus.redback.xwork.reports.ReportManager;
+import org.codehaus.redback.integration.reports.Report;
+import org.codehaus.redback.integration.reports.ReportException;
+import org.codehaus.redback.integration.reports.ReportManager;
 import org.codehaus.redback.integration.role.RoleConstants;
 
 import com.opensymphony.module.sitemesh.filter.PageResponseWrapper;

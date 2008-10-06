@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.struts2.reports;
+package org.codehaus.redback.integration.reports;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -32,14 +32,14 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationExce
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.struts2.reports.ReportManager"
+ * @plexus.component role="org.codehaus.plexus.redback.xwork.reports.ReportManager"
  */
 public class ReportManager
     extends AbstractLogEnabled
     implements Initializable
 {
     /**
-     * @plexus.requirement role="org.codehaus.plexus.redback.struts2.reports.Report"
+     * @plexus.requirement role="org.codehaus.plexus.redback.xwork.reports.Report"
      */
     private List availableReports;
 

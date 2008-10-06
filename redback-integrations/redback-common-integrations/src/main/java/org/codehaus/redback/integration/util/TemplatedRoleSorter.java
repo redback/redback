@@ -24,6 +24,7 @@ import org.codehaus.plexus.redback.rbac.TemplatedRole;
  * TemplatedRoleSorter
  *
  * @author <a href="hisidro@exist.com">Henry Isidro</a>
+ * @version $Id$
  */
 public class TemplatedRoleSorter
     implements Comparator
