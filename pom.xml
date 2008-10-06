@@ -499,7 +499,7 @@
     <module>redback-integrations</module>
   </modules>
   <properties>
-    <security.version>1.1.1</security.version>
+    <security.version>1.1.2-SNAPSHOT</security.version>
   </properties>
 
   <contributors>
