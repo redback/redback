@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.xwork.util;
+package org.codehaus.redback.integration.util;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -18,26 +18,26 @@ package org.codehaus.plexus.redback.xwork.util;
 
 import java.util.Comparator;
 
-import org.codehaus.plexus.redback.rbac.Operation;
+import org.codehaus.plexus.redback.rbac.Resource;
 
 /**
- * OperationSorter
+ * ResourceSorter
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
-public class OperationSorter
+public class ResourceSorter
     implements Comparator
 {
 
     public int compare( Object o1, Object o2 )
     {
-        if ( !( o1 instanceof Operation ) )
+        if ( !( o1 instanceof Resource ) )
         {
             return 0;
         }
 
-        if ( !( o2 instanceof Operation ) )
+        if ( !( o2 instanceof Resource ) )
         {
             return 0;
         }
@@ -57,10 +57,10 @@ public class OperationSorter
             return 1;
         }
 
-        Operation r1 = (Operation) o1;
-        Operation r2 = (Operation) o2;
+        Resource r1 = (Resource) o1;
+        Resource r2 = (Resource) o2;
 
-        return r1.getName().compareToIgnoreCase( r2.getName() );
+        return r1.getIdentifier().compareToIgnoreCase( r2.getIdentifier() );
     }
 
 }

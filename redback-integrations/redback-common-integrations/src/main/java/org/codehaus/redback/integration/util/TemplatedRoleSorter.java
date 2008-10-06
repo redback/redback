@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.struts2.util;
+package org.codehaus.redback.integration.util;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -18,25 +18,24 @@ package org.codehaus.plexus.redback.struts2.util;
 
 import java.util.Comparator;
 
-import org.codehaus.plexus.redback.rbac.Role;
+import org.codehaus.plexus.redback.rbac.TemplatedRole;
 
 /**
- * RoleSorter
+ * TemplatedRoleSorter
  *
- * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
- * @version $Id$
+ * @author <a href="hisidro@exist.com">Henry Isidro</a>
  */
-public class RoleSorter
+public class TemplatedRoleSorter
     implements Comparator
 {
     public int compare( Object o1, Object o2 )
     {
-        if ( !( o1 instanceof Role ) )
+        if ( !( o1 instanceof TemplatedRole ) )
         {
             return 0;
         }
 
-        if ( !( o2 instanceof Role ) )
+        if ( !( o2 instanceof TemplatedRole ) )
         {
             return 0;
         }
@@ -56,9 +55,16 @@ public class RoleSorter
             return 1;
         }
 
-        Role r1 = (Role) o1;
-        Role r2 = (Role) o2;
+        TemplatedRole r1 = (TemplatedRole) o1;
+        TemplatedRole r2 = (TemplatedRole) o2;
         
-        return r1.getName().compareToIgnoreCase( r2.getName() );
+        if ( r1.getResource().equals( r2.getResource() ) )
+        {
+            return r1.getTemplateNamePrefix().compareTo( r2.getTemplateNamePrefix() );
+        }
+        else
+        {
+            return r1.getResource().compareToIgnoreCase( r2.getResource() );
+        }
     }
 }

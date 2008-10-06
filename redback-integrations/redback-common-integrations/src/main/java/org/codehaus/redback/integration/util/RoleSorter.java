@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.xwork.util;
+package org.codehaus.redback.integration.util;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -18,26 +18,25 @@ package org.codehaus.plexus.redback.xwork.util;
 
 import java.util.Comparator;
 
-import org.codehaus.plexus.redback.rbac.Permission;
+import org.codehaus.plexus.redback.rbac.Role;
 
 /**
- * PermissionSorter
+ * RoleSorter
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
-public class PermissionSorter
+public class RoleSorter
     implements Comparator
 {
-
     public int compare( Object o1, Object o2 )
     {
-        if ( !( o1 instanceof Permission ) )
+        if ( !( o1 instanceof Role ) )
         {
             return 0;
         }
 
-        if ( !( o2 instanceof Permission ) )
+        if ( !( o2 instanceof Role ) )
         {
             return 0;
         }
@@ -57,10 +56,9 @@ public class PermissionSorter
             return 1;
         }
 
-        Permission r1 = (Permission) o1;
-        Permission r2 = (Permission) o2;
-
+        Role r1 = (Role) o1;
+        Role r2 = (Role) o2;
+        
         return r1.getName().compareToIgnoreCase( r2.getName() );
     }
-
 }

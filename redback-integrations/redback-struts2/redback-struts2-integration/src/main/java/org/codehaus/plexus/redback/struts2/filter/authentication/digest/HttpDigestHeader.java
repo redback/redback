@@ -19,10 +19,10 @@ package org.codehaus.plexus.redback.struts2.filter.authentication.digest;
 import java.util.Properties;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.redback.struts2.HttpUtils;
 import org.codehaus.plexus.redback.struts2.filter.authentication.HttpAuthenticationException;
 import org.codehaus.plexus.util.Base64;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.redback.integration.HttpUtils;
 
 /**
  * HttpDigestHeader

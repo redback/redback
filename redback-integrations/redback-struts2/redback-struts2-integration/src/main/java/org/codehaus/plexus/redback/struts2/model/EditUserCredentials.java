@@ -17,7 +17,7 @@ package org.codehaus.plexus.redback.struts2.model;
  */
 
 import org.codehaus.plexus.redback.users.User;
-import org.codehaus.plexus.redback.struts2.util.DateUtils;
+import org.codehaus.redback.integration.util.DateUtils;
 
 /**
  * EditUserCredentials

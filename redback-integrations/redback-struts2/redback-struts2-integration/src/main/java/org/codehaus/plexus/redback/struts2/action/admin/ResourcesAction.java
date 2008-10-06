@@ -27,7 +27,7 @@ import org.codehaus.plexus.redback.struts2.action.AbstractSecurityAction;
 import org.codehaus.plexus.redback.struts2.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.struts2.interceptor.SecureActionException;
 import org.codehaus.plexus.redback.struts2.role.RoleConstants;
-import org.codehaus.plexus.redback.struts2.util.ResourceSorter;
+import org.codehaus.redback.integration.util.ResourceSorter;
 
 /**
  * OperationsAction:

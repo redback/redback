@@ -33,7 +33,7 @@ import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
-import org.codehaus.plexus.redback.xwork.util.RoleSorter;
+import org.codehaus.redback.integration.util.RoleSorter;
 import org.codehaus.redback.integration.util.UserComparator;
 
 /**

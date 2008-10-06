@@ -17,7 +17,7 @@ package org.codehaus.plexus.redback.xwork.model;
  */
 
 import org.codehaus.plexus.redback.users.User;
-import org.codehaus.plexus.redback.xwork.util.DateUtils;
+import org.codehaus.redback.integration.util.DateUtils;
 
 /**
  * EditUserCredentials

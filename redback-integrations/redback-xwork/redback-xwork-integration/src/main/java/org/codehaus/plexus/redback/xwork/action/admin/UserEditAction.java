@@ -35,8 +35,8 @@ import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
 import org.codehaus.plexus.redback.xwork.model.AdminEditUserCredentials;
 import org.codehaus.plexus.redback.xwork.role.RoleConstants;
-import org.codehaus.plexus.redback.xwork.util.RoleSorter;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.redback.integration.util.RoleSorter;
 
 /**
  * UserEditAction

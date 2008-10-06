@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.xwork;
+package org.codehaus.redback.integration;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -19,6 +19,8 @@ package org.codehaus.plexus.redback.xwork;
 import java.util.Properties;
 
 import junit.framework.TestCase;
+
+import org.codehaus.redback.integration.HttpUtils;
 
 /**
  * HttpUtilsTest

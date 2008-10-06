@@ -29,8 +29,8 @@ import org.codehaus.plexus.redback.struts2.action.RedbackActionSupport;
 import org.codehaus.plexus.redback.struts2.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.struts2.interceptor.SecureActionException;
 import org.codehaus.plexus.redback.struts2.role.RoleConstants;
-import org.codehaus.plexus.redback.struts2.util.PermissionSorter;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.redback.integration.util.PermissionSorter;
 
 /**
  * PermissionsAction

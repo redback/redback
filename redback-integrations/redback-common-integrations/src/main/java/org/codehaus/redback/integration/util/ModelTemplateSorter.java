@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.struts2.util;
+package org.codehaus.redback.integration.util;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -18,26 +18,24 @@ package org.codehaus.plexus.redback.struts2.util;
 
 import java.util.Comparator;
 
-import org.codehaus.plexus.redback.rbac.Resource;
+import org.codehaus.plexus.redback.role.model.ModelTemplate;
 
 /**
- * ResourceSorter
+ * ModelTemplateSorter
  *
- * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
- * @version $Id$
+ * @author <a href="mailto:hisidro@exist.com">Henry Isidro</a>
  */
-public class ResourceSorter
+public class ModelTemplateSorter
     implements Comparator
 {
-
     public int compare( Object o1, Object o2 )
     {
-        if ( !( o1 instanceof Resource ) )
+        if ( !( o1 instanceof ModelTemplate ) )
         {
             return 0;
         }
 
-        if ( !( o2 instanceof Resource ) )
+        if ( !( o2 instanceof ModelTemplate ) )
         {
             return 0;
         }
@@ -57,10 +55,9 @@ public class ResourceSorter
             return 1;
         }
 
-        Resource r1 = (Resource) o1;
-        Resource r2 = (Resource) o2;
+        ModelTemplate r1 = (ModelTemplate) o1;
+        ModelTemplate r2 = (ModelTemplate) o2;
 
-        return r1.getIdentifier().compareToIgnoreCase( r2.getIdentifier() );
+        return r1.getNamePrefix().compareToIgnoreCase( r2.getNamePrefix() );
     }
-
 }
