@@ -34,6 +34,7 @@ import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.redback.integration.filter.authentication.HttpAuthenticationException;
 
 import com.opensymphony.xwork2.ActionContext;
 

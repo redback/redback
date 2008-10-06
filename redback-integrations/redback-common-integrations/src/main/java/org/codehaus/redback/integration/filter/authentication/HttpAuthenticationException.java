@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.xwork.filter.authentication.digest;
+package org.codehaus.redback.integration.filter.authentication;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -16,35 +16,36 @@ package org.codehaus.plexus.redback.xwork.filter.authentication.digest;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.redback.xwork.filter.authentication.HttpAuthenticationException;
+import org.codehaus.plexus.redback.authentication.AuthenticationException;
 
 /**
- * NonceExpirationException
+ * HttpAuthenticationException
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
-public class NonceExpirationException
-    extends HttpAuthenticationException
+public class HttpAuthenticationException
+    extends AuthenticationException
 {
 
-    public NonceExpirationException()
+    public HttpAuthenticationException()
     {
         super();
     }
 
-    public NonceExpirationException( String message, Throwable cause )
+    public HttpAuthenticationException( String message, Throwable cause )
     {
         super( message, cause );
     }
 
-    public NonceExpirationException( String message )
+    public HttpAuthenticationException( String message )
     {
         super( message );
     }
 
-    public NonceExpirationException( Throwable cause )
+    public HttpAuthenticationException( Throwable cause )
     {
         super( cause );
     }
+
 }
