@@ -43,7 +43,7 @@ import org.springframework.mail.javamail.JavaMailSender;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.struts2.mail.Mailer"
+ * @plexus.component role="org.codehaus.redback.integration.mail.Mailer"
  */
 public class MailerImpl
     extends AbstractLogEnabled

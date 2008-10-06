@@ -34,7 +34,7 @@ import java.util.Locale;
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.struts2.mail.MailGenerator" role-hint="velocity"
+ * @plexus.component role="org.codehaus.redback.integration.mail.MailGenerator" role-hint="velocity"
  */
 public class VelocityMailGenerator
     extends AbstractLogEnabled
