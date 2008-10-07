@@ -207,7 +207,7 @@ public class DefaultRoleManager extends AbstractLogEnabled implements RoleManage
 
             // remove the user assignments
             List rolesList = new ArrayList();
-            rolesList.add( role );
+            rolesList.add( role.getName() );
 
             List userAssignments = rbacManager.getUserAssignmentsForRoles( rolesList );
 
