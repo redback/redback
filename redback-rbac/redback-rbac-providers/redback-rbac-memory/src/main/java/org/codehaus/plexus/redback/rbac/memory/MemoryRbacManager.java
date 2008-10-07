@@ -488,9 +488,7 @@ public class MemoryRbacManager
 
             for ( Iterator j = roleNames.iterator(); j.hasNext(); )
             {
-            	Role role = (Role) j.next();
-                String roleName = role.getName();
-
+            	String roleName = (String) j.next();
                 if ( ua.getRoleNames().contains( roleName ) )
                 {
                     userAssignments.add( ua );
