@@ -16,9 +16,9 @@ package org.codehaus.plexus.redback.xwork.util;
  * limitations under the License.
  */
 
-import java.util.Comparator;
-
 import org.codehaus.plexus.redback.rbac.Role;
+
+import java.util.Comparator;
 
 /**
  * RoleSorter
@@ -58,7 +58,7 @@ public class RoleSorter
 
         Role r1 = (Role) o1;
         Role r2 = (Role) o2;
-        
+
         return r1.getName().compareToIgnoreCase( r2.getName() );
     }
 }

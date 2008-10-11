@@ -222,19 +222,19 @@
 
     <action name="role" class="redback-role-edit" method="input">
       <result name="input">/WEB-INF/jsp/redback/admin/role.jsp</result>
-      <result name="error">/WEB-INF/jsp/redback/admin/role.jsp</result>
+      <result name="error">/WEB-INF/jsp/redback/include/error.jsp</result>
       <result name="success" type="redirect-action">roles</result>
     </action>
 
     <action name="roleedit" class="redback-role-edit" method="edit">
       <result name="input">/WEB-INF/jsp/redback/admin/roleEdit.jsp</result>
-      <result name="error">/WEB-INF/jsp/redback/admin/roleEdit.jsp</result>
+      <result name="error">/WEB-INF/jsp/redback/include/error.jsp</result>
       <result name="success" type="redirect-action">roles</result>
     </action>
 
     <action name="rolesave" class="redback-role-edit" method="save">
       <result name="input">/WEB-INF/jsp/redback/admin/roleEdit.jsp</result>
-      <result name="error">/WEB-INF/jsp/redback/admin/roleEdit.jsp</result>
+      <result name="error">/WEB-INF/jsp/redback/include/error.jsp</result>
       <result name="success" type="redirect-action">roles</result>
     </action>
 

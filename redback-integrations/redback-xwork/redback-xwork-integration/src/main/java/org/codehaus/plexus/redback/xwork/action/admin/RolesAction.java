@@ -16,18 +16,17 @@ package org.codehaus.plexus.redback.xwork.action.admin;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.Resource;
-import org.codehaus.plexus.redback.xwork.action.AbstractSecurityAction;
+import org.codehaus.plexus.redback.rbac.Role;
+import org.codehaus.plexus.redback.xwork.action.AbstractUserCredentialsAction;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
 import org.codehaus.plexus.redback.xwork.role.RoleConstants;
-import org.codehaus.plexus.redback.xwork.util.RoleSorter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * RolesAction
@@ -39,33 +38,21 @@ import org.codehaus.plexus.redback.xwork.util.RoleSorter;
  * instantiation-strategy="per-lookup"
  */
 public class RolesAction
-    extends AbstractSecurityAction
+    extends AbstractUserCredentialsAction
 {
     private static final String LIST = "list";
 
-    /**
-     * @plexus.requirement role-hint="cached"
-     */
-    private RBACManager manager;
-
-    private List allRoles;
+    private List<Role> allRoles;
 
     public String list()
     {
         try
         {
-            allRoles = manager.getAllRoles();
-
-            if ( allRoles == null )
-            {
-                allRoles = Collections.EMPTY_LIST;
-            }
-
-            Collections.sort( allRoles, new RoleSorter() );
+            allRoles = getFilterdRolesForCurrentUserAccess();
         }
         catch ( RbacManagerException e )
         {
-            List list = new ArrayList();
+            List<String> list = new ArrayList<String>();
             list.add( e.getMessage() );
             addActionError( getText( "cannot.list.all.roles", list ) );
             getLogger().error( "System error:", e );
@@ -75,12 +62,12 @@ public class RolesAction
         return LIST;
     }
 
-    public List getAllRoles()
+    public List<Role> getAllRoles()
     {
         return allRoles;
     }
 
-    public void setAllRoles( List allRoles )
+    public void setAllRoles( List<Role> allRoles )
     {
         this.allRoles = allRoles;
     }
@@ -90,7 +77,11 @@ public class RolesAction
     {
         SecureActionBundle bundle = new SecureActionBundle();
         bundle.setRequiresAuthentication( true );
+        bundle.addRequiredAuthorization( RoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION, Resource.GLOBAL );
         bundle.addRequiredAuthorization( RoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION, Resource.GLOBAL );
+        bundle.addRequiredAuthorization( RoleConstants.USER_MANAGEMENT_ROLE_GRANT_OPERATION, Resource.GLOBAL );
+        bundle.addRequiredAuthorization( RoleConstants.USER_MANAGEMENT_ROLE_DROP_OPERATION, Resource.GLOBAL );
+        bundle.addRequiredAuthorization( RoleConstants.USER_MANAGEMENT_USER_ROLE_OPERATION, Resource.GLOBAL );
         return bundle;
     }
 }

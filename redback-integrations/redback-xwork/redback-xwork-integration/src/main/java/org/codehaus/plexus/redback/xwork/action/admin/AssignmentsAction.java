@@ -16,27 +16,13 @@ package org.codehaus.plexus.redback.xwork.action.admin;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.codehaus.plexus.redback.rbac.Permission;
-import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.RbacObjectNotFoundException;
 import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
-import org.codehaus.plexus.redback.rbac.jdo.JdoRole;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.model.ModelApplication;
-import org.codehaus.plexus.redback.role.model.ModelRole;
-import org.codehaus.plexus.redback.role.model.ModelTemplate;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
@@ -48,13 +34,20 @@ import org.codehaus.plexus.redback.xwork.model.ApplicationRoleDetails;
 import org.codehaus.plexus.redback.xwork.role.RoleConstants;
 import org.codehaus.plexus.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 /**
  * AssignmentsAction
- * 
+ *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  * @plexus.component role="com.opensymphony.xwork.Action" role-hint="redback-assignments"
- *                   instantiation-strategy="per-lookup"
+ * instantiation-strategy="per-lookup"
  */
 public class AssignmentsAction
     extends AbstractUserCredentialsAction
@@ -62,11 +55,6 @@ public class AssignmentsAction
     // ------------------------------------------------------------------
     // Plexus Component Requirements
     // ------------------------------------------------------------------
-
-    /**
-     * @plexus.requirement role-hint="cached"
-     */
-    private RBACManager manager;
 
     /**
      * @plexus.requirement role-hint="default"
@@ -140,7 +128,7 @@ public class AssignmentsAction
      * also have a column of checkboxes that can be selected and then removed from the user. <p/> A table of roles that
      * can be assigned. This table should have a set of checkboxes that can be selected and then added to the user. <p/>
      * Duplicate role assignment needs to be taken care of.
-     * 
+     *
      * @throws RbacManagerException
      * @throws RbacObjectNotFoundException
      */
@@ -188,20 +176,22 @@ public class AssignmentsAction
         }
 
         // check first if role assignments for user exist
-        if ( !manager.userAssignmentExists( principal ) )
+        if ( !getManager().userAssignmentExists( principal ) )
         {
-            UserAssignment assignment = manager.createUserAssignment( principal );
-            manager.saveUserAssignment( assignment );
+            UserAssignment assignment = getManager().createUserAssignment( principal );
+            getManager().saveUserAssignment( assignment );
         }
-        
-        List assignableRoles = filterRolesForCurrentUserAccess( manager.getAllRoles() );
+
+        List<Role> assignableRoles = getFilterdRolesForCurrentUserAccess();
         for ( Iterator i = rmanager.getModel().getApplications().iterator(); i.hasNext(); )
         {
             ModelApplication application = (ModelApplication) i.next();
 
-            ApplicationRoleDetails details =
-                new ApplicationRoleDetails( application, manager.getEffectivelyAssignedRoles( principal ),
-                                            manager.getAssignedRoles( principal ), assignableRoles );
+            ApplicationRoleDetails details = new ApplicationRoleDetails( application,
+                                                                         getManager().getEffectivelyAssignedRoles(
+                                                                             principal ),
+                                                                         getManager().getAssignedRoles( principal ),
+                                                                         assignableRoles );
 
             applicationRoleDetails.add( details );
         }
@@ -211,19 +201,19 @@ public class AssignmentsAction
 
     /**
      * Display the edit user panel.
-     * 
+     *
      * @return
      */
     public String edituser()
     {
         try
         {
-            Collection<Role> assignedRoles = (Collection<Role>) manager.getAssignedRoles( principal );
-            List<Role> assignableRoles = filterRolesForCurrentUserAccess( manager.getAllRoles() );
-            
+            Collection<Role> assignedRoles = (Collection<Role>) getManager().getAssignedRoles( principal );
+            List<Role> assignableRoles = getFilterdRolesForCurrentUserAccess();
+
             Set<Role> availableRoles = new HashSet<Role>( assignedRoles );
             availableRoles.addAll( assignableRoles );
-            
+
             List<String> roles = new ArrayList<String>();
             addSelectedRoles( availableRoles, roles, addNDSelectedRoles );
             addSelectedRoles( availableRoles, roles, addDSelectedRoles );
@@ -235,7 +225,7 @@ public class AssignmentsAction
                 if ( !roles.contains( assignedRole.getName() ) )
                 {
                     // removing a currently assigned role, check if we have permission
-                    if ( !checkRoleName( assignableRoles, assignedRole.getName() ))
+                    if ( !checkRoleName( assignableRoles, assignedRole.getName() ) )
                     {
                         // it may have not been on the page. Leave it assigned.
                         roles.add( assignedRole.getName() );
@@ -254,21 +244,21 @@ public class AssignmentsAction
             {
                 logChange( currentUser, "adding role '" + r + "' to " );
             }
-            
+
             UserAssignment assignment;
 
-            if ( manager.userAssignmentExists( principal ) )
+            if ( getManager().userAssignmentExists( principal ) )
             {
-                assignment = manager.getUserAssignment( principal );
+                assignment = getManager().getUserAssignment( principal );
             }
             else
             {
-                assignment = manager.createUserAssignment( principal );
+                assignment = getManager().createUserAssignment( principal );
             }
 
             assignment.setRoleNames( roles );
 
-            assignment = manager.saveUserAssignment( assignment );
+            assignment = getManager().saveUserAssignment( assignment );
         }
         catch ( RbacManagerException ne )
         {
@@ -310,76 +300,6 @@ public class AssignmentsAction
             }
         }
         return false;
-    }
-
-    /**
-     * this is a hack. this is a hack around the requirements of putting RBAC constraits into the model. this adds one
-     * very major restriction to this security system, that a role name must contain the identifiers of the resource
-     * that is being constrained for adding and granting of roles, this is unacceptable in the long term and we need to
-     * get the model refactored to include this RBAC concept
-     * 
-     * @param roleList
-     * @return
-     * @throws RbacManagerException
-     */
-    private List filterRolesForCurrentUserAccess( List roleList )
-        throws RbacManagerException
-    {
-        String currentUser = getCurrentUser();
-
-        List filteredRoleList = new ArrayList();
-
-        Map assignedPermissionMap = manager.getAssignedPermissionMap( currentUser );
-        List resourceGrants = new ArrayList();
-
-        if ( assignedPermissionMap.containsKey( RoleConstants.USER_MANAGEMENT_ROLE_GRANT_OPERATION ) )
-        {
-            List roleGrantPermissions =
-                (List) assignedPermissionMap.get( RoleConstants.USER_MANAGEMENT_ROLE_GRANT_OPERATION );
-
-            for ( Iterator i = roleGrantPermissions.iterator(); i.hasNext(); )
-            {
-                Permission permission = (Permission) i.next();
-
-                if ( permission.getResource().getIdentifier().equals( Resource.GLOBAL ) )
-                {
-                    // the current user has the rights to assign any given role
-                    return roleList;
-                }
-                else
-                {
-                    resourceGrants.add( permission.getResource().getIdentifier() );
-                }
-            }
-        }
-        else
-        {
-            return Collections.EMPTY_LIST;
-        }
-
-        // we should have a list of resourceGrants now, this will provide us with the information necessary to restrict
-        // the role list
-        for ( Iterator i = roleList.iterator(); i.hasNext(); )
-        {
-            Role role = (Role) i.next();
-
-            for ( Iterator j = resourceGrants.iterator(); j.hasNext(); )
-            {
-                String resourceIdentifier = (String) j.next();
-
-                if ( role.getName().indexOf( resourceIdentifier ) != -1 )
-                {
-                    filteredRoleList.add( role );
-                }
-            }
-        }
-
-        return filteredRoleList;
-    }
-
-    private String getCurrentUser()
-    {
-        return getSecuritySession().getUser().getPrincipal().toString();
     }
 
     // ------------------------------------------------------------------

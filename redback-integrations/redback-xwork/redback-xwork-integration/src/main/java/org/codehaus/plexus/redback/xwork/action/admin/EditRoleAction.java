@@ -16,24 +16,21 @@ package org.codehaus.plexus.redback.xwork.action.admin;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.redback.role.RoleManager;
-import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
-import org.codehaus.plexus.redback.xwork.action.AbstractSecurityAction;
+import org.codehaus.plexus.redback.xwork.action.AbstractUserCredentialsAction;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
 import org.codehaus.plexus.redback.xwork.role.RoleConstants;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -47,21 +44,11 @@ import java.util.Map;
  * instantiation-strategy="per-lookup"
  */
 public class EditRoleAction
-    extends AbstractSecurityAction
+    extends AbstractUserCredentialsAction
 {
     // ------------------------------------------------------------------
     // Plexus Component Requirements
     // ------------------------------------------------------------------
-
-    /**
-     * @plexus.requirement
-     */
-    private SecuritySystem securitySystem;
-
-    /**
-     * @plexus.requirement role-hint="cached"
-     */
-    private RBACManager manager;
 
     /**
      * @plexus.requirement
@@ -80,21 +67,21 @@ public class EditRoleAction
 
     private List childRoleNames = new ArrayList();
 
-    private List parentRoleNames = new ArrayList();
+    private List<String> parentRoleNames = new ArrayList<String>();
 
     private List permissions = new ArrayList();
 
-    private List users = new ArrayList();
+    private List<User> users = new ArrayList<User>();
 
-    private List parentUsers = new ArrayList();
+    private List<User> parentUsers = new ArrayList<User>();
 
     private List allUsers = new ArrayList();
 
-    private List/*<String>*/ usersList = new ArrayList();
+    private List<String> usersList = new ArrayList<String>();
 
-    private List/*<String>*/ availableUsers = new ArrayList();
+    private List<String> availableUsers = new ArrayList<String>();
 
-    private List/*<String>*/ currentUsers = new ArrayList();
+    private List<String> currentUsers = new ArrayList<String>();
 
     // ------------------------------------------------------------------
     // Action Entry Points - (aka Names)
@@ -114,7 +101,7 @@ public class EditRoleAction
             return ERROR;
         }
 
-        if ( !manager.roleExists( name ) )
+        if ( !getManager().roleExists( name ) )
         {
             // Means that the role name doesn't exist.
             // We should exit early and not attempt to look up the role information.
@@ -123,7 +110,14 @@ public class EditRoleAction
 
         try
         {
-            Role role = manager.getRole( name );
+            if ( !isAuthorized() )
+            {
+                getLogger().warn( getCurrentUser() + " isn't authorized to access to the role '" + name + "'" );
+                addActionError( getText( "alert.message" ) );
+                return ERROR;
+            }
+
+            Role role = getManager().getRole( name );
             if ( role == null )
             {
                 addActionError( getText( "cannot.operate.null.role" ) );
@@ -132,24 +126,22 @@ public class EditRoleAction
 
             description = role.getDescription();
             childRoleNames = role.getChildRoleNames();
-            Map parentRoles = manager.getParentRoles( role );
-            for ( Iterator i = parentRoles.keySet().iterator(); i.hasNext(); )
+            Map<String, Role> parentRoles = getManager().getParentRoles( role );
+            for ( String roleName : parentRoles.keySet() )
             {
-                String roleName = (String) i.next();
                 parentRoleNames.add( roleName );
             }
             permissions = role.getPermissions();
 
             //Get users of the current role
-            List roles = new ArrayList();
+            List<String> roles = new ArrayList<String>();
             roles.add( name );
-            List userAssignments = manager.getUserAssignmentsForRoles( roles );
-            users = new ArrayList();
+            List<UserAssignment> userAssignments = getManager().getUserAssignmentsForRoles( roles );
+            users = new ArrayList<User>();
             if ( userAssignments != null )
             {
-                for ( Iterator i = userAssignments.iterator(); i.hasNext(); )
+                for ( UserAssignment userAssignment : userAssignments )
                 {
-                    UserAssignment userAssignment = (UserAssignment) i.next();
                     try
                     {
                         User user = getUserManager().findUser( userAssignment.getPrincipal() );
@@ -163,15 +155,15 @@ public class EditRoleAction
             }
 
             //Get users of the parent roles
-            parentUsers = new ArrayList();
-            if ( parentRoles != null && !parentRoles.isEmpty() )
+            parentUsers = new ArrayList<User>();
+            if ( !parentRoles.isEmpty() )
             {
-                List userParentAssignments = manager.getUserAssignmentsForRoles( parentRoles.keySet() );
+                List<UserAssignment> userParentAssignments =
+                    getManager().getUserAssignmentsForRoles( parentRoles.keySet() );
                 if ( userParentAssignments != null )
                 {
-                    for ( Iterator i = userParentAssignments.iterator(); i.hasNext(); )
+                    for ( UserAssignment userAssignment : userParentAssignments )
                     {
-                        UserAssignment userAssignment = (UserAssignment) i.next();
                         try
                         {
                             User user = getUserManager().findUser( userAssignment.getPrincipal() );
@@ -187,7 +179,7 @@ public class EditRoleAction
         }
         catch ( RbacManagerException e )
         {
-            List list = new ArrayList();
+            List<String> list = new ArrayList<String>();
             list.add( name );
             list.add( e.getMessage() );
             addActionError( getText( "cannot.get.role", list ) );
@@ -197,26 +189,45 @@ public class EditRoleAction
         return INPUT;
     }
 
+    private boolean isAuthorized()
+        throws RbacManagerException
+    {
+        List<Role> assignableRoles = getFilterdRolesForCurrentUserAccess();
+        boolean updatableRole = false;
+        for ( Role r : assignableRoles )
+        {
+            if ( r.getName().equalsIgnoreCase( name ) )
+            {
+                updatableRole = true;
+            }
+        }
+
+        return updatableRole;
+    }
+
     public String edit()
     {
         String result = input();
+        if ( ERROR.equals( result ) )
+        {
+            return result;
+        }
+
         newDescription = description;
 
         //TODO: Remove all users defined in parent roles too
         allUsers = getUserManager().getUsers();
 
-        for ( Iterator i = users.iterator(); i.hasNext(); )
+        for ( User user : users )
         {
-            User user = (User) i.next();
             if ( allUsers.contains( user ) )
             {
                 allUsers.remove( user );
             }
         }
 
-        for ( Iterator i = parentUsers.iterator(); i.hasNext(); )
+        for ( User user : parentUsers )
         {
-            User user = (User) i.next();
             if ( allUsers.contains( user ) )
             {
                 allUsers.remove( user );
@@ -228,7 +239,11 @@ public class EditRoleAction
 
     public String save()
     {
-        input();
+        String result = input();
+        if ( ERROR.equals( result ) )
+        {
+            return result;
+        }
 
         if ( name == null )
         {
@@ -245,13 +260,13 @@ public class EditRoleAction
         try
         {
             Role role;
-            if ( manager.roleExists( name ) )
+            if ( getManager().roleExists( name ) )
             {
-                role = manager.getRole( name );
+                role = getManager().getRole( name );
             }
             else
             {
-                role = manager.createRole( name );
+                role = getManager().createRole( name );
             }
 
             //TODO: allow to modify childRoleNames and permissions
@@ -259,15 +274,15 @@ public class EditRoleAction
             //role.setChildRoleNames( childRoleNames );
             //role.setPermissions( permissions );
 
-            manager.saveRole( role );
+            getManager().saveRole( role );
 
-            List list = new ArrayList();
+            List<String> list = new ArrayList<String>();
             list.add( name );
             addActionMessage( getText( "save.role.success", list ) );
         }
         catch ( RbacManagerException e )
         {
-            List list = new ArrayList();
+            List<String> list = new ArrayList<String>();
             list.add( name );
             list.add( e.getMessage() );
             addActionError( getText( "cannot.get.role", list ) );
@@ -284,15 +299,13 @@ public class EditRoleAction
             return INPUT;
         }
 
-        for ( Iterator i = availableUsers.iterator(); i.hasNext(); )
+        for ( String principal : availableUsers )
         {
-            String principal = (String) i.next();
-
             if ( !getUserManager().userExists( principal ) )
             {
                 // Means that the role name doesn't exist.
                 // We need to fail fast and return to the previous page.
-                List list = new ArrayList();
+                List<String> list = new ArrayList<String>();
                 list.add( principal );
                 addActionError( getText( "user.does.not.exist", list ) );
                 return ERROR;
@@ -302,22 +315,22 @@ public class EditRoleAction
             {
                 UserAssignment assignment;
 
-                if ( manager.userAssignmentExists( principal ) )
+                if ( getManager().userAssignmentExists( principal ) )
                 {
-                    assignment = manager.getUserAssignment( principal );
+                    assignment = getManager().getUserAssignment( principal );
                 }
                 else
                 {
-                    assignment = manager.createUserAssignment( principal );
+                    assignment = getManager().createUserAssignment( principal );
                 }
 
                 assignment.addRoleName( name );
-                assignment = manager.saveUserAssignment( assignment );
+                assignment = getManager().saveUserAssignment( assignment );
                 getLogger().info( name + " role assigned to " + principal );
             }
             catch ( RbacManagerException e )
             {
-                List list = new ArrayList();
+                List<String> list = new ArrayList<String>();
                 list.add( principal );
                 list.add( e.getMessage() );
                 addActionError( getText( "cannot.assign.role", list ) );
@@ -336,15 +349,13 @@ public class EditRoleAction
             return INPUT;
         }
 
-        for ( Iterator i = currentUsers.iterator(); i.hasNext(); )
+        for ( String principal : currentUsers )
         {
-            String principal = (String) i.next();
-
             if ( !getUserManager().userExists( principal ) )
             {
                 // Means that the role name doesn't exist.
                 // We need to fail fast and return to the previous page.
-                List list = new ArrayList();
+                List<String> list = new ArrayList<String>();
                 list.add( principal );
                 addActionError( getText( "user.does.not.exist", list ) );
                 return ERROR;
@@ -354,22 +365,22 @@ public class EditRoleAction
             {
                 UserAssignment assignment;
 
-                if ( manager.userAssignmentExists( principal ) )
+                if ( getManager().userAssignmentExists( principal ) )
                 {
-                    assignment = manager.getUserAssignment( principal );
+                    assignment = getManager().getUserAssignment( principal );
                 }
                 else
                 {
-                    assignment = manager.createUserAssignment( principal );
+                    assignment = getManager().createUserAssignment( principal );
                 }
 
                 assignment.removeRoleName( name );
-                assignment = manager.saveUserAssignment( assignment );
+                assignment = getManager().saveUserAssignment( assignment );
                 getLogger().info( name + " role unassigned to " + principal );
             }
             catch ( RbacManagerException e )
             {
-                List list = new ArrayList();
+                List<String> list = new ArrayList<String>();
                 list.add( principal );
                 list.add( e.getMessage() );
                 addActionError( getText( "cannot.assign.role", list ) );
@@ -440,12 +451,12 @@ public class EditRoleAction
         this.permissions = permissions;
     }
 
-    public List getUsers()
+    public List<User> getUsers()
     {
         return users;
     }
 
-    public void setUsers( List users )
+    public void setUsers( List<User> users )
     {
         this.users = users;
     }
@@ -460,52 +471,52 @@ public class EditRoleAction
         this.allUsers = allUsers;
     }
 
-    public List getUsersList()
+    public List<String> getUsersList()
     {
         return usersList;
     }
 
-    public void setUsersList( List usersList )
+    public void setUsersList( List<String> usersList )
     {
         this.usersList = usersList;
     }
 
-    public List getAvailableUsers()
+    public List<String> getAvailableUsers()
     {
         return availableUsers;
     }
 
-    public void setAvailableUsers( List availableUsers )
+    public void setAvailableUsers( List<String> availableUsers )
     {
         this.availableUsers = availableUsers;
     }
 
-    public List getCurrentUsers()
+    public List<String> getCurrentUsers()
     {
         return currentUsers;
     }
 
-    public void setCurrentUsers( List currentUsers )
+    public void setCurrentUsers( List<String> currentUsers )
     {
         this.currentUsers = currentUsers;
     }
 
-    public List getParentRoleNames()
+    public List<String> getParentRoleNames()
     {
         return parentRoleNames;
     }
 
-    public void setParentRoleNames( List parentRoleNames )
+    public void setParentRoleNames( List<String> parentRoleNames )
     {
         this.parentRoleNames = parentRoleNames;
     }
 
-    public List getParentUsers()
+    public List<User> getParentUsers()
     {
         return parentUsers;
     }
 
-    public void setParentUsers( List parentUsers )
+    public void setParentUsers( List<User> parentUsers )
     {
         this.parentUsers = parentUsers;
     }
@@ -519,7 +530,11 @@ public class EditRoleAction
     {
         SecureActionBundle bundle = new SecureActionBundle();
         bundle.setRequiresAuthentication( true );
-        bundle.addRequiredAuthorization( RoleConstants.USER_MANAGEMENT_ROLE_GRANT_OPERATION, name );
+        bundle.addRequiredAuthorization( RoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION, Resource.GLOBAL );
+        bundle.addRequiredAuthorization( RoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION, Resource.GLOBAL );
+        bundle.addRequiredAuthorization( RoleConstants.USER_MANAGEMENT_ROLE_GRANT_OPERATION, Resource.GLOBAL );
+        bundle.addRequiredAuthorization( RoleConstants.USER_MANAGEMENT_ROLE_DROP_OPERATION, Resource.GLOBAL );
+        bundle.addRequiredAuthorization( RoleConstants.USER_MANAGEMENT_USER_ROLE_OPERATION, Resource.GLOBAL );
         return bundle;
     }
 }
