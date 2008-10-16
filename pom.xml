@@ -224,7 +224,7 @@
       </dependency>
       <dependency>
         <groupId>org.codehaus.redback</groupId>
-        <artifactId>redback-authentication-=keys=</artifactId>
+        <artifactId>redback-authentication-keys</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>
