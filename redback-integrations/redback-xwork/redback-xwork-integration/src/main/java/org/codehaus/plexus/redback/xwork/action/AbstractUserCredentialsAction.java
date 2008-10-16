@@ -206,6 +206,7 @@ public abstract class AbstractUserCredentialsAction
             }
         }
 
+        Collections.sort( filteredRoleList, new RoleSorter() );
         return filteredRoleList;
     }
 
@@ -221,13 +222,9 @@ public abstract class AbstractUserCredentialsAction
 
         if ( roles == null )
         {
-            roles = Collections.EMPTY_LIST;
+            return Collections.EMPTY_LIST;
         }
 
-        roles = filterRolesForCurrentUserAccess( roles );
-
-        Collections.sort( roles, new RoleSorter() );
-
-        return roles;
+        return filterRolesForCurrentUserAccess( roles );
     }
 }
