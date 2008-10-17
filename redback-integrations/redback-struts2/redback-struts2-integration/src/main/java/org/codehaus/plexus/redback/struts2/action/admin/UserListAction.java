@@ -34,11 +34,11 @@ import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.redback.struts2.action.AbstractSecurityAction;
 import org.codehaus.plexus.redback.struts2.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.struts2.interceptor.SecureActionException;
+import org.codehaus.plexus.redback.struts2.reports.ReportManager;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.redback.integration.reports.ReportManager;
 import org.codehaus.redback.integration.role.RoleConstants;
 
 /**

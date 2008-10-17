@@ -30,14 +30,14 @@
     <s:url id="logoutUrl" action="logout" namespace="/security" includeParams="none"/>
     <s:url id="accountUrl" action="account" namespace="/security" includeParams="none" />
     
-    <s:text name="current.user"/>
+    <s:text name="%{current.user}"/>
     <c:choose>
       <c:when test="${sessionScope.securitySession.user != null}">
         <span class="fullname"><s:a href="%{accountUrl}" cssClass="edit">${sessionScope.securitySession.user.fullName}</s:a></span>
         (<span class="username">${sessionScope.securitySession.user.username}</span>)
       </c:when>
       <c:otherwise>
-        <span class="fullname"><s:text name="unknown.user"/></span>
+        <span class="fullname"><s:text name="%{unknown.user}"/></span>
       </c:otherwise>
     </c:choose>
     
