@@ -16,14 +16,25 @@ package org.codehaus.plexus.redback.struts2.action;
  * limitations under the License.
  */
 
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-
 import org.codehaus.plexus.redback.policy.PasswordRuleViolationException;
+import org.codehaus.plexus.redback.rbac.Permission;
+import org.codehaus.plexus.redback.rbac.RBACManager;
+import org.codehaus.plexus.redback.rbac.RbacManagerException;
+import org.codehaus.plexus.redback.rbac.Resource;
+import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.redback.integration.model.UserCredentials;
+import org.codehaus.redback.integration.role.RoleConstants;
+import org.codehaus.redback.integration.util.RoleSorter;
+
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * AbstractUserCredentialsAction
@@ -39,6 +50,11 @@ public abstract class AbstractUserCredentialsAction
     // ------------------------------------------------------------------
 
     /**
+     * @plexus.requirement role-hint="cached"
+     */
+    private RBACManager manager;
+
+    /**
      * @plexus.requirement
      */
     protected SecuritySystem securitySystem;
@@ -48,6 +64,26 @@ public abstract class AbstractUserCredentialsAction
     // ------------------------------------------------------------------
 
     protected UserCredentials internalUser;
+
+    public RBACManager getManager()
+    {
+        return manager;
+    }
+
+    public void setManager( RBACManager manager )
+    {
+        this.manager = manager;
+    }
+
+    public SecuritySystem getSecuritySystem()
+    {
+        return securitySystem;
+    }
+
+    public void setSecuritySystem( SecuritySystem securitySystem )
+    {
+        this.securitySystem = securitySystem;
+    }
 
     // ------------------------------------------------------------------
     // Action Entry Points - (aka Names)
@@ -61,9 +97,9 @@ public abstract class AbstractUserCredentialsAction
         }
         else if ( internalUser.getUsername().indexOf( " " ) != -1 )
         {
-        	addFieldError( "user.username", getText( "username.has.spaces") );
+            addFieldError( "user.username", getText( "username.has.spaces" ) );
         }
-        
+
         if ( StringUtils.isEmpty( internalUser.getFullName() ) )
         {
             addFieldError( "user.fullName", getText( "fullName.required" ) );
@@ -111,5 +147,84 @@ public abstract class AbstractUserCredentialsAction
         {
             addFieldError( "user.password", getText( "password.required" ) );
         }
+    }
+
+    /**
+     * this is a hack. this is a hack around the requirements of putting RBAC constraits into the model. this adds one
+     * very major restriction to this security system, that a role name must contain the identifiers of the resource
+     * that is being constrained for adding and granting of roles, this is unacceptable in the long term and we need to
+     * get the model refactored to include this RBAC concept
+     *
+     * @param roleList
+     * @return
+     * @throws org.codehaus.plexus.redback.rbac.RbacManagerException
+     *
+     */
+    private List<Role> filterRolesForCurrentUserAccess( List<Role> roleList )
+        throws RbacManagerException
+    {
+        String currentUser = getCurrentUser();
+
+        List<Role> filteredRoleList = new ArrayList<Role>();
+
+        Map<String, List<Permission>> assignedPermissionMap = manager.getAssignedPermissionMap( currentUser );
+        List<String> resourceGrants = new ArrayList<String>();
+
+        if ( assignedPermissionMap.containsKey( RoleConstants.USER_MANAGEMENT_ROLE_GRANT_OPERATION ) )
+        {
+            List<Permission> roleGrantPermissions =
+                assignedPermissionMap.get( RoleConstants.USER_MANAGEMENT_ROLE_GRANT_OPERATION );
+
+            for ( Permission permission : roleGrantPermissions )
+            {
+                if ( permission.getResource().getIdentifier().equals( Resource.GLOBAL ) )
+                {
+                    // the current user has the rights to assign any given role
+                    return roleList;
+                }
+                else
+                {
+                    resourceGrants.add( permission.getResource().getIdentifier() );
+                }
+            }
+        }
+        else
+        {
+            return Collections.EMPTY_LIST;
+        }
+
+        // we should have a list of resourceGrants now, this will provide us with the information necessary to restrict
+        // the role list
+        for ( Role role : roleList )
+        {
+            for ( String resourceIdentifier : resourceGrants )
+            {
+                if ( role.getName().indexOf( resourceIdentifier ) != -1 )
+                {
+                    filteredRoleList.add( role );
+                }
+            }
+        }
+
+        Collections.sort( filteredRoleList, new RoleSorter() );
+        return filteredRoleList;
+    }
+
+    protected String getCurrentUser()
+    {
+        return getSecuritySession().getUser().getPrincipal().toString();
+    }
+
+    protected List<Role> getFilterdRolesForCurrentUserAccess()
+        throws RbacManagerException
+    {
+        List<Role> roles = manager.getAllRoles();
+
+        if ( roles == null )
+        {
+            return Collections.EMPTY_LIST;
+        }
+
+        return filterRolesForCurrentUserAccess( roles );
     }
 }

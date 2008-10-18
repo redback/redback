@@ -1,17 +1,36 @@
 package org.codehaus.plexus.redback.struts2.model;
+/*
+ * Copyright 2008 The Codehaus.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import org.codehaus.plexus.redback.rbac.Role;
+import org.codehaus.plexus.redback.role.model.ModelApplication;
 import org.codehaus.plexus.redback.role.model.ModelRole;
 import org.codehaus.plexus.redback.role.model.ModelTemplate;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 /**
- * Created by IntelliJ IDEA.
- * User: jesse
- * Date: Nov 11, 2007
- * Time: 10:49:32 AM
- * To change this template use File | Settings | File Templates.
+ * @todo incredibly ugly population of the table, needs to be more concise
  */
 public class ApplicationRoleDetails
 {
@@ -19,226 +38,135 @@ public class ApplicationRoleDetails
 
     private String description;
 
-    // to be filled with resources garnered from created applicationTemplates
-    private Set resources = new HashSet();
+    private List<String> assignedRoles;
 
-    // ModelTemplate
-    private List applicationTemplates;
+    private List<String> availableRoles;
 
-    // ModelRole
-    private List applicationRoles;
+    private List<ModelTemplate> tableHeader;
 
-    // all created roles in the system
-    private List roles;
+    private List<List<RoleTableCell>> table;
 
-    private List effectivelyAssignedRoles;
+    public ApplicationRoleDetails( ModelApplication application, Collection<Role> effectivelyAssignedRoles,
+                                   Collection<Role> allAssignedRoles, List<Role> assignableRoles )
+    {
+        name = application.getId();
+        description = application.getDescription();
 
-    private List allAssignedRoles;
+        List<ModelTemplate> templates = application.getTemplates();
+        List<ModelRole> roles = application.getRoles();
 
-    private List assignedRoles = new ArrayList();
+        tableHeader = new LinkedList<ModelTemplate>( templates );
 
-    private List availableRoles = new ArrayList();
+        computeRoles( roles, assignableRoles, effectivelyAssignedRoles, allAssignedRoles );
 
-    private List tableHeader;
+        computeTable( gatherResources( templates, assignableRoles ), effectivelyAssignedRoles, allAssignedRoles );
+    }
 
-    private List table;
-
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
+    public String getDescription()
+    {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Set getResources() {
-        return resources;
-    }
-
-    public List getApplicationTemplates() {
-        return applicationTemplates;
-    }
-
-    public void setApplicationTemplates(List applicationTemplates) {
-        this.applicationTemplates = applicationTemplates;
-    }
-
-    public List getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List roles) {
-        this.roles = roles;
-    }
-
-    public List getAssignedRoles() {
-        process();
+    public List<String> getAssignedRoles()
+    {
         return assignedRoles;
     }
 
-    public void setAssignedRoles(List assignedRoles) {
-        this.assignedRoles = assignedRoles;
-    }
-
-    public List getEffectivelyAssignedRoles() {
-        return effectivelyAssignedRoles;
-    }
-
-    public void setEffectivelyAssignedRoles(List effectivelyAssignedRoles) {
-        this.effectivelyAssignedRoles = effectivelyAssignedRoles;
-    }
-
-    public List getAllAssignedRoles() {
-        return allAssignedRoles;
-    }
-
-    public void setAllAssignedRoles(List allAssignedRoles) {
-        this.allAssignedRoles = allAssignedRoles;
-    }
-
-    public List getAvailableRoles() {
-        process();
+    public List<String> getAvailableRoles()
+    {
         return availableRoles;
     }
 
-    public void setAvailableRoles(List availableRoles) {
-        this.availableRoles = availableRoles;
-    }
-
-    public List getApplicationRoles() {
-        return applicationRoles;
-    }
-
-    public void setApplicationRoles(List applicationRoles) {
-        this.applicationRoles = applicationRoles;
-    }
-
-    public List getTableHeader()
+    public List<ModelTemplate> getTableHeader()
     {
-        process();
-
         return tableHeader;
     }
 
-    public List getTable()
+    public List<List<RoleTableCell>> getTable()
     {
-        process();
-
         return table;
     }
 
-
-    private boolean prepared;
-
-    private void process()
+    private void computeRoles( Collection<ModelRole> applicationRoles, Collection<Role> assignableRoles,
+                               Collection<Role> effectivelyAssignedRoles, Collection<Role> allAssignedRoles )
     {
-        if ( !prepared )
+        assignedRoles = new ArrayList<String>();
+        availableRoles = new ArrayList<String>();
+        for ( Iterator<ModelRole> i = applicationRoles.iterator(); i.hasNext(); )
         {
-            gatherResources();
+            ModelRole role = (ModelRole) i.next();
 
-            computeRoles();
-
-            computeTable();
-
-            prepared = true;
-        }
-    }
-
-    private void computeRoles()
-    {
-        for ( Iterator i = applicationRoles.iterator(); i.hasNext(); )
-        {            
-            ModelRole role = (ModelRole)i.next();
-
-            if ( isAssigned( role.getName() ) )
+            if ( isInList( role.getName(), allAssignedRoles ) )
             {
                 if ( role.isAssignable() )
                 {
                     assignedRoles.add( role.getName() );
                 }
             }
-            else if ( isEffectivelyAssigned( role.getName() ) )
+            else if ( isInList( role.getName(), effectivelyAssignedRoles ) )
             {
                 // nothing
             }
-            else
+            else if ( isInList( role.getName(), assignableRoles ) )
             {
                 if ( role.isAssignable() )
                 {
-                    availableRoles.add( role.getName() );                    
+                    availableRoles.add( role.getName() );
                 }
             }
         }
-        
+
         Collections.sort( assignedRoles, String.CASE_INSENSITIVE_ORDER );
         Collections.sort( availableRoles, String.CASE_INSENSITIVE_ORDER );
     }
 
-    private void gatherResources()
+    private Set<String> gatherResources( List<ModelTemplate> applicationTemplates, List<Role> roles )
     {
-        for ( Iterator i = applicationTemplates.iterator(); i.hasNext(); )
+        Set<String> resources = new HashSet<String>();
+        for ( ModelTemplate modelTemplate : applicationTemplates )
         {
-            ModelTemplate template = (ModelTemplate)i.next();
-
-            for ( Iterator k = roles.iterator(); k.hasNext(); )
+            for ( Role role : roles )
             {
-                Role role = (Role)k.next();
-
-                if ( role.getName().startsWith( template.getNamePrefix() ) )
+                String roleName = role.getName();
+                if ( roleName.startsWith( modelTemplate.getNamePrefix() ) )
                 {
-                    resources.add( role.getName().substring( role.getName().indexOf( template.getDelimiter() ) + template.getDelimiter().length() ) );
+                    String delimiter = modelTemplate.getDelimiter();
+                    resources.add( roleName.substring( roleName.indexOf( delimiter ) + delimiter.length() ) );
                 }
             }
         }
+        return resources;
     }
 
-    private void computeTable()
+    private void computeTable( Collection<String> resources, Collection<Role> effectivelyAssignedRoles,
+                               Collection<Role> allAssignedRoles )
     {
-        table = new LinkedList();
-
-        String delimiter;
-
-        tableHeader = new LinkedList();
-        // the top row is the list of applicationTemplates, empty in the first column
-        //tableHeader.add("");
-
-        for ( Iterator i = applicationTemplates.iterator(); i.hasNext(); )
-        {
-            ModelTemplate template = (ModelTemplate)i.next();
-            tableHeader.add( template );
-        }
+        table = new LinkedList<List<RoleTableCell>>();
 
         List<String> resourcesList = new ArrayList<String>( resources );
         Collections.sort( resourcesList, String.CASE_INSENSITIVE_ORDER );
-        
-        for ( Iterator k = resourcesList.iterator(); k.hasNext(); )
+
+        for ( String resource : resourcesList )
         {
-            String resource = (String)k.next();
-            LinkedList tableRow = new LinkedList();
+            LinkedList<RoleTableCell> tableRow = new LinkedList<RoleTableCell>();
 
             RoleTableCell resourceCell = new RoleTableCell();
             resourceCell.setName( resource );
             resourceCell.setLabel( true );
             tableRow.add( resourceCell );
 
-
-            for ( Iterator i = tableHeader.iterator(); i.hasNext(); )
+            for ( ModelTemplate modelTemplate : tableHeader )
             {
-                ModelTemplate template = (ModelTemplate)i.next();
-
                 RoleTableCell cell = new RoleTableCell();
 
-                cell.setName( template.getNamePrefix() + template.getDelimiter() + resource );
-                cell.setEffectivelyAssigned( isEffectivelyAssigned( cell.getName() ) );
-                cell.setAssigned( isAssigned( cell.getName() ) );
+                cell.setName( modelTemplate.getNamePrefix() + modelTemplate.getDelimiter() + resource );
+                cell.setEffectivelyAssigned( isInList( cell.getName(), effectivelyAssignedRoles ) );
+                cell.setAssigned( isInList( cell.getName(), allAssignedRoles ) );
                 cell.setLabel( false );
 
                 tableRow.add( cell );
@@ -248,36 +176,17 @@ public class ApplicationRoleDetails
         }
     }
 
-
-    private boolean isEffectivelyAssigned( String roleName )
+    private boolean isInList( String roleName, Collection<Role> effectivelyAssignedRoles )
     {
-        for ( Iterator i = effectivelyAssignedRoles.iterator(); i.hasNext(); )
+        for ( Role role : effectivelyAssignedRoles )
         {
-            Role effectiveRole = (Role)i.next();
-            {
-                if ( roleName.equals( effectiveRole.getName() ) )
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean isAssigned( String roleName )
-    {
-        for ( Iterator i = allAssignedRoles.iterator(); i.hasNext(); )
-        {
-            Role assignedRole = (Role)i.next();
-
-            if ( roleName.equals( assignedRole.getName() ) )
+            if ( roleName.equals( role.getName() ) )
             {
                 return true;
             }
         }
         return false;
     }
-
 
     public class RoleTableCell
     {
@@ -289,35 +198,43 @@ public class ApplicationRoleDetails
 
         private boolean label;
 
-        public String getName() {
+        public String getName()
+        {
             return name;
         }
 
-        public void setName(String name) {
+        public void setName( String name )
+        {
             this.name = name;
         }
 
-        public boolean isEffectivelyAssigned() {
+        public boolean isEffectivelyAssigned()
+        {
             return effectivelyAssigned;
         }
 
-        public void setEffectivelyAssigned(boolean effectivelyAssigned) {
+        public void setEffectivelyAssigned( boolean effectivelyAssigned )
+        {
             this.effectivelyAssigned = effectivelyAssigned;
         }
 
-        public boolean isAssigned() {
+        public boolean isAssigned()
+        {
             return assigned;
         }
 
-        public void setAssigned(boolean assigned) {
+        public void setAssigned( boolean assigned )
+        {
             this.assigned = assigned;
         }
 
-        public boolean isLabel() {
+        public boolean isLabel()
+        {
             return label;
         }
 
-        public void setLabel(boolean label) {
+        public void setLabel( boolean label )
+        {
             this.label = label;
         }
     }

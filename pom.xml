@@ -224,11 +224,6 @@
       </dependency>
       <dependency>
         <groupId>org.codehaus.redback</groupId>
-        <artifactId>redback-authentication-keys</artifactId>
-        <version>${security.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-authentication-memory</artifactId>
         <version>${security.version}</version>
       </dependency>
@@ -370,7 +365,7 @@
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-utils</artifactId>
-        <version>1.2</version>
+        <version>1.4</version>
         <exclusions>
           <exclusion>
             <groupId>org.codehaus.plexus</groupId>

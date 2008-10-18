@@ -46,7 +46,7 @@ public class RoleConstants
 
     public static final String USER_MANAGEMENT_USER_EDIT_OPERATION = "user-management-user-edit";
 
-    public static final String USER_MANAGEMENT_USER_ROLE_OPERATION = "user-management-user-role";    
+    public static final String USER_MANAGEMENT_USER_ROLE_OPERATION = "user-management-user-role";
 
     public static final String USER_MANAGEMENT_USER_DELETE_OPERATION = "user-management-user-delete";
 
