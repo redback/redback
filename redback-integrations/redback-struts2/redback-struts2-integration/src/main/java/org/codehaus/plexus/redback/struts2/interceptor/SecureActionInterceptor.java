@@ -59,6 +59,7 @@ public class SecureActionInterceptor
      */
     private String trackerName;
 
+    @Override
     public void destroy()
     {
     }
@@ -76,6 +77,7 @@ public class SecureActionInterceptor
      * @return
      * @throws Exception
      */
+    @Override
     public String intercept( ActionInvocation invocation )
         throws Exception
     {

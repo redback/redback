@@ -16,16 +16,24 @@ package org.codehaus.plexus.redback.struts2.interceptor;
  * limitations under the License.
  */
 
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
+import com.opensymphony.xwork2.spring.SpringObjectFactory;
 import com.opensymphony.xwork2.spring.interceptor.ActionAutowiringInterceptor;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import java.util.Map;
+import org.apache.struts2.StrutsException;
 import org.codehaus.plexus.logging.LogEnabled;
 import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.spring.PlexusToSpringUtils;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.web.context.WebApplicationContext;
 
 public abstract class AbstractHttpRequestTrackerInterceptor
-    extends ActionAutowiringInterceptor
+    extends AbstractInterceptor
     implements LogEnabled
 {
     public static final String TRACKER_NAME = ActionInvocationTracker.ROLE + ":name";
@@ -46,13 +54,20 @@ public abstract class AbstractHttpRequestTrackerInterceptor
     {
         Map sessionMap = invocation.getInvocationContext().getSession();
         
+        ApplicationContext applicationContext = (ApplicationContext) ActionContext.getContext().getApplication().get(
+                    WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
+        if (applicationContext == null)
+        {
+            throw new StrutsException("Could not locate ApplicationContext");
+        }
+        
         ActionInvocationTracker tracker = (ActionInvocationTracker) sessionMap.get( ActionInvocationTracker.ROLE );
 
         if ( tracker == null )
         {
             final String beanName = PlexusToSpringUtils.buildSpringId(ActionInvocationTracker.ROLE, getTrackerName());
             //noinspection deprecation
-            tracker = (ActionInvocationTracker) getApplicationContext().getBean(beanName);
+            tracker = (ActionInvocationTracker) applicationContext.getBean(beanName);
             sessionMap.put( ActionInvocationTracker.ROLE, tracker );
         }
 
