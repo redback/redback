@@ -24,7 +24,7 @@
   <display-name>Plexus Redback Example Webapp</display-name>
 
   <filter>
-    <filter-name>webwork-cleanup</filter-name>
+    <filter-name>struts2-cleanup</filter-name>
     <filter-class>org.apache.struts2.dispatcher.ActionContextCleanUp</filter-class>
   </filter>
 
@@ -34,12 +34,12 @@
   </filter>
 
   <filter>
-    <filter-name>webwork</filter-name>
+    <filter-name>struts2</filter-name>
     <filter-class>org.apache.struts2.dispatcher.FilterDispatcher</filter-class>
   </filter>
 
   <filter-mapping>
-    <filter-name>webwork-cleanup</filter-name>
+    <filter-name>struts2-cleanup</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
   
@@ -49,7 +49,7 @@
   </filter-mapping>
   
   <filter-mapping>
-    <filter-name>webwork</filter-name>
+    <filter-name>struts2</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
