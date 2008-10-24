@@ -8,7 +8,7 @@
 <%@ taglib uri="/struts-tags" prefix="s" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
     <s:form action="user" name="removeRole" method="post" namespace="/security/admin">
-      <s:hidden name="principal" value="${username}" />
+      <s:hidden name="principal">${username}</s:hidden>
       <s:select name="roleName" list="assignedRoles" labelposition="top" />
       <s:submit value="%{getText('remove')}" />
     </s:form>

@@ -48,11 +48,11 @@
         <c:forEach var="resource" items="${allResources}">
           <tr>
             <td>
-              <s:checkbox name="selectedResources" value="${resource.identifier}" />
+              <s:checkbox name="selectedResources" fieldValue="%{resource.identifier}" />
             </td>
             <td>
               <s:url id="resourceUrl" action="resource-edit">
-                <s:param name="resourceIdentifier" value="${resource.identifier}" />
+                <s:param name="resourceIdentifier">${resource.identifier}</s:param>
               </s:url>
               <s:a href="%{resourceUrl}"><c:out value="${resource.identifier}" /></s:a>
             </td>

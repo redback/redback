@@ -48,11 +48,11 @@
         <c:forEach var="operation" items="${allOperations}">
           <tr>
             <td>
-              <s:checkbox name="selectedOperations" value="${operation.name}" />
+              <s:checkbox name="selectedOperations" fieldValue="%{operation.name}" />
             </td>
             <td>
               <s:url id="operationUrl" action="operation-edit">
-                <s:param name="operationName" value="${operation.name}" />
+                <s:param name="operationName">${operation.name}</s:param>
               </s:url>
               <s:a href="%{operationUrl}"><c:out value="${operation.name}" /></s:a>
             </td>

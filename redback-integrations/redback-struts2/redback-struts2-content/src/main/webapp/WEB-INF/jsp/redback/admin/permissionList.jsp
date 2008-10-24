@@ -48,11 +48,11 @@
         <c:forEach var="permission" items="${allPermissions}">
           <tr>
             <td>
-              <s:checkbox name="selectedPermissions" value="${permission.name}" />
+              <s:checkbox name="selectedPermissions" fieldValue="%{permission.name}" />
             </td>
             <td>
               <s:url id="permissionUrl" action="permission-edit">
-                <s:param name="permissionName" value="${permission.name}" />
+                <s:param name="permissionName">${permission.name}</s:param>
               </s:url>
               <s:a href="%{permissionUrl}"><c:out value="${permission.name}" /></s:a>
             </td>

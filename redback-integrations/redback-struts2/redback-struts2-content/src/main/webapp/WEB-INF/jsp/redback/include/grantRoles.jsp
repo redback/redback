@@ -8,9 +8,9 @@
 <%@ taglib uri="/struts-tags" prefix="s" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-    <s:set name="availableRoles" value="${availableRoles}"/>
+    <s:set name="availableRoles" value="#availableRoles"/>
     <s:form action="user" name="grantRole" method="post" namespace="/security/admin">
-      <s:hidden name="principal" value="${username}" />
+      <s:hidden name="principal">${username}"</s:hidden>
       <s:select name="roleName" list="availableRoles" labelposition="top" />
       <s:submit value="%{getText('grant')}" />
     </s:form>
