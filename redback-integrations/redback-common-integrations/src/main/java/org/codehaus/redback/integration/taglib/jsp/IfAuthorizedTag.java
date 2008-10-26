@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.struts2.taglib.jsp;
+package org.codehaus.redback.integration.taglib.jsp;
 
 /*
  * Copyright 2006 The Codehaus.

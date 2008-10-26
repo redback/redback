@@ -8,7 +8,7 @@
 
   <tag>
     <name>ifConfigured</name>
-    <tagclass>org.codehaus.plexus.redback.struts2.taglib.jsp.IfConfiguredTag</tagclass>
+    <tagclass>org.codehaus.redback.integration.taglib.jsp.IfConfiguredTag</tagclass>
     <bodycontent>JSP</bodycontent>
     <attribute>
       <name>option</name>
@@ -24,19 +24,19 @@
 
   <tag>
     <name>isReadOnlyUserManager</name>
-    <tagclass>org.codehaus.plexus.redback.struts2.taglib.jsp.IsReadOnlyUserManagerTag</tagclass>
+    <tagclass>org.codehaus.redback.integration.taglib.jsp.IsReadOnlyUserManagerTag</tagclass>
     <bodycontent>JSP</bodycontent>
   </tag>
   
   <tag>
     <name>isNotReadOnlyUserManager</name>
-    <tagclass>org.codehaus.plexus.redback.struts2.taglib.jsp.IsNotReadOnlyUserManagerTag</tagclass>
+    <tagclass>org.codehaus.redback.integration.taglib.jsp.IsNotReadOnlyUserManagerTag</tagclass>
     <bodycontent>JSP</bodycontent>
   </tag>
 
   <tag>
     <name>ifAuthorized</name>
-    <tagclass>org.codehaus.plexus.redback.struts2.taglib.jsp.IfAuthorizedTag</tagclass>
+    <tagclass>org.codehaus.redback.integration.taglib.jsp.IfAuthorizedTag</tagclass>
     <bodycontent>JSP</bodycontent>
     <attribute>
       <name>permission</name>
@@ -52,7 +52,7 @@
   
   <tag>
     <name>ifAnyAuthorized</name>
-    <tagclass>org.codehaus.plexus.redback.struts2.taglib.jsp.IfAnyAuthorizedTag</tagclass>
+    <tagclass>org.codehaus.redback.integration.taglib.jsp.IfAnyAuthorizedTag</tagclass>
     <bodycontent>JSP</bodycontent>
     <attribute>
       <name>permissions</name>
@@ -68,7 +68,7 @@
 
   <tag>
     <name>elseAuthorized</name>
-    <tagclass>org.codehaus.plexus.redback.struts2.taglib.jsp.ElseAuthorizedTag</tagclass>
+    <tagclass>org.codehaus.redback.integration.taglib.jsp.ElseAuthorizedTag</tagclass>
     <bodycontent>JSP</bodycontent>
   </tag>
 
