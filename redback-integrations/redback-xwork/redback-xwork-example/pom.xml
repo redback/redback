@@ -59,7 +59,7 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.redback</groupId>
-      <artifactId>redback-xwork-taglib</artifactId>
+      <artifactId>redback-common-integrations</artifactId>
     </dependency>
    <dependency>
       <groupId>org.codehaus.redback</groupId>
