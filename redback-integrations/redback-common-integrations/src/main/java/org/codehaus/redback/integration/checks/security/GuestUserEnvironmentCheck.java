@@ -33,7 +33,7 @@ import java.util.List;
  * RequiredRolesEnvironmentCheck:
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
- * @version: $ID:$
+ * @version: $Id$
  * @plexus.component role="org.codehaus.plexus.redback.system.check.EnvironmentCheck"
  * role-hint="guest-user-check"
  */
