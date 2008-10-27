@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.struts2.checks.security;
+package org.codehaus.redback.integration.checks.security;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -35,11 +35,13 @@ import org.codehaus.redback.integration.role.RoleConstants;
  * and unlocks them on startup.
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
- * @version: $Id:$
+ * @version: $Id$
  * @plexus.component role="org.codehaus.plexus.redback.system.check.EnvironmentCheck"
  * role-hint="locked-admin-check"
  */
-public class LockedAdminEnvironmentCheck extends AbstractLogEnabled implements EnvironmentCheck
+public class LockedAdminEnvironmentCheck
+    extends AbstractLogEnabled
+    implements EnvironmentCheck
 {
 
     /**
@@ -67,7 +69,7 @@ public class LockedAdminEnvironmentCheck extends AbstractLogEnabled implements E
     {
         if ( !checked && !userManager.isReadOnly() )
         {
-            List roles = new ArrayList();
+            List<String> roles = new ArrayList<String>();
             roles.add( RoleConstants.SYSTEM_ADMINISTRATOR_ROLE );
 
             List systemAdminstrators;

@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.xwork.checks.security;
+package org.codehaus.redback.integration.checks.security;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -19,10 +19,9 @@ package org.codehaus.plexus.redback.xwork.checks.security;
 import java.util.List;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.redback.rbac.RBACManager;
-import org.codehaus.plexus.redback.system.check.EnvironmentCheck;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
+import org.codehaus.plexus.redback.system.check.EnvironmentCheck;
 
 /**
  * RequiredRolesEnvironmentCheck: this environment check will check that the
@@ -30,7 +29,7 @@ import org.codehaus.plexus.redback.role.RoleManagerException;
  * assigned.
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
- * @version: $Id:$
+ * @version: $Id$
  * @plexus.component role="org.codehaus.plexus.redback.system.check.EnvironmentCheck"
  * role-hint="required-roles"
  */

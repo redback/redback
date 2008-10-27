@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.xwork.checks.security;
+package org.codehaus.redback.integration.checks.security;
 
 /*
  * Copyright 2005-2006 The Codehaus.
