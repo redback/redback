@@ -16,9 +16,9 @@ package org.codehaus.plexus.redback.xwork.action;
  * limitations under the License.
  */
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.codehaus.plexus.redback.policy.PasswordEncoder;
@@ -30,9 +30,8 @@ import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
-import org.codehaus.plexus.redback.xwork.util.AutoLoginCookies;
 import org.codehaus.plexus.util.StringUtils;
-import com.opensymphony.webwork.dispatcher.SessionMap;
+import org.codehaus.redback.integration.util.AutoLoginCookies;
 
 /**
  * PasswordAction

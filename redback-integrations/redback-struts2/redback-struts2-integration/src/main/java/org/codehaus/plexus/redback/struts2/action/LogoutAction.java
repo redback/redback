@@ -16,11 +16,12 @@ package org.codehaus.plexus.redback.struts2.action;
  * limitations under the License.
  */
 
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.dispatcher.SessionMap;
 import org.codehaus.plexus.ehcache.EhcacheComponent;
 import org.codehaus.plexus.redback.struts2.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.struts2.interceptor.SecureActionException;
-import org.codehaus.plexus.redback.struts2.util.AutoLoginCookies;
+import org.codehaus.redback.integration.util.AutoLoginCookies;
 
 /**
  * LogoutAction
@@ -86,8 +87,8 @@ public class LogoutAction
             }
         }
         
-        autologinCookies.removeRememberMeCookie();
-        autologinCookies.removeSignonCookie();
+        autologinCookies.removeRememberMeCookie( ServletActionContext.getResponse(), ServletActionContext.getRequest() );
+        autologinCookies.removeSignonCookie( ServletActionContext.getResponse(), ServletActionContext.getRequest() );
 
         setAuthTokens( null );
 

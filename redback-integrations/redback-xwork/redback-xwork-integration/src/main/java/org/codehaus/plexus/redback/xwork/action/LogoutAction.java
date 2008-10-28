@@ -16,14 +16,10 @@ package org.codehaus.plexus.redback.xwork.action;
  * limitations under the License.
  */
 
-import javax.servlet.http.HttpSession;
-
 import org.codehaus.plexus.ehcache.EhcacheComponent;
-import org.codehaus.plexus.redback.system.SecuritySession;
-import org.codehaus.plexus.redback.system.SecuritySystemConstants;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
 import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
-import org.codehaus.plexus.redback.xwork.util.AutoLoginCookies;
+import org.codehaus.redback.integration.util.AutoLoginCookies;
 
 import com.opensymphony.webwork.ServletActionContext;
 import com.opensymphony.webwork.dispatcher.SessionMap;
@@ -92,8 +88,8 @@ public class LogoutAction
             }
         }
         
-        autologinCookies.removeRememberMeCookie();
-        autologinCookies.removeSignonCookie();
+        autologinCookies.removeRememberMeCookie( ServletActionContext.getResponse(), ServletActionContext.getRequest() );
+        autologinCookies.removeSignonCookie( ServletActionContext.getResponse(), ServletActionContext.getRequest() );
 
         setAuthTokens( null );
 

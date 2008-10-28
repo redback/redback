@@ -18,6 +18,7 @@ package org.codehaus.plexus.redback.struts2.interceptor;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.struts2.ServletActionContext;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
@@ -28,11 +29,10 @@ import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.system.SecuritySystemConstants;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
-import org.codehaus.plexus.redback.struts2.util.AutoLoginCookies;
+import org.codehaus.redback.integration.util.AutoLoginCookies;
 
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.Interceptor;
-import org.apache.struts2.ServletActionContext;
 
 /**
  * AutoLoginInterceptor
@@ -86,11 +86,13 @@ public class AutoLoginInterceptor
             checkCookieConsistency( securitySession );
             
             // update single sign on cookie
-            autologinCookies.setSignonCookie( securitySession.getUser().getUsername() );
+            autologinCookies.setSignonCookie( securitySession.getUser().getUsername(), ServletActionContext
+                .getResponse(), ServletActionContext.getRequest() );
         }
         else
         {
-            AuthenticationKey authkey = autologinCookies.getSignonKey();
+            AuthenticationKey authkey = autologinCookies.getSignonKey( ServletActionContext.getResponse(),
+                                                                       ServletActionContext.getRequest() );
 
             if ( authkey != null )
             {
@@ -109,21 +111,26 @@ public class AutoLoginInterceptor
                     }
                     else
                     {
-                        autologinCookies.removeSignonCookie();
-                        autologinCookies.removeRememberMeCookie();
+                        autologinCookies.removeSignonCookie( ServletActionContext.getResponse(), ServletActionContext
+                            .getRequest() );
+                        autologinCookies.removeRememberMeCookie( ServletActionContext.getResponse(),
+                                                                 ServletActionContext.getRequest() );
                     }
                 }
                 catch ( AccountLockedException e )
                 {
                     getLogger().info( "Account Locked : Username [" + e.getUser().getUsername() + "]", e );
-                    autologinCookies.removeSignonCookie();
-                    autologinCookies.removeRememberMeCookie();
+                    autologinCookies.removeSignonCookie( ServletActionContext.getResponse(), ServletActionContext
+                        .getRequest() );
+                    autologinCookies.removeRememberMeCookie( ServletActionContext.getResponse(), ServletActionContext
+                        .getRequest() );
                     return ACCOUNT_LOCKED;
                 }
             }
             else if ( autologinCookies.isRememberMeEnabled() )
             {
-                authkey = autologinCookies.getRememberMeKey();
+                authkey = autologinCookies.getRememberMeKey( ServletActionContext.getResponse(), ServletActionContext
+                    .getRequest() );
 
                 if ( authkey != null )
                 {
@@ -140,13 +147,15 @@ public class AutoLoginInterceptor
                         }
                         else
                         {
-                            autologinCookies.removeRememberMeCookie();
+                            autologinCookies.removeRememberMeCookie( ServletActionContext.getResponse(),
+                                                                     ServletActionContext.getRequest() );
                         }
                     }
                     catch ( AccountLockedException e )
                     {
                         getLogger().info( "Account Locked : Username [" + e.getUser().getUsername() + "]", e );
-                        autologinCookies.removeRememberMeCookie();
+                        autologinCookies.removeRememberMeCookie( ServletActionContext.getResponse(),
+                                                                 ServletActionContext.getRequest() );
                         return ACCOUNT_LOCKED;
                     }
                 }
@@ -162,7 +171,8 @@ public class AutoLoginInterceptor
 
         boolean failed = false;
 
-        AuthenticationKey key = autologinCookies.getRememberMeKey();
+        AuthenticationKey key = autologinCookies.getRememberMeKey( ServletActionContext.getResponse(),
+                                                                   ServletActionContext.getRequest() );
         if ( key != null )
         {
             if ( !key.getForPrincipal().equals( username ) )
@@ -175,7 +185,7 @@ public class AutoLoginInterceptor
 
         if ( !failed )
         {
-            key = autologinCookies.getSignonKey();
+            key = autologinCookies.getSignonKey( ServletActionContext.getResponse(), ServletActionContext.getRequest() );
             if ( key != null )
             {
                 if ( !key.getForPrincipal().equals( username ) )
@@ -221,7 +231,8 @@ public class AutoLoginInterceptor
                 getLogger().debug(
                     "Setting session:" + SecuritySystemConstants.SECURITY_SESSION_KEY + " to " + securitySession );
 
-                autologinCookies.setSignonCookie( authkey.getForPrincipal() );
+                autologinCookies.setSignonCookie( authkey.getForPrincipal(), ServletActionContext.getResponse(),
+                                                  ServletActionContext.getRequest() );
             }
             else
             {
@@ -244,8 +255,8 @@ public class AutoLoginInterceptor
 
     private void removeCookiesAndSession()
     {
-        autologinCookies.removeRememberMeCookie();
-        autologinCookies.removeSignonCookie();
+        autologinCookies.removeRememberMeCookie( ServletActionContext.getResponse(), ServletActionContext.getRequest() );
+        autologinCookies.removeSignonCookie( ServletActionContext.getResponse(), ServletActionContext.getRequest() );
 
         HttpSession session = ServletActionContext.getRequest().getSession();
         if ( session != null )
