@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.struts2.filter.authentication.digest;
+package org.codehaus.redback.integration.filter.authentication.digest;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -33,7 +33,7 @@ import org.codehaus.redback.integration.filter.authentication.digest.Digest;
  * @plexus.component role="org.codehaus.plexus.redback.struts2.filter.authentication.digest.HttpClientHeader"
  * instantiation-strategy="per-lookup"
  */
-class HttpDigestHeader
+public class HttpDigestHeader
     extends AbstractLogEnabled
 {
     public String username;
