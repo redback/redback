@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.struts2.filter.authentication.basic;
+package org.codehaus.redback.integration.filter.authentication.basic;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -27,8 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
-import org.codehaus.plexus.redback.struts2.filter.authentication.AbstractHttpAuthenticationFilter;
-import org.codehaus.plexus.redback.struts2.filter.authentication.HttpAuthenticator;
+import org.codehaus.redback.integration.filter.authentication.AbstractHttpAuthenticationFilter;
+import org.codehaus.redback.integration.filter.authentication.HttpAuthenticator;
 
 /**
  * HttpBasicAuthenticationFilter

@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.struts2.filter.authentication.basic;
+package org.codehaus.redback.integration.filter.authentication.basic;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -20,22 +20,23 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
 import org.codehaus.plexus.redback.policy.MustChangePasswordException;
-import org.codehaus.plexus.redback.struts2.filter.authentication.HttpAuthenticator;
 import org.codehaus.plexus.util.Base64;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.redback.integration.filter.authentication.HttpAuthenticator;
 
 /**
  * HttpBasicAuthentication
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.struts2.filter.authentication.HttpAuthenticator"
+ * @plexus.component role="org.codehaus.redback.integration.filter.authentication.HttpAuthenticator"
  * role-hint="basic"
  */
 public class HttpBasicAuthentication
@@ -50,20 +51,21 @@ public class HttpBasicAuthentication
     public AuthenticationResult getAuthenticationResult( HttpServletRequest request, HttpServletResponse response )
         throws AuthenticationException, AccountLockedException, MustChangePasswordException
     {
-        if ( isAlreadyAuthenticated() )
+        HttpSession httpSession = request.getSession( true );
+        if ( isAlreadyAuthenticated( httpSession ) )
         {
-            return getSecuritySession().getAuthenticationResult();
+            return getSecuritySession( httpSession ).getAuthenticationResult();
         }
 
         PasswordBasedAuthenticationDataSource authDataSource;
         String header = request.getHeader( "Authorization" );
-        
+
         // in tomcat this is : authorization=Basic YWRtaW46TWFuYWdlMDc=
-        if (header==null)
+        if ( header == null )
         {
-           header = request.getHeader("authorization");
+            header = request.getHeader( "authorization" );
         }
-        
+
         if ( ( header != null ) && header.startsWith( "Basic " ) )
         {
             String base64Token = header.substring( 6 );
@@ -80,7 +82,7 @@ public class HttpBasicAuthentication
             }
 
             authDataSource = new PasswordBasedAuthenticationDataSource( username, password );
-            return super.authenticate( authDataSource );
+            return super.authenticate( authDataSource, httpSession );
         }
         else
         {

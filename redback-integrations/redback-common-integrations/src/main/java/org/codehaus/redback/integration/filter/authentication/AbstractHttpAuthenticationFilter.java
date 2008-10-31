@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.struts2.filter.authentication;
+package org.codehaus.redback.integration.filter.authentication;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -19,7 +19,7 @@ package org.codehaus.plexus.redback.struts2.filter.authentication;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 
-import org.codehaus.plexus.redback.struts2.filter.PlexusServletFilter;
+import org.codehaus.redback.integration.filter.PlexusServletFilter;
 
 /**
  * AbstractHttpAuthenticationFilter

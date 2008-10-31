@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.struts2.filter.authentication.digest;
+package org.codehaus.redback.integration.filter.authentication.digest;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -20,29 +20,27 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authentication.TokenBasedAuthenticationDataSource;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
 import org.codehaus.plexus.redback.policy.MustChangePasswordException;
-import org.codehaus.plexus.redback.struts2.filter.authentication.HttpAuthenticator;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.util.Base64;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.redback.integration.filter.authentication.HttpAuthenticationException;
-import org.codehaus.redback.integration.filter.authentication.digest.Digest;
-import org.codehaus.redback.integration.filter.authentication.digest.HttpDigestHeader;
-import org.codehaus.redback.integration.filter.authentication.digest.NonceExpirationException;
+import org.codehaus.redback.integration.filter.authentication.HttpAuthenticator;
 
 /**
  * HttpDigestAuthentication methods for working with <a href="http://www.faqs.org/rfcs/rfc2617.html">RFC 2617 HTTP Authentication</a>.
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.struts2.filter.authentication.HttpAuthenticator"
+ * @plexus.component role="org.codehaus.redback.integration.filter.authentication.HttpAuthenticator"
  * role-hint="digest"
  */
 public class HttpDigestAuthentication
@@ -75,9 +73,10 @@ public class HttpDigestAuthentication
     public AuthenticationResult getAuthenticationResult( HttpServletRequest request, HttpServletResponse response )
         throws AuthenticationException, AccountLockedException, MustChangePasswordException
     {
-        if ( isAlreadyAuthenticated() )
+        HttpSession httpSession = request.getSession( true );
+        if ( isAlreadyAuthenticated( httpSession ) )
         {
-            return getSecuritySession().getAuthenticationResult();
+            return getSecuritySession( httpSession ).getAuthenticationResult();
         }
 
         TokenBasedAuthenticationDataSource authDataSource = new TokenBasedAuthenticationDataSource();
@@ -86,9 +85,9 @@ public class HttpDigestAuthentication
         // in tomcat this is : authorization=Basic YWRtaW46TWFuYWdlMDc=
         if ( authHeader == null )
         {
-            authHeader = request.getHeader("authorization");
+            authHeader = request.getHeader( "authorization" );
         }
-        
+
         if ( ( authHeader != null ) && authHeader.startsWith( "Digest " ) )
         {
             String rawDigestHeader = authHeader.substring( 7 );
@@ -108,7 +107,7 @@ public class HttpDigestAuthentication
             }
         }
 
-        return super.authenticate( authDataSource );
+        return super.authenticate( authDataSource, httpSession );
     }
 
     public User findUser( String username )
@@ -187,13 +186,13 @@ public class HttpDigestAuthentication
         }
         else if ( StringUtils.equals( "auth", digestHeader.qop ) )
         {
-            digest = a1 + ":" + digestHeader.nonce + ":" + digestHeader.nc + ":" + digestHeader.cnonce + ":" +
-                digestHeader.qop + ":" + a2;
+            digest = a1 + ":" + digestHeader.nonce + ":" + digestHeader.nc + ":" + digestHeader.cnonce + ":"
+                + digestHeader.qop + ":" + a2;
         }
         else
         {
-            throw new IllegalStateException(
-                "Http Digest Parameter [qop] with value of [" + digestHeader.qop + "] is unsupported." );
+            throw new IllegalStateException( "Http Digest Parameter [qop] with value of [" + digestHeader.qop
+                + "] is unsupported." );
         }
 
         return Digest.md5Hex( digest );

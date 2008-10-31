@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.struts2.filter.authentication;
+package org.codehaus.redback.integration.filter.authentication;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -17,11 +17,10 @@ package org.codehaus.plexus.redback.struts2.filter.authentication;
  */
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.redback.authentication.AuthenticationDataSource;
@@ -34,9 +33,6 @@ import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.redback.integration.filter.authentication.HttpAuthenticationException;
-
-import com.opensymphony.xwork2.ActionContext;
 
 /**
  * HttpAuthenticator
@@ -60,14 +56,14 @@ public abstract class HttpAuthenticator
      * @throws MustChangePasswordException
      * @throws AccountLockedException
      */
-    public AuthenticationResult authenticate( AuthenticationDataSource ds )
+    public AuthenticationResult authenticate( AuthenticationDataSource ds, HttpSession httpSession )
         throws AuthenticationException, AccountLockedException, MustChangePasswordException
     {
         try
         {
             SecuritySession securitySession = securitySystem.authenticate( ds );
 
-            setSecuritySession( securitySession );
+            setSecuritySession( securitySession, httpSession );
 
             return securitySession.getAuthenticationResult();
         }
@@ -141,57 +137,42 @@ public abstract class HttpAuthenticator
                                                                   HttpServletResponse response )
         throws AuthenticationException, AccountLockedException, MustChangePasswordException;
 
-    public Map getContextSession()
-    {
-        ActionContext context = ActionContext.getContext();
-        Map sessionMap = context.getSession();
-        if ( sessionMap == null )
-        {
-            sessionMap = new HashMap();
-        }
 
-        return sessionMap;
+
+    public User getSessionUser( HttpSession httpSession )
+    {
+        return (User) httpSession.getAttribute( SecuritySession.USERKEY );
     }
 
-    public User getSessionUser()
+    public boolean isAlreadyAuthenticated( HttpSession httpSession )
     {
-        return (User) getContextSession().get( SecuritySession.USERKEY );
-    }
-
-    public boolean isAlreadyAuthenticated()
-    {
-        User user = getSessionUser();
+        User user = getSessionUser( httpSession );
 
         return ( ( user != null ) && !user.isLocked() );
     }
 
-    public SecuritySession getSecuritySession()
+    public SecuritySession getSecuritySession( HttpSession httpSession )
     {
-        return (SecuritySession) getContextSession().get( SecuritySession.ROLE );
+        return (SecuritySession) httpSession.getAttribute( SecuritySession.ROLE );
     }
 
-    public void setSecuritySession( SecuritySession session )
+    
+    private void setSecuritySession( SecuritySession session, HttpSession httpSession )
     {
-        Map map = getContextSession();
-        map.put( SecuritySession.ROLE, session );
-        map.put( SecuritySession.USERKEY, session.getUser() );
-        ActionContext.getContext().setSession( map );
+        httpSession.setAttribute( SecuritySession.ROLE, session );
+        httpSession.setAttribute( SecuritySession.USERKEY, session.getUser() );
     }
 
-    public void setSessionUser( User user )
+    private void setSessionUser( User user, HttpSession httpSession )
     {
-        Map map = getContextSession();
-        map.put( SecuritySession.ROLE, null );
-        map.put( SecuritySession.USERKEY, user );
-        ActionContext.getContext().setSession( map );
+        httpSession.setAttribute( SecuritySession.ROLE, null );
+        httpSession.setAttribute( SecuritySession.USERKEY, user );
     }
 
-    public String storeDefaultUser( String principal )
+    private String storeDefaultUser( String principal, HttpSession httpSession )
     {
-        Map map = getContextSession();
-        map.put( SecuritySession.ROLE, null );
-        map.put( SecuritySession.USERKEY, null );
-        ActionContext.getContext().setSession( map );
+        httpSession.setAttribute( SecuritySession.ROLE, null );
+        httpSession.setAttribute( SecuritySession.USERKEY, null );
 
         if ( StringUtils.isEmpty( principal ) )
         {
@@ -201,8 +182,7 @@ public abstract class HttpAuthenticator
         try
         {
             User user = securitySystem.getUserManager().findUser( principal );
-            map.put( SecuritySession.USERKEY, user );
-            ActionContext.getContext().setSession( map );
+            httpSession.setAttribute( SecuritySession.USERKEY, user );
 
             return user.getPrincipal().toString();
 

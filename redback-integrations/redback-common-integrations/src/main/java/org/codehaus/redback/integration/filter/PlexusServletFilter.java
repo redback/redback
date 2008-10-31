@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.struts2.filter;
+package org.codehaus.redback.integration.filter;
 
 /*
  * Copyright 2005-2006 The Codehaus.

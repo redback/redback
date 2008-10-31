@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.xwork.filter.authorization;
+package org.codehaus.redback.integration.filter.authorization;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -28,8 +28,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.codehaus.plexus.redback.authorization.AuthorizationException;
 import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySystem;
-import org.codehaus.plexus.redback.xwork.filter.PlexusServletFilter;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.redback.integration.filter.PlexusServletFilter;
 
 /**
  * SimpleAuthorizationFilter
