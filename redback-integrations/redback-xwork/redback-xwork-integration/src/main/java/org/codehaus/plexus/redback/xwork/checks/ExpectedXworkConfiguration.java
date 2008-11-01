@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.plexus.redback.system.check.EnvironmentCheck;
-import org.codehaus.plexus.redback.xwork.checks.xwork.XworkPackageConfig;
+import org.codehaus.redback.integration.checks.xwork.XworkPackageConfig;
 
 import com.opensymphony.xwork.config.Configuration;
 import com.opensymphony.xwork.config.ConfigurationManager;

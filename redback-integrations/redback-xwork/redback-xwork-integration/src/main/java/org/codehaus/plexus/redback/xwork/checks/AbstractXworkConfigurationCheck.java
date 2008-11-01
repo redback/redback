@@ -20,9 +20,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.plexus.redback.xwork.checks.xwork.XworkActionConfig;
-import org.codehaus.plexus.redback.xwork.checks.xwork.XworkPackageConfig;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.redback.integration.checks.xwork.XworkActionConfig;
+import org.codehaus.redback.integration.checks.xwork.XworkPackageConfig;
 
 import com.opensymphony.xwork.config.Configuration;
 import com.opensymphony.xwork.config.entities.ActionConfig;
