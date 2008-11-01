@@ -157,19 +157,19 @@ public abstract class HttpAuthenticator
     }
 
     
-    private void setSecuritySession( SecuritySession session, HttpSession httpSession )
+    public void setSecuritySession( SecuritySession session, HttpSession httpSession )
     {
         httpSession.setAttribute( SecuritySession.ROLE, session );
         httpSession.setAttribute( SecuritySession.USERKEY, session.getUser() );
     }
 
-    private void setSessionUser( User user, HttpSession httpSession )
+    public void setSessionUser( User user, HttpSession httpSession )
     {
         httpSession.setAttribute( SecuritySession.ROLE, null );
         httpSession.setAttribute( SecuritySession.USERKEY, user );
     }
 
-    private String storeDefaultUser( String principal, HttpSession httpSession )
+    public String storeDefaultUser( String principal, HttpSession httpSession )
     {
         httpSession.setAttribute( SecuritySession.ROLE, null );
         httpSession.setAttribute( SecuritySession.USERKEY, null );
