@@ -41,7 +41,7 @@ import org.codehaus.redback.integration.util.UserComparator;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.xwork.reports.Report" role-hint="rolesmatrix-csv"
+ * @plexus.component role="org.codehaus.redback.integration.reports.Report" role-hint="rolesmatrix-csv"
  */
 public class CsvRolesMatrix
     implements Report
