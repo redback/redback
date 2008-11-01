@@ -19,8 +19,8 @@ package org.codehaus.plexus.redback.struts2.action;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.dispatcher.SessionMap;
 import org.codehaus.plexus.ehcache.EhcacheComponent;
-import org.codehaus.plexus.redback.struts2.interceptor.SecureActionBundle;
-import org.codehaus.plexus.redback.struts2.interceptor.SecureActionException;
+import org.codehaus.redback.integration.interceptor.SecureActionBundle;
+import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.util.AutoLoginCookies;
 
 /**

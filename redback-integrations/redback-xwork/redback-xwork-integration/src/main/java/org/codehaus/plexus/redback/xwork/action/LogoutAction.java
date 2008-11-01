@@ -17,8 +17,8 @@ package org.codehaus.plexus.redback.xwork.action;
  */
 
 import org.codehaus.plexus.ehcache.EhcacheComponent;
-import org.codehaus.plexus.redback.xwork.interceptor.SecureActionBundle;
-import org.codehaus.plexus.redback.xwork.interceptor.SecureActionException;
+import org.codehaus.redback.integration.interceptor.SecureActionBundle;
+import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.util.AutoLoginCookies;
 
 import com.opensymphony.webwork.ServletActionContext;
