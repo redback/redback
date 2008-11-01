@@ -30,7 +30,7 @@ public class XworkPackageConfig
 {
     public String name;
 
-    public List actions = new ArrayList();
+    public List<XworkActionConfig> actions = new ArrayList<XworkActionConfig>();
 
     public XworkPackageConfig( String name )
     {

@@ -33,7 +33,7 @@ public class XworkActionConfig
 
     public String method;
 
-    public List results = new ArrayList();
+    public List<String> results = new ArrayList<String>();
 
     public XworkActionConfig( String name, String className, String method )
     {

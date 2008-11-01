@@ -1,4 +1,4 @@
-package org.codehaus.plexus.redback.struts2.checks;
+package org.codehaus.redback.integration.checks;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -22,7 +22,7 @@ import org.codehaus.plexus.redback.system.check.EnvironmentCheck;
 
 /**
  * ExpectedJsps
- *
+ * @FIXME the jsp list is not correct
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  * @plexus.component role="org.codehaus.plexus.redback.system.check.EnvironmentCheck"
