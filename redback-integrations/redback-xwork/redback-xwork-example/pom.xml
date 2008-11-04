@@ -199,20 +199,6 @@
 
   <profiles>
     <profile>
-      <id>release</id>
-      <build>
-        <plugins>
-          <plugin>
-            <!-- example deployement only when release -->
-            <artifactId>maven-deploy-plugin</artifactId>
-            <configuration>
-              <skip>true</skip>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>    
-    <profile>
       <id>postgres</id>
       <dependencies>
         <dependency>

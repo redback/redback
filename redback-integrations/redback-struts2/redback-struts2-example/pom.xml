@@ -88,7 +88,7 @@
         </configuration>
       </plugin>
       <plugin>
-        <!-- skip example deployement with snapshots -->
+        <!-- skip example deployement -->
         <artifactId>maven-deploy-plugin</artifactId>
         <configuration>
           <skip>true</skip>
@@ -219,20 +219,6 @@
   </scm>
   
   <profiles>
-    <profile>
-      <id>release</id>
-      <build>
-        <plugins>
-          <plugin>
-            <!-- example deployement only when release -->
-            <artifactId>maven-deploy-plugin</artifactId>
-            <configuration>
-              <skip>true</skip>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
     <profile>
       <id>postgres</id>
       <dependencies>
