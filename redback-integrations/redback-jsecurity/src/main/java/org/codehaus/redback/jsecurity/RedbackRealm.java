@@ -1,8 +1,13 @@
 package org.codehaus.redback.jsecurity;
 
+import java.security.Permission;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import org.codehaus.plexus.redback.authorization.AuthorizationException;
 import org.codehaus.plexus.redback.rbac.RBACManager;
+import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
@@ -35,16 +40,28 @@ public class RedbackRealm extends AuthorizingRealm
     {
         String username = (String) principals.fromRealm(getName()).iterator().next();
 
-        UserAssignment assignment = rbackManager.getUserAssignment(username);
-        assignment.getRoleNames()
+        try
+        {
+            UserAssignment assignment = rbackManager.getUserAssignment(username);
+            Set<String> roleNames = new HashSet<String>(assignment.getRoleNames());
+            Set<String> permissions = new HashSet<String>();
 
-        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+            for (Iterator<Permission> it = rbackManager.getAssignedPermissions(username).iterator(); it.hasNext();) {
+                Permission permission = it.next();
+                permissions.add(permission.getName());
+            }
 
-    private List<String> getRoleNames(User user)
-    {
-        userManager.
+            SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo(roleNames);
+            authorizationInfo.setStringPermissions(permissions);
+
+            return authorizationInfo;
+        }
+        catch (RbacManagerException e)
+        {
+            //TODO: add logging
+        }
+        
+        return null;
     }
 
     @Override
