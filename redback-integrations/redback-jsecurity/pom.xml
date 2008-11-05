@@ -9,7 +9,7 @@
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-jsecurity</artifactId>
     <version>1.2-SNAPSHOT</version>
-    <name>Redback :: JSecurity Integration</name>
+    <name>Redback :: Integration :: JSecurity Integration</name>
     <dependencies>
         <dependency>
             <groupId>org.codehaus.redback</groupId>

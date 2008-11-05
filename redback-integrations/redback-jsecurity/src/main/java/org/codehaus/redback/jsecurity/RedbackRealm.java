@@ -1,13 +1,10 @@
 package org.codehaus.redback.jsecurity;
 
-import java.security.Permission;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
-import org.codehaus.plexus.redback.authorization.AuthorizationException;
-import org.codehaus.plexus.redback.policy.PasswordEncoder;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
+import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
@@ -52,7 +49,8 @@ public class RedbackRealm extends AuthorizingRealm
             Set<String> roleNames = new HashSet<String>(assignment.getRoleNames());
             Set<String> permissions = new HashSet<String>();
 
-            for (Iterator<Permission> it = rbacManager.getAssignedPermissions(username).iterator(); it.hasNext();) {
+            for (Iterator<Permission> it = rbacManager.getAssignedPermissions(username).iterator(); it.hasNext();)
+            {
                 Permission permission = it.next();
                 permissions.add(permission.getName());
             }

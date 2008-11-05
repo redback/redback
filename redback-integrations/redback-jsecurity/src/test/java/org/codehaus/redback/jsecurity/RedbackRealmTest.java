@@ -1,13 +1,19 @@
 package org.codehaus.redback.jsecurity;
 
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
+import org.codehaus.plexus.redback.rbac.Operation;
+import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
+import org.codehaus.plexus.redback.rbac.Resource;
+import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 import org.jsecurity.authc.UsernamePasswordToken;
 import org.jsecurity.mgt.DefaultSecurityManager;
+import org.jsecurity.subject.PrincipalCollection;
+import org.jsecurity.subject.SimplePrincipalCollection;
 import org.jsecurity.subject.Subject;
 
 public class RedbackRealmTest extends PlexusInSpringTestCase
@@ -48,8 +54,20 @@ public class RedbackRealmTest extends PlexusInSpringTestCase
 
         assertEquals(1, userManager.getUsers().size());
         
-        rbacManager.createRole("role1");
-        rbacManager.createRole("role2");
+        Role role1 = rbacManager.createRole("role1");
+        Permission permission = rbacManager.createPermission("Allowed to write to repository");
+        Operation operation = rbacManager.createOperation("myop");
+        Resource resource = rbacManager.createResource("filesystem");
+
+        permission.setOperation(operation);
+        permission.setPermanent(false);
+        permission.setResource(resource);
+
+        role1.addPermission(permission);
+        rbacManager.savePermission(permission);
+        rbacManager.saveRole(role1);
+        
+        Role role2 = rbacManager.createRole("role2");
 
         UserAssignment assignment = rbacManager.createUserAssignment(user.getUsername());
         assignment.addRoleName("role1");
@@ -59,5 +77,9 @@ public class RedbackRealmTest extends PlexusInSpringTestCase
         assertTrue(subject.isAuthenticated());
         assertTrue(subject.hasRole("role1"));
         assertFalse(subject.hasRole("role2"));
+
+        PrincipalCollection principals = new SimplePrincipalCollection("test1", realm.getName());
+
+        assertTrue(securityManager.isPermitted(principals, "Allowed to write to repository"));
     }
 }
