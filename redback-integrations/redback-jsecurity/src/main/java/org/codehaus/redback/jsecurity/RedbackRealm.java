@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import org.codehaus.plexus.redback.authorization.AuthorizationException;
+import org.codehaus.plexus.redback.policy.PasswordEncoder;
+import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
@@ -17,6 +19,7 @@ import org.jsecurity.authc.AuthenticationInfo;
 import org.jsecurity.authc.AuthenticationToken;
 import org.jsecurity.authc.SimpleAuthenticationInfo;
 import org.jsecurity.authc.UsernamePasswordToken;
+import org.jsecurity.authc.credential.CredentialsMatcher;
 import org.jsecurity.authz.AuthorizationInfo;
 import org.jsecurity.authz.SimpleAuthorizationInfo;
 import org.jsecurity.realm.AuthorizingRealm;
@@ -28,11 +31,14 @@ public class RedbackRealm extends AuthorizingRealm
 
     private final UserManager userManager;
 
-    private final RBACManager rbackManager;
+    private final RBACManager rbacManager;
 
-    public RedbackRealm(UserManager userManager, RBACManager rbackManager) {
+    private final UserSecurityPolicy userSecurityPolicy;
+
+    public RedbackRealm(UserManager userManager, RBACManager rbacManager, UserSecurityPolicy userSecurityPolicy) {
         this.userManager = userManager;
-        this.rbackManager = rbackManager;
+        this.rbacManager = rbacManager;
+        this.userSecurityPolicy = userSecurityPolicy;
     }
     
     @Override
@@ -42,11 +48,11 @@ public class RedbackRealm extends AuthorizingRealm
 
         try
         {
-            UserAssignment assignment = rbackManager.getUserAssignment(username);
+            UserAssignment assignment = rbacManager.getUserAssignment(username);
             Set<String> roleNames = new HashSet<String>(assignment.getRoleNames());
             Set<String> permissions = new HashSet<String>();
 
-            for (Iterator<Permission> it = rbackManager.getAssignedPermissions(username).iterator(); it.hasNext();) {
+            for (Iterator<Permission> it = rbacManager.getAssignedPermissions(username).iterator(); it.hasNext();) {
                 Permission permission = it.next();
                 permissions.add(permission.getName());
             }
@@ -90,11 +96,25 @@ public class RedbackRealm extends AuthorizingRealm
             return null;
         }
 
-        return new SimpleAuthenticationInfo(user.getUsername(), user.getPassword(), getName());
+        return new SimpleAuthenticationInfo(user.getUsername(), user.getEncodedPassword(), getName());
     }
 
     @Override
-    public String getName() {
+    public String getName()
+    {
         return REDBACK_REALM_NAME;
+    }
+
+    @Override
+    public CredentialsMatcher getCredentialsMatcher()
+    {
+        return new CredentialsMatcher()
+        {
+            public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info)
+            {
+                final String credentials = new String((char[])token.getCredentials());
+                return userSecurityPolicy.getPasswordEncoder().encodePassword(credentials).equals((String)info.getCredentials());
+            }
+        };
     }
 }
