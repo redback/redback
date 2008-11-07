@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-authentication</artifactId>
-    <version>1.2-beta-1</version>
+    <version>1.2-SNAPSHOT</version>
   </parent>
   <artifactId>redback-authentication-api</artifactId>
   <name>Redback :: Authentication API</name>

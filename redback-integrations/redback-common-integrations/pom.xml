@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-integrations</artifactId>
-    <version>1.2-beta-1</version>
+    <version>1.2-SNAPSHOT</version>
   </parent>
   <artifactId>redback-common-integrations</artifactId>
   <name>Redback :: Integration :: Common</name>
@@ -166,9 +166,9 @@
     </dependency>
   </dependencies>
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/redback/redback/tags/redback-1.2-beta-1/redback-integrations/redback-common-integrations</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.2-beta-1/redback-integrations/redback-common-integrations</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/redback/redback/tags/redback-1.2-beta-1/redback-integrations/redback-common-integrations</url>
+    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-integrations/redback-common-integrations</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-integrations/redback-common-integrations</developerConnection>
+    <url>http://fisheye.codehaus.org/browse/redback/redback/trunk/redback-integrations/redback-common-integrations</url>
   </scm>
   <build>
     <plugins>
