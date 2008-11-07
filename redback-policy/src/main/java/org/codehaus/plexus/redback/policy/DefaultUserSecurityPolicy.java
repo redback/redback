@@ -57,6 +57,8 @@ public class DefaultUserSecurityPolicy
 
     public static final String PASSWORD_ENCODER = "security.policy.password.encoder";
 
+    public static final String UNLOCKABLE_ACCOUNTS = "security.policy.unlockable.accounts";
+
     private PasswordRule defaultPasswordRule = new MustHavePasswordRule();
 
     /**
@@ -76,6 +78,8 @@ public class DefaultUserSecurityPolicy
     private int passwordExpirationDays;
     
     private boolean passwordExpirationEnabled;
+
+    private List<String> unlockableAccounts;
 
     /**
      * @plexus.requirement
@@ -107,6 +111,24 @@ public class DefaultUserSecurityPolicy
     public int getPreviousPasswordsCount()
     {
         return previousPasswordsCount;
+    }
+
+    public List<String> getUnlockableAccounts()
+    {
+        if (unlockableAccounts == null)
+        {
+            unlockableAccounts = new ArrayList<String>();
+        }
+        return unlockableAccounts;
+    }
+
+    /**
+     * Sets a list of accounts which should never be locked by security policy
+     * @param unlockableAccounts
+     */
+    public void setUnlockableAccounts(List<String> unlockableAccounts)
+    {
+        this.unlockableAccounts = unlockableAccounts;
     }
 
     /**
@@ -200,7 +222,7 @@ public class DefaultUserSecurityPolicy
     public void extensionPasswordExpiration( User user )
         throws MustChangePasswordException
     {
-        if ( passwordExpirationEnabled )
+        if ( passwordExpirationEnabled && !getUnlockableAccounts().contains( user.getUsername() ) )
         {
             Calendar expirationDate = Calendar.getInstance();
             expirationDate.setTime( user.getLastPasswordChange() );
@@ -219,14 +241,17 @@ public class DefaultUserSecurityPolicy
     public void extensionExcessiveLoginAttempts( User user )
         throws AccountLockedException
     {
-        int attempt = user.getCountFailedLoginAttempts();
-        attempt++;
-        user.setCountFailedLoginAttempts( attempt );
-
-        if ( attempt >= loginAttemptCount )
+        if ( !getUnlockableAccounts().contains( user.getUsername() ) )
         {
-            user.setLocked( true );
-            throw new AccountLockedException( "Account " + user.getUsername() + " is locked.", user );
+            int attempt = user.getCountFailedLoginAttempts();
+            attempt++;
+            user.setCountFailedLoginAttempts( attempt );
+
+            if ( attempt >= loginAttemptCount )
+            {
+                user.setLocked( true );
+                throw new AccountLockedException( "Account " + user.getUsername() + " is locked.", user );
+            }
         }
     }
 
@@ -379,5 +404,6 @@ public class DefaultUserSecurityPolicy
         this.loginAttemptCount = config.getInt( LOGIN_ATTEMPT_COUNT );
         this.passwordExpirationEnabled = config.getBoolean( PASSWORD_EXPIRATION_ENABLED );
         this.passwordExpirationDays = config.getInt( PASSWORD_EXPIRATION );
+        this.unlockableAccounts = config.getList(UNLOCKABLE_ACCOUNTS);
     }
 }
