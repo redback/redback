@@ -681,7 +681,7 @@
     <module>redback-integrations</module>
   </modules>
   <properties>
-    <security.version>1.2-beta-1</security.version>
+    <security.version>1.2-SNAPSHOT</security.version>
     <springVersion>2.5.5</springVersion>
   </properties>
 
