@@ -95,7 +95,7 @@ public interface RBACManager
     /**
      * Method getRoles
      */
-    public List getAllRoles()
+    public List<Role> getAllRoles()
         throws RbacManagerException;
 
     /**
@@ -248,7 +248,7 @@ public interface RBACManager
     public Resource getResource( String resourceIdentifier )
         throws RbacObjectNotFoundException, RbacManagerException;
 
-    public List getAllResources()
+    public List<Resource> getAllResources()
         throws RbacManagerException;
 
     public void removeResource( Resource resource )
@@ -410,7 +410,7 @@ public interface RBACManager
      * @throws RbacManagerException
      * @throws RbacObjectNotFoundException
      */
-    public List getAllAssignableRoles()
+    public List<Role> getAllAssignableRoles()
         throws RbacManagerException, RbacObjectNotFoundException;
 
     /**

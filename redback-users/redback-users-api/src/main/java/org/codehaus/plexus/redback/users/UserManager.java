@@ -93,9 +93,9 @@ public interface UserManager
      *
      * @return the List of {@link User} Objects.
      */
-    List getUsers();
+    List<User> getUsers();
 
-    List getUsers( boolean orderAscending );
+    List<User> getUsers( boolean orderAscending );
 
     /**
      * Add a User.
@@ -133,11 +133,11 @@ public interface UserManager
     User getGuestUser()
         throws UserNotFoundException;
 
-    List findUsersByUsernameKey( String usernameKey, boolean orderAscending );
+    List<User> findUsersByUsernameKey( String usernameKey, boolean orderAscending );
 
-    List findUsersByFullNameKey( String fullNameKey, boolean orderAscending );
+    List<User> findUsersByFullNameKey( String fullNameKey, boolean orderAscending );
 
-    List findUsersByEmailKey( String emailKey, boolean orderAscending );
+    List<User> findUsersByEmailKey( String emailKey, boolean orderAscending );
 
     /**
      * Find users matching properties, ordering and range as specified by the
@@ -146,7 +146,7 @@ public interface UserManager
      * @param query the query.
      * @return a List of {@link User} objects.
      */
-    List findUsersByQuery( UserQuery query );
+    List<User> findUsersByQuery( UserQuery query );
 
     /**
      * Find a User using the principal.
