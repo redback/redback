@@ -1,9 +1,29 @@
 package org.codehaus.redback.jsecurity;
 
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
+import org.codehaus.plexus.redback.policy.AccountLockedException;
 import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
@@ -24,30 +44,29 @@ import org.jsecurity.subject.PrincipalCollection;
 
 public class RedbackRealm extends AuthorizingRealm
 {
-    private static final String REDBACK_REALM_NAME = "redback-realm";
-
     private final UserManager userManager;
 
     private final RBACManager rbacManager;
 
-    private final UserSecurityPolicy userSecurityPolicy;
+    private final UserSecurityPolicy securityPolicy;
 
-    public RedbackRealm(UserManager userManager, RBACManager rbacManager, UserSecurityPolicy userSecurityPolicy) {
+    public RedbackRealm(UserManager userManager, RBACManager rbacManager, UserSecurityPolicy securityPolicy)
+    {
         this.userManager = userManager;
         this.rbacManager = rbacManager;
-        this.userSecurityPolicy = userSecurityPolicy;
+        this.securityPolicy = securityPolicy;
     }
     
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals)
     {
-        String username = (String) principals.fromRealm(getName()).iterator().next();
+        final String username = (String) principals.fromRealm(getName()).iterator().next();
 
         try
         {
-            UserAssignment assignment = rbacManager.getUserAssignment(username);
-            Set<String> roleNames = new HashSet<String>(assignment.getRoleNames());
-            Set<String> permissions = new HashSet<String>();
+            final UserAssignment assignment = rbacManager.getUserAssignment(username);
+            final Set<String> roleNames = new HashSet<String>(assignment.getRoleNames());
+            final Set<String> permissions = new HashSet<String>();
 
             for (Iterator<Permission> it = rbacManager.getAssignedPermissions(username).iterator(); it.hasNext();)
             {
@@ -77,7 +96,7 @@ public class RedbackRealm extends AuthorizingRealm
             throw new AuthenticationException("AuthenticationToken cannot be null");
         }
         
-        UsernamePasswordToken passwordToken = (UsernamePasswordToken)token;
+        final UsernamePasswordToken passwordToken = (UsernamePasswordToken)token;
 
         User user = null;
         try
@@ -94,13 +113,17 @@ public class RedbackRealm extends AuthorizingRealm
             return null;
         }
 
-        return new SimpleAuthenticationInfo(user.getUsername(), user.getEncodedPassword(), getName());
-    }
+        if ( user.isLocked() && !user.isPasswordChangeRequired() )
+        {
+            throw new AuthenticationException("User " + user.getPrincipal() + " is locked.");
+        }
 
-    @Override
-    public String getName()
-    {
-        return REDBACK_REALM_NAME;
+        if ( user.isPasswordChangeRequired() )
+        {
+            throw new AuthenticationException("Password change is required for user " + user.getPrincipal());
+        }
+
+        return new RedbackAuthenticationInfo(user, getName());
     }
 
     @Override
@@ -111,8 +134,48 @@ public class RedbackRealm extends AuthorizingRealm
             public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info)
             {
                 final String credentials = new String((char[])token.getCredentials());
-                return userSecurityPolicy.getPasswordEncoder().encodePassword(credentials).equals((String)info.getCredentials());
+                final boolean match = securityPolicy.getPasswordEncoder().encodePassword(credentials).equals((String)info.getCredentials());
+                if (!match)
+                {
+                    User user = ((RedbackAuthenticationInfo)info).getUser();
+                    try
+                    {
+                        securityPolicy.extensionExcessiveLoginAttempts( user );
+                    }
+                    catch (AccountLockedException e)
+                    {
+                        //log that account has been locked
+                    }
+                    finally
+                    {
+                        try
+                        {
+                            userManager.updateUser( user );
+                        }
+                        catch (UserNotFoundException e)
+                        {
+                            //The user no longer exists anyway and authc has failed
+                        }
+                    }
+                }
+                return match;
             }
         };
+    }
+
+    final class RedbackAuthenticationInfo extends SimpleAuthenticationInfo
+    {
+        private final User user;
+
+        public RedbackAuthenticationInfo(User user, String realmName)
+        {
+            super(user.getPrincipal(), user.getEncodedPassword(), realmName);
+            this.user = user;
+        }
+
+        public User getUser()
+        {
+            return user;
+        }
     }
 }
