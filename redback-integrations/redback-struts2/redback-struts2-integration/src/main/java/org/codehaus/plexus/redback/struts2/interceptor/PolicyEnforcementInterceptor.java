@@ -86,8 +86,16 @@ public class PolicyEnforcementInterceptor
 
             ActionContext context = ActionContext.getContext();
 
-            SecuritySession securitySession =
-                    (SecuritySession) context.getSession().get( SecuritySystemConstants.SECURITY_SESSION_KEY );
+            SecuritySession securitySession = null;
+
+            try
+            {
+                securitySession = (SecuritySession) context.getSession().get( SecuritySystemConstants.SECURITY_SESSION_KEY );
+            }
+            catch (IllegalStateException e)
+            {
+                getLogger().debug("Could not get security session as the session was invalid", e);
+            }
 
             UserSecurityPolicy policy = securitySystem.getPolicy();            
             
