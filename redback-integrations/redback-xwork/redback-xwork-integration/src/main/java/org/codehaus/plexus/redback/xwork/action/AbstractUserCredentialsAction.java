@@ -193,16 +193,24 @@ public abstract class AbstractUserCredentialsAction
             return Collections.EMPTY_LIST;
         }
 
+        String delimiter = " - ";
+        
         // we should have a list of resourceGrants now, this will provide us with the information necessary to restrict
         // the role list
         for ( Role role : roleList )
         {
-            for ( String resourceIdentifier : resourceGrants )
+        	int delimiterIndex = role.getName().indexOf( delimiter );         
+        	for ( String resourceIdentifier : resourceGrants )
             {
-                if ( role.getName().indexOf( resourceIdentifier ) != -1 )
-                {
-                    filteredRoleList.add( role );
-                }
+
+        		if ( ( role.getName().indexOf( resourceIdentifier ) != -1 ) && ( delimiterIndex != -1 ) )
+        		{
+        			String resourceName = role.getName().substring( delimiterIndex + delimiter.length() );
+        			if ( resourceName.equals( resourceIdentifier ) )
+                    {
+        				filteredRoleList.add( role );
+        			}
+        		}
             }
         }
 
