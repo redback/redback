@@ -31,7 +31,7 @@ import javax.naming.spi.StateFactory;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: LdapConnectionFactory.java,v 1.3 2006/02/06 15:15:54 trygvis Exp $
+ * @version $Id$
  */
 public interface LdapConnectionFactory
 {
@@ -42,7 +42,7 @@ public interface LdapConnectionFactory
     LdapConnection getConnection( Rdn subRdn ) throws LdapException;
 
     LdapConnection getConnection( String bindDn, String password ) throws LdapException;
-    
+
     LdapName getBaseDnLdapName() throws LdapException;
 
     void addObjectFactory( Class<? extends ObjectFactory> objectFactoryClass );

@@ -18,6 +18,9 @@ package org.codehaus.plexus.redback.common.ldap;
 
 import javax.naming.directory.Attributes;
 
+/**
+ * @version $Id$
+ */
 public class UserUpdate
 {
 

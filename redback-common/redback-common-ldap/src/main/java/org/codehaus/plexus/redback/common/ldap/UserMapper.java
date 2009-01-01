@@ -20,6 +20,9 @@ import org.codehaus.plexus.redback.users.User;
 
 import javax.naming.directory.Attributes;
 
+/**
+ * @version $Id$
+ */
 public interface UserMapper
 {
     public static final String ROLE = UserMapper.class.getName();

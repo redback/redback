@@ -16,6 +16,9 @@ package org.codehaus.plexus.redback.common.ldap;
  * limitations under the License.
  */
 
+/**
+ * @version $Id$
+ */
 public class MappingException
     extends Exception
 {

@@ -40,7 +40,7 @@ import javax.naming.ldap.Rdn;
  * The configuration for a connection will not change.
  *
  * @author <a href="mailto:trygvis@inamo.no">trygvis</a>
- * @version $Id: LdapConnection.java,v 1.3 2006/02/06 15:15:54 trygvis Exp $
+ * @version $Id$
  */
 public class LdapConnection
 {

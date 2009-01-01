@@ -27,7 +27,7 @@ import javax.naming.NamingException;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">trygvis</a>
- * @version $Id: LdapException.java,v 1.2 2006/02/06 15:15:54 trygvis Exp $
+ * @version $Id$
  */
 public class LdapException
     extends NamingException

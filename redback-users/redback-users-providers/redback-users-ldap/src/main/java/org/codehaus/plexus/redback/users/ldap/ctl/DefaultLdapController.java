@@ -16,40 +16,41 @@ package org.codehaus.plexus.redback.users.ldap.ctl;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.logging.LogEnabled;
-import org.codehaus.plexus.logging.Logger;
-import org.codehaus.plexus.redback.common.ldap.LdapUser;
-import org.codehaus.plexus.redback.common.ldap.MappingException;
-import org.codehaus.plexus.redback.common.ldap.UserMapper;
-import org.codehaus.plexus.redback.users.User;
-import org.codehaus.plexus.redback.users.UserManager;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
+import javax.annotation.Resource;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Set;
+
+import org.codehaus.plexus.redback.common.ldap.LdapUser;
+import org.codehaus.plexus.redback.common.ldap.MappingException;
+import org.codehaus.plexus.redback.common.ldap.UserMapper;
+import org.codehaus.plexus.redback.users.User;
+import org.codehaus.plexus.redback.users.UserManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 /**
  * @author <a href="jesse@codehaus.org"> jesse
  * @version "$Id$"
- * @plexus.component role="org.codehaus.plexus.redback.users.ldap.ctl.LdapController" role-hint="default"
  */
+@Service
 public class DefaultLdapController
-    implements LogEnabled, LdapController
+    implements LdapController
 {
 
-    private Logger log;
+    private Logger log = LoggerFactory.getLogger( getClass() );
 
-    /**
-     * @plexus.requirement role-hint="ldap"
-     */
+    @Resource(name="userMapper#ldap")
     private UserMapper mapper;
 
-    /* (non-Javadoc)
+    /**
 	 * @see org.codehaus.plexus.redback.users.ldap.ctl.LdapControllerI#removeUser(java.lang.Object, javax.naming.directory.DirContext)
 	 */
     public void removeUser( Object principal, DirContext context )
@@ -58,7 +59,7 @@ public class DefaultLdapController
 
     }
 
-    /* (non-Javadoc)
+    /**
 	 * @see org.codehaus.plexus.redback.users.ldap.ctl.LdapControllerI#updateUser(org.codehaus.plexus.redback.users.User, javax.naming.directory.DirContext)
 	 */
     public void updateUser( User user, DirContext context )
@@ -67,7 +68,7 @@ public class DefaultLdapController
 
     }
 
-    /* (non-Javadoc)
+    /**
 	 * @see org.codehaus.plexus.redback.users.ldap.ctl.LdapControllerI#userExists(java.lang.Object, javax.naming.directory.DirContext)
 	 */
     public boolean userExists( Object key, DirContext context )
@@ -124,7 +125,7 @@ public class DefaultLdapController
         return context.search( mapper.getUserBaseDn(), filter, ctls );
     }
 
-    /* (non-Javadoc)
+    /**
 	 * @see org.codehaus.plexus.redback.users.ldap.ctl.LdapControllerI#getUsers(javax.naming.directory.DirContext)
 	 */
     public Collection<User> getUsers( DirContext context )
@@ -152,7 +153,7 @@ public class DefaultLdapController
         }
     }
 
-    /* (non-Javadoc)
+    /**
 	 * @see org.codehaus.plexus.redback.users.ldap.ctl.LdapControllerI#createUser(org.codehaus.plexus.redback.users.User, javax.naming.directory.DirContext, boolean)
 	 */
     public void createUser( User user, DirContext context, boolean encodePasswordIfChanged )
@@ -170,7 +171,7 @@ public class DefaultLdapController
 
     }
 
-    /* (non-Javadoc)
+    /**
 	 * @see org.codehaus.plexus.redback.users.ldap.ctl.LdapControllerI#getUser(java.lang.Object, javax.naming.directory.DirContext)
 	 */
     public LdapUser getUser( Object key, DirContext context )
@@ -203,11 +204,4 @@ public class DefaultLdapController
         }
     }
 
-    /* (non-Javadoc)
-	 * @see org.codehaus.plexus.redback.users.ldap.ctl.LdapControllerI#enableLogging(org.codehaus.plexus.logging.Logger)
-	 */
-    public void enableLogging( Logger logger )
-    {
-        log = logger;
-    }
 }

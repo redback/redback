@@ -18,6 +18,7 @@ package org.codehaus.plexus.redback.users.ldap;
 
 import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 import org.codehaus.plexus.apacheds.ApacheDs;
+import org.codehaus.plexus.redback.common.ldap.LdapUser;
 import org.codehaus.plexus.redback.common.ldap.connection.LdapConnection;
 import org.codehaus.plexus.redback.common.ldap.connection.LdapConnectionFactory;
 import org.codehaus.plexus.redback.policy.PasswordEncoder;
@@ -25,6 +26,8 @@ import org.codehaus.plexus.redback.policy.encoders.SHA1PasswordEncoder;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -50,6 +53,9 @@ import javax.naming.directory.SearchResult;
 public class LdapUserManagerTest
     extends PlexusInSpringTestCase
 {
+    
+    protected Logger log = LoggerFactory.getLogger( getClass() );
+    
     private UserManager userManager;
 
     private ApacheDs apacheDs;
@@ -58,9 +64,6 @@ public class LdapUserManagerTest
 
     private PasswordEncoder passwordEncoder;
 
-    /**
-     * @plexus.requirement role-hint="configurable"
-     */
     private LdapConnectionFactory connectionFactory;
 
     public void testFoo()
@@ -81,7 +84,7 @@ public class LdapUserManagerTest
         suffix = apacheDs.addSimplePartition( "test", new String[] { "redback", "plexus", "codehaus", "org" } )
             .getSuffix();
 
-        System.out.println( "DN Suffix: " + suffix );
+        log.info( "DN Suffix: " + suffix );
 
         apacheDs.startServer();
 
@@ -104,7 +107,6 @@ public class LdapUserManagerTest
 
         apacheDs.stopServer();
 
-        // TODO Auto-generated method stub
         super.tearDown();
     }
 
@@ -128,26 +130,37 @@ public class LdapUserManagerTest
     {
         assertNotNull( connectionFactory );
 
-        LdapConnection connection = connectionFactory.getConnection();
+        LdapConnection connection = null; 
+        try
+        {
+        connection = connectionFactory.getConnection();
 
         assertNotNull( connection );
 
         DirContext context = connection.getDirContext();
 
         assertNotNull( context );
-
+        } finally {
+            connection.close();
+        }
     }
 
     public void testDirectUsersExistence()
         throws Exception
     {
-        LdapConnection connection = connectionFactory.getConnection();
+        LdapConnection connection = null; 
+        try
+        {
+        connection = connectionFactory.getConnection();
 
         DirContext context = connection.getDirContext();
 
         assertExist( context, createDn( "jesse" ), "cn", "jesse" );
         assertExist( context, createDn( "joakim" ), "cn", "joakim" );
-
+        } finally {
+            connection.close();
+        }
+        
     }
 
     public void testUserManager()
@@ -187,7 +200,7 @@ public class LdapUserManagerTest
             // cool it works !
         }
     }
-
+    
     private void bindUserObject( DirContext context, String cn, String dn )
         throws Exception
     {

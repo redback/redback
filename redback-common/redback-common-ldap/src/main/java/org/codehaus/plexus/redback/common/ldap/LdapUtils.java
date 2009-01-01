@@ -21,10 +21,15 @@ import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 
+/**
+ * 
+ * @version $Id$
+ */
 public final class LdapUtils
 {
     private LdapUtils()
     {
+        // no op
     }
 
     @SuppressWarnings("unchecked")

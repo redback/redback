@@ -53,25 +53,25 @@
       <name>Redback User List</name>
       <subscribe>http://xircles.codehaus.org/manage_email/user%40redback.codehaus.org</subscribe>
       <unsubscribe>http://xircles.codehaus.org/manage_email/user%40redback.codehaus.org</unsubscribe>
-      <archive>http://archive.redback.codehaus.org/user</archive>
+      <archive>http://archive.hausfoundation.org/lists/org.codehaus.redback.user</archive>
     </mailingList>
     <mailingList>
       <name>Redback Developer List</name>
       <subscribe>http://xircles.codehaus.org/manage_email/dev%40redback.codehaus.org</subscribe>
       <unsubscribe>http://xircles.codehaus.org/manage_email/dev%40redback.codehaus.org</unsubscribe>
-      <archive>http://archive.redback.codehaus.org/dev</archive>
+      <archive>http://archive.hausfoundation.org/lists/org.codehaus.redback.dev</archive>
     </mailingList>
     <mailingList>
       <name>Redback Announce List</name>
       <subscribe>http://xircles.codehaus.org/manage_email/announce%40redback.codehaus.org</subscribe>
       <unsubscribe>http://xircles.codehaus.org/manage_email/announce%40redback.codehaus.org</unsubscribe>
-      <archive>http://archive.redback.codehaus.org/announce</archive>
+      <archive>http://archive.hausfoundation.org/lists/org.codehaus.redback.announce</archive>
     </mailingList>
     <mailingList>
       <name>Redback Commit List</name>
       <subscribe>http://xircles.codehaus.org/manage_email/scm%40redback.codehaus.org</subscribe>
       <unsubscribe>http://xircles.codehaus.org/manage_email/scm%40redback.codehaus.org</unsubscribe>
-      <archive>http://archive.redback.codehaus.org/scm</archive>
+      <archive>http://archive.hausfoundation.org/lists/org.codehaus.redback.scm</archive>
     </mailingList>
   </mailingLists>
   
@@ -547,14 +547,14 @@
       </dependency>
       <dependency>
         <groupId>org.springframework</groupId>
-        <artifactId>spring-context</artifactId>
-        <version>${springVersion}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
         <artifactId>spring-context-support</artifactId>
         <version>${springVersion}</version>
-      </dependency>       
+      </dependency>   
+      <dependency>
+        <groupId>javax.annotation</groupId>
+        <artifactId>jsr250-api</artifactId>
+        <version>1.0</version>
+      </dependency>
       <dependency>
         <groupId>javax.mail</groupId>
         <artifactId>mail</artifactId>
@@ -682,7 +682,7 @@
   </modules>
   <properties>
     <security.version>1.2-SNAPSHOT</security.version>
-    <springVersion>2.5.5</springVersion>
+    <springVersion>2.5.6</springVersion>
   </properties>
 
   <contributors>

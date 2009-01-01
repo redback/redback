@@ -28,7 +28,7 @@ import java.util.List;
 
 /**
  * @author <a href="jesse@codehaus.org"> jesse
- * @version "$Id: BasicUserMapper.java 6784 2007-08-23 19:21:13Z jesse $"
+ * @version $Id$
  * @plexus.component role="org.codehaus.plexus.redback.common.ldap.UserMapper" role-hint="ldap"
  */
 public class LdapUserMapper

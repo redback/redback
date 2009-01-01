@@ -47,7 +47,7 @@ import javax.naming.ldap.LdapName;
  * Note that both the bind dn and password must be set if any are set.
  *
  * @author <a href="mailto:trygvis@inamo.no">trygvis</a>
- * @version $Id: LdapConnectionConfiguration.java,v 1.3 2006/02/06 15:15:54 trygvis Exp $
+ * @version $Id$
  */
 public class LdapConnectionConfiguration
 {

@@ -39,7 +39,7 @@ import java.util.Properties;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
- * @version $Id: ConfigurableLdapConnectionFactory.java,v 1.3 2006/02/06 15:15:54 trygvis Exp $
+ * @version $Id$
  * 
  * @plexus.component role="org.codehaus.plexus.redback.common.ldap.connection.LdapConnectionFactory"
  *   role-hint="configurable"
@@ -48,44 +48,44 @@ public class ConfigurableLdapConnectionFactory
     extends AbstractLogEnabled
     implements LdapConnectionFactory, Initializable
 {
-	/**
-	 * @plexus.configuration
-	 */
+    /**
+     * @plexus.configuration
+     */
     private String hostname;
 
-	/**
-	 * @plexus.configuration
-	 */
+    /**
+     * @plexus.configuration
+     */
     private int port;
 
-	/**
-	 * @plexus.configuration
-	 */
+    /**
+     * @plexus.configuration
+     */
     private String baseDn;
 
-	/**
-	 * @plexus.configuration
-	 */
+    /**
+     * @plexus.configuration
+     */
     private String contextFactory;
 
-	/**
-	 * @plexus.configuration
-	 */
+    /**
+     * @plexus.configuration
+     */
     private String bindDn;
 
-	/**
-	 * @plexus.configuration
-	 */
+    /**
+     * @plexus.configuration
+     */
     private String password;
 
-	/**
-	 * @plexus.configuration
-	 */
+    /**
+     * @plexus.configuration
+     */
     private String authenticationMethod;
 
-	/**
-	 * @plexus.configuration
-	 */
+    /**
+     * @plexus.configuration
+     */
     private Properties extraProperties;
 
     private LdapConnectionConfiguration configuration;
@@ -107,11 +107,12 @@ public class ConfigurableLdapConnectionFactory
             configuration = new LdapConnectionConfiguration();
             configuration.setHostname( userConf.getString( "ldap.config.hostname", hostname ) );
             configuration.setPort( userConf.getInt( "ldap.config.port", port ) );
-            configuration.setBaseDn( getConcatenatedList( "ldap.config.base.dn", baseDn ) );            
-            configuration.setContextFactory( userConf.getString( "ldap.config.context.factory", contextFactory ) );                        
-            configuration.setBindDn( getConcatenatedList( "ldap.config.bind.dn", bindDn ) );           
+            configuration.setBaseDn( getConcatenatedList( "ldap.config.base.dn", baseDn ) );
+            configuration.setContextFactory( userConf.getString( "ldap.config.context.factory", contextFactory ) );
+            configuration.setBindDn( getConcatenatedList( "ldap.config.bind.dn", bindDn ) );
             configuration.setPassword( userConf.getString( "ldap.config.password", password ) );
-            configuration.setAuthenticationMethod( userConf.getString( "ldap.config.authentication.method", authenticationMethod ) );
+            configuration.setAuthenticationMethod( userConf.getString( "ldap.config.authentication.method",
+                                                                       authenticationMethod ) );
             configuration.setExtraProperties( extraProperties );
         }
         catch ( InvalidNameException e )
@@ -135,10 +136,11 @@ public class ConfigurableLdapConnectionFactory
     {
         return new LdapConnection( configuration, subRdn );
     }
-    
-    public LdapConnection getConnection( String bindDn, String password ) throws LdapException
+
+    public LdapConnection getConnection( String bindDn, String password )
+        throws LdapException
     {
-        return new LdapConnection(configuration, bindDn, password );
+        return new LdapConnection( configuration, bindDn, password );
     }
 
     public LdapName getBaseDnLdapName()
@@ -163,9 +165,7 @@ public class ConfigurableLdapConnectionFactory
     {
         configuration.getStateFactories().add( stateFactoryClass );
     }
-    
-    
-    
+
     // ----------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------
@@ -174,27 +174,27 @@ public class ConfigurableLdapConnectionFactory
     {
         return "{ConfigurableLdapConnectionFactory: configuration: " + configuration + "}";
     }
-    
+
     private String getConcatenatedList( String key, String defaultValue )
     {
-    	String concatenatedList = "";
+        String concatenatedList = "";
         List<String> list = userConf.getList( key );
-        if( !list.isEmpty() )
+        if ( !list.isEmpty() )
         {
-            for( String value : list )
-            {            	
-            	if ( (concatenatedList.length() > 0)  )
+            for ( String value : list )
+            {
+                if ( ( concatenatedList.length() > 0 ) )
                 {
-                	concatenatedList = concatenatedList + ",";
+                    concatenatedList = concatenatedList + ",";
                 }
-            	concatenatedList = concatenatedList + value;
+                concatenatedList = concatenatedList + value;
             }
         }
         else
         {
-        	concatenatedList = defaultValue;
-        }            
-        
+            concatenatedList = defaultValue;
+        }
+
         return concatenatedList;
     }
     

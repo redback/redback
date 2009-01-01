@@ -27,7 +27,10 @@ import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.users.UserQuery;
 import org.codehaus.plexus.redback.users.ldap.ctl.LdapController;
 import org.codehaus.plexus.redback.users.ldap.ctl.LdapControllerException;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,24 +39,18 @@ import java.util.List;
 /**
  * @author <a href="jesse@codehaus.org"> jesse
  * @version "$Id$"
- * @plexus.component role="org.codehaus.plexus.redback.users.UserManager" role-hint="ldap"
  */
+@Service("userManager#ldap")
 public class LdapUserManager
     extends AbstractUserManager
 {
-    /**
-     * @plexus.requirement role-hint="configurable"
-     */
+    @Resource(name="ldapConnectionFactory#configurable")
     private LdapConnectionFactory connectionFactory;
 
-    /**
-     * @plexus.requirement role-hint="default"
-     */
+    @Resource
     private LdapController controller;
 
-    /**
-     * @plexus.requirement role-hint="ldap"
-     */
+    @Resource(name="userMapper#ldap")
     private UserMapper mapper;
 
     private User guestUser;
@@ -98,6 +95,9 @@ public class LdapUserManager
         catch ( MappingException e )
         {
             getLogger().error( "Error mapping user: " + user.getPrincipal() + " to LDAP attributes.", e );
+        }finally
+        {
+            closeDirContext(context);
         }
         return user;
     }
@@ -329,11 +329,26 @@ public class LdapUserManager
         }
         catch ( LdapException le )
         {
-            le.printStackTrace();
+            getLogger().warn( "skip error on new newDirContext() : " + le.getMessage() );
             return null;
         }
     }
 
+    private void closeDirContext(DirContext dirContext)
+    {
+        if ( dirContext != null )
+        {
+            try
+            {
+                dirContext.close();
+            }
+            catch ( NamingException e )
+            {
+                getLogger().info( "skip error on dirContext.close() : " + e.getMessage() );
+            }
+        }
+    }
+    
     public LdapConnectionFactory getConnectionFactory()
     {
         return connectionFactory;

@@ -37,7 +37,7 @@ import javax.naming.directory.SearchResult;
  * LdapBindAuthenticator:
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
- * @version: $ID:$
+ * @version: $Id$
  * @plexus.component role="org.codehaus.plexus.redback.authentication.Authenticator"
  * role-hint="ldap"
  */
@@ -92,7 +92,7 @@ public class LdapBindAuthenticator
         try
         {
             DirContext context = connectionFactory.getConnection().getDirContext();
-
+            
             NamingEnumeration<SearchResult> results = context.search( mapper.getUserBaseDn(), filter, ctls );
 
             getLogger().info( "Found user?: " + results.hasMoreElements() );
