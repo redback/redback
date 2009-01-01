@@ -16,6 +16,13 @@ package org.codehaus.plexus.redback.users.ldap;
  */
 
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.naming.directory.DirContext;
+
 import org.codehaus.plexus.redback.common.ldap.MappingException;
 import org.codehaus.plexus.redback.common.ldap.UserMapper;
 import org.codehaus.plexus.redback.common.ldap.connection.LdapConnection;
@@ -29,13 +36,6 @@ import org.codehaus.plexus.redback.users.ldap.ctl.LdapController;
 import org.codehaus.plexus.redback.users.ldap.ctl.LdapControllerException;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import javax.naming.NamingException;
-import javax.naming.directory.DirContext;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 /**
  * @author <a href="jesse@codehaus.org"> jesse
  * @version "$Id$"
@@ -44,13 +44,13 @@ import java.util.List;
 public class LdapUserManager
     extends AbstractUserManager
 {
-    @Resource(name="ldapConnectionFactory#configurable")
+    @Resource(name = "ldapConnectionFactory#configurable")
     private LdapConnectionFactory connectionFactory;
 
     @Resource
     private LdapController controller;
 
-    @Resource(name="userMapper#ldap")
+    @Resource(name = "userMapper#ldap")
     private UserMapper mapper;
 
     private User guestUser;
@@ -83,9 +83,10 @@ public class LdapUserManager
             return guestUser;
         }
 
-        DirContext context = newDirContext();
+        LdapConnection ldapConnection = getLdapConnection();
         try
         {
+            DirContext context = ldapConnection.getDirContext();
             controller.createUser( user, context, checked );
         }
         catch ( LdapControllerException e )
@@ -95,9 +96,10 @@ public class LdapUserManager
         catch ( MappingException e )
         {
             getLogger().error( "Error mapping user: " + user.getPrincipal() + " to LDAP attributes.", e );
-        }finally
+        }
+        finally
         {
-            closeDirContext(context);
+            closeLdapConnection( ldapConnection );
         }
         return user;
     }
@@ -116,26 +118,38 @@ public class LdapUserManager
     public void deleteUser( Object principal )
         throws UserNotFoundException
     {
+        LdapConnection ldapConnection = getLdapConnection();
         try
         {
-            controller.removeUser( principal, newDirContext() );
+            DirContext context = ldapConnection.getDirContext();
+            controller.removeUser( principal, context );
         }
         catch ( LdapControllerException e )
         {
             getLogger().error( "Failed to delete user: " + principal, e );
+        }
+        finally
+        {
+            closeLdapConnection( ldapConnection );
         }
     }
 
     public void deleteUser( String username )
         throws UserNotFoundException
     {
+        LdapConnection ldapConnection = getLdapConnection();
         try
         {
-            controller.removeUser( username, newDirContext() );
+            DirContext context = ldapConnection.getDirContext();
+            controller.removeUser( username, context );
         }
         catch ( LdapControllerException e )
         {
             getLogger().error( "Failed to delete user: " + username, e );
+        }
+        finally
+        {
+            closeLdapConnection( ldapConnection );
         }
     }
 
@@ -157,9 +171,11 @@ public class LdapUserManager
             return getGuestUser();
         }
 
+        LdapConnection ldapConnection = getLdapConnection();
         try
         {
-            User user = controller.getUser( username, newDirContext() );
+            DirContext context = ldapConnection.getDirContext();
+            User user = controller.getUser( username, context );
             if ( user == null )
             {
                 throw new UserNotFoundException( "user with name " + username + " not found " );
@@ -175,6 +191,10 @@ public class LdapUserManager
         {
             getLogger().error( "Failed to map user: " + username, e );
             return null;
+        }
+        finally
+        {
+            closeLdapConnection( ldapConnection );
         }
     }
 
@@ -201,9 +221,11 @@ public class LdapUserManager
             return getGuestUser();
         }
 
+        LdapConnection ldapConnection = getLdapConnection();
         try
         {
-            return controller.getUser( principal, newDirContext() );
+            DirContext context = ldapConnection.getDirContext();
+            return controller.getUser( principal, context );
         }
         catch ( LdapControllerException e )
         {
@@ -215,23 +237,27 @@ public class LdapUserManager
             getLogger().error( "Failed to map user: " + principal, e );
             return null;
         }
+        finally
+        {
+            closeLdapConnection( ldapConnection );
+        }
     }
 
     public List<User> findUsersByEmailKey( String emailKey, boolean orderAscending )
     {
-        getLogger().warn( "findUsersByEmailKey not implemented in ldap empty list returned"  );
+        getLogger().warn( "findUsersByEmailKey not implemented in ldap empty list returned" );
         return Collections.emptyList();
     }
 
     public List<User> findUsersByFullNameKey( String fullNameKey, boolean orderAscending )
     {
-        getLogger().warn( "findUsersByEmailKey not implemented in ldap empty list returned"  );
+        getLogger().warn( "findUsersByEmailKey not implemented in ldap empty list returned" );
         return Collections.emptyList();
     }
 
     public List<User> findUsersByQuery( UserQuery query )
     {
-        getLogger().warn( "findUsersByEmailKey not implemented in ldap empty list returned"  );
+        getLogger().warn( "findUsersByEmailKey not implemented in ldap empty list returned" );
         return Collections.emptyList();
     }
 
@@ -240,7 +266,7 @@ public class LdapUserManager
      */
     public List<User> findUsersByUsernameKey( String usernameKey, boolean orderAscending )
     {
-        getLogger().warn( "findUsersByEmailKey not implemented in ldap empty list returned"  );
+        getLogger().warn( "findUsersByEmailKey not implemented in ldap empty list returned" );
         return Collections.emptyList();
     }
 
@@ -254,10 +280,12 @@ public class LdapUserManager
      */
     public List<User> getUsers()
     {
+        LdapConnection ldapConnection = getLdapConnection();
         try
         {
+            DirContext context = ldapConnection.getDirContext();
             List<User> users = new ArrayList<User>();
-            users.addAll( controller.getUsers( newDirContext() ) );
+            users.addAll( controller.getUsers( context ) );
             //We add the guest user because it isn't in LDAP
             try
             {
@@ -275,10 +303,13 @@ public class LdapUserManager
         }
         catch ( Exception e )
         {
-            e.printStackTrace();
+            getLogger().error( e.getMessage(), e );
         }
-
-        return null;
+        finally
+        {
+            closeLdapConnection( ldapConnection );
+        }
+        return Collections.emptyList();
     }
 
     public List<User> getUsers( boolean orderAscending )
@@ -289,9 +320,11 @@ public class LdapUserManager
     public User updateUser( User user )
         throws UserNotFoundException
     {
+        LdapConnection ldapConnection = getLdapConnection();
         try
         {
-            controller.updateUser( user, newDirContext() );
+            DirContext context = ldapConnection.getDirContext();
+            controller.updateUser( user, context );
         }
         catch ( LdapControllerException e )
         {
@@ -301,62 +334,51 @@ public class LdapUserManager
         {
             getLogger().error( "Failed to update user: " + user.getPrincipal(), e );
         }
-
+        finally
+        {
+            closeLdapConnection( ldapConnection );
+        }
         return user;
     }
 
     public boolean userExists( Object principal )
     {
-        DirContext context = newDirContext();
+        LdapConnection ldapConnection = getLdapConnection();
         try
         {
+            DirContext context = ldapConnection.getDirContext();
             return controller.userExists( principal, context );
         }
         catch ( LdapControllerException e )
         {
-            getLogger().debug( "Failed to search for user: " + principal, e );
+            getLogger().warn( "Failed to search for user: " + principal, e );
             return false;
+        }
+        finally
+        {
+            closeLdapConnection( ldapConnection );
         }
     }
 
-    private DirContext newDirContext()
+    private LdapConnection getLdapConnection()
     {
         try
         {
-            LdapConnection connection = connectionFactory.getConnection();
-
-            return connection.getDirContext();
+            return connectionFactory.getConnection();
         }
-        catch ( LdapException le )
+        catch ( LdapException e )
         {
-            getLogger().warn( "skip error on new newDirContext() : " + le.getMessage() );
-            return null;
+            getLogger().warn( "failed to get a ldap connection " + e.getMessage(), e );
+            throw new RuntimeException( "failed to get a ldap connection " + e.getMessage(), e );
         }
     }
 
-    private void closeDirContext(DirContext dirContext)
+    private void closeLdapConnection( LdapConnection ldapConnection )
     {
-        if ( dirContext != null )
+        if ( ldapConnection != null )
         {
-            try
-            {
-                dirContext.close();
-            }
-            catch ( NamingException e )
-            {
-                getLogger().info( "skip error on dirContext.close() : " + e.getMessage() );
-            }
+            ldapConnection.close();
         }
     }
     
-    public LdapConnectionFactory getConnectionFactory()
-    {
-        return connectionFactory;
-    }
-
-    public void setConnectionFactory( LdapConnectionFactory connectionFactory )
-    {
-        this.connectionFactory = connectionFactory;
-    }
-
 }
