@@ -30,6 +30,7 @@ import org.codehaus.plexus.redback.users.ldap.ctl.LdapControllerException;
 
 import javax.naming.directory.DirContext;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -158,7 +159,12 @@ public class LdapUserManager
 
         try
         {
-            return controller.getUser( username, newDirContext() );
+            User user = controller.getUser( username, newDirContext() );
+            if ( user == null )
+            {
+                throw new UserNotFoundException( "user with name " + username + " not found " );
+            }
+            return user;
         }
         catch ( LdapControllerException e )
         {
@@ -211,32 +217,31 @@ public class LdapUserManager
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public List findUsersByEmailKey( String emailKey, boolean orderAscending )
+    public List<User> findUsersByEmailKey( String emailKey, boolean orderAscending )
     {
-        // TODO Auto-generated method stub
-        return null;
+        getLogger().warn( "findUsersByEmailKey not implemented in ldap empty list returned"  );
+        return Collections.emptyList();
     }
 
-    @SuppressWarnings("unchecked")
-    public List findUsersByFullNameKey( String fullNameKey, boolean orderAscending )
+    public List<User> findUsersByFullNameKey( String fullNameKey, boolean orderAscending )
     {
-        // TODO Auto-generated method stub
-        return null;
+        getLogger().warn( "findUsersByEmailKey not implemented in ldap empty list returned"  );
+        return Collections.emptyList();
     }
 
-    @SuppressWarnings("unchecked")
-    public List findUsersByQuery( UserQuery query )
+    public List<User> findUsersByQuery( UserQuery query )
     {
-        // TODO Auto-generated method stub
-        return null;
+        getLogger().warn( "findUsersByEmailKey not implemented in ldap empty list returned"  );
+        return Collections.emptyList();
     }
 
-    @SuppressWarnings("unchecked")
-    public List findUsersByUsernameKey( String usernameKey, boolean orderAscending )
+    /** 
+     * @see org.codehaus.plexus.redback.users.UserManager#findUsersByUsernameKey(java.lang.String, boolean)
+     */
+    public List<User> findUsersByUsernameKey( String usernameKey, boolean orderAscending )
     {
-        // TODO Auto-generated method stub
-        return null;
+        getLogger().warn( "findUsersByEmailKey not implemented in ldap empty list returned"  );
+        return Collections.emptyList();
     }
 
     public String getId()
@@ -244,7 +249,10 @@ public class LdapUserManager
         return "LDAP User-Manager: " + getClass().getName();
     }
 
-    public List getUsers()
+    /** 
+     * @see org.codehaus.plexus.redback.users.UserManager#getUsers()
+     */
+    public List<User> getUsers()
     {
         try
         {
@@ -273,7 +281,7 @@ public class LdapUserManager
         return null;
     }
 
-    public List getUsers( boolean orderAscending )
+    public List<User> getUsers( boolean orderAscending )
     {
         return getUsers();
     }

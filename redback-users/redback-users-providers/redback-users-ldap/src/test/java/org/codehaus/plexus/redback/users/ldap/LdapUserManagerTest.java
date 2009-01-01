@@ -24,6 +24,7 @@ import org.codehaus.plexus.redback.policy.PasswordEncoder;
 import org.codehaus.plexus.redback.policy.encoders.SHA1PasswordEncoder;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
+import org.codehaus.plexus.redback.users.UserNotFoundException;
 
 import java.util.List;
 
@@ -43,73 +44,74 @@ import javax.naming.directory.SearchResult;
  * LdapUserManagerTest 
  *
  * @author <a href="mailto:jesse@codehaus.org">Jesse McConnell</a>
- * @version $Id:$
+ * @version $Id$
  */  
-public class LdapUserManagerTest extends PlexusInSpringTestCase
-{
-	private UserManager userManager;
 
-	private ApacheDs apacheDs;
-	
-	private String suffix;
-	
-	private PasswordEncoder passwordEncoder;
-	
-	/**
-	 * @plexus.requirement role-hint="configurable"
-	 */
-	private LdapConnectionFactory connectionFactory;
-    
-    public void testFoo() throws Exception
+public class LdapUserManagerTest
+    extends PlexusInSpringTestCase
+{
+    private UserManager userManager;
+
+    private ApacheDs apacheDs;
+
+    private String suffix;
+
+    private PasswordEncoder passwordEncoder;
+
+    /**
+     * @plexus.requirement role-hint="configurable"
+     */
+    private LdapConnectionFactory connectionFactory;
+
+    public void testFoo()
+        throws Exception
     {
 
     }
-	
+
     protected void setUp()
         throws Exception
     {
-    	super.setUp();
-    		
-    	passwordEncoder = new SHA1PasswordEncoder();
-    	
-    	apacheDs = (ApacheDs)lookup(ApacheDs.ROLE, "test" );    	
-         
-    	suffix = apacheDs.addSimplePartition( "test", new String[]{"redback", "plexus", "codehaus", "org"} ).getSuffix();
-    	
-    	System.out.println( "DN Suffix: " + suffix );
-    	
-     	apacheDs.startServer();
-    		
-    	makeUsers();    	
-    	
-    	userManager = (UserManager)lookup( UserManager.ROLE, "ldap" );
-    	
-    	connectionFactory = (LdapConnectionFactory) lookup( LdapConnectionFactory.ROLE, "configurable" );
+        super.setUp();
+
+        passwordEncoder = new SHA1PasswordEncoder();
+
+        apacheDs = (ApacheDs) lookup( ApacheDs.ROLE, "test" );
+
+        suffix = apacheDs.addSimplePartition( "test", new String[] { "redback", "plexus", "codehaus", "org" } )
+            .getSuffix();
+
+        System.out.println( "DN Suffix: " + suffix );
+
+        apacheDs.startServer();
+
+        makeUsers();
+
+        userManager = (UserManager) lookup( UserManager.ROLE, "ldap" );
+
+        connectionFactory = (LdapConnectionFactory) lookup( LdapConnectionFactory.ROLE, "configurable" );
     }
-    
-    
 
-	protected void tearDown() throws Exception {
-		
-		
-		
-		InitialDirContext context = apacheDs.getAdminContext();
-		
-		context.unbind( createDn( "jesse" ) );
-        
-        context.unbind( createDn( "joakim" ) );
-		
-		apacheDs.stopServer();
-		
-		// TODO Auto-generated method stub
-		super.tearDown();
-	}
-
-
-
-	private void makeUsers() throws Exception
+    protected void tearDown()
+        throws Exception
     {
-        InitialDirContext context = apacheDs.getAdminContext();        
+
+        InitialDirContext context = apacheDs.getAdminContext();
+
+        context.unbind( createDn( "jesse" ) );
+
+        context.unbind( createDn( "joakim" ) );
+
+        apacheDs.stopServer();
+
+        // TODO Auto-generated method stub
+        super.tearDown();
+    }
+
+    private void makeUsers()
+        throws Exception
+    {
+        InitialDirContext context = apacheDs.getAdminContext();
 
         String cn = "jesse";
         bindUserObject( context, cn, createDn( cn ) );
@@ -120,80 +122,97 @@ public class LdapUserManagerTest extends PlexusInSpringTestCase
         assertExist( context, createDn( cn ), "cn", cn );
 
     }
-    
-    public void testConnection( ) throws Exception
-    {
-    	assertNotNull( connectionFactory );
-    	
-    	LdapConnection connection = connectionFactory.getConnection();
-    	
-    	assertNotNull( connection );
-    	
-    	DirContext context = connection.getDirContext();
-    
-    	assertNotNull( context );	
-    	
-    }
-    	
-    public void testDirectUsersExistence() throws Exception
-    {
-    	LdapConnection connection = connectionFactory.getConnection();
-    	
-    	DirContext context = connection.getDirContext();
-    	
-    	assertExist( context, createDn( "jesse" ), "cn", "jesse" );
-    	assertExist( context, createDn( "joakim" ), "cn", "joakim" );
-    	
-    }
-    
-    public void testUserManager() throws Exception
-    { 	
-    	assertNotNull( userManager );
-    	
-    	assertTrue( userManager.userExists( "jesse" ));    
-    	
-    	List users = userManager.getUsers();
-    	
-    	assertNotNull( users );  
-    	
-    	assertEquals( 2, users.size() );
-    	
-    	User jesse = userManager.findUser("jesse");
-    	
-    	assertNotNull( jesse );
-    	
-    	assertEquals("jesse", jesse.getPrincipal().toString() );
-    	assertEquals("foo", jesse.getEmail() );
-    	assertEquals("foo", jesse.getFullName() );
-    	assertTrue( passwordEncoder.isPasswordValid(jesse.getEncodedPassword(), "foo") );
-    	
-    }
-    
-    
-    private void bindUserObject(DirContext context, String cn, String dn)
-			throws Exception 
-	{
-		Attributes attributes = new BasicAttributes(true);
-		BasicAttribute objectClass = new BasicAttribute("objectClass");
-		objectClass.add("top");
-		objectClass.add("inetOrgPerson");
-		objectClass.add("person");
-		objectClass.add("organizationalperson");
-		attributes.put(objectClass);
-		attributes.put("cn", cn);
-		attributes.put("sn", "foo");
-		attributes.put("mail", "foo");
-		attributes.put("userPassword", passwordEncoder.encodePassword( "foo" ) );
-		attributes.put("givenName", "foo");
-        context.createSubcontext( dn, attributes );
-	}
 
-	private String createDn( String cn )
+    public void testConnection()
+        throws Exception
+    {
+        assertNotNull( connectionFactory );
+
+        LdapConnection connection = connectionFactory.getConnection();
+
+        assertNotNull( connection );
+
+        DirContext context = connection.getDirContext();
+
+        assertNotNull( context );
+
+    }
+
+    public void testDirectUsersExistence()
+        throws Exception
+    {
+        LdapConnection connection = connectionFactory.getConnection();
+
+        DirContext context = connection.getDirContext();
+
+        assertExist( context, createDn( "jesse" ), "cn", "jesse" );
+        assertExist( context, createDn( "joakim" ), "cn", "joakim" );
+
+    }
+
+    public void testUserManager()
+        throws Exception
+    {
+        assertNotNull( userManager );
+
+        assertTrue( userManager.userExists( "jesse" ) );
+
+        List<User> users = userManager.getUsers();
+
+        assertNotNull( users );
+
+        assertEquals( 2, users.size() );
+
+        User jesse = userManager.findUser( "jesse" );
+
+        assertNotNull( jesse );
+
+        assertEquals( "jesse", jesse.getPrincipal().toString() );
+        assertEquals( "foo", jesse.getEmail() );
+        assertEquals( "foo", jesse.getFullName() );
+        assertTrue( passwordEncoder.isPasswordValid( jesse.getEncodedPassword(), "foo" ) );
+
+    }
+
+    public void testUserNotFoundException()
+        throws Exception
+    {
+        try
+        {
+            userManager.findUser( "foo bar" );
+            fail( "not a UserNotFoundException with an unknown user" );
+        }
+        catch ( UserNotFoundException e )
+        {
+            // cool it works !
+        }
+    }
+
+    private void bindUserObject( DirContext context, String cn, String dn )
+        throws Exception
+    {
+        Attributes attributes = new BasicAttributes( true );
+        BasicAttribute objectClass = new BasicAttribute( "objectClass" );
+        objectClass.add( "top" );
+        objectClass.add( "inetOrgPerson" );
+        objectClass.add( "person" );
+        objectClass.add( "organizationalperson" );
+        attributes.put( objectClass );
+        attributes.put( "cn", cn );
+        attributes.put( "sn", "foo" );
+        attributes.put( "mail", "foo" );
+        attributes.put( "userPassword", passwordEncoder.encodePassword( "foo" ) );
+        attributes.put( "givenName", "foo" );
+        context.createSubcontext( dn, attributes );
+    }
+
+    private String createDn( String cn )
     {
         return "cn=" + cn + "," + suffix;
     }
 
-    private void assertExist( DirContext context, String dn, String attribute, String value ) throws NamingException
+    private void assertExist( DirContext context, String dn, String attribute, String value )
+        throws NamingException
     {
         SearchControls ctls = new SearchControls();
 
@@ -203,10 +222,10 @@ public class LdapUserManagerTest extends PlexusInSpringTestCase
 
         BasicAttributes matchingAttributes = new BasicAttributes();
         matchingAttributes.put( attribute, value );
-        BasicAttribute objectClass = new BasicAttribute("objectClass");
-        objectClass.add("inetOrgPerson");
-        matchingAttributes.put(objectClass);
-        
+        BasicAttribute objectClass = new BasicAttribute( "objectClass" );
+        objectClass.add( "inetOrgPerson" );
+        matchingAttributes.put( objectClass );
+
         NamingEnumeration<SearchResult> results = context.search( suffix, matchingAttributes );
         // NamingEnumeration<SearchResult> results = context.search( suffix, "(" + attribute + "=" + value + ")", ctls
         // );
