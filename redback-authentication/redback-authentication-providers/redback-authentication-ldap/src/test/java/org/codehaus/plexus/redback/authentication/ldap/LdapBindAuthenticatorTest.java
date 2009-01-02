@@ -26,7 +26,6 @@ import org.codehaus.plexus.apacheds.ApacheDs;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authentication.Authenticator;
 import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
-import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.policy.PasswordEncoder;
 import org.codehaus.plexus.redback.policy.encoders.SHA1PasswordEncoder;
 import org.codehaus.plexus.spring.PlexusInSpringTestCase;

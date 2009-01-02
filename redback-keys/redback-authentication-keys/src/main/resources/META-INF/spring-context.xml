@@ -28,6 +28,6 @@
 
   <context:annotation-config />
   <context:component-scan 
-    base-package="org.codehaus.plexus.redback.authentication.ldap"/>
+    base-package="org.codehaus.plexus.redback.authentication.keystore"/>
  
 </beans>

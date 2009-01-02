@@ -16,7 +16,8 @@ package org.codehaus.plexus.redback.authentication.keystore;
 * limitations under the License.
 */
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
+import javax.annotation.Resource;
+
 import org.codehaus.plexus.redback.authentication.AuthenticationDataSource;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
@@ -30,34 +31,32 @@ import org.codehaus.plexus.redback.policy.AccountLockedException;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 /**
  * KeyStoreAuthenticator:
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
- * @version: $ID:$
+ * @version: $Id$
  *
- * @plexus.component
- *   role="org.codehaus.plexus.redback.authentication.Authenticator"
- *   role-hint="keystore"
  */
+@Service("uuthenticator#keystore")
 public class KeyStoreAuthenticator
-    extends AbstractLogEnabled
     implements Authenticator
 {
-    /**
-     * @plexus.requirement role-hint="cached"
-     */
+    private Logger log = LoggerFactory.getLogger( getClass() );
+    
+    @Resource(name="keyManager#cached")
     private KeyManager keystore;
     
-    /**
-     * @plexus.requirement role-hint="configurable"
-     */
+    @Resource(name="userManager#configurable")
     private UserManager userManager;
 
     public String getId()
     {
-        return "$ID:$";
+        return "$Id$";
     }
 
     public AuthenticationResult authenticate( AuthenticationDataSource source )
@@ -97,7 +96,7 @@ public class KeyStoreAuthenticator
         }
         catch ( UserNotFoundException e )
         {
-            getLogger().warn( "Login for user " + source.getPrincipal() + " failed. user not found." );
+            log.warn( "Login for user " + source.getPrincipal() + " failed. user not found." );
             return new AuthenticationResult( false, null, e );
         }
     }

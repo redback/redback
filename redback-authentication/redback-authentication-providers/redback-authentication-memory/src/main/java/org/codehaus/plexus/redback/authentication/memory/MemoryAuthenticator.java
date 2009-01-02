@@ -21,17 +21,15 @@ import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authentication.Authenticator;
 import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
+import org.springframework.stereotype.Service;
 
 /**
  * MemoryAuthenticator:
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
- * @version: $ID:$
- *
- * @plexus.component
- *   role="org.codehaus.plexus.redback.authentication.Authenticator"
- *   role-hint="memory"
+ * @version: $Id$
  */
+@Service("authenticator#memory")
 public class MemoryAuthenticator
     implements Authenticator
 {

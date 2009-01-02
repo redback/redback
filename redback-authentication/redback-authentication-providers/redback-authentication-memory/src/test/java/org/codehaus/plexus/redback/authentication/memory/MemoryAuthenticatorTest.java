@@ -25,7 +25,7 @@ import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDat
  * MemoryAuthenticatorTest:
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
- * @version: $ID:$
+ * @version: $Id$
  */
 public class MemoryAuthenticatorTest
     extends PlexusInSpringTestCase
