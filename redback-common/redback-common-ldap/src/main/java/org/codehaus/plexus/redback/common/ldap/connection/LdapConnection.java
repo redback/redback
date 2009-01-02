@@ -36,6 +36,9 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * The configuration for a connection will not change.
  *
@@ -44,6 +47,8 @@ import javax.naming.ldap.Rdn;
  */
 public class LdapConnection
 {
+    private Logger log = LoggerFactory.getLogger( getClass() );
+    
     private LdapConnectionConfiguration config;
 
     private DirContext context;
@@ -215,7 +220,7 @@ public class LdapConnection
         }
         catch ( NamingException ex )
         {
-            // ignore
+            log.info( "skip error closing ldap connection " + ex.getMessage() );
         }
         finally
         {
