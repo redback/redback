@@ -385,6 +385,11 @@
         </exclusions>
       </dependency>
       <dependency>
+        <groupId>net.sf.ehcache</groupId>
+        <artifactId>ehcache</artifactId>
+        <version>1.5.0</version>
+      </dependency>
+      <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-expression-evaluator</artifactId>
         <version>1.0-alpha-1</version>
@@ -492,22 +497,22 @@
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>jcl104-over-slf4j</artifactId>
-        <version>1.5.0</version>
+        <version>${slf4jVersion}</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
-        <version>1.5.0</version>
+        <version>${slf4jVersion}</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-simple</artifactId>
-        <version>1.5.0</version>
+        <version>${slf4jVersion}</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-log4j12</artifactId>
-        <version>1.5.0</version>
+        <version>${slf4jVersion}</version>
       </dependency>
       <dependency>
         <groupId>log4j</groupId>
@@ -638,6 +643,15 @@
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.4.3</version>
+        <configuration>
+          <systemProperties>
+            <property>
+              <!-- java.io.tmpdir is a shared directory /var/tmp on solaris and cause permission issues with ehcache -->
+              <name>java.io.tmpdir</name>
+              <value>./target</value>
+            </property>
+          </systemProperties>
+        </configuration>        
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -701,6 +715,7 @@
   <properties>
     <security.version>1.2-SNAPSHOT</security.version>
     <springVersion>2.5.6</springVersion>
+    <slf4jVersion>1.5.6</slf4jVersion>
   </properties>
 
   <contributors>
