@@ -29,6 +29,14 @@ public class SimpleActionInvocationTrackerTest
 
     private ActionInvocationTracker tracker;
 
+    
+    
+    @Override
+    protected String getPlexusConfigLocation()
+    {
+        return "plexus.xml";
+    }
+
     public void setUp()
         throws Exception
     {

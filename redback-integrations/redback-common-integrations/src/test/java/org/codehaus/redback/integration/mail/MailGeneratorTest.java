@@ -16,12 +16,23 @@ package org.codehaus.redback.integration.mail;
 * limitations under the License.
 */
 
+import java.net.URL;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
+
+import javax.jdo.PersistenceManager;
+import javax.jdo.PersistenceManagerFactory;
+
+import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
+import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.keys.KeyManager;
 import org.codehaus.plexus.redback.keys.KeyManagerException;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 import org.codehaus.redback.integration.mail.MailGenerator;
+import org.jpox.SchemaTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +55,36 @@ public class MailGeneratorTest
     {
         super.setUp();
 
+        DefaultConfigurableJdoFactory jdoFactory = (DefaultConfigurableJdoFactory) lookup( JdoFactory.ROLE, "users" );
+
+        jdoFactory.setPassword( "" );
+
+        jdoFactory.setProperty( "org.jpox.transactionIsolation", "READ_COMMITTED" ); //$NON-NLS-1$ //$NON-NLS-2$
+
+        jdoFactory.setProperty( "org.jpox.poid.transactionIsolation", "READ_COMMITTED" ); //$NON-NLS-1$ //$NON-NLS-2$
+
+        jdoFactory.setProperty( "org.jpox.autoCreateSchema", "true" ); //$NON-NLS-1$ //$NON-NLS-2$
+        
+        Properties properties = jdoFactory.getProperties();
+
+        for ( Iterator it = properties.entrySet().iterator(); it.hasNext(); )
+        {
+            Map.Entry entry = (Map.Entry) it.next();
+
+            System.setProperty( (String) entry.getKey(), (String) entry.getValue() );
+        }
+
+        SchemaTool.createSchemaTables( new URL[] { getClass()
+            .getResource( "/org/codehaus/plexus/redback/keys/jdo/package.jdo" ) }, new URL[] {}, null, false, null ); //$NON-NLS-1$
+
+        PersistenceManagerFactory pmf = jdoFactory.getPersistenceManagerFactory();
+
+        assertNotNull( pmf );
+
+        PersistenceManager pm = pmf.getPersistenceManager();
+
+        pm.close();        
+        
         generator = (MailGenerator) lookup( MailGenerator.ROLE, "velocity" );
 
         policy = (UserSecurityPolicy) lookup( UserSecurityPolicy.ROLE );

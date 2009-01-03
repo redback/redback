@@ -35,5 +35,23 @@
       <role>org.codehaus.plexus.redback.struts2.interceptor.MockComponent</role>
       <implementation>org.codehaus.plexus.redback.struts2.interceptor.MockComponentImpl</implementation>
     </component>
+    <component>
+      <role>org.codehaus.plexus.jdo.JdoFactory</role>
+      <role-hint>users</role-hint>
+      <implementation>org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory</implementation>
+      <configuration>
+        <persistenceManagerFactoryClass>org.jpox.PersistenceManagerFactoryImpl</persistenceManagerFactoryClass>
+        <driverName>org.hsqldb.jdbcDriver</driverName>
+        <url>jdbc:hsqldb:mem:MailGeneratorTest</url>
+        <userName>sa</userName>
+        <otherProperties>
+          <property>
+            <name>org.jpox.rdbms.dateTimezone</name>
+            <value>JDK_DEFAULT_TIMEZONE</value>
+          </property>
+          
+        </otherProperties>
+      </configuration>
+    </component>      
   </components>
 </component-set>

@@ -30,6 +30,12 @@ public class BackTrackingResultTest
 {
     public static final int HISTORY_SIZE = 2;
 
+    @Override
+    protected String getPlexusConfigLocation()
+    {
+        return "plexus.xml";
+    }    
+    
     public void testBackTrackPrevious()
         throws Exception
     {

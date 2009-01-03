@@ -56,7 +56,7 @@ public class LdapBindAuthenticator
     @Resource(name="ldapConnectionFactory#configurable")
     private LdapConnectionFactory connectionFactory;
 
-    @Resource
+    @Resource(name="userConfiguration")
     private UserConfiguration config;
 
     public String getId()
