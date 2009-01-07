@@ -38,7 +38,7 @@
     <div class="axial">
       <table border="1" cellspacing="2" cellpadding="3" width="100%">
         <s:label label="%{getText('name')}" name="name"/>
-        <s:textfield label="%{getText('description')}" name="newDescription"/>
+        <s:textfield label="%{getText('description')}" name="newDescription" maxlength="255"/>
       </table>
     </div>
     <div class="functnbar3">

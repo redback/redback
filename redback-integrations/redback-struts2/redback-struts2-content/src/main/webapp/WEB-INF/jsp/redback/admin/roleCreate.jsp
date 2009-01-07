@@ -33,7 +33,7 @@
 <s:form action="rolecreate!submit" method="post" theme="xhtml"
          name="roleCreateForm" cssClass="securiy rolecreate">
   <s:textfield label="%{getText('role.name')}" name="roleName" />
-  <s:textfield label="%{getText('role.description')}" name="description" />
+  <s:textfield label="%{getText('role.description')}" name="description" maxlength="255"/>
   <tr>
     <td valign="top"><s:text name="permissions"/></td>
     <td>
