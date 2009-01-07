@@ -6,9 +6,9 @@
          ================================================================ -->
 
     <component>
-      <role>org.codehaus.plexus.ehcache.EhcacheComponent</role>
+      <role>org.codehaus.plexus.cache.Cache</role>
       <role-hint>operations</role-hint>
-      <implementation>org.codehaus.plexus.ehcache.MemoryCache</implementation>
+      <implementation>org.codehaus.plexus.cache.ehcache.EhcacheCache</implementation>
       <description>MemoryCache for Operations</description>
       <configuration>
         <eternal>false</eternal>
@@ -21,9 +21,9 @@
     </component>
 
     <component>
-      <role>org.codehaus.plexus.ehcache.EhcacheComponent</role>
+      <role>org.codehaus.plexus.cache.Cache</role>
       <role-hint>permissions</role-hint>
-      <implementation>org.codehaus.plexus.ehcache.MemoryCache</implementation>
+      <implementation>org.codehaus.plexus.cache.ehcache.EhcacheCache</implementation>
       <description>MemoryCache for Permissions</description>
       <configuration>
         <eternal>false</eternal>
@@ -36,9 +36,9 @@
     </component>
 
     <component>
-      <role>org.codehaus.plexus.ehcache.EhcacheComponent</role>
+      <role>org.codehaus.plexus.cache.Cache</role>
       <role-hint>resources</role-hint>
-      <implementation>org.codehaus.plexus.ehcache.MemoryCache</implementation>
+      <implementation>org.codehaus.plexus.cache.ehcache.EhcacheCache</implementation>
       <description>MemoryCache for Resources</description>
       <configuration>
         <eternal>false</eternal>
@@ -51,9 +51,9 @@
     </component>
 
     <component>
-      <role>org.codehaus.plexus.ehcache.EhcacheComponent</role>
+      <role>org.codehaus.plexus.cache.Cache</role>
       <role-hint>roles</role-hint>
-      <implementation>org.codehaus.plexus.ehcache.MemoryCache</implementation>
+      <implementation>org.codehaus.plexus.cache.ehcache.EhcacheCache</implementation>
       <description>MemoryCache for Roles</description>
       <configuration>
         <eternal>false</eternal>
@@ -66,9 +66,9 @@
     </component>
 
     <component>
-      <role>org.codehaus.plexus.ehcache.EhcacheComponent</role>
+      <role>org.codehaus.plexus.cache.Cache</role>
       <role-hint>effectiveRoleSet</role-hint>
-      <implementation>org.codehaus.plexus.ehcache.MemoryCache</implementation>
+      <implementation>org.codehaus.plexus.cache.ehcache.EhcacheCache</implementation>
       <description>MemoryCache for Effective Role Sets</description>
       <configuration>
         <eternal>false</eternal>
@@ -85,9 +85,9 @@
          ================================================================ -->
 
     <component>
-      <role>org.codehaus.plexus.ehcache.EhcacheComponent</role>
+      <role>org.codehaus.plexus.cache.Cache</role>
       <role-hint>userAssignments</role-hint>
-      <implementation>org.codehaus.plexus.ehcache.MemoryCache</implementation>
+      <implementation>org.codehaus.plexus.cache.ehcache.EhcacheCache</implementation>
       <description>MemoryCache for UserAssignments</description>
       <configuration>
         <eternal>false</eternal>
@@ -100,9 +100,9 @@
     </component>
 
     <component>
-      <role>org.codehaus.plexus.ehcache.EhcacheComponent</role>
+      <role>org.codehaus.plexus.cache.Cache</role>
       <role-hint>userPermissions</role-hint>
-      <implementation>org.codehaus.plexus.ehcache.MemoryCache</implementation>
+      <implementation>org.codehaus.plexus.cache.ehcache.EhcacheCache</implementation>
       <description>MemoryCache for User Permissions Map</description>
       <configuration>
         <eternal>false</eternal>

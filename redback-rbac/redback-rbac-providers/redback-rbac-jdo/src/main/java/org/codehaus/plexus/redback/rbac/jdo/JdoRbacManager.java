@@ -30,6 +30,7 @@ import org.codehaus.plexus.redback.rbac.RbacPermanentException;
 import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -44,18 +45,14 @@ import javax.jdo.Transaction;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @author Jesse McConnell <jmcconnell@apache.org>
- * @version $Id:$
- * @plexus.component 
- *   role="org.codehaus.plexus.redback.rbac.RBACManager"
- *   role-hint="jdo"
+ * @version $Id$
  */
+@Service("rBACManager#jdo")
 public class JdoRbacManager
     extends AbstractRBACManager
     implements RBACManagerListener, Initializable
 {
-    /**
-     * @plexus.requirement
-     */
+    @javax.annotation.Resource
     private JdoTool jdo;
 
     // private static final String ROLE_DETAIL = "role-child-detail";

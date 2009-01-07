@@ -69,23 +69,13 @@ public class DataManagementTest
         targetDirectory = createBackupDirectory();
     }
 
-    public void testEraseRbac()
-        throws Exception
-    {
-        RBACManager manager = (RBACManager) lookup( RBACManager.ROLE, "jdo" );
-
-        createRbacDatabase( manager );
-
-        dataManagementTool.eraseRBACDatabase( manager );
-
-        assertEmpty( manager );
-    }
-
     public void testEraseUsers()
         throws Exception
     {
         UserManager manager = (UserManager) lookup( UserManager.ROLE, "jdo" );
 
+        dataManagementTool.eraseUsersDatabase( manager );
+        
         createUserDatabase( manager );
 
         dataManagementTool.eraseUsersDatabase( manager );
@@ -109,7 +99,9 @@ public class DataManagementTest
         throws Exception
     {
         RBACManager manager = (RBACManager) lookup( RBACManager.ROLE, "jdo" );
-
+        
+        dataManagementTool.eraseRBACDatabase( manager );
+        
         createRbacDatabase( manager );
 
         dataManagementTool.backupRBACDatabase( manager, targetDirectory );
@@ -123,7 +115,10 @@ public class DataManagementTest
         IOUtil.copy( getClass().getResourceAsStream( "/expected-rbac.xml" ), sw );
 
         assertEquals( "Check database content", convertLineEndings( sw.toString() ).trim(), fixXmlQuotes( FileUtils.fileRead( backupFile ) ).trim() );
+        
     }
+    
+    
 
     private void createRbacDatabase( RBACManager manager )
         throws RbacManagerException
@@ -215,6 +210,8 @@ public class DataManagementTest
     {
         RBACManager manager = (RBACManager) lookup( RBACManager.ROLE, "jdo" );
 
+        dataManagementTool.eraseRBACDatabase( manager );
+        
         assertEmpty( manager );
 
         File backupFile = new File( targetDirectory, "rbac.xml" );
@@ -292,6 +289,8 @@ public class DataManagementTest
     {
         UserManager manager = (UserManager) lookup( UserManager.ROLE, "jdo" );
 
+        dataManagementTool.eraseUsersDatabase( manager );
+        
         assertEmpty( manager );
 
         File backupFile = new File( targetDirectory, "users.xml" );
@@ -342,6 +341,8 @@ public class DataManagementTest
     {
         KeyManager manager = (KeyManager) lookup( KeyManager.ROLE, "jdo" );
 
+        dataManagementTool.eraseKeysDatabase( manager );
+        
         assertEmpty( manager );
 
         File backupFile = new File( targetDirectory, "keys.xml" );

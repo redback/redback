@@ -43,6 +43,7 @@ public class JdoKeyManagerTest
     protected void setUp()
         throws Exception
     {
+        
         super.setUp();
 
         DefaultConfigurableJdoFactory jdoFactory = (DefaultConfigurableJdoFactory) lookup( JdoFactory.ROLE, "users" );
@@ -85,8 +86,9 @@ public class JdoKeyManagerTest
         PersistenceManager pm = pmf.getPersistenceManager();
 
         pm.close();
-
-        setKeyManager( (KeyManager) lookup( KeyManager.ROLE, "jdo" ) );
+        KeyManager keyManager = (KeyManager) getApplicationContext().getBean( "keyManager#jdo" );
+        keyManager.eraseDatabase();
+        setKeyManager( keyManager );
     }
     
 }

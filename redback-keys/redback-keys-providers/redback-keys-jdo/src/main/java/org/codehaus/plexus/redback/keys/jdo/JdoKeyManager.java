@@ -16,6 +16,13 @@ package org.codehaus.plexus.redback.keys.jdo;
  * limitations under the License.
  */
 
+import java.util.Calendar;
+import java.util.List;
+
+import javax.annotation.Resource;
+import javax.jdo.PersistenceManager;
+import javax.jdo.PersistenceManagerFactory;
+
 import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.jdo.PlexusJdoUtils;
 import org.codehaus.plexus.jdo.PlexusObjectNotFoundException;
@@ -28,28 +35,20 @@ import org.codehaus.plexus.redback.keys.KeyManagerException;
 import org.codehaus.plexus.redback.keys.KeyNotFoundException;
 import org.codehaus.plexus.util.StringUtils;
 import org.jpox.PersistenceManagerFactoryImpl;
-
-import java.util.Calendar;
-import java.util.List;
-
-import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
+import org.springframework.stereotype.Service;
 
 /**
  * JdoKeyManager
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.keys.KeyManager"
- * role-hint="jdo"
  */
+@Service("keyManager#jdo")
 public class JdoKeyManager
     extends AbstractKeyManager
     implements Initializable
 {
-    /**
-     * @plexus.requirement role-hint="users"
-     */
+    @Resource(name="jdoFactory#users")
     private JdoFactory jdoFactory;
 
     private PersistenceManagerFactory pmf;

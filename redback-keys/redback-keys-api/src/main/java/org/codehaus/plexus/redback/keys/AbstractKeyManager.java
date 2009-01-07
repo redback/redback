@@ -16,15 +16,16 @@ package org.codehaus.plexus.redback.keys;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.digest.Hex;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.util.Calendar;
 import java.util.Random;
 import java.util.TimeZone;
+
+import org.codehaus.plexus.digest.Hex;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * AbstractKeyManager 
@@ -33,9 +34,10 @@ import java.util.TimeZone;
  * @version $Id$
  */
 public abstract class AbstractKeyManager
-    extends AbstractLogEnabled
     implements KeyManager
 {
+    protected Logger log = LoggerFactory.getLogger( getClass() );
+    
     private static final int KEY_LENGTH = 16;
 
     private static final boolean SECURE = true;
@@ -69,12 +71,12 @@ public abstract class AbstractKeyManager
                 catch ( NoSuchAlgorithmException e )
                 {
                     randomMode = !SECURE;
-                    getLogger().warn( "Unable to use SecureRandom", e );
+                    log.warn( "Unable to use SecureRandom", e );
                 }
                 catch ( NoSuchProviderException e )
                 {
                     randomMode = !SECURE;
-                    getLogger().warn( "Unable to use SecureRandom", e );
+                    log.warn( "Unable to use SecureRandom", e );
                 }
             }
 

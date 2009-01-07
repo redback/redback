@@ -16,40 +16,38 @@ package org.codehaus.plexus.redback.users.cached;
  * limitations under the License.
  */
 
-import net.sf.ehcache.Element;
-import org.codehaus.plexus.ehcache.EhcacheComponent;
-import org.codehaus.plexus.ehcache.EhcacheUtils;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.codehaus.plexus.cache.Cache;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserManagerListener;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.users.UserQuery;
-
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 /**
  * CachedUserManager
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.users.UserManager" role-hint="cached"
  */
+@Service("userManager#cached")
 public class CachedUserManager
-    extends AbstractLogEnabled
     implements UserManager, UserManagerListener
 {
-    /**
-     * @plexus.requirement role-hint="jdo"
-     */
+    
+    private Logger log = LoggerFactory.getLogger( getClass() );
+    
+    @Resource(name="userManager#jdo")
     private UserManager userImpl;
 
-    /**
-     * Cache used for users
-     *
-     * @plexus.requirement role-hint="users"
-     */
-    private EhcacheComponent usersCache;
+    @Resource(name="cache#users")
+    private Cache usersCache;
 
     public boolean isReadOnly()
     {
@@ -65,7 +63,7 @@ public class CachedUserManager
     {
         if ( user != null )
         {
-            usersCache.invalidateKey( user.getPrincipal() );
+            usersCache.remove( user.getPrincipal() );
         }
         return this.userImpl.addUser( user );
     }
@@ -79,28 +77,28 @@ public class CachedUserManager
     {
         if ( user != null )
         {
-            usersCache.invalidateKey( user.getPrincipal() );
+            usersCache.remove( user.getPrincipal() );
         }
         this.userImpl.addUserUnchecked( user );
     }
 
     public User createUser( String username, String fullName, String emailAddress )
     {
-        usersCache.invalidateKey( username );
+        usersCache.remove( username );
         return this.userImpl.createUser( username, fullName, emailAddress );
     }
 
     public void deleteUser( Object principal )
         throws UserNotFoundException
     {
-        usersCache.invalidateKey( principal );
+        usersCache.remove( principal );
         this.userImpl.deleteUser( principal );
     }
 
     public void deleteUser( String username )
         throws UserNotFoundException
     {
-        usersCache.invalidateKey( username );
+        usersCache.remove( username );
         this.userImpl.deleteUser( username );
     }
 
@@ -112,7 +110,7 @@ public class CachedUserManager
         }
         finally
         {
-            EhcacheUtils.clearAllCaches( getLogger() );
+            usersCache.clear();
         }
     }
 
@@ -124,15 +122,15 @@ public class CachedUserManager
             return getGuestUser();
         }
 
-        Element el = usersCache.getElement( username );
+        Object el = usersCache.get( username );
         if ( el != null )
         {
-            return (User) el.getObjectValue();
+            return (User) el;
         }
         else
         {
             User user = this.userImpl.findUser( username );
-            usersCache.putElement( new Element( username, user ) );
+            usersCache.put( username, user );
             return user;
         }
     }
@@ -140,15 +138,15 @@ public class CachedUserManager
     public User getGuestUser()
         throws UserNotFoundException
     {
-        Element el = usersCache.getElement( GUEST_USERNAME );
+        Object el = usersCache.get( GUEST_USERNAME );
         if ( el != null )
         {
-            return (User) el.getObjectValue();
+            return (User) el;
         }
         else
         {
             User user = this.userImpl.getGuestUser();
-            usersCache.putElement( new Element( GUEST_USERNAME, user ) );
+            usersCache.put( GUEST_USERNAME, user );
             return user;
         }
     }
@@ -156,15 +154,15 @@ public class CachedUserManager
     public User findUser( Object principal )
         throws UserNotFoundException
     {
-        Element el = usersCache.getElement( principal );
+        Object el = usersCache.get( principal );
         if ( el != null )
         {
-            return (User) el.getObjectValue();
+            return (User) el;
         }
         else
         {
             User user = this.userImpl.findUser( principal );
-            usersCache.putElement( new Element( principal, user ) );
+            usersCache.put( principal, user );
             return user;
         }
     }
@@ -177,25 +175,25 @@ public class CachedUserManager
 
     public List findUsersByQuery( UserQuery query )
     {
-        getLogger().debug( "NOT CACHED - .findUsersByQuery(UserQuery)" );
+        log.debug( "NOT CACHED - .findUsersByQuery(UserQuery)" );
         return this.userImpl.findUsersByQuery( query );
     }
 
     public List findUsersByEmailKey( String emailKey, boolean orderAscending )
     {
-        getLogger().debug( "NOT CACHED - .findUsersByEmailKey(String, boolean)" );
+        log.debug( "NOT CACHED - .findUsersByEmailKey(String, boolean)" );
         return this.userImpl.findUsersByEmailKey( emailKey, orderAscending );
     }
 
     public List findUsersByFullNameKey( String fullNameKey, boolean orderAscending )
     {
-        getLogger().debug( "NOT CACHED - .findUsersByFullNameKey(String, boolean)" );
+        log.debug( "NOT CACHED - .findUsersByFullNameKey(String, boolean)" );
         return this.userImpl.findUsersByFullNameKey( fullNameKey, orderAscending );
     }
 
     public List findUsersByUsernameKey( String usernameKey, boolean orderAscending )
     {
-        getLogger().debug( "NOT CACHED - .findUsersByUsernameKey(String, boolean)" );
+        log.debug( "NOT CACHED - .findUsersByUsernameKey(String, boolean)" );
         return this.userImpl.findUsersByUsernameKey( usernameKey, orderAscending );
     }
 
@@ -206,13 +204,13 @@ public class CachedUserManager
 
     public List getUsers()
     {
-        getLogger().debug( "NOT CACHED - .getUsers()" );
+        log.debug( "NOT CACHED - .getUsers()" );
         return this.userImpl.getUsers();
     }
 
     public List getUsers( boolean orderAscending )
     {
-        getLogger().debug( "NOT CACHED - .getUsers(boolean)" );
+        log.debug( "NOT CACHED - .getUsers(boolean)" );
         return this.userImpl.getUsers( orderAscending );
     }
 
@@ -226,7 +224,7 @@ public class CachedUserManager
     {
         if ( user != null )
         {
-            usersCache.invalidateKey( user.getPrincipal() );
+            usersCache.remove( user.getPrincipal() );
         }
         return this.userImpl.updateUser( user );
     }
@@ -248,7 +246,7 @@ public class CachedUserManager
             ( (UserManagerListener) this.userImpl ).userManagerInit( freshDatabase );
         }
 
-        EhcacheUtils.clearAllCaches( getLogger() );
+        usersCache.clear();
     }
 
     public void userManagerUserAdded( User user )
@@ -260,7 +258,7 @@ public class CachedUserManager
 
         if ( user != null )
         {
-            usersCache.invalidateKey( user.getPrincipal() );
+            usersCache.remove( user.getPrincipal() );
         }
     }
 
@@ -273,7 +271,7 @@ public class CachedUserManager
 
         if ( user != null )
         {
-            usersCache.invalidateKey( user.getPrincipal() );
+            usersCache.remove( user.getPrincipal() );
         }
     }
 
@@ -286,7 +284,7 @@ public class CachedUserManager
 
         if ( user != null )
         {
-            usersCache.invalidateKey( user.getPrincipal() );
+            usersCache.remove( user.getPrincipal() );
         }
     }
 }

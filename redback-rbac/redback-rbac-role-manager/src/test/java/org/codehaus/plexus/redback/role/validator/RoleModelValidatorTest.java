@@ -43,6 +43,12 @@ public class RoleModelValidatorTest
         super.setUp();
     }
     
+    @Override
+    protected String getPlexusConfigLocation()
+    {
+        return "plexus.xml";
+    }
+
     public void testGood() throws Exception 
     {
         File resource = new File( getBasedir() + "/src/test/validation-tests/redback-good.xml");

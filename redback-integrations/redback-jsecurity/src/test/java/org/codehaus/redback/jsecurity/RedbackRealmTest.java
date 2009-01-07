@@ -36,13 +36,19 @@ import org.jsecurity.subject.PrincipalCollection;
 import org.jsecurity.subject.SimplePrincipalCollection;
 import org.jsecurity.subject.Subject;
 
-public class RedbackRealmTest extends PlexusInSpringTestCase
+public class RedbackRealmTest
+    extends PlexusInSpringTestCase
 {
     private DefaultSecurityManager securityManager;
+
     private RedbackRealm realm;
+
     private UserManager userManager;
+
     private RBACManager rbacManager;
+
     private UserSecurityPolicy userSecurityPolicy;
+
     private User user;
 
     @Override
@@ -51,115 +57,124 @@ public class RedbackRealmTest extends PlexusInSpringTestCase
     {
         super.setUp();
         securityManager = new DefaultSecurityManager();
-        userManager = (UserManager)lookup(UserManager.ROLE, "memory");
-        rbacManager = (RBACManager)lookup(RBACManager.ROLE, "memory");
-        userSecurityPolicy = (UserSecurityPolicy)lookup(userSecurityPolicy.ROLE);
+        userManager = (UserManager) lookup( UserManager.ROLE, "memory" );
+        rbacManager = (RBACManager) lookup( RBACManager.ROLE, "memory" );
+        userSecurityPolicy = (UserSecurityPolicy) lookup( userSecurityPolicy.ROLE );
 
-        realm = new RedbackRealm(userManager, rbacManager, userSecurityPolicy);
-        securityManager.setRealm(realm);
+        realm = new RedbackRealm( userManager, rbacManager, userSecurityPolicy );
+        securityManager.setRealm( realm );
 
-        user = userManager.createUser("test1", "John Tester", "jtester@redback.codehaus.org");
-        user.setPassword("password1");
-        userManager.addUser(user);
-        userManager.updateUser(user);
+        user = userManager.createUser( "test1", "John Tester", "jtester@redback.codehaus.org" );
+        user.setPassword( "password1" );
+        userManager.addUser( user );
+        userManager.updateUser( user );
     }
 
     @Override
-    protected void tearDown() throws Exception {
+    protected void tearDown()
+        throws Exception
+    {
         super.tearDown();
         securityManager.destroy();
         securityManager = null;
         realm = null;
     }
 
+    @Override
+    protected String getPlexusConfigLocation()
+    {
+        return "plexus.xml";
+    }
+
     public void testThrowsExceptionIfUserAccountLocked()
         throws Exception
     {
-        user.setLocked(true);
-        userManager.updateUser(user);
+        user.setLocked( true );
+        userManager.updateUser( user );
         try
         {
-            securityManager.login(new UsernamePasswordToken("test1", "password1"));
-            fail("Should not be able to login");
+            securityManager.login( new UsernamePasswordToken( "test1", "password1" ) );
+            fail( "Should not be able to login" );
         }
-        catch (AuthenticationException e)
+        catch ( AuthenticationException e )
         {
-            assertTrue(true);
+            assertTrue( true );
         }
     }
 
     public void testThrowsExceptionIfUserAccountNeedsPasswordChange()
         throws Exception
     {
-        user.setPasswordChangeRequired(true);
-        userManager.updateUser(user);
+        user.setPasswordChangeRequired( true );
+        userManager.updateUser( user );
         try
         {
-            securityManager.login(new UsernamePasswordToken("test1", "password1"));
-            fail("Should not be able to login");
+            securityManager.login( new UsernamePasswordToken( "test1", "password1" ) );
+            fail( "Should not be able to login" );
         }
-        catch (AuthenticationException e)
+        catch ( AuthenticationException e )
         {
-            assertTrue(true);
+            assertTrue( true );
         }
     }
 
     public void testUnsuccessfullAuthAttemptsLockAccount()
     {
-        assertFalse(user.isLocked());
-        userSecurityPolicy.setLoginAttemptCount(2);
+        assertFalse( user.isLocked() );
+        userSecurityPolicy.setLoginAttemptCount( 2 );
         try
         {
-            securityManager.login(new UsernamePasswordToken("test1", "incorrectpassowrd"));
-            fail("password should be incorrect");
+            securityManager.login( new UsernamePasswordToken( "test1", "incorrectpassowrd" ) );
+            fail( "password should be incorrect" );
         }
-        catch (AuthenticationException e)
+        catch ( AuthenticationException e )
         {
         }
 
-        assertFalse(user.isLocked());
+        assertFalse( user.isLocked() );
 
         try
         {
-            securityManager.login(new UsernamePasswordToken("test1", "incorrectpassowrd"));
-            fail("password should be incorrect");
+            securityManager.login( new UsernamePasswordToken( "test1", "incorrectpassowrd" ) );
+            fail( "password should be incorrect" );
         }
-        catch (AuthenticationException e)
+        catch ( AuthenticationException e )
         {
         }
-        assertTrue(user.isLocked());
+        assertTrue( user.isLocked() );
     }
 
-    public void testBasic() throws Exception
+    public void testBasic()
+        throws Exception
     {
-        assertEquals(1, userManager.getUsers().size());
-        
-        Role role1 = rbacManager.createRole("role1");
-        Permission permission = rbacManager.createPermission("Allowed to write to repository");
-        Operation operation = rbacManager.createOperation("myop");
-        Resource resource = rbacManager.createResource("filesystem");
+        assertEquals( 1, userManager.getUsers().size() );
 
-        permission.setOperation(operation);
-        permission.setPermanent(false);
-        permission.setResource(resource);
+        Role role1 = rbacManager.createRole( "role1" );
+        Permission permission = rbacManager.createPermission( "Allowed to write to repository" );
+        Operation operation = rbacManager.createOperation( "myop" );
+        Resource resource = rbacManager.createResource( "filesystem" );
 
-        role1.addPermission(permission);
-        rbacManager.savePermission(permission);
-        rbacManager.saveRole(role1);
-        
-        Role role2 = rbacManager.createRole("role2");
+        permission.setOperation( operation );
+        permission.setPermanent( false );
+        permission.setResource( resource );
 
-        UserAssignment assignment = rbacManager.createUserAssignment(user.getUsername());
-        assignment.addRoleName("role1");
-        rbacManager.saveUserAssignment(assignment);
+        role1.addPermission( permission );
+        rbacManager.savePermission( permission );
+        rbacManager.saveRole( role1 );
 
-        Subject subject = securityManager.login(new UsernamePasswordToken("test1", "password1"));
-        assertTrue(subject.isAuthenticated());
-        assertTrue(subject.hasRole("role1"));
-        assertFalse(subject.hasRole("role2"));
+        Role role2 = rbacManager.createRole( "role2" );
 
-        PrincipalCollection principals = new SimplePrincipalCollection("test1", realm.getName());
+        UserAssignment assignment = rbacManager.createUserAssignment( user.getUsername() );
+        assignment.addRoleName( "role1" );
+        rbacManager.saveUserAssignment( assignment );
 
-        assertTrue(securityManager.isPermitted(principals, "Allowed to write to repository"));
+        Subject subject = securityManager.login( new UsernamePasswordToken( "test1", "password1" ) );
+        assertTrue( subject.isAuthenticated() );
+        assertTrue( subject.hasRole( "role1" ) );
+        assertFalse( subject.hasRole( "role2" ) );
+
+        PrincipalCollection principals = new SimplePrincipalCollection( "test1", realm.getName() );
+
+        assertTrue( securityManager.isPermitted( principals, "Allowed to write to repository" ) );
     }
 }

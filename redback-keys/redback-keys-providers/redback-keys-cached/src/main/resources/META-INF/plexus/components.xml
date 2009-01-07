@@ -6,9 +6,9 @@
          ================================================================ -->
 
     <component>
-      <role>org.codehaus.plexus.ehcache.EhcacheComponent</role>
+      <role>org.codehaus.plexus.cache.Cache</role>
       <role-hint>keys</role-hint>
-      <implementation>org.codehaus.plexus.ehcache.MemoryCache</implementation>
+      <implementation>org.codehaus.plexus.cache.ehcache.EhcacheCache</implementation>
       <description>MemoryCache for Keys</description>
       <configuration>
         <eternal>false</eternal>

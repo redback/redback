@@ -35,7 +35,14 @@ public class TestAuthenticationManager
     }
 
 
-   public void testAuthenticatorPopulation()
+   @Override
+    protected String getPlexusConfigLocation()
+    {
+        return "plexus.xml";
+    }
+
+
+public void testAuthenticatorPopulation()
        throws Exception
    {
        AuthenticationManager authManager = (AuthenticationManager) lookup( AuthenticationManager.ROLE );

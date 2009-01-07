@@ -16,11 +16,6 @@ package org.codehaus.plexus.redback.role;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
-import org.codehaus.plexus.jdo.JdoFactory;
-import org.codehaus.plexus.redback.rbac.RBACManager;
-import org.jpox.SchemaTool;
-
 import java.io.File;
 import java.net.URL;
 import java.util.Iterator;
@@ -29,6 +24,13 @@ import java.util.Properties;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
+
+import net.sf.ehcache.CacheManager;
+
+import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
+import org.codehaus.plexus.jdo.JdoFactory;
+import org.codehaus.plexus.redback.rbac.RBACManager;
+import org.jpox.SchemaTool;
 
 /**
  * RoleManagerTest:
@@ -39,12 +41,26 @@ import javax.jdo.PersistenceManagerFactory;
 public class JpoxRoleManagerTest
     extends AbstractRoleManagerTest
 {
+    
+    
+    
+    @Override
+    protected String getPlexusConfigLocation()
+    {
+        return "plexus.xml";
+    }
+
     /**
      * Creates a new RbacStore which contains no data.
      */
     protected void setUp()
         throws Exception
     {
+        
+        CacheManager.getInstance().clearAll();
+        CacheManager.getInstance().removalAll();
+        CacheManager.getInstance().shutdown();
+        
         super.setUp();
 
         DefaultConfigurableJdoFactory jdoFactory = (DefaultConfigurableJdoFactory) lookup( JdoFactory.ROLE, "users" );
@@ -64,6 +80,8 @@ public class JpoxRoleManagerTest
         jdoFactory.setProperty( "org.jpox.poid.transactionIsolation", "READ_UNCOMMITTED" ); //$NON-NLS-1$ //$NON-NLS-2$
 
         jdoFactory.setProperty( "org.jpox.autoCreateSchema", "true" ); //$NON-NLS-1$ //$NON-NLS-2$
+        
+        jdoFactory.setProperty( "org.jpox.autoCreateTables", "true" );
         
         jdoFactory.setProperty( "javax.jdo.option.RetainValues", "true" );
 

@@ -26,7 +26,7 @@ import java.util.List;
  * MemoryUserAssignment 
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
- * @version $Id: MemoryUserAssignment.java 5883 2007-02-21 22:46:14Z joakime $
+ * @version $Id$
  */
 public class MemoryUserAssignment
     extends AbstractUserAssignment

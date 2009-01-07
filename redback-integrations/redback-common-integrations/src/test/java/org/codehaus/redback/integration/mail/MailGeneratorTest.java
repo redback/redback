@@ -24,6 +24,8 @@ import java.util.Properties;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 
+import net.sf.ehcache.CacheManager;
+
 import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
 import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
@@ -53,6 +55,9 @@ public class MailGeneratorTest
     protected void setUp()
         throws Exception
     {
+        CacheManager.getInstance().clearAll();
+        CacheManager.getInstance().removalAll();
+        CacheManager.getInstance().shutdown();
         super.setUp();
 
         DefaultConfigurableJdoFactory jdoFactory = (DefaultConfigurableJdoFactory) lookup( JdoFactory.ROLE, "users" );

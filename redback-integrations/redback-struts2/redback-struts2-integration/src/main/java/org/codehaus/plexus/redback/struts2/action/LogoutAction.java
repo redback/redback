@@ -18,7 +18,7 @@ package org.codehaus.plexus.redback.struts2.action;
 
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.dispatcher.SessionMap;
-import org.codehaus.plexus.ehcache.EhcacheComponent;
+import org.codehaus.plexus.cache.Cache;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.util.AutoLoginCookies;
@@ -43,21 +43,21 @@ public class LogoutAction
      * 
      * @plexus.requirement role-hint="userAssignments"
      */
-    private EhcacheComponent userAssignmentsCache;
+    private Cache userAssignmentsCache;
     
     /**
      * cache used for user permissions
      * 
      * @plexus.requirement role-hint="userPermissions"
      */
-    private EhcacheComponent userPermissionsCache;
+    private Cache userPermissionsCache;
     
     /**
      * Cache used for users
      * 
      * @plexus.requirement role-hint="users"
      */
-    private EhcacheComponent usersCache;
+    private Cache usersCache;
     
     /**
      * @plexus.requirement
@@ -75,15 +75,15 @@ public class LogoutAction
             Object principal = (String)getSecuritySession().getUser().getPrincipal();
             if ( userAssignmentsCache != null )
             {
-                userAssignmentsCache.invalidateKey( principal );
+                userAssignmentsCache.remove( principal );
             }
             if ( userPermissionsCache != null )
             {
-                userPermissionsCache.invalidateKey( principal );
+                userPermissionsCache.remove( principal );
             }
             if ( usersCache != null )
             {
-                usersCache.invalidateKey( principal );
+                usersCache.remove( principal );
             }
         }
         

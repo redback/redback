@@ -30,9 +30,12 @@ public class CachedRbacManagerTest
     protected void setUp()
         throws Exception
     {
+        CacheManager.getInstance().removeCache( "usersCache" );
+        CacheManager.getInstance().removalAll();
+        CacheManager.getInstance().shutdown();
         super.setUp();
-
-        setRbacManager( (RBACManager) lookup( RBACManager.ROLE, "cached" ) );
+        CacheManager.getInstance().clearAll();
+        setRbacManager( (RBACManager) getApplicationContext().getBean( "rBACManager#cached" ) );
 
         assertTrue( getRbacManager() instanceof CachedRbacManager );
     }
@@ -40,6 +43,7 @@ public class CachedRbacManagerTest
     protected void tearDown()
         throws Exception
     {
+        CacheManager.getInstance().clearAll();
         CacheManager.getInstance().removalAll();
         super.tearDown();
     }

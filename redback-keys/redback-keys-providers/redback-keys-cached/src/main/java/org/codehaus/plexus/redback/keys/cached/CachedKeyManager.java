@@ -16,44 +16,40 @@ package org.codehaus.plexus.redback.keys.cached;
  * limitations under the License.
  */
 
-import net.sf.ehcache.Element;
+import java.util.List;
 
-import org.codehaus.plexus.ehcache.EhcacheComponent;
-import org.codehaus.plexus.ehcache.EhcacheUtils;
+import javax.annotation.Resource;
+
+import org.codehaus.plexus.cache.Cache;
 import org.codehaus.plexus.redback.keys.AbstractKeyManager;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.keys.KeyManager;
 import org.codehaus.plexus.redback.keys.KeyManagerException;
 import org.codehaus.plexus.redback.keys.KeyNotFoundException;
-
-import java.util.List;
+import org.springframework.stereotype.Service;
 
 /**
  * CachedKeyManager 
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.keys.KeyManager" role-hint="cached"
  */
+@Service("keyManager#cached")
 public class CachedKeyManager
     extends AbstractKeyManager
     implements KeyManager
 {
-    /**
-     * @plexus.requirement role-hint="jdo"
-     */
+    @Resource(name="keyManager#jdo")
     private KeyManager keyImpl;
 
-    /**
-     * @plexus.requirement role-hint="keys"
-     */
-    private EhcacheComponent keysCache;
+    @Resource(name="cache#keys")
+    private Cache keysCache;
 
     public AuthenticationKey addKey( AuthenticationKey key )
     {
         if ( key != null )
         {
-            keysCache.invalidateKey( key.getKey() );
+            keysCache.remove( key.getKey() );
         }
         return this.keyImpl.addKey( key );
     }
@@ -62,21 +58,21 @@ public class CachedKeyManager
         throws KeyManagerException
     {
         AuthenticationKey authkey = this.keyImpl.createKey( principal, purpose, expirationMinutes );
-        keysCache.invalidateKey( authkey.getKey() );
+        keysCache.remove( authkey.getKey() );
         return authkey;
     }
 
     public void deleteKey( AuthenticationKey key )
         throws KeyManagerException
     {
-        keysCache.invalidateKey( key.getKey() );
+        keysCache.remove( key.getKey() );
         this.keyImpl.deleteKey( key );
     }
 
     public void deleteKey( String key )
         throws KeyManagerException
     {
-        keysCache.invalidateKey( key );
+        keysCache.remove( key );
         this.keyImpl.deleteKey( key );
     }
 
@@ -88,7 +84,7 @@ public class CachedKeyManager
         }
         finally
         {
-            EhcacheUtils.clearAllCaches( getLogger() );
+            this.keysCache.clear();
         }
     }
 
@@ -97,17 +93,16 @@ public class CachedKeyManager
     {
         try
         {
-            Element el = keysCache.getElement( key );
-            if ( el != null )
+            AuthenticationKey authkey = (AuthenticationKey) keysCache.get( key );
+            if ( authkey != null )
             {
-                AuthenticationKey authkey = (AuthenticationKey) el.getObjectValue();
                 assertNotExpired( authkey );
                 return authkey;
             }
             else
             {
-                AuthenticationKey authkey = this.keyImpl.findKey( key );
-                keysCache.putElement( new Element( key, authkey ) );
+                authkey = this.keyImpl.findKey( key );
+                keysCache.put( key,authkey );
                 return authkey;
             }
         }
@@ -115,14 +110,14 @@ public class CachedKeyManager
         {
             // this is done to remove keys that have been expired.
             // TODO: need to make a listener for the key manager.
-            keysCache.invalidateKey( key );
+            keysCache.remove( key );
             throw knfe;
         }
     }
 
     public List getAllKeys()
     {
-        getLogger().debug( "NOT CACHED - .getAllKeys()" );
+        log.debug( "NOT CACHED - .getAllKeys()" );
         return this.keyImpl.getAllKeys();
     }
 

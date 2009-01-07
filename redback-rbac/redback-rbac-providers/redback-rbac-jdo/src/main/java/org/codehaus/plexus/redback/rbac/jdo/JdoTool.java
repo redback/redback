@@ -25,12 +25,14 @@ import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.RbacObjectNotFoundException;
 import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.util.StringUtils;
+import org.springframework.stereotype.Service;
 
 import java.io.PrintStream;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.jdo.Extent;
 import javax.jdo.JDOException;
 import javax.jdo.JDOHelper;
@@ -52,14 +54,13 @@ import javax.jdo.spi.PersistenceCapable;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.rbac.jdo.JdoTool"
  */
+@Service
 public class JdoTool
     implements Initializable, DeleteLifecycleListener, StoreLifecycleListener
 {
-    /**
-     * @plexus.requirement role-hint="users"
-     */
+
+    @Resource(name="jdoFactory#users")
     private JdoFactory jdoFactory;
 
     private PersistenceManagerFactory pmf;

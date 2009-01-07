@@ -21,14 +21,13 @@ import org.codehaus.plexus.redback.authorization.AuthorizationDataSource;
 import org.codehaus.plexus.redback.authorization.AuthorizationException;
 import org.codehaus.plexus.redback.authorization.AuthorizationResult;
 import org.codehaus.plexus.redback.authorization.Authorizer;
+import org.springframework.stereotype.Service;
 
 /**
  * @author: Jesse McConnell <jesse@codehaus.org>
- * @version: $Id:$
- *
- * @plexus.component role="org.codehaus.plexus.redback.authorization.Authorizer"
- * role-hint="memory"
- */
+ * @version: $Id$
+  */
+@Service("authorizer#memory")
 public class MemoryAuthorizer
     extends AbstractLogEnabled
     implements Authorizer

@@ -30,7 +30,7 @@ import java.util.List;
  * RoleModelUtils:
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
- * @version: $Id:$
+ * @version: $Id$
  */
 public class RoleModelUtils
 {

@@ -22,7 +22,7 @@ import org.codehaus.plexus.redback.rbac.Resource;
  * MemoryResource 
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
- * @version $Id: MemoryResource.java 5883 2007-02-21 22:46:14Z joakime $
+ * @version $Id$
  */
 public class MemoryResource
     implements Resource, java.io.Serializable

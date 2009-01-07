@@ -20,6 +20,7 @@ import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.role.model.*;
 import org.codehaus.plexus.redback.role.util.RoleModelUtils;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -29,16 +30,17 @@ import java.util.List;
  * DefaultRoleModelValidator: validates completeness of the model
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
- * @version: $Id:$
+ * @version: $Id$
  * 
- * @plexus.component role="org.codehaus.plexus.redback.role.validator.RoleModelValidator"
- *   role-hint="default"
  */
-public class DefaultRoleModelValidator implements RoleModelValidator
+@Service("roleModelValidator")
+public class DefaultRoleModelValidator
+    implements RoleModelValidator
 {
     private List validationErrors;
 
-    public boolean validate( RedbackRoleModel model ) throws RoleManagerException
+    public boolean validate( RedbackRoleModel model )
+        throws RoleManagerException
     {
         validationErrors = null;
 
@@ -88,136 +90,136 @@ public class DefaultRoleModelValidator implements RoleModelValidator
 
         for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
         {
-            ModelApplication application = (ModelApplication)k.next();
+            ModelApplication application = (ModelApplication) k.next();
 
-        if ( application.getId() == null )
-        {
-            addValidationError( "model is missing application name" );
-        }
-        
-        // validate model has version
-        if ( application.getVersion() == null )
-        {
-           addValidationError( application.getId() + " is missing version" );
-        }
+            if ( application.getId() == null )
+            {
+                addValidationError( "model is missing application name" );
+            }
 
-        // validate resource bits
-        for ( Iterator i = application.getResources().iterator(); i.hasNext(); )
-        {
-            ModelResource resource = (ModelResource)i.next();
-            
-            if ( resource.getName() == null )
+            // validate model has version
+            if ( application.getVersion() == null )
             {
-                addValidationError( resource.toString() + " missing name" );
+                addValidationError( application.getId() + " is missing version" );
             }
-            
-            if ( resource.getId() == null )
+
+            // validate resource bits
+            for ( Iterator i = application.getResources().iterator(); i.hasNext(); )
             {
-                addValidationError( resource.toString() + " missing id" );
-            }
-        }
-        
-        // validate the operations
-        for ( Iterator i = application.getOperations().iterator(); i.hasNext(); )
-        {
-            ModelOperation operation = (ModelOperation)i.next();
-            
-            if ( operation.getName() == null )
-            {
-                addValidationError( operation.toString() + " missing name" );
-            }
-            
-            if ( operation.getId() == null )
-            {
-                addValidationError( operation.toString() + " missing id" );
-            }
-        }
-        
-        for ( Iterator i = application.getRoles().iterator(); i.hasNext(); )
-        {
-            ModelRole role = (ModelRole)i.next();
-            
-            if ( role.getId() == null )
-            {
-                addValidationError( role.toString() + " missing id" );
-            }
-            
-            if ( role.getName() == null )
-            {
-                addValidationError( role.toString() + " missing name" );
-            }
-            
-            if ( role.getPermissions() != null )
-            {
-                for ( Iterator j = role.getPermissions().iterator(); j.hasNext(); )
+                ModelResource resource = (ModelResource) i.next();
+
+                if ( resource.getName() == null )
                 {
-                    ModelPermission permission = (ModelPermission)j.next();
-                    
-                    if ( permission.getName() == null )
-                    {
-                        addValidationError( permission.toString() + " missing name" );                  
-                    }
-                    
-                    if ( permission.getId() == null )
-                    {
-                        addValidationError( permission.toString() + " missing id" );
-                    }
-                    
-                    if ( permission.getOperation() == null )
-                    {
-                        addValidationError( permission.toString() + " missing operations" ); 
-                    }
-                    
-                    if ( permission.getResource() == null )
-                    {
-                        addValidationError( permission.toString() + " missing resource" );
-                    }                        
+                    addValidationError( resource.toString() + " missing name" );
+                }
+
+                if ( resource.getId() == null )
+                {
+                    addValidationError( resource.toString() + " missing id" );
                 }
             }
-        }
-        
-        for ( Iterator i = application.getTemplates().iterator(); i.hasNext(); )
-        {
-            ModelTemplate template = (ModelTemplate)i.next();
-            
-            if ( template.getId() == null )
+
+            // validate the operations
+            for ( Iterator i = application.getOperations().iterator(); i.hasNext(); )
             {
-                addValidationError( template.toString() + " missing id" );
-            }
-            
-            if ( template.getNamePrefix() == null )
-            {
-                addValidationError( template.toString() + " missing name prefix" );
-            }
-            
-            if ( template.getPermissions() != null )
-            {
-                for ( Iterator j = template.getPermissions().iterator(); j.hasNext(); )
+                ModelOperation operation = (ModelOperation) i.next();
+
+                if ( operation.getName() == null )
                 {
-                    ModelPermission permission = (ModelPermission)j.next();
-                    
-                    if ( permission.getName() == null )
-                    {
-                        addValidationError( permission.toString() + " missing name" );                  
-                    }
-                    
-                    if ( permission.getId() == null )
-                    {
-                        addValidationError( permission.toString() + " missing id" );
-                    }
-                    
-                    if ( permission.getOperation() == null )
-                    {
-                        addValidationError( permission.toString() + " missing operations" ); 
-                    }
-                    
-                    if ( permission.getResource() == null )
-                    {
-                        addValidationError( permission.toString() + " missing resource" );
-                    }                        
+                    addValidationError( operation.toString() + " missing name" );
+                }
+
+                if ( operation.getId() == null )
+                {
+                    addValidationError( operation.toString() + " missing id" );
                 }
             }
-        }
+
+            for ( Iterator i = application.getRoles().iterator(); i.hasNext(); )
+            {
+                ModelRole role = (ModelRole) i.next();
+
+                if ( role.getId() == null )
+                {
+                    addValidationError( role.toString() + " missing id" );
+                }
+
+                if ( role.getName() == null )
+                {
+                    addValidationError( role.toString() + " missing name" );
+                }
+
+                if ( role.getPermissions() != null )
+                {
+                    for ( Iterator j = role.getPermissions().iterator(); j.hasNext(); )
+                    {
+                        ModelPermission permission = (ModelPermission) j.next();
+
+                        if ( permission.getName() == null )
+                        {
+                            addValidationError( permission.toString() + " missing name" );
+                        }
+
+                        if ( permission.getId() == null )
+                        {
+                            addValidationError( permission.toString() + " missing id" );
+                        }
+
+                        if ( permission.getOperation() == null )
+                        {
+                            addValidationError( permission.toString() + " missing operations" );
+                        }
+
+                        if ( permission.getResource() == null )
+                        {
+                            addValidationError( permission.toString() + " missing resource" );
+                        }
+                    }
+                }
+            }
+
+            for ( Iterator i = application.getTemplates().iterator(); i.hasNext(); )
+            {
+                ModelTemplate template = (ModelTemplate) i.next();
+
+                if ( template.getId() == null )
+                {
+                    addValidationError( template.toString() + " missing id" );
+                }
+
+                if ( template.getNamePrefix() == null )
+                {
+                    addValidationError( template.toString() + " missing name prefix" );
+                }
+
+                if ( template.getPermissions() != null )
+                {
+                    for ( Iterator j = template.getPermissions().iterator(); j.hasNext(); )
+                    {
+                        ModelPermission permission = (ModelPermission) j.next();
+
+                        if ( permission.getName() == null )
+                        {
+                            addValidationError( permission.toString() + " missing name" );
+                        }
+
+                        if ( permission.getId() == null )
+                        {
+                            addValidationError( permission.toString() + " missing id" );
+                        }
+
+                        if ( permission.getOperation() == null )
+                        {
+                            addValidationError( permission.toString() + " missing operations" );
+                        }
+
+                        if ( permission.getResource() == null )
+                        {
+                            addValidationError( permission.toString() + " missing resource" );
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -233,225 +235,225 @@ public class DefaultRoleModelValidator implements RoleModelValidator
         // check the operations in role permissions
         for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
         {
-            ModelApplication application = (ModelApplication)k.next();
+            ModelApplication application = (ModelApplication) k.next();
 
-        for ( Iterator i = application.getRoles().iterator(); i.hasNext(); )
-        {
-            ModelRole role = (ModelRole) i.next();
-
-            if ( role.getPermissions() != null )
+            for ( Iterator i = application.getRoles().iterator(); i.hasNext(); )
             {
-                for ( Iterator j = role.getPermissions().iterator(); j.hasNext(); )
-                {
-                    ModelPermission permission = (ModelPermission) j.next();
+                ModelRole role = (ModelRole) i.next();
 
-                    if ( !operationIdList.contains( permission.getOperation() ) )
+                if ( role.getPermissions() != null )
+                {
+                    for ( Iterator j = role.getPermissions().iterator(); j.hasNext(); )
                     {
-                        addValidationError( "missing operation: " + permission.getOperation() + " in permission "
-                                        + permission.getId() );
+                        ModelPermission permission = (ModelPermission) j.next();
+
+                        if ( !operationIdList.contains( permission.getOperation() ) )
+                        {
+                            addValidationError( "missing operation: " + permission.getOperation() + " in permission "
+                                + permission.getId() );
+                        }
                     }
                 }
             }
-        }
 
-        // check the operations in template permissions
-        for ( Iterator i = application.getTemplates().iterator(); i.hasNext(); )
-        {
-            ModelTemplate template = (ModelTemplate) i.next();
-
-            if ( template.getPermissions() != null )
+            // check the operations in template permissions
+            for ( Iterator i = application.getTemplates().iterator(); i.hasNext(); )
             {
-                for ( Iterator j = template.getPermissions().iterator(); j.hasNext(); )
-                {
-                    ModelPermission permission = (ModelPermission) j.next();
+                ModelTemplate template = (ModelTemplate) i.next();
 
-                    if ( !operationIdList.contains( permission.getOperation() ) )
+                if ( template.getPermissions() != null )
+                {
+                    for ( Iterator j = template.getPermissions().iterator(); j.hasNext(); )
                     {
-                        addValidationError( "missing operation: " + permission.getOperation() + " in permission "
-                                        + permission.getId() );
+                        ModelPermission permission = (ModelPermission) j.next();
+
+                        if ( !operationIdList.contains( permission.getOperation() ) )
+                        {
+                            addValidationError( "missing operation: " + permission.getOperation() + " in permission "
+                                + permission.getId() );
+                        }
                     }
                 }
             }
-        }
         }
     }
 
     private void validateResourceClosure( RedbackRoleModel model )
     {
-       List resourceIdList = RoleModelUtils.getResourceIdList( model );
+        List resourceIdList = RoleModelUtils.getResourceIdList( model );
         for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
-               {
-                   ModelApplication application = (ModelApplication)k.next();
-
-        for ( Iterator i = application.getRoles().iterator(); i.hasNext(); )
         {
-            ModelRole role = (ModelRole) i.next();
+            ModelApplication application = (ModelApplication) k.next();
 
-            if ( role.getPermissions() != null )
+            for ( Iterator i = application.getRoles().iterator(); i.hasNext(); )
             {
-                for ( Iterator j = role.getPermissions().iterator(); j.hasNext(); )
-                {
-                    ModelPermission permission = (ModelPermission) j.next();
+                ModelRole role = (ModelRole) i.next();
 
-                    if ( !resourceIdList.contains( permission.getResource() ) )
+                if ( role.getPermissions() != null )
+                {
+                    for ( Iterator j = role.getPermissions().iterator(); j.hasNext(); )
                     {
-                        addValidationError( "missing operation: " + permission.getResource() + " in permission "
-                                        + permission.getId() );
+                        ModelPermission permission = (ModelPermission) j.next();
+
+                        if ( !resourceIdList.contains( permission.getResource() ) )
+                        {
+                            addValidationError( "missing operation: " + permission.getResource() + " in permission "
+                                + permission.getId() );
+                        }
                     }
                 }
             }
         }
-               }
     }
 
     private void validateChildRoleClosure( RedbackRoleModel model )
     {
         List roleIdList = RoleModelUtils.getRoleIdList( model );
         for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
-               {
-                   ModelApplication application = (ModelApplication)k.next();
-
-        for ( Iterator i = application.getRoles().iterator(); i.hasNext(); )
         {
-            ModelRole role = (ModelRole) i.next();
+            ModelApplication application = (ModelApplication) k.next();
 
-            if ( role.getChildRoles() != null )
+            for ( Iterator i = application.getRoles().iterator(); i.hasNext(); )
             {
-                for ( Iterator j = role.getChildRoles().iterator(); j.hasNext(); )
-                {
-                    String childRoleId = (String) j.next();
+                ModelRole role = (ModelRole) i.next();
 
-                    if ( !roleIdList.contains( childRoleId ) )
+                if ( role.getChildRoles() != null )
+                {
+                    for ( Iterator j = role.getChildRoles().iterator(); j.hasNext(); )
                     {
-                        addValidationError( "missing role id: " + childRoleId + " in child roles of role "
-                                        + role.getId() );
+                        String childRoleId = (String) j.next();
+
+                        if ( !roleIdList.contains( childRoleId ) )
+                        {
+                            addValidationError( "missing role id: " + childRoleId + " in child roles of role "
+                                + role.getId() );
+                        }
+                    }
+                }
+            }
+
+            for ( Iterator i = application.getTemplates().iterator(); i.hasNext(); )
+            {
+                ModelTemplate template = (ModelTemplate) i.next();
+
+                if ( template.getChildRoles() != null )
+                {
+                    for ( Iterator j = template.getChildRoles().iterator(); j.hasNext(); )
+                    {
+                        String childRoleId = (String) j.next();
+
+                        if ( !roleIdList.contains( childRoleId ) )
+                        {
+                            addValidationError( "missing role id: " + childRoleId + " in child roles of template "
+                                + template.getId() );
+                        }
                     }
                 }
             }
         }
-
-        for ( Iterator i = application.getTemplates().iterator(); i.hasNext(); )
-        {
-            ModelTemplate template = (ModelTemplate) i.next();
-
-            if ( template.getChildRoles() != null )
-            {
-                for ( Iterator j = template.getChildRoles().iterator(); j.hasNext(); )
-                {
-                    String childRoleId = (String) j.next();
-
-                    if ( !roleIdList.contains( childRoleId ) )
-                    {
-                        addValidationError( "missing role id: " + childRoleId + " in child roles of template "
-                                        + template.getId() );
-                    }
-                }
-            }
-        }
-               }
     }
 
     private void validateParentRoleClosure( RedbackRoleModel model )
     {
-       List roleIdList = RoleModelUtils.getRoleIdList( model );
+        List roleIdList = RoleModelUtils.getRoleIdList( model );
 
         for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
-               {
-                   ModelApplication application = (ModelApplication)k.next();
-
-        for ( Iterator i = application.getRoles().iterator(); i.hasNext(); )
         {
-            ModelRole role = (ModelRole) i.next();
+            ModelApplication application = (ModelApplication) k.next();
 
-            if ( role.getParentRoles() != null )
+            for ( Iterator i = application.getRoles().iterator(); i.hasNext(); )
             {
-                for ( Iterator j = role.getParentRoles().iterator(); j.hasNext(); )
-                {
-                    String parentRoleId = (String) j.next();
+                ModelRole role = (ModelRole) i.next();
 
-                    if ( !roleIdList.contains( parentRoleId ) )
+                if ( role.getParentRoles() != null )
+                {
+                    for ( Iterator j = role.getParentRoles().iterator(); j.hasNext(); )
                     {
-                        addValidationError( "missing role id: " + parentRoleId + " in parent roles of role "
-                                        + role.getId() );
+                        String parentRoleId = (String) j.next();
+
+                        if ( !roleIdList.contains( parentRoleId ) )
+                        {
+                            addValidationError( "missing role id: " + parentRoleId + " in parent roles of role "
+                                + role.getId() );
+                        }
+                    }
+                }
+            }
+
+            for ( Iterator i = application.getTemplates().iterator(); i.hasNext(); )
+            {
+                ModelTemplate template = (ModelTemplate) i.next();
+
+                if ( template.getParentRoles() != null )
+                {
+                    for ( Iterator j = template.getParentRoles().iterator(); j.hasNext(); )
+                    {
+                        String parentRoleId = (String) j.next();
+
+                        if ( !roleIdList.contains( parentRoleId ) )
+                        {
+                            addValidationError( "missing role id: " + parentRoleId + " in parent roles of template "
+                                + template.getId() );
+                        }
                     }
                 }
             }
         }
-
-        for ( Iterator i = application.getTemplates().iterator(); i.hasNext(); )
-        {
-            ModelTemplate template = (ModelTemplate) i.next();
-
-            if ( template.getParentRoles() != null )
-            {
-                for ( Iterator j = template.getParentRoles().iterator(); j.hasNext(); )
-                {
-                    String parentRoleId = (String) j.next();
-
-                    if ( !roleIdList.contains( parentRoleId ) )
-                    {
-                        addValidationError( "missing role id: " + parentRoleId + " in parent roles of template "
-                                        + template.getId() );
-                    }
-                }
-            }
-        }
-               }
     }
 
     private void validateTemplateClosure( RedbackRoleModel model )
     {
-       List templateIdList = RoleModelUtils.getTemplateIdList( model );
-        
+        List templateIdList = RoleModelUtils.getTemplateIdList( model );
+
         // template name prefix must be unique
         List templateNamePrefixList = new ArrayList();
 
         for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
-               {
-                   ModelApplication application = (ModelApplication)k.next();
-
-        for ( Iterator i = application.getTemplates().iterator(); i.hasNext(); )
         {
-            ModelTemplate template = (ModelTemplate) i.next();
+            ModelApplication application = (ModelApplication) k.next();
 
-            if ( template.getParentTemplates() != null )
+            for ( Iterator i = application.getTemplates().iterator(); i.hasNext(); )
             {
-                for ( Iterator j = template.getParentTemplates().iterator(); j.hasNext(); )
-                {
-                    String parentTemplateId = (String) j.next();
+                ModelTemplate template = (ModelTemplate) i.next();
 
-                    if ( !templateIdList.contains( parentTemplateId ) )
+                if ( template.getParentTemplates() != null )
+                {
+                    for ( Iterator j = template.getParentTemplates().iterator(); j.hasNext(); )
                     {
-                        addValidationError( "missing template id: " + parentTemplateId
-                                        + " in parent templates of template " + template.getId() );
+                        String parentTemplateId = (String) j.next();
+
+                        if ( !templateIdList.contains( parentTemplateId ) )
+                        {
+                            addValidationError( "missing template id: " + parentTemplateId
+                                + " in parent templates of template " + template.getId() );
+                        }
                     }
                 }
-            }
 
-            if ( template.getChildTemplates() != null )
-            {
-                for ( Iterator j = template.getChildTemplates().iterator(); j.hasNext(); )
+                if ( template.getChildTemplates() != null )
                 {
-                    String childTemplateId = (String) j.next();
-
-                    if ( !templateIdList.contains( childTemplateId ) )
+                    for ( Iterator j = template.getChildTemplates().iterator(); j.hasNext(); )
                     {
-                        addValidationError( "missing template id: " + childTemplateId
-                                        + " in child templates of template " + template.getId() );
+                        String childTemplateId = (String) j.next();
+
+                        if ( !templateIdList.contains( childTemplateId ) )
+                        {
+                            addValidationError( "missing template id: " + childTemplateId
+                                + " in child templates of template " + template.getId() );
+                        }
                     }
                 }
-            }
-            
-            if ( !templateNamePrefixList.contains( template.getNamePrefix() ) )
-            {
-                templateNamePrefixList.add( template.getNamePrefix() );
-            }
-            else
-            {
-                addValidationError( "duplicate name prefix detected: " + template.getNamePrefix() );
+
+                if ( !templateNamePrefixList.contains( template.getNamePrefix() ) )
+                {
+                    templateNamePrefixList.add( template.getNamePrefix() );
+                }
+                else
+                {
+                    addValidationError( "duplicate name prefix detected: " + template.getNamePrefix() );
+                }
             }
         }
-               }
     }
 
     /**
@@ -463,15 +465,14 @@ public class DefaultRoleModelValidator implements RoleModelValidator
     {
         try
         {
-           RoleModelUtils.generateRoleGraph( model );
+            RoleModelUtils.generateRoleGraph( model );
         }
         catch ( CycleDetectedException e )
         {
             addValidationError( "cycle detected: " + e.getMessage() );
         }
     }
-    
-   
+
     /**
      * We are not allowed to have cycles between template either, this method is to detect and 
      * raise a red flag when that happens.  Templates are a bit more complex since they have both
@@ -491,6 +492,6 @@ public class DefaultRoleModelValidator implements RoleModelValidator
         catch ( CycleDetectedException e )
         {
             addValidationError( "template cycle detected: " + e.getMessage() );
-        } 
+        }
     }
 }

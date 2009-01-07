@@ -16,9 +16,22 @@ package org.codehaus.plexus.redback.management;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.redback.rbac.jdo.RbacDatabase;
-import org.codehaus.plexus.redback.rbac.jdo.io.stax.RbacJdoModelStaxReader;
-import org.codehaus.plexus.redback.rbac.jdo.io.stax.RbacJdoModelStaxWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.stream.XMLStreamException;
+
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.keys.KeyManager;
 import org.codehaus.plexus.redback.keys.jdo.AuthenticationKeyDatabase;
@@ -31,36 +44,24 @@ import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
+import org.codehaus.plexus.redback.rbac.jdo.RbacDatabase;
+import org.codehaus.plexus.redback.rbac.jdo.io.stax.RbacJdoModelStaxReader;
+import org.codehaus.plexus.redback.rbac.jdo.io.stax.RbacJdoModelStaxWriter;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.jdo.UserDatabase;
 import org.codehaus.plexus.redback.users.jdo.io.stax.UsersManagementStaxReader;
 import org.codehaus.plexus.redback.users.jdo.io.stax.UsersManagementStaxWriter;
 import org.codehaus.plexus.util.IOUtil;
-
-import javax.xml.stream.XMLStreamException;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import org.springframework.stereotype.Service;
 
 /**
  * JDO implementation of the data management tool.
  *
  * @todo do we really need JDO specifics here? Could optimize by going straight to JDOFactory
  * @todo check whether this current method logs everything unnecessarily.
- * @plexus.component role="org.codehaus.plexus.redback.management.DataManagementTool" role-hint="jdo"
  */
+@Service("dataManagementTool#jdo")
 public class JdoDataManagementTool
     implements DataManagementTool
 {

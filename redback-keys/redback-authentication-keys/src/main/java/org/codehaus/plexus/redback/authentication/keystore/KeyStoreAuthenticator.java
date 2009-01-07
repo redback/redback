@@ -42,7 +42,7 @@ import org.springframework.stereotype.Service;
  * @version: $Id$
  *
  */
-@Service("uuthenticator#keystore")
+@Service("authenticator#keystore")
 public class KeyStoreAuthenticator
     implements Authenticator
 {

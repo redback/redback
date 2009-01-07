@@ -16,10 +16,13 @@ package org.codehaus.plexus.redback.rbac.cached;
  * limitations under the License.
  */
 
-import net.sf.ehcache.Element;
-import org.codehaus.plexus.ehcache.EhcacheComponent;
-import org.codehaus.plexus.ehcache.EhcacheUtils;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.codehaus.plexus.cache.Cache;
 import org.codehaus.plexus.redback.rbac.Operation;
 import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
@@ -30,77 +33,46 @@ import org.codehaus.plexus.redback.rbac.RbacObjectNotFoundException;
 import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
-
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 /**
  * CachedRbacManager is a wrapped RBACManager with caching.
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.rbac.RBACManager" role-hint="cached"
  */
+@Service("rBACManager#cached")
 public class CachedRbacManager
-    extends AbstractLogEnabled
     implements RBACManager, RBACManagerListener
 {
-    /**
-     * @plexus.requirement role-hint="jdo"
-     */
+    
+    private Logger log = LoggerFactory.getLogger( getClass() );
+    
+    @javax.annotation.Resource(name="rBACManager#jdo")
     private RBACManager rbacImpl;
 
-    /**
-     * cache used for operations
-     *
-     * @plexus.requirement role-hint="operations"
-     */
-    private EhcacheComponent operationsCache;
+    @javax.annotation.Resource(name="cache#operations")
+    private Cache operationsCache;
 
-    /**
-     * cache used for permissions
-     *
-     * @plexus.requirement role-hint="permissions"
-     */
-    private EhcacheComponent permissionsCache;
+    @javax.annotation.Resource(name="cache#permissions")
+    private Cache permissionsCache;
 
-    /**
-     * cache used for resources
-     *
-     * @plexus.requirement role-hint="resources"
-     */
-    private EhcacheComponent resourcesCache;
+    @javax.annotation.Resource(name="cache#resources")
+    private Cache resourcesCache;
 
-    /**
-     * cache used for roles
-     *
-     * @plexus.requirement role-hint="roles"
-     */
-    private EhcacheComponent rolesCache;
+    @javax.annotation.Resource(name="cache#roles")
+    private Cache rolesCache;
 
-    /**
-     * cache used for user assignments
-     *
-     * @plexus.requirement role-hint="userAssignments"
-     */
-    private EhcacheComponent userAssignmentsCache;
+    @javax.annotation.Resource(name="cache#userAssignments")
+    private Cache userAssignmentsCache;
 
-    /**
-     * cache used for user permissions
-     *
-     * @plexus.requirement role-hint="userPermissions"
-     */
-    private EhcacheComponent userPermissionsCache;
+    @javax.annotation.Resource(name="cache#userPermissions")
+    private Cache userPermissionsCache;
 
-    /**
-     * cache used for effective role sets
-     *
-     * @plexus.requirement role-hint="effectiveRoleSet"
-     */
-    private EhcacheComponent effectiveRoleSetCache;
+    @javax.annotation.Resource(name="cache#effectiveRoleSet")
+    private Cache effectiveRoleSetCache;
 
     public void addChildRole( Role role, Role childRole )
         throws RbacObjectInvalidException, RbacManagerException
@@ -124,34 +96,34 @@ public class CachedRbacManager
     public Operation createOperation( String name )
         throws RbacManagerException
     {
-        operationsCache.invalidateKey( name );
+        operationsCache.remove( name );
         return this.rbacImpl.createOperation( name );
     }
 
     public Permission createPermission( String name )
         throws RbacManagerException
     {
-        permissionsCache.invalidateKey( name );
+        permissionsCache.remove( name );
         return this.rbacImpl.createPermission( name );
     }
 
     public Permission createPermission( String name, String operationName, String resourceIdentifier )
         throws RbacManagerException
     {
-        permissionsCache.invalidateKey( name );
+        permissionsCache.remove( name );
         return this.rbacImpl.createPermission( name, operationName, resourceIdentifier );
     }
 
     public Resource createResource( String identifier )
         throws RbacManagerException
     {
-        resourcesCache.invalidateKey( identifier );
+        resourcesCache.remove( identifier );
         return this.rbacImpl.createResource( identifier );
     }
 
     public Role createRole( String name )
     {
-        rolesCache.invalidateKey( name );
+        rolesCache.remove( name );
         return this.rbacImpl.createRole( name );
     }
 
@@ -170,67 +142,75 @@ public class CachedRbacManager
         }
         finally
         {
-            EhcacheUtils.clearAllCaches( getLogger() );
+            // FIXME cleanup
+            //EhcacheUtils.clearAllCaches( log() );
         }
     }
 
-    public List getAllAssignableRoles()
+    /** 
+     * @see org.codehaus.plexus.redback.rbac.RBACManager#getAllAssignableRoles()
+     */
+    public List<Role> getAllAssignableRoles()
         throws RbacManagerException, RbacObjectNotFoundException
     {
-        getLogger().debug( "NOT CACHED - .getAllAssignableRoles()" );
+        log.debug( "NOT CACHED - .getAllAssignableRoles()" );
         return this.rbacImpl.getAllAssignableRoles();
     }
 
     public List getAllOperations()
         throws RbacManagerException
     {
-        getLogger().debug( "NOT CACHED - .getAllOperations()" );
+        log.debug( "NOT CACHED - .getAllOperations()" );
         return this.rbacImpl.getAllOperations();
     }
 
     public List getAllPermissions()
         throws RbacManagerException
     {
-        getLogger().debug( "NOT CACHED - .getAllPermissions()" );
+        log.debug( "NOT CACHED - .getAllPermissions()" );
         return this.rbacImpl.getAllPermissions();
     }
 
     public List getAllResources()
         throws RbacManagerException
     {
-        getLogger().debug( "NOT CACHED - .getAllResources()" );
+        log.debug( "NOT CACHED - .getAllResources()" );
         return this.rbacImpl.getAllResources();
     }
 
     public List getAllRoles()
         throws RbacManagerException
     {
-        getLogger().debug( "NOT CACHED - .getAllRoles()" );
+        log.debug( "NOT CACHED - .getAllRoles()" );
         return this.rbacImpl.getAllRoles();
     }
 
     public List getAllUserAssignments()
         throws RbacManagerException
     {
-        getLogger().debug( "NOT CACHED - .getAllUserAssignments()" );
+        log.debug( "NOT CACHED - .getAllUserAssignments()" );
         return this.rbacImpl.getAllUserAssignments();
     }
 
+    /** 
+     * @see org.codehaus.plexus.redback.rbac.RBACManager#getAssignedPermissionMap(java.lang.String)
+     */
+    @SuppressWarnings("unchecked")
     public Map getAssignedPermissionMap( String principal )
         throws RbacObjectNotFoundException, RbacManagerException
     {
-        Element el = userPermissionsCache.getElement( principal );
+        Object el = userPermissionsCache.get( principal );
 
         if ( el != null )
         {
-            //getLogger().debug( "using cached user permission map" );
-            return (Map) el.getObjectValue();
+            //log.debug( "using cached user permission map" );
+            return (Map) el;
         }
         else
         {
-            getLogger().debug( "building user permission map" );
+            log.debug( "building user permission map" );
             Map userPermMap = this.rbacImpl.getAssignedPermissionMap( principal );
-            userPermissionsCache.putElement( new Element( principal, userPermMap ) );
+            userPermissionsCache.put( principal, userPermMap );
             return userPermMap;
         }
     }
@@ -238,67 +218,67 @@ public class CachedRbacManager
     public Set getAssignedPermissions( String principal )
         throws RbacObjectNotFoundException, RbacManagerException
     {
-        getLogger().debug( "NOT CACHED - .getAssignedPermissions(String)" );
+        log.debug( "NOT CACHED - .getAssignedPermissions(String)" );
         return this.rbacImpl.getAssignedPermissions( principal );
     }
 
     public Collection getAssignedRoles( String principal )
         throws RbacObjectNotFoundException, RbacManagerException
     {
-        getLogger().debug( "NOT CACHED - .getAssignedRoles(String)" );
+        log.debug( "NOT CACHED - .getAssignedRoles(String)" );
         return this.rbacImpl.getAssignedRoles( principal );
     }
 
     public Collection getAssignedRoles( UserAssignment userAssignment )
         throws RbacObjectNotFoundException, RbacManagerException
     {
-        getLogger().debug( "NOT CACHED - .getAssignedRoles(UserAssignment)" );
+        log.debug( "NOT CACHED - .getAssignedRoles(UserAssignment)" );
         return this.rbacImpl.getAssignedRoles( userAssignment );
     }
 
     public Map getChildRoles( Role role )
         throws RbacManagerException
     {
-        getLogger().debug( "NOT CACHED - .getChildRoles(Role)" );
+        log.debug( "NOT CACHED - .getChildRoles(Role)" );
         return this.rbacImpl.getChildRoles( role );
     }
 
     public Map/*<String, Role>*/ getParentRoles( Role role )
         throws RbacManagerException
     {
-        getLogger().debug( "NOT CACHED - .getParentRoles(Role)" );
+        log.debug( "NOT CACHED - .getParentRoles(Role)" );
         return this.rbacImpl.getParentRoles( role );
     }
 
     public Collection getEffectivelyAssignedRoles( String principal )
         throws RbacObjectNotFoundException, RbacManagerException
     {
-        getLogger().debug( "NOT CACHED - .getEffectivelyAssignedRoles(String)" );
+        log.debug( "NOT CACHED - .getEffectivelyAssignedRoles(String)" );
         return this.rbacImpl.getEffectivelyAssignedRoles( principal );
     }
 
     public Collection getEffectivelyUnassignedRoles( String principal )
         throws RbacManagerException, RbacObjectNotFoundException
     {
-        getLogger().debug( "NOT CACHED - .getEffectivelyUnassignedRoles(String)" );
+        log.debug( "NOT CACHED - .getEffectivelyUnassignedRoles(String)" );
         return this.rbacImpl.getEffectivelyUnassignedRoles( principal );
     }
 
     public Set getEffectiveRoles( Role role )
         throws RbacObjectNotFoundException, RbacManagerException
     {
-        Element el = effectiveRoleSetCache.getElement( role.getName() );
+        Object el = effectiveRoleSetCache.get( role.getName() );
 
         if ( el != null )
         {
-            getLogger().debug( "using cached effective role set" );
-            return (Set) el.getObjectValue();
+            log.debug( "using cached effective role set" );
+            return (Set) el;
         }
         else
         {
-            getLogger().debug( "building effective role set" );
+            log.debug( "building effective role set" );
             Set effectiveRoleSet = this.rbacImpl.getEffectiveRoles( role );
-            effectiveRoleSetCache.putElement( new Element( role.getName(), effectiveRoleSet ) );
+            effectiveRoleSetCache.put( role.getName(), effectiveRoleSet ) ;
             return effectiveRoleSet;
         }
     }
@@ -307,22 +287,22 @@ public class CachedRbacManager
         throws RbacManagerException
     {
         /* this is very light */
-        getLogger().debug( "NOT CACHED - .getGlobalResource()" );
+        log.debug( "NOT CACHED - .getGlobalResource()" );
         return this.rbacImpl.getGlobalResource();
     }
 
     public Operation getOperation( String operationName )
         throws RbacObjectNotFoundException, RbacManagerException
     {
-        Element el = operationsCache.getElement( operationName );
+        Object el = operationsCache.get( operationName );
         if ( el != null )
         {
-            return (Operation) el.getObjectValue();
+            return (Operation) el;
         }
         else
         {
             Operation operation = this.rbacImpl.getOperation( operationName );
-            operationsCache.putElement( new Element( operationName, operation ) );
+            operationsCache.put( operationName, operation );
             return operation;
         }
     }
@@ -330,15 +310,15 @@ public class CachedRbacManager
     public Permission getPermission( String permissionName )
         throws RbacObjectNotFoundException, RbacManagerException
     {
-        Element el = permissionsCache.getElement( permissionName );
+        Object el = permissionsCache.get( permissionName );
         if ( el != null )
         {
-            return (Permission) el.getObjectValue();
+            return (Permission) el;
         }
         else
         {
             Permission permission = this.rbacImpl.getPermission( permissionName );
-            permissionsCache.putElement( new Element( permissionName, permission ) );
+            permissionsCache.put( permissionName, permission );
             return permission;
         }
     }
@@ -346,15 +326,15 @@ public class CachedRbacManager
     public Resource getResource( String resourceIdentifier )
         throws RbacObjectNotFoundException, RbacManagerException
     {
-        Element el = resourcesCache.getElement( resourceIdentifier );
+        Object el = resourcesCache.get( resourceIdentifier );
         if ( el != null )
         {
-            return (Resource) el.getObjectValue();
+            return (Resource) el;
         }
         else
         {
             Resource resource = this.rbacImpl.getResource( resourceIdentifier );
-            resourcesCache.putElement( new Element( resourceIdentifier, resource ) );
+            resourcesCache.put( resourceIdentifier, resource);
             return resource;
         }
     }
@@ -362,15 +342,15 @@ public class CachedRbacManager
     public Role getRole( String roleName )
         throws RbacObjectNotFoundException, RbacManagerException
     {
-        Element el = rolesCache.getElement( roleName );
+        Object el = rolesCache.get( roleName );
         if ( el != null )
         {
-            return (Role) el.getObjectValue();
+            return (Role) el;
         }
         else
         {
             Role role = this.rbacImpl.getRole( roleName );
-            rolesCache.putElement( new Element( roleName, role ) );
+            rolesCache.put(roleName, role );
             return role;
         }
     }
@@ -378,29 +358,29 @@ public class CachedRbacManager
     public Map getRoles( Collection roleNames )
         throws RbacObjectNotFoundException, RbacManagerException
     {
-        getLogger().debug( "NOT CACHED - .getRoles(Collection)" );
+        log.debug( "NOT CACHED - .getRoles(Collection)" );
         return this.rbacImpl.getRoles( roleNames );
     }
 
     public Collection getUnassignedRoles( String principal )
         throws RbacManagerException, RbacObjectNotFoundException
     {
-        getLogger().debug( "NOT CACHED - .getUnassignedRoles(String)" );
+        log.debug( "NOT CACHED - .getUnassignedRoles(String)" );
         return this.rbacImpl.getUnassignedRoles( principal );
     }
 
     public UserAssignment getUserAssignment( String principal )
         throws RbacObjectNotFoundException, RbacManagerException
     {
-        Element el = userAssignmentsCache.getElement( principal );
+        Object el = userAssignmentsCache.get( principal );
         if ( el != null )
         {
-            return (UserAssignment) el.getObjectValue();
+            return (UserAssignment) el;
         }
         else
         {
             UserAssignment userAssignment = this.rbacImpl.getUserAssignment( principal );
-            userAssignmentsCache.putElement( new Element( principal, userAssignment ) );
+            userAssignmentsCache.put( principal, userAssignment );
             return userAssignment;
         }
     }
@@ -408,7 +388,7 @@ public class CachedRbacManager
     public List getUserAssignmentsForRoles( Collection roleNames )
         throws RbacManagerException
     {
-        getLogger().debug( "NOT CACHED - .getUserAssignmentsForRoles(Collection)" );
+        log.debug( "NOT CACHED - .getUserAssignmentsForRoles(Collection)" );
         return this.rbacImpl.getUserAssignmentsForRoles( roleNames );
     }
 
@@ -468,8 +448,13 @@ public class CachedRbacManager
         {
             ( (RBACManagerListener) this.rbacImpl ).rbacInit( freshdb );
         }
-
-        EhcacheUtils.clearAllCaches( getLogger() );
+        // lookup all Cache and clear all ?
+        this.resourcesCache.clear();
+        this.operationsCache.clear();
+        this.permissionsCache.clear();
+        this.rolesCache.clear();
+        this.userAssignmentsCache.clear();
+        this.userPermissionsCache.clear();
     }
 
     public void rbacPermissionRemoved( Permission permission )
@@ -547,7 +532,7 @@ public class CachedRbacManager
     public void removeOperation( String operationName )
         throws RbacObjectNotFoundException, RbacObjectInvalidException, RbacManagerException
     {
-        operationsCache.invalidateKey( operationName );
+        operationsCache.remove( operationName );
         this.rbacImpl.removeOperation( operationName );
     }
 
@@ -561,7 +546,7 @@ public class CachedRbacManager
     public void removePermission( String permissionName )
         throws RbacObjectNotFoundException, RbacObjectInvalidException, RbacManagerException
     {
-        permissionsCache.invalidateKey( permissionName );
+        permissionsCache.remove( permissionName );
         this.rbacImpl.removePermission( permissionName );
     }
 
@@ -575,7 +560,7 @@ public class CachedRbacManager
     public void removeResource( String resourceIdentifier )
         throws RbacObjectNotFoundException, RbacObjectInvalidException, RbacManagerException
     {
-        resourcesCache.invalidateKey( resourceIdentifier );
+        resourcesCache.remove( resourceIdentifier );
         this.rbacImpl.removeResource( resourceIdentifier );
     }
 
@@ -589,7 +574,7 @@ public class CachedRbacManager
     public void removeRole( String roleName )
         throws RbacObjectNotFoundException, RbacObjectInvalidException, RbacManagerException
     {
-        rolesCache.invalidateKey( roleName );
+        rolesCache.remove( roleName );
         this.rbacImpl.removeRole( roleName );
     }
 
@@ -676,7 +661,7 @@ public class CachedRbacManager
 
         for ( Iterator i = assignments.iterator(); i.hasNext();  )
         {
-            getLogger().debug( "invalidating user assignment with role " + role.getName() );
+            log.debug( "invalidating user assignment with role " + role.getName() );
             invalidateCachedUserAssignment( (UserAssignment)i.next() );
         }
         */
@@ -710,7 +695,7 @@ public class CachedRbacManager
 
         for ( Iterator i = assignments.iterator(); i.hasNext();  )
         {
-            getLogger().debug( "invalidating user assignment with roles" );
+            log.debug( "invalidating user assignment with roles" );
             invalidateCachedUserAssignment( (UserAssignment)i.next() );
         }
         */
@@ -749,10 +734,10 @@ public class CachedRbacManager
     {
         if ( role != null )
         {
-            rolesCache.invalidateKey( role.getName() );
+            rolesCache.remove( role.getName() );
             // if a role changes we need to invalidate the entire effective role set cache
             // since we have no concept of the heirarchy involved in the role sets
-            effectiveRoleSetCache.getCache().removeAll();
+            effectiveRoleSetCache.clear();
         }
 
     }
@@ -761,7 +746,7 @@ public class CachedRbacManager
     {
         if ( operation != null )
         {
-            operationsCache.invalidateKey( operation.getName() );
+            operationsCache.remove( operation.getName() );
         }
     }
 
@@ -769,7 +754,7 @@ public class CachedRbacManager
     {
         if ( permission != null )
         {
-            permissionsCache.invalidateKey( permission.getName() );
+            permissionsCache.remove( permission.getName() );
         }
     }
 
@@ -777,7 +762,7 @@ public class CachedRbacManager
     {
         if ( resource != null )
         {
-            resourcesCache.invalidateKey( resource.getIdentifier() );
+            resourcesCache.remove( resource.getIdentifier() );
         }
     }
 
@@ -785,20 +770,20 @@ public class CachedRbacManager
     {
         if ( userAssignment != null )
         {
-            userAssignmentsCache.invalidateKey( userAssignment.getPrincipal() );
-            userPermissionsCache.invalidateKey( userAssignment.getPrincipal() );
+            userAssignmentsCache.remove( userAssignment.getPrincipal() );
+            userPermissionsCache.remove( userAssignment.getPrincipal() );
         }
     }
 
     private void invalidateCachedUserAssignment( String principal )
     {
-        userAssignmentsCache.invalidateKey( principal );
-        userPermissionsCache.invalidateKey( principal );
+        userAssignmentsCache.remove( principal );
+        userPermissionsCache.remove( principal );
     }
 
     private void invalidateAllCachedUserAssignments()
     {
-        userAssignmentsCache.getCache().removeAll();
-        userPermissionsCache.getCache().removeAll();
+        userAssignmentsCache.clear();
+        userPermissionsCache.clear();
     }
 }

@@ -24,7 +24,7 @@ import org.codehaus.plexus.redback.rbac.Resource;
  * MemoryPermission 
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
- * @version $Id: MemoryPermission.java 5883 2007-02-21 22:46:14Z joakime $
+ * @version $Id$
  */
 public class MemoryPermission
     implements Permission, java.io.Serializable

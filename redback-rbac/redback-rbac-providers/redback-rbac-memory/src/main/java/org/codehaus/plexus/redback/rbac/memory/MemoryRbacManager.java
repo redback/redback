@@ -29,6 +29,7 @@ import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.util.StringUtils;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,9 +46,9 @@ import java.util.Map;
  *
  * @author Jesse McConnell <jmcconnell@apache.org>
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
- * @version $Id:$
- * @plexus.component role="org.codehaus.plexus.redback.rbac.RBACManager" role-hint="memory"
+ * @version $Id$
  */
+@Service("rBACManager#memory")
 public class MemoryRbacManager
     extends AbstractRBACManager
     implements RBACManager

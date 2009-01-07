@@ -16,6 +16,8 @@ package org.codehaus.plexus.redback.rbac.jdo;
  * limitations under the License.
  */
 
+import net.sf.ehcache.CacheManager;
+
 import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
 import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.redback.rbac.AbstractRBACManager;
@@ -48,6 +50,11 @@ public class JdoRbacManagerTest
     protected void setUp()
         throws Exception
     {
+
+        CacheManager.getInstance().removeCache( "usersCache" );
+        CacheManager.getInstance().removalAll();
+        CacheManager.getInstance().shutdown();
+        
         super.setUp();
 
         DefaultConfigurableJdoFactory jdoFactory = (DefaultConfigurableJdoFactory) lookup( JdoFactory.ROLE, "users" );
@@ -68,6 +75,8 @@ public class JdoRbacManagerTest
         jdoFactory.setProperty( "org.jpox.poid.transactionIsolation", "READ_COMMITTED" ); //$NON-NLS-1$ //$NON-NLS-2$
 
         jdoFactory.setProperty( "org.jpox.autoCreateSchema", "true" ); //$NON-NLS-1$ //$NON-NLS-2$
+        
+        jdoFactory.setProperty( "org.jpox.autoCreateTables", "true" );
         
         jdoFactory.setProperty( "javax.jdo.option.RetainValues", "true" );
 
@@ -113,5 +122,15 @@ public class JdoRbacManagerTest
         pm.close();
 
         setRbacManager( (AbstractRBACManager) lookup( RBACManager.ROLE, "jdo" ) );
+    }
+
+    @Override
+    protected void tearDown()
+        throws Exception
+    {
+        super.tearDown();
+        CacheManager.getInstance().removeCache( "usersCache" );
+        CacheManager.getInstance().removalAll();
+        CacheManager.getInstance().shutdown();
     }
 }

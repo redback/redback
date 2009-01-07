@@ -27,6 +27,7 @@ import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.role.model.*;
 import org.codehaus.plexus.redback.role.util.RoleModelUtils;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
@@ -34,105 +35,108 @@ import java.util.*;
  * DefaultRoleModelProcessor: inserts the components of the model that can be populated into the rbac manager
  * 
  * @author: Jesse McConnell <jesse@codehaus.org>
- * @version: $Id:$
+ * @version: $Id$
  * 
- * @plexus.component role="org.codehaus.plexus.redback.role.processor.RoleModelProcessor" role-hint="default"
  */
-public class DefaultRoleModelProcessor implements RoleModelProcessor
+@Service("roleModelProcessor")
+public class DefaultRoleModelProcessor
+    implements RoleModelProcessor
 {
-    /**
-     * @plexus.requirement role-hint="cached"
-     */
+    @javax.annotation.Resource(name = "rBACManager#cached")
     private RBACManager rbacManager;
 
     private Map resourceMap = new HashMap();
 
     private Map operationMap = new HashMap();
 
-    public void process( RedbackRoleModel model ) throws RoleManagerException
+    public void process( RedbackRoleModel model )
+        throws RoleManagerException
     {
         // must process resources and operations first, they are required for the
         // permissions in the roles to add in correctly
         processResources( model );
         processOperations( model );
-        
+
         processRoles( model );
     }
 
-
-    private void processResources( RedbackRoleModel model ) throws RoleManagerException
+    private void processResources( RedbackRoleModel model )
+        throws RoleManagerException
     {
         for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
         {
-            ModelApplication application =  (ModelApplication) k.next();
+            ModelApplication application = (ModelApplication) k.next();
 
-        for ( Iterator i = application.getResources().iterator(); i.hasNext(); )
-        {
-            ModelResource profileResource = (ModelResource) i.next();
-
-            try
+            for ( Iterator i = application.getResources().iterator(); i.hasNext(); )
             {
-                if ( !rbacManager.resourceExists( profileResource.getName() ) )
+                ModelResource profileResource = (ModelResource) i.next();
+
+                try
                 {
+                    if ( !rbacManager.resourceExists( profileResource.getName() ) )
+                    {
 
-                    Resource resource = rbacManager.createResource( profileResource.getName() );
-                    resource.setPermanent( profileResource.isPermanent() );
-                    resource = rbacManager.saveResource( resource );
+                        Resource resource = rbacManager.createResource( profileResource.getName() );
+                        resource.setPermanent( profileResource.isPermanent() );
+                        resource = rbacManager.saveResource( resource );
 
-                    // store for use in permission creation
-                    resourceMap.put( profileResource.getId(), resource );
+                        // store for use in permission creation
+                        resourceMap.put( profileResource.getId(), resource );
 
+                    }
+                    else
+                    {
+                        resourceMap.put( profileResource.getId(), rbacManager.getResource( profileResource.getName() ) );
+                    }
                 }
-                else
+                catch ( RbacManagerException e )
                 {
-                    resourceMap.put( profileResource.getId(), rbacManager.getResource( profileResource.getName() ) );
+                    throw new RoleManagerException( "error creating resource '" + profileResource.getName() + "'", e );
                 }
             }
-            catch ( RbacManagerException e )
-            {
-                throw new RoleManagerException( "error creating resource '" + profileResource.getName() + "'", e );
-            }
-        }
         }
     }
 
-    private void processOperations( RedbackRoleModel model ) throws RoleManagerException
+    private void processOperations( RedbackRoleModel model )
+        throws RoleManagerException
     {
         for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
         {
-            ModelApplication application =  (ModelApplication) k.next();
-        for ( Iterator i = application.getOperations().iterator(); i.hasNext(); )
-        {
-            ModelOperation profileOperation = (ModelOperation) i.next();
-
-            try
+            ModelApplication application = (ModelApplication) k.next();
+            for ( Iterator i = application.getOperations().iterator(); i.hasNext(); )
             {
-                if ( !rbacManager.operationExists( profileOperation.getName() ) )
+                ModelOperation profileOperation = (ModelOperation) i.next();
+
+                try
                 {
+                    if ( !rbacManager.operationExists( profileOperation.getName() ) )
+                    {
 
-                    Operation operation = rbacManager.createOperation( profileOperation.getName() );
-                    operation.setPermanent( profileOperation.isPermanent() );
-                    operation.setDescription( profileOperation.getDescription() );
-                    operation = rbacManager.saveOperation( operation );
+                        Operation operation = rbacManager.createOperation( profileOperation.getName() );
+                        operation.setPermanent( profileOperation.isPermanent() );
+                        operation.setDescription( profileOperation.getDescription() );
+                        operation = rbacManager.saveOperation( operation );
 
-                    // store for use in permission creation
-                    operationMap.put( profileOperation.getId(), operation );
+                        // store for use in permission creation
+                        operationMap.put( profileOperation.getId(), operation );
 
+                    }
+                    else
+                    {
+                        operationMap.put( profileOperation.getId(), rbacManager.getOperation( profileOperation
+                            .getName() ) );
+                    }
                 }
-                else
+                catch ( RbacManagerException e )
                 {
-                    operationMap.put( profileOperation.getId(), rbacManager.getOperation( profileOperation.getName() ) );
+                    throw new RoleManagerException( "error creating operation '" + profileOperation.getName() + "'", e );
                 }
             }
-            catch ( RbacManagerException e )
-            {
-                throw new RoleManagerException( "error creating operation '" + profileOperation.getName() + "'", e );
-            }
-        }
         }
     }
 
-    private void processRoles( RedbackRoleModel model ) throws RoleManagerException
+    private void processRoles( RedbackRoleModel model )
+        throws RoleManagerException
     {
         List sortedGraph;
         try
@@ -143,11 +147,11 @@ public class DefaultRoleModelProcessor implements RoleModelProcessor
         {
             throw new RoleManagerException( "cycle detected: this should have been caught in validation", e );
         }
-       
+
         for ( Iterator i = sortedGraph.iterator(); i.hasNext(); )
         {
             String roleId = (String) i.next();
-            
+
             ModelRole roleProfile = RoleModelUtils.getModelRole( model, roleId );
 
             List permissions = processPermissions( roleProfile.getPermissions() );
@@ -168,34 +172,33 @@ public class DefaultRoleModelProcessor implements RoleModelProcessor
 
                         role.addPermission( permission );
                     }
-                    
+
                     // add child roles to this role
                     if ( roleProfile.getChildRoles() != null )
                     {
                         for ( Iterator j = roleProfile.getChildRoles().iterator(); j.hasNext(); )
                         {
-                            String childRoleId = (String)j.next();
+                            String childRoleId = (String) j.next();
                             ModelRole childRoleProfile = RoleModelUtils.getModelRole( model, childRoleId );
                             role.addChildRoleName( childRoleProfile.getName() );
                         }
-                    }                    
-                    
+                    }
+
                     rbacManager.saveRole( role );
-                    
+
                     // add link from parent roles to this new role
                     if ( roleProfile.getParentRoles() != null )
                     {
                         for ( Iterator j = roleProfile.getParentRoles().iterator(); j.hasNext(); )
                         {
-                            String parentRoleId = (String)j.next();
+                            String parentRoleId = (String) j.next();
                             ModelRole parentModelRole = RoleModelUtils.getModelRole( model, parentRoleId );
                             Role parentRole = rbacManager.getRole( parentModelRole.getName() );
                             parentRole.addChildRoleName( role.getName() );
-                            rbacManager.saveRole( parentRole );                                                    
-                        } 
+                            rbacManager.saveRole( parentRole );
+                        }
                     }
-                  
-                        
+
                 }
                 catch ( RbacManagerException e )
                 {
@@ -204,10 +207,9 @@ public class DefaultRoleModelProcessor implements RoleModelProcessor
             }
         }
     }
-    
-    
 
-    private List processPermissions( List permissions ) throws RoleManagerException
+    private List processPermissions( List permissions )
+        throws RoleManagerException
     {
         List rbacPermissions = new ArrayList();
 
@@ -226,7 +228,7 @@ public class DefaultRoleModelProcessor implements RoleModelProcessor
                     Operation operation = (Operation) operationMap.get( profilePermission.getOperation() );
                     // same with resource
                     Resource resource = (Resource) resourceMap.get( profilePermission.getResource() );
-                    
+
                     permission.setOperation( operation );
                     permission.setResource( resource );
                     permission.setPermanent( profilePermission.isPermanent() );

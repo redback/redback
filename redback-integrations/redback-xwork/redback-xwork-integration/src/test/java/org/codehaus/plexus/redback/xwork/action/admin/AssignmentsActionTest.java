@@ -21,6 +21,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import net.sf.ehcache.CacheManager;
+
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
 import org.codehaus.plexus.redback.authorization.AuthorizationResult;
@@ -67,6 +69,9 @@ public class AssignmentsActionTest
     public void setUp()
         throws Exception
     {
+        CacheManager.getInstance().clearAll();
+        CacheManager.getInstance().removalAll();
+        CacheManager.getInstance().shutdown();
         super.setUp();
 
         action = (AssignmentsAction) lookup( Action.class, "redback-assignments" );
