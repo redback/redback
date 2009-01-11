@@ -175,14 +175,14 @@ public interface User
      * 
      * @return the list of {@link String} objects.  Represents previous passwords (in encoded format). 
      */
-    List getPreviousEncodedPasswords();
+    List<String> getPreviousEncodedPasswords();
 
     /**
      * Sets the list of previous passwords (in encoded format)
      * 
      * @param encodedPasswordList (list of {@link String} objects.) the previously passwords in encoded format.
      */
-    void setPreviousEncodedPasswords( List encodedPasswordList );
+    void setPreviousEncodedPasswords( List<String> encodedPasswordList );
 
     /**
      * Add encoded password to previously passwords in encoded format.

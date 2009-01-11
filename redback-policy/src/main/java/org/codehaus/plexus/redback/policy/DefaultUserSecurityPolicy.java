@@ -16,6 +16,13 @@ package org.codehaus.plexus.redback.policy;
  * limitations under the License.
  */
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
+
 import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
@@ -27,21 +34,15 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationExce
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.policy.rules.MustHavePasswordRule;
 import org.codehaus.plexus.redback.users.User;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import org.springframework.stereotype.Service;
 
 /**
  * User Security Policy.
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.policy.UserSecurityPolicy"
- * role-hint="default"
  */
+@Service("userSecurityPolicy")
 public class DefaultUserSecurityPolicy
     implements UserSecurityPolicy, Initializable, Contextualizable
 {
@@ -61,16 +62,28 @@ public class DefaultUserSecurityPolicy
 
     private PasswordRule defaultPasswordRule = new MustHavePasswordRule();
 
-    /**
-     * @plexus.requirement
-     */
+    private PlexusContainer plexus;    
+    
+    @Resource (name="userConfiguration")
     private UserConfiguration config;
 
-    /**
-     * @plexus.requirement role-hint="sha256"
-     */
+    @Resource(name="passwordEncoder#sha256")
     private PasswordEncoder passwordEncoder;
 
+    @Resource(name="userValidationSettings")
+    private UserValidationSettings userValidationSettings;
+
+    @Resource(name="cookieSettings#rememberMe")
+    private CookieSettings rememberMeCookieSettings;
+
+    @Resource(name="cookieSettings#signon")
+    private CookieSettings signonCookieSettings;    
+
+    /**
+     * The List of {@link PasswordRule} objects.
+     */
+    private List<PasswordRule> rules = new ArrayList<PasswordRule>();    
+    
     private int previousPasswordsCount;
 
     private int loginAttemptCount;
@@ -81,28 +94,74 @@ public class DefaultUserSecurityPolicy
 
     private List<String> unlockableAccounts;
 
-    /**
-     * @plexus.requirement
-     */
-    private UserValidationSettings userValidationSettings;
+    
+    // ---------------------------------------
+    //  Component lifecycle
+    // ---------------------------------------
+    @SuppressWarnings("unchecked")
+    public void initialize()
+        throws InitializationException
+    {
+        configurePolicy();
 
-    /**
-     * @plexus.requirement role-hint="rememberMe"
-     */
-    private CookieSettings rememberMeCookieSettings;
+        configureEncoder();
 
-    /**
-     * @plexus.requirement role-hint="signon"
-     */
-    private CookieSettings signonCookieSettings;
+        try
+        {
+            this.rules = plexus.lookupList( PasswordRule.ROLE );
+        }
+        catch ( ComponentLookupException e )
+        {
+            throw new InitializationException( e.getMessage(), e );
+        }
+        // In some configurations, rules can be unset.
+        if ( rules == null )
+        {
+            // Set rules to prevent downstream NPE.
+            rules = new ArrayList<PasswordRule>();
+        }
 
-    /**
-     * The List of {@link PasswordRule} objects.
-     *
-     * @plexus.requirement role="org.codehaus.plexus.redback.policy.PasswordRule"
-     */
-    private List rules = new ArrayList();
+        if ( rules.isEmpty() )
+        {
+            // there should be at least one rule
+            addPasswordRule( defaultPasswordRule );
+        }
+    }
 
+    public void contextualize( Context context )
+        throws ContextException
+    {
+        plexus = (PlexusContainer) context.get( PlexusConstants.PLEXUS_KEY );
+    }
+
+    private void configureEncoder()
+        throws InitializationException
+    {
+        String encoder = config.getString( PASSWORD_ENCODER );
+
+        if ( encoder != null )
+        {
+            try
+            {
+                this.passwordEncoder = (PasswordEncoder) plexus.lookup( PasswordEncoder.ROLE, encoder );
+            }
+            catch ( ComponentLookupException e )
+            {
+                throw new InitializationException( "Unable to lookup password encoder.", e );
+            }
+        }
+    }
+
+    private void configurePolicy()
+    {
+        this.previousPasswordsCount = config.getInt( PASSWORD_RETENTION_COUNT );
+        this.loginAttemptCount = config.getInt( LOGIN_ATTEMPT_COUNT );
+        this.passwordExpirationEnabled = config.getBoolean( PASSWORD_EXPIRATION_ENABLED );
+        this.passwordExpirationDays = config.getInt( PASSWORD_EXPIRATION );
+        this.unlockableAccounts = config.getList( UNLOCKABLE_ACCOUNTS );
+    }
+    
+    
     public String getId()
     {
         return "Default User Security Policy";
@@ -190,7 +249,7 @@ public class DefaultUserSecurityPolicy
      *
      * @return the list of {@link PasswordRule} objects.
      */
-    public List getPasswordRules()
+    public List<PasswordRule> getPasswordRules()
     {
         return this.rules;
     }
@@ -200,7 +259,7 @@ public class DefaultUserSecurityPolicy
      *
      * @param rules the list of {@link PasswordRule} objects.
      */
-    public void setPasswordRules( List rules )
+    public void setPasswordRules( List<PasswordRule> rules )
     {
         this.rules.clear();
 
@@ -211,10 +270,8 @@ public class DefaultUserSecurityPolicy
 
         // Intentionally iterating to ensure policy settings in provided rules.
 
-        Iterator it = rules.iterator();
-        while ( it.hasNext() )
+        for (PasswordRule rule : rules)
         {
-            PasswordRule rule = (PasswordRule) it.next();
             addPasswordRule( rule );
         }
     }
@@ -265,14 +322,14 @@ public class DefaultUserSecurityPolicy
         user.setPassword( null );
 
         // push new password onto list of previous password.
-        List previousPasswords = new ArrayList();
+        List<String> previousPasswords = new ArrayList<String>();
         previousPasswords.add( user.getEncodedPassword() );
 
         if ( !user.getPreviousEncodedPasswords().isEmpty() )
         {
             int oldCount = Math.min( previousPasswordsCount - 1, user.getPreviousEncodedPasswords().size() );
             //modified sublist start index as the previous value results to nothing being added to the list. 
-            List sublist = user.getPreviousEncodedPasswords().subList( 0, oldCount );
+            List<String> sublist = user.getPreviousEncodedPasswords().subList( 0, oldCount );
             previousPasswords.addAll( sublist );
         }
 
@@ -290,11 +347,8 @@ public class DefaultUserSecurityPolicy
         {
             PasswordRuleViolations violations = new PasswordRuleViolations();
 
-            Iterator it = rules.iterator();
-            while ( it.hasNext() )
+            for (PasswordRule rule : this.rules)
             {
-                PasswordRule rule = (PasswordRule) it.next();
-
                 if ( rule.isEnabled() )
                 {
                     if ( rule.requiresSecurityPolicy() )
@@ -320,36 +374,7 @@ public class DefaultUserSecurityPolicy
             user.setPassword( "" );
         }
     }
-
-    public void initialize()
-        throws InitializationException
-    {
-        configurePolicy();
-
-        configureEncoder();
-
-        // In some configurations, rules can be unset.
-        if ( rules == null )
-        {
-            // Set rules to prevent downstream NPE.
-            rules = new ArrayList();
-        }
-
-        if ( rules.isEmpty() )
-        {
-            // there should be at least one rule
-            addPasswordRule( defaultPasswordRule );
-        }
-    }
-
-    private PlexusContainer plexus;
-
-    public void contextualize( Context context )
-        throws ContextException
-    {
-        plexus = (PlexusContainer) context.get( PlexusConstants.PLEXUS_KEY );
-    }
-
+    
     public int getPasswordExpirationDays()
     {
         return passwordExpirationDays;
@@ -380,30 +405,4 @@ public class DefaultUserSecurityPolicy
         return signonCookieSettings;
     }
 
-    private void configureEncoder()
-        throws InitializationException
-    {
-        String encoder = config.getString( PASSWORD_ENCODER );
-
-        if ( encoder != null )
-        {
-            try
-            {
-                this.passwordEncoder = (PasswordEncoder) plexus.lookup( PasswordEncoder.ROLE, encoder );
-            }
-            catch ( ComponentLookupException e )
-            {
-                throw new InitializationException( "Unable to lookup password encoder.", e );
-            }
-        }
-    }
-
-    private void configurePolicy()
-    {
-        this.previousPasswordsCount = config.getInt( PASSWORD_RETENTION_COUNT );
-        this.loginAttemptCount = config.getInt( LOGIN_ATTEMPT_COUNT );
-        this.passwordExpirationEnabled = config.getBoolean( PASSWORD_EXPIRATION_ENABLED );
-        this.passwordExpirationDays = config.getInt( PASSWORD_EXPIRATION );
-        this.unlockableAccounts = config.getList(UNLOCKABLE_ACCOUNTS);
-    }
 }

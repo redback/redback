@@ -16,14 +16,19 @@ package org.codehaus.plexus.redback.authentication;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.redback.policy.AccountLockedException;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+
+import org.codehaus.plexus.redback.policy.AccountLockedException;
+import org.codehaus.plexus.spring.PlexusToSpringUtils;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
 
 
 /**
@@ -35,19 +40,27 @@ import java.util.Set;
  * auth procedure followed by authentication based on a known key for 'remember me' type functionality.
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
- * @version: $ID:$
- * @plexus.component role="org.codehaus.plexus.redback.authentication.AuthenticationManager"
- * role-hint="default"
+ * @version: $Id$
  */
+@Service("authenticationManager")
 public class DefaultAuthenticationManager
-    extends AbstractLogEnabled
     implements AuthenticationManager
 {
-    /**
-     * @plexus.requirement role="org.codehaus.plexus.redback.authentication.Authenticator"
-     */
-    private List authenticators;
+    
+    private List<Authenticator> authenticators;
 
+    @Resource
+    private ApplicationContext applicationContext;
+    
+    @SuppressWarnings("unchecked")
+    @PostConstruct
+    public void initialize()
+    {
+        this.authenticators = PlexusToSpringUtils.lookupList( PlexusToSpringUtils.buildSpringId( Authenticator.class ),
+                                                              applicationContext );
+    }
+    
+    
     public String getId()
     {
         return "Default Authentication Manager - " + this.getClass().getName() + " : managed authenticators - " +
@@ -95,7 +108,7 @@ public class DefaultAuthenticationManager
             "authentication failed on authenticators: " + knownAuthenticators() ), authnResultExceptionsMap ) );
     }
 
-    public List getAuthenticators()
+    public List<Authenticator> getAuthenticators()
     {
         return authenticators;
     }

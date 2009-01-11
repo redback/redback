@@ -30,15 +30,15 @@ import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 import org.codehaus.plexus.util.Base64;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.redback.integration.filter.authentication.HttpAuthenticator;
+import org.springframework.stereotype.Service;
 
 /**
  * HttpBasicAuthentication
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.redback.integration.filter.authentication.HttpAuthenticator"
- * role-hint="basic"
  */
+@Service("httpAuthenticator#basic")
 public class HttpBasicAuthentication
     extends HttpAuthenticator
 {

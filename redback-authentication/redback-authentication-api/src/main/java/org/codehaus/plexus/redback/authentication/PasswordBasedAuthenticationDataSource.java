@@ -17,6 +17,8 @@ package org.codehaus.plexus.redback.authentication;
  */
 
 import org.codehaus.plexus.util.StringUtils;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 /**
  * PasswordBasedAuthenticationDataSource: the username is considered the principal with this data source
@@ -24,10 +26,9 @@ import org.codehaus.plexus.util.StringUtils;
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  * 
- * @plexus.component role="org.codehaus.plexus.redback.authentication.AuthenticationDataSource"
- *                   role-hint="password"
- *                   instantiation-strategy="per-lookup"
  */
+@Service("authenticationDataSource#password")
+@Scope("prototype")
 public class PasswordBasedAuthenticationDataSource
     implements AuthenticationDataSource
 {

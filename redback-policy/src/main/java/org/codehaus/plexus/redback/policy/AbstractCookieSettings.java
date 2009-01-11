@@ -16,6 +16,8 @@ package org.codehaus.plexus.redback.policy;
  * limitations under the License.
  */
 
+import javax.annotation.Resource;
+
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 
 /**
@@ -28,9 +30,7 @@ import org.codehaus.plexus.redback.configuration.UserConfiguration;
 public abstract class AbstractCookieSettings
     implements CookieSettings
 {
-    /**
-     * @plexus.requirement
-     */
+    @Resource(name="userConfiguration")
     protected UserConfiguration config;
 
     /**

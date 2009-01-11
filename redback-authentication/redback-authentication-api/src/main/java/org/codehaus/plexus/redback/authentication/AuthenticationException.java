@@ -20,7 +20,7 @@ package org.codehaus.plexus.redback.authentication;
  * AuthenticationException.java
  *
  * @author Jesse McConnell
- * @version $ID:$
+ * @version $Id$
  */
 public class AuthenticationException
     extends Exception

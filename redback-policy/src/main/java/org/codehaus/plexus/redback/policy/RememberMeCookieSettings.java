@@ -18,14 +18,15 @@ package org.codehaus.plexus.redback.policy;
 
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
+import org.springframework.stereotype.Service;
 
 /**
  * RememberMeCookieSettings
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id: RememberMeCookieSettings.java 4565 2006-11-03 18:56:00Z joakime $
- * @plexus.component role="org.codehaus.plexus.redback.policy.CookieSettings" role-hint="rememberMe"
  */
+@Service("cookieSettings#rememberMe")
 public class RememberMeCookieSettings
     extends AbstractCookieSettings
     implements Initializable

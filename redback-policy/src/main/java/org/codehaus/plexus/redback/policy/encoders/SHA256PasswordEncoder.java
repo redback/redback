@@ -17,15 +17,15 @@ package org.codehaus.plexus.redback.policy.encoders;
  */
 
 import org.codehaus.plexus.redback.policy.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 /**
  * SHA-256 Password Encoder.
  * 
- * @plexus.component role="org.codehaus.plexus.redback.policy.PasswordEncoder" role-hint="sha256"
- * 
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
+@Service("passwordEncoder#sha256")
 public class SHA256PasswordEncoder
     extends AbstractJAASPasswordEncoder
     implements PasswordEncoder

@@ -24,7 +24,7 @@ import java.util.List;
  * AuthenticationManager:
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
- * @version: $ID:$
+ * @version: $Id$
  */
 public interface AuthenticationManager
 {
@@ -32,7 +32,7 @@ public interface AuthenticationManager
 
     public String getId();
 
-    public List getAuthenticators();
+    public List<Authenticator> getAuthenticators();
 
     public AuthenticationResult authenticate( AuthenticationDataSource source )
         throws AccountLockedException, AuthenticationException;

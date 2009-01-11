@@ -100,7 +100,11 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context-support</artifactId>
-    </dependency>     
+    </dependency>   
+    <dependency>
+      <groupId>javax.annotation</groupId>
+      <artifactId>jsr250-api</artifactId>
+    </dependency>      
 
     <dependency>
       <groupId>org.extremecomponents</groupId>
@@ -175,19 +179,4 @@
     <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-integrations/redback-common-integrations</developerConnection>
     <url>http://fisheye.codehaus.org/browse/redback/redback/trunk/redback-integrations/redback-common-integrations</url>
   </scm>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>descriptor</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>  
 </project>

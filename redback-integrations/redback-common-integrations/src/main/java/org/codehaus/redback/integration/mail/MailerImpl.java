@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -29,45 +30,39 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.policy.UserValidationSettings;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
 
 /**
  * Mailer
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.redback.integration.mail.Mailer"
  */
+@Service("mailer")
 public class MailerImpl
-    extends AbstractLogEnabled
     implements Mailer
 {
-    /**
-     * @plexus.requirement role-hint="velocity"
-     */
+    protected Logger log = LoggerFactory.getLogger( getClass() );
+    
+    @Resource(name="mailGenerator#velocity")
     private MailGenerator generator;
 
-
-    /**
-     * @plexus.requirement role="mailSender"
-     */
+    @Resource(name="mailSender")
     private JavaMailSender javaMailSender;
 
-    /**
-     * @plexus.requirement
-     */
+    @Resource
     private SecuritySystem securitySystem;
 
-    /**
-     * @plexus.requirement
-     */
+    @Resource(name="userConfiguration")
     private UserConfiguration config;
 
     public void sendAccountValidationEmail( Collection recipients, AuthenticationKey authkey, String baseUrl )
@@ -92,7 +87,7 @@ public class MailerImpl
     {
         if ( recipients.isEmpty() )
         {
-            getLogger().warn( "Mail Not Sent - No mail recipients for email. subject [" + subject + "]" );
+            log.warn( "Mail Not Sent - No mail recipients for email. subject [" + subject + "]" );
             return;
         }
 
@@ -135,21 +130,21 @@ public class MailerImpl
             message.setRecipients(Message.RecipientType.TO, tos.toArray(new Address[tos.size()]));
 
 
-            getLogger().debug( content );
+            log.debug( content );
 
             javaMailSender.send( message );
         }
         catch ( AddressException e )
         {
-            getLogger().error( "Unable to send message, subject [" + subject + "]", e );
+            log.error( "Unable to send message, subject [" + subject + "]", e );
         }
         catch ( MessagingException e )
         {
-            getLogger().error( "Unable to send message, subject [" + subject + "]", e );
+            log.error( "Unable to send message, subject [" + subject + "]", e );
         }       
         catch ( UnsupportedEncodingException e )
         {
-            getLogger().error( "Unable to send message, subject [" + subject + "]", e );
+            log.error( "Unable to send message, subject [" + subject + "]", e );
         }                
     }
 }

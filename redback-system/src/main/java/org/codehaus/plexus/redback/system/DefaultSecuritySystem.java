@@ -16,6 +16,8 @@ package org.codehaus.plexus.redback.system;
  * limitations under the License.
  */
 
+import javax.annotation.Resource;
+
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.redback.authentication.AuthenticationDataSource;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
@@ -32,41 +34,32 @@ import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.springframework.stereotype.Service;
 
 /**
  * DefaultSecuritySystem:
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
  * @version: $Id$
- * @plexus.component role="org.codehaus.plexus.redback.system.SecuritySystem" role-hint="default"
  */
+@Service("securitySystem")
 public class DefaultSecuritySystem
     extends AbstractLogEnabled
     implements SecuritySystem
 {
-    /**
-     * @plexus.requirement
-     */
+    @Resource
     private AuthenticationManager authnManager;
 
-    /**
-     * @plexus.requirement role-hint="rbac"
-     */
+    @Resource(name="authorizer#rbac")
     private Authorizer authorizer;
 
-    /**
-     * @plexus.requirement role-hint="configurable"
-     */
+    @Resource(name="userManager#configurable")
     private UserManager userManager;
 
-    /**
-     * @plexus.requirement role-hint="cached"
-     */
+    @Resource(name="keyManager#cached")
     private KeyManager keyManager;
 
-    /**
-     * @plexus.requirement
-     */
+    @Resource
     private UserSecurityPolicy policy;
 
     // ----------------------------------------------------------------------------

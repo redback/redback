@@ -23,18 +23,24 @@ import org.codehaus.plexus.redback.http.HttpUtils;
 import org.codehaus.plexus.redback.http.authentication.HttpAuthenticationException;
 import org.codehaus.plexus.util.Base64;
 import org.codehaus.plexus.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 /**
  * HttpDigestHeader
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.authentication.digest.HttpClientHeader"
- * instantiation-strategy="per-lookup"
  */
+@Service("httpClientHeader")
+@Scope("protype")
 class HttpDigestHeader
-    extends AbstractLogEnabled
 {
+    
+    private Logger log = LoggerFactory.getLogger( getClass() );
+    
     public String username;
 
     public String realm;
@@ -69,7 +75,7 @@ class HttpDigestHeader
         if ( StringUtils.isEmpty( username ) || StringUtils.isEmpty( realm ) || StringUtils.isEmpty( nonce ) ||
             StringUtils.isEmpty( uri ) || StringUtils.isEmpty( response ) )
         {
-            getLogger().debug( "Missing mandatory fields: Raw Digest Header : [" + rawHeader + "]" );
+            log.debug( "Missing mandatory fields: Raw Digest Header : [" + rawHeader + "]" );
 
             throw new HttpAuthenticationException( "Missing mandatory digest fields per RFC2069." );
         }
@@ -77,7 +83,7 @@ class HttpDigestHeader
         // [RFC 2617] Validate realm.
         if ( !StringUtils.equals( expectedRealm, realm ) )
         {
-            getLogger().debug( "Realm name is invalid: expected [" + expectedRealm + "] but got [" + realm + "]" );
+            log.debug( "Realm name is invalid: expected [" + expectedRealm + "] but got [" + realm + "]" );
 
             throw new HttpAuthenticationException( "Response realm does not match expected realm." );
         }
@@ -87,7 +93,7 @@ class HttpDigestHeader
         {
             if ( StringUtils.isEmpty( nc ) || StringUtils.isEmpty( cnonce ) )
             {
-                getLogger().debug( "Missing mandatory qop fields: nc [" + nc + "] cnonce [" + cnonce + "]" );
+                log.debug( "Missing mandatory qop fields: nc [" + nc + "] cnonce [" + cnonce + "]" );
 
                 throw new HttpAuthenticationException( "Missing mandatory qop digest fields per RFC2617." );
             }
@@ -96,7 +102,7 @@ class HttpDigestHeader
         // [RFC 2617] Validate nonce
         if ( !Base64.isArrayByteBase64( nonce.getBytes() ) )
         {
-            getLogger().debug( "Nonce is not encoded in Base64: nonce [" + nonce + "]" );
+            log.debug( "Nonce is not encoded in Base64: nonce [" + nonce + "]" );
 
             throw new HttpAuthenticationException( "Response nonce is not encoded in Base64." );
         }
@@ -108,7 +114,7 @@ class HttpDigestHeader
         // Validate nonce format
         if ( nonceTokens.length != 2 )
         {
-            getLogger().debug( "Nonce format expected [2] elements, but got [" + nonceTokens.length +
+            log.debug( "Nonce format expected [2] elements, but got [" + nonceTokens.length +
                 "] instead.  Decoded nonce [" + decodedNonce + "]" );
 
             throw new HttpAuthenticationException(
@@ -132,7 +138,7 @@ class HttpDigestHeader
 
         if ( !StringUtils.equals( expectedSignature, nonceTokens[1] ) )
         {
-            getLogger().error( "Nonce parameter has been compromised." );
+            log.error( "Nonce parameter has been compromised." );
 
             throw new HttpAuthenticationException( "Nonce parameter has been compromised." );
         }

@@ -19,15 +19,15 @@ package org.codehaus.redback.integration.checks;
 import java.util.List;
 
 import org.codehaus.plexus.redback.system.check.EnvironmentCheck;
+import org.springframework.stereotype.Service;
 
 /**
  * ExpectedJsps
  * @FIXME the jsp list is not correct
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.system.check.EnvironmentCheck"
- * role-hint="ExpectedJsps"
  */
+@Service("environmentCheck#ExpectedJsps")
 public class ExpectedJsps
     implements EnvironmentCheck
 {

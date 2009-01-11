@@ -16,6 +16,8 @@ package org.codehaus.plexus.redback.policy.rules;
  * limitations under the License.
  */
 
+import javax.annotation.Resource;
+
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.policy.PasswordRule;
@@ -31,9 +33,7 @@ public abstract class AbstractPasswordRule
 {
     protected boolean enabled = true;
 
-    /**
-     * @plexus.requirement
-     */
+    @Resource (name="userConfiguration")
     protected UserConfiguration config;
 
     public boolean isEnabled()

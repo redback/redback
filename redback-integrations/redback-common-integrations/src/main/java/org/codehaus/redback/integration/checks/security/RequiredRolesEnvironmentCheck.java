@@ -18,10 +18,14 @@ package org.codehaus.redback.integration.checks.security;
 
 import java.util.List;
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
+import javax.annotation.Resource;
+
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.system.check.EnvironmentCheck;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 /**
  * RequiredRolesEnvironmentCheck: this environment check will check that the
@@ -30,17 +34,15 @@ import org.codehaus.plexus.redback.system.check.EnvironmentCheck;
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
  * @version: $Id$
- * @plexus.component role="org.codehaus.plexus.redback.system.check.EnvironmentCheck"
- * role-hint="required-roles"
  */
+@Service("environmentCheck#required-roles")
 public class RequiredRolesEnvironmentCheck
-    extends AbstractLogEnabled
     implements EnvironmentCheck
 {
 
-   /**
-     * @plexus.requirement role-hint="default"
-     */
+    protected Logger log = LoggerFactory.getLogger( getClass() );
+    
+    @Resource
     private RoleManager roleManager;
 
     /**
@@ -55,7 +57,7 @@ public class RequiredRolesEnvironmentCheck
     {
         if ( !checked )
         {
-            getLogger().info( "Checking the existence of required roles." );
+            log.info( "Checking the existence of required roles." );
 
             try
             {

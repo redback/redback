@@ -32,43 +32,34 @@ import org.codehaus.plexus.redback.rbac.RbacObjectNotFoundException;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 /**
  * RbacAuthorizer:
  *
  * @author Jesse McConnell <jmcconnell@apache.org>
- * @version $Id:$
- * @plexus.component role="org.codehaus.plexus.redback.authorization.Authorizer"
- * role-hint="rbac"
+ * @version $Id$
  */
+@Service("authorizer#rbac")
 public class RbacAuthorizer
     extends AbstractLogEnabled
     implements Authorizer
 {
 
-    /**
-     * @plexus.requirement role-hint="cached"
-     */
+    @Resource(name="rBACManager#cached")
     private RBACManager manager;
 
-    /**
-     * @plexus.requirement role-hint="configurable"
-     */
+    @Resource(name="userManager#configurable")
     private UserManager userManager;
 
-    /**
-     * @plexus.requirement role-hint="default"
-     */
+    @Resource
     private PermissionEvaluator evaluator;
-
-    /**
-     * @plexus.requirement role-hint="default"
-     */
-    private UserConfiguration config;
 
     public String getId()
     {

@@ -20,14 +20,14 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationExce
 import org.codehaus.plexus.redback.policy.PasswordRuleViolations;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.users.User;
+import org.springframework.stereotype.Service;
 
 /**
  * Basic Password Rule. Checks that password only contains alpha-numeric characters.
  *
- * @plexus.component role="org.codehaus.plexus.redback.policy.PasswordRule" role-hint="alpha-numeric"
- * <p/>
  * $Id$
  */
+@Service("passwordRule#alpha-numeric")
 public class AlphaNumericPasswordRule
     extends AbstractPasswordRule
 {

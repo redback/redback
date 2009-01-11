@@ -24,30 +24,30 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.velocity.VelocityComponent;
+import org.springframework.stereotype.Service;
 
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+
+import javax.annotation.Resource;
 
 /**
  * Mail generator component implementation using velocity.
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.redback.integration.mail.MailGenerator" role-hint="velocity"
  */
+@Service("mailGenerator#velocity")
 public class VelocityMailGenerator
     extends AbstractLogEnabled
     implements MailGenerator
 {
-    /**
-     * @plexus.requirement
-     */
+    @Resource(name="userConfiguration")
     private UserConfiguration config;
 
-    /**
-     * @plexus.requirement
-     */
+    // FIXME use the spring directly 
+    @Resource
     private VelocityComponent velocity;
 
     public String generateMail( String templateName, AuthenticationKey authkey, String baseUrl )

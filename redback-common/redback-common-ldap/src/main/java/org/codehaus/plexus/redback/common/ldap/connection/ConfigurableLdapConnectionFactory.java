@@ -23,29 +23,27 @@ package org.codehaus.plexus.redback.common.ldap.connection;
  * SOFTWARE.
  */
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
-import org.codehaus.plexus.redback.configuration.UserConfiguration;
+import java.util.List;
+import java.util.Properties;
 
+import javax.annotation.Resource;
 import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
 import javax.naming.spi.ObjectFactory;
 import javax.naming.spi.StateFactory;
 
-import java.util.List;
-import java.util.Properties;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
+import org.codehaus.plexus.redback.configuration.UserConfiguration;
+import org.springframework.stereotype.Service;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
- * 
- * @plexus.component role="org.codehaus.plexus.redback.common.ldap.connection.LdapConnectionFactory"
- *   role-hint="configurable"
  */
+@Service("ldapConnectionFactory#configurable")
 public class ConfigurableLdapConnectionFactory
-    extends AbstractLogEnabled
     implements LdapConnectionFactory, Initializable
 {
     /**
@@ -90,9 +88,8 @@ public class ConfigurableLdapConnectionFactory
 
     private LdapConnectionConfiguration configuration;
 
-    /**
-     * @plexus.requirement
-     */
+
+    @Resource(name="userConfiguration")
     private UserConfiguration userConf;
 
     // ----------------------------------------------------------------------

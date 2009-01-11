@@ -25,6 +25,7 @@ import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.users.memory.util.UserSorter;
 import org.codehaus.plexus.util.StringUtils;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URL;
@@ -36,17 +37,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.annotation.Resource;
+
 /**
- * @plexus.component role="org.codehaus.plexus.redback.users.UserManager"
- * role-hint="memory"
+ * @version $Id$
  */
+@Service("userManager#memory")
 public class MemoryUserManager
     extends AbstractUserManager
     implements UserManager
 {
-    /**
-     * @plexus.requirement
-     */
+    @Resource
     private UserSecurityPolicy userSecurityPolicy;
 
     public String getId()

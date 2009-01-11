@@ -30,7 +30,9 @@ import org.codehaus.plexus.redback.users.UserManagerException;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.users.UserQuery;
 import org.codehaus.plexus.util.StringUtils;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.jdo.Extent;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
@@ -43,21 +45,16 @@ import java.util.List;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.users.UserManager"
- * role-hint="jdo"
  */
+@Service("userManager#jdo")
 public class JdoUserManager
     extends AbstractUserManager
     implements Initializable
 {
-    /**
-     * @plexus.requirement role-hint="users"
-     */
+    @Resource(name="jdoFactory#users")
     private JdoFactory jdoFactory;
 
-    /**
-     * @plexus.requirement
-     */
+    @Resource
     private UserSecurityPolicy userSecurityPolicy;
 
     private PersistenceManagerFactory pmf;

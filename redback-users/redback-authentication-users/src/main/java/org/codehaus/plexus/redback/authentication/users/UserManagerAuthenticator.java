@@ -31,31 +31,29 @@ import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.HashMap;
+
+import javax.annotation.Resource;
 
 /**
  * {@link Authenticator} implementation that uses a wrapped {@link UserManager} to authenticate.
  *
  * @author <a href='mailto:rahul.thakur.xdev@gmail.com'>Rahul Thakur</a> 
  * @version $Id$
- * @plexus.component
- *   role="org.codehaus.plexus.redback.authentication.Authenticator"
- *   role-hint="user-manager"
  */
+@Service("authenticator#user-manager")
 public class UserManagerAuthenticator
     extends AbstractLogEnabled
     implements Authenticator
 {
-    /**
-     * @plexus.requirement role-hint="configurable"
-     */
+
+    @Resource(name="userManager#configurable")
     private UserManager userManager;
     
-    /**
-     * @plexus.requirement
-     */
+    @Resource
     private UserSecurityPolicy securityPolicy;
     
     public String getId()

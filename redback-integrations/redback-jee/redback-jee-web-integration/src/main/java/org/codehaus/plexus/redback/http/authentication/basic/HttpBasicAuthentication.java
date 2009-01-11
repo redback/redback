@@ -30,6 +30,7 @@ import org.codehaus.plexus.redback.policy.AccountLockedException;
 import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 import org.codehaus.plexus.util.Base64;
 import org.codehaus.plexus.util.StringUtils;
+import org.springframework.stereotype.Service;
 
 /**
  * HttpBasicAuthentication
@@ -37,9 +38,8 @@ import org.codehaus.plexus.util.StringUtils;
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @author Andrew Williams
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.http.authentication.HttpAuthenticator"
- * role-hint="basic"
  */
+@Service("attpAuthenticator#basic")
 public class HttpBasicAuthentication
     extends SessionBasedHttpAuthenticator
 {

@@ -20,6 +20,7 @@ import org.codehaus.plexus.redback.authorization.AuthorizationDataSource;
 import org.codehaus.plexus.redback.authorization.AuthorizationException;
 import org.codehaus.plexus.redback.authorization.AuthorizationResult;
 import org.codehaus.plexus.redback.authorization.Authorizer;
+import org.springframework.stereotype.Service;
 
 /**
  * OpenAuthorizer - No checks for authorization, everything passes. 
@@ -27,10 +28,8 @@ import org.codehaus.plexus.redback.authorization.Authorizer;
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  * 
- * @plexus.component
- *   role="org.codehaus.plexus.redback.authorization.Authorizer"
- *   role-hint="rbac"
  */
+@Service("authorizer#rbac")
 public class OpenAuthorizer
     implements Authorizer
 {

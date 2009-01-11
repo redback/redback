@@ -20,6 +20,7 @@ import org.codehaus.plexus.redback.users.UserNotFoundException;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import org.springframework.stereotype.Service;
 
 /**
  * DefaultPermissionEvaluator:
@@ -28,17 +29,14 @@ import org.codehaus.plexus.redback.users.UserNotFoundException;
  * of the person making the authorization check
  *
  * @author Jesse McConnell <jesse@codehaus.org>
- * @version $Id:$
- * @plexus.component role="org.codehaus.plexus.redback.authorization.rbac.evaluator.PermissionEvaluator"
- * role-hint="default"
+ * @version $Id$
  */
+@Service("permissionEvaluator")
 public class DefaultPermissionEvaluator
     extends AbstractLogEnabled
     implements PermissionEvaluator
 {
-    /**
-     * @plexus.requirement role-hint="configurable"
-     */
+    @javax.annotation.Resource(name="userManager#configurable")
     private UserManager userManager;
 
     public boolean evaluate( Permission permission, Object operation, Object resource, Object principal )

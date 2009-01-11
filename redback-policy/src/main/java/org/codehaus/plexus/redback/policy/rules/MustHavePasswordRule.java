@@ -21,14 +21,15 @@ import org.codehaus.plexus.redback.policy.PasswordRuleViolations;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.util.StringUtils;
+import org.springframework.stereotype.Service;
 
 /**
  * Basic Password Rule, Checks for non-empty Passwords in non guest users.
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.policy.PasswordRule" role-hint="must-have"
  */
+@Service("passwordRule#must-have")
 public class MustHavePasswordRule
     extends AbstractPasswordRule
 {

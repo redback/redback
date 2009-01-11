@@ -24,15 +24,17 @@ import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.redback.integration.HttpUtils;
 import org.codehaus.redback.integration.filter.authentication.HttpAuthenticationException;
 import org.codehaus.redback.integration.filter.authentication.digest.Digest;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 /**
  * HttpDigestHeader
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.struts2.filter.authentication.digest.HttpClientHeader"
- * instantiation-strategy="per-lookup"
  */
+@Service("httpClientHeader")
+@Scope("prototype")
 public class HttpDigestHeader
     extends AbstractLogEnabled
 {

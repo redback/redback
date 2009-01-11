@@ -17,6 +17,7 @@ package org.codehaus.plexus.redback.policy.encoders;
  */
 
 import org.codehaus.plexus.redback.policy.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 /**
  * PlainText PasswordEncoder for use in situtations where the password needs to be saved as-is.
@@ -24,8 +25,8 @@ import org.codehaus.plexus.redback.policy.PasswordEncoder;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.policy.PasswordEncoder" role-hint="plaintext"
  */
+@Service("passwordEncoder#plaintext")
 public class PlainTextPasswordEncoder
     implements PasswordEncoder
 {

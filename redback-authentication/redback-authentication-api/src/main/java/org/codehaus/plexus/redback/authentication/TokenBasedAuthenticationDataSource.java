@@ -1,5 +1,8 @@
 package org.codehaus.plexus.redback.authentication;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
+
 /*
  * Copyright 2001-2006 The Codehaus.
  *
@@ -22,10 +25,9 @@ package org.codehaus.plexus.redback.authentication;
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  * 
- * @plexus.component role="org.codehaus.plexus.redback.authentication.AuthenticationDataSource"
- *                   role-hint="token"
- *                   instantiation-strategy="per-lookup"
  */
+@Service("authenticationDataSource#token")
+@Scope("prototype")
 public class TokenBasedAuthenticationDataSource
     implements AuthenticationDataSource
 {

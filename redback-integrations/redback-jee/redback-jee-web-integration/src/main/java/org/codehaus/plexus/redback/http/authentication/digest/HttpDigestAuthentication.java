@@ -18,6 +18,7 @@ package org.codehaus.plexus.redback.http.authentication.digest;
 
 import java.io.IOException;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -34,6 +35,7 @@ import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.util.Base64;
 import org.codehaus.plexus.util.StringUtils;
+import org.springframework.stereotype.Service;
 
 /**
  * HttpDigestAuthentication methods for working with <a href="http://www.faqs.org/rfcs/rfc2617.html">RFC 2617 HTTP Authentication</a>.
@@ -41,15 +43,12 @@ import org.codehaus.plexus.util.StringUtils;
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @author Andrew Williams
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.http.authentication.HttpAuthenticator"
- * role-hint="digest"
  */
+@Service("attpAuthenticator#digest")
 public class HttpDigestAuthentication
     extends SessionBasedHttpAuthenticator
 {
-    /**
-     * @plexus.requirement role-hint="configurable"
-     */
+    @Resource(name="userManager#configurable")
     private UserManager userManager;
 
     /**
@@ -62,7 +61,7 @@ public class HttpDigestAuthentication
      *
      * @plexus.configuration default-value="OrycteropusAfer"
      */
-    private String digestKey;
+    private String digestKey = "OrycteropusAfer";
 
     private String realm;
 

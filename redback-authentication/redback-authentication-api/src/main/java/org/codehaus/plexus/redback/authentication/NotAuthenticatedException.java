@@ -19,7 +19,7 @@ package org.codehaus.plexus.redback.authentication;
  * EntityAuthenticationException.java
  *
  * @author Dan Diephouse
- * @since Nov 24, 2002
+ * @since $Id$
  */
 public class NotAuthenticatedException
     extends Exception

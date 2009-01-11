@@ -61,14 +61,14 @@ public interface UserSecurityPolicy
      *
      * @return the list of {@link PasswordRule} objects.
      */
-    List getPasswordRules();
+    List<PasswordRule> getPasswordRules();
 
     /**
      * Set the Password Rules List.
      *
      * @param rules the list of {@link PasswordRule} objects.
      */
-    void setPasswordRules( List rules );
+    void setPasswordRules( List<PasswordRule> rules );
 
     /**
      * Gets the count of Previous Passwords that should be tracked.

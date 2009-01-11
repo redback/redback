@@ -22,6 +22,7 @@ package org.codehaus.plexus.redback.authentication;
  * todo which this back to an interface and use the mojo style expression evaluation to populate the particular required fields
  * @see PasswordBasedAuthenticationDataSource
  * @see TokenBasedAuthenticationDataSource
+ * @version $Id$
  */
 public interface AuthenticationDataSource
 {

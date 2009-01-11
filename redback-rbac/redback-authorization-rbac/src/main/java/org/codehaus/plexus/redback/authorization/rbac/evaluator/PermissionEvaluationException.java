@@ -19,7 +19,7 @@ package org.codehaus.plexus.redback.authorization.rbac.evaluator;
  * PermissionEvaluationException:
  *
  * @author Jesse McConnell <jmcconnell@apache.org>
- * @version $Id:$
+ * @version $Id$
  */
 public class PermissionEvaluationException
     extends Exception

@@ -21,7 +21,9 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationExce
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.util.StringUtils;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttributes;
 import java.util.List;
@@ -29,30 +31,30 @@ import java.util.List;
 /**
  * @author <a href="jesse@codehaus.org"> jesse
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.common.ldap.UserMapper" role-hint="ldap"
  */
+@Service("userMapper#ldap")
 public class LdapUserMapper
     implements UserMapper, Initializable
 {
     /**
      * @plexus.configuration default-value="mail"
      */
-    String emailAttribute;
+    String emailAttribute = "mail";
 
     /**
      * @plexus.configuration default-value="givenName"
      */
-    String fullNameAttribute;
+    String fullNameAttribute = "givenName";
 
     /**
      * @plexus.configuration default-value="userPassword"
      */
-    String passwordAttribute;
+    String passwordAttribute = "userPassword";
 
     /**
      * @plexus.configuration default-value="cn"
      */
-    String userIdAttribute;
+    String userIdAttribute = "cn";
 
     /**
      * @plexus.configuration default-value=""
@@ -62,16 +64,14 @@ public class LdapUserMapper
     /**
      * @plexus.configuration default-value="inetOrgPerson"
      */
-    String userObjectClass;
+    String userObjectClass = "inetOrgPerson";
 
     /**
      * @plexus.configuration default-value=""
      */
     String userFilter;
 
-    /**
-     * @plexus.requirement
-     */
+    @Resource(name="userConfiguration")
     private UserConfiguration userConf;
 
     public void initialize()

@@ -16,6 +16,11 @@ package org.codehaus.plexus.redback.configuration;
  * limitations under the License.
  */
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
@@ -25,33 +30,32 @@ import org.codehaus.plexus.evaluator.DefaultExpressionEvaluator;
 import org.codehaus.plexus.evaluator.EvaluatorException;
 import org.codehaus.plexus.evaluator.ExpressionEvaluator;
 import org.codehaus.plexus.evaluator.sources.SystemPropertyExpressionSource;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.registry.Registry;
 import org.codehaus.plexus.registry.RegistryException;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 /**
  * ConfigurationFactory
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.configuration.UserConfiguration"
+ * 
  */
+@Service("userConfiguration")
 public class UserConfiguration
-    extends AbstractLogEnabled
     implements Contextualizable, Initializable
 {
     public static final String ROLE = UserConfiguration.class.getName();
 
     private static final String DEFAULT_CONFIG_RESOURCE = "org/codehaus/plexus/redback/config-defaults.properties";
 
+    protected Logger log = LoggerFactory.getLogger( getClass() );
+    
     /**
      * @plexus.configuration
      * @deprecated Please configure the Plexus registry instead
@@ -99,9 +103,9 @@ public class UserConfiguration
 
         lookupRegistry = registry.getSubset( PREFIX );
 
-        if ( getLogger().isDebugEnabled() )
+        if ( log.isDebugEnabled() )
         {
-            getLogger().debug( lookupRegistry.dump() );
+            log.debug( lookupRegistry.dump() );
         }
     }
 
@@ -120,7 +124,7 @@ public class UserConfiguration
         if ( !configs.isEmpty() )
         {
             // TODO: plexus should be able to do this on it's own.
-            getLogger().warn(
+            log.warn(
                 "DEPRECATED: the <configs> elements is deprecated. Please configure the Plexus registry instead" );
         }
 
@@ -134,9 +138,9 @@ public class UserConfiguration
             }
             catch ( EvaluatorException e )
             {
-                getLogger().warn( "Unable to resolve configuration name: " + e.getMessage(), e );
+                log.warn( "Unable to resolve configuration name: " + e.getMessage(), e );
             }
-            getLogger().info(
+            log.info(
                 "Attempting to find configuration [" + configName + "] (resolved to [" + configName + "])" );
 
             registry.addConfigurationFromFile( new File( configName ), PREFIX );

@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -33,21 +35,20 @@ import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.redback.integration.util.UserComparator;
+import org.springframework.stereotype.Service;
 
 /**
  * CsvUserList
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.redback.integration.reports.Report" role-hint="userlist-csv"
  */
+@Service("report#userlist-csv")
 public class CsvUserList
     extends AbstractLogEnabled
     implements Report
 {
-    /**
-     * @plexus.requirement
-     */
+    @Resource
     private SecuritySystem securitySystem;
 
     private Map fields;
@@ -93,7 +94,7 @@ public class CsvUserList
     {
         UserManager userManager = securitySystem.getUserManager();
 
-        List allUsers = userManager.getUsers();
+        List<User> allUsers = userManager.getUsers();
 
         Collections.sort( allUsers, new UserComparator( "username", true ) );
 
@@ -101,7 +102,7 @@ public class CsvUserList
 
         writeCsvHeader( out, allUsers );
 
-        Iterator itUsers = allUsers.iterator();
+        Iterator<User> itUsers = allUsers.iterator();
         while ( itUsers.hasNext() )
         {
             User user = (User) itUsers.next();

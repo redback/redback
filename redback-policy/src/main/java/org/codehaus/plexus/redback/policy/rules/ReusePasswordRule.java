@@ -21,6 +21,7 @@ import org.codehaus.plexus.redback.policy.PasswordRuleViolations;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.util.StringUtils;
+import org.springframework.stereotype.Service;
 
 import java.util.Iterator;
 
@@ -30,8 +31,8 @@ import java.util.Iterator;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.policy.PasswordRule" role-hint="reuse"
  */
+@Service("passwordRule#reuse")
 public class ReusePasswordRule
     extends AbstractPasswordRule
 {

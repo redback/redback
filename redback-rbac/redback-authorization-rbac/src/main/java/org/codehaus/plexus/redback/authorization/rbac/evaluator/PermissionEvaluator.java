@@ -21,7 +21,7 @@ import org.codehaus.plexus.redback.rbac.Permission;
  * PermissionEvaluator:
  *
  * @author Jesse McConnell <jmcconnell@apache.org>
- * @version $Id:$
+ * @version $Id$
  */
 public interface PermissionEvaluator
 {

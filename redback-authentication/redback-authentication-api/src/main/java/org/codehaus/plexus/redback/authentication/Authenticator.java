@@ -22,7 +22,7 @@ import org.codehaus.plexus.redback.policy.AccountLockedException;
  * Authenticator:
  *
  * @author Jesse McConnell
- * @version $ID:$
+ * @version $Id$
  */
 public interface Authenticator
 {

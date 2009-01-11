@@ -22,6 +22,7 @@ import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authentication.Authenticator;
 import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
+import org.springframework.stereotype.Service;
 
 /**
  * OpenAuthenticator - Does not test user / password.
@@ -30,10 +31,8 @@ import org.codehaus.plexus.redback.policy.AccountLockedException;
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  * 
- * @plexus.component
- *   role="org.codehaus.plexus.redback.authentication.Authenticator"
- *   role-hint="open"
  */
+@Service("authenticator#open")
 public class OpenAuthenticator
     implements Authenticator
 {

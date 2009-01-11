@@ -18,14 +18,15 @@ package org.codehaus.plexus.redback.policy;
 
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
+import org.springframework.stereotype.Service;
 
 /**
  * SignonCookieSettings
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.policy.CookieSettings" role-hint="signon"
  */
+@Service("cookieSettings#signon")
 public class SignonCookieSettings
     extends AbstractCookieSettings
     implements Initializable

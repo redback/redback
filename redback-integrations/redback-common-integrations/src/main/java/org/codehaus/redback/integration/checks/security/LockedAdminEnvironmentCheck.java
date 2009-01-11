@@ -20,7 +20,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
+import javax.annotation.Resource;
+
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
@@ -29,6 +30,9 @@ import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.redback.integration.role.RoleConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 /**
  * LockedAdminEnvironmentCheck: checks if accounts marked as system administrator are locked
@@ -36,22 +40,18 @@ import org.codehaus.redback.integration.role.RoleConstants;
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
  * @version: $Id$
- * @plexus.component role="org.codehaus.plexus.redback.system.check.EnvironmentCheck"
- * role-hint="locked-admin-check"
  */
+@Service("environmentCheck#locked-admin-check")
 public class LockedAdminEnvironmentCheck
-    extends AbstractLogEnabled
     implements EnvironmentCheck
 {
+    
+    protected Logger log = LoggerFactory.getLogger( getClass() );
 
-    /**
-     * @plexus.requirement role-hint="configurable"
-     */
+    @Resource(name="userManager#configurable")
     private UserManager userManager;
 
-    /**
-     * @plexus.requirement role-hint="cached"
-     */
+    @Resource(name="rBACManager#cached")
     private RBACManager rbacManager;
 
     /**
@@ -87,15 +87,15 @@ public class LockedAdminEnvironmentCheck
                         
                         if ( admin.isLocked() )
                         {
-                            getLogger().info( "Found locked system administrator: " + admin.getUsername() );
-                            getLogger().info(  "Unlocking system administrator: " + admin.getUsername() );
+                            log.info( "Found locked system administrator: " + admin.getUsername() );
+                            log.info(  "Unlocking system administrator: " + admin.getUsername() );
                             admin.setLocked( false );
                             userManager.updateUser( admin );
                         }
                     }
                     catch ( UserNotFoundException ne )
                     {
-                        getLogger().warn( "Dangling UserAssignment -> " + userAssignment.getPrincipal() );
+                        log.warn( "Dangling UserAssignment -> " + userAssignment.getPrincipal() );
                         violations.add( ne );
                     }
                 }

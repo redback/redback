@@ -26,26 +26,25 @@ import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.users.UserQuery;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 /**
  * @author <a href="jesse@codehaus.org"> jesse
- * @version "$Id:$"
- * @plexus.component role="org.codehaus.plexus.redback.users.UserManager" role-hint="configurable"
+ * @version "Id$
  */
+@Service("userManager#configurable")
 public class ConfigurableUserManager
     extends AbstractUserManager
     implements Initializable
 {
-    /**
-     * @plexus.requirement
-     */
+    @Resource (name="userConfiguration")
     private UserConfiguration config;
 
-    /**
-     * @plexus.requirement role-hint="default"
-     */
+    @Resource
     private PlexusContainer container;
 
     private UserManager userManagerImpl;

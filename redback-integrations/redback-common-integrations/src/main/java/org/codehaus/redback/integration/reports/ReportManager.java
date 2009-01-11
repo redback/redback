@@ -22,26 +22,32 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
+import org.springframework.stereotype.Service;
 
 /**
  * ReportManager
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.redback.integration.reports.ReportManager"
  */
+@Service("reportManager")
 public class ReportManager
-    extends AbstractLogEnabled
     implements Initializable
 {
     /**
      * @plexus.requirement role="org.codehaus.plexus.redback.xwork.reports.Report"
      */
     private List availableReports;
+    
+    @Resource
+    private PlexusContainer plexusContainer;
 
     private Map reportMap;
 
@@ -82,6 +88,14 @@ public class ReportManager
     public void initialize()
         throws InitializationException
     {
+        try
+        {
+            availableReports = this.plexusContainer.lookupList( Report.class );
+        }
+        catch ( ComponentLookupException e )
+        {
+            throw new InitializationException( e.getMessage(), e );
+        }
         reportMap = new HashMap();
 
         Iterator it = availableReports.iterator();

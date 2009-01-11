@@ -16,11 +16,11 @@ package org.codehaus.redback.integration.util;
  * limitations under the License.
  */
 
+import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.keys.KeyManager;
 import org.codehaus.plexus.redback.keys.KeyManagerException;
@@ -28,20 +28,23 @@ import org.codehaus.plexus.redback.keys.KeyNotFoundException;
 import org.codehaus.plexus.redback.policy.CookieSettings;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 /**
  * AutoLoginCookies
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.redback.integration.util.AutoLoginCookies"
  */
+@Service("autoLoginCookies")
 public class AutoLoginCookies
-    extends AbstractLogEnabled
 {
-    /**
-     * @plexus.requirement
-     */
+    
+    private Logger log = LoggerFactory.getLogger( getClass() );
+    
+    @Resource
     private SecuritySystem securitySystem;
 
     /**
@@ -65,14 +68,14 @@ public class AutoLoginCookies
 
         if ( rememberMeCookie == null )
         {
-            getLogger().debug( "Remember Me Cookie Not Found: " + REMEMBER_ME_KEY );
+            log.debug( "Remember Me Cookie Not Found: " + REMEMBER_ME_KEY );
             return null;
         }
 
         // Found user with a remember me key.
         String providedKey = rememberMeCookie.getValue();
 
-        getLogger().debug( "Found remember me cookie : " + providedKey );
+        log.debug( "Found remember me cookie : " + providedKey );
 
         CookieSettings settings = securitySystem.getPolicy().getRememberMeCookieSettings();
         return findAuthKey( REMEMBER_ME_KEY, providedKey, settings.getDomain(), settings.getPath(), httpServletResponse, httpServletRequest );
@@ -102,7 +105,7 @@ public class AutoLoginCookies
         }
         catch ( KeyManagerException e )
         {
-            getLogger().warn( "Unable to set remember me cookie." );
+            log.warn( "Unable to set remember me cookie." );
         }
     }
 
@@ -118,7 +121,7 @@ public class AutoLoginCookies
 
         if ( ssoCookie == null )
         {
-            getLogger().debug( "Single Sign On Cookie Not Found: " + SIGNON_KEY );
+            log.debug( "Single Sign On Cookie Not Found: " + SIGNON_KEY );
             return null;
         }
 
@@ -126,7 +129,7 @@ public class AutoLoginCookies
 
         String providedKey = ssoCookie.getValue();
 
-        getLogger().debug( "Found sso cookie : " + providedKey );
+        log.debug( "Found sso cookie : " + providedKey );
 
         CookieSettings settings = securitySystem.getPolicy().getSignonCookieSettings();
         return findAuthKey( SIGNON_KEY, providedKey, settings.getDomain(), settings.getPath(), httpServletResponse, httpServletRequest );
@@ -155,7 +158,7 @@ public class AutoLoginCookies
         }
         catch ( KeyManagerException e )
         {
-            getLogger().warn( "Unable to set single sign on cookie." );
+            log.warn( "Unable to set single sign on cookie." );
 
         }
     }
@@ -192,20 +195,20 @@ public class AutoLoginCookies
         {
             AuthenticationKey authkey = securitySystem.getKeyManager().findKey( providedKey );
 
-            getLogger().debug( "Found AuthKey: " + authkey );
+            log.debug( "Found AuthKey: " + authkey );
 
             return authkey;
         }
         catch ( KeyNotFoundException e )
         {
-            getLogger().info( "Invalid AuthenticationKey " + providedKey + " submitted. Invalidating cookie." );
+            log.info( "Invalid AuthenticationKey " + providedKey + " submitted. Invalidating cookie." );
 
             // Invalid Cookie.  Remove it.
             removeCookie( httpServletResponse, httpServletRequest, cookieName, domain, path );
         }
         catch ( KeyManagerException e )
         {
-            getLogger().error( "KeyManagerException: " + e.getMessage(), e );
+            log.error( "KeyManagerException: " + e.getMessage(), e );
         }
 
         return null;

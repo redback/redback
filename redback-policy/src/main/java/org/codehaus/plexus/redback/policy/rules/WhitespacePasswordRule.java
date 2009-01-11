@@ -20,14 +20,14 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationExce
 import org.codehaus.plexus.redback.policy.PasswordRuleViolations;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.users.User;
+import org.springframework.stereotype.Service;
 
 /**
  * Basic Password Rule. Checks that password does not have whitespaces in it.
  *
- * @plexus.component role="org.codehaus.plexus.redback.policy.PasswordRule" role-hint="no-whitespaces"
- * <p/>
  * $Id$
  */
+@Service("passwordRule#no-whitespaces")
 public class WhitespacePasswordRule
     extends AbstractPasswordRule
 {

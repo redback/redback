@@ -16,8 +16,10 @@ package org.codehaus.redback.integration.checks.security;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.redback.configuration.UserConfiguration;
+import java.util.List;
+
+import javax.annotation.Resource;
+
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
@@ -26,35 +28,23 @@ import org.codehaus.plexus.redback.system.check.EnvironmentCheck;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
-
-import java.util.List;
+import org.springframework.stereotype.Service;
 
 /**
  * RequiredRolesEnvironmentCheck:
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
  * @version: $Id$
- * @plexus.component role="org.codehaus.plexus.redback.system.check.EnvironmentCheck"
- * role-hint="guest-user-check"
  */
+@Service("environmentCheck#guest-user-check")
 public class GuestUserEnvironmentCheck
-    extends AbstractLogEnabled
     implements EnvironmentCheck
 {
 
-    /**
-     * @plexus.requirement role-hint="default"
-     */
-    private UserConfiguration config;
-
-    /**
-     * @plexus.requirement role-hint="default"
-     */
+    @Resource
     private RoleManager roleManager;
 
-    /**
-     * @plexus.requirement role-hint="default"
-     */
+    @Resource
     private SecuritySystem securitySystem;
 
     /**

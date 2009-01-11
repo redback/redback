@@ -16,23 +16,24 @@ package org.codehaus.plexus.redback.policy;
  * limitations under the License.
  */
 
+import javax.annotation.Resource;
+
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
+import org.springframework.stereotype.Service;
 
 /**
  * DefaultUserValidationSettings
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.policy.UserValidationSettings"
  */
+@Service("userValidationSettings")
 public class DefaultUserValidationSettings
     implements UserValidationSettings, Initializable
 {
-    /**
-     * @plexus.requirement
-     */
+    @Resource (name="userConfiguration")
     private UserConfiguration config;
 
     private boolean emailValidationRequired;

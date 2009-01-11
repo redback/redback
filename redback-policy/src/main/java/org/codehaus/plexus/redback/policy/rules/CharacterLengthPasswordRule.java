@@ -21,6 +21,7 @@ import org.codehaus.plexus.redback.policy.PasswordRuleViolations;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.util.StringUtils;
+import org.springframework.stereotype.Service;
 
 /**
  * Basic Password Rule, Checks for non-empty passwords that have between {@link #setMinimumCharacters(int)} and
@@ -28,8 +29,8 @@ import org.codehaus.plexus.util.StringUtils;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="org.codehaus.plexus.redback.policy.PasswordRule" role-hint="character-length"
  */
+@Service("passwordRule#character-length")
 public class CharacterLengthPasswordRule
     extends AbstractPasswordRule
 {
