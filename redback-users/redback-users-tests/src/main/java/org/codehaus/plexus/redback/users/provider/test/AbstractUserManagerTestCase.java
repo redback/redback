@@ -16,11 +16,15 @@ package org.codehaus.plexus.redback.users.provider.test;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
-import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
-import org.codehaus.plexus.redback.users.*;
-
 import java.util.List;
+
+import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
+import org.codehaus.plexus.redback.users.PermanentUserException;
+import org.codehaus.plexus.redback.users.User;
+import org.codehaus.plexus.redback.users.UserManager;
+import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.codehaus.plexus.redback.users.UserQuery;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 
 /**
  * AbstractUserManagerTestCase 
