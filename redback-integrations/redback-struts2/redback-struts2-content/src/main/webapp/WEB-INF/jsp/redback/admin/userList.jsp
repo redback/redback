@@ -48,7 +48,7 @@
     items="users" 
     action="${pageContext.request.contextPath}/security/userlist!show.action"
     imagePath="${pageContext.request.contextPath}/images/redback/table/*.gif"
-    autoIncludeParameters="true" 
+    autoIncludeParameters="false" 
     title="Users"
     filterable="true"
     showTitle="false"
@@ -108,8 +108,8 @@
               <s:url id="userdeleteUrl" action="userdelete">
                 <s:param name="username">${user.username}</s:param>
               </s:url>
-              <s:a href="#userdeleteUrl" title="getText('delete') #user.username">
-                <img src="<c:url value="/images/redback/delete.gif"/>" border="none"/>
+              <s:a href="%{userdeleteUrl}" title="delete user">
+     		  <img src="<c:url value="/images/redback/delete.gif"/>" border="none"/>
               </s:a>              
             </redback:ifAuthorized>
           </c:if>
