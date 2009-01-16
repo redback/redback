@@ -18,7 +18,7 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-xwork</artifactId>
-    <version>1.2-beta-2</version>
+    <version>1.2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>redback-xwork-example</artifactId>

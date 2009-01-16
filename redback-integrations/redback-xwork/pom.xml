@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-integrations</artifactId>
-    <version>1.2-beta-2</version>
+    <version>1.2-SNAPSHOT</version>
   </parent>
   <artifactId>redback-xwork</artifactId>
   <name>Redback :: Integration :: XWork</name>
