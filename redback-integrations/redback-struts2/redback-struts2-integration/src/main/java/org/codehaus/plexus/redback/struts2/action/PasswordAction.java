@@ -87,9 +87,9 @@ public class PasswordAction
 
     public String submit()
     {
-        SecuritySession session = getSecuritySession();
+        final SecuritySession securitySession = getSecuritySession();
 
-        provideExisting = StringUtils.isNotEmpty( session.getUser().getEncodedPassword() );
+        provideExisting = StringUtils.isNotEmpty( securitySession.getUser().getEncodedPassword() );
 
         if ( StringUtils.isEmpty( newPassword ) )
         {
@@ -101,7 +101,7 @@ public class PasswordAction
             addFieldError( "newPassword", getText( "password.confimation.failed" ) );
         }
 
-        User user = session.getUser();
+        User user = securitySession.getUser();
 
         // Test existing Password.
         PasswordEncoder encoder = securitySystem.getPolicy().getPasswordEncoder();
@@ -194,7 +194,7 @@ public class PasswordAction
 
         getLogger().info( "Password Change Request Success." );
 
-        if ( !session.isAuthenticated() )
+        if ( !securitySession.isAuthenticated() )
         {
             getLogger().debug( "User is not authenticated." );
             return REQUIRES_AUTHENTICATION;
