@@ -41,9 +41,13 @@ import org.jsecurity.authz.AuthorizationInfo;
 import org.jsecurity.authz.SimpleAuthorizationInfo;
 import org.jsecurity.realm.AuthorizingRealm;
 import org.jsecurity.subject.PrincipalCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RedbackRealm extends AuthorizingRealm
 {
+    private Logger log = LoggerFactory.getLogger(RedbackRealm.class);
+
     private final UserManager userManager;
 
     private final RBACManager rbacManager;
@@ -81,7 +85,7 @@ public class RedbackRealm extends AuthorizingRealm
         }
         catch (RbacManagerException e)
         {
-            //TODO: add logging
+            log.error("Could not authenticate against data source", e);
         }
         
         return null;
@@ -105,7 +109,7 @@ public class RedbackRealm extends AuthorizingRealm
         }
         catch (UserNotFoundException e)
         {
-            //TODO: log this
+            log.error("Could not find user " + passwordToken.getUsername());
         }
 
         if (user == null)
@@ -115,12 +119,12 @@ public class RedbackRealm extends AuthorizingRealm
 
         if ( user.isLocked() && !user.isPasswordChangeRequired() )
         {
-            throw new AuthenticationException("User " + user.getPrincipal() + " is locked.");
+            throw new PrincipalLockedException("User " + user.getPrincipal() + " is locked.");
         }
 
         if ( user.isPasswordChangeRequired() )
         {
-            throw new AuthenticationException("Password change is required for user " + user.getPrincipal());
+            throw new PrincipalPasswordChangeRequiredException("Password change is required for user " + user.getPrincipal());
         }
 
         return new RedbackAuthenticationInfo(user, getName());
@@ -144,7 +148,7 @@ public class RedbackRealm extends AuthorizingRealm
                     }
                     catch (AccountLockedException e)
                     {
-                        //log that account has been locked
+                        log.info("User " + user.getUsername() + " has been locked", e);
                     }
                     finally
                     {
@@ -154,7 +158,7 @@ public class RedbackRealm extends AuthorizingRealm
                         }
                         catch (UserNotFoundException e)
                         {
-                            //The user no longer exists anyway and authc has failed
+                            log.error("The user to be updated could not be found", e);
                         }
                     }
                 }

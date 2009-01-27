@@ -29,7 +29,7 @@ import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.spring.PlexusInSpringTestCase;
-import org.jsecurity.authc.AuthenticationException;
+import org.jsecurity.authc.IncorrectCredentialsException;
 import org.jsecurity.authc.UsernamePasswordToken;
 import org.jsecurity.mgt.DefaultSecurityManager;
 import org.jsecurity.subject.PrincipalCollection;
@@ -96,7 +96,7 @@ public class RedbackRealmTest
             securityManager.login( new UsernamePasswordToken( "test1", "password1" ) );
             fail( "Should not be able to login" );
         }
-        catch ( AuthenticationException e )
+        catch ( PrincipalLockedException e )
         {
             assertTrue( true );
         }
@@ -112,13 +112,13 @@ public class RedbackRealmTest
             securityManager.login( new UsernamePasswordToken( "test1", "password1" ) );
             fail( "Should not be able to login" );
         }
-        catch ( AuthenticationException e )
+        catch ( PrincipalPasswordChangeRequiredException e )
         {
             assertTrue( true );
         }
     }
 
-    public void testUnsuccessfullAuthAttemptsLockAccount()
+    public void testUnsuccessfullAuthAttemptsLockAccount() throws Exception
     {
         assertFalse( user.isLocked() );
         userSecurityPolicy.setLoginAttemptCount( 2 );
@@ -127,21 +127,20 @@ public class RedbackRealmTest
             securityManager.login( new UsernamePasswordToken( "test1", "incorrectpassowrd" ) );
             fail( "password should be incorrect" );
         }
-        catch ( AuthenticationException e )
+        catch (IncorrectCredentialsException e)
         {
+            assertFalse( user.isLocked() );
         }
-
-        assertFalse( user.isLocked() );
 
         try
         {
             securityManager.login( new UsernamePasswordToken( "test1", "incorrectpassowrd" ) );
             fail( "password should be incorrect" );
         }
-        catch ( AuthenticationException e )
+        catch ( IncorrectCredentialsException e )
         {
+            assertTrue( user.isLocked() );
         }
-        assertTrue( user.isLocked() );
     }
 
     public void testBasic()
