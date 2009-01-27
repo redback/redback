@@ -118,9 +118,8 @@ public class LdapUser
     {
         return newPassword;
     }
-
-    @SuppressWarnings("unchecked")
-    public List getPreviousEncodedPasswords()
+            
+    public List<String> getPreviousEncodedPasswords()
     {
         return previousEncodedPasswords;
     }
@@ -205,8 +204,7 @@ public class LdapUser
         this.permanent = permanent;
     }
 
-    @SuppressWarnings("unchecked")
-    public void setPreviousEncodedPasswords( List encodedPasswordList )
+    public void setPreviousEncodedPasswords( List<String> encodedPasswordList )
     {
         previousEncodedPasswords = new ArrayList<String>( encodedPasswordList );
     }
