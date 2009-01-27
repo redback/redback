@@ -121,6 +121,7 @@ public class ConfigurableUserManager
         return userManagerImpl.findUser( principal );
     }
 
+    @Override
     public User getGuestUser()
         throws UserNotFoundException
     {
