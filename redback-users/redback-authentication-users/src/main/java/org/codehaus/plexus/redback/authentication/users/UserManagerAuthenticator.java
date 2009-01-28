@@ -50,7 +50,7 @@ public class UserManagerAuthenticator
     implements Authenticator
 {
 
-    @Resource(name="userManager#configurable")
+    @Resource(name="userManager#jdo")
     private UserManager userManager;
     
     @Resource
@@ -120,7 +120,7 @@ public class UserManagerAuthenticator
                 getLogger().warn( "Password is Invalid for user " + source.getPrincipal() + "." );
                 authnResultExceptionsMap.put( AuthenticationConstants.AUTHN_NO_SUCH_USER,
                     "Password is Invalid for user " + source.getPrincipal() + "." );
-                
+
                 try
                 {
                     securityPolicy.extensionExcessiveLoginAttempts( user );
@@ -129,7 +129,7 @@ public class UserManagerAuthenticator
                 {
                     userManager.updateUser( user );
                 }
-                
+
                 return new AuthenticationResult( false, source.getPrincipal(), null, authnResultExceptionsMap );
             }
         }
