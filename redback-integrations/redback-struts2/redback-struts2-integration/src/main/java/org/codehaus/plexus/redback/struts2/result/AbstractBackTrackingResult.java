@@ -17,7 +17,12 @@ package org.codehaus.plexus.redback.struts2.result;
  */
 
 import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.config.entities.ResultConfig;
+
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+
 import org.apache.struts2.dispatcher.ServletActionRedirectResult;
 import org.codehaus.plexus.redback.struts2.interceptor.ActionInvocationTracker;
 import org.codehaus.plexus.redback.struts2.interceptor.SavedActionInvocation;
@@ -63,6 +68,23 @@ public class AbstractBackTrackingResult
                 setActionName( savedInvocation.getActionName() );
                 setMethod( savedInvocation.getMethodName() );
                 invocation.getInvocationContext().getParameters().putAll( savedInvocation.getParametersMap() );
+                
+                // hack for REDBACK-188
+                String resultCode = invocation.getResultCode();
+                if( resultCode != null )
+                {
+	            	ResultConfig resultConfig = invocation.getProxy().getConfig().getResults().get( resultCode );
+	            	
+	            	Map filteredMap = new HashMap();
+	            	Set<String> keys = savedInvocation.getParametersMap().keySet();
+	            	for( String key : keys )
+	            	{
+	            		filteredMap.put( key , "" );
+	            	}
+	            	
+	            	resultConfig.getParams().putAll( filteredMap );
+                }
+                
                 tracker.unsetBackTrack();
             }
 
