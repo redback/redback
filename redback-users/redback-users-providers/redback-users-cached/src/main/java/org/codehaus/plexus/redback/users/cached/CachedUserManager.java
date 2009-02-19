@@ -42,9 +42,8 @@ public class CachedUserManager
 {
     
     private Logger log = LoggerFactory.getLogger( getClass() );
-
-    //REDBACK-190 - should use the configurable user manager which will fall back to the #jdo provider if no configurable user manager has been specified
-    @Resource(name="userManager#configurable")
+    
+    @Resource(name="userManager#jdo")
     private UserManager userImpl;
 
     @Resource(name="cache#users")
