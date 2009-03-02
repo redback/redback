@@ -39,7 +39,7 @@ import org.springframework.stereotype.Service;
  * @author Andrew Williams
  * @version $Id$
  */
-@Service("attpAuthenticator#basic")
+@Service("httpAuthenticator#basic")
 public class HttpBasicAuthentication
     extends SessionBasedHttpAuthenticator
 {
