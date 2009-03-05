@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.struts2.ServletActionContext;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.RbacObjectNotFoundException;
@@ -35,11 +36,19 @@ import org.codehaus.plexus.redback.struts2.action.AbstractSecurityAction;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
+import org.codehaus.plexus.redback.users.UserQuery;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.reports.ReportManager;
 import org.codehaus.redback.integration.role.RoleConstants;
+import org.extremecomponents.table.context.Context;
+import org.extremecomponents.table.context.HttpServletRequestContext;
+import org.extremecomponents.table.limit.FilterSet;
+import org.extremecomponents.table.limit.Limit;
+import org.extremecomponents.table.limit.LimitFactory;
+import org.extremecomponents.table.limit.TableLimit;
+import org.extremecomponents.table.limit.TableLimitFactory;
 
 /**
  * UserListAction
@@ -99,7 +108,7 @@ public class UserListAction
 
         if ( StringUtils.isEmpty( roleName ) )
         {
-            users = getUserManager().getUsers();
+            users = findUsersWithFilter();
         }
         else
         {
@@ -150,7 +159,7 @@ public class UserListAction
     private List findUsers( Collection roleNames )
     {
         List usernames = getUsernamesForRoles( roleNames );
-        List users = getUserManager().getUsers();
+        List users = findUsersWithFilter();
         List filteredUsers = new ArrayList();
 
         for ( Iterator i = users.iterator(); i.hasNext(); )
@@ -163,6 +172,26 @@ public class UserListAction
         }
 
         return filteredUsers;
+    }
+    
+    private List findUsersWithFilter()
+    {
+        Context context = new HttpServletRequestContext(ServletActionContext.getRequest());
+        LimitFactory limitFactory = new TableLimitFactory(context);
+        Limit limit = new TableLimit(limitFactory);
+        FilterSet filterSet = limit.getFilterSet();            
+
+        UserQuery query = getUserManager().createUserQuery();
+        if (filterSet.getFilter("username")!=null) {
+            query.setUsername(filterSet.getFilter("username").getValue());
+        }
+        if (filterSet.getFilter("fullName")!=null) {
+            query.setFullName(filterSet.getFilter("fullName").getValue());
+        }
+        if (filterSet.getFilter("email")!=null) {
+            query.setEmail(filterSet.getFilter("email").getValue());
+        }
+        return getUserManager().findUsersByQuery(query);
     }
 
     private List getUsernamesForRoles( Collection roleNames )

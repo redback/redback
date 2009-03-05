@@ -70,6 +70,11 @@ public class LdapUserMapper
      * @plexus.configuration default-value=""
      */
     String userFilter;
+    
+    /**
+     * @plexus.configuration default-value="0"
+     */
+    int maxResultCount = 0;
 
     @Resource(name="userConfiguration")
     private UserConfiguration userConf;
@@ -84,6 +89,7 @@ public class LdapUserMapper
         userBaseDn = userConf.getString( "ldap.config.mapper.attribute.user.base.dn", userBaseDn );
         userObjectClass = userConf.getString( "ldap.config.mapper.attribute.user.object.class", userObjectClass );
         userFilter = userConf.getString( "ldap.config.mapper.attribute.user.filter", userFilter );
+        maxResultCount = userConf.getInt( "ldap.config.max.result.count", maxResultCount );
     }
 
     public Attributes getCreationAttributes( User user, boolean encodePasswordIfChanged )
@@ -129,6 +135,10 @@ public class LdapUserMapper
     public String[] getUserAttributeNames()
     {
         return new String[]{emailAttribute, fullNameAttribute, passwordAttribute, userIdAttribute};
+    }
+    
+    public int getMaxResultCount() {
+        return maxResultCount;
     }
 
     public UserUpdate getUpdate( LdapUser user )
@@ -221,6 +231,10 @@ public class LdapUserMapper
         this.fullNameAttribute = fullNameAttribute;
     }
 
+    public void setMaxResultCount(int maxResultCount) {
+        this.maxResultCount = maxResultCount;
+    }
+
     public String getUserBaseDn()
     {
         if ( userBaseDn == null )
@@ -283,6 +297,10 @@ public class LdapUserMapper
     public LdapUser newTemplateUserInstance()
     {
         return new LdapUser();
+    }
+    
+    public String[] getReturningAttributes() {
+        return new String[] {getUserIdAttribute(), getEmailAttribute(), getFullNameAttribute(), getPasswordAttribute()};
     }
 
 }

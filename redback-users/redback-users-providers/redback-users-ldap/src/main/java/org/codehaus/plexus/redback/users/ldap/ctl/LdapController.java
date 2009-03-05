@@ -17,12 +17,14 @@ package org.codehaus.plexus.redback.users.ldap.ctl;
  */
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.naming.directory.DirContext;
 
 import org.codehaus.plexus.redback.common.ldap.LdapUser;
 import org.codehaus.plexus.redback.common.ldap.MappingException;
 import org.codehaus.plexus.redback.users.User;
+import org.codehaus.plexus.redback.users.ldap.LdapUserQuery;
 
 /**
  * @version $Id$
@@ -50,4 +52,6 @@ public interface LdapController {
 	public abstract LdapUser getUser(Object key, DirContext context)
 			throws LdapControllerException, MappingException;
 
+    public abstract List<User> getUsersByQuery(LdapUserQuery query, DirContext context)
+            throws LdapControllerException, MappingException;
 }

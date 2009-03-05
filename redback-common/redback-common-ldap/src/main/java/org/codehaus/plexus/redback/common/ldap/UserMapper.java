@@ -57,5 +57,7 @@ public interface UserMapper
     LdapUser newUserInstance( String username, String fullName, String email );
 
     LdapUser newTemplateUserInstance();
+    
+    String[] getReturningAttributes();
 
 }

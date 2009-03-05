@@ -690,6 +690,7 @@
               <value>./target</value>
             </property>
           </systemProperties>
+          <argLine>-Xmx256m -Xms256m</argLine>
         </configuration>        
       </plugin>
       <plugin>

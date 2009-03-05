@@ -16,108 +16,45 @@ package org.codehaus.plexus.redback.users.ldap;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.redback.common.ldap.LdapUser;
 import org.codehaus.plexus.redback.common.ldap.UserMapper;
-import org.codehaus.plexus.redback.users.UserQuery;
+import org.codehaus.plexus.redback.users.AbstractUserQuery;
 
 public class LdapUserQuery
-    implements UserQuery
+    extends AbstractUserQuery
 {
-
-    private final UserMapper mapper;
-
-    private LdapUser template;
-
-    private String orderBy;
-
-    private Integer maxResults;
-
-    private Integer firstResult;
-
-    private Boolean ascending;
-
-    public LdapUserQuery( UserMapper mapper )
-    {
-        this.mapper = mapper;
-        template = mapper.newTemplateUserInstance();
-    }
-
-    public long getFirstResult()
-    {
-        return firstResult;
-    }
-
-    public long getMaxResults()
-    {
-        return maxResults;
-    }
-
-    public String getOrderBy()
-    {
-        return orderBy;
-    }
-
-    public boolean isAscending()
-    {
-        return ascending;
-    }
-
-    public void setAscending( boolean ascending )
-    {
-        this.ascending = ascending;
-    }
 
     public void setFirstResult( int firstResult )
     {
-        this.firstResult = firstResult;
+        super.setFirstResult( firstResult );
         throw new UnsupportedOperationException( "Result limiting is not yet supported for LDAP." );
     }
 
     public void setMaxResults( int maxResults )
     {
-        this.maxResults = maxResults;
+        super.setMaxResults( maxResults );
         throw new UnsupportedOperationException( "Result limiting is not yet supported for LDAP." );
     }
 
     public void setOrderBy( String orderBy )
     {
-        this.orderBy = orderBy;
+        super.setOrderBy( orderBy );
         throw new UnsupportedOperationException( "Free-form ordering is not yet supported for LDAP." );
     }
-
-    public String getEmail()
+    
+    public String getLdapFilter( UserMapper mapper )
     {
-        return template.getEmail();
-    }
-
-    public String getFullName()
-    {
-        return template.getFullName();
-    }
-
-    public String getUsername()
-    {
-        return template.getUsername();
-    }
-
-    public void setEmail( String address )
-    {
-        template.setEmail( address );
-    }
-
-    public void setFullName( String name )
-    {
-        template.setFullName( name );
-    }
-
-    public void setUsername( String name )
-    {
-        template.setUsername( name );
-    }
-
-    public String[] getUserAttributeNames()
-    {
-        return mapper.getUserAttributeNames();
+        String filter = "";
+        if (this.getEmail() != null )
+        {
+            filter += "(" + mapper.getEmailAddressAttribute() + "=" + this.getEmail() + ")";
+        }
+        if ( this.getFullName() != null )
+        {
+            filter += "(" + mapper.getUserFullNameAttribute() + "=" + this.getFullName() + ")";
+        }
+        filter += "(" + mapper.getUserIdAttribute() + "=" + ( this.getUsername() != null ? this.getUsername() : "*" ) + ")";
+        
+        return filter;
     }
 
 }

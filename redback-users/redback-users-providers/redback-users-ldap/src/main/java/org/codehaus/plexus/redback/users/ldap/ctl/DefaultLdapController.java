@@ -18,6 +18,8 @@ package org.codehaus.plexus.redback.users.ldap.ctl;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -28,10 +30,12 @@ import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
 import org.codehaus.plexus.redback.common.ldap.LdapUser;
+import org.codehaus.plexus.redback.common.ldap.LdapUserMapper;
 import org.codehaus.plexus.redback.common.ldap.MappingException;
 import org.codehaus.plexus.redback.common.ldap.UserMapper;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
+import org.codehaus.plexus.redback.users.ldap.LdapUserQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -87,42 +91,43 @@ public class DefaultLdapController
     protected NamingEnumeration<SearchResult> searchUsers( Object key, DirContext context )
         throws NamingException
     {
-        return searchUsers( key, context, null );
+        LdapUserQuery query = new LdapUserQuery();
+        query.setUsername( "" + key );
+        return searchUsers( context, null, query );
     }
 
     protected NamingEnumeration<SearchResult> searchUsers( DirContext context )
         throws NamingException
     {
-        return searchUsers( null, context, null );
+        return searchUsers( context, null, null );
     }
 
     protected NamingEnumeration<SearchResult> searchUsers( DirContext context, String[] returnAttributes )
         throws NamingException
     {
-        return searchUsers( null, context, returnAttributes );
+        return searchUsers( context, returnAttributes, null );
     }
 
-    protected NamingEnumeration<SearchResult> searchUsers( Object key, DirContext context, String[] returnAttributes )
+    protected NamingEnumeration<SearchResult> searchUsers( DirContext context, String[] returnAttributes, LdapUserQuery query )
         throws NamingException
     {
-        SearchControls ctls = new SearchControls();
-
-        if ( key != null )
+        if ( query == null )
         {
-            ctls.setCountLimit( 0 );
+            query = new LdapUserQuery();
         }
+        SearchControls ctls = new SearchControls();
 
         ctls.setDerefLinkFlag( true );
         ctls.setSearchScope( SearchControls.SUBTREE_SCOPE );
-        ctls.setReturningAttributes( new String[]{"*"} );
+        ctls.setReturningAttributes( mapper.getReturningAttributes() );
+        ctls.setCountLimit( ( ( LdapUserMapper ) mapper ).getMaxResultCount() );
 
-        String filter = "(&(objectClass=" + mapper.getUserObjectClass() + ")" +
-            ( mapper.getUserFilter() != null ? mapper.getUserFilter() : "" ) + "(" + mapper.getUserIdAttribute() + "=" +
-            ( key != null ? key : "*" ) + "))";
+        String finalFilter = "(&(objectClass=" + mapper.getUserObjectClass() + ")" +
+            ( mapper.getUserFilter() != null ? mapper.getUserFilter() : "" ) + query.getLdapFilter(mapper) + ")";
 
-        log.info( "Searching for users with filter: \'" + filter + "\'" + " from base dn: " + mapper.getUserBaseDn() );
+        log.info( "Searching for users with filter: \'" + finalFilter + "\'" + " from base dn: " + mapper.getUserBaseDn() );
 
-        return context.search( mapper.getUserBaseDn(), filter, ctls );
+        return context.search( mapper.getUserBaseDn(), finalFilter, ctls );
     }
 
     /**
@@ -133,7 +138,7 @@ public class DefaultLdapController
     {
         try
         {
-            NamingEnumeration<SearchResult> results = searchUsers( null, context, null );
+            NamingEnumeration<SearchResult> results = searchUsers( context, null, null );
             Set<User> users = new LinkedHashSet<User>();
 
             while ( results.hasMoreElements() )
@@ -152,6 +157,34 @@ public class DefaultLdapController
             throw new LdapControllerException( message, e );
         }
     }
+    
+   /**
+    * @see org.codehaus.plexus.redback.users.ldap.ctl.LdapControllerI#getUsersByQuery(org.codehaus.plexus.redback.users.ldap.LdapUserQuery, javax.naming.directory.DirContext)
+    */
+   public List<User> getUsersByQuery( LdapUserQuery query, DirContext context )
+       throws LdapControllerException, MappingException
+   {
+       try
+       {
+           NamingEnumeration<SearchResult> results = searchUsers( context, null, query );
+           List<User> users = new LinkedList<User>();
+
+           while ( results.hasMoreElements() )
+           {
+               SearchResult result = results.nextElement();
+
+               users.add( mapper.getUser( result.getAttributes() ) );
+           }
+
+           return users;
+       }
+       catch ( NamingException e )
+       {
+           String message = "Failed to retrieve ldap information for users.";
+
+           throw new LdapControllerException( message, e );
+       }
+   }
 
     /**
 	 * @see org.codehaus.plexus.redback.users.ldap.ctl.LdapControllerI#createUser(org.codehaus.plexus.redback.users.User, javax.naming.directory.DirContext, boolean)
@@ -180,10 +213,12 @@ public class DefaultLdapController
         String username = key.toString();
 
         log.info( "Searching for user: " + username );
+        LdapUserQuery query = new LdapUserQuery();
+        query.setUsername( username );
 
         try
         {
-            NamingEnumeration<SearchResult> result = searchUsers( username, context, null );
+            NamingEnumeration<SearchResult> result = searchUsers( context, null, query );
 
             if ( result.hasMoreElements() )
             {

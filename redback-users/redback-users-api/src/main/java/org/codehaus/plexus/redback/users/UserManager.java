@@ -38,7 +38,7 @@ public interface UserManager
     public boolean isReadOnly();
 
     /**
-     * And Identifier for the UserManager.
+     * An Identifier for the UserManager.
      *
      * @return the user manager identifier.
      */

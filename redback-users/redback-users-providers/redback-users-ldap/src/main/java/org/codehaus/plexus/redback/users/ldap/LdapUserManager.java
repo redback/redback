@@ -111,8 +111,7 @@ public class LdapUserManager
 
     public UserQuery createUserQuery()
     {
-        // TODO Implement queries!
-        return null;
+        return new LdapUserQuery();
     }
 
     public void deleteUser( Object principal )
@@ -245,20 +244,49 @@ public class LdapUserManager
 
     public List<User> findUsersByEmailKey( String emailKey, boolean orderAscending )
     {
-        getLogger().warn( "findUsersByEmailKey not implemented in ldap empty list returned" );
-        return Collections.emptyList();
+        LdapUserQuery query = new LdapUserQuery();
+        query.setEmail( emailKey );
+        query.setOrderBy( UserQuery.ORDER_BY_EMAIL );
+        query.setAscending( orderAscending );
+        return findUsersByQuery( query );
     }
 
     public List<User> findUsersByFullNameKey( String fullNameKey, boolean orderAscending )
     {
-        getLogger().warn( "findUsersByEmailKey not implemented in ldap empty list returned" );
-        return Collections.emptyList();
+        LdapUserQuery query = new LdapUserQuery();
+        query.setFullName( fullNameKey );
+        query.setOrderBy( UserQuery.ORDER_BY_FULLNAME );
+        query.setAscending( orderAscending );
+        return findUsersByQuery( query );
     }
 
     public List<User> findUsersByQuery( UserQuery query )
     {
-        getLogger().warn( "findUsersByEmailKey not implemented in ldap empty list returned" );
-        return Collections.emptyList();
+        if ( query == null )
+        {
+            return Collections.emptyList();
+        }
+
+        LdapConnection ldapConnection = getLdapConnection();
+        try
+        {
+            DirContext context = ldapConnection.getDirContext();
+            return controller.getUsersByQuery( ( LdapUserQuery ) query, context );
+        }
+        catch ( LdapControllerException e )
+        {
+            getLogger().error( "Failed to find user", e );
+            return null;
+        }
+        catch ( MappingException e )
+        {
+            getLogger().error( "Failed to map user", e );
+            return null;
+        }
+        finally
+        {
+            closeLdapConnection( ldapConnection );
+        }
     }
 
     /** 
@@ -266,8 +294,11 @@ public class LdapUserManager
      */
     public List<User> findUsersByUsernameKey( String usernameKey, boolean orderAscending )
     {
-        getLogger().warn( "findUsersByEmailKey not implemented in ldap empty list returned" );
-        return Collections.emptyList();
+        LdapUserQuery query = new LdapUserQuery();
+        query.setUsername( usernameKey );
+        query.setOrderBy( UserQuery.ORDER_BY_USERNAME );
+        query.setAscending( orderAscending );
+        return findUsersByQuery( query );
     }
 
     public String getId()

@@ -86,6 +86,8 @@ public class LdapUserManagerTest
         log.info( "DN Suffix: " + suffix );
 
         apacheDs.startServer();
+        
+        clearManyUsers();
 
         makeUsers();
 
@@ -180,8 +182,10 @@ public class LdapUserManagerTest
         assertNotNull( jesse );
 
         assertEquals( "jesse", jesse.getPrincipal().toString() );
-        assertEquals( "foo", jesse.getEmail() );
+        assertEquals( "jesse@apache.org", jesse.getEmail() );
         assertEquals( "foo", jesse.getFullName() );
+        System.out.println( "=====>"+jesse.getEncodedPassword());
+        System.out.println( "=====>"+passwordEncoder.encodePassword( "foo" ));
         assertTrue( passwordEncoder.isPasswordValid( jesse.getEncodedPassword(), "foo" ) );
 
     }
@@ -200,6 +204,59 @@ public class LdapUserManagerTest
         }
     }
     
+    public void testWithManyUsers()
+        throws Exception
+    {
+        makeManyUsers();
+        
+        assertNotNull( userManager );
+
+        assertTrue( userManager.userExists( "user10" ) );
+
+        List<User> users = userManager.getUsers();
+
+        assertNotNull( users );
+
+        assertEquals( 10002, users.size() );
+
+        User user10 = userManager.findUser( "user10" );
+
+        assertNotNull( user10 );
+    }
+    
+    private void makeManyUsers()
+        throws Exception
+    {
+        InitialDirContext context = apacheDs.getAdminContext();
+        
+        for ( int i = 0 ; i < 10000 ; i++ )
+        {    
+            String cn = "user"+i;
+            bindUserObject( context, cn, createDn( cn ) );
+        }
+    
+    }
+    
+    private void clearManyUsers()
+        throws Exception
+    {
+        InitialDirContext context = apacheDs.getAdminContext();
+        
+        for ( int i = 0 ; i < 10000 ; i++ )
+        {    
+            String cn = "user"+i;
+            try
+            {
+                context.unbind( createDn( cn ) );
+            }
+            catch ( NamingException e )
+            {
+                // OK lets try with next one
+            }
+        }
+    
+    }
+    
     private void bindUserObject( DirContext context, String cn, String dn )
         throws Exception
     {
@@ -212,7 +269,7 @@ public class LdapUserManagerTest
         attributes.put( objectClass );
         attributes.put( "cn", cn );
         attributes.put( "sn", "foo" );
-        attributes.put( "mail", "foo" );
+        attributes.put( "mail", cn+"@apache.org" );
         attributes.put( "userPassword", passwordEncoder.encodePassword( "foo" ) );
         attributes.put( "givenName", "foo" );
         context.createSubcontext( dn, attributes );

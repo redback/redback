@@ -91,14 +91,14 @@ public interface UserQuery
     /**
      * Returns the maximum number of users to return.
      *
-     * @return the maxinum number of users to return.
+     * @return the maximum number of users to return.
      */
     long getMaxResults();
 
     /**
      * Sets the maximum number of users to return.
      *
-     * @param maxResults the maxinum number of users to return.
+     * @param maxResults the maximum number of users to return.
      */
     void setMaxResults( int maxResults );
 
