@@ -17,7 +17,6 @@ package org.codehaus.redback.integration.checks.security;
  */
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -65,22 +64,20 @@ public class LockedAdminEnvironmentCheck
      * 
      * @param violations
      */
-    public void validateEnvironment( List violations )
+    public void validateEnvironment( List<String> violations )
     {
         if ( !checked && !userManager.isReadOnly() )
         {
             List<String> roles = new ArrayList<String>();
             roles.add( RoleConstants.SYSTEM_ADMINISTRATOR_ROLE );
 
-            List systemAdminstrators;
+            List<UserAssignment> systemAdminstrators;
             try
             {
                 systemAdminstrators = rbacManager.getUserAssignmentsForRoles( roles );
                 
-                for ( Iterator i = systemAdminstrators.iterator(); i.hasNext(); )
+                for ( UserAssignment userAssignment : systemAdminstrators )
                 {
-                    UserAssignment userAssignment = (UserAssignment)i.next();
-                    
                     try
                     {
                         User admin = userManager.findUser( userAssignment.getPrincipal() );
@@ -96,13 +93,13 @@ public class LockedAdminEnvironmentCheck
                     catch ( UserNotFoundException ne )
                     {
                         log.warn( "Dangling UserAssignment -> " + userAssignment.getPrincipal() );
-                        violations.add( ne );
+                        violations.add( ne.getMessage() );
                     }
                 }
             }
             catch ( RbacManagerException e )
             {                
-                violations.add( e );
+                violations.add( e.getMessage() );
             }
             
             checked = true;

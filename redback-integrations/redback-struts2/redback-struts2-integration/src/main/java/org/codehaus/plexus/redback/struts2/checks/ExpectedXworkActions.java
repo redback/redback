@@ -31,7 +31,7 @@ import org.codehaus.plexus.redback.system.check.EnvironmentCheck;
 public class ExpectedXworkActions
     implements EnvironmentCheck
 {
-    public void validateEnvironment( List violations )
+    public void validateEnvironment( List<String> violations )
     {
         String classNames[] = new String[]{"org.codehaus.plexus.redback.struts2.action.admin.UserCreateAction",
             "org.codehaus.plexus.redback.struts2.action.admin.UserDeleteAction",
@@ -61,7 +61,7 @@ public class ExpectedXworkActions
         }
     }
 
-    private boolean classExists( List violations, String className )
+    private boolean classExists( List<String> violations, String className )
     {
         try
         {

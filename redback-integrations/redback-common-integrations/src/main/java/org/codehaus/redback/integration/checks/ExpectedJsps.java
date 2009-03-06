@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
 public class ExpectedJsps
     implements EnvironmentCheck
 {
-    public void validateEnvironment( List violations )
+    public void validateEnvironment( List<String> violations )
     {
         String redback = "/WEB-INF/jsp/redback";
         String resources[] = new String[]{"/admin/userCreate.jspf", "/admin/userList.jspf", "/admin/userEdit.jspf",

@@ -50,14 +50,14 @@ public class ExpectedXworkConfiguration
     extends AbstractXworkConfigurationCheck
     implements EnvironmentCheck
 {	
-    public void validateEnvironment( List violations )
+    public void validateEnvironment( List<String> violations )
     {
         // Get the configuration.
         Configuration xworkConfig = ConfigurationManager.getConfiguration();
 
         if ( xworkConfig != null )
         {
-            List internalViolations = new ArrayList();
+            List<String> internalViolations = new ArrayList<String>();
 
             /* PLXREDBACK-67
              * TODO: this currently throws a violation since the standard practice is

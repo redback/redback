@@ -55,7 +55,7 @@ public class GuestUserEnvironmentCheck
     /**
      * @param violations
      */
-    public void validateEnvironment( List violations )
+    public void validateEnvironment( List<String> violations )
     {
         if ( !checked )
         {

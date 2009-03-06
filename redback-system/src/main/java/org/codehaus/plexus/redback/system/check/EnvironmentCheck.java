@@ -33,5 +33,5 @@ public interface EnvironmentCheck
      *
      * @param violations list to populate with environment violations.
      */
-    public void validateEnvironment( List violations );
+    public void validateEnvironment( List<String> violations );
 }
