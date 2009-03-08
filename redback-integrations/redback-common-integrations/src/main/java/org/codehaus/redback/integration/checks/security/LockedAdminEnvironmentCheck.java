@@ -84,7 +84,6 @@ public class LockedAdminEnvironmentCheck
                         
                         if ( admin.isLocked() )
                         {
-                            log.info( "Found locked system administrator: " + admin.getUsername() );
                             log.info(  "Unlocking system administrator: " + admin.getUsername() );
                             admin.setLocked( false );
                             userManager.updateUser( admin );
@@ -93,13 +92,12 @@ public class LockedAdminEnvironmentCheck
                     catch ( UserNotFoundException ne )
                     {
                         log.warn( "Dangling UserAssignment -> " + userAssignment.getPrincipal() );
-                        violations.add( ne.getMessage() );
                     }
                 }
             }
             catch ( RbacManagerException e )
             {                
-                violations.add( e.getMessage() );
+                log.warn( "Exception when checking for locked admin user: " + e.getMessage(), e );
             }
             
             checked = true;
