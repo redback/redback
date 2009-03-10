@@ -17,10 +17,8 @@ package org.codehaus.plexus.redback.authentication;
  */
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -77,15 +75,13 @@ public class DefaultAuthenticationManager
         }
 
         // put AuthenticationResult exceptions in a map
-        Map authnResultExceptionsMap = new HashMap();
-        for ( Iterator i = authenticators.iterator(); i.hasNext(); )
+        Map<String,String> authnResultExceptionsMap = new HashMap<String,String>();
+        for ( Authenticator authenticator : authenticators )
         {
-            Authenticator authenticator = (Authenticator) i.next();
-
             if ( authenticator.supportsDataSource( source ) )
             {
                 AuthenticationResult authResult = authenticator.authenticate( source );
-                Map exceptionsMap = authResult.getExceptionsMap();
+                Map<String,String> exceptionsMap = authResult.getExceptionsMap();
 
                 if ( authResult.isAuthenticated() )
                 {
@@ -94,12 +90,7 @@ public class DefaultAuthenticationManager
 
                 if ( exceptionsMap != null )
                 {
-                    Set entrySet = exceptionsMap.entrySet();
-                    for ( Iterator iter = entrySet.iterator(); iter.hasNext(); )
-                    {
-                        Map.Entry entry = (Map.Entry) iter.next();
-                        authnResultExceptionsMap.put( entry.getKey(), entry.getValue() );
-                    }
+                    authnResultExceptionsMap.putAll( exceptionsMap );
                 }
             }
         }
@@ -117,11 +108,9 @@ public class DefaultAuthenticationManager
     {
         StringBuffer strbuf = new StringBuffer();
 
-        Iterator it = authenticators.iterator();
-        while ( it.hasNext() )
+        for ( Authenticator authenticator : authenticators )
         {
-            Authenticator authn = (Authenticator) it.next();
-            strbuf.append( '(' ).append( authn.getId() ).append( ") " );
+            strbuf.append( '(' ).append( authenticator.getId() ).append( ") " );
         }
 
         return strbuf.toString();

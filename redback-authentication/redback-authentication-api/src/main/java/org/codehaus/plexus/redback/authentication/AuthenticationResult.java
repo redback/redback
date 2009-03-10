@@ -17,7 +17,6 @@ package org.codehaus.plexus.redback.authentication;
  */
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -36,7 +35,7 @@ public class AuthenticationResult
     // TODO: why aren't these just thrown from the authenticate() method?
     private Exception exception;
 
-    private Map exceptionsMap;
+    private Map<String,String> exceptionsMap;
 
     public AuthenticationResult()
     {
@@ -52,13 +51,8 @@ public class AuthenticationResult
         this.exception = exception;
     }
 
-    public AuthenticationResult( boolean authenticated, Object principal, Exception exception, Map exceptionsMap )
+    public AuthenticationResult( boolean authenticated, Object principal, Exception exception, Map<String,String> exceptionsMap )
     {
-        if ( this.exceptionsMap == null )
-        {
-            this.exceptionsMap = new HashMap();
-        }
-
         isAuthenticated = authenticated;
         this.principal = principal;
         this.exception = exception;
@@ -80,7 +74,7 @@ public class AuthenticationResult
         return exception;
     }
 
-    public Map getExceptionsMap()
+    public Map<String,String> getExceptionsMap()
     {
         return exceptionsMap;
     }

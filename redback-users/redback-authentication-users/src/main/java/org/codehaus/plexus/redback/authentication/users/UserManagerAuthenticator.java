@@ -74,7 +74,7 @@ public class UserManagerAuthenticator
         String username = null;
         Exception resultException = null;
         PasswordBasedAuthenticationDataSource source = (PasswordBasedAuthenticationDataSource) ds;
-        Map authnResultExceptionsMap = new HashMap();
+        Map<String,String> authnResultExceptionsMap = new HashMap<String,String>();
         
         try
         {
