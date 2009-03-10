@@ -16,17 +16,16 @@ package org.codehaus.plexus.redback.common.ldap;
  * limitations under the License.
  */
 
+import javax.annotation.Resource;
+import javax.naming.directory.Attributes;
+import javax.naming.directory.BasicAttributes;
+
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-import javax.naming.directory.Attributes;
-import javax.naming.directory.BasicAttributes;
-import java.util.List;
 
 /**
  * @author <a href="jesse@codehaus.org"> jesse
@@ -86,7 +85,9 @@ public class LdapUserMapper
         fullNameAttribute = userConf.getString( "ldap.config.mapper.attribute.fullname", fullNameAttribute );
         passwordAttribute = userConf.getString( "ldap.config.mapper.attribute.password", passwordAttribute );
         userIdAttribute = userConf.getString( "ldap.config.mapper.attribute.user.id", userIdAttribute );
-        userBaseDn = userConf.getString( "ldap.config.mapper.attribute.user.base.dn", userBaseDn );
+        userBaseDn =
+            userConf.getConcatenatedList( "ldap.config.mapper.attribute.user.base.dn",
+                                          userConf.getConcatenatedList( "ldap.config.base.dn", null ) );
         userObjectClass = userConf.getString( "ldap.config.mapper.attribute.user.object.class", userObjectClass );
         userFilter = userConf.getString( "ldap.config.mapper.attribute.user.filter", userFilter );
         maxResultCount = userConf.getInt( "ldap.config.max.result.count", maxResultCount );
@@ -237,20 +238,6 @@ public class LdapUserMapper
 
     public String getUserBaseDn()
     {
-        if ( userBaseDn == null )
-        {
-            userBaseDn = "";
-            List<String> list = userConf.getList( "ldap.config.base.dn" );
-            for ( String item : list )
-            {
-                if ( userBaseDn.length() > 0 )
-                {
-                    userBaseDn = userBaseDn + ",";
-                }
-                userBaseDn = userBaseDn + item;
-            }
-        }
-
         return userBaseDn;
     }
 

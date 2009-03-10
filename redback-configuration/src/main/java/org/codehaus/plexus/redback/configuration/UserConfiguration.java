@@ -172,6 +172,31 @@ public class UserConfiguration
         return lookupRegistry.getList( key );
     }
 
+    public String getConcatenatedList( String key, String defaultValue )
+    {
+        String concatenatedList;
+        List<String> list = getList( key );
+        if ( !list.isEmpty() )
+        {
+            StringBuilder s = new StringBuilder();
+            for ( String value : list )
+            {
+                if ( s.length() > 0 )
+                {
+                    s.append( "," );
+                }
+                s.append( value );
+            }
+            concatenatedList = s.toString();
+        }
+        else
+        {
+            concatenatedList = defaultValue;
+        }
+
+        return concatenatedList;
+    }
+
     public void contextualize( Context context )
         throws ContextException
     {

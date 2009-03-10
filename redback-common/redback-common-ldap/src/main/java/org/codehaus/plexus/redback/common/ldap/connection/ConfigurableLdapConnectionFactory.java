@@ -23,7 +23,6 @@ package org.codehaus.plexus.redback.common.ldap.connection;
  * SOFTWARE.
  */
 
-import java.util.List;
 import java.util.Properties;
 
 import javax.annotation.Resource;
@@ -104,9 +103,9 @@ public class ConfigurableLdapConnectionFactory
             configuration = new LdapConnectionConfiguration();
             configuration.setHostname( userConf.getString( "ldap.config.hostname", hostname ) );
             configuration.setPort( userConf.getInt( "ldap.config.port", port ) );
-            configuration.setBaseDn( getConcatenatedList( "ldap.config.base.dn", baseDn ) );
+            configuration.setBaseDn( userConf.getConcatenatedList( "ldap.config.base.dn", baseDn ) );
             configuration.setContextFactory( userConf.getString( "ldap.config.context.factory", contextFactory ) );
-            configuration.setBindDn( getConcatenatedList( "ldap.config.bind.dn", bindDn ) );
+            configuration.setBindDn( userConf.getConcatenatedList( "ldap.config.bind.dn", bindDn ) );
             configuration.setPassword( userConf.getString( "ldap.config.password", password ) );
             configuration.setAuthenticationMethod( userConf.getString( "ldap.config.authentication.method",
                                                                        authenticationMethod ) );
@@ -172,27 +171,8 @@ public class ConfigurableLdapConnectionFactory
         return "{ConfigurableLdapConnectionFactory: configuration: " + configuration + "}";
     }
 
-    private String getConcatenatedList( String key, String defaultValue )
+    public LdapConnectionConfiguration getConfiguration()
     {
-        String concatenatedList = "";
-        List<String> list = userConf.getList( key );
-        if ( !list.isEmpty() )
-        {
-            for ( String value : list )
-            {
-                if ( ( concatenatedList.length() > 0 ) )
-                {
-                    concatenatedList = concatenatedList + ",";
-                }
-                concatenatedList = concatenatedList + value;
-            }
-        }
-        else
-        {
-            concatenatedList = defaultValue;
-        }
-
-        return concatenatedList;
+        return configuration;
     }
-    
 }

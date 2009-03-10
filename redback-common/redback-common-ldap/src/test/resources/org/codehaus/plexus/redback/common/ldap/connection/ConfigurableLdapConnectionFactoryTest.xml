@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<plexus>
+  <components>
+    <component>
+      <role>org.codehaus.plexus.redback.configuration.UserConfiguration</role>
+      <implementation>org.codehaus.plexus.redback.configuration.UserConfiguration</implementation>
+      <configuration>
+        <configs>
+          <config>src/test/resources/test.properties</config>
+        </configs>
+      </configuration>
+    </component>
+  </components>
+</plexus>

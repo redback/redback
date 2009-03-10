@@ -28,12 +28,6 @@ import org.codehaus.plexus.util.StringUtils;
 public class UserConfigurationTest
     extends PlexusInSpringTestCase
 {
-    protected void setUp()
-        throws Exception
-    {
-        super.setUp();
-    }
-
     private void assertEmpty( String str )
     {
         if ( StringUtils.isNotEmpty( str ) )
@@ -85,5 +79,15 @@ public class UserConfigurationTest
         UserConfiguration config = (UserConfiguration) lookup( UserConfiguration.ROLE );
         assertEquals( 25, config.getInt( "email.smtp.port" ) );
         assertEquals( 8080, config.getInt( "email.smtp.port.bad", 8080 ) );
+    }
+    
+    public void testConcatenatedList()
+    {
+        UserConfiguration config = (UserConfiguration) lookup( UserConfiguration.ROLE );
+
+        assertEquals( "uid=brett,dc=codehaus,dc=org", config.getConcatenatedList( "ldap.bind.dn", null ) );
+        assertEquals( "dc=codehaus,dc=org", config.getConcatenatedList( "ldap.base.dn", null ) );
+        assertEquals( "foo", config.getConcatenatedList( "short.list", null ) );
+        assertEquals( "bar,baz", config.getConcatenatedList( "no.list", "bar,baz" ) );
     }
 }
