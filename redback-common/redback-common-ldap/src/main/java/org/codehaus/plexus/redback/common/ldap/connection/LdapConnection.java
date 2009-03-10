@@ -26,7 +26,6 @@ package org.codehaus.plexus.redback.common.ldap.connection;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.naming.Context;
@@ -124,10 +123,7 @@ public class LdapConnection
     {
         Properties env = new Properties();
 
-        for ( Map.Entry entry : config.getExtraProperties().entrySet() )
-        {
-            env.put( entry.getKey(), entry.getValue() );
-        }
+        env.putAll( config.getExtraProperties() );
 
         config.check();
 
@@ -166,7 +162,7 @@ public class LdapConnection
 
         String objectFactories = null;
 
-        for ( Class objectFactoryClass : config.getObjectFactories() )
+        for ( Class<?> objectFactoryClass : config.getObjectFactories() )
         {
             if ( objectFactories == null )
             {
@@ -189,7 +185,7 @@ public class LdapConnection
 
         String stateFactories = null;
 
-        for ( Class stateFactoryClass : config.getStateFactories() )
+        for ( Class<?> stateFactoryClass : config.getStateFactories() )
         {
             if ( stateFactories == null )
             {

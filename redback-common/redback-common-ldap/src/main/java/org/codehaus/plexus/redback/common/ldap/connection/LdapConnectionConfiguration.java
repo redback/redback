@@ -65,9 +65,9 @@ public class LdapConnectionConfiguration
 
     private String authenticationMethod;
 
-    private List<Class> objectFactories;
+    private List<Class<?>> objectFactories;
 
-    private List<Class> stateFactories;
+    private List<Class<?>> stateFactories;
 
     private Properties extraProperties;
 
@@ -240,32 +240,32 @@ public class LdapConnectionConfiguration
         this.authenticationMethod = authenticationMethod;
     }
 
-    public List<Class> getObjectFactories()
+    public List<Class<?>> getObjectFactories()
     {
         if ( objectFactories == null )
         {
-            objectFactories = new ArrayList<Class>();
+            objectFactories = new ArrayList<Class<?>>();
         }
 
         return objectFactories;
     }
 
-    public void setObjectFactories( List<Class> objectFactories )
+    public void setObjectFactories( List<Class<?>> objectFactories )
     {
         this.objectFactories = objectFactories;
     }
 
-    public List<Class> getStateFactories()
+    public List<Class<?>> getStateFactories()
     {
         if ( stateFactories == null )
         {
-            stateFactories = new ArrayList<Class>();
+            stateFactories = new ArrayList<Class<?>>();
         }
 
         return stateFactories;
     }
 
-    public void setStateFactories( List<Class> stateFactories )
+    public void setStateFactories( List<Class<?>> stateFactories )
     {
         this.stateFactories = stateFactories;
     }
