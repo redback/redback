@@ -34,6 +34,8 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationExce
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.policy.rules.MustHavePasswordRule;
 import org.codehaus.plexus.redback.users.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -59,6 +61,8 @@ public class DefaultUserSecurityPolicy
     public static final String PASSWORD_ENCODER = "security.policy.password.encoder";
 
     public static final String UNLOCKABLE_ACCOUNTS = "security.policy.unlockable.accounts";
+
+    private static final Logger log = LoggerFactory.getLogger( DefaultUserSecurityPolicy.class );
 
     private PasswordRule defaultPasswordRule = new MustHavePasswordRule();
 
@@ -288,6 +292,7 @@ public class DefaultUserSecurityPolicy
 
             if ( now.after( expirationDate ) )
             {
+                log.info( "User '" + user.getUsername() + "' locked due to password expiration date passing: " + expirationDate );
                 user.setLocked( true );
                 user.setPasswordChangeRequired( true );
                 throw new MustChangePasswordException( "Password Expired, You must change your password." );
@@ -306,6 +311,7 @@ public class DefaultUserSecurityPolicy
 
             if ( attempt >= loginAttemptCount )
             {
+                log.info( "User '" + user.getUsername() + "' locked due to excessive login attempts: " + attempt );
                 user.setLocked( true );
                 throw new AccountLockedException( "Account " + user.getUsername() + " is locked.", user );
             }
