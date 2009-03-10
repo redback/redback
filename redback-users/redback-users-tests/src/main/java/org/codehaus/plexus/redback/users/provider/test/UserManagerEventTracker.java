@@ -35,11 +35,11 @@ public class UserManagerEventTracker
 
     public Boolean lastDbFreshness;
 
-    public List addedUsernames = new ArrayList();
+    public List<String> addedUsernames = new ArrayList<String>();
 
-    public List removedUsernames = new ArrayList();
+    public List<String> removedUsernames = new ArrayList<String>();
 
-    public List updatedUsernames = new ArrayList();
+    public List<String> updatedUsernames = new ArrayList<String>();
 
     public void userManagerInit( boolean freshDatabase )
     {
@@ -47,7 +47,7 @@ public class UserManagerEventTracker
         lastDbFreshness = Boolean.valueOf( freshDatabase );
     }
 
-    private void addUniqueUsername( List list, User user )
+    private void addUniqueUsername( List<String> list, User user )
     {
         if ( !list.contains( user.getUsername() ) )
         {

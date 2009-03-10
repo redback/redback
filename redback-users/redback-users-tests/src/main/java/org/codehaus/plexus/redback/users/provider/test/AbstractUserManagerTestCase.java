@@ -431,7 +431,7 @@ public class AbstractUserManagerTestCase
         // Query with default ordering ascending
         query = um.createUserQuery();
         query.setOrderBy( UserQuery.ORDER_BY_EMAIL );
-        List users = um.findUsersByQuery( query );
+        List<User> users = um.findUsersByQuery( query );
         assertEquals( 3, users.size() );
         assertEquals( "admin@somedomain.com", ( (User) users.get( 0 ) ).getEmail() );
 
