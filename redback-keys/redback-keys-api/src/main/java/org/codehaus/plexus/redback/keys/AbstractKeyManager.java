@@ -17,7 +17,6 @@ package org.codehaus.plexus.redback.keys;
  */
 
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.util.Calendar;
 import java.util.Random;
@@ -60,33 +59,28 @@ public abstract class AbstractKeyManager
     {
         byte vfour[] = new byte[KEY_LENGTH];
 
-        if ( randomMode == SECURE )
+        if ( isRandomMode() == SECURE )
         {
             if ( secureRandom == null )
             {
                 try
                 {
-                    secureRandom = SecureRandom.getInstance( "SHA1PRNG", "SUN" );
+                    secureRandom = SecureRandom.getInstance( "SHA1PRNG" );
                 }
                 catch ( NoSuchAlgorithmException e )
                 {
-                    randomMode = !SECURE;
-                    log.warn( "Unable to use SecureRandom", e );
-                }
-                catch ( NoSuchProviderException e )
-                {
-                    randomMode = !SECURE;
+                    setRandomMode( !SECURE );
                     log.warn( "Unable to use SecureRandom", e );
                 }
             }
 
-            if ( randomMode == SECURE )
+            if ( isRandomMode() == SECURE )
             {
                 secureRandom.nextBytes( vfour );
             }
         }
 
-        if ( randomMode != SECURE )
+        if ( isRandomMode() != SECURE )
         {
             if ( random == null )
             {
@@ -138,5 +132,15 @@ public abstract class AbstractKeyManager
     protected Calendar getNowGMT()
     {
         return Calendar.getInstance( TimeZone.getTimeZone( "GMT" ) );
+    }
+
+    public void setRandomMode( boolean randomMode )
+    {
+        this.randomMode = randomMode;
+    }
+
+    public boolean isRandomMode()
+    {
+        return randomMode;
     }
 }
