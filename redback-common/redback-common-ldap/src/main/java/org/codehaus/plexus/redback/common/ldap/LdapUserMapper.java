@@ -87,7 +87,7 @@ public class LdapUserMapper
         userIdAttribute = userConf.getString( "ldap.config.mapper.attribute.user.id", userIdAttribute );
         userBaseDn =
             userConf.getConcatenatedList( "ldap.config.mapper.attribute.user.base.dn",
-                                          userConf.getConcatenatedList( "ldap.config.base.dn", null ) );
+                                          userConf.getConcatenatedList( "ldap.config.base.dn", userBaseDn ) );
         userObjectClass = userConf.getString( "ldap.config.mapper.attribute.user.object.class", userObjectClass );
         userFilter = userConf.getString( "ldap.config.mapper.attribute.user.filter", userFilter );
         maxResultCount = userConf.getInt( "ldap.config.max.result.count", maxResultCount );
