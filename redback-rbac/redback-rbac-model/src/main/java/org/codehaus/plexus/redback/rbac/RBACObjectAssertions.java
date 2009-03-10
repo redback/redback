@@ -18,8 +18,6 @@ package org.codehaus.plexus.redback.rbac;
 
 import org.codehaus.plexus.util.StringUtils;
 
-import java.util.Iterator;
-
 /**
  * RBACObjectAssertions 
  *
@@ -50,10 +48,8 @@ public class RBACObjectAssertions
         if ( role.getPermissions() != null )
         {
             int i = 0;
-            Iterator it = role.getPermissions().iterator();
-            while ( it.hasNext() )
+            for ( Permission perm : role.getPermissions() )
             {
-                Permission perm = (Permission) it.next();
                 assertValid( "Role.permissions[" + i + "]", perm );
                 i++;
             }
@@ -156,11 +152,8 @@ public class RBACObjectAssertions
         }
           */
         int i = 0;
-        Iterator it = assignment.getRoleNames().iterator();
-        while ( it.hasNext() )
+        for ( String name : assignment.getRoleNames() )
         {
-            String name = (String) it.next();
-
             if ( StringUtils.isEmpty( name ) )
             {
                 throw new RbacObjectInvalidException( scope, "UserAssignment.rolename[" + i + "] cannot be empty." );

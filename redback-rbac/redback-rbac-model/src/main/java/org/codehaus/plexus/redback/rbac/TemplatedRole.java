@@ -30,9 +30,6 @@ public class TemplatedRole
     
     private String delimiter;
     
-    private String name;
-    
-    
     public TemplatedRole(Role role, String templateNamePrefix, String delimeter)
     {
         this.role = role;
