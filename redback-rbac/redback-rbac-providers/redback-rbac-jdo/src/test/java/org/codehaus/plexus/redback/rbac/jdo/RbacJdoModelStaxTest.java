@@ -16,17 +16,11 @@ package org.codehaus.plexus.redback.rbac.jdo;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.redback.rbac.Operation;
-import org.codehaus.plexus.redback.rbac.Resource;
-import org.codehaus.plexus.redback.rbac.jdo.io.stax.RbacJdoModelStaxReader;
-import org.codehaus.plexus.redback.rbac.jdo.io.stax.RbacJdoModelStaxWriter;
-
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -34,12 +28,18 @@ import javax.xml.stream.XMLStreamException;
 
 import junit.framework.TestCase;
 
+import org.codehaus.plexus.redback.rbac.Operation;
+import org.codehaus.plexus.redback.rbac.Resource;
+import org.codehaus.plexus.redback.rbac.jdo.io.stax.RbacJdoModelStaxReader;
+import org.codehaus.plexus.redback.rbac.jdo.io.stax.RbacJdoModelStaxWriter;
+
 /**
  * Test the StAX reader and writer generated.
  */
 public class RbacJdoModelStaxTest
     extends TestCase
 {
+    @SuppressWarnings("unchecked")
     public void testStax()
         throws IOException, XMLStreamException
     {
@@ -90,55 +90,50 @@ public class RbacJdoModelStaxTest
 
         RbacDatabase newDatabase = new RbacJdoModelStaxReader().read( new StringReader( w.toString() ) );
 
-        List expectedRoles = database.getRoles();
-        List roles = newDatabase.getRoles();
+        List<JdoRole> expectedRoles = database.getRoles();
+        List<JdoRole> roles = newDatabase.getRoles();
         assertEquals( expectedRoles.size(), roles.size() );
-        for ( Iterator i = roles.iterator(); i.hasNext(); )
+        for ( JdoRole r : roles )
         {
-            role = (JdoRole) i.next();
-
             boolean found = false;
-            for ( Iterator j = expectedRoles.iterator(); j.hasNext(); )
+            for ( JdoRole expectedRole : expectedRoles )
             {
-                JdoRole expectedRole = (JdoRole) j.next();
-                if ( expectedRole.getName().equals( role.getName() ) )
+                if ( expectedRole.getName().equals( r.getName() ) )
                 {
                     found = true;
 
-                    assertRole( expectedRole, role );
+                    assertRole( expectedRole, r );
                 }
             }
             if ( !found )
             {
-                fail( "Couldn't find role: " + role.getName() );
+                fail( "Couldn't find role: " + r.getName() );
             }
         }
 
-        List expectedUserAssignments = database.getUserAssignments();
-        List userAssignments = newDatabase.getUserAssignments();
+        List<JdoUserAssignment> expectedUserAssignments = database.getUserAssignments();
+        List<JdoUserAssignment> userAssignments = newDatabase.getUserAssignments();
         assertEquals( expectedUserAssignments.size(), userAssignments.size() );
-        for ( Iterator i = userAssignments.iterator(); i.hasNext(); )
+        for ( JdoUserAssignment a : userAssignments )
         {
-            assignment = (JdoUserAssignment) i.next();
-
             boolean found = false;
-            for ( Iterator j = expectedUserAssignments.iterator(); j.hasNext(); )
+            for ( JdoUserAssignment expectedAssignment : expectedUserAssignments )
             {
-                JdoUserAssignment expectedAssignment = (JdoUserAssignment) j.next();
-                if ( expectedAssignment.getPrincipal().equals( assignment.getPrincipal() ) )
+                if ( expectedAssignment.getPrincipal().equals( a.getPrincipal() ) )
                 {
                     found = true;
 
-                    assertUserAssignment( expectedAssignment, assignment );
+                    assertUserAssignment( expectedAssignment, a );
                 }
             }
             if ( !found )
             {
-                fail( "Couldn't find assignment: " + assignment.getPrincipal() );
+                fail( "Couldn't find assignment: " + a.getPrincipal() );
             }
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void assertRole( JdoRole expectedRole, JdoRole role )
     {
         assertEquals( expectedRole.getDescription(), role.getDescription() );
@@ -156,17 +151,14 @@ public class RbacJdoModelStaxTest
         assertEquals( expectedAssignment.getRoleNames(), assignment.getRoleNames() );
     }
 
-    private void assertPermissions( List expectedPermissions, List permissions )
+    private void assertPermissions( List<JdoPermission> expectedPermissions, List<JdoPermission> permissions )
     {
         assertEquals( expectedPermissions.size(), permissions.size() );
-        for ( Iterator i = permissions.iterator(); i.hasNext(); )
+        for ( JdoPermission permission : permissions )
         {
-            JdoPermission permission = (JdoPermission) i.next();
-
             boolean found = false;
-            for ( Iterator j = expectedPermissions.iterator(); j.hasNext(); )
+            for ( JdoPermission expectedPermission : expectedPermissions )
             {
-                JdoPermission expectedPermission = (JdoPermission) j.next();
                 if ( expectedPermission.getName().equals( permission.getName() ) )
                 {
                     found = true;

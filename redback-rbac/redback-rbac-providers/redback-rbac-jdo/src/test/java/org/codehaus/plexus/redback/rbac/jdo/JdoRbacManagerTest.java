@@ -16,6 +16,14 @@ package org.codehaus.plexus.redback.rbac.jdo;
  * limitations under the License.
  */
 
+import java.io.File;
+import java.net.URL;
+import java.util.Map;
+import java.util.Properties;
+
+import javax.jdo.PersistenceManager;
+import javax.jdo.PersistenceManagerFactory;
+
 import net.sf.ehcache.CacheManager;
 
 import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
@@ -24,15 +32,6 @@ import org.codehaus.plexus.redback.rbac.AbstractRBACManager;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.tests.AbstractRbacManagerTestCase;
 import org.jpox.SchemaTool;
-
-import java.io.File;
-import java.net.URL;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
-
-import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
 
 /**
  * JdoRbacManagerTest:
@@ -92,10 +91,8 @@ public class JdoRbacManagerTest
         
         Properties properties = jdoFactory.getProperties();
 
-        for ( Iterator it = properties.entrySet().iterator(); it.hasNext(); )
+        for ( Map.Entry<Object,Object> entry : properties.entrySet() )
         {
-            Map.Entry entry = (Map.Entry) it.next();
-
             System.setProperty( (String) entry.getKey(), (String) entry.getValue() );
         }
 

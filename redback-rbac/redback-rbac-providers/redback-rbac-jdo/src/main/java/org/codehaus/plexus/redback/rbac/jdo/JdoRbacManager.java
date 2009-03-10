@@ -16,6 +16,13 @@ package org.codehaus.plexus.redback.rbac.jdo;
  * limitations under the License.
  */
 
+import java.util.Collection;
+import java.util.List;
+
+import javax.jdo.JDOHelper;
+import javax.jdo.PersistenceManager;
+import javax.jdo.Transaction;
+
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.redback.rbac.AbstractRBACManager;
@@ -31,14 +38,6 @@ import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.springframework.stereotype.Service;
-
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.jdo.JDOHelper;
-import javax.jdo.PersistenceManager;
-import javax.jdo.Transaction;
 
 /**
  * JdoRbacManager:
@@ -135,10 +134,11 @@ public class JdoRbacManager
     /**
      * Method getRoles
      */
-    public List getAllRoles()
+    @SuppressWarnings("unchecked")
+    public List<Role> getAllRoles()
         throws RbacManagerException
     {
-        return jdo.getAllObjects( JdoRole.class );
+        return (List<Role>) jdo.getAllObjects( JdoRole.class );
     }
 
     public void removeRole( Role role )
@@ -154,7 +154,7 @@ public class JdoRbacManager
         jdo.removeObject( role );
     }
 
-    public void saveRoles( Collection roles )
+    public void saveRoles( Collection<Role> roles )
         throws RbacObjectInvalidException, RbacManagerException
     {
         if ( roles == null )
@@ -173,11 +173,8 @@ public class JdoRbacManager
         {
             tx.begin();
 
-            Iterator it = roles.iterator();
-            while ( it.hasNext() )
+            for ( Role role : roles )
             {
-                Role role = (Role) it.next();
-
                 if ( ( JDOHelper.getObjectId( role ) != null ) && !JDOHelper.isDetached( role ) )
                 {
                     // This is a fatal error that means we need to fix our code.
@@ -311,10 +308,11 @@ public class JdoRbacManager
         return (Permission) jdo.getObjectById( JdoPermission.class, permissionName, null );
     }
 
-    public List getAllPermissions()
+    @SuppressWarnings("unchecked")
+    public List<Permission> getAllPermissions()
         throws RbacManagerException
     {
-        return jdo.getAllObjects( JdoPermission.class );
+        return (List<Permission>) jdo.getAllObjects( JdoPermission.class );
     }
 
     public void removePermission( Permission permission )
@@ -392,10 +390,11 @@ public class JdoRbacManager
         return (Operation) jdo.getObjectById( JdoOperation.class, operationName, null );
     }
 
-    public List getAllOperations()
+    @SuppressWarnings("unchecked")
+    public List<Operation> getAllOperations()
         throws RbacManagerException
     {
-        return jdo.getAllObjects( JdoOperation.class );
+        return (List<Operation>) jdo.getAllObjects( JdoOperation.class );
     }
 
     public void removeOperation( Operation operation )
@@ -475,10 +474,11 @@ public class JdoRbacManager
         return (Resource) jdo.getObjectById( JdoResource.class, resourceIdentifier, null );
     }
 
-    public List getAllResources()
+    @SuppressWarnings("unchecked")
+    public List<Resource> getAllResources()
         throws RbacManagerException
     {
-        return jdo.getAllObjects( JdoResource.class );
+        return (List<Resource>) jdo.getAllObjects( JdoResource.class );
     }
 
     public void removeResource( Resource resource )
@@ -568,19 +568,21 @@ public class JdoRbacManager
     /**
      * Method getAssignments
      */
-    public List getAllUserAssignments()
+    @SuppressWarnings("unchecked")
+    public List<UserAssignment> getAllUserAssignments()
         throws RbacManagerException
     {
-        return jdo.getAllObjects( JdoUserAssignment.class );
+        return (List<UserAssignment>) jdo.getAllObjects( JdoUserAssignment.class );
     }
 
     /**
      * Method getUserAssignmentsForRoles
      */
-    public List getUserAssignmentsForRoles( Collection roleNames )
+    @SuppressWarnings("unchecked")
+    public List<UserAssignment> getUserAssignmentsForRoles( Collection<String> roleNames )
         throws RbacManagerException
     {
-        return jdo.getUserAssignmentsForRoles( JdoUserAssignment.class, null, roleNames );
+        return (List<UserAssignment>) jdo.getUserAssignmentsForRoles( JdoUserAssignment.class, null, roleNames );
     }
 
     /**

@@ -123,19 +123,20 @@ public class JdoTool
 
     private boolean hasTriggeredInit = false;
 
+    @SuppressWarnings("unchecked")
     public void triggerInit()
     {
         if ( !hasTriggeredInit )
         {
             hasTriggeredInit = true;
 
-            List roles = getAllObjects( JdoRole.class );
+            List<Role> roles = (List<Role>) getAllObjects( JdoRole.class );
 
             listener.rbacInit( roles.isEmpty() );
         }
     }
 
-    public void enableCache( Class clazz )
+    public void enableCache( Class<?> clazz )
     {
         DataStoreCache cache = pmf.getDataStoreCache();
         cache.pinAll( clazz, false ); // Pin all objects of type clazz from now on
@@ -184,17 +185,17 @@ public class JdoTool
         }
     }
 
-    public List getAllObjects( Class clazz )
+    public List<?> getAllObjects( Class<?> clazz )
     {
         return getAllObjects( clazz, null, null );
     }
 
-    public List getAllObjects( Class clazz, String ordering )
+    public List<?> getAllObjects( Class<?> clazz, String ordering )
     {
         return getAllObjects( clazz, ordering, null );
     }
 
-    public List getAllObjects( Class clazz, String ordering, String fetchGroup )
+    public List<?> getAllObjects( Class<?> clazz, String ordering, String fetchGroup )
     {
         PersistenceManager pm = getPersistenceManager();
         Transaction tx = pm.currentTransaction();
@@ -217,9 +218,9 @@ public class JdoTool
                 pm.getFetchPlan().addGroup( fetchGroup );
             }
 
-            List result = (List) query.execute();
+            List<?> result = (List<?>) query.execute();
 
-            result = (List) pm.detachCopyAll( result );
+            result = (List<?>) pm.detachCopyAll( result );
 
             tx.commit();
 
@@ -231,7 +232,7 @@ public class JdoTool
         }
     }
 
-    public List getUserAssignmentsForRoles( Class clazz, String ordering, Collection roleNames )
+    public List<?> getUserAssignmentsForRoles( Class<?> clazz, String ordering, Collection<String> roleNames )
     {
         PersistenceManager pm = getPersistenceManager();
         Transaction tx = pm.currentTransaction();
@@ -253,10 +254,10 @@ public class JdoTool
 
             StringBuffer filter = new StringBuffer();
 
-            Iterator i = roleNames.iterator();
-
             if ( roleNames.size() > 0 )
             {
+                Iterator<String> i = roleNames.iterator();
+
                 filter.append( "this.roleNames.contains(\"" ).append( i.next() ).append( "\")" );
 
                 while ( i.hasNext() )
@@ -267,9 +268,9 @@ public class JdoTool
                 query.setFilter( filter.toString() );
             }
 
-            List result = (List) query.execute();
+            List<?> result = (List<?>) query.execute();
 
-            result = (List) pm.detachCopyAll( result );
+            result = (List<?>) pm.detachCopyAll( result );
 
             tx.commit();
 
@@ -281,7 +282,7 @@ public class JdoTool
         }
     }
 
-    public Object getObjectById( Class clazz, String id, String fetchGroup )
+    public Object getObjectById( Class<?> clazz, String id, String fetchGroup )
         throws RbacObjectNotFoundException, RbacManagerException
     {
         if ( StringUtils.isEmpty( id ) )
@@ -333,7 +334,7 @@ public class JdoTool
         return ( JDOHelper.getObjectId( object ) != null );
     }
 
-    public boolean objectExistsById( Class clazz, String id )
+    public boolean objectExistsById( Class<?> clazz, String id )
         throws RbacManagerException
     {
         try
@@ -352,7 +353,7 @@ public class JdoTool
     {
         if ( o == null )
         {
-            throw new RbacManagerException( "Unable to remove null object '" + o.getClass().getName() + "'" );
+            throw new RbacManagerException( "Unable to remove null object" );
         }
 
         PersistenceManager pm = getPersistenceManager();
@@ -460,7 +461,7 @@ public class JdoTool
         // ignore
     }
 
-    public void removeAll( Class aClass )
+    public void removeAll( Class<?> aClass )
     {
         PersistenceManager pm = getPersistenceManager();
         Transaction tx = pm.currentTransaction();
