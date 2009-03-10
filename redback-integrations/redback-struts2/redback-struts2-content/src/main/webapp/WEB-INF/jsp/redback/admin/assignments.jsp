@@ -87,14 +87,14 @@
                             <c:when test="${column.assigned}">
                                 <td>
                                     <center>
-                                  <input type="checkbox" name="addDSelectedRoles" value="${column.name}" checked="yes"/>
+                                  <input type="checkbox" name="addDSelectedRoles" value="${column.name}" checked="checked"/>
                                         </center>
                                 </td>
                             </c:when>
                             <c:when test="${column.effectivelyAssigned}">
                                 <td>
                                     <center>
-                                  <input type="checkbox" name="addDSelectedRoles" value="${column.name}" disabled="true"/>
+                                  <input type="checkbox" name="addDSelectedRoles" value="${column.name}" disabled="disabled"/>
                                         </center>
                                 </td>
                             </c:when>

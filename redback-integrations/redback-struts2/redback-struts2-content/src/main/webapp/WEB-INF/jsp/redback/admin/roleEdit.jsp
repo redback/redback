@@ -137,7 +137,8 @@
           </select>
         </c:if>
         <c:if test="${empty users}">
-          <select size="20" multiple="multiple" id="users" name="usersList"/>
+          <select size="20" multiple="multiple" id="users" name="usersList">
+          </select>
         </c:if>
       </td>
     </tr>
@@ -147,3 +148,4 @@
 </body>
 </s:i18n>
 </html>
+          

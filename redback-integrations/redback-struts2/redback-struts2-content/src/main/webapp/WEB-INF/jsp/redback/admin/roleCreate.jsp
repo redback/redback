@@ -38,7 +38,7 @@
     <td valign="top"><s:text name="permissions"/></td>
     <td>
     
-      <table cellspacing="0" cellpadding="2" cssClass="permission">
+      <table cellspacing="0" cellpadding="2" class="permission">
         <thead>
         <tr>
           <th><s:text name="name"/></th>

@@ -38,7 +38,7 @@
 </div>
 
 <p>
-  <ww.text name="access.denied.message"/>
+  <s:text name="access.denied.message"/>
 </p>
 
 </body>
