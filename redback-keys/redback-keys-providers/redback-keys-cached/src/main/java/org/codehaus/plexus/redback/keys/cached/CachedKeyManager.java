@@ -115,7 +115,7 @@ public class CachedKeyManager
         }
     }
 
-    public List getAllKeys()
+    public List<AuthenticationKey> getAllKeys()
     {
         log.debug( "NOT CACHED - .getAllKeys()" );
         return this.keyImpl.getAllKeys();

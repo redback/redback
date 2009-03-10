@@ -40,7 +40,7 @@ import java.util.Map;
 public class MemoryKeyManager
     extends AbstractKeyManager
 {
-    private Map keys = new HashMap();
+    private Map<String, AuthenticationKey> keys = new HashMap<String, AuthenticationKey>();
 
     public AuthenticationKey createKey( String principal, String purpose, int expirationMinutes )
         throws KeyManagerException
@@ -71,7 +71,7 @@ public class MemoryKeyManager
             throw new KeyNotFoundException( "Empty key not found." );
         }
 
-        AuthenticationKey authkey = (AuthenticationKey) keys.get( key );
+        AuthenticationKey authkey = keys.get( key );
 
         if ( authkey == null )
         {
@@ -92,16 +92,16 @@ public class MemoryKeyManager
     public void deleteKey( String key )
         throws KeyManagerException
     {
-        AuthenticationKey authkey = (AuthenticationKey) keys.get( key );
+        AuthenticationKey authkey = keys.get( key );
         if ( authkey != null )
         {
             keys.remove( authkey );
         }
     }
 
-    public List getAllKeys()
+    public List<AuthenticationKey> getAllKeys()
     {
-        return new ArrayList( keys.values() );
+        return new ArrayList<AuthenticationKey>( keys.values() );
     }
 
     public AuthenticationKey addKey( AuthenticationKey key )

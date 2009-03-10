@@ -1,7 +1,5 @@
 package org.codehaus.plexus.redback.keys;
 
-import java.util.List;
-
 /*
  * Copyright 2001-2006 The Codehaus.
  *
@@ -17,6 +15,8 @@ import java.util.List;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import java.util.List;
 
 /**
  * KeyManager
@@ -77,7 +77,7 @@ public interface KeyManager
     public void deleteKey( String key )
         throws KeyManagerException;
 
-    List getAllKeys();
+    List<AuthenticationKey> getAllKeys();
 
     AuthenticationKey addKey( AuthenticationKey key );
 

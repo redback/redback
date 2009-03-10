@@ -66,7 +66,7 @@ public class KeyManagerTest
             return null;
         }
 
-        public List getAllKeys()
+        public List<AuthenticationKey> getAllKeys()
         {
             // TODO Auto-generated method stub
             return null;

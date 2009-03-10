@@ -137,7 +137,8 @@ public class JdoKeyManager
         }
     }
 
-    public List getAllKeys()
+    @SuppressWarnings("unchecked")
+    public List<AuthenticationKey> getAllKeys()
     {
         return PlexusJdoUtils.getAllObjectsDetached( getPersistenceManager(), JdoAuthenticationKey.class );
     }
