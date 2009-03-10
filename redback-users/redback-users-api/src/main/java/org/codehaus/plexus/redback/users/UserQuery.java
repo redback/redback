@@ -29,8 +29,8 @@ public interface UserQuery
 
     final static String ORDER_BY_EMAIL = "email";
 
-    final static Set ALLOWED_ORDER_FIELDS =
-        new HashSet( Arrays.asList( new String[]{ORDER_BY_USERNAME, ORDER_BY_FULLNAME, ORDER_BY_EMAIL} ) );
+    final static Set<String> ALLOWED_ORDER_FIELDS =
+        new HashSet<String>( Arrays.asList( ORDER_BY_USERNAME, ORDER_BY_FULLNAME, ORDER_BY_EMAIL ) );
 
     /**
      * Returns the case insensitive substring user name criteria.
