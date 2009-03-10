@@ -68,7 +68,7 @@ public interface RBACManager
     public Role saveRole( Role role )
         throws RbacObjectInvalidException, RbacManagerException;
 
-    public void saveRoles( Collection<String> roles )
+    public void saveRoles( Collection<Role> roles )
         throws RbacObjectInvalidException, RbacManagerException;
 
     /**

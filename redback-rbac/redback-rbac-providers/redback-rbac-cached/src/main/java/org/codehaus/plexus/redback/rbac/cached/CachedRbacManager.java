@@ -17,7 +17,6 @@ package org.codehaus.plexus.redback.rbac.cached;
  */
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -157,35 +156,35 @@ public class CachedRbacManager
         return this.rbacImpl.getAllAssignableRoles();
     }
 
-    public List getAllOperations()
+    public List<Operation> getAllOperations()
         throws RbacManagerException
     {
         log.debug( "NOT CACHED - .getAllOperations()" );
         return this.rbacImpl.getAllOperations();
     }
 
-    public List getAllPermissions()
+    public List<Permission> getAllPermissions()
         throws RbacManagerException
     {
         log.debug( "NOT CACHED - .getAllPermissions()" );
         return this.rbacImpl.getAllPermissions();
     }
 
-    public List getAllResources()
+    public List<Resource> getAllResources()
         throws RbacManagerException
     {
         log.debug( "NOT CACHED - .getAllResources()" );
         return this.rbacImpl.getAllResources();
     }
 
-    public List getAllRoles()
+    public List<Role> getAllRoles()
         throws RbacManagerException
     {
         log.debug( "NOT CACHED - .getAllRoles()" );
         return this.rbacImpl.getAllRoles();
     }
 
-    public List getAllUserAssignments()
+    public List<UserAssignment> getAllUserAssignments()
         throws RbacManagerException
     {
         log.debug( "NOT CACHED - .getAllUserAssignments()" );
@@ -215,69 +214,70 @@ public class CachedRbacManager
         }
     }
 
-    public Set getAssignedPermissions( String principal )
+    public Set<Permission> getAssignedPermissions( String principal )
         throws RbacObjectNotFoundException, RbacManagerException
     {
         log.debug( "NOT CACHED - .getAssignedPermissions(String)" );
         return this.rbacImpl.getAssignedPermissions( principal );
     }
 
-    public Collection getAssignedRoles( String principal )
+    public Collection<Role> getAssignedRoles( String principal )
         throws RbacObjectNotFoundException, RbacManagerException
     {
         log.debug( "NOT CACHED - .getAssignedRoles(String)" );
         return this.rbacImpl.getAssignedRoles( principal );
     }
 
-    public Collection getAssignedRoles( UserAssignment userAssignment )
+    public Collection<Role> getAssignedRoles( UserAssignment userAssignment )
         throws RbacObjectNotFoundException, RbacManagerException
     {
         log.debug( "NOT CACHED - .getAssignedRoles(UserAssignment)" );
         return this.rbacImpl.getAssignedRoles( userAssignment );
     }
 
-    public Map getChildRoles( Role role )
+    public Map<String, Role> getChildRoles( Role role )
         throws RbacManagerException
     {
         log.debug( "NOT CACHED - .getChildRoles(Role)" );
         return this.rbacImpl.getChildRoles( role );
     }
 
-    public Map/*<String, Role>*/ getParentRoles( Role role )
+    public Map<String, Role> getParentRoles( Role role )
         throws RbacManagerException
     {
         log.debug( "NOT CACHED - .getParentRoles(Role)" );
         return this.rbacImpl.getParentRoles( role );
     }
 
-    public Collection getEffectivelyAssignedRoles( String principal )
+    public Collection<Role> getEffectivelyAssignedRoles( String principal )
         throws RbacObjectNotFoundException, RbacManagerException
     {
         log.debug( "NOT CACHED - .getEffectivelyAssignedRoles(String)" );
         return this.rbacImpl.getEffectivelyAssignedRoles( principal );
     }
 
-    public Collection getEffectivelyUnassignedRoles( String principal )
+    public Collection<Role> getEffectivelyUnassignedRoles( String principal )
         throws RbacManagerException, RbacObjectNotFoundException
     {
         log.debug( "NOT CACHED - .getEffectivelyUnassignedRoles(String)" );
         return this.rbacImpl.getEffectivelyUnassignedRoles( principal );
     }
 
-    public Set getEffectiveRoles( Role role )
+    @SuppressWarnings("unchecked")
+    public Set<Role> getEffectiveRoles( Role role )
         throws RbacObjectNotFoundException, RbacManagerException
     {
-        Object el = effectiveRoleSetCache.get( role.getName() );
+        Set<Role> el = (Set<Role>) effectiveRoleSetCache.get( role.getName() );
 
         if ( el != null )
         {
             log.debug( "using cached effective role set" );
-            return (Set) el;
+            return el;
         }
         else
         {
             log.debug( "building effective role set" );
-            Set effectiveRoleSet = this.rbacImpl.getEffectiveRoles( role );
+            Set<Role> effectiveRoleSet = this.rbacImpl.getEffectiveRoles( role );
             effectiveRoleSetCache.put( role.getName(), effectiveRoleSet ) ;
             return effectiveRoleSet;
         }
@@ -355,14 +355,14 @@ public class CachedRbacManager
         }
     }
 
-    public Map getRoles( Collection roleNames )
+    public Map<String, Role> getRoles( Collection<String> roleNames )
         throws RbacObjectNotFoundException, RbacManagerException
     {
         log.debug( "NOT CACHED - .getRoles(Collection)" );
         return this.rbacImpl.getRoles( roleNames );
     }
 
-    public Collection getUnassignedRoles( String principal )
+    public Collection<Role> getUnassignedRoles( String principal )
         throws RbacManagerException, RbacObjectNotFoundException
     {
         log.debug( "NOT CACHED - .getUnassignedRoles(String)" );
@@ -385,7 +385,7 @@ public class CachedRbacManager
         }
     }
 
-    public List getUserAssignmentsForRoles( Collection roleNames )
+    public List<UserAssignment> getUserAssignmentsForRoles( Collection<String> roleNames )
         throws RbacManagerException
     {
         log.debug( "NOT CACHED - .getUserAssignmentsForRoles(Collection)" );
@@ -679,14 +679,12 @@ public class CachedRbacManager
         return this.rbacImpl.saveRole( role );
     }
 
-    public void saveRoles( Collection roles )
+    public void saveRoles( Collection<Role> roles )
         throws RbacObjectInvalidException, RbacManagerException
     {
 
-        Iterator it = roles.iterator();
-        while ( it.hasNext() )
+        for ( Role role : roles )
         {
-            Role role = (Role) it.next();
             invalidateCachedRole( role );
         }
 
