@@ -17,8 +17,6 @@ package org.codehaus.plexus.redback.configuration;
  */
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.codehaus.plexus.PlexusConstants;
@@ -60,7 +58,7 @@ public class UserConfiguration
      * @plexus.configuration
      * @deprecated Please configure the Plexus registry instead
      */
-    private List configs;
+    private List<String> configs;
 
     private Registry lookupRegistry;
 
@@ -116,34 +114,30 @@ public class UserConfiguration
         ExpressionEvaluator evaluator = new DefaultExpressionEvaluator();
         evaluator.addExpressionSource( new SystemPropertyExpressionSource() );
 
-        if ( configs == null )
+        if ( configs != null )
         {
-            configs = new ArrayList();
-        }
-
-        if ( !configs.isEmpty() )
-        {
-            // TODO: plexus should be able to do this on it's own.
-            log.warn(
-                "DEPRECATED: the <configs> elements is deprecated. Please configure the Plexus registry instead" );
-        }
-
-        Iterator it = configs.iterator();
-        while ( it.hasNext() )
-        {
-            String configName = (String) it.next();
-            try
+            if ( !configs.isEmpty() )
             {
-                configName = evaluator.expand( configName );
+                // TODO: plexus should be able to do this on it's own.
+                log.warn(
+                    "DEPRECATED: the <configs> elements is deprecated. Please configure the Plexus registry instead" );
             }
-            catch ( EvaluatorException e )
+    
+            for ( String configName : configs )
             {
-                log.warn( "Unable to resolve configuration name: " + e.getMessage(), e );
+                try
+                {
+                    configName = evaluator.expand( configName );
+                }
+                catch ( EvaluatorException e )
+                {
+                    log.warn( "Unable to resolve configuration name: " + e.getMessage(), e );
+                }
+                log.info(
+                    "Attempting to find configuration [" + configName + "] (resolved to [" + configName + "])" );
+    
+                registry.addConfigurationFromFile( new File( configName ), PREFIX );
             }
-            log.info(
-                "Attempting to find configuration [" + configName + "] (resolved to [" + configName + "])" );
-
-            registry.addConfigurationFromFile( new File( configName ), PREFIX );
         }
     }
 
@@ -172,7 +166,8 @@ public class UserConfiguration
         return lookupRegistry.getString( key, defaultValue );
     }
     
-    public List getList( String key )
+    @SuppressWarnings("unchecked")
+    public List<String> getList( String key )
     {
         return lookupRegistry.getList( key );
     }
