@@ -8,7 +8,7 @@ import java.util.Comparator;
  * UserSorter
  */
 public class UserSorter
-    implements Comparator
+    implements Comparator<User>
 {
     private boolean ascending;
 
@@ -22,18 +22,8 @@ public class UserSorter
         this.ascending = ascending;
     }
 
-    public int compare( Object o1, Object o2 )
+    public int compare( User o1, User o2 )
     {
-        if ( !( o1 instanceof User ) )
-        {
-            return 0;
-        }
-
-        if ( !( o2 instanceof User ) )
-        {
-            return 0;
-        }
-
         if ( ( o1 == null ) && ( o2 == null ) )
         {
             return 0;
@@ -54,13 +44,13 @@ public class UserSorter
 
         if ( isAscending() )
         {
-            u1 = (User) o1;
-            u2 = (User) o2;
+            u1 = o1;
+            u2 = o2;
         }
         else
         {
-            u1 = (User) o2;
-            u2 = (User) o1;
+            u1 = o2;
+            u2 = o1;
         }
 
         return u1.getUsername().compareTo( u2.getUsername() );

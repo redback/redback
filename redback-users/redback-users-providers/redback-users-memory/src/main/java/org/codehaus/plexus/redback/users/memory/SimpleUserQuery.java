@@ -60,17 +60,13 @@ public class SimpleUserQuery
      * on this UserQuery's {@link #setOrderBy(String)} and {@link #setAscending(boolean)}. 
      * @return
      */
-    public Comparator getComparator()
+    public Comparator<User> getComparator()
     {
-        return new Comparator()
+        return new Comparator<User>()
         {
-
-            public int compare( Object object, Object object1 )
+            public int compare( User user1, User user2 )
             {
-                User user = (User) object;
-                User user1 = (User) object1;
-
-                return ( isAscending() ? 1 : -1 ) * compareUsers( user, user1 );
+                return ( isAscending() ? 1 : -1 ) * compareUsers( user1, user2 );
             }
         };
     }

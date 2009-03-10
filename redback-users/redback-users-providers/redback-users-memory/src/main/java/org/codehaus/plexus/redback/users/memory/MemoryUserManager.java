@@ -83,14 +83,13 @@ public class MemoryUserManager
         return new SimpleUserQuery();
     }
 
-
-    public List findUsersByQuery( UserQuery query )
+    public List<User> findUsersByQuery( UserQuery query )
     {
         SimpleUserQuery uq = (SimpleUserQuery) query;
 
-        List list = new ArrayList();
+        List<User> list = new ArrayList<User>();
 
-        for ( Iterator i = users.values().iterator(); i.hasNext(); )
+        for ( Iterator<User> i = users.values().iterator(); i.hasNext(); )
         {
             SimpleUser user = (SimpleUser) i.next();
             boolean matches = uq.matches( user );
@@ -102,7 +101,7 @@ public class MemoryUserManager
 
         Collections.sort( list, uq.getComparator() );
 
-        List cutList = new ArrayList();
+        List<User> cutList = new ArrayList<User>();
 
         for ( long i = query.getFirstResult();
               i < list.size() && ( query.getMaxResults() == -1 || i < query.getFirstResult() + uq.getMaxResults() );
@@ -113,7 +112,7 @@ public class MemoryUserManager
         return cutList;
     }
 
-    private Map users = new HashMap();
+    private Map<Object, User> users = new HashMap<Object, User>();
 
     public User addUser( User user )
     {
@@ -155,7 +154,7 @@ public class MemoryUserManager
         throws UserNotFoundException
     {
         triggerInit();
-        User user = (User) users.get( principal );
+        User user = users.get( principal );
 
         if ( user == null )
         {
@@ -225,10 +224,10 @@ public class MemoryUserManager
         triggerInit();
         User user = null;
 
-        Iterator it = users.values().iterator();
+        Iterator<User> it = users.values().iterator();
         while ( it.hasNext() )
         {
-            User u = (User) it.next();
+            User u = it.next();
             if ( u.getUsername().equals( username ) )
             {
                 user = u;
@@ -243,16 +242,16 @@ public class MemoryUserManager
         return user;
     }
 
-    public List findUsersByUsernameKey( String usernameKey, boolean orderAscending )
+    public List<User> findUsersByUsernameKey( String usernameKey, boolean orderAscending )
     {
         triggerInit();
 
-        List userList = new ArrayList();
+        List<User> userList = new ArrayList<User>();
 
-        Iterator it = users.values().iterator();
+        Iterator<User> it = users.values().iterator();
         while ( it.hasNext() )
         {
-            User u = (User) it.next();
+            User u = it.next();
             if ( u.getUsername().indexOf( usernameKey ) > -1 )
             {
                 userList.add( u );
@@ -264,16 +263,16 @@ public class MemoryUserManager
         return userList;
     }
 
-    public List findUsersByFullNameKey( String fullNameKey, boolean orderAscending )
+    public List<User> findUsersByFullNameKey( String fullNameKey, boolean orderAscending )
     {
         triggerInit();
 
-        List userList = new ArrayList();
+        List<User> userList = new ArrayList<User>();
 
-        Iterator it = users.values().iterator();
+        Iterator<User> it = users.values().iterator();
         while ( it.hasNext() )
         {
-            User u = (User) it.next();
+            User u = it.next();
             if ( u.getFullName().indexOf( fullNameKey ) > -1 )
             {
                 userList.add( u );
@@ -285,16 +284,16 @@ public class MemoryUserManager
         return userList;
     }
 
-    public List findUsersByEmailKey( String emailKey, boolean orderAscending )
+    public List<User> findUsersByEmailKey( String emailKey, boolean orderAscending )
     {
         triggerInit();
 
-        List userList = new ArrayList();
+        List<User> userList = new ArrayList<User>();
 
-        Iterator it = users.values().iterator();
+        Iterator<User> it = users.values().iterator();
         while ( it.hasNext() )
         {
-            User u = (User) it.next();
+            User u = it.next();
             if ( u.getEmail().indexOf( emailKey ) > -1 )
             {
                 userList.add( u );
@@ -306,13 +305,13 @@ public class MemoryUserManager
         return userList;
     }
 
-    public List getUsers()
+    public List<User> getUsers()
     {
         triggerInit();
-        return new ArrayList( users.values() );
+        return new ArrayList<User>( users.values() );
     }
 
-    public List getUsers( boolean ascendingUsername )
+    public List<User> getUsers( boolean ascendingUsername )
     {
         return getUsers();
     }

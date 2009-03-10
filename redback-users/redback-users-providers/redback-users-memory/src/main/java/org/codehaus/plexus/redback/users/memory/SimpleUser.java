@@ -52,7 +52,7 @@ public class SimpleUser
     
     private boolean validated = false;
 
-    private List previousEncodedPasswords;
+    private List<String> previousEncodedPasswords;
 
     private Date accountCreationDate;
     
@@ -107,11 +107,11 @@ public class SimpleUser
         return password;
     }
 
-    public List getPreviousEncodedPasswords()
+    public List<String> getPreviousEncodedPasswords()
     {
         if(previousEncodedPasswords == null)
         {
-            previousEncodedPasswords = new ArrayList();
+            previousEncodedPasswords = new ArrayList<String>();
         }
         return previousEncodedPasswords;
     }
@@ -176,7 +176,7 @@ public class SimpleUser
         this.password = password;
     }
 
-    public void setPreviousEncodedPasswords( List previousEncodedPasswords )
+    public void setPreviousEncodedPasswords( List<String> previousEncodedPasswords )
     {
         this.previousEncodedPasswords = previousEncodedPasswords;
     }
