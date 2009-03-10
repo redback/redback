@@ -190,7 +190,7 @@ public abstract class AbstractUserCredentialsAction
         }
         else
         {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
         // we should have a list of resourceGrants now, this will provide us with the information necessary to restrict
@@ -222,7 +222,7 @@ public abstract class AbstractUserCredentialsAction
 
         if ( roles == null )
         {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
         return filterRolesForCurrentUserAccess( roles );

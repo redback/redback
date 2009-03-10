@@ -27,38 +27,25 @@ import org.codehaus.plexus.redback.rbac.Role;
  * @version $Id$
  */
 public class RoleSorter
-    implements Comparator
+    implements Comparator<Role>
 {
-    public int compare( Object o1, Object o2 )
+    public int compare( Role role1, Role role2 )
     {
-        if ( !( o1 instanceof Role ) )
+        if ( ( role1 == null ) && ( role2 == null ) )
         {
             return 0;
         }
 
-        if ( !( o2 instanceof Role ) )
-        {
-            return 0;
-        }
-
-        if ( ( o1 == null ) && ( o2 == null ) )
-        {
-            return 0;
-        }
-
-        if ( ( o1 == null ) && ( o2 != null ) )
+        if ( ( role1 == null ) && ( role2 != null ) )
         {
             return -1;
         }
 
-        if ( ( o1 != null ) && ( o2 == null ) )
+        if ( ( role1 != null ) && ( role2 == null ) )
         {
             return 1;
         }
 
-        Role r1 = (Role) o1;
-        Role r2 = (Role) o2;
-        
-        return r1.getName().compareToIgnoreCase( r2.getName() );
+        return role1.getName().compareToIgnoreCase( role2.getName() );
     }
 }
