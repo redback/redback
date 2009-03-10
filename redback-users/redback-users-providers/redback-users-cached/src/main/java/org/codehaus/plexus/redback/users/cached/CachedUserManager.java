@@ -173,25 +173,25 @@ public class CachedUserManager
     }
 
 
-    public List findUsersByQuery( UserQuery query )
+    public List<User> findUsersByQuery( UserQuery query )
     {
         log.debug( "NOT CACHED - .findUsersByQuery(UserQuery)" );
         return this.userImpl.findUsersByQuery( query );
     }
 
-    public List findUsersByEmailKey( String emailKey, boolean orderAscending )
+    public List<User> findUsersByEmailKey( String emailKey, boolean orderAscending )
     {
         log.debug( "NOT CACHED - .findUsersByEmailKey(String, boolean)" );
         return this.userImpl.findUsersByEmailKey( emailKey, orderAscending );
     }
 
-    public List findUsersByFullNameKey( String fullNameKey, boolean orderAscending )
+    public List<User> findUsersByFullNameKey( String fullNameKey, boolean orderAscending )
     {
         log.debug( "NOT CACHED - .findUsersByFullNameKey(String, boolean)" );
         return this.userImpl.findUsersByFullNameKey( fullNameKey, orderAscending );
     }
 
-    public List findUsersByUsernameKey( String usernameKey, boolean orderAscending )
+    public List<User> findUsersByUsernameKey( String usernameKey, boolean orderAscending )
     {
         log.debug( "NOT CACHED - .findUsersByUsernameKey(String, boolean)" );
         return this.userImpl.findUsersByUsernameKey( usernameKey, orderAscending );
@@ -202,13 +202,13 @@ public class CachedUserManager
         return "Cached User Manager [" + this.userImpl.getId() + "]";
     }
 
-    public List getUsers()
+    public List<User> getUsers()
     {
         log.debug( "NOT CACHED - .getUsers()" );
         return this.userImpl.getUsers();
     }
 
-    public List getUsers( boolean orderAscending )
+    public List<User> getUsers( boolean orderAscending )
     {
         log.debug( "NOT CACHED - .getUsers(boolean)" );
         return this.userImpl.getUsers( orderAscending );

@@ -128,22 +128,22 @@ public class ConfigurableUserManager
         return userManagerImpl.getGuestUser();
     }
 
-    public List findUsersByEmailKey( String emailKey, boolean orderAscending )
+    public List<User> findUsersByEmailKey( String emailKey, boolean orderAscending )
     {
         return userManagerImpl.findUsersByEmailKey( emailKey, orderAscending );
     }
 
-    public List findUsersByFullNameKey( String fullNameKey, boolean orderAscending )
+    public List<User> findUsersByFullNameKey( String fullNameKey, boolean orderAscending )
     {
         return userManagerImpl.findUsersByFullNameKey( fullNameKey, orderAscending );
     }
 
-    public List findUsersByQuery( UserQuery query )
+    public List<User> findUsersByQuery( UserQuery query )
     {
         return userManagerImpl.findUsersByQuery( query );
     }
 
-    public List findUsersByUsernameKey( String usernameKey, boolean orderAscending )
+    public List<User> findUsersByUsernameKey( String usernameKey, boolean orderAscending )
     {
         return userManagerImpl.findUsersByUsernameKey( usernameKey, orderAscending );
     }
@@ -153,12 +153,12 @@ public class ConfigurableUserManager
         return ConfigurableUserManager.class.getName() + " wrapping " + userManagerImpl.getId();
     }
 
-    public List getUsers()
+    public List<User> getUsers()
     {
         return userManagerImpl.getUsers();
     }
 
-    public List getUsers( boolean orderAscending )
+    public List<User> getUsers( boolean orderAscending )
     {
         return userManagerImpl.getUsers( orderAscending );
     }
