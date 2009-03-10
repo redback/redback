@@ -48,7 +48,7 @@ public class RolesAction
     {
         try
         {
-            allRoles = getFilterdRolesForCurrentUserAccess();
+            allRoles = getFilteredRolesForCurrentUserAccess();
         }
         catch ( RbacManagerException e )
         {

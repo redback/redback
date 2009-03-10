@@ -192,7 +192,7 @@ public class EditRoleAction
     private boolean isAuthorized()
         throws RbacManagerException
     {
-        List<Role> assignableRoles = getFilterdRolesForCurrentUserAccess();
+        List<Role> assignableRoles = getFilteredRolesForCurrentUserAccess();
         boolean updatableRole = false;
         for ( Role r : assignableRoles )
         {

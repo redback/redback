@@ -183,7 +183,7 @@ public class AssignmentsAction
             getManager().saveUserAssignment( assignment );
         }
 
-        List<Role> assignableRoles = getFilterdRolesForCurrentUserAccess();
+        List<Role> assignableRoles = getFilteredRolesForCurrentUserAccess();
         for ( Iterator i = rmanager.getModel().getApplications().iterator(); i.hasNext(); )
         {
             ModelApplication application = (ModelApplication) i.next();
@@ -210,7 +210,7 @@ public class AssignmentsAction
         try
         {
             Collection<Role> assignedRoles = (Collection<Role>) getManager().getAssignedRoles( principal );
-            List<Role> assignableRoles = getFilterdRolesForCurrentUserAccess();
+            List<Role> assignableRoles = getFilteredRolesForCurrentUserAccess();
 
             Set<Role> availableRoles = new HashSet<Role>( assignedRoles );
             availableRoles.addAll( assignableRoles );

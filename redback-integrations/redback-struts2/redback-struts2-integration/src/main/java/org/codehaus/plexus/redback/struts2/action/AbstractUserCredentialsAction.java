@@ -215,7 +215,7 @@ public abstract class AbstractUserCredentialsAction
         return getSecuritySession().getUser().getPrincipal().toString();
     }
 
-    protected List<Role> getFilterdRolesForCurrentUserAccess()
+    protected List<Role> getFilteredRolesForCurrentUserAccess()
         throws RbacManagerException
     {
         List<Role> roles = manager.getAllRoles();
