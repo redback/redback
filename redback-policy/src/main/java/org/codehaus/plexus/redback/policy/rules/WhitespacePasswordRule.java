@@ -40,14 +40,17 @@ public class WhitespacePasswordRule
 
     public void testPassword( PasswordRuleViolations violations, User user )
     {
-        char[] password = user.getPassword().toCharArray();
-
-        for ( int i = 0; i < password.length; i++ )
+        if ( user.getPassword() != null )
         {
-            if ( Character.isWhitespace( password[i] ) )
+            char[] password = user.getPassword().toCharArray();
+    
+            for ( int i = 0; i < password.length; i++ )
             {
-                violations.addViolation( NO_WHITE_SPACE_VIOLATION );
-                return;
+                if ( Character.isWhitespace( password[i] ) )
+                {
+                    violations.addViolation( NO_WHITE_SPACE_VIOLATION );
+                    return;
+                }
             }
         }
     }
