@@ -432,7 +432,7 @@ public abstract class AbstractRbacManagerTestCase
 
         assertEquals( 1, manager.getAllUserAssignments().size() );
 
-        Set assignedPermissions = manager.getAssignedPermissions( adminPrincipal );
+        Set<Permission> assignedPermissions = manager.getAssignedPermissions( adminPrincipal );
 
         assertNotNull( assignedPermissions );
         assertEquals( 1, assignedPermissions.size() );
@@ -533,7 +533,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 2, bob.getRoleNames().size() );
         assertEquals( 0, manager.getUnassignedRoles( bob.getPrincipal() ).size() );
 
-        List roles = bob.getRoleNames();
+        List<String> roles = bob.getRoleNames();
         assertEquals( 2, roles.size() );
 
         // Remove 1 role from bob, end up with 1 role for bob.
@@ -672,7 +672,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 3, manager.getAllRoles().size() );
 
         // Get the List of Assigned Roles for user bob.
-        Collection assignedRoles = manager.getAssignedRoles( username );
+        Collection<Role> assignedRoles = manager.getAssignedRoles( username );
 
         assertNotNull( assignedRoles );
         assertEquals( 1, assignedRoles.size() );
@@ -703,7 +703,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 3, manager.getAllPermissions().size() );
 
         // Get the List of Assigned Roles for user bob.
-        Collection assignedPermissions = manager.getAssignedPermissions( username );
+        Collection<Permission> assignedPermissions = manager.getAssignedPermissions( username );
 
         assertNotNull( assignedPermissions );
         assertEquals( 1, assignedPermissions.size() );
@@ -713,7 +713,7 @@ public abstract class AbstractRbacManagerTestCase
         throws RbacManagerException
     {
         assertTrue( role.hasChildRoles() );
-        List childNames = role.getChildRoleNames();
+        List<String> childNames = role.getChildRoleNames();
         assertNotNull( childNames );
         assertEquals( 1, childNames.size() );
         String childName = (String) childNames.get( 0 );
@@ -772,7 +772,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 6, rbacManager.getAllPermissions().size() );
 
         // Get the List of Assigned Roles for user bob.
-        Collection assignedPermissions = rbacManager.getAssignedPermissions( username );
+        Collection<Permission> assignedPermissions = rbacManager.getAssignedPermissions( username );
 
         assertNotNull( assignedPermissions );
         assertEquals( 6, assignedPermissions.size() );

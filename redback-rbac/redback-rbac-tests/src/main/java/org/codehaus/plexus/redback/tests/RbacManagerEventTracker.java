@@ -37,13 +37,13 @@ public class RbacManagerEventTracker
 
     public Boolean lastDbFreshness;
 
-    public List addedRoleNames = new ArrayList();
+    public List<String> addedRoleNames = new ArrayList<String>();
 
-    public List removedRoleNames = new ArrayList();
+    public List<String> removedRoleNames = new ArrayList<String>();
 
-    public List addedPermissionNames = new ArrayList();
+    public List<String> addedPermissionNames = new ArrayList<String>();
 
-    public List removedPermissionNames = new ArrayList();
+    public List<String> removedPermissionNames = new ArrayList<String>();
 
     public void rbacInit( boolean freshdb )
     {
@@ -55,25 +55,41 @@ public class RbacManagerEventTracker
     public void rbacPermissionRemoved( Permission permission )
     {
         log( "Permission Removed: " + permission.getName() );
-        addUnique( removedPermissionNames, permission.getName() );
+        String obj = permission.getName();
+        if ( !removedPermissionNames.contains( obj ) )
+        {
+            removedPermissionNames.add( obj );
+        }
     }
 
     public void rbacPermissionSaved( Permission permission )
     {
         log( "Permission Saved: " + permission.getName() );
-        addUnique( addedPermissionNames, permission.getName() );
+        String obj = permission.getName();
+        if ( !addedPermissionNames.contains( obj ) )
+        {
+            addedPermissionNames.add( obj );
+        }
     }
 
     public void rbacRoleRemoved( Role role )
     {
         log( "Role Removed: " + role.getName() );
-        addUnique( removedRoleNames, role.getName() );
+        String obj = role.getName();
+        if ( !removedRoleNames.contains( obj ) )
+        {
+            removedRoleNames.add( obj );
+        }
     }
 
     public void rbacRoleSaved( Role role )
     {
         log( "Role Saved: " + role.getName() );
-        addUnique( addedRoleNames, role.getName() );
+        String obj = role.getName();
+        if ( !addedRoleNames.contains( obj ) )
+        {
+            addedRoleNames.add( obj );
+        }
     }
 
     public void rbacUserAssignmentRemoved( UserAssignment userAssignment )
@@ -84,14 +100,6 @@ public class RbacManagerEventTracker
     public void rbacUserAssignmentSaved( UserAssignment userAssignment )
     {
 
-    }
-
-    private void addUnique( List list, Object obj )
-    {
-        if ( !list.contains( obj ) )
-        {
-            list.add( obj );
-        }
     }
 
     private void log( String msg )
