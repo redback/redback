@@ -62,7 +62,7 @@ public class JdoUserQuery
      */
     public String getFilter()
     {
-        Set terms = new HashSet();
+        Set<String> terms = new HashSet<String>();
 
         if ( getUsername() != null )
         {
@@ -87,7 +87,7 @@ public class JdoUserQuery
      */
     public String[] getSearchKeys()
     {
-        List keys = new ArrayList();
+        List<String> keys = new ArrayList<String>();
 
         if ( getUsername() != null )
         {
@@ -113,7 +113,7 @@ public class JdoUserQuery
     public String getParameters()
     {
 
-        List params = new ArrayList();
+        List<String> params = new ArrayList<String>();
 
         if ( getUsername() != null )
         {

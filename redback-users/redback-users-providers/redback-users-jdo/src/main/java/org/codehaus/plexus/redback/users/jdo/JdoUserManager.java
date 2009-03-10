@@ -87,35 +87,41 @@ public class JdoUserManager
         return user;
     }
 
-    public List getUsers()
+    public List<User> getUsers()
     {
-        return getAllObjectsDetached( JdoUser.class );
+        return getAllObjectsDetached( null );
     }
 
-    public List getUsers( boolean orderAscending )
+    public List<User> getUsers( boolean orderAscending )
     {
         String ordering = orderAscending ? "username ascending" : "username descending";
 
-        return getAllObjectsDetached( JdoUser.class, ordering, null );
+        return getAllObjectsDetached( ordering );
     }
 
-    public List findUsersByUsernameKey( String usernameKey, boolean orderAscending )
+    @SuppressWarnings("unchecked")
+    private List<User> getAllObjectsDetached( String ordering )
+    {
+        return PlexusJdoUtils.getAllObjectsDetached( getPersistenceManager(), JdoUser.class, ordering, (String) null );
+    }
+
+    public List<User> findUsersByUsernameKey( String usernameKey, boolean orderAscending )
     {
         return findUsers( "username", usernameKey, orderAscending );
     }
 
-    public List findUsersByFullNameKey( String fullNameKey, boolean orderAscending )
+    public List<User> findUsersByFullNameKey( String fullNameKey, boolean orderAscending )
     {
         return findUsers( "fullName", fullNameKey, orderAscending );
     }
 
-    public List findUsersByEmailKey( String emailKey, boolean orderAscending )
+    public List<User> findUsersByEmailKey( String emailKey, boolean orderAscending )
     {
         return findUsers( "email", emailKey, orderAscending );
     }
 
-
-    public List findUsersByQuery( UserQuery userQuery )
+    @SuppressWarnings("unchecked")
+    public List<User> findUsersByQuery( UserQuery userQuery )
     {
         JdoUserQuery uq = (JdoUserQuery) userQuery;
 
@@ -144,9 +150,9 @@ public class JdoUserManager
             query.setRange( uq.getFirstResult(),
                             uq.getMaxResults() < 0 ? Long.MAX_VALUE : uq.getFirstResult() + uq.getMaxResults() );
 
-            List result = (List) query.executeWithArray( uq.getSearchKeys() );
+            List<User> result = (List<User>) query.executeWithArray( uq.getSearchKeys() );
 
-            result = (List) pm.detachCopyAll( result );
+            result = (List<User>) pm.detachCopyAll( result );
 
             tx.commit();
 
@@ -158,7 +164,8 @@ public class JdoUserManager
         }
     }
 
-    private List findUsers( String searchField, String searchKey, boolean ascendingUsername )
+    @SuppressWarnings("unchecked")
+    private List<User> findUsers( String searchField, String searchKey, boolean ascendingUsername )
     {
         PersistenceManager pm = getPersistenceManager();
 
@@ -182,9 +189,9 @@ public class JdoUserManager
 
             query.setFilter( "this." + searchField + ".toLowerCase().indexOf(searchKey.toLowerCase()) > -1" );
 
-            List result = (List) query.execute( searchKey );
+            List<User> result = (List<User>) query.execute( searchKey );
 
-            result = (List) pm.detachCopyAll( result );
+            result = (List<User>) pm.detachCopyAll( result );
 
             tx.commit();
 
@@ -326,7 +333,7 @@ public class JdoUserManager
             throw new UserNotFoundException( "User with empty username not found." );
         }
 
-        return (User) getObjectById( JdoUser.class, username );
+        return (User) getObjectById( username, null );
     }
 
     public boolean userExists( Object principal )
@@ -391,18 +398,12 @@ public class JdoUserManager
         return PlexusJdoUtils.addObject( getPersistenceManager(), object );
     }
 
-    private Object getObjectById( Class clazz, String id )
-        throws UserNotFoundException, UserManagerException
-    {
-        return getObjectById( clazz, id, null );
-    }
-
-    private Object getObjectById( Class clazz, String id, String fetchGroup )
+    private Object getObjectById( String id, String fetchGroup )
         throws UserNotFoundException, UserManagerException
     {
         try
         {
-            return PlexusJdoUtils.getObjectById( getPersistenceManager(), clazz, id, fetchGroup );
+            return PlexusJdoUtils.getObjectById( getPersistenceManager(), JdoUser.class, id, fetchGroup );
         }
         catch ( PlexusObjectNotFoundException e )
         {
@@ -410,24 +411,9 @@ public class JdoUserManager
         }
         catch ( PlexusStoreException e )
         {
-            throw new UserManagerException( "Unable to get object '" + clazz.getName() + "', id '" + id +
+            throw new UserManagerException( "Unable to get object '" + JdoUser.class.getName() + "', id '" + id +
                 "', fetch-group '" + fetchGroup + "' from jdo store." );
         }
-    }
-
-    private List getAllObjectsDetached( Class clazz )
-    {
-        return getAllObjectsDetached( clazz, null );
-    }
-
-    private List getAllObjectsDetached( Class clazz, String fetchGroup )
-    {
-        return getAllObjectsDetached( clazz, null, fetchGroup );
-    }
-
-    private List getAllObjectsDetached( Class clazz, String ordering, String fetchGroup )
-    {
-        return PlexusJdoUtils.getAllObjectsDetached( getPersistenceManager(), clazz, ordering, fetchGroup );
     }
 
     private Object removeObject( Object o )
@@ -467,8 +453,7 @@ public class JdoUserManager
         if ( !hasTriggeredInit )
         {
             hasTriggeredInit = true;
-
-            List users = getAllObjectsDetached( JdoUser.class );
+            List<User> users = getAllObjectsDetached( null );
 
             fireUserManagerInit( users.isEmpty() );
         }
