@@ -16,6 +16,11 @@ package org.codehaus.plexus.redback.authorization.rbac;
  * limitations under the License.
  */
 
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.redback.authorization.AuthorizationDataSource;
 import org.codehaus.plexus.redback.authorization.AuthorizationException;
@@ -24,7 +29,6 @@ import org.codehaus.plexus.redback.authorization.Authorizer;
 import org.codehaus.plexus.redback.authorization.NotAuthorizedException;
 import org.codehaus.plexus.redback.authorization.rbac.evaluator.PermissionEvaluationException;
 import org.codehaus.plexus.redback.authorization.rbac.evaluator.PermissionEvaluator;
-import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
@@ -33,12 +37,6 @@ import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
 
 /**
  * RbacAuthorizer:
@@ -83,16 +81,12 @@ public class RbacAuthorizer
             if ( principal != null )
             {
                 // Set permissions = manager.getAssignedPermissions( principal.toString(), operation );
-                Map permissionMap = manager.getAssignedPermissionMap( principal.toString() );
+                Map<String, List<Permission>> permissionMap = manager.getAssignedPermissionMap( principal.toString() );
 
                 if ( permissionMap.keySet().contains( operation.toString() ) )
                 {
-                    List permissions = (List) permissionMap.get( operation.toString() );
-
-                    for ( Iterator i = permissions.iterator(); i.hasNext(); )
+                    for ( Permission permission : permissionMap.get( operation.toString() ) )
                     {
-                        Permission permission = (Permission) i.next();
-
                         //getLogger().debug( "checking permission " + permission.getName() );
 
                         if ( evaluator.evaluate( permission, operation, resource, principal ) )
@@ -108,16 +102,12 @@ public class RbacAuthorizer
             if ( !guest.isLocked() )
             {
                 // Set permissions = manager.getAssignedPermissions( principal.toString(), operation );
-                Map permissionMap = manager.getAssignedPermissionMap( guest.getPrincipal().toString() );
+                Map<String, List<Permission>> permissionMap = manager.getAssignedPermissionMap( guest.getPrincipal().toString() );
 
                 if ( permissionMap.keySet().contains( operation.toString() ) )
                 {
-                    List permissions = (List) permissionMap.get( operation.toString() );
-
-                    for ( Iterator i = permissions.iterator(); i.hasNext(); )
+                    for ( Permission permission : permissionMap.get( operation.toString() ) )
                     {
-                        Permission permission = (Permission) i.next();
-
                         getLogger().debug( "checking permission " + permission.getName() );
 
                         if ( evaluator.evaluate( permission, operation, resource, guest.getPrincipal() ) )
