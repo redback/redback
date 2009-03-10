@@ -57,7 +57,7 @@ public interface Role
     /**
      * Method getChildRoleNames
      */
-    public List getChildRoleNames();
+    public List<String> getChildRoleNames();
     
     /**
      * Convienence method to see if Role has Child Roles.
@@ -81,7 +81,7 @@ public interface Role
     /**
      * Method getPermissions
      */
-    public List getPermissions();
+    public List<Permission> getPermissions();
 
     /**
      * true if this role is available to be assigned to a user
@@ -107,7 +107,7 @@ public interface Role
      *
      * @param names the list of names of other roles.
      */
-    public void setChildRoleNames( List names );
+    public void setChildRoleNames( List<String> names );
 
     /**
      * Set the Description
@@ -130,7 +130,7 @@ public interface Role
      *
      * @param permissions
      */
-    public void setPermissions( List permissions );
+    public void setPermissions( List<Permission> permissions );
     
     /**
      * Test to see if the object is a permanent object or not.

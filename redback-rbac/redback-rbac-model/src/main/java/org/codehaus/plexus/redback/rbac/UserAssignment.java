@@ -50,7 +50,7 @@ public interface UserAssignment
      * 
      * @return List of &lt;{@link String}&gt; objects representing the Role Names.
      */
-    public List getRoleNames();
+    public List<String> getRoleNames();
     
     /**
      * Add a rolename to this assignment.
@@ -94,7 +94,7 @@ public interface UserAssignment
      * 
      * @param roles the List of &lt;{@link String}&gt; objects representing the Role Names.
      */
-    public void setRoleNames( List roles );
+    public void setRoleNames( List<String> roles );
     
     /**
      * Test to see if the object is a permanent object or not.

@@ -17,6 +17,7 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  */
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import org.codehaus.plexus.redback.policy.PasswordRuleViolationException;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.Resource;
+import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.struts2.action.CancellableAction;
 import org.codehaus.plexus.redback.system.DefaultSecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySession;
@@ -59,7 +61,7 @@ public class UserEditAction
     /**
      * A List of {@link org.codehaus.plexus.redback.rbac.Role} objects.
      */
-    private List effectivelyAssignedRoles;
+    private List<Role> effectivelyAssignedRoles;
 
     // ------------------------------------------------------------------
     // Action Parameters
@@ -97,9 +99,7 @@ public class UserEditAction
         {
             // Means that the role name doesn't exist.
             // We need to fail fast and return to the previous page.
-            List list = new ArrayList();
-            list.add( getUsername() );
-            addActionError( getText( "user.does.not.exist", list ) );
+            addActionError( getText( "user.does.not.exist", Collections.singletonList( getUsername() ) ) );
             return ERROR;
         }
 
@@ -117,7 +117,7 @@ public class UserEditAction
 
             try
             {
-                this.effectivelyAssignedRoles = new ArrayList( rbacManager.getEffectivelyAssignedRoles( u.getPrincipal().toString() ) );
+                this.effectivelyAssignedRoles = new ArrayList<Role>( rbacManager.getEffectivelyAssignedRoles( u.getPrincipal().toString() ) );
                 Collections.sort( this.effectivelyAssignedRoles, new RoleSorter() );
             }
             catch ( RbacManagerException rme )
@@ -127,10 +127,7 @@ public class UserEditAction
         }
         catch ( UserNotFoundException e )
         {
-            List list = new ArrayList();
-            list.add( getUsername() );
-            list.add( e.getMessage() );
-            addActionError( getText( "cannot.get.user", list ) );
+            addActionError( getText( "cannot.get.user", Arrays.asList( getUsername(), e.getMessage() ) ) );
             return ERROR;
         }
 
@@ -174,9 +171,7 @@ public class UserEditAction
         {
             // Means that the role name doesn't exist.
             // We need to fail fast and return to the previous page.
-            List list = new ArrayList();
-            list.add( getUsername() );
-            addActionError( getText( "user.does.not.exist", list ) );
+            addActionError( getText( "user.does.not.exist", Collections.singletonList( getUsername() ) ) );
             return ERROR;
         }
 
@@ -210,10 +205,7 @@ public class UserEditAction
         }
         catch ( UserNotFoundException e )
         {
-            List list = new ArrayList();
-            list.add( getUsername() );
-            list.add( e.getMessage() );
-            addActionError( getText( "cannot.find.user", list ) );
+            addActionError( getText( "cannot.find.user", Arrays.asList( getUsername(), e.getMessage() ) ) );
             return ERROR;
         }
         catch ( PasswordRuleViolationException pe )
@@ -266,7 +258,7 @@ public class UserEditAction
         return bundle;
     }
 
-    public List getEffectivelyAssignedRoles()
+    public List<Role> getEffectivelyAssignedRoles()
     {
         return effectivelyAssignedRoles;
     }

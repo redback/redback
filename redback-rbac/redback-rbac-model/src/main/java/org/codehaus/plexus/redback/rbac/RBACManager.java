@@ -68,7 +68,7 @@ public interface RBACManager
     public Role saveRole( Role role )
         throws RbacObjectInvalidException, RbacManagerException;
 
-    public void saveRoles( Collection roles )
+    public void saveRoles( Collection<String> roles )
         throws RbacObjectInvalidException, RbacManagerException;
 
     /**
@@ -80,16 +80,16 @@ public interface RBACManager
     public Role getRole( String roleName )
         throws RbacObjectNotFoundException, RbacManagerException;
 
-    public Map getRoles( Collection roleNames )
+    public Map<String,Role> getRoles( Collection<String> roleNames )
         throws RbacObjectNotFoundException, RbacManagerException;
 
     public void addChildRole( Role role, Role childRole )
         throws RbacObjectInvalidException, RbacManagerException;
 
-    public Map getChildRoles( Role role )
+    public Map<String,Role> getChildRoles( Role role )
         throws RbacManagerException;
 
-    public Map/*<String, Role>*/ getParentRoles( Role role )
+    public Map<String, Role> getParentRoles( Role role )
         throws RbacManagerException;
 
     /**
@@ -101,7 +101,7 @@ public interface RBACManager
     /**
      * Method getEffectiveRoles
      */
-    public Set getEffectiveRoles( Role role )
+    public Set<Role> getEffectiveRoles( Role role )
         throws RbacObjectNotFoundException, RbacManagerException;
 
     /**
@@ -168,7 +168,7 @@ public interface RBACManager
     public Permission getPermission( String permissionName )
         throws RbacObjectNotFoundException, RbacManagerException;
 
-    public List getAllPermissions()
+    public List<Permission> getAllPermissions()
         throws RbacManagerException;
 
     public void removePermission( Permission permission )
@@ -212,7 +212,7 @@ public interface RBACManager
     public Operation getOperation( String operationName )
         throws RbacObjectNotFoundException, RbacManagerException;
 
-    public List getAllOperations()
+    public List<Operation> getAllOperations()
         throws RbacManagerException;
 
     public void removeOperation( Operation operation )
@@ -292,13 +292,13 @@ public interface RBACManager
     /**
      * Method getAssignments
      */
-    public List getAllUserAssignments()
+    public List<UserAssignment> getAllUserAssignments()
         throws RbacManagerException;
 
     /**
      * Method getUserAssignmentsForRoless
      */
-    public List getUserAssignmentsForRoles( Collection roleNames )
+    public List<UserAssignment> getUserAssignmentsForRoles( Collection<String> roleNames )
         throws RbacManagerException;
 
     /**
@@ -332,7 +332,7 @@ public interface RBACManager
      * @throws RbacObjectNotFoundException
      * @throws RbacManagerException
      */
-    public Collection getAssignedRoles( String principal )
+    public Collection<Role> getAssignedRoles( String principal )
         throws RbacObjectNotFoundException, RbacManagerException;
 
     /**
@@ -341,7 +341,7 @@ public interface RBACManager
      * @param userAssignment
      * @return Collection of {@link Role} objects for the provided UserAssignment.
      */
-    public Collection getAssignedRoles( UserAssignment userAssignment )
+    public Collection<Role> getAssignedRoles( UserAssignment userAssignment )
         throws RbacObjectNotFoundException, RbacManagerException;
 
     /**
@@ -353,7 +353,7 @@ public interface RBACManager
      * @throws RbacManagerException
      * @throws RbacObjectNotFoundException
      */
-    public Collection getEffectivelyUnassignedRoles( String principal )
+    public Collection<Role> getEffectivelyUnassignedRoles( String principal )
         throws RbacManagerException, RbacObjectNotFoundException;
 
     /**
@@ -364,7 +364,7 @@ public interface RBACManager
      * @throws RbacObjectNotFoundException
      * @throws RbacManagerException
      */
-    public Collection getEffectivelyAssignedRoles( String principal )
+    public Collection<Role> getEffectivelyAssignedRoles( String principal )
         throws RbacObjectNotFoundException, RbacManagerException;
 
     /**
@@ -375,7 +375,7 @@ public interface RBACManager
      * @throws RbacManagerException
      * @throws RbacObjectNotFoundException
      */
-    public Collection getUnassignedRoles( String principal )
+    public Collection<Role> getUnassignedRoles( String principal )
         throws RbacManagerException, RbacObjectNotFoundException;
 
     /**
@@ -387,7 +387,7 @@ public interface RBACManager
      * @throws RbacObjectNotFoundException
      * @throws RbacManagerException
      */
-    public Set getAssignedPermissions( String principal )
+    public Set<Permission> getAssignedPermissions( String principal )
         throws RbacObjectNotFoundException, RbacManagerException;
 
     /**
@@ -398,10 +398,8 @@ public interface RBACManager
      * @throws RbacObjectNotFoundException
      * @throws RbacManagerException
      */
-    public Map getAssignedPermissionMap( String principal )
+    public Map<String, List<Permission>> getAssignedPermissionMap( String principal )
         throws RbacObjectNotFoundException, RbacManagerException;
-
-    ;
 
     /**
      * returns a list of all assignable roles

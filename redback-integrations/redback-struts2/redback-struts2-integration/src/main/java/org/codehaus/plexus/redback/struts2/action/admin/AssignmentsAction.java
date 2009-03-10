@@ -17,6 +17,7 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  */
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -40,6 +41,8 @@ import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.model.AdminEditUserCredentials;
 import org.codehaus.redback.integration.role.RoleConstants;
+
+import edu.emory.mathcs.backport.java.util.Collections;
 
 /**
  * AssignmentsAction
@@ -73,54 +76,42 @@ public class AssignmentsAction
     /**
      * A List of {@link Role} objects.
      */
-    private List assignedRoles;
+    private List<Role> assignedRoles;
 
     /**
      * A List of {@link Role} objects.
      */
-    private List availableRoles;
+    private List<Role> availableRoles;
 
-    private List effectivelyAssignedRoles;
+    private List<Role> effectivelyAssignedRoles;
 
     /**
      * List of names (received from client) of dynamic roles to set/unset
      */
-    private List addDSelectedRoles;
+    private List<String> addDSelectedRoles;
 
     /**
      * List of names (received from client) of nondynamic roles to set/unset
      */
-    private List addNDSelectedRoles;
+    private List<String> addNDSelectedRoles;
 
-    private List nondynamicroles;
+    private List<Role> nondynamicroles;
 
-    private List dynamicroles;
+    private List<Role> dynamicroles;
 
-    private List templates;
+    private List<String> NDRoles;
 
-    private List NDRoles;
+    private List<String> DRoles;
 
-    private List DRoles;
-
-    private List applicationRoleDetails = new ArrayList();
+    private List<ApplicationRoleDetails> applicationRoleDetails = new ArrayList<ApplicationRoleDetails>();
 
     // ------------------------------------------------------------------
     // Action Entry Points - (aka Names)
     // ------------------------------------------------------------------
 
-    public List getApplicationRoleDetails()
+    public List<ApplicationRoleDetails> getApplicationRoleDetails()
     {
         return applicationRoleDetails;
-    }
-
-    public List getTemplates()
-    {
-        return templates;
-    }
-
-    public void setTemplates( List templates )
-    {
-        this.templates = templates;
     }
 
     /**
@@ -133,11 +124,12 @@ public class AssignmentsAction
      * @throws RbacManagerException
      * @throws RbacObjectNotFoundException
      */
+    @SuppressWarnings("unchecked")
     public String show()
         throws RbacObjectNotFoundException, RbacManagerException
     {
-        this.addNDSelectedRoles = new ArrayList();
-        this.addDSelectedRoles = new ArrayList();
+        this.addNDSelectedRoles = new ArrayList<String>();
+        this.addDSelectedRoles = new ArrayList<String>();
 
         if ( StringUtils.isEmpty( principal ) )
         {
@@ -149,9 +141,7 @@ public class AssignmentsAction
 
         if ( !userManager.userExists( principal ) )
         {
-            List list = new ArrayList();
-            list.add( principal );
-            addActionError( getText( "user.does.not.exist", list ) );
+            addActionError( getText( "user.does.not.exist", Collections.singletonList( principal ) ) );
             return ERROR;
         }
 
@@ -169,10 +159,7 @@ public class AssignmentsAction
         }
         catch ( UserNotFoundException e )
         {
-            List list = new ArrayList();
-            list.add( principal );
-            list.add( e.getMessage() );
-            addActionError( getText( "user.not.found.exception", list ) );
+            addActionError( getText( "user.not.found.exception", Arrays.asList( principal, e.getMessage() ) ) );
             return ERROR;
         }
 
@@ -184,9 +171,9 @@ public class AssignmentsAction
         }
 
         List<Role> assignableRoles = getFilteredRolesForCurrentUserAccess();
-        for ( Iterator i = rmanager.getModel().getApplications().iterator(); i.hasNext(); )
+        for ( Iterator<ModelApplication> i = rmanager.getModel().getApplications().iterator(); i.hasNext(); )
         {
-            ModelApplication application = (ModelApplication) i.next();
+            ModelApplication application = i.next();
 
             ApplicationRoleDetails details = new ApplicationRoleDetails( application,
                                                                          getManager().getEffectivelyAssignedRoles(
@@ -265,9 +252,7 @@ public class AssignmentsAction
         }
         catch ( RbacManagerException ne )
         {
-            List list = new ArrayList();
-            list.add( ne.getMessage() );
-            addActionError( getText( "error.removing.selected.roles", list ) );
+            addActionError( getText( "error.removing.selected.roles", Arrays.asList( ne.getMessage() ) ) );
             return ERROR;
         }
         return SUCCESS;
@@ -278,13 +263,12 @@ public class AssignmentsAction
         getLogger().info( string + principal + " (by " + currentUser + ")" );
     }
 
-    private void addSelectedRoles( Collection<Role> assignableRoles, List<String> roles, List selectedRoles )
+    private void addSelectedRoles( Collection<Role> assignableRoles, List<String> roles, List<String> selectedRoles )
     {
         if ( selectedRoles != null )
         {
-            for ( Iterator<String> i = selectedRoles.iterator(); i.hasNext(); )
+            for ( String r : selectedRoles )
             {
-                String r = i.next();
                 if ( checkRoleName( assignableRoles, r ) )
                 {
                     roles.add( r );
@@ -309,32 +293,32 @@ public class AssignmentsAction
     // Parameter Accessor Methods
     // ------------------------------------------------------------------
 
-    public List getAssignedRoles()
+    public List<Role> getAssignedRoles()
     {
         return assignedRoles;
     }
 
-    public void setAssignedRoles( List assignedRoles )
+    public void setAssignedRoles( List<Role> assignedRoles )
     {
         this.assignedRoles = assignedRoles;
     }
 
-    public List getAvailableRoles()
+    public List<Role> getAvailableRoles()
     {
         return availableRoles;
     }
 
-    public void setAvailableRoles( List availableRoles )
+    public void setAvailableRoles( List<Role> availableRoles )
     {
         this.availableRoles = availableRoles;
     }
 
-    public List getEffectivelyAssignedRoles()
+    public List<Role> getEffectivelyAssignedRoles()
     {
         return effectivelyAssignedRoles;
     }
 
-    public void setEffectivelyAssignedRoles( List effectivelyAssignedRoles )
+    public void setEffectivelyAssignedRoles( List<Role> effectivelyAssignedRoles )
     {
         this.effectivelyAssignedRoles = effectivelyAssignedRoles;
     }
@@ -373,62 +357,62 @@ public class AssignmentsAction
         return bundle;
     }
 
-    public List getNondynamicroles()
+    public List<Role> getNondynamicroles()
     {
         return nondynamicroles;
     }
 
-    public void setNondynamicroles( List nondynamicroles )
+    public void setNondynamicroles( List<Role> nondynamicroles )
     {
         this.nondynamicroles = nondynamicroles;
     }
 
-    public List getDynamicroles()
+    public List<Role> getDynamicroles()
     {
         return dynamicroles;
     }
 
-    public void setDynamicroles( List dynamicroles )
+    public void setDynamicroles( List<Role> dynamicroles )
     {
         this.dynamicroles = dynamicroles;
     }
 
-    public List getNDRoles()
+    public List<String> getNDRoles()
     {
         return NDRoles;
     }
 
-    public void setNDRoles( List roles )
+    public void setNDRoles( List<String> roles )
     {
         NDRoles = roles;
     }
 
-    public List getDRoles()
+    public List<String> getDRoles()
     {
         return DRoles;
     }
 
-    public void setDRoles( List roles )
+    public void setDRoles( List<String> roles )
     {
         DRoles = roles;
     }
 
-    public List getAddDSelectedRoles()
+    public List<String> getAddDSelectedRoles()
     {
         return addDSelectedRoles;
     }
 
-    public void setAddDSelectedRoles( List addDSelectedRoles )
+    public void setAddDSelectedRoles( List<String> addDSelectedRoles )
     {
         this.addDSelectedRoles = addDSelectedRoles;
     }
 
-    public List getAddNDSelectedRoles()
+    public List<String> getAddNDSelectedRoles()
     {
         return addNDSelectedRoles;
     }
 
-    public void setAddNDSelectedRoles( List addNDSelectedRoles )
+    public void setAddNDSelectedRoles( List<String> addNDSelectedRoles )
     {
         this.addNDSelectedRoles = addNDSelectedRoles;
     }

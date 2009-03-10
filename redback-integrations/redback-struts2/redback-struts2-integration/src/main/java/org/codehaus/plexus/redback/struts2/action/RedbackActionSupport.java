@@ -14,10 +14,11 @@ public abstract class RedbackActionSupport
     extends ActionSupport
     implements LogEnabled, SessionAware
 {
-    protected Map session;
+    protected Map<String,Object> session;
 
     private Logger logger;
 
+    @SuppressWarnings("unchecked")
     public void setSession( Map map )
     {
         //noinspection AssignmentToCollectionOrArrayFieldFromParameter
