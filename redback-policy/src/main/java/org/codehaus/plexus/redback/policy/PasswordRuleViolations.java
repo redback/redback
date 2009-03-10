@@ -16,11 +16,10 @@ package org.codehaus.plexus.redback.policy;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.redback.users.Messages;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+
+import org.codehaus.plexus.redback.users.Messages;
 
 /**
  * Password Rule Violations
@@ -30,7 +29,7 @@ import java.util.List;
  */
 public class PasswordRuleViolations
 {
-    private List violations;
+    private List<MessageReference> violations;
 
     class MessageReference
     {
@@ -44,7 +43,7 @@ public class PasswordRuleViolations
      */
     public PasswordRuleViolations()
     {
-        violations = new ArrayList();
+        violations = new ArrayList<MessageReference>();
     }
 
     /**
@@ -84,14 +83,12 @@ public class PasswordRuleViolations
      * 
      * @return the List of {@link String} objects.
      */
-    public List getLocalizedViolations()
+    public List<String> getLocalizedViolations()
     {
-        List msgs = new ArrayList();
+        List<String> msgs = new ArrayList<String>();
 
-        Iterator it = this.violations.iterator();
-        while ( it.hasNext() )
+        for ( MessageReference msgref : violations )
         {
-            MessageReference msgref = (MessageReference) it.next();
             msgs.add( Messages.getString( msgref.key, msgref.args ) );
         }
 

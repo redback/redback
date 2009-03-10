@@ -28,11 +28,11 @@ import java.util.Map;
  */
 public class PolicyContext
 {
-    static ThreadLocal policyContext = new PolicyContextThreadLocal();
+    static ThreadLocal<PolicyContext> policyContext = new PolicyContextThreadLocal();
 
-    Map context;
+    Map<Object, Object> context;
 
-    public PolicyContext( Map map )
+    public PolicyContext( Map<Object, Object> map )
     {
         context = map;
     }
@@ -47,7 +47,7 @@ public class PolicyContext
         PolicyContext ctx = (PolicyContext) policyContext.get();
         if ( ctx == null )
         {
-            ctx = new PolicyContext( new HashMap() );
+            ctx = new PolicyContext( new HashMap<Object, Object>() );
             setContext( ctx );
         }
 
@@ -65,11 +65,11 @@ public class PolicyContext
     }
 
     private static class PolicyContextThreadLocal
-        extends ThreadLocal
+        extends ThreadLocal<PolicyContext>
     {
-        protected Object initialValue()
+        protected PolicyContext initialValue()
         {
-            return new PolicyContext( new HashMap() );
+            return new PolicyContext( new HashMap<Object, Object>() );
         }
     }
 }

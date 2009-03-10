@@ -81,11 +81,11 @@ public class ReusePasswordRule
 
         int checkCount = getPreviousPasswordCount();
 
-        Iterator it = user.getPreviousEncodedPasswords().iterator();
+        Iterator<String> it = user.getPreviousEncodedPasswords().iterator();
 
         while ( it.hasNext() && checkCount >= 0 )
         {
-            String prevEncodedPassword = (String) it.next();
+            String prevEncodedPassword = it.next();
             if ( encodedPassword.equals( prevEncodedPassword ) )
             {
                 return true;
