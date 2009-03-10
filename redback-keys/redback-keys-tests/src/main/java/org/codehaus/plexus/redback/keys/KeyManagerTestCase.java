@@ -106,14 +106,11 @@ public class KeyManagerTestCase
         assertEquals( "bar", created2.getForPrincipal() );
         assertEquals( "Something", created2.getPurpose() );
 
-        List keys = getKeyManager().getAllKeys();
-        Collections.sort( keys, new Comparator()
+        List<AuthenticationKey> keys = getKeyManager().getAllKeys();
+        Collections.sort( keys, new Comparator<AuthenticationKey>()
         {
-            public int compare( Object o, Object o1 )
+            public int compare( AuthenticationKey key1, AuthenticationKey key2 )
             {
-                AuthenticationKey key1 = (AuthenticationKey) o;
-                AuthenticationKey key2 = (AuthenticationKey) o1;
-
                 return key2.getForPrincipal().compareTo( key1.getForPrincipal() );
             }
         } );

@@ -16,19 +16,18 @@ package org.codehaus.plexus.redback.keys.jdo;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
-import org.codehaus.plexus.jdo.JdoFactory;
-import org.codehaus.plexus.redback.keys.KeyManager;
-import org.codehaus.plexus.redback.keys.KeyManagerTestCase;
-import org.jpox.SchemaTool;
-
 import java.net.URL;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
+
+import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
+import org.codehaus.plexus.jdo.JdoFactory;
+import org.codehaus.plexus.redback.keys.KeyManager;
+import org.codehaus.plexus.redback.keys.KeyManagerTestCase;
+import org.jpox.SchemaTool;
 
 /**
  * JdoKeyManagerTest 
@@ -69,10 +68,8 @@ public class JdoKeyManagerTest
 
         Properties properties = jdoFactory.getProperties();
 
-        for ( Iterator it = properties.entrySet().iterator(); it.hasNext(); )
+        for ( Map.Entry<Object,Object> entry : properties.entrySet() )
         {
-            Map.Entry entry = (Map.Entry) it.next();
-
             System.setProperty( (String) entry.getKey(), (String) entry.getValue() );
         }
 
