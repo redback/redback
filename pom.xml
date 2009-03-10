@@ -336,6 +336,11 @@
         <artifactId>redback-xwork-integration</artifactId>
         <version>${security.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.codehaus.redback</groupId>
+        <artifactId>redback-data-management</artifactId>
+        <version>${security.version}</version>
+      </dependency>
       <!-- Plexus -->
       <dependency>
         <groupId>org.codehaus.plexus</groupId>

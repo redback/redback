@@ -69,5 +69,6 @@
     <action name="main" class="main" method="show">
       <result name="success">/WEB-INF/jsp/mainpage.jsp</result>
     </action>
+    
   </package>
 </struts>

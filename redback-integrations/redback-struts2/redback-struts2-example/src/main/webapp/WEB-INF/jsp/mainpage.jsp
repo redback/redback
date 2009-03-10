@@ -41,14 +41,24 @@
 
 <ol>
 <li>
+  <redback:ifAuthorized permission="user-management-manage-data">    
+    <p/>        
+    <s:url id="backupRestoreUrl" action="backupRestore" namespace="/security"/>
+    <ul>      
+      <li>Go see the <s:a href="%{backupRestoreUrl}">backup-restore</s:a>.</li>
+    </ul>    
+  </redback:ifAuthorized>
+  
   <redback:ifAuthorized permission="user-management-user-list">
     You are authorized to see this content!
     <p/>
 
     <s:url id="userlistUrl" action="userlist" namespace="/security"/>
+        
     <ul>
-      <li>Go see the <s:a href="%{userlistUrl}">userlist</s:a>.</li>
+      <li>Go see the <s:a href="%{userlistUrl}">userlist</s:a>.</li>      
     </ul>
+    
 
   </redback:ifAuthorized>
   <redback:elseAuthorized>

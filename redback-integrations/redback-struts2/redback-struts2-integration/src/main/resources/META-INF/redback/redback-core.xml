@@ -80,6 +80,12 @@
                 <description>access guest</description>
                 <permanent>true</permanent>
             </operation>
+            <operation>
+                <id>user-management-manage-data</id>
+                <name>user-management-manage-data</name>
+                <description>manage data</description>
+                <permanent>true</permanent>
+            </operation>            
         </operations>
         <roles>
             <role>
@@ -102,6 +108,13 @@
                         <resource>global</resource>
                         <permanent>true</permanent>
                     </permission>
+                    <permission>
+                        <id>manage-rbac-data</id>
+                        <name>RBAC Manage Data</name>
+                        <operation>user-management-manage-data</operation>
+                        <resource>global</resource>
+                        <permanent>true</permanent>
+                    </permission>                    
                 </permissions>
                 <childRoles>
                     <childRole>user-administrator</childRole>

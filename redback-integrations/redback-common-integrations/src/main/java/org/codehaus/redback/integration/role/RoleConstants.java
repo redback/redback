@@ -59,4 +59,6 @@ public class RoleConstants
 
     // operations against rbac objects.
     public static final String USER_MANAGEMENT_RBAC_ADMIN_OPERATION = "user-management-rbac-admin";
+    
+    public static final String USER_MANAGEMENT_MANAGE_DATA = "user-management-manage-data";
 }

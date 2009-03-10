@@ -273,6 +273,24 @@
       <result name="success">/WEB-INF/jsp/redback/admin/roleModel.jsp</result>
     </action>
 
+    <!--
+      Backup Restore actions 
+     -->
+
+    <action name="backupRestore" class="backup-restore" method="view">
+      <result>/WEB-INF/jsp/redback/admin/backupRestore.jsp</result>
+    </action>
+       
+    <action name="backup" class="backup-restore" method="backup">
+      <result name="custom_error">/WEB-INF/jsp/redback/admin/backupRestore.jsp</result>
+      <result type="redirect-action">backupRestore</result>
+    </action>
+
+    <action name="restore" class="backup-restore" method="restore">
+      <result name="custom_error">/WEB-INF/jsp/redback/admin/backupRestore.jsp</result>      
+      <result name="success" type="redirect-action">backupRestore</result>
+    </action>
+    
   </package>
 
 </struts>
