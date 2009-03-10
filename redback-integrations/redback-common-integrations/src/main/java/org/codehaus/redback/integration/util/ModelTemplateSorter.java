@@ -27,38 +27,25 @@ import org.codehaus.plexus.redback.role.model.ModelTemplate;
  * @version $Id$
  */
 public class ModelTemplateSorter
-    implements Comparator
+    implements Comparator<ModelTemplate>
 {
-    public int compare( Object o1, Object o2 )
+    public int compare( ModelTemplate template1, ModelTemplate template2 )
     {
-        if ( !( o1 instanceof ModelTemplate ) )
+        if ( ( template1 == null ) && ( template2 == null ) )
         {
             return 0;
         }
 
-        if ( !( o2 instanceof ModelTemplate ) )
-        {
-            return 0;
-        }
-
-        if ( ( o1 == null ) && ( o2 == null ) )
-        {
-            return 0;
-        }
-
-        if ( ( o1 == null ) && ( o2 != null ) )
+        if ( ( template1 == null ) && ( template2 != null ) )
         {
             return -1;
         }
 
-        if ( ( o1 != null ) && ( o2 == null ) )
+        if ( ( template1 != null ) && ( template2 == null ) )
         {
             return 1;
         }
 
-        ModelTemplate r1 = (ModelTemplate) o1;
-        ModelTemplate r2 = (ModelTemplate) o2;
-
-        return r1.getNamePrefix().compareToIgnoreCase( r2.getNamePrefix() );
+        return template1.getNamePrefix().compareToIgnoreCase( template2.getNamePrefix() );
     }
 }

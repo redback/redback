@@ -27,21 +27,11 @@ import org.codehaus.plexus.redback.rbac.Operation;
  * @version $Id$
  */
 public class OperationSorter
-    implements Comparator
+    implements Comparator<Operation>
 {
 
-    public int compare( Object o1, Object o2 )
+    public int compare( Operation o1, Operation o2 )
     {
-        if ( !( o1 instanceof Operation ) )
-        {
-            return 0;
-        }
-
-        if ( !( o2 instanceof Operation ) )
-        {
-            return 0;
-        }
-
         if ( ( o1 == null ) && ( o2 == null ) )
         {
             return 0;
@@ -57,10 +47,7 @@ public class OperationSorter
             return 1;
         }
 
-        Operation r1 = (Operation) o1;
-        Operation r2 = (Operation) o2;
-
-        return r1.getName().compareToIgnoreCase( r2.getName() );
+        return o1.getName().compareToIgnoreCase( o2.getName() );
     }
 
 }

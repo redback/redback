@@ -31,7 +31,7 @@ public class SecureActionBundle
 {
     private boolean requiresAuthentication = false;
 
-    private List authorizationTuples = new ArrayList();
+    private List<AuthorizationTuple> authorizationTuples = new ArrayList<AuthorizationTuple>();
 
     public static final SecureActionBundle OPEN;
 
@@ -83,7 +83,7 @@ public class SecureActionBundle
         }
     }
 
-    public List getAuthorizationTuples()
+    public List<AuthorizationTuple> getAuthorizationTuples()
     {
         return authorizationTuples;
     }

@@ -27,38 +27,25 @@ import org.codehaus.plexus.redback.rbac.TemplatedRole;
  * @version $Id$
  */
 public class TemplatedRoleSorter
-    implements Comparator
+    implements Comparator<TemplatedRole>
 {
-    public int compare( Object o1, Object o2 )
+    public int compare( TemplatedRole r1, TemplatedRole r2 )
     {
-        if ( !( o1 instanceof TemplatedRole ) )
+        if ( ( r1 == null ) && ( r2 == null ) )
         {
             return 0;
         }
 
-        if ( !( o2 instanceof TemplatedRole ) )
-        {
-            return 0;
-        }
-
-        if ( ( o1 == null ) && ( o2 == null ) )
-        {
-            return 0;
-        }
-
-        if ( ( o1 == null ) && ( o2 != null ) )
+        if ( ( r1 == null ) && ( r2 != null ) )
         {
             return -1;
         }
 
-        if ( ( o1 != null ) && ( o2 == null ) )
+        if ( ( r1 != null ) && ( r2 == null ) )
         {
             return 1;
         }
 
-        TemplatedRole r1 = (TemplatedRole) o1;
-        TemplatedRole r2 = (TemplatedRole) o2;
-        
         if ( r1.getResource().equals( r2.getResource() ) )
         {
             return r1.getTemplateNamePrefix().compareTo( r2.getTemplateNamePrefix() );

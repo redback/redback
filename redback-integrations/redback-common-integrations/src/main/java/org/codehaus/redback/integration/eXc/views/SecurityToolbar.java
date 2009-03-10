@@ -71,6 +71,7 @@ public class SecurityToolbar
         html.tdEnd();
     }
 
+    @SuppressWarnings("unchecked")
     protected void columnRight( HtmlBuilder html, TableModel model )
     {
         boolean filterable = BuilderUtils.filterable( model );

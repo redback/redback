@@ -26,9 +26,9 @@ import java.util.Collection;
  */
 public interface Mailer
 {
-    void sendAccountValidationEmail( Collection recipients, AuthenticationKey authkey, String baseUrl );
+    void sendAccountValidationEmail( Collection<String> recipients, AuthenticationKey authkey, String baseUrl );
 
-    void sendPasswordResetEmail( Collection recipients, AuthenticationKey authkey, String baseUrl );
+    void sendPasswordResetEmail( Collection<String> recipients, AuthenticationKey authkey, String baseUrl );
 
-    void sendMessage( Collection recipients, String subject, String content );
+    void sendMessage( Collection<String> recipients, String subject, String content );
 }

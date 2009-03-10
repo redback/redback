@@ -18,7 +18,6 @@ package org.codehaus.redback.integration.reports;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -44,12 +43,12 @@ public class ReportManager
     /**
      * @plexus.requirement role="org.codehaus.plexus.redback.xwork.reports.Report"
      */
-    private List availableReports;
+    private List<Report> availableReports;
     
     @Resource
     private PlexusContainer plexusContainer;
 
-    private Map reportMap;
+    private Map<String,Map<String,Report>> reportMap;
 
     public Report findReport( String id, String type )
         throws ReportException
@@ -64,13 +63,13 @@ public class ReportManager
             throw new ReportException( "Unable to generate report from empty report type." );
         }
 
-        Map typeMap = (Map) reportMap.get( id );
+        Map<String, Report> typeMap = reportMap.get( id );
         if ( typeMap == null )
         {
             throw new ReportException( "Unable to find report id [" + id + "]" );
         }
 
-        Report requestedReport = (Report) typeMap.get( type );
+        Report requestedReport = typeMap.get( type );
 
         if ( requestedReport == null )
         {
@@ -80,11 +79,12 @@ public class ReportManager
         return requestedReport;
     }
 
-    public Map getReportMap()
+    public Map<String, Map<String, Report>> getReportMap()
     {
         return Collections.unmodifiableMap( reportMap );
     }
 
+    @SuppressWarnings("unchecked")
     public void initialize()
         throws InitializationException
     {
@@ -96,17 +96,14 @@ public class ReportManager
         {
             throw new InitializationException( e.getMessage(), e );
         }
-        reportMap = new HashMap();
+        reportMap = new HashMap<String, Map<String, Report>>();
 
-        Iterator it = availableReports.iterator();
-        while ( it.hasNext() )
+        for ( Report report : availableReports )
         {
-            Report report = (Report) it.next();
-
-            Map typeMap = (Map) reportMap.get( report.getId() );
+            Map<String, Report> typeMap = reportMap.get( report.getId() );
             if ( typeMap == null )
             {
-                typeMap = new HashMap();
+                typeMap = new HashMap<String, Report>();
             }
 
             typeMap.put( report.getType(), report );

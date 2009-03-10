@@ -27,7 +27,7 @@ import org.codehaus.plexus.redback.users.User;
  * @version $Id$
  */
 public class UserComparator
-    implements Comparator
+    implements Comparator<User>
 {
     private static final int UNKNOWN = -1;
 
@@ -77,37 +77,24 @@ public class UserComparator
         }
     }
 
-    public int compare( Object o1, Object o2 )
+    public int compare( User user1, User user2 )
     {
-        if ( !( o1 instanceof User ) )
+        if ( ( user1 == null ) && ( user2 == null ) )
         {
             return 0;
         }
 
-        if ( !( o2 instanceof User ) )
-        {
-            return 0;
-        }
-
-        if ( ( o1 == null ) && ( o2 == null ) )
-        {
-            return 0;
-        }
-
-        if ( ( o1 == null ) && ( o2 != null ) )
+        if ( ( user1 == null ) && ( user2 != null ) )
         {
             return -1;
         }
 
-        if ( ( o1 != null ) && ( o2 == null ) )
+        if ( ( user1 != null ) && ( user2 == null ) )
         {
             return 1;
         }
 
-        User r1 = (User) o1;
-        User r2 = (User) o2;
-
-        return compareUsers( r1, r2 ) * ( ascending ? 1 : -1 );
+        return compareUsers( user1, user2 ) * ( ascending ? 1 : -1 );
     }
 
     private int compareUsers( User u1, User u2 )

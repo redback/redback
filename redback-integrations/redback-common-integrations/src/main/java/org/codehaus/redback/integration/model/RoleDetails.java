@@ -37,9 +37,9 @@ public abstract class RoleDetails
 
     private boolean assignable;
 
-    private List childRoleNames = new ArrayList();
+    private List<String> childRoleNames = new ArrayList<String>();
 
-    private List permissions = new ArrayList();
+    private List<SimplePermission> permissions = new ArrayList<SimplePermission>();
 
     public void addChildRoleName( String name )
     {
@@ -56,7 +56,7 @@ public abstract class RoleDetails
         permissions.add( permission );
     }
 
-    public List getChildRoleNames()
+    public List<String> getChildRoleNames()
     {
         return childRoleNames;
     }
@@ -91,17 +91,17 @@ public abstract class RoleDetails
         this.name = name;
     }
 
-    public List getPermissions()
+    public List<SimplePermission> getPermissions()
     {
         return permissions;
     }
 
-    public void setPermissions( List permissions )
+    public void setPermissions( List<SimplePermission> permissions )
     {
         this.permissions = permissions;
     }
 
-    public void setChildRoleNames( List childRoleNames )
+    public void setChildRoleNames( List<String> childRoleNames )
     {
         this.childRoleNames = childRoleNames;
     }

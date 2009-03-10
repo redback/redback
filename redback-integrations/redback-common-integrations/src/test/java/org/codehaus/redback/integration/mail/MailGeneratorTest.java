@@ -17,9 +17,8 @@ package org.codehaus.redback.integration.mail;
 */
 
 import java.net.URL;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Properties;
+import java.util.Map.Entry;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
@@ -33,7 +32,6 @@ import org.codehaus.plexus.redback.keys.KeyManager;
 import org.codehaus.plexus.redback.keys.KeyManagerException;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.spring.PlexusInSpringTestCase;
-import org.codehaus.redback.integration.mail.MailGenerator;
 import org.jpox.SchemaTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,10 +70,8 @@ public class MailGeneratorTest
         
         Properties properties = jdoFactory.getProperties();
 
-        for ( Iterator it = properties.entrySet().iterator(); it.hasNext(); )
+        for ( Entry<Object, Object> entry : properties.entrySet() )
         {
-            Map.Entry entry = (Map.Entry) it.next();
-
             System.setProperty( (String) entry.getKey(), (String) entry.getValue() );
         }
 

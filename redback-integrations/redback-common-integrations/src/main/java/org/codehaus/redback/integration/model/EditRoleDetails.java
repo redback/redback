@@ -16,11 +16,8 @@ package org.codehaus.redback.integration.model;
  * limitations under the License.
  */
 
-import java.util.Iterator;
-
 import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.Role;
-import org.codehaus.redback.integration.model.RoleDetails;
 
 /**
  * EditRoleDetails - Existing user Role Details.
@@ -41,18 +38,14 @@ public class EditRoleDetails
     {
         super.setName( role.getName() );
         super.setDescription( role.getDescription() );
-        Iterator it;
-
-        it = role.getChildRoleNames().iterator();
-        while ( it.hasNext() )
+        
+        for ( String r : role.getChildRoleNames() )
         {
-            super.addChildRoleName( (String) it.next() );
+            super.addChildRoleName( r );
         }
 
-        it = role.getPermissions().iterator();
-        while ( it.hasNext() )
+        for ( Permission perm : role.getPermissions() )
         {
-            Permission perm = (Permission) it.next();
             super.addPermission( perm.getName(), perm.getOperation().getName(), perm.getResource().getIdentifier() );
         }
     }

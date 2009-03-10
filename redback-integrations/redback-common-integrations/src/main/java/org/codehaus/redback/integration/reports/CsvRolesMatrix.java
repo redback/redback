@@ -21,7 +21,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -70,22 +69,19 @@ public class CsvRolesMatrix
     {
         UserManager userManager = securitySystem.getUserManager();
 
-        List allUsers = userManager.getUsers();
-        List allRoles;
-        Map assignmentsMap;
+        List<User> allUsers = userManager.getUsers();
+        List<Role> allRoles;
+        Map<String, List<String>> assignmentsMap;
 
         try
         {
             allRoles = rbacManager.getAllRoles();
             Collections.sort( allRoles, new RoleSorter() );
 
-            List allAssignments = rbacManager.getAllUserAssignments();
-            assignmentsMap = new HashMap();
+            assignmentsMap = new HashMap<String, List<String>>();
 
-            Iterator it = allAssignments.iterator();
-            while ( it.hasNext() )
+            for ( UserAssignment assignment : rbacManager.getAllUserAssignments() )
             {
-                UserAssignment assignment = (UserAssignment) it.next();
                 assignmentsMap.put( assignment.getPrincipal(), assignment.getRoleNames() );
             }
         }
@@ -100,43 +96,38 @@ public class CsvRolesMatrix
 
         writeCsvHeader( out, allRoles );
 
-        Iterator itUsers = allUsers.iterator();
-        while ( itUsers.hasNext() )
+        for ( User user : allUsers )
         {
-            User user = (User) itUsers.next();
             writeCsvRow( out, user, assignmentsMap, allRoles );
         }
 
         out.flush();
     }
 
-    private void writeCsvHeader( PrintWriter out, List allRoles )
+    private void writeCsvHeader( PrintWriter out, List<Role> allRoles )
     {
         out.print( "Username,Full Name,Email Address" );
-        Iterator itRoles = allRoles.iterator();
-        while ( itRoles.hasNext() )
+        for ( Role role : allRoles )
         {
-            Role role = (Role) itRoles.next();
             out.print( "," + escapeCell( role.getName() ) );
         }
         out.println();
     }
 
-    private void writeCsvRow( PrintWriter out, User user, Map assignmentsMap, List allRoles )
+    private void writeCsvRow( PrintWriter out, User user, Map<String,List<String>> assignmentsMap, List<Role> allRoles )
     {
         out.print( escapeCell( user.getUsername() ) );
         out.print( "," + escapeCell( user.getFullName() ) );
         out.print( "," + escapeCell( user.getEmail() ) );
 
-        List assignedRoleNames = (List) assignmentsMap.get( user.getPrincipal().toString() );
+        List<String> assignedRoleNames = assignmentsMap.get( user.getPrincipal().toString() );
         if ( assignedRoleNames == null )
         {
-            assignedRoleNames = new ArrayList();
+            assignedRoleNames = new ArrayList<String>();
         }
-        Iterator itRoles = allRoles.iterator();
-        while ( itRoles.hasNext() )
+        
+        for ( Role role : allRoles )
         {
-            Role role = (Role) itRoles.next();
             out.print( ',' );
             if ( assignedRoleNames.contains( role.getName() ) )
             {

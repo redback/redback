@@ -27,38 +27,25 @@ import org.codehaus.plexus.redback.rbac.Resource;
  * @version $Id$
  */
 public class ResourceSorter
-    implements Comparator
+    implements Comparator<Resource>
 {
 
-    public int compare( Object o1, Object o2 )
+    public int compare( Resource r1, Resource r2 )
     {
-        if ( !( o1 instanceof Resource ) )
+        if ( ( r1 == null ) && ( r2 == null ) )
         {
             return 0;
         }
 
-        if ( !( o2 instanceof Resource ) )
-        {
-            return 0;
-        }
-
-        if ( ( o1 == null ) && ( o2 == null ) )
-        {
-            return 0;
-        }
-
-        if ( ( o1 == null ) && ( o2 != null ) )
+        if ( ( r1 == null ) && ( r2 != null ) )
         {
             return -1;
         }
 
-        if ( ( o1 != null ) && ( o2 == null ) )
+        if ( ( r1 != null ) && ( r2 == null ) )
         {
             return 1;
         }
-
-        Resource r1 = (Resource) o1;
-        Resource r2 = (Resource) o2;
 
         return r1.getIdentifier().compareToIgnoreCase( r2.getIdentifier() );
     }

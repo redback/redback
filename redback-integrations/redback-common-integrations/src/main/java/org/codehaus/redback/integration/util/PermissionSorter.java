@@ -27,40 +27,27 @@ import org.codehaus.plexus.redback.rbac.Permission;
  * @version $Id$
  */
 public class PermissionSorter
-    implements Comparator
+    implements Comparator<Permission>
 {
 
-    public int compare( Object o1, Object o2 )
+    public int compare( Permission p1, Permission p2 )
     {
-        if ( !( o1 instanceof Permission ) )
+        if ( ( p1 == null ) && ( p2 == null ) )
         {
             return 0;
         }
 
-        if ( !( o2 instanceof Permission ) )
-        {
-            return 0;
-        }
-
-        if ( ( o1 == null ) && ( o2 == null ) )
-        {
-            return 0;
-        }
-
-        if ( ( o1 == null ) && ( o2 != null ) )
+        if ( ( p1 == null ) && ( p2 != null ) )
         {
             return -1;
         }
 
-        if ( ( o1 != null ) && ( o2 == null ) )
+        if ( ( p1 != null ) && ( p2 == null ) )
         {
             return 1;
         }
 
-        Permission r1 = (Permission) o1;
-        Permission r2 = (Permission) o2;
-
-        return r1.getName().compareToIgnoreCase( r2.getName() );
+        return p1.getName().compareToIgnoreCase( p2.getName() );
     }
 
 }

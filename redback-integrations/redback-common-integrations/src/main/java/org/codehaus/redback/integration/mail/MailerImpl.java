@@ -19,7 +19,6 @@ package org.codehaus.redback.integration.mail;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -65,7 +64,7 @@ public class MailerImpl
     @Resource(name="userConfiguration")
     private UserConfiguration config;
 
-    public void sendAccountValidationEmail( Collection recipients, AuthenticationKey authkey, String baseUrl )
+    public void sendAccountValidationEmail( Collection<String> recipients, AuthenticationKey authkey, String baseUrl )
     {
         String content = generator.generateMail( "newAccountValidationEmail", authkey, baseUrl );
 
@@ -74,7 +73,7 @@ public class MailerImpl
         sendMessage( recipients, validation.getEmailSubject(), content );
     }
 
-    public void sendPasswordResetEmail( Collection recipients, AuthenticationKey authkey, String baseUrl )
+    public void sendPasswordResetEmail( Collection<String> recipients, AuthenticationKey authkey, String baseUrl )
     {
         String content = generator.generateMail( "passwordResetEmail", authkey, baseUrl );
 
@@ -83,7 +82,7 @@ public class MailerImpl
         sendMessage( recipients, validation.getEmailSubject(), content );
     }
 
-    public void sendMessage( Collection recipients, String subject, String content )
+    public void sendMessage( Collection<String> recipients, String subject, String content )
     {
         if ( recipients.isEmpty() )
         {
@@ -115,13 +114,10 @@ public class MailerImpl
 
             message.setFrom( from );
 
-            Iterator it = recipients.iterator();
             List<Address> tos = new ArrayList<Address>();
-            while ( it.hasNext() )
+            
+            for ( String mailbox : recipients )
             {
-                String mailbox = (String) it.next();
-
-                
                 InternetAddress to = new InternetAddress( mailbox.trim() );
 
                 tos.add( to );                

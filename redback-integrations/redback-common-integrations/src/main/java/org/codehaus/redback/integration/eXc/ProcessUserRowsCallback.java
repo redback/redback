@@ -36,6 +36,7 @@ public class ProcessUserRowsCallback
     extends ProcessRowsCallback
 {
 
+    @SuppressWarnings("unchecked")
     public Collection sortRows( TableModel model, Collection rows )
         throws Exception
     {

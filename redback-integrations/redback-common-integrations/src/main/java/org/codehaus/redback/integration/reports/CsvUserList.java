@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
@@ -51,11 +50,11 @@ public class CsvUserList
     @Resource
     private SecuritySystem securitySystem;
 
-    private Map fields;
+    private Map<String,String> fields;
 
     public CsvUserList()
     {
-        fields = new HashMap();
+        fields = new HashMap<String,String>();
         fields.put( "username", "User Name" );
         fields.put( "fullName", "Full Name" );
         fields.put( "email", "Email Address" );
@@ -100,7 +99,7 @@ public class CsvUserList
 
         PrintWriter out = new PrintWriter( os );
 
-        writeCsvHeader( out, allUsers );
+        writeCsvHeader( out );
 
         Iterator<User> itUsers = allUsers.iterator();
         while ( itUsers.hasNext() )
@@ -112,35 +111,31 @@ public class CsvUserList
         out.flush();
     }
 
-    private void writeCsvHeader( PrintWriter out, List allUsers )
+    private void writeCsvHeader( PrintWriter out )
     {
         boolean hasPreviousField = false;
-        Iterator it = fields.entrySet().iterator();
-        while ( it.hasNext() )
+        for ( String heading : fields.values() )
         {
-            Map.Entry field = (Entry) it.next();
             if ( hasPreviousField )
             {
                 out.print( "," );
             }
-            String heading = (String) field.getValue();
             out.print( escapeCell( heading ) );
             hasPreviousField = true;
         }
         out.println();
     }
 
+    @SuppressWarnings("unchecked")
     private void writeCsvRow( PrintWriter out, User user )
         throws ReportException
     {
         try
         {
             boolean hasPreviousField = false;
-            Map propMap = PropertyUtils.describe( user );
-            Iterator it = fields.keySet().iterator();
-            while ( it.hasNext() )
+            Map<String,Object> propMap = PropertyUtils.describe( user );
+            for ( String propName : fields.keySet() )
             {
-                String propName = (String) it.next();
                 Object propValue = propMap.get( propName );
 
                 if ( hasPreviousField )
