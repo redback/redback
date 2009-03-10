@@ -16,8 +16,6 @@ package org.codehaus.plexus.redback.struts2.action;
  * limitations under the License.
  */
 
-import java.util.Iterator;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
@@ -82,10 +80,8 @@ public abstract class AbstractSecurityAction
 
         if ( violations != null )
         {
-            Iterator it = violations.getLocalizedViolations().iterator();
-            while ( it.hasNext() )
+            for ( String violation : violations.getLocalizedViolations() )
             {
-                String violation = (String) it.next();
                 addFieldError( field, violation );
             }
         }

@@ -16,8 +16,7 @@ package org.codehaus.plexus.redback.struts2.action;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import org.codehaus.plexus.redback.policy.PasswordEncoder;
 import org.codehaus.plexus.redback.policy.PasswordRuleViolationException;
@@ -89,9 +88,7 @@ public class AccountAction
         {
             // Means that the role name doesn't exist.
             // We need to fail fast and return to the previous page.
-            List list = new ArrayList();
-            list.add( username );
-            addActionError( getText( "user.does.not.exist", list ) );
+            addActionError( getText( "user.does.not.exist", Arrays.asList( username ) ) );
             return ERROR;
         }
 
@@ -110,10 +107,7 @@ public class AccountAction
         }
         catch ( UserNotFoundException e )
         {
-            List list = new ArrayList();
-            list.add( username );
-            list.add( e.getMessage() );
-            addActionError( getText( "cannot.get.user", list ) );
+            addActionError( getText( "cannot.get.user", Arrays.asList( username, e.getMessage() ) ) );
             return ERROR;
         }
 
@@ -162,9 +156,7 @@ public class AccountAction
         {
             // Means that the role name doesn't exist.
             // We need to fail fast and return to the previous page.
-            List list = new ArrayList();
-            list.add( username );
-            addActionError( getText( "user.does.not.exist", list ) );
+            addActionError( getText( "user.does.not.exist", Arrays.asList( username ) ) );
             return ERROR;
         }
 
@@ -211,10 +203,7 @@ public class AccountAction
         }
         catch ( UserNotFoundException e )
         {
-            List list = new ArrayList();
-            list.add( username );
-            list.add( e.getMessage() );
-            addActionError( getText( "cannot.get.user", list ) );
+            addActionError( getText( "cannot.get.user", Arrays.asList( username, e.getMessage() ) ) );
             return ERROR;
         }
         catch ( PasswordRuleViolationException e )

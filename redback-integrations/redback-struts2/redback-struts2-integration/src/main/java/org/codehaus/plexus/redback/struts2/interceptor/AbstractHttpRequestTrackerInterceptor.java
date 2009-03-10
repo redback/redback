@@ -16,21 +16,19 @@ package org.codehaus.plexus.redback.struts2.interceptor;
  * limitations under the License.
  */
 
-import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionInvocation;
-import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
-import com.opensymphony.xwork2.spring.SpringObjectFactory;
-import com.opensymphony.xwork2.spring.interceptor.ActionAutowiringInterceptor;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import java.util.Map;
+
 import org.apache.struts2.StrutsException;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.logging.LogEnabled;
 import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.spring.PlexusToSpringUtils;
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.web.context.WebApplicationContext;
+
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
 public abstract class AbstractHttpRequestTrackerInterceptor
     extends AbstractInterceptor
@@ -49,10 +47,11 @@ public abstract class AbstractHttpRequestTrackerInterceptor
         getLogger().info( this.getClass().getName() + " initialized!" );
     }
     
+    @SuppressWarnings("unchecked")
     protected synchronized ActionInvocationTracker addActionInvocation( ActionInvocation invocation )
         throws ComponentLookupException
     {
-        Map sessionMap = invocation.getInvocationContext().getSession();
+        Map<String, ActionInvocationTracker> sessionMap = invocation.getInvocationContext().getSession();
         
         ApplicationContext applicationContext = (ApplicationContext) ActionContext.getContext().getApplication().get(
                     WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);

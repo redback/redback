@@ -16,7 +16,7 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -52,7 +52,7 @@ public class ResourcesAction
 
     private boolean isPattern;
 
-    private List allResources;
+    private List<Resource> allResources;
 
     public String list()
     {
@@ -62,18 +62,16 @@ public class ResourcesAction
 
             if ( allResources == null )
             {
-                allResources = Collections.EMPTY_LIST;
+                allResources = Collections.emptyList();
             }
 
             Collections.sort( allResources, new ResourceSorter() );
         }
         catch ( RbacManagerException e )
         {
-            List list = new ArrayList();
-            list.add( e.getMessage() );
-            addActionError( getText( "cannot.list.all.resources", list ) );
+            addActionError( getText( "cannot.list.all.resources", Arrays.asList( e.getMessage() ) ) );
             getLogger().error( "System error:", e );
-            allResources = Collections.EMPTY_LIST;
+            allResources = Collections.emptyList();
         }
 
         return LIST;
@@ -92,11 +90,9 @@ public class ResourcesAction
         }
         catch ( RbacManagerException e )
         {
-            List list = new ArrayList();
-            list.add( e.getMessage() );
-            addActionError( getText( "cannot.save.resource", list ) );
+            addActionError( getText( "cannot.save.resource", Arrays.asList( e.getMessage() ) ) );
             getLogger().error( "System error:", e );
-            allResources = Collections.EMPTY_LIST;
+            allResources = Collections.emptyList();
         }
 
         return LIST;
@@ -110,20 +106,18 @@ public class ResourcesAction
         }
         catch ( RbacManagerException ne )
         {
-            List list = new ArrayList();
-            list.add( resourceIdentifier );
-            addActionError( getText( "cannot.remove.resource", list ) );
+            addActionError( getText( "cannot.remove.resource", Arrays.asList( resourceIdentifier ) ) );
             return ERROR;
         }
         return LIST;
     }
 
-    public List getAllResources()
+    public List<Resource> getAllResources()
     {
         return allResources;
     }
 
-    public void setAllResources( List allResources )
+    public void setAllResources( List<Resource> allResources )
     {
         this.allResources = allResources;
     }

@@ -16,8 +16,7 @@ package org.codehaus.plexus.redback.struts2.action;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.keys.KeyManager;
@@ -89,10 +88,7 @@ public class PasswordResetAction
             AuthenticationKey authkey = keyManager.createKey( username, "Password Reset Request",
                                                               policy.getUserValidationSettings().getEmailValidationTimeout() );
 
-            List recipients = new ArrayList();
-            recipients.add( user.getEmail() );
-
-            mailer.sendPasswordResetEmail( recipients, authkey, getBaseUrl() );
+            mailer.sendPasswordResetEmail( Arrays.asList( user.getEmail() ), authkey, getBaseUrl() );
 
             addActionMessage( getText( "password.reset.success" ) );
         }

@@ -36,6 +36,7 @@ public class BackTrackingResultTest
         return "plexus.xml";
     }    
     
+    @SuppressWarnings("unchecked")
     public void testBackTrackPrevious()
         throws Exception
     {
@@ -72,7 +73,7 @@ public class BackTrackingResultTest
         actionInvocation1.getInvocationContext().getSession().put( ActionInvocationTracker.ROLE, tracker );
 
         // before backtrack
-        Map parametersMap = actionInvocation1.getInvocationContext().getParameters();
+        Map<String,String> parametersMap = actionInvocation1.getInvocationContext().getParameters();
 
         assertEquals( ActionProxyStub.ACTION_NAME, backtrackingResult.getActionName() );
         assertEquals( ActionProxyStub.METHOD, backtrackingResult.getMethod() );
@@ -94,6 +95,7 @@ public class BackTrackingResultTest
 
     }
 
+    @SuppressWarnings("unchecked")
     public void testBackTrackCurrent()
         throws Exception
     {
@@ -130,7 +132,7 @@ public class BackTrackingResultTest
         actionInvocation1.getInvocationContext().getSession().put( ActionInvocationTracker.ROLE, tracker );
 
         // before backtrack
-        Map parametersMap = actionInvocation1.getInvocationContext().getParameters();
+        Map<String, String> parametersMap = actionInvocation1.getInvocationContext().getParameters();
 
         assertEquals( ActionProxyStub.ACTION_NAME, backtrackingResult.getActionName() );
         assertEquals( ActionProxyStub.METHOD, backtrackingResult.getMethod() );

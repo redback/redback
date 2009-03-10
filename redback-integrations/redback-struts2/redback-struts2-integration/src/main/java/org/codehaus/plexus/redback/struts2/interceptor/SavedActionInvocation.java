@@ -27,17 +27,18 @@ public class SavedActionInvocation
 
     private String actionName;
 
-    private Map parameterMap;
+    private Map<String, String> parameterMap;
 
     private String methodName;
 
+    @SuppressWarnings("unchecked")
     public SavedActionInvocation( ActionInvocation invocation )
     {
         namespace = invocation.getProxy().getNamespace();
         actionName = invocation.getProxy().getActionName();
         methodName = invocation.getProxy().getMethod();
 
-        parameterMap = new HashMap();
+        parameterMap = new HashMap<String, String>();
         parameterMap.putAll( invocation.getInvocationContext().getParameters() );
     }
 
@@ -51,7 +52,7 @@ public class SavedActionInvocation
         return actionName;
     }
 
-    public Map getParametersMap()
+    public Map<String,String> getParametersMap()
     {
         return parameterMap;
     }

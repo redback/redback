@@ -16,9 +16,7 @@ package org.codehaus.plexus.redback.struts2.action;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Map;
 
 import org.codehaus.plexus.redback.policy.PasswordEncoder;
@@ -31,7 +29,6 @@ import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
-import org.codehaus.redback.integration.util.AutoLoginCookies;
 
 /**
  * PasswordAction
@@ -68,16 +65,6 @@ public class PasswordAction
     private String targetUrl;   
 
     private boolean provideExisting;
-
-    /**
-     * @plexus.requirement
-     */
-    private AutoLoginCookies autologinCookies;
-
-
-    // ------------------------------------------------------------------
-    // Action Entry Points - (aka Names)
-    // ------------------------------------------------------------------
 
     public String show()
     {
@@ -127,10 +114,8 @@ public class PasswordAction
 
             if ( violations != null )
             {
-                Iterator it = violations.getLocalizedViolations().iterator();
-                while ( it.hasNext() )
+                for ( String violation : violations.getLocalizedViolations() )
                 {
-                    String violation = (String) it.next();
                     addFieldError( "newPassword", violation );
                 }
             }
@@ -160,9 +145,7 @@ public class PasswordAction
         }
         catch ( UserNotFoundException e )
         {
-            List list = new ArrayList();
-            list.add( user.getUsername() );
-            addActionError( getText( "cannot.update.user.not.found", list ) );
+            addActionError( getText( "cannot.update.user.not.found", Arrays.asList( user.getUsername() ) ) );
             addActionError( getText( "admin.deleted.account" ) );
 
             return ERROR;
@@ -173,10 +156,8 @@ public class PasswordAction
 
             if ( violations != null )
             {
-                Iterator it = violations.getLocalizedViolations().iterator();
-                while ( it.hasNext() )
+                for ( String violation : violations.getLocalizedViolations() )
                 {
-                    String violation = (String) it.next();
                     addFieldError( "newPassword", violation );
                 }
             }
@@ -216,7 +197,7 @@ public class PasswordAction
             if ( super.session != null )
             {            
                 
-                Map map  = (Map) super.session ;
+                Map<String, Object> map = (Map<String, Object>) super.session;
                 String url = "";
                 if ( map.containsKey( "targetUrl" ) ) 
                 {

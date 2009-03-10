@@ -16,7 +16,6 @@ package org.codehaus.plexus.redback.struts2.checks;
  * limitations under the License.
  */
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -37,8 +36,8 @@ import com.opensymphony.xwork2.config.entities.PackageConfig;
 public class AbstractXworkConfigurationCheck
 {
 
-    protected void checkAction( List violations, XworkPackageConfig expectedPackage, XworkActionConfig expectedAction,
-                                Map xwActionMap )
+    protected void checkAction( List<String> violations, XworkPackageConfig expectedPackage, XworkActionConfig expectedAction,
+                                Map<?, ?> xwActionMap )
     {
         ActionConfig xwActionConfig = (ActionConfig) xwActionMap.get( expectedAction.name );
         if ( xwActionConfig != null )
@@ -63,7 +62,7 @@ public class AbstractXworkConfigurationCheck
                 }
             }
 
-            Map xwResultMap = xwActionConfig.getResults();
+            Map<?, ?> xwResultMap = xwActionConfig.getResults();
 
             if ( expectedAction.results.isEmpty() )
             {
@@ -77,11 +76,8 @@ public class AbstractXworkConfigurationCheck
             else
             {
                 // Check for named result names.
-                Iterator it = expectedAction.results.iterator();
-                while ( it.hasNext() )
+                for ( String resultName : expectedAction.results )
                 {
-                    String resultName = (String) it.next();
-
                     if ( xwResultMap.get( resultName ) == null )
                     {
                         violations.add( "xwork.xml - Missing named result " + quote( resultName ) + " in action " +
@@ -97,18 +93,16 @@ public class AbstractXworkConfigurationCheck
         }
     }
 
-    protected void checkPackage( List violations, XworkPackageConfig expectedPackage, Configuration xwConfig )
+    protected void checkPackage( List<String> violations, XworkPackageConfig expectedPackage, Configuration xwConfig )
     {
         PackageConfig xwPackageConfig = findPackageNamespace( xwConfig, expectedPackage.name );
 
         if ( xwPackageConfig != null )
         {
-            Map xwActionMap = xwPackageConfig.getActionConfigs();
+            Map<?, ?> xwActionMap = xwPackageConfig.getActionConfigs();
 
-            Iterator it = expectedPackage.actions.iterator();
-            while ( it.hasNext() )
+            for ( XworkActionConfig expectedAction : expectedPackage.actions )
             {
-                XworkActionConfig expectedAction = (XworkActionConfig) it.next();
                 checkAction( violations, expectedPackage, expectedAction, xwActionMap );
             }
         }
@@ -118,14 +112,13 @@ public class AbstractXworkConfigurationCheck
         }
     }
 
+    @SuppressWarnings("unchecked")
     protected PackageConfig findPackageNamespace( Configuration xwConfig, String name )
     {
-        Map xwPackageConfigMap = xwConfig.getPackageConfigs();
+        Map<?,PackageConfig> xwPackageConfigMap = xwConfig.getPackageConfigs();
 
-        Iterator it = xwPackageConfigMap.values().iterator();
-        while ( it.hasNext() )
+        for ( PackageConfig xwPackageConfig : xwPackageConfigMap.values() )
         {
-            PackageConfig xwPackageConfig = (PackageConfig) it.next();
             if ( StringUtils.equals( name, xwPackageConfig.getNamespace() ) )
             {
                 return xwPackageConfig;

@@ -206,7 +206,7 @@ public class BackupRestoreAction
         return backupDirectory;
     }
 
-    public List getPreviousBackups()
+    public List<BackupRecord> getPreviousBackups()
     {
         return previousBackups;
     }
@@ -219,7 +219,7 @@ public class BackupRestoreAction
     
     private void retrievePreviousBackups()
     {
-        previousBackups = new ArrayList();
+        previousBackups = new ArrayList<BackupRecord>();
         File[] files = backupDirectory.listFiles();
         if ( files != null )
         {

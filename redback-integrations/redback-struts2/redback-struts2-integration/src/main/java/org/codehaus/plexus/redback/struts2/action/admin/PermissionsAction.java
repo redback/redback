@@ -16,7 +16,7 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -69,7 +69,7 @@ public class PermissionsAction
 
     private String resourceIdentifier;
 
-    private List allPermissions;
+    private List<Permission> allPermissions;
 
     // ------------------------------------------------------------------
     // Action Entry Points - (aka Names)
@@ -83,18 +83,16 @@ public class PermissionsAction
 
             if ( allPermissions == null )
             {
-                allPermissions = Collections.EMPTY_LIST;
+                allPermissions = Collections.emptyList();
             }
 
             Collections.sort( allPermissions, new PermissionSorter() );
         }
         catch ( RbacManagerException e )
         {
-            List list = new ArrayList();
-            list.add( e.getMessage() );
-            addActionError( getText( "cannot.list.all.permissions", list ) );
+            addActionError( getText( "cannot.list.all.permissions", Arrays.asList( e.getMessage() ) ) );
             getLogger().error( "System error:", e );
-            allPermissions = Collections.EMPTY_LIST;
+            allPermissions = Collections.emptyList();
         }
 
         return LIST;
@@ -146,10 +144,7 @@ public class PermissionsAction
         }
         catch ( RbacManagerException e )
         {
-            List list = new ArrayList();
-            list.add( name );
-            list.add( e.getMessage() );
-            addActionError( getText( "cannot.get.permission", list ) );
+            addActionError( getText( "cannot.get.permission", Arrays.asList( name, e.getMessage() ) ) );
             return ERROR;
         }
 
@@ -196,16 +191,11 @@ public class PermissionsAction
 
             manager.savePermission( permission );
 
-            List list = new ArrayList();
-            list.add( name );
-            addActionMessage( getText( "save.permission.success", list ) );
+            addActionMessage( getText( "save.permission.success", Arrays.asList( name ) ) );
         }
         catch ( RbacManagerException e )
         {
-            List list = new ArrayList();
-            list.add( name );
-            list.add( e.getMessage() );
-            addActionError( getText( "cannot.get.permission", list ) );
+            addActionError( getText( "cannot.get.permission", Arrays.asList( name, e.getMessage() ) ) );
             return ERROR;
         }
 
@@ -266,12 +256,12 @@ public class PermissionsAction
         this.resourceIdentifier = resourceIdentifier;
     }
 
-    public List getAllPermissions()
+    public List<Permission> getAllPermissions()
     {
         return allPermissions;
     }
 
-    public void setAllPermissions( List allPermissions )
+    public void setAllPermissions( List<Permission> allPermissions )
     {
         this.allPermissions = allPermissions;
     }

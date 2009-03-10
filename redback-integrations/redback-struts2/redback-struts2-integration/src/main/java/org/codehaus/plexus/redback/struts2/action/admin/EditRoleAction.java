@@ -20,11 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
-import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.struts2.action.AbstractUserCredentialsAction;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
@@ -47,15 +47,6 @@ public class EditRoleAction
     extends AbstractUserCredentialsAction
 {
     // ------------------------------------------------------------------
-    // Plexus Component Requirements
-    // ------------------------------------------------------------------
-
-    /**
-     * @plexus.requirement
-     */
-    private RoleManager roleManager;
-
-    // ------------------------------------------------------------------
     // Action Parameters
     // ------------------------------------------------------------------
 
@@ -65,17 +56,17 @@ public class EditRoleAction
 
     private String newDescription;
 
-    private List childRoleNames = new ArrayList();
+    private List<String> childRoleNames = new ArrayList<String>();
 
     private List<String> parentRoleNames = new ArrayList<String>();
 
-    private List permissions = new ArrayList();
+    private List<Permission> permissions = new ArrayList<Permission>();
 
     private List<User> users = new ArrayList<User>();
 
     private List<User> parentUsers = new ArrayList<User>();
 
-    private List allUsers = new ArrayList();
+    private List<User> allUsers = new ArrayList<User>();
 
     private List<String> usersList = new ArrayList<String>();
 
@@ -411,12 +402,12 @@ public class EditRoleAction
         this.name = roleName;
     }
 
-    public List getChildRoleNames()
+    public List<String> getChildRoleNames()
     {
         return childRoleNames;
     }
 
-    public void setChildRoleNames( List childRoleNames )
+    public void setChildRoleNames( List<String> childRoleNames )
     {
         this.childRoleNames = childRoleNames;
     }
@@ -441,12 +432,12 @@ public class EditRoleAction
         this.newDescription = newDescription;
     }
 
-    public List getPermissions()
+    public List<Permission> getPermissions()
     {
         return permissions;
     }
 
-    public void setPermissions( List permissions )
+    public void setPermissions( List<Permission> permissions )
     {
         this.permissions = permissions;
     }
@@ -461,12 +452,12 @@ public class EditRoleAction
         this.users = users;
     }
 
-    public List getAllUsers()
+    public List<User> getAllUsers()
     {
         return allUsers;
     }
 
-    public void setAllUsers( List allUsers )
+    public void setAllUsers( List<User> allUsers )
     {
         this.allUsers = allUsers;
     }

@@ -16,7 +16,7 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -53,7 +53,7 @@ public class OperationsAction
 
     private String description;
 
-    private List allOperations;
+    private List<Operation> allOperations;
 
     public String list()
     {
@@ -63,18 +63,16 @@ public class OperationsAction
 
             if ( allOperations == null )
             {
-                allOperations = Collections.EMPTY_LIST;
+                allOperations = Collections.emptyList();
             }
 
             Collections.sort( allOperations, new OperationSorter() );
         }
         catch ( RbacManagerException e )
         {
-            List list = new ArrayList();
-            list.add( e.getMessage() );
-            addActionError( getText( "cannot.list.all.operations", list ) );
+            addActionError( getText( "cannot.list.all.operations", Arrays.asList( e.getMessage() ) ) );
             getLogger().error( "System error:", e );
-            allOperations = Collections.EMPTY_LIST;
+            allOperations = Collections.emptyList();
         }
 
         return LIST;
@@ -92,11 +90,9 @@ public class OperationsAction
         }
         catch ( RbacManagerException e )
         {
-            List list = new ArrayList();
-            list.add( operationName );
-            addActionError( getText( "cannot.save.operation", list ) );
+            addActionError( getText( "cannot.save.operation", Arrays.asList( operationName ) ) );
             getLogger().error( "System error:", e );
-            allOperations = Collections.EMPTY_LIST;
+            allOperations = Collections.emptyList();
         }
 
         return LIST;
@@ -110,20 +106,18 @@ public class OperationsAction
         }
         catch ( RbacManagerException ne )
         {
-            List list = new ArrayList();
-            list.add( operationName );
-            addActionError( getText( "cannot.remove.operation", list ) );
+            addActionError( getText( "cannot.remove.operation", Arrays.asList( operationName ) ) );
             return ERROR;
         }
         return LIST;
     }
 
-    public List getAllOperations()
+    public List<Operation> getAllOperations()
     {
         return allOperations;
     }
 
-    public void setAllOperations( List allOperations )
+    public void setAllOperations( List<Operation> allOperations )
     {
         this.allOperations = allOperations;
     }

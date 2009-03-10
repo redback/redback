@@ -37,13 +37,14 @@ public class ActionContextStub
 
     public static final String VALUE_3 = "value_3";
 
+    @SuppressWarnings("unchecked")
     public ActionContextStub()
     {
         super( new HashMap() );
         this.setName( CONTEXT_NAME );
         this.setSession( new HashMap() );
 
-        this.setParameters( new HashMap() );
+        this.setParameters( new HashMap<String,String>() );
         this.getParameters().put( PARAMETER_1, VALUE_1 );
         this.getParameters().put( PARAMETER_2, VALUE_2 );
         this.getParameters().put( PARAMETER_3, VALUE_3 );

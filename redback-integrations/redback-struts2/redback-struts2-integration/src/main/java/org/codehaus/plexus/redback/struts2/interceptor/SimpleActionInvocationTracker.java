@@ -34,7 +34,7 @@ public class SimpleActionInvocationTracker
 
     private boolean backTrack;
 
-    private Stack actionInvocationStack = new Stack();
+    private Stack<SavedActionInvocation> actionInvocationStack = new Stack<SavedActionInvocation>();
 
     public void setHistorySize( int size )
     {

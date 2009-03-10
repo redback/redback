@@ -44,6 +44,7 @@ public class SimpleActionInvocationTrackerTest
         tracker = new SimpleActionInvocationTracker();
     }
 
+    @SuppressWarnings("unchecked")
     public void testAddActionInvocation()
         throws Exception
     {
@@ -54,7 +55,7 @@ public class SimpleActionInvocationTrackerTest
 
         // first entry int the stack
         SavedActionInvocation actionInvocation = tracker.getActionInvocationAt( 0 );
-        Map parametersMap = actionInvocation.getParametersMap();
+        Map<String,String> parametersMap = actionInvocation.getParametersMap();
 
         assertEquals( ActionProxyStub.ACTION_NAME, actionInvocation.getActionName() );
         assertEquals( ActionProxyStub.METHOD, actionInvocation.getMethodName() );

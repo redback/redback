@@ -26,7 +26,7 @@ import java.util.Date;
  * A record of a backup directory for displaying the backup/restore page.
  */
 public class BackupRecord
-    implements Comparable
+    implements Comparable<BackupRecord>
 {
     private final File directory;
 
@@ -63,9 +63,8 @@ public class BackupRecord
         return userDatabase;
     }
 
-    public int compareTo( Object o )
+    public int compareTo( BackupRecord record )
     {
-        BackupRecord record = (BackupRecord) o;
         return record.date.compareTo( this.date );
     }
 }

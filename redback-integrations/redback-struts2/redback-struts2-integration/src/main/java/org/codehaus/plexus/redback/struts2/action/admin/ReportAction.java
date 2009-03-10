@@ -18,8 +18,7 @@ package org.codehaus.plexus.redback.struts2.action.admin;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -65,9 +64,7 @@ public class ReportAction
         }
         catch ( ReportException e )
         {
-            List list = new ArrayList();
-            list.add( e.getMessage() );
-            addActionError( getText( "cannot.get.report", list ) );
+            addActionError( getText( "cannot.get.report", Arrays.asList( e.getMessage() ) ) );
             return ERROR;
         }
 

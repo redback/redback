@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -40,6 +39,7 @@ import org.codehaus.plexus.redback.users.UserQuery;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
+import org.codehaus.redback.integration.reports.Report;
 import org.codehaus.redback.integration.reports.ReportManager;
 import org.codehaus.redback.integration.role.RoleConstants;
 import org.extremecomponents.table.context.Context;
@@ -85,9 +85,9 @@ public class UserListAction
     // Action Parameters
     // ------------------------------------------------------------------
 
-    private List users;
+    private List<User> users;
 
-    private List roles;
+    private List<Role> roles;
 
     private String roleName;
 
@@ -103,7 +103,7 @@ public class UserListAction
         }
         catch ( RbacManagerException e )
         {
-            roles = Collections.EMPTY_LIST;
+            roles = Collections.emptyList();
         }
 
         if ( StringUtils.isEmpty( roleName ) )
@@ -115,11 +115,11 @@ public class UserListAction
             try
             {
                 Role target = rbac.getRole( roleName );
-                Set targetRoleNames = new HashSet();
+                Set<String> targetRoleNames = new HashSet<String>();
 
                 for ( int i = 0; i < roles.size(); i++ )
                 {
-                    Role r = (Role) roles.get( i );
+                    Role r = roles.get( i );
                     if ( rbac.getEffectiveRoles( r ).contains( target ) )
                     {
                         targetRoleNames.add( r.getName() );
@@ -130,17 +130,17 @@ public class UserListAction
             }
             catch ( RbacObjectNotFoundException e )
             {
-                users = Collections.EMPTY_LIST;
+                users = Collections.emptyList();
             }
             catch ( RbacManagerException e )
             {
-                users = Collections.EMPTY_LIST;
+                users = Collections.emptyList();
             }
         }
 
         if ( users == null )
         {
-            users = Collections.EMPTY_LIST;
+            users = Collections.emptyList();
         }
 
         return INPUT;
@@ -156,15 +156,13 @@ public class UserListAction
         return bundle;
     }
 
-    private List findUsers( Collection roleNames )
+    private List<User> findUsers( Collection<String> roleNames )
     {
-        List usernames = getUsernamesForRoles( roleNames );
-        List users = findUsersWithFilter();
-        List filteredUsers = new ArrayList();
+        List<String> usernames = getUsernamesForRoles( roleNames );
+        List<User> filteredUsers = new ArrayList<User>();
 
-        for ( Iterator i = users.iterator(); i.hasNext(); )
+        for ( User user : findUsersWithFilter() )
         {
-            User user = (User) i.next();
             if ( usernames.contains( user.getUsername() ) )
             {
                 filteredUsers.add( user );
@@ -174,7 +172,7 @@ public class UserListAction
         return filteredUsers;
     }
     
-    private List findUsersWithFilter()
+    private List<User> findUsersWithFilter()
     {
         Context context = new HttpServletRequestContext(ServletActionContext.getRequest());
         LimitFactory limitFactory = new TableLimitFactory(context);
@@ -194,19 +192,19 @@ public class UserListAction
         return getUserManager().findUsersByQuery(query);
     }
 
-    private List getUsernamesForRoles( Collection roleNames )
+    private List<String> getUsernamesForRoles( Collection<String> roleNames )
     {
-        Set usernames = new HashSet();
+        Set<String> usernames = new HashSet<String>();
 
         try
         {
-            List userAssignments = rbac.getUserAssignmentsForRoles( roleNames );
+            List<UserAssignment> userAssignments = rbac.getUserAssignmentsForRoles( roleNames );
 
             if ( userAssignments != null )
             {
-                for ( int i = 0; i < userAssignments.size(); i++ )
+                for ( UserAssignment a : userAssignments )
                 {
-                    usernames.add( ( (UserAssignment) userAssignments.get( i ) ).getPrincipal() );
+                    usernames.add( a.getPrincipal() );
                 }
             }
         }
@@ -215,7 +213,7 @@ public class UserListAction
             getLogger().warn( "Unable to get user assignments for roles " + roleNames, e );
         }
 
-        return new ArrayList( usernames );
+        return new ArrayList<String>( usernames );
     }
 
     private UserManager getUserManager()
@@ -227,12 +225,12 @@ public class UserListAction
     // Parameter Accessor Methods
     // ------------------------------------------------------------------
 
-    public List getUsers()
+    public List<User> getUsers()
     {
         return users;
     }
 
-    public void setUsers( List users )
+    public void setUsers( List<User> users )
     {
         this.users = users;
     }
@@ -251,12 +249,12 @@ public class UserListAction
         this.roleName = roleName;
     }
 
-    public List getRoles()
+    public List<Role> getRoles()
     {
         return roles;
     }
 
-    public Map getReportMap()
+    public Map<String, Map<String, Report>> getReportMap()
     {
         return reportManager.getReportMap();
     }

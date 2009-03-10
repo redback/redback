@@ -17,11 +17,11 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  */
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -66,7 +66,8 @@ public class SystemInfoAction
      */
     private RBACManager rbacManager;
 
-    private static final List ignoredReaders;
+    // Class.getClass() and some JPOX classes
+    private static final List<String> ignoredReaders = Arrays.asList( "class", "copy" );
 
     private static final String NULL = "&lt;null&gt;";
 
@@ -75,15 +76,6 @@ public class SystemInfoAction
     private static final String INDENT = "  ";
 
     private static final int MAXDEPTH = 10;
-
-    static
-    {
-        ignoredReaders = new ArrayList();
-        // Ignoring Class.getClass()
-        ignoredReaders.add( "class" );
-        // Found in some jpox classes.
-        ignoredReaders.add( "copy" );
-    }
 
     // ------------------------------------------------------------------
     // Action Parameters
@@ -117,7 +109,7 @@ public class SystemInfoAction
 
     private void dumpObject( StringBuffer sb, Object obj, String indent )
     {
-        dumpObjectSwitchboard( new ArrayList(), sb, obj, indent, 0 );
+        dumpObjectSwitchboard( new ArrayList<Object>(), sb, obj, indent, 0 );
     }
 
     /**
@@ -129,7 +121,7 @@ public class SystemInfoAction
      * @param indent      the current indent string.
      * @param depth       the depth in the tree.
      */
-    private void dumpObjectSwitchboard( List seenObjects, StringBuffer sb, Object obj, String indent, int depth )
+    private void dumpObjectSwitchboard( List<Object> seenObjects, StringBuffer sb, Object obj, String indent, int depth )
     {
         if ( obj == null )
         {
@@ -152,19 +144,19 @@ public class SystemInfoAction
 
         if ( obj instanceof List )
         {
-            dumpIterator( seenObjects, sb, ( (List) obj ).iterator(), indent, depth );
+            dumpIterator( seenObjects, sb, ( (List<?>) obj ).iterator(), indent, depth );
         }
         else if ( obj instanceof Set )
         {
-            dumpIterator( seenObjects, sb, ( (Set) obj ).iterator(), indent, depth );
+            dumpIterator( seenObjects, sb, ( (Set<?>) obj ).iterator(), indent, depth );
         }
         else if ( obj instanceof Map )
         {
-            dumpIterator( seenObjects, sb, ( (Map) obj ).entrySet().iterator(), indent, depth );
+            dumpIterator( seenObjects, sb, ( (Map<?, ?>) obj ).entrySet().iterator(), indent, depth );
         }
         else if ( obj instanceof Iterator )
         {
-            dumpIterator( seenObjects, sb, (Iterator) obj, indent, depth );
+            dumpIterator( seenObjects, sb, (Iterator<?>) obj, indent, depth );
         }
         else
         {
@@ -192,18 +184,17 @@ public class SystemInfoAction
         depth--;
     }
 
-    private void dumpObjectReaders( List seenObjects, StringBuffer sb, Object obj, String indent, int depth )
+    @SuppressWarnings("unchecked")
+    private void dumpObjectReaders( List<Object> seenObjects, StringBuffer sb, Object obj, String indent, int depth )
     {
         sb.append( obj.toString() ).append( LN );
         String name = null;
 
         try
         {
-            Map readers = PropertyUtils.describe( obj );
-            Iterator it = readers.entrySet().iterator();
-            while ( it.hasNext() )
+            Map<String, Object> readers = PropertyUtils.describe( obj );
+            for ( Map.Entry<String, Object> readerEntry : readers.entrySet() )
             {
-                Map.Entry readerEntry = (Entry) it.next();
                 name = (String) readerEntry.getKey();
 
                 if ( ignoredReaders.contains( name ) )
@@ -239,7 +230,7 @@ public class SystemInfoAction
         }
     }
 
-    private void dumpIterator( List seenObjects, StringBuffer sb, Iterator iterator, String indent, int depth )
+    private void dumpIterator( List<Object> seenObjects, StringBuffer sb, Iterator<?> iterator, String indent, int depth )
     {
         sb.append( LN );
         while ( iterator.hasNext() )

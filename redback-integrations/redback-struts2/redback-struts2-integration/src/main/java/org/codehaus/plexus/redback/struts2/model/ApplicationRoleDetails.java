@@ -46,6 +46,7 @@ public class ApplicationRoleDetails
 
     private List<List<RoleTableCell>> table;
 
+    @SuppressWarnings("unchecked")
     public ApplicationRoleDetails( ModelApplication application, Collection<Role> effectivelyAssignedRoles,
                                    Collection<Role> allAssignedRoles, List<Role> assignableRoles )
     {

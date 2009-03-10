@@ -44,6 +44,7 @@ public class AbstractBackTrackingResult
         return setupBackTrack( invocation, CURRENT );
     }
 
+    @SuppressWarnings("unchecked")
     protected boolean setupBackTrack( ActionInvocation invocation, int order )
     {
         Map session = invocation.getInvocationContext().getSession();
@@ -75,7 +76,7 @@ public class AbstractBackTrackingResult
                 {
 	            	ResultConfig resultConfig = invocation.getProxy().getConfig().getResults().get( resultCode );
 	            	
-	            	Map filteredMap = new HashMap();
+	            	Map<String, String> filteredMap = new HashMap<String, String>();
 	            	Set<String> keys = savedInvocation.getParametersMap().keySet();
 	            	for( String key : keys )
 	            	{

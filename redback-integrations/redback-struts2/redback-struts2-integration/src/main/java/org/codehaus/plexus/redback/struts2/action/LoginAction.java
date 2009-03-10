@@ -16,8 +16,7 @@ package org.codehaus.plexus.redback.struts2.action;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import org.apache.struts2.ServletActionContext;
 import org.codehaus.plexus.redback.authentication.AuthenticationConstants;
@@ -387,17 +386,12 @@ public class LoginAction
         }
         catch ( AuthenticationException ae )
         {
-            List list = new ArrayList();
-            list.add( ae.getMessage() );
-            addActionError( getText( "authentication.exception", list ) );
+            addActionError( getText( "authentication.exception", Arrays.asList( ae.getMessage() ) ) );
             return ERROR;
         }
         catch ( UserNotFoundException ue )
         {
-            List list = new ArrayList();
-            list.add( username );
-            list.add( ue.getMessage() );
-            addActionError( getText( "user.not.found.exception", list ) );
+            addActionError( getText( "user.not.found.exception", Arrays.asList( username, ue.getMessage() ) ) );
             return ERROR;
         }
         catch ( AccountLockedException e )

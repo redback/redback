@@ -16,8 +16,7 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
@@ -84,9 +83,7 @@ public class UserDeleteAction extends AbstractSecurityAction implements Cancella
         }
         catch ( UserNotFoundException e )
         {
-        	List list = new ArrayList();
-            list.add( username );
-        	addActionError( getText( "cannot.remove.user.not.found", list ) );
+        	addActionError( getText( "cannot.remove.user.not.found", Arrays.asList( username ) ) );
             return SUCCESS;
         }
 
@@ -117,17 +114,11 @@ public class UserDeleteAction extends AbstractSecurityAction implements Cancella
         }
         catch ( RbacObjectInvalidException e )
         {
-            List list = new ArrayList();
-            list.add( username );
-            list.add( e.getMessage() );
-            addActionError( getText( "cannot.remove.user.role", list ) );
+            addActionError( getText( "cannot.remove.user.role", Arrays.asList( username, e.getMessage() ) ) );
         }
         catch ( RbacManagerException e )
         {
-            List list = new ArrayList();
-            list.add( username );
-            list.add( e.getMessage() );
-            addActionError( getText( "cannot.remove.user.role", list ) );
+            addActionError( getText( "cannot.remove.user.role", Arrays.asList( username, e.getMessage() ) ) );
         }
 
         if ( getActionErrors().isEmpty() )
@@ -138,9 +129,7 @@ public class UserDeleteAction extends AbstractSecurityAction implements Cancella
             }
             catch ( UserNotFoundException e )
             {
-                List list = new ArrayList();
-                list.add( username );
-                addActionError( getText( "cannot.remove.user.non.existent", list ) );
+                addActionError( getText( "cannot.remove.user.non.existent", Arrays.asList( username ) ) );
             }
         }
 

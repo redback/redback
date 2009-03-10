@@ -75,6 +75,7 @@ public class PolicyEnforcementInterceptor
      * @return
      * @throws Exception
      */
+    @SuppressWarnings("unchecked")
     public String intercept( ActionInvocation actionInvocation )
         throws Exception
     {
@@ -114,7 +115,7 @@ public class PolicyEnforcementInterceptor
 
             if ( checkForcePasswordChange( securitySession, actionInvocation ) )
             {
-                Map session = ServletActionContext.getContext().getSession();
+                Map<String, Object> session = ServletActionContext.getContext().getSession();
                 HttpServletRequest request = ServletActionContext.getRequest();
                 
                 String queryString = request.getQueryString();
@@ -148,7 +149,7 @@ public class PolicyEnforcementInterceptor
                     Calendar expirationDate = Calendar.getInstance();
                     expirationDate.setTime( user.getLastPasswordChange() );
                     expirationDate.add( Calendar.DAY_OF_MONTH, policy.getPasswordExpirationDays() );
-                    Map session = ServletActionContext.getContext().getSession();
+                    Map<String, Object> session = ServletActionContext.getContext().getSession();
                     session.put( "passwordExpirationNotification", expirationDate.getTime().toString() );
                 }                                
             }

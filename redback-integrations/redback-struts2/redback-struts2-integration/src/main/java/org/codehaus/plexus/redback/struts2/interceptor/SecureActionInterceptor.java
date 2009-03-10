@@ -16,7 +16,6 @@ package org.codehaus.plexus.redback.struts2.interceptor;
  * limitations under the License.
  */
 
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -125,7 +124,7 @@ public class SecureActionInterceptor
                     }
                 }
 
-                List authzTuples = bundle.getAuthorizationTuples();
+                List<SecureActionBundle.AuthorizationTuple> authzTuples = bundle.getAuthorizationTuples();
 
                 // if operations are returned we need to perform authorization checks
                 if ( authzTuples != null && authzTuples.size() > 0 )
@@ -138,10 +137,8 @@ public class SecureActionInterceptor
                         return processRequiresAuthentication( invocation );
                     }
 
-                    for ( Iterator i = authzTuples.iterator(); i.hasNext(); )
+                    for ( SecureActionBundle.AuthorizationTuple tuple : authzTuples )
                     {
-                        SecureActionBundle.AuthorizationTuple tuple = (SecureActionBundle.AuthorizationTuple) i.next();
-
                         getLogger().debug( "checking authz for " + tuple.toString() );
 
                         AuthorizationResult authzResult =

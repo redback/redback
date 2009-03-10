@@ -17,7 +17,6 @@ package org.codehaus.plexus.redback.struts2.interceptor;
  */
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -50,7 +49,7 @@ public class EnvironmentCheckInterceptor
     /**
      * @plexus.requirement role="org.codehaus.plexus.redback.system.check.EnvironmentCheck"
      */
-    private List checkers;
+    private List<EnvironmentCheck> checkers;
 
     public void destroy()
     {
@@ -67,13 +66,10 @@ public class EnvironmentCheckInterceptor
 
         if ( checkers != null )
         {
-            List violations = new ArrayList();
+            List<String> violations = new ArrayList<String>();
 
-            Iterator it = checkers.iterator();
-            while ( it.hasNext() )
+            for ( EnvironmentCheck check : checkers )
             {
-                EnvironmentCheck check = (EnvironmentCheck) it.next();
-
                 check.validateEnvironment( violations );
             }
 
@@ -85,10 +81,9 @@ public class EnvironmentCheckInterceptor
                 msg.append( " ENVIRONMENT FAILURE !! \n" );
                 msg.append( "\n" );
 
-                Iterator vit = violations.iterator();
-                while ( vit.hasNext() )
+                for ( String v : violations )
                 {
-                    msg.append( vit.next() ).append( "\n" );
+                    msg.append( v ).append( "\n" );
                 }
 
                 msg.append( "\n" );

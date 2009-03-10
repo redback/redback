@@ -16,8 +16,7 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.rbac.Resource;
@@ -82,9 +81,7 @@ public class UserCreateAction
         {
             // Means that the role name doesn't exist.
             // We need to fail fast and return to the previous page.
-            List list = new ArrayList();
-            list.add( user.getUsername() );
-            addActionError( getText( "user.already.exists", list ) );
+            addActionError( getText( "user.already.exists", Arrays.asList( user.getUsername() ) ) );
         }
 
         if ( hasActionErrors() || hasFieldErrors() )

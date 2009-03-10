@@ -17,9 +17,10 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  */
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.List;
 
+import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.Resource;
@@ -62,9 +63,9 @@ public class RoleCreateAction
 
     private String description;
 
-    private List permissions;
+    private List<SimplePermission> permissions;
 
-    private List childRoles;
+    private List<String> childRoles;
 
     private SimplePermission addpermission;
 
@@ -78,12 +79,12 @@ public class RoleCreateAction
     {
         if ( permissions == null )
         {
-            permissions = new ArrayList();
+            permissions = new ArrayList<SimplePermission>();
         }
 
         if ( childRoles == null )
         {
-            childRoles = new ArrayList();
+            childRoles = new ArrayList<String>();
         }
 
         if ( addpermission == null )
@@ -104,7 +105,7 @@ public class RoleCreateAction
 
         if ( permissions == null )
         {
-            permissions = new ArrayList();
+            permissions = new ArrayList<SimplePermission>();
         }
 
         permissions.add( addpermission );
@@ -142,11 +143,9 @@ public class RoleCreateAction
             _role.setDescription( description );
             _role.setChildRoleNames( childRoles );
 
-            List _permissionList = new ArrayList();
-            Iterator it = permissions.iterator();
-            while ( it.hasNext() )
+            List<Permission> _permissionList = new ArrayList<Permission>();
+            for ( SimplePermission perm : permissions )
             {
-                SimplePermission perm = (SimplePermission) it.next();
                 _permissionList.add(
                     manager.createPermission( perm.getName(), perm.getOperationName(), perm.getResourceIdentifier() ) );
             }
@@ -155,16 +154,11 @@ public class RoleCreateAction
 
             manager.saveRole( _role );
 
-            List list = new ArrayList();
-            list.add( roleName );
-            addActionMessage( getText( "save.role.success", list ) );
+            addActionMessage( getText( "save.role.success", Arrays.asList( roleName ) ) );
         }
         catch ( RbacManagerException e )
         {
-            List list = new ArrayList();
-            list.add( roleName );
-            list.add( e.getMessage() );
-            addActionError( getText( "cannot.get.role", list ) );
+            addActionError( getText( "cannot.get.role", Arrays.asList( roleName, e.getMessage() ) ) );
             return ERROR;
         }
 

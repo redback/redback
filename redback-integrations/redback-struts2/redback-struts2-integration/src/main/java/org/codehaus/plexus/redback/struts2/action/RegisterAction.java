@@ -16,13 +16,11 @@ package org.codehaus.plexus.redback.struts2.action;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.keys.KeyManagerException;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
-import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.users.User;
@@ -60,11 +58,6 @@ public class RegisterAction
      * @plexus.requirement
      */
     private Mailer mailer;
-
-    /**
-     * @plexus.requirement role-hint="cached"
-     */
-    private RBACManager rbacManager;
 
     /**
      * @plexus.requirement
@@ -124,9 +117,7 @@ public class RegisterAction
         {
             // Means that the role name doesn't exist.
             // We need to fail fast and return to the previous page.
-            List list = new ArrayList();
-            list.add( user.getUsername() );
-            addActionError( getText( "user.already.exists", list ) );
+            addActionError( getText( "user.already.exists", Arrays.asList( user.getUsername() ) ) );
         }
 
         if ( hasActionErrors() || hasFieldErrors() )
@@ -160,10 +151,7 @@ public class RegisterAction
                                                                                       "New User Email Validation",
                                                                                       securityPolicy.getUserValidationSettings().getEmailValidationTimeout() );
 
-                List recipients = new ArrayList();
-                recipients.add( u.getEmail() );
-
-                mailer.sendAccountValidationEmail( recipients, authkey, getBaseUrl() );
+                mailer.sendAccountValidationEmail( Arrays.asList( u.getEmail() ), authkey, getBaseUrl() );
 
                 securityPolicy.setEnabled( false );
                 manager.addUser( u );
@@ -201,10 +189,7 @@ public class RegisterAction
                                                                                   "New User Email Validation",
                                                                                   securityPolicy.getUserValidationSettings().getEmailValidationTimeout() );
             
-            List recipients = new ArrayList();
-            recipients.add( user.getEmail() );
-
-            mailer.sendAccountValidationEmail( recipients, authkey, getBaseUrl() );
+            mailer.sendAccountValidationEmail( Arrays.asList( user.getEmail() ), authkey, getBaseUrl() );
 
             return RESEND_VALIDATION_EMAIL;
         }
