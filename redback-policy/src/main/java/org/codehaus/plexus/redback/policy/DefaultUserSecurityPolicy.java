@@ -292,8 +292,8 @@ public class DefaultUserSecurityPolicy
 
             if ( now.after( expirationDate ) )
             {
-                log.info( "User '" + user.getUsername() + "' locked due to password expiration date passing: " + expirationDate );
-                user.setLocked( true );
+                log.info( "User '" + user.getUsername() + "' flagged for password expiry (expired on: "
+                    + expirationDate + ")" );
                 user.setPasswordChangeRequired( true );
                 throw new MustChangePasswordException( "Password Expired, You must change your password." );
             }

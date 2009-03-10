@@ -147,7 +147,7 @@ public abstract class HttpAuthenticator
     {
         User user = getSessionUser( httpSession );
 
-        return ( ( user != null ) && !user.isLocked() );
+        return ( ( user != null ) && !user.isLocked() && !user.isPasswordChangeRequired() );
     }
 
     public SecuritySession getSecuritySession( HttpSession httpSession )

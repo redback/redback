@@ -74,7 +74,7 @@ public class KeyStoreAuthenticator
             {
                 User user = userManager.findUser( dataSource.getPrincipal() );
                 
-                if (user.isLocked())
+                if (user.isLocked() || user.isPasswordChangeRequired())
                 {
                     throw new AccountLockedException( "Account " + source.getPrincipal() + " is locked.", user );
                 }
