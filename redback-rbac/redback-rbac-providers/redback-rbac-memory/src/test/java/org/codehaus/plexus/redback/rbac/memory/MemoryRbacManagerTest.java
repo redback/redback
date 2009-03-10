@@ -16,22 +16,10 @@ package org.codehaus.plexus.redback.rbac.memory;
  * limitations under the License.
  */
 
-import java.io.File;
-import java.net.URL;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
-
-import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
-
 import net.sf.ehcache.CacheManager;
 
-import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
-import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.tests.AbstractRbacManagerTestCase;
-import org.jpox.SchemaTool;
 
 /**
  * MemoryRbacManagerTest 

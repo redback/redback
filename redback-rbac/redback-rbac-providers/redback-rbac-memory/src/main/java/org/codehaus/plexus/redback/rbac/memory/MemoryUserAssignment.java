@@ -41,7 +41,7 @@ public class MemoryUserAssignment
     /**
      * Field roles
      */
-    private List roles = new ArrayList();
+    private List<String> roles = new ArrayList<String>();
     
     /**
      * Field permanent
@@ -83,11 +83,11 @@ public class MemoryUserAssignment
     /**
      * Method getRoles
      */
-    public List getRoleNames()
+    public List<String> getRoleNames()
     {
         if ( this.roles == null )
         {
-            this.roles = new ArrayList();
+            this.roles = new ArrayList<String>();
         }
 
         return this.roles;
@@ -118,7 +118,7 @@ public class MemoryUserAssignment
      * 
      * @param roles
      */
-    public void setRoleNames( List roles )
+    public void setRoleNames( List<String> roles )
     {
         this.roles = roles;
     }

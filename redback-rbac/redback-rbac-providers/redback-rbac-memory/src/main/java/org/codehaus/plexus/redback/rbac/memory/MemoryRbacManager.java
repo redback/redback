@@ -16,6 +16,13 @@ package org.codehaus.plexus.redback.rbac.memory;
  * limitations under the License.
  */
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.codehaus.plexus.redback.rbac.AbstractRBACManager;
 import org.codehaus.plexus.redback.rbac.Operation;
 import org.codehaus.plexus.redback.rbac.Permission;
@@ -31,14 +38,6 @@ import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 /**
  * MemoryRbacManager: a very quick and dirty implementation of a rbac store
  * <p/>
@@ -53,15 +52,15 @@ public class MemoryRbacManager
     extends AbstractRBACManager
     implements RBACManager
 {
-    private Map roles = new HashMap();
+    private Map<String, Role> roles = new HashMap<String, Role>();
 
-    private Map permissions = new HashMap();
+    private Map<String, Permission> permissions = new HashMap<String, Permission>();
 
-    private Map operations = new HashMap();
+    private Map<String, Operation> operations = new HashMap<String, Operation>();
 
-    private Map resources = new HashMap();
+    private Map<String, Resource> resources = new HashMap<String, Resource>();
 
-    private Map userAssignments = new HashMap();
+    private Map<String, UserAssignment> userAssignments = new HashMap<String, UserAssignment>();
 
     // ----------------------------------------------------------------------
     // Role methods
@@ -80,17 +79,16 @@ public class MemoryRbacManager
 
         if ( role.getPermissions() != null )
         {
-            Iterator it = role.getPermissions().iterator();
-            while ( it.hasNext() )
+            for ( Permission p : role.getPermissions() )
             {
-                savePermission( (Permission) it.next() );
+                savePermission( p );
             }
         }
 
         return role;
     }
 
-    public void saveRoles( Collection roles )
+    public void saveRoles( Collection<Role> roles )
         throws RbacObjectInvalidException, RbacManagerException
     {
         if ( roles == null )
@@ -99,10 +97,8 @@ public class MemoryRbacManager
             return;
         }
 
-        Iterator it = roles.iterator();
-        while ( it.hasNext() )
+        for ( Role role : roles )
         {
-            Role role = (Role) it.next();
             saveRole( role );
         }
     }
@@ -123,7 +119,7 @@ public class MemoryRbacManager
 
         assertRoleExists( roleName );
 
-        return (Role) roles.get( roleName );
+        return roles.get( roleName );
     }
 
     public void removeRole( Role role )
@@ -143,12 +139,12 @@ public class MemoryRbacManager
         roles.remove( role.getName() );
     }
 
-    public List getAllRoles()
+    public List<Role> getAllRoles()
         throws RbacManagerException
     {
         triggerInit();
 
-        return Collections.unmodifiableList( new ArrayList( roles.values() ) );
+        return Collections.unmodifiableList( new ArrayList<Role>( roles.values() ) );
     }
 
     // ----------------------------------------------------------------------
@@ -313,15 +309,15 @@ public class MemoryRbacManager
 
         assertPermissionExists( permissionName );
 
-        return (Permission) permissions.get( permissionName );
+        return permissions.get( permissionName );
     }
 
-    public List getResources()
+    public List<Resource> getResources()
         throws RbacManagerException
     {
         triggerInit();
 
-        return Collections.unmodifiableList( new ArrayList( resources.values() ) );
+        return Collections.unmodifiableList( new ArrayList<Resource>( resources.values() ) );
     }
 
     public void removeOperation( Operation operation )
@@ -444,51 +440,47 @@ public class MemoryRbacManager
         }
     }
 
-    public List getAllOperations()
+    public List<Operation> getAllOperations()
         throws RbacManagerException
     {
         triggerInit();
 
-        return Collections.unmodifiableList( new ArrayList( operations.values() ) );
+        return Collections.unmodifiableList( new ArrayList<Operation>( operations.values() ) );
     }
 
-    public List getAllPermissions()
+    public List<Permission> getAllPermissions()
         throws RbacManagerException
     {
         triggerInit();
 
-        return Collections.unmodifiableList( new ArrayList( permissions.values() ) );
+        return Collections.unmodifiableList( new ArrayList<Permission>( permissions.values() ) );
     }
 
-    public List getAllResources()
+    public List<Resource> getAllResources()
         throws RbacManagerException
     {
         triggerInit();
 
-        return Collections.unmodifiableList( new ArrayList( resources.values() ) );
+        return Collections.unmodifiableList( new ArrayList<Resource>( resources.values() ) );
     }
 
-    public List getAllUserAssignments()
+    public List<UserAssignment> getAllUserAssignments()
         throws RbacManagerException
     {
         triggerInit();
 
-        return Collections.unmodifiableList( new ArrayList( userAssignments.values() ) );
+        return Collections.unmodifiableList( new ArrayList<UserAssignment>( userAssignments.values() ) );
     }
 
-    public List getUserAssignmentsForRoles( Collection roleNames )
+    public List<UserAssignment> getUserAssignmentsForRoles( Collection<String> roleNames )
         throws RbacManagerException
     {
-        List allUA = getAllUserAssignments();
-        List userAssignments = new ArrayList();
+        List<UserAssignment> userAssignments = new ArrayList<UserAssignment>();
 
-        for ( Iterator i = allUA.iterator(); i.hasNext(); )
+        for ( UserAssignment ua : getAllUserAssignments() )
         {
-            UserAssignment ua = (UserAssignment) i.next();
-
-            for ( Iterator j = roleNames.iterator(); j.hasNext(); )
+            for ( String roleName : roleNames )
             {
-            	String roleName = (String) j.next();
                 if ( ua.getRoleNames().contains( roleName ) )
                 {
                     userAssignments.add( ua );
@@ -507,7 +499,7 @@ public class MemoryRbacManager
 
         assertUserAssignmentExists( principal );
 
-        return (UserAssignment) userAssignments.get( principal );
+        return userAssignments.get( principal );
     }
 
     public Operation getOperation( String operationName )
@@ -517,7 +509,7 @@ public class MemoryRbacManager
 
         assertOpertionExists( operationName );
 
-        return (Operation) operations.get( operationName );
+        return operations.get( operationName );
     }
 
     public Resource getResource( String resourceIdentifier )
@@ -527,7 +519,7 @@ public class MemoryRbacManager
 
         assertResourceExists( resourceIdentifier );
 
-        return (Resource) resources.get( resourceIdentifier );
+        return resources.get( resourceIdentifier );
     }
 
     private boolean hasTriggeredInit = false;

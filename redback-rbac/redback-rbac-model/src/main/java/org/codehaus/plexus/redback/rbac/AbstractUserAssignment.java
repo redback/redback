@@ -35,7 +35,7 @@ public abstract class AbstractUserAssignment
 
     public void addRoleName( String roleName )
     {
-        List names = getRoleNames();
+        List<String> names = getRoleNames();
         if ( !names.contains( roleName ) )
         {
             names.add( roleName );

@@ -52,12 +52,12 @@ public class MemoryRole
     /**
      * Field childRoleNames
      */
-    private List childRoleNames = new ArrayList();
+    private List<String> childRoleNames = new ArrayList<String>();
 
     /**
      * Field permissions
      */
-    private List permissions = new ArrayList();
+    private List<Permission> permissions = new ArrayList<Permission>();
     
     /**
      * Field permanent
@@ -105,7 +105,7 @@ public class MemoryRole
     /**
      * Method getChildRoles
      */
-    public List getChildRoleNames()
+    public List<String> getChildRoleNames()
     {
         return this.childRoleNames;
     }
@@ -129,7 +129,7 @@ public class MemoryRole
     /**
      * Method getPermissions
      */
-    public List getPermissions()
+    public List<Permission> getPermissions()
     {
         return this.permissions;
     }
@@ -208,7 +208,7 @@ public class MemoryRole
      * 
      * @param permissions
      */
-    public void setPermissions( List permissions )
+    public void setPermissions( List<Permission> permissions )
     {
         this.permissions = permissions;
     }
@@ -229,7 +229,7 @@ public class MemoryRole
         this.childRoleNames.add( name );
     }
 
-    public void setChildRoleNames( List names )
+    public void setChildRoleNames( List<String> names )
     {
         if(names == null)
         {
