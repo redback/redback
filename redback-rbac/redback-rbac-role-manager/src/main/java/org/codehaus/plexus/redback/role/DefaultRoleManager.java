@@ -16,7 +16,18 @@ package org.codehaus.plexus.redback.role;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.PlexusContainer;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.stream.XMLStreamException;
+
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
@@ -35,19 +46,6 @@ import org.codehaus.plexus.redback.role.template.RoleTemplateProcessor;
 import org.codehaus.plexus.redback.role.util.RoleModelUtils;
 import org.codehaus.plexus.redback.role.validator.RoleModelValidator;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.xml.stream.XMLStreamException;
 
 /**
  * RoleProfileManager:
@@ -75,7 +73,7 @@ public class DefaultRoleManager
     /**
      * a map of the resources, and the model that they loaded
      */
-    private Map knownResources = new HashMap();
+    private Map<String, ModelApplication> knownResources = new HashMap<String, ModelApplication>();
 
     @javax.annotation.Resource(name="roleModelValidator")
     private RoleModelValidator modelValidator;
@@ -90,6 +88,7 @@ public class DefaultRoleManager
     private RBACManager rbacManager;
 
 
+    @SuppressWarnings("unchecked")
     public void loadRoleModel( URL resource )
         throws RoleManagerException
     {
@@ -99,12 +98,8 @@ public class DefaultRoleManager
         {
             RedbackRoleModel roleModel = reader.read( new InputStreamReader( resource.openStream() ) );
 
-            boolean loaded = false;
-
-            for ( Iterator i = roleModel.getApplications().iterator(); i.hasNext(); )
+            for ( ModelApplication app : (List<ModelApplication>) roleModel.getApplications() )
             {
-                ModelApplication app = (ModelApplication) i.next();
-
                 if ( !knownResources.containsKey( app.getId() ) )
                 {
                     getLogger().info( "loading " + app.getId() );
@@ -126,14 +121,12 @@ public class DefaultRoleManager
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void loadRoleModel( RedbackRoleModel roleModel )
         throws RoleManagerException
     {
-
-        for ( Iterator i = roleModel.getApplications().iterator(); i.hasNext(); )
+        for ( ModelApplication app : (List<ModelApplication>) roleModel.getApplications() )
         {
-            ModelApplication app = (ModelApplication) i.next();
-
             if ( !knownResources.containsKey( app.getId() ) )
             {
                 loadApplication( app );
@@ -158,13 +151,11 @@ public class DefaultRoleManager
         }
         else
         {
-            List validationErrors = modelValidator.getValidationErrors();
-
             getLogger().error( "Role Model Validation Errors:" );
 
-            for ( Iterator i = validationErrors.iterator(); i.hasNext(); )
+            for ( String error : modelValidator.getValidationErrors() )
             {
-                getLogger().error( (String) i.next() );
+                getLogger().error( error );
             }
 
             throw new RoleManagerException( "Role Model Validation Error" );
@@ -202,15 +193,8 @@ public class DefaultRoleManager
         {
             Role role = rbacManager.getRole( roleName );
 
-            // remove the user assignments
-            List rolesList = new ArrayList();
-            rolesList.add( role.getName() );
-
-            List userAssignments = rbacManager.getUserAssignmentsForRoles( rolesList );
-
-            for ( Iterator i = userAssignments.iterator(); i.hasNext(); )
+            for ( UserAssignment assignment : rbacManager.getUserAssignmentsForRoles( Arrays.asList( role.getName() ) ) )
             {
-                UserAssignment assignment = (UserAssignment) i.next();
                 assignment.removeRoleName( role );
                 rbacManager.saveUserAssignment( assignment );
             }
@@ -247,14 +231,8 @@ public class DefaultRoleManager
             Role role = rbacManager.getRole( oldRoleName );
 
             // remove the user assignments
-            List rolesList = new ArrayList();
-            rolesList.add( role.getName() );
-
-            List userAssignments = rbacManager.getUserAssignmentsForRoles( rolesList );
-
-            for ( Iterator i = userAssignments.iterator(); i.hasNext(); )
+            for ( UserAssignment assignment : rbacManager.getUserAssignmentsForRoles( Arrays.asList( role.getName() ) ) )
             {
-                UserAssignment assignment = (UserAssignment) i.next();
                 assignment.removeRoleName( oldRoleName );
                 assignment.addRoleName( newRoleName );
                 rbacManager.saveUserAssignment( assignment );
@@ -431,11 +409,11 @@ public class DefaultRoleManager
 
             loadRoleModel( baseResource );
 
-            Enumeration enumerator = RoleManager.class.getClassLoader().getResources( "META-INF/redback/redback.xml" );
+            Enumeration<URL> enumerator = RoleManager.class.getClassLoader().getResources( "META-INF/redback/redback.xml" );
 
             while ( enumerator.hasMoreElements() )
             {
-                URL redbackResource = (URL) enumerator.nextElement();
+                URL redbackResource = enumerator.nextElement();
 
                 loadRoleModel( redbackResource );
             }

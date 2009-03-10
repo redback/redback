@@ -18,7 +18,6 @@ package org.codehaus.plexus.redback.role;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
@@ -97,10 +96,8 @@ public class JpoxRoleManagerTest
         
         Properties properties = jdoFactory.getProperties();
 
-        for ( Iterator it = properties.entrySet().iterator(); it.hasNext(); )
+        for ( Map.Entry<Object,Object> entry : properties.entrySet() )
         {
-            Map.Entry entry = (Map.Entry) it.next();
-
             System.setProperty( (String) entry.getKey(), (String) entry.getValue() );
         }
 

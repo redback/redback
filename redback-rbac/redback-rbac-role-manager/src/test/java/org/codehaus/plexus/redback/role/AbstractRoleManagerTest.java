@@ -16,12 +16,11 @@ package org.codehaus.plexus.redback.role;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import java.util.List;
+
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
-
-import java.util.Iterator;
-import java.util.List;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 
 /**
  * AbstractRoleManagerTest:
@@ -79,13 +78,12 @@ public abstract class AbstractRoleManagerTest extends PlexusInSpringTestCase
     	
     	UserAssignment assignment = rbacManager.getUserAssignment( principal );
     	
-    	List assignments = assignment.getRoleNames();
+    	List<String> assignments = assignment.getRoleNames();
     	
     	assertEquals( 2, assignments.size() );
     	
-    	for ( Iterator i = assignments.iterator(); i.hasNext(); )
+    	for ( String roleName : assignments )
     	{
-    		String roleName = (String)i.next();
     		System.out.println( roleName );
     		assertTrue( "Test Role".equals( roleName ) || "Foo 2 - frigid".equals( roleName ) );
     	}

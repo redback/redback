@@ -52,17 +52,14 @@ public class DefaultRoleTemplateProcessor
     @javax.annotation.Resource(name="rBACManager#cached")
     private RBACManager rbacManager;
 
+    @SuppressWarnings("unchecked")
     public void create( RedbackRoleModel model, String templateId, String resource )
         throws RoleManagerException
     {
-        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        for ( ModelApplication application: (List<ModelApplication>) model.getApplications() )
         {
-            ModelApplication application = (ModelApplication) k.next();
-
-            for ( Iterator i = application.getTemplates().iterator(); i.hasNext(); )
+            for ( ModelTemplate template : (List<ModelTemplate>) application.getTemplates() )
             {
-                ModelTemplate template = (ModelTemplate) i.next();
-
                 if ( templateId.equals( template.getId() ) )
                 {
                     // resource can be special
@@ -79,17 +76,14 @@ public class DefaultRoleTemplateProcessor
         throw new RoleManagerException( "unknown template '" + templateId + "'" );
     }
 
+    @SuppressWarnings("unchecked")
     public void remove( RedbackRoleModel model, String templateId, String resource )
         throws RoleManagerException
     {
-        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        for ( ModelApplication application: (List<ModelApplication>) model.getApplications() )
         {
-            ModelApplication application = (ModelApplication) k.next();
-
-            for ( Iterator i = application.getTemplates().iterator(); i.hasNext(); )
+            for ( ModelTemplate template : (List<ModelTemplate>) application.getTemplates() )
             {
-                ModelTemplate template = (ModelTemplate) i.next();
-
                 if ( templateId.equals( template.getId() ) )
                 {
                     removeTemplatedRole( model, template, resource );
@@ -171,12 +165,13 @@ public class DefaultRoleTemplateProcessor
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void processTemplate( RedbackRoleModel model, ModelTemplate template, String resource )
         throws RoleManagerException
     {
         String templateName = template.getNamePrefix() + template.getDelimiter() + resource;
 
-        List permissions = processPermissions( model, template, resource );
+        List<Permission> permissions = processPermissions( model, template, resource );
 
         if ( !rbacManager.roleExists( templateName ) )
         {
@@ -198,9 +193,8 @@ public class DefaultRoleTemplateProcessor
                 // add child roles to this role
                 if ( template.getChildRoles() != null )
                 {
-                    for ( Iterator j = template.getChildRoles().iterator(); j.hasNext(); )
+                    for ( String childRoleId : (List<String>) template.getChildRoles() )
                     {
-                        String childRoleId = (String) j.next();
                         ModelRole childRoleProfile = RoleModelUtils.getModelRole( model, childRoleId );
                         role.addChildRoleName( childRoleProfile.getName() );
                     }
@@ -209,9 +203,8 @@ public class DefaultRoleTemplateProcessor
                 // add child templates to this role, be nice and make them if they don't exist
                 if ( template.getChildTemplates() != null )
                 {
-                    for ( Iterator j = template.getChildTemplates().iterator(); j.hasNext(); )
+                    for ( String childTemplateId : (List<String>) template.getChildTemplates() )
                     {
-                        String childTemplateId = (String) j.next();
                         ModelTemplate childModelTemplate = RoleModelUtils.getModelTemplate( model, childTemplateId );
 
                         if ( childModelTemplate == null )
@@ -248,9 +241,8 @@ public class DefaultRoleTemplateProcessor
                 // add link from parent roles to this new role
                 if ( template.getParentRoles() != null )
                 {
-                    for ( Iterator j = template.getParentRoles().iterator(); j.hasNext(); )
+                    for ( String parentRoleId : (List<String>) template.getParentRoles() )
                     {
-                        String parentRoleId = (String) j.next();
                         ModelRole parentModelRole = RoleModelUtils.getModelRole( model, parentRoleId );
                         Role parentRole = rbacManager.getRole( parentModelRole.getName() );
                         parentRole.addChildRoleName( role.getName() );
@@ -261,9 +253,8 @@ public class DefaultRoleTemplateProcessor
                 // add child templates to this role, be nice and make them if they don't exist
                 if ( template.getParentTemplates() != null )
                 {
-                    for ( Iterator j = template.getParentTemplates().iterator(); j.hasNext(); )
+                    for ( String parentTemplateId : (List<String>) template.getParentTemplates() )
                     {
-                        String parentTemplateId = (String) j.next();
                         ModelTemplate parentModelTemplate = RoleModelUtils.getModelTemplate( model, parentTemplateId );
 
                         if ( parentModelTemplate == null )
@@ -305,18 +296,18 @@ public class DefaultRoleTemplateProcessor
 
     }
 
-    private List processPermissions( RedbackRoleModel model, ModelTemplate template, String resource )
+    @SuppressWarnings("unchecked")
+    private List<Permission> processPermissions( RedbackRoleModel model, ModelTemplate template, String resource )
         throws RoleManagerException
     {
-        List rbacPermissions = new ArrayList();
+        List<Permission> rbacPermissions = new ArrayList<Permission>();
 
         if ( template.getPermissions() != null )
         {
-            for ( Iterator i = template.getPermissions().iterator(); i.hasNext(); )
+            for ( ModelPermission profilePermission : (List<ModelPermission>) template.getPermissions() )
             {
                 try
                 {
-                    ModelPermission profilePermission = (ModelPermission) i.next();
                     String permissionName = profilePermission.getName() + template.getDelimiter()
                         + resolvePermissionResource( model, profilePermission, resource );
 

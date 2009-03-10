@@ -16,15 +16,20 @@ package org.codehaus.plexus.redback.role.validator;
  * limitations under the License.
  */
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.codehaus.plexus.redback.role.RoleManagerException;
-import org.codehaus.plexus.redback.role.model.*;
+import org.codehaus.plexus.redback.role.model.ModelApplication;
+import org.codehaus.plexus.redback.role.model.ModelOperation;
+import org.codehaus.plexus.redback.role.model.ModelPermission;
+import org.codehaus.plexus.redback.role.model.ModelResource;
+import org.codehaus.plexus.redback.role.model.ModelRole;
+import org.codehaus.plexus.redback.role.model.ModelTemplate;
+import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
 import org.codehaus.plexus.redback.role.util.RoleModelUtils;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * DefaultRoleModelValidator: validates completeness of the model
@@ -37,7 +42,7 @@ import java.util.List;
 public class DefaultRoleModelValidator
     implements RoleModelValidator
 {
-    private List validationErrors;
+    private List<String> validationErrors;
 
     public boolean validate( RedbackRoleModel model )
         throws RoleManagerException
@@ -63,7 +68,7 @@ public class DefaultRoleModelValidator
         }
     }
 
-    public List getValidationErrors()
+    public List<String> getValidationErrors()
     {
         return validationErrors;
     }
@@ -72,7 +77,7 @@ public class DefaultRoleModelValidator
     {
         if ( validationErrors == null )
         {
-            validationErrors = new ArrayList();
+            validationErrors = new ArrayList<String>();
         }
 
         validationErrors.add( error );
@@ -84,14 +89,13 @@ public class DefaultRoleModelValidator
      * 
      * @param model
      */
+    @SuppressWarnings("unchecked")
     private void validateRequiredStructure( RedbackRoleModel model )
     {
         // validate model has name
 
-        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        for ( ModelApplication application : (List<ModelApplication>) model.getApplications() )
         {
-            ModelApplication application = (ModelApplication) k.next();
-
             if ( application.getId() == null )
             {
                 addValidationError( "model is missing application name" );
@@ -104,10 +108,8 @@ public class DefaultRoleModelValidator
             }
 
             // validate resource bits
-            for ( Iterator i = application.getResources().iterator(); i.hasNext(); )
+            for ( ModelResource resource : (List<ModelResource>) application.getResources() )
             {
-                ModelResource resource = (ModelResource) i.next();
-
                 if ( resource.getName() == null )
                 {
                     addValidationError( resource.toString() + " missing name" );
@@ -120,10 +122,8 @@ public class DefaultRoleModelValidator
             }
 
             // validate the operations
-            for ( Iterator i = application.getOperations().iterator(); i.hasNext(); )
+            for ( ModelOperation operation : (List<ModelOperation>) application.getOperations() )
             {
-                ModelOperation operation = (ModelOperation) i.next();
-
                 if ( operation.getName() == null )
                 {
                     addValidationError( operation.toString() + " missing name" );
@@ -135,10 +135,8 @@ public class DefaultRoleModelValidator
                 }
             }
 
-            for ( Iterator i = application.getRoles().iterator(); i.hasNext(); )
+            for ( ModelRole role : (List<ModelRole>) application.getRoles() )
             {
-                ModelRole role = (ModelRole) i.next();
-
                 if ( role.getId() == null )
                 {
                     addValidationError( role.toString() + " missing id" );
@@ -151,10 +149,8 @@ public class DefaultRoleModelValidator
 
                 if ( role.getPermissions() != null )
                 {
-                    for ( Iterator j = role.getPermissions().iterator(); j.hasNext(); )
+                    for ( ModelPermission permission : (List<ModelPermission>) role.getPermissions() )
                     {
-                        ModelPermission permission = (ModelPermission) j.next();
-
                         if ( permission.getName() == null )
                         {
                             addValidationError( permission.toString() + " missing name" );
@@ -178,10 +174,8 @@ public class DefaultRoleModelValidator
                 }
             }
 
-            for ( Iterator i = application.getTemplates().iterator(); i.hasNext(); )
+            for ( ModelTemplate template : (List<ModelTemplate>) application.getTemplates() )
             {
-                ModelTemplate template = (ModelTemplate) i.next();
-
                 if ( template.getId() == null )
                 {
                     addValidationError( template.toString() + " missing id" );
@@ -194,10 +188,8 @@ public class DefaultRoleModelValidator
 
                 if ( template.getPermissions() != null )
                 {
-                    for ( Iterator j = template.getPermissions().iterator(); j.hasNext(); )
+                    for ( ModelPermission permission : (List<ModelPermission>) template.getPermissions() )
                     {
-                        ModelPermission permission = (ModelPermission) j.next();
-
                         if ( permission.getName() == null )
                         {
                             addValidationError( permission.toString() + " missing name" );
@@ -228,25 +220,20 @@ public class DefaultRoleModelValidator
      *
      * @param model
      */
+    @SuppressWarnings("unchecked")
     private void validateOperationClosure( RedbackRoleModel model )
     {
-        List operationIdList = RoleModelUtils.getOperationIdList( model );
+        List<String> operationIdList = RoleModelUtils.getOperationIdList( model );
 
         // check the operations in role permissions
-        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        for ( ModelApplication application : (List<ModelApplication>) model.getApplications() )
         {
-            ModelApplication application = (ModelApplication) k.next();
-
-            for ( Iterator i = application.getRoles().iterator(); i.hasNext(); )
+            for ( ModelRole role : (List<ModelRole>) application.getRoles() )
             {
-                ModelRole role = (ModelRole) i.next();
-
                 if ( role.getPermissions() != null )
                 {
-                    for ( Iterator j = role.getPermissions().iterator(); j.hasNext(); )
+                    for ( ModelPermission permission : (List<ModelPermission>) role.getPermissions() )
                     {
-                        ModelPermission permission = (ModelPermission) j.next();
-
                         if ( !operationIdList.contains( permission.getOperation() ) )
                         {
                             addValidationError( "missing operation: " + permission.getOperation() + " in permission "
@@ -257,16 +244,12 @@ public class DefaultRoleModelValidator
             }
 
             // check the operations in template permissions
-            for ( Iterator i = application.getTemplates().iterator(); i.hasNext(); )
+            for ( ModelTemplate template : (List<ModelTemplate>) application.getTemplates() )
             {
-                ModelTemplate template = (ModelTemplate) i.next();
-
                 if ( template.getPermissions() != null )
                 {
-                    for ( Iterator j = template.getPermissions().iterator(); j.hasNext(); )
+                    for ( ModelPermission permission : (List<ModelPermission>) template.getPermissions() )
                     {
-                        ModelPermission permission = (ModelPermission) j.next();
-
                         if ( !operationIdList.contains( permission.getOperation() ) )
                         {
                             addValidationError( "missing operation: " + permission.getOperation() + " in permission "
@@ -278,23 +261,18 @@ public class DefaultRoleModelValidator
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void validateResourceClosure( RedbackRoleModel model )
     {
-        List resourceIdList = RoleModelUtils.getResourceIdList( model );
-        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        List<String> resourceIdList = RoleModelUtils.getResourceIdList( model );
+        for ( ModelApplication application : (List<ModelApplication>) model.getApplications() )
         {
-            ModelApplication application = (ModelApplication) k.next();
-
-            for ( Iterator i = application.getRoles().iterator(); i.hasNext(); )
+            for ( ModelRole role : (List<ModelRole>) application.getRoles() )
             {
-                ModelRole role = (ModelRole) i.next();
-
                 if ( role.getPermissions() != null )
                 {
-                    for ( Iterator j = role.getPermissions().iterator(); j.hasNext(); )
+                    for ( ModelPermission permission : (List<ModelPermission>) role.getPermissions() )
                     {
-                        ModelPermission permission = (ModelPermission) j.next();
-
                         if ( !resourceIdList.contains( permission.getResource() ) )
                         {
                             addValidationError( "missing operation: " + permission.getResource() + " in permission "
@@ -306,23 +284,18 @@ public class DefaultRoleModelValidator
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void validateChildRoleClosure( RedbackRoleModel model )
     {
-        List roleIdList = RoleModelUtils.getRoleIdList( model );
-        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        List<String> roleIdList = RoleModelUtils.getRoleIdList( model );
+        for ( ModelApplication application : (List<ModelApplication>) model.getApplications() )
         {
-            ModelApplication application = (ModelApplication) k.next();
-
-            for ( Iterator i = application.getRoles().iterator(); i.hasNext(); )
+            for ( ModelRole role : (List<ModelRole>) application.getRoles() )
             {
-                ModelRole role = (ModelRole) i.next();
-
                 if ( role.getChildRoles() != null )
                 {
-                    for ( Iterator j = role.getChildRoles().iterator(); j.hasNext(); )
+                    for ( String childRoleId : (List<String>) role.getChildRoles() )
                     {
-                        String childRoleId = (String) j.next();
-
                         if ( !roleIdList.contains( childRoleId ) )
                         {
                             addValidationError( "missing role id: " + childRoleId + " in child roles of role "
@@ -332,16 +305,12 @@ public class DefaultRoleModelValidator
                 }
             }
 
-            for ( Iterator i = application.getTemplates().iterator(); i.hasNext(); )
+            for ( ModelTemplate template : (List<ModelTemplate>) application.getTemplates() )
             {
-                ModelTemplate template = (ModelTemplate) i.next();
-
                 if ( template.getChildRoles() != null )
                 {
-                    for ( Iterator j = template.getChildRoles().iterator(); j.hasNext(); )
+                    for ( String childRoleId : (List<String>) template.getChildRoles() )
                     {
-                        String childRoleId = (String) j.next();
-
                         if ( !roleIdList.contains( childRoleId ) )
                         {
                             addValidationError( "missing role id: " + childRoleId + " in child roles of template "
@@ -353,24 +322,19 @@ public class DefaultRoleModelValidator
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void validateParentRoleClosure( RedbackRoleModel model )
     {
         List roleIdList = RoleModelUtils.getRoleIdList( model );
 
-        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        for ( ModelApplication application : (List<ModelApplication>) model.getApplications() )
         {
-            ModelApplication application = (ModelApplication) k.next();
-
-            for ( Iterator i = application.getRoles().iterator(); i.hasNext(); )
+            for ( ModelRole role : (List<ModelRole>) application.getRoles() )
             {
-                ModelRole role = (ModelRole) i.next();
-
                 if ( role.getParentRoles() != null )
                 {
-                    for ( Iterator j = role.getParentRoles().iterator(); j.hasNext(); )
+                    for ( String parentRoleId : (List<String>) role.getParentRoles() )
                     {
-                        String parentRoleId = (String) j.next();
-
                         if ( !roleIdList.contains( parentRoleId ) )
                         {
                             addValidationError( "missing role id: " + parentRoleId + " in parent roles of role "
@@ -380,16 +344,12 @@ public class DefaultRoleModelValidator
                 }
             }
 
-            for ( Iterator i = application.getTemplates().iterator(); i.hasNext(); )
+            for ( ModelTemplate template : (List<ModelTemplate>) application.getTemplates() )
             {
-                ModelTemplate template = (ModelTemplate) i.next();
-
                 if ( template.getParentRoles() != null )
                 {
-                    for ( Iterator j = template.getParentRoles().iterator(); j.hasNext(); )
+                    for ( String parentRoleId : (List<String>) template.getParentRoles() )
                     {
-                        String parentRoleId = (String) j.next();
-
                         if ( !roleIdList.contains( parentRoleId ) )
                         {
                             addValidationError( "missing role id: " + parentRoleId + " in parent roles of template "
@@ -401,27 +361,22 @@ public class DefaultRoleModelValidator
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void validateTemplateClosure( RedbackRoleModel model )
     {
         List templateIdList = RoleModelUtils.getTemplateIdList( model );
 
         // template name prefix must be unique
-        List templateNamePrefixList = new ArrayList();
+        List<String> templateNamePrefixList = new ArrayList<String>();
 
-        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        for ( ModelApplication application : (List<ModelApplication>) model.getApplications() )
         {
-            ModelApplication application = (ModelApplication) k.next();
-
-            for ( Iterator i = application.getTemplates().iterator(); i.hasNext(); )
+            for ( ModelTemplate template : (List<ModelTemplate>) application.getTemplates() )
             {
-                ModelTemplate template = (ModelTemplate) i.next();
-
                 if ( template.getParentTemplates() != null )
                 {
-                    for ( Iterator j = template.getParentTemplates().iterator(); j.hasNext(); )
+                    for ( String parentTemplateId : (List<String>) template.getParentTemplates() )
                     {
-                        String parentTemplateId = (String) j.next();
-
                         if ( !templateIdList.contains( parentTemplateId ) )
                         {
                             addValidationError( "missing template id: " + parentTemplateId
@@ -432,10 +387,8 @@ public class DefaultRoleModelValidator
 
                 if ( template.getChildTemplates() != null )
                 {
-                    for ( Iterator j = template.getChildTemplates().iterator(); j.hasNext(); )
+                    for ( String childTemplateId : (List<String>) template.getChildTemplates() )
                     {
-                        String childTemplateId = (String) j.next();
-
                         if ( !templateIdList.contains( childTemplateId ) )
                         {
                             addValidationError( "missing template id: " + childTemplateId

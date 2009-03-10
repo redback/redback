@@ -45,9 +45,9 @@ public class DefaultRoleModelProcessor
     @javax.annotation.Resource(name = "rBACManager#cached")
     private RBACManager rbacManager;
 
-    private Map resourceMap = new HashMap();
+    private Map<String, Resource> resourceMap = new HashMap<String, Resource>();
 
-    private Map operationMap = new HashMap();
+    private Map<String, Operation> operationMap = new HashMap<String, Operation>();
 
     public void process( RedbackRoleModel model )
         throws RoleManagerException
@@ -60,17 +60,14 @@ public class DefaultRoleModelProcessor
         processRoles( model );
     }
 
+    @SuppressWarnings("unchecked")
     private void processResources( RedbackRoleModel model )
         throws RoleManagerException
     {
-        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        for ( ModelApplication application : (List<ModelApplication>) model.getApplications() )
         {
-            ModelApplication application = (ModelApplication) k.next();
-
-            for ( Iterator i = application.getResources().iterator(); i.hasNext(); )
+            for ( ModelResource profileResource : (List<ModelResource>) application.getResources() )
             {
-                ModelResource profileResource = (ModelResource) i.next();
-
                 try
                 {
                     if ( !rbacManager.resourceExists( profileResource.getName() ) )
@@ -97,16 +94,14 @@ public class DefaultRoleModelProcessor
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void processOperations( RedbackRoleModel model )
         throws RoleManagerException
     {
-        for ( Iterator k = model.getApplications().iterator(); k.hasNext(); )
+        for ( ModelApplication application : (List<ModelApplication>) model.getApplications() )
         {
-            ModelApplication application = (ModelApplication) k.next();
-            for ( Iterator i = application.getOperations().iterator(); i.hasNext(); )
+            for ( ModelOperation profileOperation : (List<ModelOperation>) application.getOperations() )
             {
-                ModelOperation profileOperation = (ModelOperation) i.next();
-
                 try
                 {
                     if ( !rbacManager.operationExists( profileOperation.getName() ) )
@@ -135,10 +130,11 @@ public class DefaultRoleModelProcessor
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void processRoles( RedbackRoleModel model )
         throws RoleManagerException
     {
-        List sortedGraph;
+        List<String> sortedGraph;
         try
         {
             sortedGraph = RoleModelUtils.reverseTopologicalSortedRoleList( model );
@@ -148,13 +144,11 @@ public class DefaultRoleModelProcessor
             throw new RoleManagerException( "cycle detected: this should have been caught in validation", e );
         }
 
-        for ( Iterator i = sortedGraph.iterator(); i.hasNext(); )
+        for ( String roleId : sortedGraph )
         {
-            String roleId = (String) i.next();
-
             ModelRole roleProfile = RoleModelUtils.getModelRole( model, roleId );
 
-            List permissions = processPermissions( roleProfile.getPermissions() );
+            List<Permission> permissions = processPermissions( roleProfile.getPermissions() );
 
             if ( !rbacManager.roleExists( roleProfile.getName() ) )
             {
@@ -166,19 +160,16 @@ public class DefaultRoleModelProcessor
                     role.setAssignable( roleProfile.isAssignable() );
 
                     // add any permissions associated with this role
-                    for ( Iterator j = permissions.iterator(); j.hasNext(); )
+                    for ( Permission permission : permissions )
                     {
-                        Permission permission = (Permission) j.next();
-
                         role.addPermission( permission );
                     }
 
                     // add child roles to this role
                     if ( roleProfile.getChildRoles() != null )
                     {
-                        for ( Iterator j = roleProfile.getChildRoles().iterator(); j.hasNext(); )
+                        for ( String childRoleId : (List<String>) roleProfile.getChildRoles() )
                         {
-                            String childRoleId = (String) j.next();
                             ModelRole childRoleProfile = RoleModelUtils.getModelRole( model, childRoleId );
                             role.addChildRoleName( childRoleProfile.getName() );
                         }
@@ -189,9 +180,8 @@ public class DefaultRoleModelProcessor
                     // add link from parent roles to this new role
                     if ( roleProfile.getParentRoles() != null )
                     {
-                        for ( Iterator j = roleProfile.getParentRoles().iterator(); j.hasNext(); )
+                        for ( String parentRoleId : (List<String>) roleProfile.getParentRoles() )
                         {
-                            String parentRoleId = (String) j.next();
                             ModelRole parentModelRole = RoleModelUtils.getModelRole( model, parentRoleId );
                             Role parentRole = rbacManager.getRole( parentModelRole.getName() );
                             parentRole.addChildRoleName( role.getName() );
@@ -208,15 +198,13 @@ public class DefaultRoleModelProcessor
         }
     }
 
-    private List processPermissions( List permissions )
+    private List<Permission> processPermissions( List<ModelPermission> permissions )
         throws RoleManagerException
     {
-        List rbacPermissions = new ArrayList();
+        List<Permission> rbacPermissions = new ArrayList<Permission>();
 
-        for ( Iterator i = permissions.iterator(); i.hasNext(); )
+        for ( ModelPermission profilePermission : permissions )
         {
-            ModelPermission profilePermission = (ModelPermission) i.next();
-
             try
             {
                 if ( !rbacManager.permissionExists( profilePermission.getName() ) )

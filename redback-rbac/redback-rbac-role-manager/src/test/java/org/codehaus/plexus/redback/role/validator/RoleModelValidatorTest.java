@@ -16,13 +16,12 @@ package org.codehaus.plexus.redback.role.validator;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import java.io.File;
+import java.util.List;
+
 import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
 import org.codehaus.plexus.redback.role.model.io.stax.RedbackRoleModelStaxReader;
-
-import java.io.File;
-import java.util.Iterator;
-import java.util.List;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 
 /**
  * RoleModelMergerTest:
@@ -119,12 +118,10 @@ public class RoleModelValidatorTest
         assertNull( modelValidator.getValidationErrors() );
     }
     
-    private boolean checkForValidationError( List validationErrors, String errorText )    
+    private boolean checkForValidationError( List<String> validationErrors, String errorText )    
     {
-        for ( Iterator i = validationErrors.iterator(); i.hasNext(); )
+        for ( String error : validationErrors )
         {
-            String error = (String)i.next();
-            
             if ( error.indexOf( errorText ) != -1 )
             {
                 return true;
