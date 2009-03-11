@@ -71,9 +71,15 @@ public class DefaultPermissionEvaluator
                 return true;
             }
 
+            // if we are not checking a specific resource, the operation is enough
+            if ( resource == null )
+            {
+                return true;
+            }
+            
             // check if the resource identifier of the permission matches the resource we are checking against
             // if it does then return true
-            if ( resource != null && permissionResource.equals( resource.toString() ) )
+            if ( permissionResource.equals( resource.toString() ) )
             {
                 return true;
             }

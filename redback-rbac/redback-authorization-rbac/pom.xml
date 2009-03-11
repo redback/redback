@@ -39,7 +39,18 @@
     </dependency>
     <dependency>
       <groupId>org.codehaus.redback</groupId>
-      <artifactId>redback-users-cached</artifactId>
+      <artifactId>redback-rbac-memory</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.redback</groupId>
+      <artifactId>redback-users-configurable</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.redback</groupId>
+      <artifactId>redback-users-memory</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.redback</groupId>
