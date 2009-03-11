@@ -72,6 +72,8 @@ public class UserEditAction
     private String updateButton;
 
     private boolean emailValidationRequired;
+
+    private boolean hasHiddenRoles;
     
     // ------------------------------------------------------------------
     // Action Entry Points - (aka Names)
@@ -117,8 +119,11 @@ public class UserEditAction
 
             try
             {
-                this.effectivelyAssignedRoles = new ArrayList<Role>( rbacManager.getEffectivelyAssignedRoles( u.getPrincipal().toString() ) );
-                Collections.sort( this.effectivelyAssignedRoles, new RoleSorter() );
+                String principal = u.getPrincipal().toString();
+                List<Role> roles = new ArrayList<Role>( rbacManager.getEffectivelyAssignedRoles( principal ) );
+                effectivelyAssignedRoles = filterRolesForCurrentUserAccess( roles );
+                Collections.sort( effectivelyAssignedRoles, new RoleSorter() );
+                hasHiddenRoles = ( roles.size() > effectivelyAssignedRoles.size() );
             }
             catch ( RbacManagerException rme )
             {
@@ -266,6 +271,16 @@ public class UserEditAction
 	public boolean isEmailValidationRequired() {
 		return emailValidationRequired;
 	}
+
+    public boolean isHasHiddenRoles()
+    {
+        return hasHiddenRoles;
+    }
+
+    public void setHasHiddenRoles( boolean hasHiddenRoles )
+    {
+        this.hasHiddenRoles = hasHiddenRoles;
+    }
 
     
     

@@ -160,7 +160,7 @@ public abstract class AbstractUserCredentialsAction
      * @throws org.codehaus.plexus.redback.rbac.RbacManagerException
      *
      */
-    private List<Role> filterRolesForCurrentUserAccess( List<Role> roleList )
+    protected List<Role> filterRolesForCurrentUserAccess( List<Role> roleList )
         throws RbacManagerException
     {
         String currentUser = getCurrentUser();

@@ -18,31 +18,17 @@ package org.codehaus.plexus.redback.struts2.action.admin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import net.sf.ehcache.CacheManager;
-
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
-import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
 import org.codehaus.plexus.redback.authorization.AuthorizationResult;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
-import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.RbacObjectInvalidException;
 import org.codehaus.plexus.redback.rbac.RbacObjectNotFoundException;
-import org.codehaus.plexus.redback.rbac.UserAssignment;
-import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.struts2.model.ApplicationRoleDetails;
 import org.codehaus.plexus.redback.struts2.model.ApplicationRoleDetails.RoleTableCell;
-import org.codehaus.plexus.redback.system.SecuritySession;
-import org.codehaus.plexus.redback.system.SecuritySystem;
-import org.codehaus.plexus.redback.system.SecuritySystemConstants;
-import org.codehaus.plexus.redback.users.User;
-import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
-import org.codehaus.plexus.redback.users.memory.SimpleUser;
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 
@@ -52,92 +38,19 @@ import com.opensymphony.xwork2.Action;
  * @todo missing tests for success/fail on standard show/edit functions (non security testing related)
  */
 public class AssignmentsActionTest
-    extends PlexusInSpringTestCase
+    extends AbstractUserCredentialsActionTest
 {
-    private static final String PASSWORD = "password1";
-
     private AssignmentsAction action;
-
-    private RoleManager roleManager;
-
-    private SecuritySystem system;
-
-    private SecuritySession session;
-
-    private RBACManager rbacManager;
 
     public void setUp()
         throws Exception
     {
-        CacheManager.getInstance().clearAll();
-        CacheManager.getInstance().removalAll();
-        CacheManager.getInstance().shutdown();
         super.setUp();
 
         action = (AssignmentsAction) lookup( Action.class, "redback-assignments" );
 
-        system = (SecuritySystem) lookup( SecuritySystem.ROLE );
-
-        roleManager = (RoleManager) lookup( RoleManager.class );
-        roleManager.loadRoleModel( getClass().getResource( "/redback.xml" ) );
-        roleManager.createTemplatedRole( "project-administrator", "default" );
-        roleManager.createTemplatedRole( "project-administrator", "other" );
-        roleManager.createTemplatedRole( "project-grant-only", "default" );
-
-        rbacManager = (RBACManager) lookup( RBACManager.class, "memory" );
-
-        UserManager userManager = system.getUserManager();
-
-        User user = new SimpleUser();
-        user.setUsername( "user" );
-        user.setPassword( PASSWORD );
-        userManager.addUserUnchecked( user );
-
-        user = new SimpleUser();
-        user.setUsername( "user2" );
-        user.setPassword( PASSWORD );
-        userManager.addUserUnchecked( user );
-
-        user = new SimpleUser();
-        user.setUsername( "user3" );
-        user.setPassword( PASSWORD );
-        userManager.addUserUnchecked( user );
-
-        user = new SimpleUser();
-        user.setUsername( "admin" );
-        user.setPassword( PASSWORD );
-        userManager.addUserUnchecked( user );
-
-        user = new SimpleUser();
-        user.setUsername( "user-admin" );
-        user.setPassword( PASSWORD );
-        userManager.addUserUnchecked( user );
-
-        UserAssignment assignment = rbacManager.createUserAssignment( "admin" );
-        assignment.addRoleName( "System Administrator" );
-        rbacManager.saveUserAssignment( assignment );
-
-        assignment = rbacManager.createUserAssignment( "user-admin" );
-        assignment.addRoleName( "User Administrator" );
-        rbacManager.saveUserAssignment( assignment );
-
-        assignment = rbacManager.createUserAssignment( "user2" );
-        rbacManager.saveUserAssignment( assignment );
-
-        login( "user", PASSWORD );
+        login( action, "user", PASSWORD );
         action.setPrincipal( "user2" );
-    }
-
-    private void login( String principal, String password )
-        throws AuthenticationException, UserNotFoundException, AccountLockedException
-    {
-        PasswordBasedAuthenticationDataSource authdatasource = new PasswordBasedAuthenticationDataSource();
-        authdatasource.setPrincipal( principal );
-        authdatasource.setPassword( password );
-        session = system.authenticate( authdatasource );
-        assertTrue( session.isAuthenticated() );
-
-        action.setSession( Collections.singletonMap( SecuritySystemConstants.SECURITY_SESSION_KEY, session ) );
     }
 
     /**
@@ -182,23 +95,6 @@ public class AssignmentsActionTest
         throws SecureActionException
     {
         return (List<SecureActionBundle.AuthorizationTuple>) action.getSecureActionBundle().getAuthorizationTuples();
-    }
-
-    private void addAssignment( String principal, String roleName )
-        throws RbacManagerException, RbacObjectInvalidException
-    {
-        UserAssignment assignment;
-
-        if ( rbacManager.userAssignmentExists( principal ) )
-        {
-            assignment = rbacManager.getUserAssignment( principal );
-        }
-        else
-        {
-            assignment = rbacManager.createUserAssignment( principal );
-        }
-        assignment.addRoleName( roleName );
-        rbacManager.saveUserAssignment( assignment );
     }
 
     /**
@@ -525,7 +421,7 @@ public class AssignmentsActionTest
         throws AccountLockedException, AuthenticationException, UserNotFoundException, RbacObjectNotFoundException,
         RbacManagerException
     {
-        login( "admin", PASSWORD );
+        login( action, "admin", PASSWORD );
 
         assertEquals( Action.SUCCESS, action.show() );
 
@@ -559,7 +455,7 @@ public class AssignmentsActionTest
         throws AccountLockedException, AuthenticationException, UserNotFoundException, RbacObjectNotFoundException,
         RbacManagerException
     {
-        login( "user-admin", PASSWORD );
+        login( action, "user-admin", PASSWORD );
 
         assertEquals( Action.SUCCESS, action.show() );
 
@@ -592,7 +488,7 @@ public class AssignmentsActionTest
         throws RbacObjectNotFoundException, RbacManagerException, AccountLockedException, AuthenticationException,
         UserNotFoundException
     {
-        login( "user-admin", PASSWORD );
+        login( action, "user-admin", PASSWORD );
 
         // set addDSelectedRoles (dynamic --> Resource Roles) and addNDSelectedRoles (non-dynamic --> Available Roles)
         List<String> ndSelectedRoles = new ArrayList<String>();
@@ -622,7 +518,7 @@ public class AssignmentsActionTest
         throws RbacObjectNotFoundException, RbacManagerException, AccountLockedException, AuthenticationException,
         UserNotFoundException
     {
-        login( "user-admin", PASSWORD );
+        login( action, "user-admin", PASSWORD );
 
         addAssignment( "user2", "Continuum Group Project Administrator" );
         addAssignment( "user2", "Project Administrator - default" );
