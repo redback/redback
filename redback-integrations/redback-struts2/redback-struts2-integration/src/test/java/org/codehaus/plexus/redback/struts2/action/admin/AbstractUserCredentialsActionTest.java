@@ -41,7 +41,7 @@ import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.users.memory.SimpleUser;
 import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 
-public class AbstractUserCredentialsActionTest
+public abstract class AbstractUserCredentialsActionTest
     extends PlexusInSpringTestCase
 {
     protected static final String PASSWORD = "password1";
