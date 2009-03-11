@@ -174,6 +174,10 @@ public class RegisterAction
             manager.addUser( u );
         }
 
+        AuditEvent event = new AuditEvent( getText( "log.account.create" ) );
+        event.setAffectedUser( username );
+        event.log();
+        
         return REGISTER_SUCCESS;
     }
 

@@ -32,6 +32,7 @@ import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.model.ModelApplication;
 import org.codehaus.plexus.redback.struts2.action.AbstractUserCredentialsAction;
+import org.codehaus.plexus.redback.struts2.action.AuditEvent;
 import org.codehaus.plexus.redback.struts2.model.ApplicationRoleDetails;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
@@ -222,7 +223,12 @@ public class AssignmentsAction
                     }
                     else
                     {
-                        logChange( currentUser, "removing role '" + assignedRole.getName() + "' from " );
+                        String role = assignedRole.getName();
+                        AuditEvent event = new AuditEvent( getText( "log.revoke.role" ) );
+                        event.setAffectedUser( principal );
+                        event.setRole( role );
+                        event.setCurrentUser( currentUser );
+                        event.log();
                     }
                 }
                 else
@@ -232,7 +238,11 @@ public class AssignmentsAction
             }
             for ( String r : newRoles )
             {
-                logChange( currentUser, "adding role '" + r + "' to " );
+                AuditEvent event = new AuditEvent( getText( "log.assign.role" ) );
+                event.setAffectedUser( principal );
+                event.setRole( r );
+                event.setCurrentUser( currentUser );
+                event.log();
             }
 
             UserAssignment assignment;
@@ -256,11 +266,6 @@ public class AssignmentsAction
             return ERROR;
         }
         return SUCCESS;
-    }
-
-    private void logChange( String currentUser, String string )
-    {
-        getLogger().info( string + principal + " (by " + currentUser + ")" );
     }
 
     private void addSelectedRoles( Collection<Role> assignableRoles, List<String> roles, List<String> selectedRoles )

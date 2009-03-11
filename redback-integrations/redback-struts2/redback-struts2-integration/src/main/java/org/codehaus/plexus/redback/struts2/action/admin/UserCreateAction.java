@@ -21,6 +21,7 @@ import java.util.Arrays;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.struts2.action.AbstractUserCredentialsAction;
+import org.codehaus.plexus.redback.struts2.action.AuditEvent;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
@@ -103,6 +104,11 @@ public class UserCreateAction
             securityPolicy.setEnabled( false );
             u.setValidated( true );
             manager.addUser( u );
+            String currentUser = getCurrentUser();
+            AuditEvent event = new AuditEvent( getText( "log.account.create" ) );
+            event.setAffectedUser( u.getUsername() );
+            event.setCurrentUser( currentUser );
+            event.log();
         }
         finally
         {

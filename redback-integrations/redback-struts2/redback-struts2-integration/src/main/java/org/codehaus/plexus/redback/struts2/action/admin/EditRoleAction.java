@@ -26,6 +26,7 @@ import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.redback.struts2.action.AbstractUserCredentialsAction;
+import org.codehaus.plexus.redback.struts2.action.AuditEvent;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
@@ -269,6 +270,11 @@ public class EditRoleAction
 
             List<String> list = new ArrayList<String>();
             list.add( name );
+            String currentUser = getCurrentUser();
+            AuditEvent event = new AuditEvent( getText( "log.role.edit" ) );
+            event.setRole( name );
+            event.setCurrentUser( currentUser );
+            event.log();
             addActionMessage( getText( "save.role.success", list ) );
         }
         catch ( RbacManagerException e )

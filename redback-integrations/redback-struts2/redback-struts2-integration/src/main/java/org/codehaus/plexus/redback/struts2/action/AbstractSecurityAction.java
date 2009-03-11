@@ -16,6 +16,7 @@ package org.codehaus.plexus.redback.struts2.action;
  * limitations under the License.
  */
 
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
@@ -29,7 +30,7 @@ import org.codehaus.redback.integration.interceptor.SecureActionException;
 
 /**
  * AbstractSecurityAction
- *
+ * 
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
@@ -90,7 +91,12 @@ public abstract class AbstractSecurityAction
     protected String getBaseUrl()
     {
         HttpServletRequest req = ServletActionContext.getRequest();
-        return req.getScheme() + "://" + req.getServerName() +
-            ( req.getServerPort() == 80 ? "" : ":" + req.getServerPort() ) + req.getContextPath();
+        return req.getScheme() + "://" + req.getServerName()
+            + ( req.getServerPort() == 80 ? "" : ":" + req.getServerPort() ) + req.getContextPath();
+    }
+
+    protected String getCurrentUser()
+    {
+        return getSecuritySession().getUser().getPrincipal().toString();
     }
 }

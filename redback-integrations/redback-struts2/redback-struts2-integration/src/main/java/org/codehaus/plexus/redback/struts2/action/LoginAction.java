@@ -160,6 +160,12 @@ public class LoginAction
             authsource.setToken( authkey.getKey() );
 
             securitySystem.getUserManager().updateUser( user );
+            String currentUser = getCurrentUser();
+            
+            AuditEvent event = new AuditEvent( getText( "log.password.change" ) );
+            event.setAffectedUser( username );
+            event.setCurrentUser( currentUser );
+            event.log();
 
             return webLogin( authsource, false );
         }
@@ -213,6 +219,12 @@ public class LoginAction
             authsource.setToken( authkey.getKey() );
 
             securitySystem.getUserManager().updateUser( user );
+            String currentUser = getCurrentUser();
+            
+            AuditEvent event = new AuditEvent( getText( "log.account.validation" ) );
+            event.setAffectedUser( username );
+            event.setCurrentUser( currentUser );
+            event.log();
 
             return webLogin( authsource, false );
         }
@@ -356,6 +368,10 @@ public class LoginAction
                     return PASSWORD_CHANGE;
                 }              
 
+                AuditEvent event = new AuditEvent( getText( "log.login.success" ) );
+                event.setAffectedUser( username );
+                event.log();
+                
                 return LOGIN_SUCCESS;
             }
             else
@@ -381,6 +397,10 @@ public class LoginAction
                     addActionError( getText( "authentication.failed" ) );
                 }
 
+                AuditEvent event = new AuditEvent( getText( "log.login.fail" ) );
+                event.setAffectedUser( username );
+                event.log();
+                
                 return ERROR;
             }
         }
@@ -392,11 +412,19 @@ public class LoginAction
         catch ( UserNotFoundException ue )
         {
             addActionError( getText( "user.not.found.exception", Arrays.asList( username, ue.getMessage() ) ) );
+
+            AuditEvent event = new AuditEvent( getText( "log.login.fail" ) );
+            event.setAffectedUser( username );
+            event.log();
             return ERROR;
         }
         catch ( AccountLockedException e )
         {
             addActionError( getText( "account.locked" ) );
+
+            AuditEvent event = new AuditEvent( getText( "log.login.fail.locked" ) );
+            event.setAffectedUser( username );
+            event.log();
             return ERROR;
         }
     }

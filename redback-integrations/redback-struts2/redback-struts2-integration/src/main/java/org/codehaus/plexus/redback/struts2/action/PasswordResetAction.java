@@ -90,6 +90,10 @@ public class PasswordResetAction
 
             mailer.sendPasswordResetEmail( Arrays.asList( user.getEmail() ), authkey, getBaseUrl() );
 
+            AuditEvent event = new AuditEvent( getText( "log.password.reset.request" ) );
+            event.setAffectedUser( username );
+            event.log();
+
             addActionMessage( getText( "password.reset.success" ) );
         }
         catch ( UserNotFoundException e )

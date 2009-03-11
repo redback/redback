@@ -174,6 +174,11 @@ public class PasswordAction
         }
 
         getLogger().info( "Password Change Request Success." );
+        String currentUser = getCurrentUser();
+        AuditEvent event = new AuditEvent( getText( "log.password.change" ) );
+        event.setAffectedUser( user.getUsername() );
+        event.setCurrentUser( currentUser );
+        event.log();
 
         if ( !securitySession.isAuthenticated() )
         {

@@ -26,6 +26,7 @@ import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.Role;
+import org.codehaus.plexus.redback.struts2.action.AuditEvent;
 import org.codehaus.plexus.redback.struts2.action.CancellableAction;
 import org.codehaus.plexus.redback.system.DefaultSecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySession;
@@ -218,7 +219,13 @@ public class UserEditAction
             processPasswordRuleViolations( pe );
             return ERROR;
         }
+        String currentUser = getCurrentUser();
 
+        AuditEvent event = new AuditEvent( getText( "log.account.edit" ) );
+        event.setAffectedUser( getUsername() );
+        event.setCurrentUser( currentUser );
+        event.log();
+        
         return SUCCESS;
     }
     

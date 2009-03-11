@@ -210,11 +210,6 @@ public abstract class AbstractUserCredentialsAction
         return filteredRoleList;
     }
 
-    protected String getCurrentUser()
-    {
-        return getSecuritySession().getUser().getPrincipal().toString();
-    }
-
     protected List<Role> getFilteredRolesForCurrentUserAccess()
         throws RbacManagerException
     {

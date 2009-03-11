@@ -19,6 +19,7 @@ package org.codehaus.plexus.redback.struts2.action.admin;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
+import org.codehaus.plexus.redback.struts2.action.AuditEvent;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
@@ -104,10 +105,18 @@ public class AddAdminUserAction
         u.setPermanent( true );
 
         userManager.addUser( u );
+        
+        AuditEvent event = new AuditEvent( getText( "log.account.create" ) );
+        event.setAffectedUser( u.getUsername() );
+        event.log();
 
         try
         {
             roleManager.assignRole( "system-administrator", u.getPrincipal().toString() );
+            event = new AuditEvent( getText( "log.assign.role" ) );
+            event.setAffectedUser( u.getUsername() );
+            event.setRole( "system-administrator" );
+            event.log();
         }
         catch ( RoleManagerException rpe )
         {

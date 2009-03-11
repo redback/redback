@@ -24,6 +24,7 @@ import org.codehaus.plexus.redback.rbac.RbacObjectInvalidException;
 import org.codehaus.plexus.redback.rbac.RbacObjectNotFoundException;
 import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.struts2.action.AbstractSecurityAction;
+import org.codehaus.plexus.redback.struts2.action.AuditEvent;
 import org.codehaus.plexus.redback.struts2.action.CancellableAction;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
@@ -132,6 +133,12 @@ public class UserDeleteAction extends AbstractSecurityAction implements Cancella
                 addActionError( getText( "cannot.remove.user.non.existent", Arrays.asList( username ) ) );
             }
         }
+        String currentUser = getCurrentUser();
+        
+        AuditEvent event = new AuditEvent( getText( "log.account.delete" ) );
+        event.setAffectedUser( username );
+        event.setCurrentUser( currentUser );
+        event.log();
 
         return SUCCESS;
     }

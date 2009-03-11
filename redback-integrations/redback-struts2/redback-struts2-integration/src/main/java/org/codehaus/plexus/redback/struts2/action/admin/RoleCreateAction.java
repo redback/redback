@@ -26,6 +26,7 @@ import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.struts2.action.AbstractSecurityAction;
+import org.codehaus.plexus.redback.struts2.action.AuditEvent;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
@@ -155,6 +156,11 @@ public class RoleCreateAction
             manager.saveRole( _role );
 
             addActionMessage( getText( "save.role.success", Arrays.asList( roleName ) ) );
+            String currentUser = getCurrentUser();
+            AuditEvent event = new AuditEvent( getText( "log.role.create" ) );
+            event.setRole( roleName );
+            event.setCurrentUser( currentUser );
+            event.log();
         }
         catch ( RbacManagerException e )
         {

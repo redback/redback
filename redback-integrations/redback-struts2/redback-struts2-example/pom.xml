@@ -171,6 +171,12 @@
             <contextPath>/</contextPath>
             <jettyEnvXmlFile>src/jetty-env.xml</jettyEnvXmlFile>
           </webAppConfig>
+          <systemProperties>                           
+            <property>
+              <name>appserver.base</name>
+              <value>${basedir}/target</value>
+            </property>
+          </systemProperties>
           <connectors>
             <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
               <port>9090</port>

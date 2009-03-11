@@ -66,6 +66,8 @@ public class LogoutAction
 
     public String logout()
     {
+        String currentUser = (String)getSecuritySession().getUser().getPrincipal();
+        
         if ( getSecuritySession() != null )
         {            
             // [PLXREDBACK-65] this is a bit of a hack around the cached managers since they don't have the ability to 
@@ -97,6 +99,9 @@ public class LogoutAction
             ( (SessionMap) session ).invalidate();
         }
         
+        AuditEvent event = new AuditEvent( getText( "log.logout.success" ) );
+        event.setAffectedUser( currentUser );
+        event.log();
         
         return LOGOUT;
     }
