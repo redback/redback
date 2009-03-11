@@ -126,7 +126,7 @@ public interface UserManager
         throws UserNotFoundException;
 
     /**
-     * Get the gueust user.
+     * Get the guest user.
      *
      * @return the guest user.
      */
