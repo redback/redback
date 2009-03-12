@@ -97,6 +97,14 @@ public abstract class AbstractSecurityAction
 
     protected String getCurrentUser()
     {
-        return getSecuritySession().getUser().getPrincipal().toString();
+        SecuritySession securitySession = getSecuritySession();
+        if ( securitySession != null && securitySession.getUser() != null )
+        {
+            return securitySession.getUser().getPrincipal().toString();
+        }
+        else
+        {
+            return null;
+        }
     }
 }

@@ -160,11 +160,9 @@ public class LoginAction
             authsource.setToken( authkey.getKey() );
 
             securitySystem.getUserManager().updateUser( user );
-            String currentUser = getCurrentUser();
             
             AuditEvent event = new AuditEvent( getText( "log.password.change" ) );
             event.setAffectedUser( username );
-            event.setCurrentUser( currentUser );
             event.log();
 
             return webLogin( authsource, false );
