@@ -35,6 +35,7 @@ public class TokenBasedAuthenticationDataSource
 
     private String principal;
 
+    private boolean enforcePasswordChange = true;
 
     public TokenBasedAuthenticationDataSource( String principal )
     {
@@ -73,5 +74,15 @@ public class TokenBasedAuthenticationDataSource
         sb.append( ",token=" ).append( token );
         sb.append( ']' );
         return sb.toString();
+    }
+
+    public void setEnforcePasswordChange( boolean enforcePasswordChange )
+    {
+        this.enforcePasswordChange  = enforcePasswordChange;        
+    }
+
+    public boolean isEnforcePasswordChange()
+    {
+        return enforcePasswordChange;
     }
 }

@@ -81,4 +81,9 @@ public class PasswordBasedAuthenticationDataSource
         sb.append( ']' );
         return sb.toString();
     }
+
+    public boolean isEnforcePasswordChange()
+    {
+        return true;
+    }
 }

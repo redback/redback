@@ -80,7 +80,7 @@ public class KeyStoreAuthenticator
                     throw new AccountLockedException( "Account " + source.getPrincipal() + " is locked.", user );
                 }
                 
-                if ( user.isPasswordChangeRequired() )
+                if ( user.isPasswordChangeRequired() && source.isEnforcePasswordChange() )
                 {
                     throw new MustChangePasswordException( "Password expired.", user );
                 }

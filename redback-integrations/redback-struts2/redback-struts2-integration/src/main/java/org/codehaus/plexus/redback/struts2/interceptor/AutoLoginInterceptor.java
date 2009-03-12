@@ -99,7 +99,9 @@ public class AutoLoginInterceptor
             {
                 try
                 {
-                    securitySession = checkAuthentication( authkey );
+                    securitySession =
+                        checkAuthentication( authkey,
+                                             invocation.getInvocationContext().getName().equals( PASSWORD_CHANGE ) );
 
                     if ( securitySession != null && securitySession.isAuthenticated() )
                     {
@@ -136,7 +138,7 @@ public class AutoLoginInterceptor
                 {
                     try
                     {
-                        securitySession = checkAuthentication( authkey );
+                        securitySession = checkAuthentication( authkey, false );
 
                         if ( securitySession == null || !securitySession.isAuthenticated() )
                         {
@@ -205,7 +207,7 @@ public class AutoLoginInterceptor
         }
     }
 
-    private SecuritySession checkAuthentication( AuthenticationKey authkey )
+    private SecuritySession checkAuthentication( AuthenticationKey authkey, boolean enforcePasswordChange )
         throws AccountLockedException, MustChangePasswordException
     {
         SecuritySession securitySession = null;
@@ -213,6 +215,7 @@ public class AutoLoginInterceptor
         TokenBasedAuthenticationDataSource authsource = new TokenBasedAuthenticationDataSource();
         authsource.setPrincipal( authkey.getForPrincipal() );
         authsource.setToken( authkey.getKey() );
+        authsource.setEnforcePasswordChange( enforcePasswordChange );
 
         try
         {

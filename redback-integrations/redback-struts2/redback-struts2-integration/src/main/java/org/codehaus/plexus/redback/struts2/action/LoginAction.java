@@ -160,6 +160,7 @@ public class LoginAction
             TokenBasedAuthenticationDataSource authsource = new TokenBasedAuthenticationDataSource();
             authsource.setPrincipal( user.getPrincipal().toString() );
             authsource.setToken( authkey.getKey() );
+            authsource.setEnforcePasswordChange( false );
 
             securitySystem.getUserManager().updateUser( user );
             
@@ -217,6 +218,7 @@ public class LoginAction
             TokenBasedAuthenticationDataSource authsource = new TokenBasedAuthenticationDataSource();
             authsource.setPrincipal( user.getPrincipal().toString() );
             authsource.setToken( authkey.getKey() );
+            authsource.setEnforcePasswordChange( false );
 
             securitySystem.getUserManager().updateUser( user );
             String currentUser = getCurrentUser();
@@ -417,7 +419,6 @@ public class LoginAction
         }
         catch ( MustChangePasswordException e )
         {
-            // TODO: this should not happen if there is a password change required - but the password change action needs to log the user in on success to swap them
             AuthenticationResult result = new AuthenticationResult( true, e.getUser().getPrincipal(), null );
             SecuritySession securitySession = new DefaultSecuritySession( result, e.getUser() );
             setAuthTokens( securitySession );
