@@ -62,7 +62,6 @@
   </dependencies>
   <modules>
     <module>redback-common-integrations</module>
-    <module>redback-xwork</module>
     <module>redback-struts2</module>
     <module>redback-jee</module>
 <!--
