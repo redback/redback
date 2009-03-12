@@ -11,6 +11,7 @@
       <implementation>org.codehaus.plexus.cache.ehcache.EhcacheCache</implementation>      
       <description>MemoryCache for Users</description>
       <configuration>
+        <disk-persistent>false</disk-persistent>
         <eternal>false</eternal>
         <max-elements-in-memory>1000</max-elements-in-memory>
         <memory-eviction-policy>LRU</memory-eviction-policy>

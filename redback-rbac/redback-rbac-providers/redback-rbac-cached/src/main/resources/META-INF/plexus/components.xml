@@ -11,6 +11,7 @@
       <implementation>org.codehaus.plexus.cache.ehcache.EhcacheCache</implementation>
       <description>MemoryCache for Operations</description>
       <configuration>
+        <disk-persistent>false</disk-persistent>
         <eternal>false</eternal>
         <max-elements-in-memory>1000</max-elements-in-memory>
         <memory-eviction-policy>LRU</memory-eviction-policy>
@@ -26,6 +27,7 @@
       <implementation>org.codehaus.plexus.cache.ehcache.EhcacheCache</implementation>
       <description>MemoryCache for Permissions</description>
       <configuration>
+        <disk-persistent>false</disk-persistent>
         <eternal>false</eternal>
         <max-elements-in-memory>1000</max-elements-in-memory>
         <memory-eviction-policy>LRU</memory-eviction-policy>
@@ -41,6 +43,7 @@
       <implementation>org.codehaus.plexus.cache.ehcache.EhcacheCache</implementation>
       <description>MemoryCache for Resources</description>
       <configuration>
+        <disk-persistent>false</disk-persistent>
         <eternal>false</eternal>
         <max-elements-in-memory>1000</max-elements-in-memory>
         <memory-eviction-policy>LRU</memory-eviction-policy>
@@ -56,6 +59,7 @@
       <implementation>org.codehaus.plexus.cache.ehcache.EhcacheCache</implementation>
       <description>MemoryCache for Roles</description>
       <configuration>
+        <disk-persistent>false</disk-persistent>
         <eternal>false</eternal>
         <max-elements-in-memory>1000</max-elements-in-memory>
         <memory-eviction-policy>LRU</memory-eviction-policy>
@@ -71,6 +75,7 @@
       <implementation>org.codehaus.plexus.cache.ehcache.EhcacheCache</implementation>
       <description>MemoryCache for Effective Role Sets</description>
       <configuration>
+        <disk-persistent>false</disk-persistent>
         <eternal>false</eternal>
         <max-elements-in-memory>1000</max-elements-in-memory>
         <memory-eviction-policy>LRU</memory-eviction-policy>
@@ -90,6 +95,7 @@
       <implementation>org.codehaus.plexus.cache.ehcache.EhcacheCache</implementation>
       <description>MemoryCache for UserAssignments</description>
       <configuration>
+        <disk-persistent>false</disk-persistent>
         <eternal>false</eternal>
         <max-elements-in-memory>10000</max-elements-in-memory>
         <memory-eviction-policy>LRU</memory-eviction-policy>
@@ -105,6 +111,7 @@
       <implementation>org.codehaus.plexus.cache.ehcache.EhcacheCache</implementation>
       <description>MemoryCache for User Permissions Map</description>
       <configuration>
+        <disk-persistent>false</disk-persistent>
         <eternal>false</eternal>
         <max-elements-in-memory>10000</max-elements-in-memory>
         <memory-eviction-policy>LRU</memory-eviction-policy>
