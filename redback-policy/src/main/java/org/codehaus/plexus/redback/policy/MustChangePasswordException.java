@@ -1,5 +1,7 @@
 package org.codehaus.plexus.redback.policy;
 
+import org.codehaus.plexus.redback.users.User;
+
 /*
  * Copyright 2001-2006 The Apache Software Foundation.
  *
@@ -25,23 +27,16 @@ package org.codehaus.plexus.redback.policy;
 public class MustChangePasswordException
     extends PolicyViolationException
 {
-    public MustChangePasswordException()
-    {
-        super();
-    }
+    private final User user;
 
-    public MustChangePasswordException( String message, Throwable cause )
-    {
-        super( message, cause );
-    }
-
-    public MustChangePasswordException( String message )
+    public MustChangePasswordException( String message, User user )
     {
         super( message );
+        this.user = user;
     }
 
-    public MustChangePasswordException( Throwable cause )
+    public User getUser()
     {
-        super( cause );
+        return user;
     }
 }

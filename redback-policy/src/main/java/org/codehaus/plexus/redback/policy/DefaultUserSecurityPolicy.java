@@ -295,7 +295,7 @@ public class DefaultUserSecurityPolicy
                 log.info( "User '" + user.getUsername() + "' flagged for password expiry (expired on: "
                     + expirationDate + ")" );
                 user.setPasswordChangeRequired( true );
-                throw new MustChangePasswordException( "Password Expired, You must change your password." );
+                throw new MustChangePasswordException( "Password Expired, You must change your password.", user );
             }
         }
     }

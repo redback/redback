@@ -22,6 +22,7 @@ import org.codehaus.plexus.redback.authorization.AuthorizationException;
 import org.codehaus.plexus.redback.authorization.AuthorizationResult;
 import org.codehaus.plexus.redback.keys.KeyManager;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
+import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
@@ -42,10 +43,10 @@ public interface SecuritySystem
     // ----------------------------------------------------------------------------
 
     public SecuritySession authenticate( AuthenticationDataSource source )
-        throws AuthenticationException, UserNotFoundException, AccountLockedException;
+        throws AuthenticationException, UserNotFoundException, AccountLockedException, MustChangePasswordException;
 
     public boolean isAuthenticated( AuthenticationDataSource source )
-        throws AuthenticationException, UserNotFoundException, AccountLockedException;
+        throws AuthenticationException, UserNotFoundException, AccountLockedException, MustChangePasswordException;
 
     // ----------------------------------------------------------------------------
     // Authorization

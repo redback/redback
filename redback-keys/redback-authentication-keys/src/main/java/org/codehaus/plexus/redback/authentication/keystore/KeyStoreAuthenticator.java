@@ -28,6 +28,7 @@ import org.codehaus.plexus.redback.keys.KeyManager;
 import org.codehaus.plexus.redback.keys.KeyManagerException;
 import org.codehaus.plexus.redback.keys.KeyNotFoundException;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
+import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
@@ -60,7 +61,7 @@ public class KeyStoreAuthenticator
     }
 
     public AuthenticationResult authenticate( AuthenticationDataSource source )
-        throws AccountLockedException, AuthenticationException
+        throws AccountLockedException, AuthenticationException, MustChangePasswordException
     {
         TokenBasedAuthenticationDataSource dataSource = (TokenBasedAuthenticationDataSource) source;
 
@@ -74,9 +75,14 @@ public class KeyStoreAuthenticator
             {
                 User user = userManager.findUser( dataSource.getPrincipal() );
                 
-                if (user.isLocked() || user.isPasswordChangeRequired())
+                if ( user.isLocked() )
                 {
                     throw new AccountLockedException( "Account " + source.getPrincipal() + " is locked.", user );
+                }
+                
+                if ( user.isPasswordChangeRequired() )
+                {
+                    throw new MustChangePasswordException( "Password expired.", user );
                 }
                 
                 return new AuthenticationResult( true, dataSource.getPrincipal(), null );

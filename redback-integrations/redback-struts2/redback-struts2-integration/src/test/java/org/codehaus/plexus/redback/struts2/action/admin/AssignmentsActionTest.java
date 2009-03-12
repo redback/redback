@@ -23,6 +23,7 @@ import java.util.List;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authorization.AuthorizationResult;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
+import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.RbacObjectInvalidException;
 import org.codehaus.plexus.redback.rbac.RbacObjectNotFoundException;
@@ -416,10 +417,10 @@ public class AssignmentsActionTest
     /**
      * Check security - show should succeed and display all roles, even without 'user-management-role-grant' or
      * 'user-management-user-role' for the user administrators.
+     * @throws MustChangePasswordException 
      */
     public void testSystemAdminCanShowRoles()
-        throws AccountLockedException, AuthenticationException, UserNotFoundException, RbacObjectNotFoundException,
-        RbacManagerException
+        throws Exception
     {
         login( action, "admin", PASSWORD );
 
@@ -452,8 +453,7 @@ public class AssignmentsActionTest
      * 'user-management-user-role' for the user administrators.
      */
     public void testUserAdminCanShowRoles()
-        throws AccountLockedException, AuthenticationException, UserNotFoundException, RbacObjectNotFoundException,
-        RbacManagerException
+        throws Exception
     {
         login( action, "user-admin", PASSWORD );
 
@@ -485,8 +485,7 @@ public class AssignmentsActionTest
      * 'user-management-user-role' for the user administrators.
      */
     public void testUserAdminCanAddRoles()
-        throws RbacObjectNotFoundException, RbacManagerException, AccountLockedException, AuthenticationException,
-        UserNotFoundException
+        throws Exception
     {
         login( action, "user-admin", PASSWORD );
 
@@ -515,8 +514,7 @@ public class AssignmentsActionTest
      * 'user-management-user-role' for the user administrators.
      */
     public void testUserAdminCanRemoveRoles()
-        throws RbacObjectNotFoundException, RbacManagerException, AccountLockedException, AuthenticationException,
-        UserNotFoundException
+        throws Exception
     {
         login( action, "user-admin", PASSWORD );
 

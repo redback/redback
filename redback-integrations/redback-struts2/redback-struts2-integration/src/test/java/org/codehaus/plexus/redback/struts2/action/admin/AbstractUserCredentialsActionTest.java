@@ -26,6 +26,7 @@ import net.sf.ehcache.CacheManager;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
+import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.RbacObjectInvalidException;
@@ -129,7 +130,7 @@ public abstract class AbstractUserCredentialsActionTest
     }
 
     protected void login( AbstractUserCredentialsAction action, String principal, String password )
-        throws AuthenticationException, UserNotFoundException, AccountLockedException
+        throws AuthenticationException, UserNotFoundException, AccountLockedException, MustChangePasswordException
     {
         PasswordBasedAuthenticationDataSource authdatasource = new PasswordBasedAuthenticationDataSource();
         authdatasource.setPrincipal( principal );

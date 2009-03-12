@@ -30,6 +30,8 @@ import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.keys.KeyManagerException;
 import org.codehaus.plexus.redback.keys.KeyNotFoundException;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
+import org.codehaus.plexus.redback.policy.MustChangePasswordException;
+import org.codehaus.plexus.redback.system.DefaultSecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.User;
@@ -329,7 +331,6 @@ public class LoginAction
 
             if ( securitySession.getAuthenticationResult().isAuthenticated() )
             {
-                // TODO: this should not happen if there is a password change required - but the password change action needs to log the user in on success to swap them
                 // Success!  Create tokens.
                 setAuthTokens( securitySession );
 
@@ -354,17 +355,6 @@ public class LoginAction
                 }
                 autologinCookies.setSignonCookie( authdatasource.getPrincipal(), ServletActionContext.getResponse(),
                                                   ServletActionContext.getRequest() );
-
-                if ( securitySession.getUser().isLocked() )
-                {
-                    return ACCOUNT_LOCKED;
-                }
-                
-                // check if user is forced to change their password (also see policy enforcement interceptor)
-                if( securitySession.getUser().isPasswordChangeRequired() )
-                {
-                    return PASSWORD_CHANGE;
-                }              
 
                 AuditEvent event = new AuditEvent( getText( "log.login.success" ) );
                 event.setAffectedUser( username );
@@ -423,7 +413,19 @@ public class LoginAction
             AuditEvent event = new AuditEvent( getText( "log.login.fail.locked" ) );
             event.setAffectedUser( username );
             event.log();
-            return ERROR;
+            return ACCOUNT_LOCKED;
+        }
+        catch ( MustChangePasswordException e )
+        {
+            // TODO: this should not happen if there is a password change required - but the password change action needs to log the user in on success to swap them
+            AuthenticationResult result = new AuthenticationResult( true, e.getUser().getPrincipal(), null );
+            SecuritySession securitySession = new DefaultSecuritySession( result, e.getUser() );
+            setAuthTokens( securitySession );
+
+            AuditEvent event = new AuditEvent( getText( "log.login.fail.locked" ) );
+            event.setAffectedUser( username );
+            event.log();
+            return PASSWORD_CHANGE;
         }
     }
 }

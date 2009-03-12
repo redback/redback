@@ -29,11 +29,6 @@ public class AccountLockedException
 {
     private User user;
 
-    public AccountLockedException()
-    {
-        super();
-    }
-
     public AccountLockedException( String message, User user )
     {
         super( message );

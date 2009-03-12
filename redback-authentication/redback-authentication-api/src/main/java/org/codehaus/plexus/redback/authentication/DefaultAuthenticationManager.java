@@ -24,6 +24,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.codehaus.plexus.redback.policy.AccountLockedException;
+import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 import org.codehaus.plexus.spring.PlexusToSpringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -66,7 +67,7 @@ public class DefaultAuthenticationManager
     }
 
     public AuthenticationResult authenticate( AuthenticationDataSource source )
-        throws AccountLockedException, AuthenticationException
+        throws AccountLockedException, AuthenticationException, MustChangePasswordException
     {
         if ( authenticators == null || authenticators.size() == 0 )
         {

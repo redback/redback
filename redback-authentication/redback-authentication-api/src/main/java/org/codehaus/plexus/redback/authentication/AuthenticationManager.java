@@ -17,6 +17,7 @@ package org.codehaus.plexus.redback.authentication;
  */
 
 import org.codehaus.plexus.redback.policy.AccountLockedException;
+import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 
 import java.util.List;
 
@@ -35,5 +36,5 @@ public interface AuthenticationManager
     public List<Authenticator> getAuthenticators();
 
     public AuthenticationResult authenticate( AuthenticationDataSource source )
-        throws AccountLockedException, AuthenticationException;
+        throws AccountLockedException, AuthenticationException, MustChangePasswordException;
 }

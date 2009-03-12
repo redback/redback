@@ -25,6 +25,7 @@ import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authentication.TokenBasedAuthenticationDataSource;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
+import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.system.SecuritySystemConstants;
@@ -103,11 +104,6 @@ public class AutoLoginInterceptor
                     if ( securitySession != null && securitySession.isAuthenticated() )
                     {
                         checkCookieConsistency( securitySession );
-
-                        if ( securitySession.getUser().isPasswordChangeRequired() )
-                        {
-                            return PASSWORD_CHANGE;
-                        }
                     }
                     else
                     {
@@ -126,6 +122,10 @@ public class AutoLoginInterceptor
                         .getRequest() );
                     return ACCOUNT_LOCKED;
                 }
+                catch ( MustChangePasswordException e )
+                {
+                    return PASSWORD_CHANGE;
+                }
             }
             else if ( autologinCookies.isRememberMeEnabled() )
             {
@@ -138,14 +138,7 @@ public class AutoLoginInterceptor
                     {
                         securitySession = checkAuthentication( authkey );
 
-                        if ( securitySession != null && securitySession.isAuthenticated() )
-                        {
-                            if ( securitySession.getUser().isPasswordChangeRequired() )
-                            {
-                                return PASSWORD_CHANGE;
-                            }
-                        }
-                        else
+                        if ( securitySession == null || !securitySession.isAuthenticated() )
                         {
                             autologinCookies.removeRememberMeCookie( ServletActionContext.getResponse(),
                                                                      ServletActionContext.getRequest() );
@@ -157,6 +150,10 @@ public class AutoLoginInterceptor
                         autologinCookies.removeRememberMeCookie( ServletActionContext.getResponse(),
                                                                  ServletActionContext.getRequest() );
                         return ACCOUNT_LOCKED;
+                    }
+                    catch ( MustChangePasswordException e )
+                    {
+                        return PASSWORD_CHANGE;
                     }
                 }
             }
@@ -209,7 +206,7 @@ public class AutoLoginInterceptor
     }
 
     private SecuritySession checkAuthentication( AuthenticationKey authkey )
-        throws AccountLockedException
+        throws AccountLockedException, MustChangePasswordException
     {
         SecuritySession securitySession = null;
         getLogger().debug( "Logging in with an authentication key: " + authkey.getForPrincipal() );

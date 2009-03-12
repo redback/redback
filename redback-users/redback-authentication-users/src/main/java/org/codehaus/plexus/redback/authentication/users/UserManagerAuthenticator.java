@@ -64,11 +64,12 @@ public class UserManagerAuthenticator
     /**
      * @throws org.codehaus.plexus.redback.policy.AccountLockedException 
      * @throws MustChangePasswordException 
+     * @throws MustChangePasswordException 
      * @throws PolicyViolationException 
      * @see org.codehaus.plexus.redback.authentication.Authenticator#authenticate(org.codehaus.plexus.redback.authentication.AuthenticationDataSource)
      */
     public AuthenticationResult authenticate( AuthenticationDataSource ds )
-        throws AuthenticationException, AccountLockedException
+        throws AuthenticationException, AccountLockedException, MustChangePasswordException
     {
         boolean authenticationSuccess = false;
         String username = null;
@@ -82,9 +83,14 @@ public class UserManagerAuthenticator
             User user = userManager.findUser( source.getPrincipal() );
             username = user.getUsername();
             
-            if ( user.isLocked() && !user.isPasswordChangeRequired() )
+            if ( user.isLocked() )
             {
                 throw new AccountLockedException( "Account " + source.getPrincipal() + " is locked.", user );
+            }
+            
+            if ( user.isPasswordChangeRequired() )
+            {
+                throw new MustChangePasswordException( "Password expired.", user );
             }
             
             PasswordEncoder encoder = securityPolicy.getPasswordEncoder();

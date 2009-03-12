@@ -83,9 +83,10 @@ public class DefaultSecuritySystem
      * @throws UserNotFoundException
      * @throws MustChangePasswordException
      * @throws AccountLockedException
+     * @throws MustChangePasswordException 
      */
     public SecuritySession authenticate( AuthenticationDataSource source )
-        throws AuthenticationException, UserNotFoundException, AccountLockedException
+        throws AuthenticationException, UserNotFoundException, AccountLockedException, MustChangePasswordException
     {
         // Perform Authentication.
         AuthenticationResult result = authnManager.authenticate( source );
@@ -118,7 +119,7 @@ public class DefaultSecuritySystem
     }
 
     public boolean isAuthenticated( AuthenticationDataSource source )
-        throws AuthenticationException, UserNotFoundException, AccountLockedException
+        throws AuthenticationException, UserNotFoundException, AccountLockedException, MustChangePasswordException
     {
         return authenticate( source ).getAuthenticationResult().isAuthenticated();
     }
