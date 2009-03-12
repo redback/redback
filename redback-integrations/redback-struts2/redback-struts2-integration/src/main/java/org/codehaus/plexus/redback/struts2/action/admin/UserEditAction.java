@@ -18,6 +18,7 @@ package org.codehaus.plexus.redback.struts2.action.admin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,7 +40,6 @@ import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.model.AdminEditUserCredentials;
 import org.codehaus.redback.integration.role.RoleConstants;
-import org.codehaus.redback.integration.util.RoleSorter;
 
 /**
  * UserEditAction
@@ -121,9 +121,8 @@ public class UserEditAction
             try
             {
                 String principal = u.getPrincipal().toString();
-                List<Role> roles = new ArrayList<Role>( rbacManager.getEffectivelyAssignedRoles( principal ) );
+                List<Role> roles = filterAssignableRoles( rbacManager.getEffectivelyAssignedRoles( principal ) );
                 effectivelyAssignedRoles = filterRolesForCurrentUserAccess( roles );
-                Collections.sort( effectivelyAssignedRoles, new RoleSorter() );
                 hasHiddenRoles = ( roles.size() > effectivelyAssignedRoles.size() );
             }
             catch ( RbacManagerException rme )
@@ -139,6 +138,19 @@ public class UserEditAction
 
 
         return INPUT;
+    }
+
+    private List<Role> filterAssignableRoles( Collection<Role> roles )
+    {
+        List<Role> assignableRoles = new ArrayList<Role>( roles.size() );
+        for ( Role r : roles )
+        {
+            if ( r.isAssignable() )
+            {
+                assignableRoles.add( r );
+            }
+        }
+        return assignableRoles;
     }
 
     public String submit()

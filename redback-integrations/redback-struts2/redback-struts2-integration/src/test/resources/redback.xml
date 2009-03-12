@@ -4,6 +4,13 @@
     <application>
       <id>Continuum</id>
       <version>1.0</version>
+      <operations>
+        <operation>
+          <id>continuum-manage-users</id>
+          <name>continuum-manage-users</name>
+          <description>Manage Continuum Users</description>
+        </operation>
+      </operations>
       <roles>
         <role>
           <id>continuum-group-project-administrator</id>
@@ -29,6 +36,24 @@
               <resource>global</resource>
             </permission>
           </permissions>
+        </role>
+        <role>
+          <id>continuum-user-administrator</id>
+          <name>Continuum User Administrator</name>
+          <permanent>true</permanent>
+          <assignable>false</assignable>
+          <permissions>
+            <permission>
+              <id>continuum-manage-users</id>
+              <name>continuum-manage-users</name>
+              <operation>continuum-manage-users</operation>
+              <resource>global</resource>
+              <permanent>true</permanent>
+            </permission>
+          </permissions>
+          <parentRoles>
+            <parentRole>user-administrator</parentRole>
+          </parentRoles>
         </role>
       </roles>
       <templates>

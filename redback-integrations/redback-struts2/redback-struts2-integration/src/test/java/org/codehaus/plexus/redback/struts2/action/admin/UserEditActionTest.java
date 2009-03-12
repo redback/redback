@@ -83,4 +83,22 @@ public class UserEditActionTest
         assertEquals( "Project Administrator - default", r.getName() );
         assertTrue( action.isHasHiddenRoles() );
     }
+
+    public void testEditPageHidesUnassignableRoles()
+        throws RbacObjectInvalidException, RbacManagerException
+    {
+        // REDBACK-201
+        // user should not be able to see the unassignable roles 
+
+        addAssignment( "user", "User Administrator" );
+
+        action.setUsername( "user" );
+        assertEquals( Action.INPUT, action.edit() );
+
+        List<Role> effectivelyAssignedRoles = action.getEffectivelyAssignedRoles();
+        assertEquals( 1, effectivelyAssignedRoles.size() );
+        Role r = effectivelyAssignedRoles.get( 0 );
+        assertEquals( "User Administrator", r.getName() );
+        assertFalse( action.isHasHiddenRoles() );
+    }
 }
