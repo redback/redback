@@ -120,6 +120,13 @@ public class MainPageTest
         selenium.open( "/" );
         assert selenium.getHtmlSource().indexOf( "<h4>This is the example mainpage</h4>" ) >= 0;
     }
+    
+    @Test ( dependsOnMethods = { "logout" }, description="REDBACK-207", groups="disabled" )
+    public void logoutWhenAlreadyLoggedOut()
+    {
+        logout();
+        // TODO: assert result - current bug throws an NPE but it isn't propogated here
+    }
 
     @AfterClass
     public void shutdownSelenium()
