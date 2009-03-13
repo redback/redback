@@ -15,13 +15,11 @@
     <!--
      | Logger manager
      -->
-<!--
     <component>
       <role>org.codehaus.plexus.logging.LoggerManager</role>
-      <implementation>org.codehaus.plexus.logging.log4j.Log4JLoggerManager</implementation>
+      <implementation>org.codehaus.plexus.logging.slf4j.Slf4jLoggerManager</implementation>
       <lifecycle-handler>basic</lifecycle-handler>
     </component>
--->
  <!--
     <component>
       <role>org.codehaus.plexus.ldap.helper.LdapConnectionFactory</role>
