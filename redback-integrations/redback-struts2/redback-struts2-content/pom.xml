@@ -28,19 +28,12 @@
     <dependency>
       <groupId>org.codehaus.redback</groupId>
       <artifactId>redback-struts2-integration</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.redback</groupId>
       <artifactId>redback-common-integrations</artifactId>
-      <version>${project.version}</version>
     </dependency>
   </dependencies>
-  <scm>
-    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-integrations/redback-xwork/redback-xwork-content</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-integrations/redback-xwork/redback-xwork-content</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/redback/redback/trunk/redback-integrations/redback-xwork/redback-xwork-content</url>
-  </scm>
   <build>
     <plugins>
       <plugin>

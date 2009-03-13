@@ -28,7 +28,6 @@ import java.util.Map;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.redback.rbac.RBACManager;
@@ -45,6 +44,8 @@ import org.codehaus.plexus.redback.role.processor.RoleModelProcessor;
 import org.codehaus.plexus.redback.role.template.RoleTemplateProcessor;
 import org.codehaus.plexus.redback.role.util.RoleModelUtils;
 import org.codehaus.plexus.redback.role.validator.RoleModelValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -56,10 +57,10 @@ import org.springframework.stereotype.Service;
  */
 @Service("roleManager")
 public class DefaultRoleManager
-    extends AbstractLogEnabled
     implements RoleManager, Initializable
 {
-
+    private Logger log = LoggerFactory.getLogger(DefaultRoleManager.class);
+    
     /**
      * the blessed model that has been validated as complete
      */
@@ -102,7 +103,7 @@ public class DefaultRoleManager
             {
                 if ( !knownResources.containsKey( app.getId() ) )
                 {
-                    getLogger().info( "loading " + app.getId() );
+                    log.info( "loading " + app.getId() );
                     loadApplication( app );
                 }
             }
@@ -151,11 +152,11 @@ public class DefaultRoleManager
         }
         else
         {
-            getLogger().error( "Role Model Validation Errors:" );
+            log.error( "Role Model Validation Errors:" );
 
             for ( String error : modelValidator.getValidationErrors() )
             {
-                getLogger().error( error );
+                log.error( error );
             }
 
             throw new RoleManagerException( "Role Model Validation Error" );

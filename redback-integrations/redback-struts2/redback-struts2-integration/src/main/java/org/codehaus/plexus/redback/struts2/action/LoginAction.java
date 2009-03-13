@@ -172,14 +172,14 @@ public class LoginAction
         }
         catch ( KeyNotFoundException e )
         {
-            getLogger().info( "Invalid key requested: " + resetPassword );
+            log.info( "Invalid key requested: " + resetPassword );
             addActionError( getText( "cannot.find.key" ) );
             return ERROR;
         }
         catch ( KeyManagerException e )
         {
             addActionError( getText( "cannot.find.key.at.the.moment" ) );
-            getLogger().warn( "Key Manager error: ", e );
+            log.warn( "Key Manager error: ", e );
             return ERROR;
         }
         catch ( UserNotFoundException e )
@@ -232,7 +232,7 @@ public class LoginAction
         }
         catch ( KeyNotFoundException e )
         {
-            getLogger().info( "Invalid key requested: " + validateMe );
+            log.info( "Invalid key requested: " + validateMe );
             addActionError( getText( "cannot.find.key" ) );
             return ERROR;
         }
@@ -366,7 +366,7 @@ public class LoginAction
             }
             else
             {
-                getLogger().debug( "Login Action failed against principal : " +
+                log.debug( "Login Action failed against principal : " +
                     securitySession.getAuthenticationResult().getPrincipal(),
                                    securitySession.getAuthenticationResult().getException() );
 

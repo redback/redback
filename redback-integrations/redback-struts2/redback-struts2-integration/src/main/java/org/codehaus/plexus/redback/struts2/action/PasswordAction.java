@@ -173,7 +173,7 @@ public class PasswordAction
             return ERROR;
         }
 
-        getLogger().info( "Password Change Request Success." );
+        log.info( "Password Change Request Success." );
         String currentUser = getCurrentUser();
         AuditEvent event = new AuditEvent( getText( "log.password.change" ) );
         event.setAffectedUser( user.getUsername() );
@@ -182,7 +182,7 @@ public class PasswordAction
 
         if ( !securitySession.isAuthenticated() )
         {
-            getLogger().debug( "User is not authenticated." );
+            log.debug( "User is not authenticated." );
             return REQUIRES_AUTHENTICATION;
         }
 
@@ -207,12 +207,12 @@ public class PasswordAction
                 if ( map.containsKey( "targetUrl" ) ) 
                 {
                     url = map.remove( "targetUrl" ).toString() ;                    
-                    getLogger().info( "targetUrl is retrieved and removed from the session: " + url );
+                    log.info( "targetUrl is retrieved and removed from the session: " + url );
                 }
                 else 
                 {
                     url = super.getBaseUrl();
-                    getLogger().info( "targetUrl is empty, assign it to baseUrl: " + url ); 
+                    log.info( "targetUrl is empty, assign it to baseUrl: " + url ); 
                 }
                 setTargetUrl( url );
             }    

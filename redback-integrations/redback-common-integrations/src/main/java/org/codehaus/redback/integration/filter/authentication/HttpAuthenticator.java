@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.redback.authentication.AuthenticationDataSource;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
@@ -34,6 +33,8 @@ import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * HttpAuthenticator
@@ -42,8 +43,9 @@ import org.codehaus.plexus.util.StringUtils;
  * @version $Id$
  */
 public abstract class HttpAuthenticator
-    extends AbstractLogEnabled
 {
+    protected Logger log = LoggerFactory.getLogger( getClass() );
+
     public static final String ROLE = HttpAuthenticator.class.getName();
 
     @Resource
@@ -69,12 +71,12 @@ public abstract class HttpAuthenticator
         catch ( AuthenticationException e )
         {
             String msg = "Unable to authenticate user: " + ds;
-            getLogger().info( msg, e );
+            log.info( msg, e );
             throw new HttpAuthenticationException( msg, e );
         }
         catch ( UserNotFoundException e )
         {
-            getLogger().info( "Login attempt against unknown user: " + ds );
+            log.info( "Login attempt against unknown user: " + ds );
             throw new HttpAuthenticationException( "User name or password invalid." );
         }
     }
@@ -188,7 +190,7 @@ public abstract class HttpAuthenticator
         }
         catch ( UserNotFoundException e )
         {
-            getLogger().warn( "Default User '" + principal + "' not found.", e );
+            log.warn( "Default User '" + principal + "' not found.", e );
             return null;
         }
     }

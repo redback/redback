@@ -26,21 +26,24 @@
   <name>Redback :: Integration :: Struts 2 Example Webapp</name>
   <dependencies>
     <dependency>
-      <groupId>org.codehaus.redback</groupId>
-      <artifactId>redback-struts2-content</artifactId>
-      <version>${project.version}</version>
-      <type>war</type>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-log4j-logging</artifactId>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl104-over-slf4j</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.redback</groupId>
+      <artifactId>redback-struts2-content</artifactId>
+      <type>war</type>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.redback</groupId>
       <artifactId>redback-struts2-integration</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.redback</groupId>
@@ -49,7 +52,6 @@
     <dependency>
       <groupId>org.codehaus.redback</groupId>
       <artifactId>redback-common-integrations</artifactId>
-      <version>${project.version}</version>
     </dependency>
    <dependency>
       <groupId>org.codehaus.redback</groupId>
@@ -163,7 +165,7 @@
         <groupId>org.mortbay.jetty</groupId>
         <artifactId>maven-jetty-plugin</artifactId>
         <version>6.1.11</version>
-	      <configuration>
+        <configuration>
           <scanIntervalSeconds>10</scanIntervalSeconds>
           <contextPath>/</contextPath>
           <jettyEnvXml>src/jetty-env.xml</jettyEnvXml>
@@ -218,12 +220,6 @@
     </plugins>
   </build>
 
-  <scm>
-    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-integrations/redback-xwork/redback-xwork-example</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-integrations/redback-xwork/redback-xwork-example</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/redback/redback/trunk/redback-integrations/redback-xwork/redback-xwork-example</url>
-  </scm>
-  
   <profiles>
     <profile>
       <id>postgres</id>

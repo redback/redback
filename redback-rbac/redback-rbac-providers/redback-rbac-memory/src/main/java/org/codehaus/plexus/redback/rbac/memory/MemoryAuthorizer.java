@@ -16,7 +16,6 @@ package org.codehaus.plexus.redback.rbac.memory;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.redback.authorization.AuthorizationDataSource;
 import org.codehaus.plexus.redback.authorization.AuthorizationException;
 import org.codehaus.plexus.redback.authorization.AuthorizationResult;
@@ -29,7 +28,6 @@ import org.springframework.stereotype.Service;
   */
 @Service("authorizer#memory")
 public class MemoryAuthorizer
-    extends AbstractLogEnabled
     implements Authorizer
 {
     public String getId()

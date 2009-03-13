@@ -21,7 +21,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.redback.authorization.AuthorizationDataSource;
 import org.codehaus.plexus.redback.authorization.AuthorizationException;
 import org.codehaus.plexus.redback.authorization.AuthorizationResult;
@@ -36,6 +35,8 @@ import org.codehaus.plexus.redback.rbac.RbacObjectNotFoundException;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -46,10 +47,9 @@ import org.springframework.stereotype.Service;
  */
 @Service("authorizer#rbac")
 public class RbacAuthorizer
-    extends AbstractLogEnabled
     implements Authorizer
 {
-
+    private Logger log = LoggerFactory.getLogger( RbacAuthorizer.class );
     @Resource(name="rBACManager#cached")
     private RBACManager manager;
 
@@ -108,7 +108,7 @@ public class RbacAuthorizer
                 {
                     for ( Permission permission : permissionMap.get( operation.toString() ) )
                     {
-                        getLogger().debug( "checking permission " + permission.getName() );
+                        log.debug( "checking permission " + permission.getName() );
 
                         if ( evaluator.evaluate( permission, operation, resource, guest.getPrincipal() ) )
                         {

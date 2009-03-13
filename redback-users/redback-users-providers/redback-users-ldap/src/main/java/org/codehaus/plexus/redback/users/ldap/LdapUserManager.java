@@ -91,11 +91,11 @@ public class LdapUserManager
         }
         catch ( LdapControllerException e )
         {
-            getLogger().error( "Error mapping user: " + user.getPrincipal() + " to LDAP attributes.", e );
+            log.error( "Error mapping user: " + user.getPrincipal() + " to LDAP attributes.", e );
         }
         catch ( MappingException e )
         {
-            getLogger().error( "Error mapping user: " + user.getPrincipal() + " to LDAP attributes.", e );
+            log.error( "Error mapping user: " + user.getPrincipal() + " to LDAP attributes.", e );
         }
         finally
         {
@@ -125,7 +125,7 @@ public class LdapUserManager
         }
         catch ( LdapControllerException e )
         {
-            getLogger().error( "Failed to delete user: " + principal, e );
+            log.error( "Failed to delete user: " + principal, e );
         }
         finally
         {
@@ -144,7 +144,7 @@ public class LdapUserManager
         }
         catch ( LdapControllerException e )
         {
-            getLogger().error( "Failed to delete user: " + username, e );
+            log.error( "Failed to delete user: " + username, e );
         }
         finally
         {
@@ -183,12 +183,12 @@ public class LdapUserManager
         }
         catch ( LdapControllerException e )
         {
-            getLogger().error( "Failed to find user: " + username, e );
+            log.error( "Failed to find user: " + username, e );
             return null;
         }
         catch ( MappingException e )
         {
-            getLogger().error( "Failed to map user: " + username, e );
+            log.error( "Failed to map user: " + username, e );
             return null;
         }
         finally
@@ -228,12 +228,12 @@ public class LdapUserManager
         }
         catch ( LdapControllerException e )
         {
-            getLogger().error( "Failed to find user: " + principal, e );
+            log.error( "Failed to find user: " + principal, e );
             return null;
         }
         catch ( MappingException e )
         {
-            getLogger().error( "Failed to map user: " + principal, e );
+            log.error( "Failed to map user: " + principal, e );
             return null;
         }
         finally
@@ -275,12 +275,12 @@ public class LdapUserManager
         }
         catch ( LdapControllerException e )
         {
-            getLogger().error( "Failed to find user", e );
+            log.error( "Failed to find user", e );
             return null;
         }
         catch ( MappingException e )
         {
-            getLogger().error( "Failed to map user", e );
+            log.error( "Failed to map user", e );
             return null;
         }
         finally
@@ -334,7 +334,7 @@ public class LdapUserManager
         }
         catch ( Exception e )
         {
-            getLogger().error( e.getMessage(), e );
+            log.error( e.getMessage(), e );
         }
         finally
         {
@@ -359,11 +359,11 @@ public class LdapUserManager
         }
         catch ( LdapControllerException e )
         {
-            getLogger().error( "Failed to update user: " + user.getPrincipal(), e );
+            log.error( "Failed to update user: " + user.getPrincipal(), e );
         }
         catch ( MappingException e )
         {
-            getLogger().error( "Failed to update user: " + user.getPrincipal(), e );
+            log.error( "Failed to update user: " + user.getPrincipal(), e );
         }
         finally
         {
@@ -382,7 +382,7 @@ public class LdapUserManager
         }
         catch ( LdapControllerException e )
         {
-            getLogger().warn( "Failed to search for user: " + principal, e );
+            log.warn( "Failed to search for user: " + principal, e );
             return false;
         }
         finally
@@ -399,7 +399,7 @@ public class LdapUserManager
         }
         catch ( LdapException e )
         {
-            getLogger().warn( "failed to get a ldap connection " + e.getMessage(), e );
+            log.warn( "failed to get a ldap connection " + e.getMessage(), e );
             throw new RuntimeException( "failed to get a ldap connection " + e.getMessage(), e );
         }
     }

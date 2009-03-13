@@ -169,12 +169,6 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.5.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <version>1.5.0</version>
     </dependency>
     <!-- === Test Dependencies ======================= -->
     <dependency>
@@ -208,12 +202,12 @@
       <version>2.2</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
-  <scm>
-    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-integrations/redback-xwork/redback-xwork-integration</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-integrations/redback-xwork/redback-xwork-integration</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/redback/redback/trunk/redback-integrations/redback-xwork/redback-xwork-integration</url>
-  </scm>
   <build>
     <plugins>
       <plugin>

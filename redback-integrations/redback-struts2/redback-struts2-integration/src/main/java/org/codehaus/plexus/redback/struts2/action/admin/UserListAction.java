@@ -210,7 +210,7 @@ public class UserListAction
         }
         catch ( RbacManagerException e )
         {
-            getLogger().warn( "Unable to get user assignments for roles " + roleNames, e );
+            log.warn( "Unable to get user assignments for roles " + roleNames, e );
         }
 
         return new ArrayList<String>( usernames );

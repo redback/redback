@@ -1,14 +1,14 @@
 package org.codehaus.plexus.redback.http.authentication;
 
-import org.codehaus.plexus.redback.authentication.AuthenticationException;
+import java.util.Map;
+
 import org.codehaus.plexus.redback.authentication.AuthenticationDataSource;
+import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
 import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.users.User;
-
-import java.util.Map;
 
 /**
  * An HttpAuthenticator using a Map for session storage

@@ -29,11 +29,12 @@ import javax.annotation.Resource;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.redback.integration.util.UserComparator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -44,9 +45,10 @@ import org.springframework.stereotype.Service;
  */
 @Service("report#userlist-csv")
 public class CsvUserList
-    extends AbstractLogEnabled
     implements Report
 {
+    private Logger log = LoggerFactory.getLogger( CsvUserList.class );    
+    
     @Resource
     private SecuritySystem securitySystem;
 
@@ -154,19 +156,19 @@ public class CsvUserList
         catch ( IllegalAccessException e )
         {
             String emsg = "Unable to produce " + getName() + " report.";
-            getLogger().error( emsg, e );
+            log.error( emsg, e );
             throw new ReportException( emsg, e );
         }
         catch ( InvocationTargetException e )
         {
             String emsg = "Unable to produce " + getName() + " report.";
-            getLogger().error( emsg, e );
+            log.error( emsg, e );
             throw new ReportException( emsg, e );
         }
         catch ( NoSuchMethodException e )
         {
             String emsg = "Unable to produce " + getName() + " report.";
-            getLogger().error( emsg, e );
+            log.error( emsg, e );
             throw new ReportException( emsg, e );
         }
     }

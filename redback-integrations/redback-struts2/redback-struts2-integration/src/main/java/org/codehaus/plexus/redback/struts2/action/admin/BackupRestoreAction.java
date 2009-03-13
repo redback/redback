@@ -107,10 +107,10 @@ public class BackupRestoreAction
         File backupDirectory = getTimestampedBackupDirectory();
         backupDirectory.mkdirs();
 
-        getLogger().info( "Backing up security database to " + backupDirectory );
+        log.info( "Backing up security database to " + backupDirectory );
         this.backupDatabase( backupDirectory );          
         
-        getLogger().info( "Done backing up security database" );
+        log.info( "Done backing up security database" );
 
         return SUCCESS;
     }
@@ -137,23 +137,23 @@ public class BackupRestoreAction
 
         if ( !fileExists )
         {
-            getLogger().warn( "Backup: " + this.restoreDirectory + " not found." );
+            log.warn( "Backup: " + this.restoreDirectory + " not found." );
             addActionError( getText("backupRestore.backup.error") );
             retrievePreviousBackups();
             return CUSTOM_ERROR;
         }
         else if ( !isValidBackup )
         {
-            getLogger().warn( "Backup: " + this.restoreDirectory + " is not a valid backup directory." );
+            log.warn( "Backup: " + this.restoreDirectory + " is not a valid backup directory." );
             addActionError( getText("backupRestore.backup.error") );
             retrievePreviousBackups();
             return CUSTOM_ERROR;
         }
 
-        getLogger().info( "Restoring security database from " + this.restoreDirectory );
+        log.info( "Restoring security database from " + this.restoreDirectory );
         this.eraseDatabase();
         this.restoreDatabase( restoreDirectory );
-        getLogger().info( "Done restoring security database" );
+        log.info( "Done restoring security database" );
 
 
         return SUCCESS;

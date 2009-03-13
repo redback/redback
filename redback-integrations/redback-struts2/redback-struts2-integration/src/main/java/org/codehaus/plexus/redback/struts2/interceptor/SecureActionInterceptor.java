@@ -87,7 +87,7 @@ public class SecureActionInterceptor
 
         Action action = (Action) context.getActionInvocation().getAction();
 
-        getLogger().debug( "SecureActionInterceptor: processing " + action.getClass().getName() );
+        logger.debug( "SecureActionInterceptor: processing " + action.getClass().getName() );
 
         try
         {
@@ -98,7 +98,7 @@ public class SecureActionInterceptor
 
                 if ( bundle == null )
                 {
-                    getLogger().error( "Null bundle detected." );
+                    logger.error( "Null bundle detected." );
 
                     // TODO: send them somewhere else?
                     return invocation.invoke();
@@ -106,7 +106,7 @@ public class SecureActionInterceptor
 
                 if ( bundle == SecureActionBundle.OPEN )
                 {
-                    getLogger().debug( "Bundle.OPEN detected." );
+                    logger.debug( "Bundle.OPEN detected." );
 
                     return invocation.invoke();
                 }
@@ -119,7 +119,7 @@ public class SecureActionInterceptor
                 {
                     if ( session == null || !session.isAuthenticated() )
                     {
-                        getLogger().debug( "not authenticated, need to authenticate for this action" );
+                        logger.debug( "not authenticated, need to authenticate for this action" );
                         return processRequiresAuthentication( invocation );                        
                     }
                 }
@@ -133,23 +133,23 @@ public class SecureActionInterceptor
                     // authz, even if it is just a guest user
                     if ( session == null )
                     {
-                        getLogger().debug( "session required for authorization to run" );
+                        logger.debug( "session required for authorization to run" );
                         return processRequiresAuthentication( invocation );
                     }
 
                     for ( SecureActionBundle.AuthorizationTuple tuple : authzTuples )
                     {
-                        getLogger().debug( "checking authz for " + tuple.toString() );
+                        logger.debug( "checking authz for " + tuple.toString() );
 
                         AuthorizationResult authzResult =
                             securitySystem.authorize( session, tuple.getOperation(), tuple.getResource() );
 
-                        getLogger().debug( "checking the interceptor authz " + authzResult.isAuthorized() + " for " +
+                        logger.debug( "checking the interceptor authz " + authzResult.isAuthorized() + " for " +
                             tuple.toString() );
 
                         if ( authzResult.isAuthorized() )
                         {
-                            getLogger().debug( session.getUser().getPrincipal() + " is authorized for action " +
+                            logger.debug( session.getUser().getPrincipal() + " is authorized for action " +
                                 secureAction.getClass().getName() + " by " + tuple.toString() );
                             return invocation.invoke();
                         }
@@ -160,18 +160,18 @@ public class SecureActionInterceptor
             }
             else
             {
-                getLogger().debug( "SecureActionInterceptor: " + action.getClass().getName() + " not a secure action" );
+                logger.debug( "SecureActionInterceptor: " + action.getClass().getName() + " not a secure action" );
             }
         }
         catch ( SecureActionException se )
         {
-            getLogger().error( "can't generate the SecureActionBundle, deny access: " + se.getMessage() );
+            logger.error( "can't generate the SecureActionBundle, deny access: " + se.getMessage() );
             return processRequiresAuthentication( invocation );
         }
 
-        getLogger().debug( "not a secure action " + action.getClass().getName() );
+        logger.debug( "not a secure action " + action.getClass().getName() );
         String result = invocation.invoke();
-        getLogger().debug( "Passing invocation up, result is [" + result + "] on call " +
+        logger.debug( "Passing invocation up, result is [" + result + "] on call " +
             invocation.getAction().getClass().getName() );
         return result;
     }

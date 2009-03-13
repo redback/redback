@@ -1,14 +1,14 @@
 package org.codehaus.plexus.redback.http.authentication;
 
-import org.codehaus.plexus.redback.authentication.AuthenticationResult;
+import javax.servlet.http.HttpSession;
+
 import org.codehaus.plexus.redback.authentication.AuthenticationDataSource;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
+import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
 import org.codehaus.plexus.redback.policy.MustChangePasswordException;
-import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.system.SecuritySession;
-
-import javax.servlet.http.HttpSession;
+import org.codehaus.plexus.redback.users.User;
 
 /**
  * An HttpAuthenticator using an HttpSession for session storage

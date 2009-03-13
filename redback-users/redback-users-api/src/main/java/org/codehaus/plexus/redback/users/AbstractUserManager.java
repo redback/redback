@@ -16,10 +16,11 @@ package org.codehaus.plexus.redback.users;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * AbstractUserManager
@@ -28,9 +29,10 @@ import java.util.List;
  * @version $Id$
  */
 public abstract class AbstractUserManager
-    extends AbstractLogEnabled
     implements UserManager
 {
+    protected Logger log = LoggerFactory.getLogger( getClass() );
+    
     private List<UserManagerListener> listeners = new ArrayList<UserManagerListener>();
 
     public void addUserManagerListener( UserManagerListener listener )

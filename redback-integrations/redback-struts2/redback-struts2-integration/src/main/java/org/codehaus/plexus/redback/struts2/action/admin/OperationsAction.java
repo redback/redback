@@ -71,7 +71,7 @@ public class OperationsAction
         catch ( RbacManagerException e )
         {
             addActionError( getText( "cannot.list.all.operations", Arrays.asList( e.getMessage() ) ) );
-            getLogger().error( "System error:", e );
+            log.error( "System error:", e );
             allOperations = Collections.emptyList();
         }
 
@@ -91,7 +91,7 @@ public class OperationsAction
         catch ( RbacManagerException e )
         {
             addActionError( getText( "cannot.save.operation", Arrays.asList( operationName ) ) );
-            getLogger().error( "System error:", e );
+            log.error( "System error:", e );
             allOperations = Collections.emptyList();
         }
 

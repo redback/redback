@@ -39,5 +39,9 @@
       <artifactId>servlet-api</artifactId>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.codehaus.redback</groupId>
+      <artifactId>redback-system</artifactId>
+    </dependency>
   </dependencies>
 </project>

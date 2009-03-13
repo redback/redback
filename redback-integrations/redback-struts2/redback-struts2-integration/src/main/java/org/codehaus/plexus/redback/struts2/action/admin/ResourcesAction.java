@@ -70,7 +70,7 @@ public class ResourcesAction
         catch ( RbacManagerException e )
         {
             addActionError( getText( "cannot.list.all.resources", Arrays.asList( e.getMessage() ) ) );
-            getLogger().error( "System error:", e );
+            log.error( "System error:", e );
             allResources = Collections.emptyList();
         }
 
@@ -91,7 +91,7 @@ public class ResourcesAction
         catch ( RbacManagerException e )
         {
             addActionError( getText( "cannot.save.resource", Arrays.asList( e.getMessage() ) ) );
-            getLogger().error( "System error:", e );
+            log.error( "System error:", e );
             allResources = Collections.emptyList();
         }
 

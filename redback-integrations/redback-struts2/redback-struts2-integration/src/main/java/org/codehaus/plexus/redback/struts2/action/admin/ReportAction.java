@@ -98,14 +98,14 @@ public class ReportAction
         {
             String emsg = getText( "cannot.generate.report" );
             addActionError( emsg );
-            getLogger().error( emsg, e );
+            log.error( emsg, e );
             return ERROR;
         }
         catch ( IOException e )
         {
             String emsg = getText( "cannot.generate.report" );
             addActionError( emsg );
-            getLogger().error( emsg, e );
+            log.error( emsg, e );
             return ERROR;
         }
     }

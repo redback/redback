@@ -16,13 +16,17 @@ package org.codehaus.plexus.redback.authentication.users;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.codehaus.plexus.redback.authentication.AuthenticationConstants;
 import org.codehaus.plexus.redback.authentication.AuthenticationDataSource;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authentication.Authenticator;
 import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
-import org.codehaus.plexus.redback.authentication.AuthenticationConstants;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
 import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 import org.codehaus.plexus.redback.policy.PasswordEncoder;
@@ -31,12 +35,9 @@ import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
-import java.util.HashMap;
-
-import javax.annotation.Resource;
 
 /**
  * {@link Authenticator} implementation that uses a wrapped {@link UserManager} to authenticate.
@@ -46,10 +47,10 @@ import javax.annotation.Resource;
  */
 @Service("authenticator#user-manager")
 public class UserManagerAuthenticator
-    extends AbstractLogEnabled
     implements Authenticator
 {
-
+    private Logger log = LoggerFactory.getLogger( UserManagerAuthenticator.class );
+    
     @Resource(name="userManager#jdo")
     private UserManager userManager;
     
@@ -79,7 +80,7 @@ public class UserManagerAuthenticator
         
         try
         {
-            getLogger().debug( "Authenticate: " + source );
+            log.debug( "Authenticate: " + source );
             User user = userManager.findUser( source.getPrincipal() );
             username = user.getUsername();
             
@@ -94,12 +95,12 @@ public class UserManagerAuthenticator
             }
             
             PasswordEncoder encoder = securityPolicy.getPasswordEncoder();
-            getLogger().debug( "PasswordEncoder: " + encoder.getClass().getName() );
+            log.debug( "PasswordEncoder: " + encoder.getClass().getName() );
             
             boolean isPasswordValid = encoder.isPasswordValid( user.getEncodedPassword(), source.getPassword() );
             if ( isPasswordValid )
             {
-                getLogger().debug( "User " + source.getPrincipal() + " provided a valid password" );
+                log.debug( "User " + source.getPrincipal() + " provided a valid password" );
                 
                 try
                 {
@@ -123,7 +124,7 @@ public class UserManagerAuthenticator
             }
             else
             {
-                getLogger().warn( "Password is Invalid for user " + source.getPrincipal() + "." );
+                log.warn( "Password is Invalid for user " + source.getPrincipal() + "." );
                 authnResultExceptionsMap.put( AuthenticationConstants.AUTHN_NO_SUCH_USER,
                     "Password is Invalid for user " + source.getPrincipal() + "." );
 
@@ -141,7 +142,7 @@ public class UserManagerAuthenticator
         }
         catch ( UserNotFoundException e )
         {
-            getLogger().warn( "Login for user " + source.getPrincipal() + " failed. user not found." );
+            log.warn( "Login for user " + source.getPrincipal() + " failed. user not found." );
             resultException = e;
             authnResultExceptionsMap.put( AuthenticationConstants.AUTHN_NO_SUCH_USER, 
                 "Login for user \" + source.getPrincipal() + \" failed. user not found." );

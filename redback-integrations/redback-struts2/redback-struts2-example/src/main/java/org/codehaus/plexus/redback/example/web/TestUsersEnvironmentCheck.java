@@ -18,7 +18,6 @@ package org.codehaus.plexus.redback.example.web;
 
 import java.util.List;
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
@@ -27,6 +26,8 @@ import org.codehaus.plexus.redback.system.check.EnvironmentCheck;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * TestUsersEnvironmentCheck 
@@ -38,10 +39,9 @@ import org.codehaus.plexus.redback.users.UserNotFoundException;
  * role-hint="test-users-check"
  */
 public class TestUsersEnvironmentCheck
-    extends AbstractLogEnabled
     implements EnvironmentCheck
 {
-
+    private Logger log = LoggerFactory.getLogger( TestUsersEnvironmentCheck.class );
     /**
      * @plexus.requirement
      */
@@ -89,7 +89,7 @@ public class TestUsersEnvironmentCheck
         }
         catch ( RoleManagerException e )
         {
-            getLogger().warn( "Unable to set role: ", e );
+            log.warn( "Unable to set role: ", e );
         }
     }
 

@@ -103,12 +103,12 @@ public class PasswordResetAction
             // validity of usernames.
             addActionMessage( getText( "password.reset.failure" ) );
 
-            getLogger().info( "Password Reset on non-existant user [" + username + "]." );
+            log.info( "Password Reset on non-existant user [" + username + "]." );
         }
         catch ( KeyManagerException e )
         {
             addActionError( getText( "password.reset.email.generation.failure" ) );
-            getLogger().info( "Unable to issue password reset.", e );
+            log.info( "Unable to issue password reset.", e );
         }
 
         return INPUT;

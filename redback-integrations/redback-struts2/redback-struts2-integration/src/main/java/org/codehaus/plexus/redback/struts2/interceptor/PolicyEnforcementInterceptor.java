@@ -21,7 +21,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.apache.struts2.ServletActionContext;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.system.DefaultSecuritySession;
@@ -30,11 +30,12 @@ import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.system.SecuritySystemConstants;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.Interceptor;
-import org.apache.struts2.ServletActionContext;
 
 /**
  * Interceptor to force the user to perform actions, when required.
@@ -43,10 +44,11 @@ import org.apache.struts2.ServletActionContext;
  * @plexus.component role="com.opensymphony.xwork2.interceptor.Interceptor" role-hint="redbackPolicyEnforcementInterceptor"
  */
 public class PolicyEnforcementInterceptor
-        extends AbstractLogEnabled
     implements Interceptor
 {
-   private static final String SECURITY_USER_MUST_CHANGE_PASSWORD = "security-must-change-password";
+    private Logger log = LoggerFactory.getLogger( PolicyEnforcementInterceptor.class );
+    
+    private static final String SECURITY_USER_MUST_CHANGE_PASSWORD = "security-must-change-password";
 
     /**
      * @plexus.requirement
@@ -82,7 +84,7 @@ public class PolicyEnforcementInterceptor
 
         if ( config.getBoolean( "security.policy.strict.enforcement.enabled" ) )
         {
-            getLogger().debug( "Enforcement: enforcing per click security policies." );
+            log.debug( "Enforcement: enforcing per click security policies." );
 
 
             ActionContext context = ActionContext.getContext();
@@ -95,7 +97,7 @@ public class PolicyEnforcementInterceptor
             }
             catch (IllegalStateException e)
             {
-                getLogger().debug("Could not get security session as the session was invalid", e);
+                log.debug("Could not get security session as the session was invalid", e);
             }
 
             UserSecurityPolicy policy = securitySystem.getPolicy();            
@@ -109,7 +111,7 @@ public class PolicyEnforcementInterceptor
             }
             else
             {
-                getLogger().debug( "Enforcement: no user security session detected, skipping enforcement" );
+                log.debug( "Enforcement: no user security session detected, skipping enforcement" );
                 return actionInvocation.invoke();
             }
 
@@ -123,14 +125,14 @@ public class PolicyEnforcementInterceptor
                 
                 session.put( "targetUrl", targetUrl  );
  
-                getLogger().info( "storing targetUrl : " + targetUrl );                   
+                log.info( "storing targetUrl : " + targetUrl );                   
                 
                 return SECURITY_USER_MUST_CHANGE_PASSWORD;
             }
             
             if ( config.getBoolean( "security.policy.password.expiration.enabled" ) )
             {
-                getLogger().debug( "checking password expiration notification" );
+                log.debug( "checking password expiration notification" );
                 
                 UserManager userManager = securitySystem.getUserManager();
                 User user = userManager.findUser( securitySession.getUser().getPrincipal() );             
@@ -144,7 +146,7 @@ public class PolicyEnforcementInterceptor
 
                 if ( now.after( expirationNotifyDate ) )
                 {
-                    getLogger().debug( "setting password expiration notification" );
+                    log.debug( "setting password expiration notification" );
                     
                     Calendar expirationDate = Calendar.getInstance();
                     expirationDate.setTime( user.getLastPasswordChange() );
@@ -158,7 +160,7 @@ public class PolicyEnforcementInterceptor
         }
         else
         {
-            getLogger().debug( "Enforcement: not processing per click security policies." );
+            log.debug( "Enforcement: not processing per click security policies." );
             return actionInvocation.invoke();
         }
     }
@@ -176,35 +178,35 @@ public class PolicyEnforcementInterceptor
          */
         if ( "org.codehaus.plexus.redback.struts2.action.PasswordAction".equals( actionInvocation.getAction().getClass().getName() ) )
         {
-            getLogger().debug( "Enforcement: skipping force password check on password action" );
+            log.debug( "Enforcement: skipping force password check on password action" );
             return false;
         }
 
         if ( "org.codehaus.plexus.redback.struts2.action.LoginAction".equals( actionInvocation.getAction().getClass().getName() ) )
         {
-            getLogger().debug( "Enforcement: skipping force password check on login action" );
+            log.debug( "Enforcement: skipping force password check on login action" );
             return false;
         }
         
         if ( "org.codehaus.plexus.redback.struts2.action.LogoutAction".equals( actionInvocation.getAction().getClass().getName() ) )
         {
-            getLogger().debug( "Enforcement: skipping force password check on logout action" );
+            log.debug( "Enforcement: skipping force password check on logout action" );
             return false;
         }
 
         if ( config.getBoolean( "security.policy.strict.force.password.change.enabled" ) )
         {
-            getLogger().debug( "Enforcement: checking active user password change enabled" );
+            log.debug( "Enforcement: checking active user password change enabled" );
 
             if ( securitySession.getUser().isPasswordChangeRequired() )
             {
-                getLogger().info( "Enforcement: User must change password - forwarding to change password page." );
+                log.info( "Enforcement: User must change password - forwarding to change password page." );
 
                 return true;
             }
             else
             {
-                getLogger().debug( "Enforcement: User doesn't need to change password." );                
+                log.debug( "Enforcement: User doesn't need to change password." );                
             }
         }
         return false;

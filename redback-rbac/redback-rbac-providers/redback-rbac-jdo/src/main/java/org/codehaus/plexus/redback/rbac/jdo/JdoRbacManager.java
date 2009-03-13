@@ -218,13 +218,13 @@ public class JdoRbacManager
         try
         {
             permission = getPermission( name );
-            getLogger().debug( "Create Permission [" + name + "] Returning Existing." );
+            log.debug( "Create Permission [" + name + "] Returning Existing." );
         }
         catch ( RbacObjectNotFoundException e )
         {
             permission = new JdoPermission();
             permission.setName( name );
-            getLogger().debug( "Create Permission [" + name + "] New JdoPermission." );
+            log.debug( "Create Permission [" + name + "] New JdoPermission." );
         }
 
         return permission;
@@ -432,13 +432,13 @@ public class JdoRbacManager
         try
         {
             resource = getResource( identifier );
-            getLogger().debug( "Create Resource [" + identifier + "] Returning Existing." );
+            log.debug( "Create Resource [" + identifier + "] Returning Existing." );
         }
         catch ( RbacObjectNotFoundException e )
         {
             resource = new JdoResource();
             resource.setIdentifier( identifier );
-            getLogger().debug( "Create Resource [" + identifier + "] New JdoResource." );
+            log.debug( "Create Resource [" + identifier + "] New JdoResource." );
         }
 
         return resource;

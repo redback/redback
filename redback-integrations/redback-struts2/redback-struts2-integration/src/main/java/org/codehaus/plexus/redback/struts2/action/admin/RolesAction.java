@@ -55,7 +55,7 @@ public class RolesAction
             List<String> list = new ArrayList<String>();
             list.add( e.getMessage() );
             addActionError( getText( "cannot.list.all.roles", list ) );
-            getLogger().error( "System error:", e );
+            log.error( "System error:", e );
             allRoles = Collections.emptyList();
         }
 

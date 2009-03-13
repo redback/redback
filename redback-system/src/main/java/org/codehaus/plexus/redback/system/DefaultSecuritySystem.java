@@ -18,7 +18,6 @@ package org.codehaus.plexus.redback.system;
 
 import javax.annotation.Resource;
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.redback.authentication.AuthenticationDataSource;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationManager;
@@ -34,6 +33,8 @@ import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -44,9 +45,10 @@ import org.springframework.stereotype.Service;
  */
 @Service("securitySystem")
 public class DefaultSecuritySystem
-    extends AbstractLogEnabled
     implements SecuritySystem
 {
+    private Logger log = LoggerFactory.getLogger( DefaultSecuritySystem.class );
+    
     @Resource
     private AuthenticationManager authnManager;
 
@@ -91,29 +93,29 @@ public class DefaultSecuritySystem
         // Perform Authentication.
         AuthenticationResult result = authnManager.authenticate( source );
 
-        getLogger().debug( "authnManager.authenticate() result: " + result );
+        log.debug( "authnManager.authenticate() result: " + result );
 
         // Process Results.
         if ( result.isAuthenticated() )
         {
-            getLogger().debug( "User '" + result.getPrincipal() + "' authenticated." );
+            log.debug( "User '" + result.getPrincipal() + "' authenticated." );
             if ( userManager.userExists( result.getPrincipal() ) )
             {
-                getLogger().debug( "User '" + result.getPrincipal() + "' exists." );
+                log.debug( "User '" + result.getPrincipal() + "' exists." );
                 User user = userManager.findUser( result.getPrincipal() );
-                getLogger().debug( "User: " + user );
+                log.debug( "User: " + user );
 
                 return new DefaultSecuritySession( result, user );
             }
             else
             {
-                getLogger().debug( "User '" + result.getPrincipal() + "' DOES NOT exist." );
+                log.debug( "User '" + result.getPrincipal() + "' DOES NOT exist." );
                 return new DefaultSecuritySession( result );
             }
         }
         else
         {
-            getLogger().debug( "User '" + result.getPrincipal() + "' IS NOT authenticated." );
+            log.debug( "User '" + result.getPrincipal() + "' IS NOT authenticated." );
             return new DefaultSecuritySession( result );
         }
     }

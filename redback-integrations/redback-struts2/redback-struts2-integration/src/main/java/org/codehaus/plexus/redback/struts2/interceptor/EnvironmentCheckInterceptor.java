@@ -19,10 +19,9 @@ package org.codehaus.plexus.redback.struts2.interceptor;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.logging.Logger;
-import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.codehaus.plexus.redback.system.check.EnvironmentCheck;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.Interceptor;
@@ -36,15 +35,11 @@ import com.opensymphony.xwork2.interceptor.Interceptor;
  * role-hint="redbackEnvironmentCheckInterceptor"
  */
 public class EnvironmentCheckInterceptor
-    extends AbstractLogEnabled
     implements Interceptor
 {
     private static boolean checked = false;
 
-    /**
-     * We track our own logger, because we test for Plexus too.
-     */
-    private Logger logger;
+    private Logger log = LoggerFactory.getLogger( EnvironmentCheckInterceptor.class );
 
     /**
      * @plexus.requirement role="org.codehaus.plexus.redback.system.check.EnvironmentCheck"
@@ -88,27 +83,11 @@ public class EnvironmentCheckInterceptor
 
                 msg.append( "\n" );
                 msg.append( "======================================================================" );
-                getLogger().fatalError( msg.toString() );
+                log.error( msg.toString() );
             }
         }
 
         EnvironmentCheckInterceptor.checked = true;
-    }
-
-    @Override
-    protected Logger getLogger()
-    {
-        if ( logger == null )
-        {
-            // Try to use parent logger first.
-            logger = super.getLogger();
-            if ( logger == null )
-            {
-                // whoops no parent logger.
-                logger = new ConsoleLogger( Logger.LEVEL_DEBUG, EnvironmentCheck.class.getName() );
-            }
-        }
-        return logger;
     }
 
     public String intercept( ActionInvocation invocation )

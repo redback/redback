@@ -1,10 +1,12 @@
 package org.codehaus.plexus.redback.struts2.action;
 
-import com.opensymphony.xwork2.ActionSupport;
 import java.util.Map;
+
 import org.apache.struts2.interceptor.SessionAware;
-import org.codehaus.plexus.logging.LogEnabled;
-import org.codehaus.plexus.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.opensymphony.xwork2.ActionSupport;
 
 /**
  *
@@ -12,26 +14,16 @@ import org.codehaus.plexus.logging.Logger;
  */
 public abstract class RedbackActionSupport
     extends ActionSupport
-    implements LogEnabled, SessionAware
+    implements SessionAware
 {
+    protected Logger log = LoggerFactory.getLogger( this.getClass() );
+    
     protected Map<String,Object> session;
-
-    private Logger logger;
 
     @SuppressWarnings("unchecked")
     public void setSession( Map map )
     {
         //noinspection AssignmentToCollectionOrArrayFieldFromParameter
         this.session = map;
-    }
-
-    public void enableLogging( Logger logger )
-    {
-        this.logger = logger;
-    }
-
-    protected Logger getLogger()
-    {
-        return logger;
     }
 }

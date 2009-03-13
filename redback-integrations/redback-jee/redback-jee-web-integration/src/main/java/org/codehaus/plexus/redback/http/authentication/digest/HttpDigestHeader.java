@@ -18,7 +18,6 @@ package org.codehaus.plexus.redback.http.authentication.digest;
 
 import java.util.Properties;
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.redback.http.HttpUtils;
 import org.codehaus.plexus.redback.http.authentication.HttpAuthenticationException;
 import org.codehaus.plexus.util.Base64;

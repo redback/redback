@@ -70,7 +70,7 @@ public class AddAdminUserAction
             return ERROR;
         }
 
-        getLogger().info( "user = " + user );
+        log.info( "user = " + user );
 
         internalUser = user;
 

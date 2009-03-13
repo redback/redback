@@ -16,9 +16,9 @@ package org.codehaus.plexus.redback.struts2.action;
  * limitations under the License.
  */
 
-import org.apache.log4j.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 public class AuditEvent
 {
@@ -85,17 +85,7 @@ public class AuditEvent
             else
             {
                 logger.info( action, affectedUser );
-            }
-        }
-        else
-        {
-            if ( role != null )
-            {
-                logger.info( action, role );
-            }
-            else
-            {
-                logger.info( action );
+
             }
         }
     }

@@ -43,11 +43,6 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-  <scm>
-    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-integrations/redback-xwork</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-integrations/redback-xwork</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/redback/redback/trunk/redback-integrations/redback-xwork</url>
-  </scm>
   
   <modules>
     <module>redback-struts2-integration</module>

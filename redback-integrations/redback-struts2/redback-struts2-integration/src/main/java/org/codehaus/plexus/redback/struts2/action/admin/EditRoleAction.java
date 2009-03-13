@@ -104,7 +104,7 @@ public class EditRoleAction
         {
             if ( !isAuthorized() )
             {
-                getLogger().warn( getCurrentUser() + " isn't authorized to access to the role '" + name + "'" );
+                log.warn( getCurrentUser() + " isn't authorized to access to the role '" + name + "'" );
                 addActionError( getText( "alert.message" ) );
                 return ERROR;
             }
@@ -141,7 +141,7 @@ public class EditRoleAction
                     }
                     catch ( UserNotFoundException e )
                     {
-                        getLogger().warn( "User '" + userAssignment.getPrincipal() + "' doesn't exist.", e );
+                        log.warn( "User '" + userAssignment.getPrincipal() + "' doesn't exist.", e );
                     }
                 }
             }
@@ -163,7 +163,7 @@ public class EditRoleAction
                         }
                         catch ( UserNotFoundException e )
                         {
-                            getLogger().warn( "User '" + userAssignment.getPrincipal() + "' doesn't exist.", e );
+                            log.warn( "User '" + userAssignment.getPrincipal() + "' doesn't exist.", e );
                         }
                     }
                 }
@@ -323,7 +323,7 @@ public class EditRoleAction
 
                 assignment.addRoleName( name );
                 assignment = getManager().saveUserAssignment( assignment );
-                getLogger().info( name + " role assigned to " + principal );
+                log.info( name + " role assigned to " + principal );
             }
             catch ( RbacManagerException e )
             {
@@ -373,7 +373,7 @@ public class EditRoleAction
 
                 assignment.removeRoleName( name );
                 assignment = getManager().saveUserAssignment( assignment );
-                getLogger().info( name + " role unassigned to " + principal );
+                log.info( name + " role unassigned to " + principal );
             }
             catch ( RbacManagerException e )
             {

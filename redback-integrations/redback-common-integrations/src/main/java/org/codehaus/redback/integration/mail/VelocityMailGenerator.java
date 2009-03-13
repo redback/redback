@@ -16,21 +16,22 @@ package org.codehaus.redback.integration.mail;
  * limitations under the License.
  */
 
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.exception.MethodInvocationException;
-import org.apache.velocity.exception.ParseErrorException;
-import org.apache.velocity.exception.ResourceNotFoundException;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.redback.configuration.UserConfiguration;
-import org.codehaus.plexus.redback.keys.AuthenticationKey;
-import org.codehaus.plexus.velocity.VelocityComponent;
-import org.springframework.stereotype.Service;
-
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import javax.annotation.Resource;
+
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.exception.MethodInvocationException;
+import org.apache.velocity.exception.ParseErrorException;
+import org.apache.velocity.exception.ResourceNotFoundException;
+import org.codehaus.plexus.redback.configuration.UserConfiguration;
+import org.codehaus.plexus.redback.keys.AuthenticationKey;
+import org.codehaus.plexus.velocity.VelocityComponent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 /**
  * Mail generator component implementation using velocity.
@@ -40,9 +41,10 @@ import javax.annotation.Resource;
  */
 @Service("mailGenerator#velocity")
 public class VelocityMailGenerator
-    extends AbstractLogEnabled
     implements MailGenerator
 {
+    private Logger log = LoggerFactory.getLogger( VelocityMailGenerator.class );
+    
     @Resource(name="userConfiguration")
     private UserConfiguration config;
 
@@ -65,19 +67,19 @@ public class VelocityMailGenerator
         }
         catch ( ResourceNotFoundException e )
         {
-            getLogger().error( "No such template: '" + templateFile + "'." );
+            log.error( "No such template: '" + templateFile + "'." );
         }
         catch ( ParseErrorException e )
         {
-            getLogger().error( "Unable to generate email for template '" + templateFile + "': " + e.getMessage(), e );
+            log.error( "Unable to generate email for template '" + templateFile + "': " + e.getMessage(), e );
         }
         catch ( MethodInvocationException e )
         {
-            getLogger().error( "Unable to generate email for template '" + templateFile + "': " + e.getMessage(), e );
+            log.error( "Unable to generate email for template '" + templateFile + "': " + e.getMessage(), e );
         }
         catch ( Exception e )
         {
-            getLogger().error( "Unable to generate email for template '" + templateFile + "': " + e.getMessage(), e );
+            log.error( "Unable to generate email for template '" + templateFile + "': " + e.getMessage(), e );
         }
 
         return writer.getBuffer().toString();

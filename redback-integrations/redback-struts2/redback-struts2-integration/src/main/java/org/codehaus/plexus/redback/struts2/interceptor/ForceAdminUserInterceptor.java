@@ -16,12 +16,13 @@ package org.codehaus.plexus.redback.struts2.interceptor;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.Interceptor;
@@ -35,9 +36,10 @@ import com.opensymphony.xwork2.interceptor.Interceptor;
  * role-hint="redbackForceAdminUserInterceptor"
  */
 public class ForceAdminUserInterceptor
-    extends AbstractLogEnabled
     implements Interceptor
 {
+    private Logger log = LoggerFactory.getLogger( ForceAdminUserInterceptor.class );
+    
     private static final String SECURITY_ADMIN_USER_NEEDED = "security-admin-user-needed";
 
     private static boolean checked = false;
@@ -80,19 +82,19 @@ public class ForceAdminUserInterceptor
             User user = userManager.findUser( config.getString( "redback.default.admin" ) );
             if ( user == null )
             {
-                getLogger().info( "No admin user configured - forwarding to admin user creation page." );
+                log.info( "No admin user configured - forwarding to admin user creation page." );
                 return SECURITY_ADMIN_USER_NEEDED;
             }
               
             roleManager.assignRole( "system-administrator", user.getPrincipal().toString() );
             
             checked = true;
-            getLogger().info( "Admin user found. No need to configure admin user." );
+            log.info( "Admin user found. No need to configure admin user." );
             
         }
         catch ( UserNotFoundException e )
         {
-            getLogger().info( "No admin user found - forwarding to admin user creation page." );
+            log.info( "No admin user found - forwarding to admin user creation page." );
             return SECURITY_ADMIN_USER_NEEDED;
         }
 

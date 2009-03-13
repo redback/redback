@@ -119,7 +119,7 @@ public class HttpDigestAuthentication
         catch ( UserNotFoundException e )
         {
             String msg = "Unable to find primary user '" + username + "'.";
-            getLogger().error( msg, e );
+            log.error( msg, e );
             throw new HttpAuthenticationException( msg, e );
         }
     }

@@ -19,7 +19,6 @@ package org.codehaus.plexus.redback.struts2.interceptor;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.ServletActionContext;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authentication.TokenBasedAuthenticationDataSource;
@@ -31,6 +30,8 @@ import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.system.SecuritySystemConstants;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.redback.integration.util.AutoLoginCookies;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.Interceptor;
@@ -44,9 +45,10 @@ import com.opensymphony.xwork2.interceptor.Interceptor;
  * role-hint="redbackAutoLoginInterceptor"
  */
 public class AutoLoginInterceptor
-    extends AbstractLogEnabled
     implements Interceptor
 {
+    private Logger log = LoggerFactory.getLogger( AutoLoginInterceptor.class );
+    
     static final String PASSWORD_CHANGE = "security-must-change-password";
 
     static final String ACCOUNT_LOCKED = "security-login-locked";
@@ -82,7 +84,7 @@ public class AutoLoginInterceptor
         if ( securitySession != null && securitySession.isAuthenticated() )
         {
             // User already authenticated.
-            getLogger().debug( "User already authenticated." );
+            log.debug( "User already authenticated." );
 
             checkCookieConsistency( securitySession );
             
@@ -117,7 +119,7 @@ public class AutoLoginInterceptor
                 }
                 catch ( AccountLockedException e )
                 {
-                    getLogger().info( "Account Locked : Username [" + e.getUser().getUsername() + "]", e );
+                    log.info( "Account Locked : Username [" + e.getUser().getUsername() + "]", e );
                     autologinCookies.removeSignonCookie( ServletActionContext.getResponse(), ServletActionContext
                         .getRequest() );
                     autologinCookies.removeRememberMeCookie( ServletActionContext.getResponse(), ServletActionContext
@@ -148,7 +150,7 @@ public class AutoLoginInterceptor
                     }
                     catch ( AccountLockedException e )
                     {
-                        getLogger().info( "Account Locked : Username [" + e.getUser().getUsername() + "]", e );
+                        log.info( "Account Locked : Username [" + e.getUser().getUsername() + "]", e );
                         autologinCookies.removeRememberMeCookie( ServletActionContext.getResponse(),
                                                                  ServletActionContext.getRequest() );
                         return ACCOUNT_LOCKED;
@@ -176,7 +178,7 @@ public class AutoLoginInterceptor
         {
             if ( !key.getForPrincipal().equals( username ) )
             {
-                getLogger().debug( "Login invalidated: remember me cookie was for " + key.getForPrincipal() +
+                log.debug( "Login invalidated: remember me cookie was for " + key.getForPrincipal() +
                     "; but session was for " + username );
                 failed = true;
             }
@@ -189,14 +191,14 @@ public class AutoLoginInterceptor
             {
                 if ( !key.getForPrincipal().equals( username ) )
                 {
-                    getLogger().debug( "Login invalidated: signon cookie was for " + key.getForPrincipal() +
+                    log.debug( "Login invalidated: signon cookie was for " + key.getForPrincipal() +
                         "; but session was for " + username );
                     failed = true;
                 }
             }
             else
             {
-                getLogger().debug( "Login invalidated: signon cookie was removed" );
+                log.debug( "Login invalidated: signon cookie was removed" );
                 failed = true;
             }
         }
@@ -211,7 +213,7 @@ public class AutoLoginInterceptor
         throws AccountLockedException, MustChangePasswordException
     {
         SecuritySession securitySession = null;
-        getLogger().debug( "Logging in with an authentication key: " + authkey.getForPrincipal() );
+        log.debug( "Logging in with an authentication key: " + authkey.getForPrincipal() );
         TokenBasedAuthenticationDataSource authsource = new TokenBasedAuthenticationDataSource();
         authsource.setPrincipal( authkey.getForPrincipal() );
         authsource.setToken( authkey.getKey() );
@@ -224,11 +226,11 @@ public class AutoLoginInterceptor
             if ( securitySession.isAuthenticated() )
             {
                 // TODO: this should not happen if there is a password change required - but the password change action needs to log the user in on success to swap them
-                getLogger().debug( "Login success." );
+                log.debug( "Login success." );
 
                 HttpSession session = ServletActionContext.getRequest().getSession( true );
                 session.setAttribute( SecuritySystemConstants.SECURITY_SESSION_KEY, securitySession );
-                getLogger().debug(
+                log.debug(
                     "Setting session:" + SecuritySystemConstants.SECURITY_SESSION_KEY + " to " + securitySession );
 
                 autologinCookies.setSignonCookie( authkey.getForPrincipal(), ServletActionContext.getResponse(),
@@ -237,18 +239,18 @@ public class AutoLoginInterceptor
             else
             {
                 AuthenticationResult result = securitySession.getAuthenticationResult();
-                getLogger().info( "Login interceptor failed against principal : " + result.getPrincipal(),
+                log.info( "Login interceptor failed against principal : " + result.getPrincipal(),
                                   result.getException() );
             }
 
         }
         catch ( AuthenticationException e )
         {
-            getLogger().info( "Authentication Exception.", e );
+            log.info( "Authentication Exception.", e );
         }
         catch ( UserNotFoundException e )
         {
-            getLogger().info( "User Not Found: " + authkey.getForPrincipal(), e );
+            log.info( "User Not Found: " + authkey.getForPrincipal(), e );
         }
         return securitySession;
     }
@@ -270,13 +272,13 @@ public class AutoLoginInterceptor
         HttpSession session = ServletActionContext.getRequest().getSession();
         if ( session == null )
         {
-            getLogger().debug( "No HTTP Session exists." );
+            log.debug( "No HTTP Session exists." );
             return null;
         }
 
         SecuritySession secSession =
             (SecuritySession) session.getAttribute( SecuritySystemConstants.SECURITY_SESSION_KEY );
-        getLogger().debug( "Returning Security Session: " + secSession );
+        log.debug( "Returning Security Session: " + secSession );
         return secSession;
     }
 }

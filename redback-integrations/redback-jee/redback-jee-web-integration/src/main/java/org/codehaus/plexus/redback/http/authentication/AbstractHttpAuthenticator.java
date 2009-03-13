@@ -1,19 +1,20 @@
 package org.codehaus.plexus.redback.http.authentication;
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.redback.authentication.AuthenticationException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.codehaus.plexus.redback.authentication.AuthenticationDataSource;
+import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
-import org.codehaus.plexus.redback.system.SecuritySystem;
-import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
 import org.codehaus.plexus.redback.policy.MustChangePasswordException;
-import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.codehaus.plexus.redback.system.SecuritySession;
+import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.User;
+import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.util.StringUtils;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * HttpAuthenticator is the workings of an authenticator for http with the session storage abstracted
@@ -23,9 +24,10 @@ import javax.servlet.http.HttpServletRequest;
  * @version $Id$
  */
 public abstract class AbstractHttpAuthenticator
-    extends AbstractLogEnabled
     implements HttpAuthenticator
 {
+    protected Logger log = LoggerFactory.getLogger( getClass() );
+    
     public static final String ROLE = AbstractHttpAuthenticator.class.getName();
 
     /**
@@ -53,12 +55,12 @@ public abstract class AbstractHttpAuthenticator
         catch ( AuthenticationException e )
         {
             String msg = "Unable to authenticate user: " + ds;
-            getLogger().info( msg, e );
+            log.info( msg, e );
             throw new HttpAuthenticationException( msg, e );
         }
         catch ( UserNotFoundException e )
         {
-            getLogger().info( "Login attempt against unknown user: " + ds );
+            log.info( "Login attempt against unknown user: " + ds );
             throw new HttpAuthenticationException( "User name or password invalid." );
         }
     }
@@ -146,7 +148,7 @@ public abstract class AbstractHttpAuthenticator
         }
         catch ( UserNotFoundException e )
         {
-            getLogger().warn( "Default User '" + principal + "' not found.", e );
+            log.warn( "Default User '" + principal + "' not found.", e );
             return null;
         }
     }

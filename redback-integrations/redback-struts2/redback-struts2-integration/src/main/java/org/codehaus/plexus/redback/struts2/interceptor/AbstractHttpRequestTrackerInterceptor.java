@@ -20,9 +20,9 @@ import java.util.Map;
 
 import org.apache.struts2.StrutsException;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-import org.codehaus.plexus.logging.LogEnabled;
-import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.spring.PlexusToSpringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -32,11 +32,10 @@ import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
 public abstract class AbstractHttpRequestTrackerInterceptor
     extends AbstractInterceptor
-    implements LogEnabled
 {
     public static final String TRACKER_NAME = ActionInvocationTracker.ROLE + ":name";
     
-    private Logger logger;
+    protected Logger logger = LoggerFactory.getLogger( getClass() );
     
     protected abstract String getTrackerName();
 
@@ -44,7 +43,7 @@ public abstract class AbstractHttpRequestTrackerInterceptor
     public void init()
     {
         super.init();
-        getLogger().info( this.getClass().getName() + " initialized!" );
+        logger.info( this.getClass().getName() + " initialized!" );
     }
     
     @SuppressWarnings("unchecked")
@@ -73,39 +72,5 @@ public abstract class AbstractHttpRequestTrackerInterceptor
         tracker.addActionInvocation( invocation );
 
         return tracker;
-    }
-
-    public void enableLogging( Logger logger )
-    {
-        this.logger = logger;
-    }
-
-    protected Logger getLogger()
-    {
-        return logger;
-    }
-
-    protected void setupLogger( Object component )
-    {
-        setupLogger( component, logger );
-    }
-
-    protected void setupLogger( Object component, String subCategory )
-    {
-        if ( subCategory == null )
-        {
-            throw new IllegalStateException( "Logging category must be defined." );
-        }
-
-        final Logger childLogger = this.logger.getChildLogger( subCategory );
-        setupLogger( component, childLogger );
-    }
-
-    protected void setupLogger( Object component, Logger logger )
-    {
-        if ( component instanceof LogEnabled )
-        {
-            ( (LogEnabled) component ).enableLogging( logger );
-        }
     }
 }

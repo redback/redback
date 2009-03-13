@@ -16,12 +16,6 @@ package org.codehaus.plexus.redback.rbac;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
-import org.codehaus.plexus.util.CollectionUtils;
-import org.codehaus.plexus.util.StringUtils;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -31,6 +25,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
+import org.codehaus.plexus.util.CollectionUtils;
+import org.codehaus.plexus.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * AbstractRBACManager
  *
@@ -38,9 +39,10 @@ import java.util.Set;
  * @version $Id$
  */
 public abstract class AbstractRBACManager
-    extends AbstractLogEnabled
     implements RBACManager, Initializable
 {
+    protected Logger log = LoggerFactory.getLogger( getClass() );
+    
     private List<RBACManagerListener> listeners = new ArrayList<RBACManagerListener>();
 
     private Resource globalResource;
@@ -70,7 +72,7 @@ public abstract class AbstractRBACManager
             }
             catch ( Exception e )
             {
-                getLogger().warn( "Unable to trigger .rbacInit( boolean ) to " + listener.getClass().getName(), e );
+                log.warn( "Unable to trigger .rbacInit( boolean ) to " + listener.getClass().getName(), e );
             }
         }
     }
@@ -87,7 +89,7 @@ public abstract class AbstractRBACManager
             }
             catch ( Exception e )
             {
-                getLogger().warn( "Unable to trigger .rbacRoleSaved( Role ) to " + listener.getClass().getName(), e );
+                log.warn( "Unable to trigger .rbacRoleSaved( Role ) to " + listener.getClass().getName(), e );
             }
         }
     }
@@ -104,7 +106,7 @@ public abstract class AbstractRBACManager
             }
             catch ( Exception e )
             {
-                getLogger().warn( "Unable to trigger .rbacRoleRemoved( Role ) to " + listener.getClass().getName(), e );
+                log.warn( "Unable to trigger .rbacRoleRemoved( Role ) to " + listener.getClass().getName(), e );
             }
         }
     }
@@ -121,7 +123,7 @@ public abstract class AbstractRBACManager
             }
             catch ( Exception e )
             {
-                getLogger().warn(
+                log.warn(
                     "Unable to trigger .rbacPermissionSaved( Permission ) to " + listener.getClass().getName(), e );
             }
         }
@@ -139,7 +141,7 @@ public abstract class AbstractRBACManager
             }
             catch ( Exception e )
             {
-                getLogger().warn(
+                log.warn(
                     "Unable to trigger .rbacPermissionRemoved( Permission ) to " + listener.getClass().getName(), e );
             }
         }
@@ -157,7 +159,7 @@ public abstract class AbstractRBACManager
             }
             catch ( Exception e )
             {
-                getLogger().warn(
+                log.warn(
                     "Unable to trigger .rbacUserAssignmentSaved( UserAssignment ) to " + listener.getClass().getName(),
                     e );
             }
@@ -176,7 +178,7 @@ public abstract class AbstractRBACManager
             }
             catch ( Exception e )
             {
-                getLogger().warn( "Unable to trigger .rbacUserAssignmentRemoved( UserAssignment ) to " +
+                log.warn( "Unable to trigger .rbacUserAssignmentRemoved( UserAssignment ) to " +
                     listener.getClass().getName(), e );
             }
         }
@@ -594,7 +596,7 @@ public abstract class AbstractRBACManager
                 {
                     // the client application might not manage role clean up totally correctly so we want to notify
                     // of a child role issue and offer a clean up process at some point
-                    getLogger().warn( "dangling child role: " + roleName + " on " + role.getName() );
+                    log.warn( "dangling child role: " + roleName + " on " + role.getName() );
                 }
             }
         }
@@ -661,8 +663,8 @@ public abstract class AbstractRBACManager
         Collection<Role> assignedRoles = getEffectivelyAssignedRoles( principal );
         List<Role> allRoles = getAllAssignableRoles();
 
-        getLogger().debug( "UR: assigned " + assignedRoles.size() );
-        getLogger().debug( "UR: available " + allRoles.size() );
+        log.debug( "UR: assigned " + assignedRoles.size() );
+        log.debug( "UR: available " + allRoles.size() );
 
         return CollectionUtils.subtract( allRoles, assignedRoles );
     }
@@ -681,8 +683,8 @@ public abstract class AbstractRBACManager
         Collection<Role> assignedRoles = getAssignedRoles( principal );
         List<Role> allRoles = getAllAssignableRoles();
 
-        getLogger().debug( "UR: assigned " + assignedRoles.size() );
-        getLogger().debug( "UR: available " + allRoles.size() );
+        log.debug( "UR: assigned " + assignedRoles.size() );
+        log.debug( "UR: available " + allRoles.size() );
 
         return CollectionUtils.subtract( allRoles, assignedRoles );
     }

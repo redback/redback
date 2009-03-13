@@ -91,7 +91,7 @@ public class PermissionsAction
         catch ( RbacManagerException e )
         {
             addActionError( getText( "cannot.list.all.permissions", Arrays.asList( e.getMessage() ) ) );
-            getLogger().error( "System error:", e );
+            log.error( "System error:", e );
             allPermissions = Collections.emptyList();
         }
 

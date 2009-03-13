@@ -137,7 +137,7 @@ public class RegisterAction
         catch ( RoleManagerException rpe )
         {
             addActionError( getText( "assign.role.failure" ) );
-            getLogger().error( "RoleProfile Error: " + rpe.getMessage(), rpe );
+            log.error( "RoleProfile Error: " + rpe.getMessage(), rpe );
             return ERROR;
         }
 
@@ -161,7 +161,7 @@ public class RegisterAction
             catch ( KeyManagerException e )
             {
                 addActionError( getText( "cannot.register.user" ) );
-                getLogger().error( "Unable to register a new user.", e );
+                log.error( "Unable to register a new user.", e );
                 return ERROR;
             }
             finally
@@ -200,13 +200,13 @@ public class RegisterAction
         catch ( KeyManagerException e )
         {
             addActionError( getText( "cannot.register.user" ) );
-            getLogger().error( "Unable to register a new user.", e );
+            log.error( "Unable to register a new user.", e );
             return ERROR;
         } 
         catch ( UserNotFoundException e ) 
         {
 			addActionError( getText( "cannot.find.user" ) );
-            getLogger().error( "Unable to find user.", e );
+            log.error( "Unable to find user.", e );
             return ERROR;
 		} 	
     }

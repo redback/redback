@@ -89,7 +89,6 @@
           </c:otherwise>
         </c:choose>
       </div>
-    </div>
   </body>
 </s:i18n>
 </html>
