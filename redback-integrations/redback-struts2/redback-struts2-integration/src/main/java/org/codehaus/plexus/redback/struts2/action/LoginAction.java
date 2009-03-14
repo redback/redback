@@ -31,7 +31,6 @@ import org.codehaus.plexus.redback.keys.KeyManagerException;
 import org.codehaus.plexus.redback.keys.KeyNotFoundException;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
 import org.codehaus.plexus.redback.policy.MustChangePasswordException;
-import org.codehaus.plexus.redback.system.DefaultSecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.User;
@@ -350,13 +349,7 @@ public class LoginAction
                     }
                 }
                 
-                if ( rememberMe )
-                {
-                    autologinCookies.setRememberMeCookie( authdatasource.getPrincipal(), ServletActionContext
-                        .getResponse(), ServletActionContext.getRequest() );
-                }
-                autologinCookies.setSignonCookie( authdatasource.getPrincipal(), ServletActionContext.getResponse(),
-                                                  ServletActionContext.getRequest() );
+                setCookies( authdatasource, rememberMe );
 
                 AuditEvent event = new AuditEvent( getText( "log.login.success" ) );
                 event.setAffectedUser( username );
@@ -419,14 +412,24 @@ public class LoginAction
         }
         catch ( MustChangePasswordException e )
         {
-            AuthenticationResult result = new AuthenticationResult( true, e.getUser().getPrincipal(), null );
-            SecuritySession securitySession = new DefaultSecuritySession( result, e.getUser() );
-            setAuthTokens( securitySession );
+            // TODO: preferably we would not set the cookies for this "partial" login state
+            setCookies( authdatasource, rememberMe );
 
             AuditEvent event = new AuditEvent( getText( "log.login.fail.locked" ) );
             event.setAffectedUser( username );
             event.log();
             return PASSWORD_CHANGE;
         }
+    }
+
+    private void setCookies( AuthenticationDataSource authdatasource, boolean rememberMe )
+    {
+        if ( rememberMe )
+        {
+            autologinCookies.setRememberMeCookie( authdatasource.getPrincipal(), ServletActionContext
+                .getResponse(), ServletActionContext.getRequest() );
+        }
+        autologinCookies.setSignonCookie( authdatasource.getPrincipal(), ServletActionContext.getResponse(),
+                                          ServletActionContext.getRequest() );
     }
 }

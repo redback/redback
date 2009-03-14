@@ -87,10 +87,6 @@
       <result name="security-login-locked" type="security-external">
         <param name="externalResult">security-login-locked</param>
       </result>
-      <result name="security-must-change-password">
-        <param name="actionName">password</param>
-        <param name="namespace">/security</param>        
-      </result>
     </action>
 
     <action name="logout" class="redback-logout" method="logout">

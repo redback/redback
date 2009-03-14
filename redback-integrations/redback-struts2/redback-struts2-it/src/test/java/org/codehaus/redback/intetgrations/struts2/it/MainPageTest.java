@@ -107,11 +107,18 @@ public class MainPageTest
         selenium.open("/main.action");
         selenium.click("link=Login.");
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
+        
         selenium.type("loginForm_username", "user1");
         selenium.type("loginForm_password", "user1");
         selenium.click("loginForm__login");
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
-        // TODO: should be on the page to change the password but we aren't due to current bug
+        assert selenium.getTitle().endsWith( "Change Password" );
+        
+        selenium.type("passwordForm_existingPassword", "user1");
+        selenium.type("passwordForm_newPassword", "user2");
+        selenium.type("passwordForm_newPasswordConfirm", "user2");
+        selenium.click("passwordForm__submit");
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
     }
 
     @Test
