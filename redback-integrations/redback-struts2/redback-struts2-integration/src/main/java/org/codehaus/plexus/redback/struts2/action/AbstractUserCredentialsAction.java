@@ -114,12 +114,7 @@ public abstract class AbstractUserCredentialsAction
         {
             addFieldError( "user.confirmPassword", getText( "passwords.does.not.match" ) );
         }
-    }
-
-    public void validateCredentialsStrict()
-    {
-        validateCredentialsLoose();
-
+        
         try
         {
             if ( !StringUtils.isEmpty( internalUser.getEmail() ) )
@@ -131,7 +126,12 @@ public abstract class AbstractUserCredentialsAction
         {
             addFieldError( "user.email", getText( "email.invalid" ) );
         }
+    }
 
+    public void validateCredentialsStrict()
+    {
+        validateCredentialsLoose();
+        
         User tmpuser = internalUser.createUser( securitySystem.getUserManager() );
 
         try
