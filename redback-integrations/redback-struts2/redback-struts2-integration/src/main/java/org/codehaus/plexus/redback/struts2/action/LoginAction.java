@@ -17,6 +17,7 @@ package org.codehaus.plexus.redback.struts2.action;
  */
 
 import java.util.Arrays;
+import java.util.Date;
 
 import org.apache.struts2.ServletActionContext;
 import org.codehaus.plexus.redback.authentication.AuthenticationConstants;
@@ -355,6 +356,10 @@ public class LoginAction
                 event.setAffectedUser( username );
                 event.log();
                 
+                User user = securitySession.getUser();
+                user.setLastLoginDate( new Date() );
+                securitySystem.getUserManager().updateUser( user );
+
                 return LOGIN_SUCCESS;
             }
             else

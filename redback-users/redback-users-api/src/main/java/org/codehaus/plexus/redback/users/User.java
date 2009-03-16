@@ -282,6 +282,12 @@ public interface User
     Date getAccountCreationDate();
 
     /**
+     * Set the Creation Date for this account.
+     *
+     */
+    void setAccountCreationDate( Date date );
+
+    /**
      * Get the Last Successful Login Date for this account.
      * 
      * @return the date of the last successful login

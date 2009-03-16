@@ -388,7 +388,7 @@ public class DataManagementTest
 
     private static String removeTimestampVariance( String content )
     {
-        return removeTagContent( content, "lastPasswordChange" );
+        return removeTagContent( removeTagContent( content, "lastPasswordChange" ), "accountCreationDate" );
     }
 
     private static String removeTagContent( String content, String field )

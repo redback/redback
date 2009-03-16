@@ -16,11 +16,28 @@ package org.codehaus.redback.intetgrations.struts2.it;
  * limitations under the License.
  */
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
+import org.xml.sax.SAXException;
 
+import au.com.bytecode.opencsv.CSVReader;
+
+import com.meterware.httpunit.GetMethodWebRequest;
+import com.meterware.httpunit.WebConversation;
+import com.meterware.httpunit.WebRequest;
+import com.meterware.httpunit.WebResponse;
 import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.Selenium;
 
@@ -34,13 +51,15 @@ public class MainPageTest
 
     private Selenium selenium;
 
+    private String baseUrl;
+
     @BeforeClass
     public void createSeleniumInstance()
     {
         // todo make browser, URL, port configurable
+        baseUrl = "http://localhost:8080";
         selenium =
-            new DefaultSelenium( "localhost", 4444, System.getProperty( "selenium.browser", "*firefox" ),
-                                 "http://localhost:8080" );
+            new DefaultSelenium( "localhost", 4444, System.getProperty( "selenium.browser", "*firefox" ), baseUrl );
         selenium.start();
     }
 
@@ -136,6 +155,50 @@ public class MainPageTest
     {
         selenium.deleteAllVisibleCookies();
         logout();
+    }
+
+    @SuppressWarnings( "unchecked" )
+    @Test( description = "REDBACK-43" )
+    public void checkLastLoginDateAndAccountDate()
+        throws MalformedURLException, IOException, SAXException, ParseException
+    {
+        Date date = new Date();
+
+        selenium.deleteAllVisibleCookies();
+        loginAdmin();
+
+        String value = selenium.getCookieByName( "rbkSignon" );
+        WebConversation wc = new WebConversation();
+        WebRequest req =
+            new GetMethodWebRequest( baseUrl + "/security/report!generate.action?reportId=userlist&reportType=csv" );
+        wc.putCookie( "rbkSignon", value );
+        WebResponse resp = wc.getResponse( req );
+
+        CSVReader reader = new CSVReader( new InputStreamReader( resp.getInputStream() ) );
+        List<String[]> rows = reader.readAll();
+        String[] headers = rows.get( 0 );
+        int lastLoggedInIndex = Arrays.asList( headers ).indexOf( "Date Last Logged In" );
+        assert lastLoggedInIndex >= 0;
+        int dateCreatedIndex = Arrays.asList( headers ).indexOf( "Date Created" );
+        assert dateCreatedIndex >= 0;
+        int usernameIndex = Arrays.asList( headers ).indexOf( "User Name" );
+        assert usernameIndex >= 0;
+
+        DateFormat fmt = new SimpleDateFormat( "EEE MMM dd HH:mm:ss zzz yyyy" );
+        fmt.setLenient( true );
+
+        rows = rows.subList( 1, rows.size() );
+        for ( String[] row : rows )
+        {
+            if ( row[usernameIndex].equals( "admin" ) )
+            {
+                assert row[lastLoggedInIndex] != null;
+                assert !fmt.parse( row[lastLoggedInIndex] ).before( date );
+            }
+            
+            assert row[dateCreatedIndex] != null;
+            assert fmt.parse( row[dateCreatedIndex] ) != null;
+        }
     }
 
     @AfterClass

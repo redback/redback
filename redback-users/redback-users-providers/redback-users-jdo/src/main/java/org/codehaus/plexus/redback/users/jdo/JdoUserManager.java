@@ -38,6 +38,8 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
+
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -83,6 +85,7 @@ public class JdoUserManager
         user.setUsername( username );
         user.setFullName( fullname );
         user.setEmail( email );
+        user.setAccountCreationDate( new Date() );
 
         return user;
     }

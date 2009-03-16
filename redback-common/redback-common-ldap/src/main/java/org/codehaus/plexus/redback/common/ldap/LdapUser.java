@@ -174,6 +174,11 @@ public class LdapUser
         fullName = name;
     }
 
+    public void setAccountCreationDate( Date date )
+    {
+        creationDate = date;
+    }
+
     public void setLastLoginDate( Date date )
     {
         lastLoginDate = date;
