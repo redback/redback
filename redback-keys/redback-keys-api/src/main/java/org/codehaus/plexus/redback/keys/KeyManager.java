@@ -82,4 +82,10 @@ public interface KeyManager
     AuthenticationKey addKey( AuthenticationKey key );
 
     void eraseDatabase();
+
+    /**
+     * Remove all keys that are expired.
+     */
+    public void removeExpiredKeys()
+        throws KeyManagerException;
 }

@@ -203,6 +203,7 @@ public class DataManagementTest
         manager.createKey( "bob", "Testing", 15 );
         manager.createKey( "betty", "Something", 25 );
         manager.createKey( "fred", "Else", 30 );
+        manager.createKey( "tony", "Expired", 0 );
     }
 
     public void testRestoreRbac()

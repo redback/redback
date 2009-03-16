@@ -34,6 +34,7 @@ import javax.xml.stream.XMLStreamException;
 
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.keys.KeyManager;
+import org.codehaus.plexus.redback.keys.KeyManagerException;
 import org.codehaus.plexus.redback.keys.jdo.AuthenticationKeyDatabase;
 import org.codehaus.plexus.redback.keys.jdo.io.stax.RedbackKeyManagementJdoStaxReader;
 import org.codehaus.plexus.redback.keys.jdo.io.stax.RedbackKeyManagementJdoStaxWriter;
@@ -114,6 +115,15 @@ public class JdoDataManagementTool
     public void backupKeyDatabase( KeyManager manager, File backupDirectory )
         throws IOException, XMLStreamException
     {
+        try
+        {
+            manager.removeExpiredKeys();
+        }
+        catch ( KeyManagerException e )
+        {
+            throw new IOException( "Error removing expired keys" );
+        }
+
         AuthenticationKeyDatabase database = new AuthenticationKeyDatabase();
         database.setKeys( manager.getAllKeys() );
 

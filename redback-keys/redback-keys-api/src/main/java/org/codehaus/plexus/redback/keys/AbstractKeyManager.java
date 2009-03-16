@@ -19,6 +19,8 @@ package org.codehaus.plexus.redback.keys;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Calendar;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 import java.util.TimeZone;
 
@@ -142,5 +144,29 @@ public abstract class AbstractKeyManager
     public boolean isRandomMode()
     {
         return randomMode;
+    }
+
+    public void removeExpiredKeys()
+        throws KeyManagerException
+    {
+        List<AuthenticationKey> allKeys = getAllKeys();
+
+        Calendar now = getNowGMT();
+        Calendar expiration = getNowGMT();
+
+        log.info( "Removing expired keys." );
+        for ( AuthenticationKey authkey : allKeys )
+        {
+            if ( authkey.getDateExpires() != null )
+            {
+                expiration.setTime( authkey.getDateExpires() );
+
+                if ( now.after( expiration ) )
+                {
+                    deleteKey( authkey );
+                }
+            }
+        }
+        log.info( "Expired keys removed." );
     }
 }
