@@ -24,9 +24,9 @@ import org.testng.annotations.Test;
 import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.Selenium;
 
-/** 
+/**
  * @todo more assertions
- * @todo dependencies are too complicated, should be grouped. Bear in mind what happens if one fails. 
+ * @todo dependencies are too complicated, should be grouped. Bear in mind what happens if one fails.
  */
 public class MainPageTest
 {
@@ -93,31 +93,34 @@ public class MainPageTest
         selenium.click( "addRolesToUser_submitRolesButton" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
     }
-    
+
     @Test( dependsOnMethods = { "createUser1" } )
     public void logout()
     {
         selenium.open( "/security/logout.action" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
+        assert selenium.getHtmlSource().indexOf( "<h4>This is the example mainpage</h4>" ) >= 0;
     }
-    
-    @Test ( dependsOnMethods = { "createUser1", "logout" } )
+
+    @Test( dependsOnMethods = { "createUser1" } )
     public void loginForcedPasswordChange()
     {
-        selenium.open("/main.action");
-        selenium.click("link=Login.");
+        selenium.deleteAllVisibleCookies();
+
+        selenium.open( "/main.action" );
+        selenium.click( "link=Login." );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
-        
-        selenium.type("loginForm_username", "user1");
-        selenium.type("loginForm_password", "user1");
-        selenium.click("loginForm__login");
+
+        selenium.type( "loginForm_username", "user1" );
+        selenium.type( "loginForm_password", "user1" );
+        selenium.click( "loginForm__login" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
         assert selenium.getTitle().endsWith( "Change Password" );
-        
-        selenium.type("passwordForm_existingPassword", "user1");
-        selenium.type("passwordForm_newPassword", "user2");
-        selenium.type("passwordForm_newPasswordConfirm", "user2");
-        selenium.click("passwordForm__submit");
+
+        selenium.type( "passwordForm_existingPassword", "user1" );
+        selenium.type( "passwordForm_newPassword", "user2" );
+        selenium.type( "passwordForm_newPasswordConfirm", "user2" );
+        selenium.click( "passwordForm__submit" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
     }
 
@@ -127,12 +130,12 @@ public class MainPageTest
         selenium.open( "/" );
         assert selenium.getHtmlSource().indexOf( "<h4>This is the example mainpage</h4>" ) >= 0;
     }
-    
-    @Test ( dependsOnMethods = { "logout" }, description="REDBACK-207", groups="disabled" )
+
+    @Test( dependsOnMethods = { "logout" }, description = "REDBACK-207", groups = { "disabled" } )
     public void logoutWhenAlreadyLoggedOut()
     {
+        selenium.deleteAllVisibleCookies();
         logout();
-        // TODO: assert result - current bug throws an NPE but it isn't propogated here
     }
 
     @AfterClass
