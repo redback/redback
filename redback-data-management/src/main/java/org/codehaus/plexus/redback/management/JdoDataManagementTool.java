@@ -26,7 +26,6 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -139,6 +138,7 @@ public class JdoDataManagementTool
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void restoreRBACDatabase( RBACManager manager, File backupDirectory )
         throws IOException, XMLStreamException, RbacManagerException
     {
@@ -156,23 +156,19 @@ public class JdoDataManagementTool
             IOUtil.close( fileReader );
         }
 
-        Map permissionMap = new HashMap();
-        Map resources = new HashMap();
-        Map operations = new HashMap();
-        for ( Iterator i = database.getRoles().iterator(); i.hasNext(); )
+        Map<String, Permission> permissionMap = new HashMap<String, Permission>();
+        Map<String, Resource> resources = new HashMap<String, Resource>();
+        Map<String, Operation> operations = new HashMap<String, Operation>();
+        for ( Role role : (List<Role>) database.getRoles() )
         {
-            Role role = (Role) i.next();
-
             // TODO: this could be generally useful and put into saveRole itself as long as the performance penalty isn't too harsh.
             //   Currently it always saves everything where it could pull pack the existing permissions, etc if they exist
-            List permissions = new ArrayList();
-            for ( Iterator j = role.getPermissions().iterator(); j.hasNext(); )
+            List<Permission> permissions = new ArrayList<Permission>();
+            for ( Permission permission : role.getPermissions() )
             {
-                Permission permission = (Permission) j.next();
-
                 if ( permissionMap.containsKey( permission.getName() ) )
                 {
-                    permission = (Permission) permissionMap.get( permission.getName() );
+                    permission = permissionMap.get( permission.getName() );
                 }
                 else if ( manager.permissionExists( permission ) )
                 {
@@ -184,7 +180,7 @@ public class JdoDataManagementTool
                     Operation operation = permission.getOperation();
                     if ( operations.containsKey( operation.getName() ) )
                     {
-                        operation = (Operation) operations.get( operation.getName() );
+                        operation = operations.get( operation.getName() );
                     }
                     else if ( manager.operationExists( operation ) )
                     {
@@ -201,7 +197,7 @@ public class JdoDataManagementTool
                     Resource resource = permission.getResource();
                     if ( resources.containsKey( resource.getIdentifier() ) )
                     {
-                        resource = (Resource) resources.get( resource.getIdentifier() );
+                        resource = resources.get( resource.getIdentifier() );
                     }
                     else if ( manager.resourceExists( resource ) )
                     {
@@ -225,14 +221,13 @@ public class JdoDataManagementTool
             manager.saveRole( role );
         }
 
-        for ( Iterator i = database.getUserAssignments().iterator(); i.hasNext(); )
+        for ( UserAssignment userAssignment : (List<UserAssignment>) database.getUserAssignments() )
         {
-            UserAssignment userAssignment = (UserAssignment) i.next();
-
             manager.saveUserAssignment( userAssignment );
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void restoreUsersDatabase( UserManager manager, File backupDirectory )
         throws IOException, XMLStreamException
     {
@@ -250,14 +245,13 @@ public class JdoDataManagementTool
             IOUtil.close( fileReader );
         }
 
-        for ( Iterator i = database.getUsers().iterator(); i.hasNext(); )
+        for ( User user : (List<User>) database.getUsers() )
         {
-            User user = (User) i.next();
-
             manager.addUserUnchecked( user );
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void restoreKeysDatabase( KeyManager manager, File backupDirectory )
         throws IOException, XMLStreamException
     {
@@ -275,10 +269,8 @@ public class JdoDataManagementTool
             IOUtil.close( fileReader );
         }
 
-        for ( Iterator i = database.getKeys().iterator(); i.hasNext(); )
+        for ( AuthenticationKey key : (List<AuthenticationKey>) database.getKeys() )
         {
-            AuthenticationKey key = (AuthenticationKey) i.next();
-
             manager.addKey( key );
         }
     }

@@ -19,7 +19,6 @@ package org.codehaus.plexus.redback.keys;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.TimeZone;

@@ -221,8 +221,8 @@ public class DataManagementTest
 
         dataManagementTool.restoreRBACDatabase( manager, targetDirectory );
 
-        List roles = manager.getAllRoles();
-        List assignments = manager.getAllUserAssignments();
+        List<Role> roles = manager.getAllRoles();
+        List<UserAssignment> assignments = manager.getAllUserAssignments();
         assertEquals( 4, roles.size() );
         assertEquals( 2, assignments.size() );
         assertEquals( 6, manager.getAllOperations().size() );
@@ -300,7 +300,7 @@ public class DataManagementTest
 
         dataManagementTool.restoreUsersDatabase( manager, targetDirectory );
 
-        List users = manager.getUsers();
+        List<User> users = manager.getUsers();
         assertEquals( 3, users.size() );
 
         User user = (User) users.get( 0 );
@@ -333,7 +333,7 @@ public class DataManagementTest
 
     private void assertEmpty( UserManager manager )
     {
-        List users = manager.getUsers();
+        List<User> users = manager.getUsers();
         assertEquals( 0, users.size() );
     }
 
@@ -352,7 +352,7 @@ public class DataManagementTest
 
         dataManagementTool.restoreKeysDatabase( manager, targetDirectory );
 
-        List keys = manager.getAllKeys();
+        List<AuthenticationKey> keys = manager.getAllKeys();
         assertEquals( 3, keys.size() );
 
         AuthenticationKey key = (AuthenticationKey) keys.get( 0 );
