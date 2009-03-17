@@ -56,10 +56,11 @@ public class MainPageTest
     @BeforeClass
     public void createSeleniumInstance()
     {
-        // todo make browser, URL, port configurable
-        baseUrl = "http://localhost:8080";
+        baseUrl = "http://localhost:" + System.getProperty( "jetty.port", "8080" );
         selenium =
-            new DefaultSelenium( "localhost", 4444, System.getProperty( "selenium.browser", "*firefox" ), baseUrl );
+            new DefaultSelenium( "localhost",
+                                 Integer.valueOf( System.getProperty( "selenium.server", "4444" ) ).intValue(),
+                                 System.getProperty( "selenium.browser", "*firefox" ), baseUrl );
         selenium.start();
     }
 
@@ -195,7 +196,7 @@ public class MainPageTest
                 assert row[lastLoggedInIndex] != null;
                 assert !fmt.parse( row[lastLoggedInIndex] ).before( date );
             }
-            
+
             assert row[dateCreatedIndex] != null;
             assert fmt.parse( row[dateCreatedIndex] ) != null;
         }

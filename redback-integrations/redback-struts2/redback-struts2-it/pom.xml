@@ -48,6 +48,20 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <excludedGroups>disabled</excludedGroups>
+          <systemProperties>
+            <systemProperty>
+              <name>jetty.port</name>
+              <value>${jetty.port}</value>
+            </systemProperty>
+            <systemProperty>
+              <name>jetty.port.stop</name>
+              <value>${jetty.port.stop}</value>
+            </systemProperty>
+            <systemProperty>
+              <name>selenium.server</name>
+              <value>${selenium.server}</value>
+            </systemProperty>
+          </systemProperties>
         </configuration>        
       </plugin>
       <plugin>
@@ -57,6 +71,7 @@
         <configuration>
           <background>true</background>
           <logOutput>true</logOutput>
+          <port>${selenium.port}</port>
         </configuration>
         <executions>
           <execution>
@@ -83,7 +98,7 @@
           <contextPath>/</contextPath>
           <jettyEnvXml>${basedir}/src/jetty-env.xml</jettyEnvXml>
           <stopKey>STOP</stopKey>
-          <stopPort>8081</stopPort>
+          <stopPort>${jetty.port.stop}</stopPort>
           <classesDirectory>target/dependency/WEB-INF/classes</classesDirectory>
           <webAppSourceDirectory>target/dependency</webAppSourceDirectory>
           <systemProperties>
@@ -92,6 +107,12 @@
               <value>${basedir}/target/appserver-base</value>
             </systemProperty>
           </systemProperties>
+          <connectors>
+            <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
+              <port>${jetty.port}</port>
+              <maxIdleTime>60000</maxIdleTime>
+            </connector>
+          </connectors>
         </configuration>
         <executions>
           <execution>
@@ -150,4 +171,9 @@
       </releases>
     </repository>
   </repositories>
+  <properties>
+    <selenium.port>4444</selenium.port>
+    <jetty.port>8080</jetty.port>
+    <jetty.port.stop>8081</jetty.port.stop>
+  </properties>
 </project>
