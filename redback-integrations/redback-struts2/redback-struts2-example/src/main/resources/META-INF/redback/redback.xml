@@ -47,6 +47,9 @@
               <resource>${resource}</resource>
             </permission>
           </permissions>
+          <childTemplates>
+            <childTemplate>template1</childTemplate>
+          </childTemplates>
         </template>
         <template>
           <id>template3</id>
@@ -60,6 +63,9 @@
               <resource>${resource}</resource>
             </permission>
           </permissions>
+          <childTemplates>
+            <childTemplate>template2</childTemplate>
+          </childTemplates>
         </template>
       </templates>
     </application>
