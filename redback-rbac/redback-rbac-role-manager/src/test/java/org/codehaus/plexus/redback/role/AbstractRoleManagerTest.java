@@ -18,8 +18,13 @@ package org.codehaus.plexus.redback.role;
 
 import java.util.List;
 
+import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
+import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
+import org.codehaus.plexus.redback.role.model.ModelPermission;
+import org.codehaus.plexus.redback.role.model.ModelTemplate;
+import org.codehaus.plexus.redback.role.util.RoleModelUtils;
 import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 
 /**
@@ -59,6 +64,8 @@ public abstract class AbstractRoleManagerTest
 
         roleManager.updateRole( "test-template-2", "foo", "bar" );
 
+        assertFalse( roleManager.templatedRoleExists( "test-template-2", "foo" ) );
+        // TODO: bug - assertFalse( roleManager.templatedRoleExists( "test-template", "foo" ) );
         assertTrue( roleManager.templatedRoleExists( "test-template-2", "bar" ) );
         assertTrue( roleManager.templatedRoleExists( "test-template", "bar" ) );
 
@@ -91,5 +98,63 @@ public abstract class AbstractRoleManagerTest
             System.out.println( roleName );
             assertTrue( "Test Role".equals( roleName ) || "Foo 2 - frigid".equals( roleName ) );
         }
+    }
+    
+    public void testVerifyTemplatedRole()
+        throws Exception
+    {
+        roleManager.createTemplatedRole( "test-template-2", "first" );
+
+        assertTrue( roleManager.templatedRoleExists( "test-template-2", "first" ) );
+        Role role = rbacManager.getRole( "Foo 2 - first" );
+        assertNotNull( role );
+        assertTrue( hasPermissionOnOperation( role, "Eat Cornflakes", "first" ) );
+        assertFalse( hasPermissionOnOperation( role, "Drink Milk" ) );
+     
+        ModelTemplate template = RoleModelUtils.getModelTemplate( roleManager.getModel(), "test-template-2" );
+        ModelPermission p = new ModelPermission();
+        p.setId( "new-permission" );
+        p.setName( "New Permission" );
+        p.setOperation( "drink-milk" );
+        p.setResource( "${resource}" );
+        template.addPermission( p );
+        p = new ModelPermission();
+        p.setId( "eat-cornflakes-permission-3" );
+        p.setName( "Eat 3 Cornflakes" );
+        p.setOperation( "eat-cornflakes" );
+        p.setResource( "${resource}" );
+        template.removePermission( p );
+        
+        roleManager.verifyTemplatedRole( "test-template-2", "first" );
+        
+        assertTrue( roleManager.templatedRoleExists( "test-template-2", "first" ) );
+        role = rbacManager.getRole( "Foo 2 - first" );
+        assertNotNull( role );
+        assertFalse( hasPermissionOnOperation( role, "Eat Cornflakes", "first" ) );
+        assertTrue( hasPermissionOnOperation( role, "Drink Milk", "first" ) );
+    }
+
+    private boolean hasPermissionOnOperation( Role role, String operation )
+    {
+        for ( Permission p : role.getPermissions() )
+        {
+            if ( p.getOperation().getName().equals( operation ) )
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hasPermissionOnOperation( Role role, String operation, String resource )
+    {
+        for ( Permission p : role.getPermissions() )
+        {
+            if ( p.getOperation().getName().equals( operation ) && p.getResource().getIdentifier().equals( resource ) )
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

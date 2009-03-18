@@ -432,7 +432,11 @@ public class DefaultRoleManager
     public RedbackRoleModel getModel()
     {
         return blessedModel;
+    }
+
+    public void verifyTemplatedRole( String templateId, String resource ) throws RoleManagerException
+    {
+        // create also serves as update
+        templateProcessor.create( blessedModel, templateId, resource );
     } 
-    
-    
 }

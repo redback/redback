@@ -35,6 +35,8 @@ import org.codehaus.plexus.redback.role.model.ModelRole;
 import org.codehaus.plexus.redback.role.model.ModelTemplate;
 import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
 import org.codehaus.plexus.redback.role.util.RoleModelUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -49,6 +51,8 @@ import org.springframework.stereotype.Service;
 public class DefaultRoleTemplateProcessor
     implements RoleTemplateProcessor
 {
+    private Logger log = LoggerFactory.getLogger( DefaultRoleTemplateProcessor.class );
+    
     @javax.annotation.Resource(name="rBACManager#cached")
     private RBACManager rbacManager;
 
@@ -293,7 +297,41 @@ public class DefaultRoleTemplateProcessor
                 throw new RoleManagerException( "error creating role '" + templateName + "'", e );
             }
         }
+        else
+        {
+            try
+            {
+                Role role = rbacManager.getRole( templateName );
 
+                boolean changed = false;
+                for ( Permission permission : permissions )
+                {
+                    if ( !role.getPermissions().contains( permission ) )
+                    {
+                        log.info( "Adding new permission '" + permission.getName() + "' to role '" + role.getName() + "'" );
+                        role.addPermission( permission );
+                        changed = true;
+                    }
+                }
+                for ( Permission permission : role.getPermissions() )
+                {
+                    if ( !permissions.contains( permission ) )
+                    {
+                        log.info( "Removing old permission '" + permission.getName() + "' from role '" + role.getName() + "'" );
+                        role.removePermission( permission );
+                        changed = true;
+                    }
+                }
+                if ( changed )
+                {
+                    rbacManager.saveRole( role );
+                }
+            }
+            catch ( RbacManagerException e )
+            {
+                throw new RoleManagerException( "error updating role '" + templateName + "'", e );
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")

@@ -127,4 +127,12 @@ public interface RoleManager
      * get the blessed model, the current operating instructions for all things role management
      */
     public RedbackRoleModel getModel();
+
+    /**
+     * Check a role template is complete in the RBAC store.
+     * @param templateID the templated role
+     * @param resource the resource to verify
+     * @throws RoleManagerException 
+     */
+    public void verifyTemplatedRole( String templateID, String resource ) throws RoleManagerException;
 }
