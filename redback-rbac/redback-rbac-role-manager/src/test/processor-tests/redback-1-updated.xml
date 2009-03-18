@@ -36,10 +36,10 @@
       <name>Baby</name>
       <permissions>
         <permission>
-          <id>drink-milk-permission</id>
-          <name>Drink Milk</name>
-          <operation>drink-milk</operation>
-          <resource>milk</resource>
+          <id>eat-cornflakes-permission</id>
+          <name>Eat Cornflakes</name>
+          <operation>eat-cornflakes</operation>
+          <resource>cornflakes</resource>
         </permission>
       </permissions>
     </role>

@@ -16,14 +16,19 @@ package org.codehaus.plexus.redback.role.processor;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import java.io.File;
+import java.io.IOException;
+
+import javax.xml.stream.XMLStreamException;
+
+import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.Role;
+import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
 import org.codehaus.plexus.redback.role.model.io.stax.RedbackRoleModelStaxReader;
 import org.codehaus.plexus.redback.role.validator.RoleModelValidator;
-
-import java.io.File;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 
 /**
  * RoleProfileTest:
@@ -121,7 +126,18 @@ public class RoleModelProcessorTest
     
     public void testProcessing() throws Exception 
     {
-        File resource = new File( getBasedir() + "/src/test/processor-tests/redback-1.xml");
+        RedbackRoleModel redback = getModelFromFile("/src/test/processor-tests/redback-1.xml");
+        
+        processModel( redback );
+        
+        assertTrue( rbacManager.resourceExists( "cornflakes" ) );
+        
+    }
+
+    private RedbackRoleModel getModelFromFile(String file)
+        throws IOException, XMLStreamException
+    {
+        File resource = new File( getBasedir() + file);
         
         assertNotNull( resource );
         
@@ -130,36 +146,60 @@ public class RoleModelProcessorTest
         RedbackRoleModel redback = modelReader.read( resource.getAbsolutePath() );
         
         assertNotNull( redback );
-        
+        return redback;
+    }
+
+    private void processModel( RedbackRoleModel redback )
+        throws RoleManagerException
+    {
         assertTrue( modelValidator.validate( redback ) );
         
         roleProcessor.process( redback );
-        
-        assertTrue( rbacManager.resourceExists( "cornflakes" ) );
-        
     }
  
     public void testMultipleProcessing() throws Exception 
     {
         rbacManager.eraseDatabase();
         
-        File resource = new File( getBasedir() + "/src/test/processor-tests/redback-2.xml");
+        RedbackRoleModel redback = getModelFromFile("/src/test/processor-tests/redback-2.xml");
         
-        assertNotNull( resource );
-        
-        RedbackRoleModelStaxReader modelReader = new RedbackRoleModelStaxReader();
-        
-        RedbackRoleModel redback = modelReader.read( resource.getAbsolutePath() );
-        
-        assertNotNull( redback );
-        
-        assertTrue( modelValidator.validate( redback ) );
-        
-        roleProcessor.process( redback );
+        processModel( redback );
         roleProcessor.process( redback );
         
         Role systemAdmin = rbacManager.getRole( "System Administrator" );
         
         assertTrue( systemAdmin.hasChildRoles() );
+    }
+
+    /** @todo there are other things that are not synced - role descriptions, removal of operations, etc. */
+    
+    public void testSyncPermissionsOnUpgrade()
+        throws Exception
+    {
+        rbacManager.eraseDatabase();
+        
+        processModel( getModelFromFile("/src/test/processor-tests/redback-1.xml") );
+
+        Role role = rbacManager.getRole( "Baby" );
+        assertFalse( hasPermissionOnOperation( role, "Eat Cornflakes" ) );
+        assertTrue( hasPermissionOnOperation( role, "Drink Milk" ) );
+
+        processModel( getModelFromFile("/src/test/processor-tests/redback-1-updated.xml") );
+        
+        role = rbacManager.getRole( "Baby" );
+        assertTrue( hasPermissionOnOperation( role, "Eat Cornflakes" ) );
+        assertFalse( hasPermissionOnOperation( role, "Drink Milk" ) );
+    }
+
+    private boolean hasPermissionOnOperation( Role role, String operation )
+    {
+        for ( Permission p : role.getPermissions() )
+        {
+            if ( p.getOperation().getName().equals( operation ) )
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

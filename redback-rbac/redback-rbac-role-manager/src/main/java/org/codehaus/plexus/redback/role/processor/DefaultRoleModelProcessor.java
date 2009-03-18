@@ -27,6 +27,8 @@ import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.role.model.*;
 import org.codehaus.plexus.redback.role.util.RoleModelUtils;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -42,6 +44,8 @@ import java.util.*;
 public class DefaultRoleModelProcessor
     implements RoleModelProcessor
 {
+    private Logger log = LoggerFactory.getLogger( DefaultRoleModelProcessor.class );
+    
     @javax.annotation.Resource(name = "rBACManager#cached")
     private RBACManager rbacManager;
 
@@ -193,6 +197,41 @@ public class DefaultRoleModelProcessor
                 catch ( RbacManagerException e )
                 {
                     throw new RoleManagerException( "error creating role '" + roleProfile.getName() + "'", e );
+                }
+            }
+            else
+            {
+                try
+                {
+                    Role role = rbacManager.getRole( roleProfile.getName() );
+
+                    boolean changed = false;
+                    for ( Permission permission : permissions )
+                    {
+                        if ( !role.getPermissions().contains( permission ) )
+                        {
+                            log.info( "Adding new permission '" + permission.getName() + "' to role '" + role.getName() + "'" );
+                            role.addPermission( permission );
+                            changed = true;
+                        }
+                    }
+                    for ( Permission permission : role.getPermissions() )
+                    {
+                        if ( !permissions.contains( permission ) )
+                        {
+                            log.info( "Removing old permission '" + permission.getName() + "' from role '" + role.getName() + "'" );
+                            role.removePermission( permission );
+                            changed = true;
+                        }
+                    }
+                    if ( changed )
+                    {
+                        rbacManager.saveRole( role );
+                    }
+                }
+                catch ( RbacManagerException e )
+                {
+                    throw new RoleManagerException( "error updating role '" + roleProfile.getName() + "'", e );
                 }
             }
         }
