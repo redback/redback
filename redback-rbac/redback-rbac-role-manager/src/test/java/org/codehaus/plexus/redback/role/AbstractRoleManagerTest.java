@@ -24,14 +24,16 @@ import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 
 /**
  * AbstractRoleManagerTest:
- *
+ * 
  * @author: Jesse McConnell <jesse@codehaus.org>
  * @version: $Id:$
  */
-public abstract class AbstractRoleManagerTest extends PlexusInSpringTestCase
+public abstract class AbstractRoleManagerTest
+    extends PlexusInSpringTestCase
 {
 
     protected RBACManager rbacManager;
+
     protected RoleManager roleManager;
 
     public AbstractRoleManagerTest()
@@ -39,54 +41,55 @@ public abstract class AbstractRoleManagerTest extends PlexusInSpringTestCase
         super();
     }
 
-    public void testLoading() throws Exception
-    {       
+    public void testLoading()
+        throws Exception
+    {
         assertTrue( rbacManager.resourceExists( "*" ) );
         assertTrue( rbacManager.operationExists( "Test Operation" ) );
         assertTrue( rbacManager.roleExists( "Test Role" ) );
         assertTrue( rbacManager.roleExists( "Test Role 1" ) );
         assertTrue( rbacManager.roleExists( "Test Role 2" ) );
-        
+
         assertTrue( rbacManager.roleExists( "Role for cornflake eaters drinking milk in the bowl" ) );
-        
+
         roleManager.createTemplatedRole( "test-template-2", "foo" );
-        
+
         assertTrue( roleManager.templatedRoleExists( "test-template-2", "foo" ) );
         assertTrue( roleManager.templatedRoleExists( "test-template", "foo" ) );
-        
+
         roleManager.updateRole( "test-template-2", "foo", "bar" );
-        
+
         assertTrue( roleManager.templatedRoleExists( "test-template-2", "bar" ) );
         assertTrue( roleManager.templatedRoleExists( "test-template", "bar" ) );
-        
+
         roleManager.createTemplatedRole( "test-template-2", "hot" );
-        
+
         assertTrue( roleManager.templatedRoleExists( "test-template-2", "hot" ) );
     }
-    
-    public void testUserAssignmentUpdate() throws Exception
-    {
-    	String principal = "joe";
-    	
-    	roleManager.assignRole("test-role", principal );
-    	roleManager.createTemplatedRole( "test-template-2", "cold" );
-    	roleManager.assignTemplatedRole( "test-template-2", "cold", principal);
-    	
-    	roleManager.updateRole("test-template-2", "cold", "frigid" );
-    	
-    	assertTrue( roleManager.templatedRoleExists("test-template-2", "frigid" ) );
-    	
-    	UserAssignment assignment = rbacManager.getUserAssignment( principal );
-    	
-    	List<String> assignments = assignment.getRoleNames();
-    	
-    	assertEquals( 2, assignments.size() );
-    	
-    	for ( String roleName : assignments )
-    	{
-    		System.out.println( roleName );
-    		assertTrue( "Test Role".equals( roleName ) || "Foo 2 - frigid".equals( roleName ) );
-    	}
-    }
 
+    public void testUserAssignmentUpdate()
+        throws Exception
+    {
+        String principal = "joe";
+
+        roleManager.assignRole( "test-role", principal );
+        roleManager.createTemplatedRole( "test-template-2", "cold" );
+        roleManager.assignTemplatedRole( "test-template-2", "cold", principal );
+
+        roleManager.updateRole( "test-template-2", "cold", "frigid" );
+
+        assertTrue( roleManager.templatedRoleExists( "test-template-2", "frigid" ) );
+
+        UserAssignment assignment = rbacManager.getUserAssignment( principal );
+
+        List<String> assignments = assignment.getRoleNames();
+
+        assertEquals( 2, assignments.size() );
+
+        for ( String roleName : assignments )
+        {
+            System.out.println( roleName );
+            assertTrue( "Test Role".equals( roleName ) || "Foo 2 - frigid".equals( roleName ) );
+        }
+    }
 }
