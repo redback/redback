@@ -4,11 +4,11 @@
   <parent>
     <artifactId>redback-integrations</artifactId>
     <groupId>org.codehaus.redback</groupId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
   </parent>
   <groupId>org.codehaus.redback</groupId>
   <artifactId>redback-jsecurity</artifactId>
-  <version>1.2-SNAPSHOT</version>
+  <version>1.2</version>
   <name>Redback :: Integration :: JSecurity Integration</name>
   <dependencies>
     <dependency>
