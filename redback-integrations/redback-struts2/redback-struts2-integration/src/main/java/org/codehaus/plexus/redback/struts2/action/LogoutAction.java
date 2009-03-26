@@ -66,6 +66,11 @@ public class LogoutAction
 
     public String logout()
     {
+        if ( getSecuritySession().getUser() == null )
+        {
+            return LOGOUT;
+        }
+
         String currentUser = (String)getSecuritySession().getUser().getPrincipal();
         
         if ( getSecuritySession() != null )
