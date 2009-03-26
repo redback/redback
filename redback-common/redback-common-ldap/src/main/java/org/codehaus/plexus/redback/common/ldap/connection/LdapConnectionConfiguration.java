@@ -39,6 +39,7 @@ import javax.naming.ldap.LdapName;
  * <ul>
  * <li>Hostname - String, required.
  * <li>Port - int, not required. If 0 then the default value is used by the ldap driver.
+ * <li>Ssl - boolean, not required. If true then the ldaps will be used.
  * <li>Base DN - String, required.
  * <li>Context factory - String, required.
  * <li>Bind DN - String, not required.
@@ -54,6 +55,8 @@ public class LdapConnectionConfiguration
     private String hostname;
 
     private int port;
+
+    private boolean ssl;
 
     private LdapName baseDn;
 
@@ -170,6 +173,16 @@ public class LdapConnectionConfiguration
     public void setPort( int port )
     {
         this.port = port;
+    }
+
+    public boolean isSsl()
+    {
+        return ssl;
+    }
+
+    public void setSsl( boolean ssl )
+    {
+        this.ssl = ssl;
     }
 
     public LdapName getBaseDn()
@@ -324,6 +337,7 @@ public class LdapConnectionConfiguration
         return "{LdapConnectionConfiguration: " +
                "hostname: " + getHostname() + ", " +
                "port: " + getPort() + ", " +
+               "ssl: " + isSsl() + ", " +
                "baseDn: " + getBaseDn() + ", " +
                "contextFactory: " + getContextFactory() + ", " +
                "bindDn: " + getBindDn() + ", " +

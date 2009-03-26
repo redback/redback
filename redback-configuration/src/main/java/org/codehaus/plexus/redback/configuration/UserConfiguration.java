@@ -146,14 +146,14 @@ public class UserConfiguration
         return lookupRegistry.getString( key );
     }
 
+    public String getString( String key, String defaultValue )
+    {
+        return lookupRegistry.getString( key, defaultValue );
+    }
+
     public int getInt( String key )
     {
         return lookupRegistry.getInt( key );
-    }
-
-    public boolean getBoolean( String key )
-    {
-        return lookupRegistry.getBoolean( key );
     }
 
     public int getInt( String key, int defaultValue )
@@ -161,11 +161,16 @@ public class UserConfiguration
         return lookupRegistry.getInt( key, defaultValue );
     }
 
-    public String getString( String key, String defaultValue )
+    public boolean getBoolean( String key )
     {
-        return lookupRegistry.getString( key, defaultValue );
+        return lookupRegistry.getBoolean( key );
     }
-    
+
+    public boolean getBoolean( String key, boolean defaultValue )
+    {
+        return lookupRegistry.getBoolean( key, defaultValue );
+    }
+
     @SuppressWarnings("unchecked")
     public List<String> getList( String key )
     {

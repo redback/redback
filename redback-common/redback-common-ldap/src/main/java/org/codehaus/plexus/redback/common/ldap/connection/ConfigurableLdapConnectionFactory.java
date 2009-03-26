@@ -58,6 +58,11 @@ public class ConfigurableLdapConnectionFactory
     /**
      * @plexus.configuration
      */
+    private boolean ssl;
+
+    /**
+     * @plexus.configuration
+     */
     private String baseDn;
 
     /**
@@ -103,6 +108,7 @@ public class ConfigurableLdapConnectionFactory
             configuration = new LdapConnectionConfiguration();
             configuration.setHostname( userConf.getString( "ldap.config.hostname", hostname ) );
             configuration.setPort( userConf.getInt( "ldap.config.port", port ) );
+            configuration.setSsl( userConf.getBoolean( "ldap.config.ssl", ssl ) );
             configuration.setBaseDn( userConf.getConcatenatedList( "ldap.config.base.dn", baseDn ) );
             configuration.setContextFactory( userConf.getString( "ldap.config.context.factory", contextFactory ) );
             configuration.setBindDn( userConf.getConcatenatedList( "ldap.config.bind.dn", bindDn ) );

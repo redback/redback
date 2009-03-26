@@ -180,6 +180,8 @@ public class DataManagementTest
         KeyManager manager = (KeyManager) lookup( KeyManager.ROLE, "jdo" );
 
         createKeyDatabase( manager );
+        
+        Thread.sleep( 60000 );
 
         dataManagementTool.backupKeyDatabase( manager, targetDirectory );
 

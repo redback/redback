@@ -131,13 +131,14 @@ public class LdapConnection
 
         if ( config.getHostname() != null )
         {
+            String protocol = config.isSsl() ? "ldaps" : "ldap";
             if ( config.getPort() != 0 )
             {
-                env.put( Context.PROVIDER_URL, "ldap://" + config.getHostname() + ":" + config.getPort() + "/" );
+                env.put( Context.PROVIDER_URL, protocol + "://" + config.getHostname() + ":" + config.getPort() + "/" );
             }
             else
             {
-                env.put( Context.PROVIDER_URL, "ldap://" + config.getHostname() + "/" );
+                env.put( Context.PROVIDER_URL, protocol + "://" + config.getHostname() + "/" );
             }
         }
 
