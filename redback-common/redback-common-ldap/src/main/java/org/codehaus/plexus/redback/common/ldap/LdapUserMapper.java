@@ -16,6 +16,8 @@ package org.codehaus.plexus.redback.common.ldap;
  * limitations under the License.
  */
 
+import java.util.Date;
+
 import javax.annotation.Resource;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttributes;
@@ -203,6 +205,9 @@ public class LdapUserMapper
         }
 
         user.setEncodedPassword( encodedPassword );
+
+        // REDBACK-215: skip NPE
+        user.setLastPasswordChange( new Date() ) );
 
         return user;
     }
