@@ -207,7 +207,7 @@ public class LdapUserMapper
         user.setEncodedPassword( encodedPassword );
 
         // REDBACK-215: skip NPE
-        user.setLastPasswordChange( new Date() ) );
+        user.setLastPasswordChange( new Date() );
 
         return user;
     }
