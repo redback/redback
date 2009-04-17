@@ -132,6 +132,7 @@
         <param name="actionName">logout</param>
         <param name="namespace">/security</param>
       </result>
+      <result name="security-change-password-success">/WEB-INF/jsp/redback/changePasswordSuccess.jsp</result>
     </action>
 
     <action name="passwordReset" class="redback-password-reset" method="show">

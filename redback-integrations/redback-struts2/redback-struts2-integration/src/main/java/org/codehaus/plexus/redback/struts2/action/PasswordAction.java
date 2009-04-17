@@ -47,6 +47,8 @@ public class PasswordAction
     // Plexus Component Requirements
     // ------------------------------------------------------------------
 
+    protected static final String CHANGE_PASSWORD_SUCCESS = "security-change-password-success";
+
     /**
      * @plexus.requirement
      */
@@ -193,7 +195,7 @@ public class PasswordAction
          */
         if ( !provideExisting )
         {                                              
-            return RegisterAction.REGISTER_SUCCESS;
+            return CHANGE_PASSWORD_SUCCESS;
         }
         else
         {
@@ -211,8 +213,8 @@ public class PasswordAction
                 }
                 else 
                 {
-                    url = super.getBaseUrl();
-                    log.info( "targetUrl is empty, assign it to baseUrl: " + url ); 
+                    log.info( "targetUrl is empty, redirect to change password success page" );
+                    return CHANGE_PASSWORD_SUCCESS;
                 }
                 setTargetUrl( url );
             }    
