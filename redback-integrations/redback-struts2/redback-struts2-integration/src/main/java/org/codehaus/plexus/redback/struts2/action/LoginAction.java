@@ -360,6 +360,20 @@ public class LoginAction
                 user.setLastLoginDate( new Date() );
                 securitySystem.getUserManager().updateUser( user );
 
+                if ( StringUtils.isNotEmpty( validateMe ) )
+                {
+                    try
+                    {
+                        //REDBACK-146: delete key after validating so user won't be able to use it the second time around
+                        securitySystem.getKeyManager().deleteKey( validateMe );
+                    }
+                    catch ( KeyManagerException e )
+                    {
+                        addActionError( getText( "cannot.find.key.at.the.momment" ) );
+                        return ERROR;
+                    }
+                }
+
                 return LOGIN_SUCCESS;
             }
             else
