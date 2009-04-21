@@ -215,7 +215,10 @@ public class DefaultRoleModelProcessor
                             changed = true;
                         }
                     }
-                    for ( Permission permission : role.getPermissions() )
+                    
+                    // Copy list to avoid concurrent modification [REDBACK-220]
+                    List<Permission> oldPermissions = new ArrayList<Permission>( role.getPermissions() );
+                    for ( Permission permission : oldPermissions )
                     {
                         if ( !permissions.contains( permission ) )
                         {

@@ -17,6 +17,12 @@
       <permanent>true</permanent>
       <description>the milk in the bowl</description>
     </resource>
+    <resource>
+      <id>bed</id>
+      <name>bed</name>
+      <permanent>true</permanent>
+      <description>The baby's bed</description>
+    </resource>
   </resources>
   <operations>
     <operation>
@@ -29,6 +35,11 @@
       <name>Drink Milk</name>
       <description>drink the milk</description>
     </operation>
+    <operation>
+      <id>go-to-sleep</id>
+      <name>Go to Sleep</name>
+      <description>Go to Sleep</description>
+    </operation>
   </operations>
   <roles>
     <role>
@@ -40,6 +51,13 @@
           <name>Drink Milk</name>
           <operation>drink-milk</operation>
           <resource>milk</resource>
+        </permission>
+        <!--  need a second permission here to test removal at the start of the list [REDBACK-220] -->
+        <permission>
+          <id>go-to-sleep-permission</id>
+          <name>Go to Sleep</name>
+          <operation>go-to-sleep</operation>
+          <resource>bed</resource>
         </permission>
       </permissions>
     </role>
