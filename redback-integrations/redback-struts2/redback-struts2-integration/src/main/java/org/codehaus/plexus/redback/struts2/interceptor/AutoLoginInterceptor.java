@@ -86,11 +86,12 @@ public class AutoLoginInterceptor
             // User already authenticated.
             log.debug( "User already authenticated." );
 
-            checkCookieConsistency( securitySession );
-            
-            // update single sign on cookie
-            autologinCookies.setSignonCookie( securitySession.getUser().getUsername(), ServletActionContext
-                .getResponse(), ServletActionContext.getRequest() );
+            if ( !checkCookieConsistency( securitySession ) )
+            {
+                // update single sign on cookie
+                autologinCookies.setSignonCookie( securitySession.getUser().getUsername(), ServletActionContext
+                                                  .getResponse(), ServletActionContext.getRequest() );
+            }
         }
         else
         {
@@ -166,7 +167,7 @@ public class AutoLoginInterceptor
         return invocation.invoke();
     }
 
-    private void checkCookieConsistency( SecuritySession securitySession )
+    private boolean checkCookieConsistency( SecuritySession securitySession )
     {
         String username = securitySession.getUser().getUsername();
 
@@ -207,6 +208,8 @@ public class AutoLoginInterceptor
         {
             removeCookiesAndSession();
         }
+
+        return failed;
     }
 
     private SecuritySession checkAuthentication( AuthenticationKey authkey, boolean enforcePasswordChange )
