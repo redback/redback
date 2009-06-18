@@ -16,7 +16,11 @@ package org.codehaus.plexus.redback.tests;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
 import org.codehaus.plexus.redback.rbac.Operation;
 import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
@@ -26,11 +30,7 @@ import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.redback.tests.utils.RBACDefaults;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 
 /**
  * AbstractRbacManagerTestCase
@@ -651,31 +651,33 @@ public abstract class AbstractRbacManagerTestCase
     {
         RBACManager manager = rbacManager;
 
-        manager.saveRole( getAdminRole() );
-        manager.saveRole( getProjectAdminRole() );
+        Role adminRole = manager.saveRole( getAdminRole() );
+        Role projectAdminRole = manager.saveRole( getProjectAdminRole() );
         Role developerRole = manager.saveRole( getDeveloperRole() );
 
         // Setup 3 roles.
-        String roleName = developerRole.getName();
-
         assertEquals( 3, manager.getAllRoles().size() );
 
-        // Setup User / Assignment with 1 role.
+        // Setup User / Assignment with 3 roles.
         String username = "bob";
 
         UserAssignment assignment = manager.createUserAssignment( username );
-        assignment.addRoleName( roleName );
+        assignment.addRoleName( developerRole.getName() );
+        assignment.addRoleName( projectAdminRole.getName() );
+        assignment.addRoleName( adminRole.getName() );
         assignment = manager.saveUserAssignment( assignment );
 
-        assertEquals( 1, assignment.getRoleNames().size() );
+        assertEquals( 3, assignment.getRoleNames().size() );
         assertEquals( 1, manager.getAllUserAssignments().size() );
         assertEquals( 3, manager.getAllRoles().size() );
+
+        afterSetup();
 
         // Get the List of Assigned Roles for user bob.
         Collection<Role> assignedRoles = manager.getAssignedRoles( username );
 
         assertNotNull( assignedRoles );
-        assertEquals( 1, assignedRoles.size() );
+        assertEquals( 3, assignedRoles.size() );
     }
 
     public void testGetAssignedPermissions()
@@ -770,6 +772,8 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 1, rbacManager.getAllUserAssignments().size() );
         assertEquals( 4, rbacManager.getAllRoles().size() );
         assertEquals( 6, rbacManager.getAllPermissions().size() );
+
+        afterSetup();
 
         // Get the List of Assigned Roles for user bob.
         Collection<Permission> assignedPermissions = rbacManager.getAssignedPermissions( username );
@@ -952,5 +956,13 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 0, eventTracker.removedRoleNames.size() );
         assertEquals( 3, eventTracker.addedPermissionNames.size() );
         assertEquals( 0, eventTracker.removedPermissionNames.size() );
+    }
+
+    /**
+     * Allows subclasses to hook code after a test case has finished it's setup
+     */
+    protected void afterSetup()
+    {
+        // do nothing
     }
 }

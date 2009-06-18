@@ -25,8 +25,10 @@ import javax.jdo.PersistenceManagerFactory;
 
 import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
 import org.codehaus.plexus.jdo.JdoFactory;
+import org.codehaus.plexus.redback.common.jdo.test.StoreManagerDebug;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.provider.test.AbstractUserManagerTestCase;
+import org.jpox.AbstractPersistenceManagerFactory;
 import org.jpox.SchemaTool;
 
 /**
@@ -38,6 +40,8 @@ import org.jpox.SchemaTool;
 public class JdoUserManagerTest
     extends AbstractUserManagerTestCase
 {
+    private StoreManagerDebug storeManager;
+
     protected void setUp()
         throws Exception
     {
@@ -68,18 +72,25 @@ public class JdoUserManagerTest
             System.setProperty( (String) entry.getKey(), (String) entry.getValue() );
         }
 
-        SchemaTool.createSchemaTables( new URL[] { getClass()
-            .getResource( "/org/codehaus/plexus/redback/users/jdo/package.jdo" ) }, new URL[] {}, null, false, null ); //$NON-NLS-1$
-
         PersistenceManagerFactory pmf = jdoFactory.getPersistenceManagerFactory();
 
         assertNotNull( pmf );
+
+        /* set our own Store Manager to allow counting SQL statements */
+        StoreManagerDebug.setup( (AbstractPersistenceManagerFactory) pmf );
+
+        SchemaTool.createSchemaTables( new URL[] { getClass()
+            .getResource( "/org/codehaus/plexus/redback/users/jdo/package.jdo" ) }, new URL[] {}, null, false, null ); //$NON-NLS-1$
 
         PersistenceManager pm = pmf.getPersistenceManager();
 
         pm.close();
 
         setUserManager( (JdoUserManager) lookup( UserManager.ROLE, "jdo" ) );
+
+        /* save the store manager to access the queries executed */
+        JdoUserManager userManager = (JdoUserManager) getUserManager();
+        storeManager = StoreManagerDebug.getConfiguredStoreManager( userManager.getPersistenceManager());
     }
 
 }
