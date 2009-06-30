@@ -52,7 +52,6 @@ import org.xml.sax.SAXException;
  *  3. The resource/role will be deleted in the tables (in order) SECURITY_USERASSIGNMENT_ROLENAMES, 
  *  SECURITY_ROLE_CHILDROLE_MAP, SECURITY_ROLE_PERMISSION_MAP, SECURITY_PERMISSIONS, SECURITY_RESOURCES and SECURITY_ROLES 
  *  if it doesn't exist in Archiva or/and Continuum resources list. <br/>
- *  4. The set constraints from step 3 will be removed.
  * </p>
  *  
  * To use this, execute the following command with the specified parameters below:
