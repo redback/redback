@@ -173,7 +173,8 @@ public class DeleteUnusedRoles
         }
         else
         {
-            // implement
+            System.out.println( "Application '" + application + "' is not recognized." );
+            return;
         }
 
         try
