@@ -49,9 +49,10 @@ import org.xml.sax.SAXException;
  *  1. The resources from Archiva (repositories) or Continuum (project groups) or both will be retrieved. <br/>
  *  2. The resources from SECURITY_RESOURCES table of users database will be retrieved and checked against the 
  *  retrieved resources from Archiva and Continuum. <br/>
- *  3. Constraints for cascade deletion of resources and roles will be set in the Redback users db tables. <br/>
- *  4. The resource will be deleted if it doesn't exist in Archiva or/and Continuum resources list. <br/>
- *  5. The set constraints from step 3 will be removed.
+ *  3. The resource/role will be deleted in the tables (in order) SECURITY_USERASSIGNMENT_ROLENAMES, 
+ *  SECURITY_ROLE_CHILDROLE_MAP, SECURITY_ROLE_PERMISSION_MAP, SECURITY_PERMISSIONS, SECURITY_RESOURCES and SECURITY_ROLES 
+ *  if it doesn't exist in Archiva or/and Continuum resources list. <br/>
+ *  4. The set constraints from step 3 will be removed.
  * </p>
  *  
  * To use this, execute the following command with the specified parameters below:
@@ -183,10 +184,6 @@ public class DeleteUnusedRoles
 
             usersConn = DriverManager.getConnection( args[2], args[3], args[4] );
 
-            System.out.println( "Adding cascade delete constraints.." );
-
-            addCascadeDeleteConstraints();
-
             System.out.println( "Removing unusued '" + application + "' resource roles.." );
 
             List<String> resourcesToBeDeleted = new ArrayList<String>();
@@ -206,6 +203,41 @@ public class DeleteUnusedRoles
             }
 
             PreparedStatement deleteRoles = null;
+            // delete user assignments;
+            for ( String resource : resourcesToBeDeleted )
+            {
+                deleteRoles = usersConn.prepareStatement( "DELETE from SECURITY_USERASSIGNMENT_ROLENAMES where STRING_ELE LIKE '% - " + resource + "'" );                
+                deleteRoles.execute();
+            }
+            deleteRoles.clearBatch();
+            
+         // delete child roles
+            for ( String resource : resourcesToBeDeleted )
+            {
+                deleteRoles = usersConn.prepareStatement( "DELETE from SECURITY_ROLE_CHILDROLE_MAP where STRING_ELE LIKE '% - " + resource + "'" );
+                deleteRoles.execute();
+            }
+            deleteRoles.clearBatch();
+            
+            
+         // delete role-permissions map
+            for ( String resource : resourcesToBeDeleted )
+            {
+                deleteRoles = usersConn.prepareStatement( "DELETE from SECURITY_ROLE_PERMISSION_MAP where NAME_OID LIKE '% - " + resource + "'" );
+                deleteRoles.execute();
+            }
+            deleteRoles.clearBatch();            
+            
+         // delete permissions
+            for ( String resource : resourcesToBeDeleted )
+            {
+                deleteRoles = usersConn.prepareStatement( "DELETE from SECURITY_PERMISSIONS where RESOURCE_IDENTIFIER_OID = '" + resource + "' OR " +
+                		"NAME LIKE '% - " + resource + "'" );
+                deleteRoles.execute();
+            }
+            deleteRoles.clearBatch();
+            
+          // delete resources
             for ( String resource : resourcesToBeDeleted )
             {
                 deleteRoles = usersConn.prepareStatement( "DELETE from SECURITY_RESOURCES where IDENTIFIER = ?" );
@@ -214,6 +246,7 @@ public class DeleteUnusedRoles
             }
             deleteRoles.clearBatch();
 
+          // delete roles
             for ( String resource : resourcesToBeDeleted )
             {
                 deleteRoles =
@@ -221,10 +254,6 @@ public class DeleteUnusedRoles
                 deleteRoles.execute();
             }
             deleteRoles.clearBatch();
-
-            System.out.println( "Removing cascade delete constraints.." );
-
-            removeCascadeDeleteConstraints();
 
             System.out.println( "Unused roles successfully deleted." );
         }
@@ -323,63 +352,5 @@ public class DeleteUnusedRoles
         }
 
         return projectGroups;
-    }
-
-    private static void addCascadeDeleteConstraints()
-        throws SQLException
-    {
-        PreparedStatement addConstraint =
-            usersConn.prepareStatement( "alter table SECURITY_PERMISSIONS add constraint SECURITY_PERMISSIONS_FK01_WITH_CASCADE_DELETE foreign key (RESOURCE_IDENTIFIER_OID) references SECURITY_RESOURCES (IDENTIFIER) ON DELETE CASCADE" );
-        addConstraint.execute();
-        addConstraint.clearBatch();
-
-        addConstraint =
-            usersConn.prepareStatement( "alter table SECURITY_ROLE_PERMISSION_MAP add constraint SECURITY_ROLE_PERMISSION_MAP_FK01_WITH_CASCADE_DELETE foreign key (NAME_EID) references SECURITY_PERMISSIONS (NAME) ON DELETE CASCADE" );
-        addConstraint.execute();
-        addConstraint.clearBatch();
-
-        addConstraint =
-            usersConn.prepareStatement( "alter table SECURITY_ROLE_PERMISSION_MAP add constraint SECURITY_ROLE_PERMISSION_MAP_FK02_WITH_CASCADE_DELETE foreign key (NAME_OID) references SECURITY_ROLES  (NAME) ON DELETE CASCADE" );
-        addConstraint.execute();
-        addConstraint.clearBatch();
-
-        addConstraint =
-            usersConn.prepareStatement( "alter table SECURITY_ROLE_CHILDROLE_MAP add constraint SECURITY_ROLE_CHILDROLE_MAP_FK01_WITH_CASCADE_DELETE foreign key (NAME_OID) references SECURITY_ROLES (NAME) ON DELETE CASCADE" );
-        addConstraint.execute();
-        addConstraint.clearBatch();
-
-        addConstraint =
-            usersConn.prepareStatement( "alter table SECURITY_USERASSIGNMENT_ROLENAMES add constraint SECURITY_USERASSIGNMENT_ROLENAMES_FK01_WITH_CASCADE_DELETE foreign key (STRING_ELE) references SECURITY_ROLES (NAME) ON DELETE CASCADE" );
-        addConstraint.execute();
-        addConstraint.clearBatch();
-    }
-
-    private static void removeCascadeDeleteConstraints()
-        throws SQLException
-    {
-        PreparedStatement deleteConstraint =
-            usersConn.prepareStatement( "alter table SECURITY_PERMISSIONS drop FOREIGN KEY SECURITY_PERMISSIONS_FK01_WITH_CASCADE_DELETE" );
-        deleteConstraint.execute();
-        deleteConstraint.clearBatch();
-
-        deleteConstraint =
-            usersConn.prepareStatement( "alter table SECURITY_ROLE_PERMISSION_MAP drop FOREIGN KEY SECURITY_ROLE_PERMISSION_MAP_FK01_WITH_CASCADE_DELETE" );
-        deleteConstraint.execute();
-        deleteConstraint.clearBatch();
-
-        deleteConstraint =
-            usersConn.prepareStatement( "alter table SECURITY_ROLE_PERMISSION_MAP drop FOREIGN KEY SECURITY_ROLE_PERMISSION_MAP_FK02_WITH_CASCADE_DELETE" );
-        deleteConstraint.execute();
-        deleteConstraint.clearBatch();
-
-        deleteConstraint =
-            usersConn.prepareStatement( "alter table SECURITY_ROLE_CHILDROLE_MAP drop FOREIGN KEY SECURITY_ROLE_CHILDROLE_MAP_FK01_WITH_CASCADE_DELETE" );
-        deleteConstraint.execute();
-        deleteConstraint.clearBatch();
-
-        deleteConstraint =
-            usersConn.prepareStatement( "alter table SECURITY_USERASSIGNMENT_ROLENAMES drop FOREIGN KEY SECURITY_USERASSIGNMENT_ROLENAMES_FK01_WITH_CASCADE_DELETE" );
-        deleteConstraint.execute();
-        deleteConstraint.clearBatch();
     }
 }
