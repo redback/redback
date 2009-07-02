@@ -208,7 +208,8 @@ public class DeleteUnusedRoles
                 deleteRoles = usersConn.prepareStatement( "DELETE from SECURITY_USERASSIGNMENT_ROLENAMES where STRING_ELE LIKE '% - " + resource + "'" );                
                 deleteRoles.execute();
             }
-            deleteRoles.clearBatch();
+            
+            clearSQL( deleteRoles );
             
          // delete child roles
             for ( String resource : resourcesToBeDeleted )
@@ -216,7 +217,7 @@ public class DeleteUnusedRoles
                 deleteRoles = usersConn.prepareStatement( "DELETE from SECURITY_ROLE_CHILDROLE_MAP where STRING_ELE LIKE '% - " + resource + "'" );
                 deleteRoles.execute();
             }
-            deleteRoles.clearBatch();
+            clearSQL( deleteRoles );
             
             
          // delete role-permissions map
@@ -225,7 +226,7 @@ public class DeleteUnusedRoles
                 deleteRoles = usersConn.prepareStatement( "DELETE from SECURITY_ROLE_PERMISSION_MAP where NAME_OID LIKE '% - " + resource + "'" );
                 deleteRoles.execute();
             }
-            deleteRoles.clearBatch();            
+            clearSQL( deleteRoles );            
             
          // delete permissions
             for ( String resource : resourcesToBeDeleted )
@@ -234,7 +235,7 @@ public class DeleteUnusedRoles
                 		"NAME LIKE '% - " + resource + "'" );
                 deleteRoles.execute();
             }
-            deleteRoles.clearBatch();
+            clearSQL( deleteRoles );
             
           // delete resources
             for ( String resource : resourcesToBeDeleted )
@@ -243,7 +244,7 @@ public class DeleteUnusedRoles
                 deleteRoles.setString( 1, resource );
                 deleteRoles.execute();
             }
-            deleteRoles.clearBatch();
+            clearSQL( deleteRoles );
 
           // delete roles
             for ( String resource : resourcesToBeDeleted )
@@ -252,7 +253,7 @@ public class DeleteUnusedRoles
                     usersConn.prepareStatement( "DELETE from SECURITY_ROLES where NAME LIKE '% - " + resource + "'" );
                 deleteRoles.execute();
             }
-            deleteRoles.clearBatch();
+            clearSQL( deleteRoles );
 
             System.out.println( "Unused roles successfully deleted." );
         }
@@ -263,6 +264,15 @@ public class DeleteUnusedRoles
         finally
         {
             usersConn.close();
+        }
+    }
+
+    private static void clearSQL( PreparedStatement deleteRoles )
+        throws SQLException
+    {
+        if( deleteRoles != null )
+        {
+            deleteRoles.clearBatch();
         }
     }
 
