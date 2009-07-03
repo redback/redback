@@ -313,7 +313,10 @@ public class DefaultRoleTemplateProcessor
                         changed = true;
                     }
                 }
-                for ( Permission permission : role.getPermissions() )
+
+                // Copy list to avoid concurrent modifications
+                List<Permission> oldPermissions = new ArrayList<Permission>( role.getPermissions() );
+                for ( Permission permission : oldPermissions )
                 {
                     if ( !permissions.contains( permission ) )
                     {
@@ -342,7 +345,9 @@ public class DefaultRoleTemplateProcessor
 
         if ( template.getPermissions() != null )
         {
-            for ( ModelPermission profilePermission : (List<ModelPermission>) template.getPermissions() )
+            // copy list to avoid concurrent modifications
+            List<ModelPermission> templatePermissions = new ArrayList<ModelPermission>( template.getPermissions() );
+            for ( ModelPermission profilePermission : templatePermissions )
             {
                 try
                 {
