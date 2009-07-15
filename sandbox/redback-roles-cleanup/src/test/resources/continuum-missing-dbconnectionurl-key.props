@@ -1,0 +1,6 @@
+continuum.db.driverClassName.1=com.example.MockDriverClass
+continuum.db.username.1=user
+continuum.db.password.1=password
+continuum.db.driverClassName.2=com.example.MockDriverClass2
+continuum.db.username.2=user
+continuum.db.password.2=password

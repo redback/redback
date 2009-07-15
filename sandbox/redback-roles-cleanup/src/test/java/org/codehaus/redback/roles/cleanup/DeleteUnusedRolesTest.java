@@ -19,7 +19,9 @@ package org.codehaus.redback.roles.cleanup;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.prefs.InvalidPreferencesFormatException;
+import java.security.InvalidParameterException;
 
 import org.codehaus.redback.roles.cleanup.DeleteUnusedRoles;
 
@@ -117,6 +119,109 @@ public class DeleteUnusedRolesTest
             fail( "An IllegalArgumentException should have been thrown." );
         }
         catch ( IllegalArgumentException e )
+        {
+            assertTrue( true );
+        }
+    }
+
+    public void testLoadContinuumResourcesPropertiesFileNotFound()
+        throws Exception
+    {
+        try
+        {
+            String props = getBasedir() + "/target/test-classes/non-existing.props";
+            DeleteUnusedRoles.loadContinuumResources( props, new ArrayList<String>(), new ArrayList<String>() );            
+            fail( "An IOException should have been thrown." );
+        }
+        catch( IOException e )
+        {
+            assertTrue( true );
+        }
+    }
+
+    public void testLoadContinuumResourcesWithInvalidPropertiesKeys()
+        throws Exception
+    {
+        String props = getBasedir() + "/target/test-classes/continuum-invalid-keys.props";
+        List<String> activeResources = new ArrayList<String>();
+        DeleteUnusedRoles.loadContinuumResources( props, new ArrayList<String>(), activeResources );
+
+        assertTrue( activeResources.isEmpty() );
+    }
+
+    public void testLoadContinuumResourcesWithMissingDbConnectionUrlKey()
+        throws Exception
+    {
+        String props = getBasedir() + "/target/test-classes/continuum-missing-dbconnectionurl-key.props";
+        List<String> activeResources = new ArrayList<String>();
+        DeleteUnusedRoles.loadContinuumResources( props, new ArrayList<String>(), activeResources );
+
+        assertTrue( activeResources.isEmpty() );
+    }
+
+    public void testInvalidRequiredParametersWhenApplicationIsAll()
+        throws Exception
+    {
+        try
+        {
+            String[] args =
+                new String[]{"all", "com.example.MockDriverClass", "/database/mock/url", "username", "password", ""};
+
+            DeleteUnusedRoles.main( args );
+
+            fail( "An InvalidParameterException should have been thrown." );
+        }
+        catch ( InvalidParameterException e )
+        {
+            assertTrue( true );
+        }
+
+        try
+        {
+            String[] args = new String[]{"all", "com.example.MockDriverClass", "/database/mock/url", "username",
+                "password", "/path/to/archiva/config", ""};
+
+            DeleteUnusedRoles.main( args );
+
+            fail( "An InvalidParameterException should have been thrown." );
+        }
+        catch ( InvalidParameterException e )
+        {
+            assertTrue( true );
+        }
+    }
+
+    public void testInvalidRequiredParametersWhenApplicationIsArchiva()
+        throws Exception
+    {
+        try
+        {
+            String[] args =
+                new String[]{"archiva", "com.example.MockDriverClass", "/database/mock/url", "username", "password", ""};
+
+            DeleteUnusedRoles.main( args );
+
+            fail( "An InvalidParameterException should have been thrown." );
+        }
+        catch ( InvalidParameterException e )
+        {
+            assertTrue( true );
+        }
+    }
+
+    public void testInvalidRequiredParametersWhenApplicationIsContinuum()
+        throws Exception
+    {
+        try
+        {
+            String[] args =
+                new String[]{"continuum", "com.example.MockDriverClass", "/database/mock/url", "username", "password", "/path/to/archivaConfig", ""};
+
+            DeleteUnusedRoles.main( args );
+
+            fail( "An InvalidParameterException should have been thrown." );
+        }
+        catch ( InvalidParameterException e )
         {
             assertTrue( true );
         }

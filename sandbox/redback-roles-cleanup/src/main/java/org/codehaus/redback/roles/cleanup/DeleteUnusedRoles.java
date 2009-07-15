@@ -18,6 +18,7 @@ package org.codehaus.redback.roles.cleanup;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -26,7 +27,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+import java.util.Set;
+import java.util.Iterator;
 import java.util.prefs.InvalidPreferencesFormatException;
+import java.security.InvalidParameterException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -43,37 +48,34 @@ import org.xml.sax.SAXException;
 
 /**
  * Deletes unused resources, roles and related data from the Redback users database.
- * 
+ *
  * <p>
  * <b>How it works:</b><br/>
  *  1. The resources from Archiva (repositories) or Continuum (project groups) or both will be retrieved. <br/>
- *  2. The resources from SECURITY_RESOURCES table of users database will be retrieved and checked against the 
+ *  2. The resources from SECURITY_RESOURCES table of users database will be retrieved and checked against the
  *  retrieved resources from Archiva and Continuum. <br/>
- *  3. The resource/role will be deleted in the tables (in order) SECURITY_USERASSIGNMENT_ROLENAMES, 
- *  SECURITY_ROLE_CHILDROLE_MAP, SECURITY_ROLE_PERMISSION_MAP, SECURITY_PERMISSIONS, SECURITY_RESOURCES and SECURITY_ROLES 
+ *  3. The resource/role will be deleted in the tables (in order) SECURITY_USERASSIGNMENT_ROLENAMES,
+ *  SECURITY_ROLE_CHILDROLE_MAP, SECURITY_ROLE_PERMISSION_MAP, SECURITY_PERMISSIONS, SECURITY_RESOURCES and SECURITY_ROLES
  *  if it doesn't exist in Archiva or/and Continuum resources list. <br/>
  * </p>
- *  
+ *
  * To use this, execute the following command with the specified parameters below:
- * 
+ *
  * <p>
  * <i>java -jar redback-roles-cleanup-${version}.jar [PARAMETERS]</i>
  * </p>
- * 
+ *
  * <p>
  * <b>Parameters:</b><br/>
  * 1. Application name - specify archiva, continuum or all<br/>
- * 2. JDBC driver class name <br/>
+ * 2. JDBC driver class name for Redback users database <br/>
  * 3. Redback users database connection URL <br/>
  * 4. Redback users database username <br/>
  * 5. Redback users database password <br/>
- * 6. Path to Archiva configuration file (if application is continuum, just set this value to "") <br/> 
- * 7. Continuum builds database connection URL <br/>
- * 8. Continuum builds database username <br/>
- * 9. Continuum builds database password <br/>
- * 10. JDBC driver class name for Continuum (set this parameter only if Continuum database is using a different DBMS)
+ * 6. Path to Archiva configuration file (if application is continuum, just set this value to "") <br/>
+ * 7. Path to Continuum database connection properties file <br/> 
  * </p>
- * 
+ *
  * <p>
  * <b>Notes:</b><br/>
  * - Make sure that you add the JDBC driver in the classpath either by setting -cp [JDBC driver jar] when executing
@@ -81,39 +83,39 @@ import org.xml.sax.SAXException;
  * - When Archiva and Continuum are configured to share their own database, make sure to specify <i>all</i> for
  * the application name parameter or else you might accidentally delete used resource roles from the other application.
  * </p>
- * 
+ *
  * <p>
  * <b>Sample Usages:</b>
  * <br/>
- * 
+ *
  * 1. Users database is used by Continuum only: <br/>
- * 
+ *
  * <p>
- * <i>java -jar redback-roles-cleanup-${version}.jar continuum com.mysql.jdbc.Driver 
- *         jdbc:mysql://localhost:3306/users usersdbUsername usersdbPassword "" 
+ * <i>java -jar redback-roles-cleanup-${version}.jar continuum com.mysql.jdbc.Driver
+ *         jdbc:mysql://localhost:3306/users usersdbUsername usersdbPassword ""
  *         jdbc:mysql://localhost:3306/continuum continuumdbUsername continuumDbPassword
  * </i>
  * </p>
  *
  * 2. Users database is used by Archiva only: <br/>
- * 
+ *
  * <p>
- * <i>java -jar redback-roles-cleanup-${version}.jar archiva com.mysql.jdbc.Driver 
+ * <i>java -jar redback-roles-cleanup-${version}.jar archiva com.mysql.jdbc.Driver
  *         jdbc:mysql://localhost:3306/users usersdbUsername usersdbPassword /path/to/archiva.xml
  * </i>
  * </p>
- * 
+ *
  * 3. Archiva and Continuum are sharing one users database: <br/>
- * 
+ *
  * <p>
- * <i>java -jar redback-roles-cleanup-${version}.jar all com.mysql.jdbc.Driver 
- *         jdbc:mysql://localhost:3306/users usersdbUsername usersdbPassword /path/to/archiva.xml 
+ * <i>java -jar redback-roles-cleanup-${version}.jar all com.mysql.jdbc.Driver
+ *         jdbc:mysql://localhost:3306/users usersdbUsername usersdbPassword /path/to/archiva.xml
  *         jdbc:mysql://localhost:3306/continuum continuumdbUsername continuumDbPassword
  * </i>
  * </p>
- *  
+ *
  * </p>
- * 
+ *
  * @author <a href="mailto:oching@apache.org">Maria Odea Ching</a>
  */
 public class DeleteUnusedRoles
@@ -122,9 +124,19 @@ public class DeleteUnusedRoles
 
     private static Connection usersConn;
 
+    private static final String KEY_PREFIX = "continuum.db";
+
+    private static final String KEY_DRIVER_CLASSNAME = "driverClassName";
+
+    private static final String KEY_DB_URL = "url";
+
+    private static final String KEY_USERNAME = "username";
+
+    private static final String KEY_PASSWORD = "password";
+
     /**
      * Main method.
-     * 
+     *
      * @param args
      * @throws SQLException
      * @throws IOException
@@ -144,37 +156,64 @@ public class DeleteUnusedRoles
     {
         String application = args[0];
         List<String> activeResources = new ArrayList<String>();
-
-        Class.forName( args[1] );
+        List<String> loadedDriverClasses = new ArrayList<String>();
 
         if ( application.equals( "archiva" ) )
         {
             String archivaConfigFile = args[5];
+
+            if( "".equals( archivaConfigFile ) )
+            {
+                throw new InvalidParameterException(
+                    "Required paramater 'Archiva configuration file' should not be empty." );
+            }
+
             activeResources = getRepositories( archivaConfigFile );
         }
         else if ( application.equals( "continuum" ) )
         {
-            if ( args.length == 10 )
+            String props = args[6];
+
+            if( "".equals( props ) )
             {
-                Class.forName( args[9] );
+                throw new InvalidParameterException(
+                    "Required paramater 'Continuum database connection properties file' should not be empty." );
             }
-            activeResources = getProjectGroups( args[6], args[7], args[8] );
+
+            loadContinuumResources( props, loadedDriverClasses, activeResources );
+
         }
         else if ( application.equals( "all" ) )
         {
             String archivaConfigFile = args[5];
+
+            if( "".equals( archivaConfigFile ) )
+            {
+                throw new InvalidParameterException(
+                    "Required paramater 'Archiva configuration file' should not be empty." );
+            }
+
+            String props = args[6];
+            if( "".equals( props ) )
+            {
+                throw new InvalidParameterException(
+                    "Required paramater 'Continuum database connection properties file' should not be empty." );
+            }
+
             activeResources = getRepositories( archivaConfigFile );
 
-            if ( args.length == 10 )
-            {
-                Class.forName( args[9] );
-            }
-            activeResources.addAll( getProjectGroups( args[6], args[7], args[8] ) );
+            loadContinuumResources( props, loadedDriverClasses, activeResources );
         }
         else
         {
             System.out.println( "Application '" + application + "' is not recognized." );
             return;
+        }
+
+        if( !loadedDriverClasses.contains( args[1] ) )
+        {
+            Class.forName( args[1] );
+            loadedDriverClasses.add( args[1] );
         }
 
         try
@@ -195,7 +234,7 @@ public class DeleteUnusedRoles
                 String resource = result.getString( 1 );
                 if ( !activeResources.contains( resource ) && !resource.equals( "*" ) &&
                     !resource.equals( "${username}" ) )
-                { 
+                {
                     System.out.println( resource );
                     resourcesToBeDeleted.add( resource );
                 }
@@ -205,12 +244,12 @@ public class DeleteUnusedRoles
             // delete user assignments;
             for ( String resource : resourcesToBeDeleted )
             {
-                deleteRoles = usersConn.prepareStatement( "DELETE from SECURITY_USERASSIGNMENT_ROLENAMES where STRING_ELE LIKE '% - " + resource + "'" );                
+                deleteRoles = usersConn.prepareStatement( "DELETE from SECURITY_USERASSIGNMENT_ROLENAMES where STRING_ELE LIKE '% - " + resource + "'" );
                 deleteRoles.execute();
             }
-            
+
             clearSQL( deleteRoles );
-            
+
          // delete child roles
             for ( String resource : resourcesToBeDeleted )
             {
@@ -218,16 +257,16 @@ public class DeleteUnusedRoles
                 deleteRoles.execute();
             }
             clearSQL( deleteRoles );
-            
-            
+
+
          // delete role-permissions map
             for ( String resource : resourcesToBeDeleted )
             {
                 deleteRoles = usersConn.prepareStatement( "DELETE from SECURITY_ROLE_PERMISSION_MAP where NAME_OID LIKE '% - " + resource + "'" );
                 deleteRoles.execute();
             }
-            clearSQL( deleteRoles );            
-            
+            clearSQL( deleteRoles );
+
          // delete permissions
             for ( String resource : resourcesToBeDeleted )
             {
@@ -236,7 +275,7 @@ public class DeleteUnusedRoles
                 deleteRoles.execute();
             }
             clearSQL( deleteRoles );
-            
+
           // delete resources
             for ( String resource : resourcesToBeDeleted )
             {
@@ -264,6 +303,48 @@ public class DeleteUnusedRoles
         finally
         {
             usersConn.close();
+        }
+    }
+
+    protected static void loadContinuumResources( String props, List<String> loadedDriverClasses,
+                                               List<String> activeResources )
+        throws IOException, ClassNotFoundException, SQLException
+    {
+        Properties dbConnectionProps = getProperties( props );
+        Set keys = dbConnectionProps.keySet();
+
+        for( Iterator iter = keys.iterator(); iter.hasNext(); )
+        {
+            String key = ( String ) iter.next();
+            String[] parts = key.split( "." );
+            if( parts.length != 4 )
+            {
+                continue;
+            }
+            else
+            {
+                String driverClassName = parts[2];
+                if( driverClassName.equals( KEY_DRIVER_CLASSNAME ) )
+                {
+                    if( !loadedDriverClasses.contains( driverClassName ) )
+                    {
+                        Class.forName( driverClassName );
+                        loadedDriverClasses.add( driverClassName );
+                    }
+
+                    String num = parts[4];
+                    String dbConnectionUrl = dbConnectionProps.getProperty( KEY_PREFIX + "." + KEY_DB_URL + "." + num );
+                    if( dbConnectionUrl == null || "".equals( dbConnectionUrl ) )
+                    {
+                        continue;
+                    }
+
+                    String dbUsername = dbConnectionProps.getProperty( KEY_PREFIX + "." + KEY_USERNAME + "." + num );
+                    String dbPassword = dbConnectionProps.getProperty( KEY_PREFIX + "." + KEY_PASSWORD + "." + num );
+
+                    activeResources.addAll( getProjectGroups( dbConnectionUrl, dbUsername, dbPassword ) );
+                }
+            }
         }
     }
 
@@ -361,5 +442,16 @@ public class DeleteUnusedRoles
         }
 
         return projectGroups;
+    }
+
+    private static Properties getProperties( String props )
+        throws IOException
+    {
+        File propsFile = new File( props );
+
+        Properties propsFromFile = new Properties();
+        propsFromFile.load( new FileInputStream( propsFile) );
+
+        return propsFromFile;
     }
 }
