@@ -349,24 +349,28 @@ public class DeleteUnusedRoles
         for( Iterator iter = keys.iterator(); iter.hasNext(); )
         {
             String key = ( String ) iter.next();
-            String[] parts = key.split( "." );
+            String[] parts = key.split( "\\." );
+
             if( parts.length != 4 )
             {
+                System.out.println( "Not enough parts, skipping property.." );
                 continue;
             }
             else
             {
-                String driverClassName = parts[2];
-                if( driverClassName.equals( KEY_DRIVER_CLASSNAME ) )
+                if( KEY_DRIVER_CLASSNAME.equals( parts[2] ) )
                 {
+                    String driverClassName = dbConnectionProps.getProperty( key );
+
                     if( !loadedDriverClasses.contains( driverClassName ) )
                     {
                         Class.forName( driverClassName );
                         loadedDriverClasses.add( driverClassName );
                     }
 
-                    String num = parts[4];
+                    String num = parts[3];
                     String dbConnectionUrl = dbConnectionProps.getProperty( KEY_PREFIX + "." + KEY_DB_URL + "." + num );
+
                     if( dbConnectionUrl == null || "".equals( dbConnectionUrl ) )
                     {
                         continue;
@@ -454,7 +458,7 @@ public class DeleteUnusedRoles
 
         try
         {
-            System.out.println( "Connecting to Continuum database.." );
+            System.out.println( "\nConnecting to Continuum database '" + jdbcUrl + "'.." );
 
             continuumConn = DriverManager.getConnection( jdbcUrl, username, password );
 
@@ -464,9 +468,13 @@ public class DeleteUnusedRoles
                 continuumConn.createStatement( ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY );
             ResultSet result = stmt.executeQuery( "SELECT NAME from PROJECTGROUP" );
 
+            System.out.println( "Project Groups retrieved:" );
             while ( result.next() )
             {
-                projectGroups.add( result.getString( 1 ) );
+                String pGroup = result.getString( 1 );
+                projectGroups.add( pGroup );
+
+                System.out.println( pGroup );
             }
         }
         finally

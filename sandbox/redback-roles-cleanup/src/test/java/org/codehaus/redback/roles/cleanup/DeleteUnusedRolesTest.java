@@ -154,7 +154,11 @@ public class DeleteUnusedRolesTest
     {
         String props = getBasedir() + "/target/test-classes/continuum-missing-dbconnectionurl-key.props";
         List<String> activeResources = new ArrayList<String>();
-        DeleteUnusedRoles.loadContinuumResources( props, new ArrayList<String>(), activeResources );
+        List<String> drivers = new ArrayList<String>();
+        drivers.add( "com.example.MockDriverClass" );
+        drivers.add( "com.example.MockDriverClass2" );
+
+        DeleteUnusedRoles.loadContinuumResources( props, drivers, activeResources );
 
         assertTrue( activeResources.isEmpty() );
     }
