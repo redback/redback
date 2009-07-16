@@ -66,13 +66,13 @@ continuum.db.password.${count}
 
 +----+
 # Continuum database instance 1
-continuum.db.drivelClassName.1=com.mysql.jdbc.Driver
+continuum.db.driverClassName.1=com.mysql.jdbc.Driver
 continuum.db.url.1=jdbc:mysql://localhost:3306/continuum
 continuum.db.username.1=myusername
 continuum.db.password.1=mypassword
 
 # Continuum database instance 2
-continuum.db.drivelClassName.2=com.mysql.jdbc.Driver
+continuum.db.driverClassName.2=com.mysql.jdbc.Driver
 continuum.db.url.2=jdbc:mysql://example.com:3306/continuum
 continuum.db.username.2=anotherusername
 continuum.db.password.2=anotherpassword

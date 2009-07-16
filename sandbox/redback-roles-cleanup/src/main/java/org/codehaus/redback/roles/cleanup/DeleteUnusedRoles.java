@@ -95,13 +95,13 @@ import org.xml.sax.SAXException;
  * Example: <br/>
  *
  * # Continuum database instance 1 <br/>
- * continuum.db.drivelClassName.1=com.mysql.jdbc.Driver <br/>
+ * continuum.db.driverClassName.1=com.mysql.jdbc.Driver <br/>
  * continuum.db.url.1=jdbc:mysql://localhost:3306/continuum  <br/>
  * continuum.db.username.1=myusername <br/>
  * continuum.db.password.1=mypassword <br/>
  *
  * # Continuum database instance 2 <br/>
- * continuum.db.drivelClassName.2=com.mysql.jdbc.Driver <br/>
+ * continuum.db.driverClassName.2=com.mysql.jdbc.Driver <br/>
  * continuum.db.url.2=jdbc:mysql://example.com:3306/continuum <br/>
  * continuum.db.username.2=anotherusername <br/>
  * continuum.db.password.2=anotherpassword <br/>
