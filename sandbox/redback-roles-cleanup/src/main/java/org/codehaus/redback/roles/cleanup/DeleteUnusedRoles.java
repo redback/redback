@@ -77,11 +77,44 @@ import org.xml.sax.SAXException;
  * </p>
  *
  * <p>
+ * The Continuum database connection properties file is where the connection properties of all Continuum databases to be
+ * queried are put. It should contain the following 4 key-value pairs for each database instance.
+ * </p>
+ *
+ * <p>
+ * continuum.db.driverClassName.${count} <br/>
+ * continuum.db.url.${count} <br/>
+ * continuum.db.username.${count} <br/>
+ * continuum.db.password.${count} <br/>
+ * <br/>
+ * ${count} - index for each database instance. The set of keys above must have the same count as this would be used to
+ * determine which properties are associated to the database instance. <br/>
+ * </p>
+ *
+ * <p>
+ * Example: <br/>
+ *
+ * # Continuum database instance 1 <br/>
+ * continuum.db.drivelClassName.1=com.mysql.jdbc.Driver <br/>
+ * continuum.db.url.1=jdbc:mysql://localhost:3306/continuum  <br/>
+ * continuum.db.username.1=myusername <br/>
+ * continuum.db.password.1=mypassword <br/>
+ *
+ * # Continuum database instance 2 <br/>
+ * continuum.db.drivelClassName.2=com.mysql.jdbc.Driver <br/>
+ * continuum.db.url.2=jdbc:mysql://example.com:3306/continuum <br/>
+ * continuum.db.username.2=anotherusername <br/>
+ * continuum.db.password.2=anotherpassword <br/>
+ *
+ * </p>
+ *
+ * <p>
  * <b>Notes:</b><br/>
- * - Make sure that you add the JDBC driver in the classpath either by setting -cp [JDBC driver jar] when executing
+ * - Make sure that you add the JDBC driver(s) in the classpath either by setting -cp [JDBC driver jar] when executing
  * the redback roles cleanup utility jar or if that doesn't work, put the JDBC driver jar in ${JAVA_HOME}/jre/lib/ext <br/>
  * - When Archiva and Continuum are configured to share their own database, make sure to specify <i>all</i> for
  * the application name parameter or else you might accidentally delete used resource roles from the other application.
+ * - When connecting to a remote Continuum database, make sure that the server is configured to accept remote connections.
  * </p>
  *
  * <p>
@@ -93,7 +126,7 @@ import org.xml.sax.SAXException;
  * <p>
  * <i>java -jar redback-roles-cleanup-${version}.jar continuum com.mysql.jdbc.Driver
  *         jdbc:mysql://localhost:3306/users usersdbUsername usersdbPassword ""
- *         jdbc:mysql://localhost:3306/continuum continuumdbUsername continuumDbPassword
+ *         /path/to/continuum.props
  * </i>
  * </p>
  *
@@ -110,7 +143,7 @@ import org.xml.sax.SAXException;
  * <p>
  * <i>java -jar redback-roles-cleanup-${version}.jar all com.mysql.jdbc.Driver
  *         jdbc:mysql://localhost:3306/users usersdbUsername usersdbPassword /path/to/archiva.xml
- *         jdbc:mysql://localhost:3306/continuum continuumdbUsername continuumDbPassword
+ *         /path/to/continuum.props
  * </i>
  * </p>
  *
