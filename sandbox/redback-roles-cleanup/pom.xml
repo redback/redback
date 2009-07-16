@@ -5,7 +5,8 @@
   <artifactId>redback-roles-cleanup</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>Utility jar for deleting unused resources, roles and related data from the Redback users database.</name>
+  <name>Redback Roles Cleanup Utility</name>
+  <description>Utility jar for deleting unused resources, roles and related data from the Redback users database.</description>
   <url>http://redback.codehaus.org</url>
   <dependencies>
     <dependency>
