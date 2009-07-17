@@ -255,7 +255,7 @@ public class DeleteUnusedRoles
 
             usersConn = DriverManager.getConnection( args[2], args[3], args[4] );
 
-            System.out.println( "Removing unusued '" + application + "' resource roles.." );
+            System.out.println( "Removing unused '" + application + "' resource roles.." );
 
             List<String> resourcesToBeDeleted = new ArrayList<String>();
             Statement stmt = usersConn.createStatement( ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY );
