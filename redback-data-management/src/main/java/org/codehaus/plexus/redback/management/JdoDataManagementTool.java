@@ -294,6 +294,9 @@ public class JdoDataManagementTool
         throws FileNotFoundException
     {
         File f = new File( directory, file );
+        File parentFile = f.getParentFile();
+        parentFile.mkdirs();
+
         FileOutputStream out = new FileOutputStream( f );
         return new OutputStreamWriter( out, Charset.forName( encoding ) );
     }
