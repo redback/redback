@@ -178,4 +178,8 @@ public class JdoKeyManager
         return jdoFactory;
     }
 
+    public void setJdoFactory( JdoFactory jdoFactory )
+    {
+        this.jdoFactory = jdoFactory;
+    }
 }

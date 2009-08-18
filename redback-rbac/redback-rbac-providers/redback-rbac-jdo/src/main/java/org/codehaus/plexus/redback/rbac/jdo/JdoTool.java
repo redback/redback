@@ -491,4 +491,9 @@ public class JdoTool
     {
         return jdoFactory;
     }
+
+    public void setJdoFactory( JdoFactory jdoFactory )
+    {
+        this.jdoFactory = jdoFactory;
+    }
 }

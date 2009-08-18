@@ -69,4 +69,13 @@ public class UserConfigurableJdoFactory
         super.initialize();
     }
 
+    public UserConfiguration getConfig()
+    {
+        return config;
+    }
+
+    public void setConfig( UserConfiguration config )
+    {
+        this.config = config;
+    }
 }

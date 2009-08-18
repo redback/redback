@@ -467,6 +467,11 @@ public class JdoUserManager
         return jdoFactory;
     }
 
+    public void setJdoFactory( JdoFactory jdoFactory )
+    {
+        this.jdoFactory = jdoFactory;
+    }
+
     public UserSecurityPolicy getUserSecurityPolicy()
     {
         return userSecurityPolicy;

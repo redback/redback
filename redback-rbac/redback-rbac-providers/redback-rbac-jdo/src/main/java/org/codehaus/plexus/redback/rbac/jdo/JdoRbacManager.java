@@ -670,4 +670,9 @@ public class JdoRbacManager
     {
         return jdo;
     }
+
+    public void setJdo( JdoTool jdo )
+    {
+        this.jdo = jdo;
+    }
 }
