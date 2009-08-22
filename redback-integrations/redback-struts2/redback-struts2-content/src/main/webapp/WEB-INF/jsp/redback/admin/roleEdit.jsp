@@ -32,9 +32,9 @@
 
   <s:actionerror/>
 
-  <form action="rolesave.action" name="rolesave">
-    <input type="hidden" name="name" value="${name}"/>
-    <input type="hidden" name="usersList"/>
+  <s:form action="rolesave" name="rolesave" namespace="/security">
+    <s:hidden name="name"/>
+    <s:hidden name="usersList"/>
     <div class="axial">
       <table border="1" cellspacing="2" cellpadding="3" width="100%">
         <s:label label="%{getText('name')}" name="name"/>
@@ -42,9 +42,9 @@
       </table>
     </div>
     <div class="functnbar3">
-        <input type="submit" value="Save"/>
+        <s:submit value="%{getText('save')}" />
     </div>
-  </form>
+  </s:form>
 
   <h3><s:text name="role.model.parent.roles"/></h3>
   <c:if test="${empty parentRoleNames}">
@@ -81,6 +81,10 @@
     <s:text name="role.create.no.permissions.defined"/>
   </c:if>
   <c:if test="${!empty permissions}">
+    <!-- ec on redback should not be dependent on the resource bundle of the project using it -->
+	<s:set name="role_name" value="%{getText('name')}"/>
+	<s:set name="role_operation" value="%{getText('role.operation')}"/>
+	<s:set name="role_resource" value="%{getText('role.resource')}"/>
     <ec:table var="permission"
         items="permissions"
         cellspacing="2"
@@ -91,9 +95,9 @@
         showStatusBar="false"
         filterable="false">
       <ec:row>
-        <ec:column property="name" title="Name"/>
-        <ec:column property="operation.name" title="Operation"/>
-        <ec:column property="resource.identifier" title="Resource"/>
+        <ec:column property="name" title="${role_name}"/>
+        <ec:column property="operation.name" title="${role_operation}"/>
+        <ec:column property="resource.identifier" title="${role_resource}"/>
       </ec:row>
     </ec:table>
   </c:if>
@@ -114,30 +118,30 @@
   <h4><s:text name="role.edit.users.defined.in.current.role"/></h4>
   <form name="roleusers">
     <input type="hidden" name="name" value="${name}"/>
-  <table>
+  <table style="width:100%">
     <tr>
-      <td>
-        <select size="20" multiple="multiple" id="allUsers" name="availableUsers">
+      <td style="width:40%">
+        <select size="20" multiple="multiple" id="allUsers" name="availableUsers" style="width: 100%">
           <s:iterator id="user" value="allUsers">
             <option value="${user.username}">${user.fullName} - ${user.username}</option>
           </s:iterator>
         </select>
       </td>
-      <td>
+      <td style="text-align: center">
         <input type="submit" value="--&gt;" onclick="this.form.action='roleusersadd.action'; this.form.submit();"/>
         <br/>
         <input type="submit" value="&lt;--" onclick="this.form.action='roleusersremove.action'; this.form.submit();"/>
       </td>
-      <td>
+      <td style="width:40%">
         <c:if test="${!empty users}">
-          <select size="20" multiple="multiple" id="users" name="currentUsers">
+          <select size="20" multiple="multiple" id="users" name="currentUsers" style="width: 100%">
             <s:iterator id="user" value="users">
               <option value="${user.username}">${user.fullName} - ${user.username}</option>
             </s:iterator>
           </select>
         </c:if>
         <c:if test="${empty users}">
-          <select size="20" multiple="multiple" id="users" name="usersList">
+          <select size="20" multiple="multiple" id="users" name="usersList" style="width: 100%">
           </select>
         </c:if>
       </td>

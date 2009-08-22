@@ -49,7 +49,7 @@
 
           <c:if test="${!empty assignedRoles}">
 
-       <h5>Assigned Roles:</h5>
+       <h5><s:text name="assignments.assigned.roles"/></h5>
         <table>
         <s:iterator id="assignedRole" value="assignedRoles">
            <s:checkbox label="%{assignedRole}" name="addNDSelectedRoles" fieldValue="%{assignedRole}"/>
@@ -58,7 +58,7 @@
 
            </c:if>
           <c:if test="${!empty availableRoles}">
-        <h5>Available Roles:</h5>
+        <h5><s:text name="assignments.available.roles"/></h5>
         <table>
         <s:iterator id="availableRole" value="availableRoles">
            <s:checkbox label="%{availableRole}" name="addNDSelectedRoles" value="false" fieldValue="%{availableRole}"/>
@@ -67,7 +67,7 @@
           </c:if>
 
         <c:if test="${!empty table}">
-        <h5>Resource Roles:</h5>
+        <h5><s:text name="assignments.resource.roles"/></h5>
         <table>
             <tr>
                 <td></td>
