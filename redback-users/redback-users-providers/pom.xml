@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-users</artifactId>
-    <version>1.3-SNAPSHOT</version>
+    <version>1.2.2</version>
   </parent>
   <artifactId>redback-users-providers</artifactId>
   <name>Redback :: Users Providers</name>
