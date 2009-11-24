@@ -15,10 +15,16 @@ package org.codehaus.plexus.redback.authentication.users;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import java.util.Calendar;
+import java.util.Date;
+
 import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authentication.Authenticator;
 import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
+import org.codehaus.plexus.redback.policy.AccountLockedException;
+import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
@@ -89,7 +95,93 @@ public class UserManagerAuthenticatorTest
         assertNotNull( result.getException() );
         assertEquals( result.getException().getClass().getName(), UserNotFoundException.class.getName() );
     }
-    
+
+    public void testAuthenticateLockedPassword()
+        throws AuthenticationException, MustChangePasswordException, UserNotFoundException
+    {
+        userSecurityPolicy.setEnabled( true );
+
+        // Set up a user for the Authenticator
+        UserManager um = (UserManager) lookup( UserManager.ROLE, "memory" );
+        User user = um.createUser( "testuser", "Test User Locked Password", "testuser@somedomain.com" );
+        user.setPassword( "correctpass1" );
+        user.setValidated( true );
+        user.setPasswordChangeRequired( false );
+        um.addUser( user );
+
+        Authenticator auth = (Authenticator) lookup( Authenticator.ROLE, "user-manager" );
+        assertNotNull( auth );
+
+        boolean hasException = false;
+        AuthenticationResult result = null;
+
+        try
+        {
+            // test password lock
+            for ( int i = 0; i < 11; i++ )
+            {
+                result = auth.authenticate( createAuthDataSource( "testuser", "wrongpass" ) );
+            }
+        }
+        catch ( AccountLockedException e )
+        {
+            hasException = true;
+        }
+        finally
+        {
+            assertNotNull( result );
+            assertFalse( result.isAuthenticated() );
+            assertTrue( hasException );
+        }
+    }
+
+    public void testAuthenticateExpiredPassword()
+        throws AuthenticationException, AccountLockedException, UserNotFoundException
+    {
+        userSecurityPolicy.setEnabled( true );
+        userSecurityPolicy.setPasswordExpirationDays( 15 );
+
+        // Set up a user for the Authenticator
+	UserManager um = (UserManager) lookup( UserManager.ROLE, "memory" );
+        User user = um.createUser( "testuser", "Test User Expired Password", "testuser@somedomain.com" );
+        user.setPassword( "expiredpass1" );
+        user.setValidated( true );
+        user.setPasswordChangeRequired( false );
+        um.addUser( user );
+
+        Authenticator auth = (Authenticator) lookup( Authenticator.ROLE, "user-manager" );
+        assertNotNull( auth );
+
+        boolean hasException = false;
+
+        try
+        {
+            // test successful authentication
+            AuthenticationResult result = auth.authenticate( createAuthDataSource( "testuser", "expiredpass1" ) );
+            assertTrue( result.isAuthenticated() );
+
+            // test expired password
+            user = um.findUser( "testuser" );
+
+            Calendar currentDate = Calendar.getInstance();
+            currentDate.set( Calendar.YEAR, currentDate.get( Calendar.YEAR ) - 1 );
+            Date lastPasswordChange = currentDate.getTime();
+            user.setLastPasswordChange( lastPasswordChange );
+
+            um.updateUser( user );
+
+            auth.authenticate( createAuthDataSource( "testuser", "expiredpass1" ) );
+        }
+        catch ( MustChangePasswordException e )
+        {
+            hasException = true;
+        }
+        finally
+        {
+            assertTrue( hasException );
+        }
+    }
+
     private PasswordBasedAuthenticationDataSource createAuthDataSource(String username, String password)
     {
         PasswordBasedAuthenticationDataSource source = new PasswordBasedAuthenticationDataSource();
