@@ -78,13 +78,27 @@ public class DefaultLdapController
     public boolean userExists( Object key, DirContext context )
         throws LdapControllerException
     {
+        NamingEnumeration<SearchResult> results = null;
         try
         {
-            return searchUsers( key, context ).hasMoreElements();
+            results = searchUsers( key, context );
+            return results.hasMoreElements();
         }
         catch ( NamingException e )
         {
             throw new LdapControllerException( "Error searching for the existence of user: " + key, e );
+        }
+        finally
+        {
+            if ( results != null )
+                try
+                {
+                    results.close();
+                }
+                catch ( NamingException e )
+                {
+                    log.warn( "Error closing search results", e );
+                }
         }
     }
 
@@ -136,9 +150,10 @@ public class DefaultLdapController
     public Collection<User> getUsers( DirContext context )
         throws LdapControllerException, MappingException
     {
+        NamingEnumeration<SearchResult> results = null;
         try
         {
-            NamingEnumeration<SearchResult> results = searchUsers( context, null, null );
+            results = searchUsers( context, null, null );
             Set<User> users = new LinkedHashSet<User>();
 
             while ( results.hasMoreElements() )
@@ -156,6 +171,18 @@ public class DefaultLdapController
 
             throw new LdapControllerException( message, e );
         }
+        finally
+        {
+            if ( results != null )
+                try
+                {
+                    results.close();
+                }
+                catch ( NamingException e )
+                {
+                    log.warn( "failed to close search results", e );
+                }
+        }
     }
     
    /**
@@ -164,9 +191,10 @@ public class DefaultLdapController
    public List<User> getUsersByQuery( LdapUserQuery query, DirContext context )
        throws LdapControllerException, MappingException
    {
+       NamingEnumeration<SearchResult> results = null;
        try
        {
-           NamingEnumeration<SearchResult> results = searchUsers( context, null, query );
+           results = searchUsers( context, null, query );
            List<User> users = new LinkedList<User>();
 
            while ( results.hasMoreElements() )
@@ -184,6 +212,18 @@ public class DefaultLdapController
 
            throw new LdapControllerException( message, e );
        }
+       finally
+        {
+            if ( results != null )
+                try
+                {
+                    results.close();
+                }
+                catch ( NamingException e )
+                {
+                    log.warn( "failed to close search results", e );
+                }
+        }
    }
 
     /**
@@ -216,9 +256,10 @@ public class DefaultLdapController
         LdapUserQuery query = new LdapUserQuery();
         query.setUsername( username );
 
+        NamingEnumeration<SearchResult> result = null;
         try
         {
-            NamingEnumeration<SearchResult> result = searchUsers( context, null, query );
+            result = searchUsers( context, null, query );
 
             if ( result.hasMoreElements() )
             {
@@ -236,6 +277,18 @@ public class DefaultLdapController
             String message = "Failed to retrieve information for user: " + username;
 
             throw new LdapControllerException( message, e );
+        }
+        finally
+        {
+            if ( result != null )
+                try
+                {
+                    result.close();
+                }
+                catch ( NamingException e )
+                {
+                    log.warn( "failed to close search results", e );
+                }
         }
     }
 
