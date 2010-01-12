@@ -19,7 +19,7 @@
   <groupId>org.codehaus.redback</groupId>
   <artifactId>redback</artifactId>
   <version>1.3-SNAPSHOT</version>
-  <name>Redback test</name>
+  <name>Redback</name>
   <packaging>pom</packaging>
   <url>http://redback.codehaus.org/</url>
   <inceptionYear>2006</inceptionYear>
