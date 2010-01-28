@@ -273,57 +273,69 @@ public class DeleteUnusedRoles
                 }
             }
 
+            System.out.println( "\nStarting deletion of user assignments.." );
             PreparedStatement deleteRoles = null;
             // delete user assignments;
             for ( String resource : resourcesToBeDeleted )
-            {
+            {	
                 deleteRoles = usersConn.prepareStatement( "DELETE from SECURITY_USERASSIGNMENT_ROLENAMES where STRING_ELE LIKE '% - " + resource + "'" );
                 deleteRoles.execute();
+                System.out.println( "\"DELETE from SECURITY_USERASSIGNMENT_ROLENAMES where STRING_ELE LIKE '% - " + resource + "'\"" + " successfully executed."  );
             }
-
             clearSQL( deleteRoles );
 
+            System.out.println( "\nStarting deletion of child roles mapping.." );
          // delete child roles
             for ( String resource : resourcesToBeDeleted )
             {
-                deleteRoles = usersConn.prepareStatement( "DELETE from SECURITY_ROLE_CHILDROLE_MAP where STRING_ELE LIKE '% - " + resource + "'" );
+                deleteRoles = usersConn.prepareStatement( "DELETE from SECURITY_ROLE_CHILDROLE_MAP where STRING_ELE LIKE '% - " + resource + "' || NAME_OID LIKE '% - " + resource + "'" );
                 deleteRoles.execute();
+                System.out.println( "\"DELETE from SECURITY_ROLE_CHILDROLE_MAP where STRING_ELE LIKE '% - " + resource +
+                    "' || NAME_OID LIKE '% - " + resource + "'\"" + " successfully executed." );
             }
             clearSQL( deleteRoles );
 
-
+            System.out.println( "\nStarting deletion of role-permissions mapping.." );
          // delete role-permissions map
             for ( String resource : resourcesToBeDeleted )
             {
                 deleteRoles = usersConn.prepareStatement( "DELETE from SECURITY_ROLE_PERMISSION_MAP where NAME_OID LIKE '% - " + resource + "'" );
                 deleteRoles.execute();
+                System.out.println( "\"DELETE from SECURITY_ROLE_PERMISSION_MAP where NAME_OID LIKE '% - " + resource + "'\"" + " successfully executed." );
             }
             clearSQL( deleteRoles );
 
+            System.out.println( "\nStarting deletion of permissions.." );
          // delete permissions
             for ( String resource : resourcesToBeDeleted )
             {
                 deleteRoles = usersConn.prepareStatement( "DELETE from SECURITY_PERMISSIONS where RESOURCE_IDENTIFIER_OID = '" + resource + "' OR " +
                 		"NAME LIKE '% - " + resource + "'" );
                 deleteRoles.execute();
+                System.out.println( "\"DELETE from SECURITY_PERMISSIONS where RESOURCE_IDENTIFIER_OID = '" + resource +
+                    "' OR NAME LIKE '% - " + resource + "'\"" + " successfully executed." );
             }
             clearSQL( deleteRoles );
 
+            System.out.println( "\nStarting deletion of resources.." );
           // delete resources
             for ( String resource : resourcesToBeDeleted )
             {
                 deleteRoles = usersConn.prepareStatement( "DELETE from SECURITY_RESOURCES where IDENTIFIER = ?" );
                 deleteRoles.setString( 1, resource );
                 deleteRoles.execute();
+                System.out.println( "\"DELETE from SECURITY_RESOURCES where IDENTIFIER = " + resource + "\"" + " successfully executed."  );
             }
             clearSQL( deleteRoles );
 
+            System.out.println( "\nStarting deletion of roles.." );
           // delete roles
             for ( String resource : resourcesToBeDeleted )
             {
                 deleteRoles =
                     usersConn.prepareStatement( "DELETE from SECURITY_ROLES where NAME LIKE '% - " + resource + "'" );
                 deleteRoles.execute();
+                System.out.println( "\"DELETE from SECURITY_ROLES where NAME LIKE '% - " + resource + "'\"" + " successfully executed."  );
             }
             clearSQL( deleteRoles );
 
@@ -364,7 +376,7 @@ public class DeleteUnusedRoles
 
                     if( !loadedDriverClasses.contains( driverClassName ) )
                     {
-                        Class.forName( driverClassName );
+                        Class.forName( "com.mysql.jdbc.Driver" );
                         loadedDriverClasses.add( driverClassName );
                     }
 
@@ -476,6 +488,10 @@ public class DeleteUnusedRoles
 
                 System.out.println( pGroup );
             }
+        }
+        catch( SQLException e )
+        {
+        	e.printStackTrace();
         }
         finally
         {
