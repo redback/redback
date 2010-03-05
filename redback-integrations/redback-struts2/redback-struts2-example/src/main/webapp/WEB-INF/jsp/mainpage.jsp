@@ -54,9 +54,11 @@
     <p/>
 
     <s:url id="userlistUrl" action="userlist" namespace="/security"/>
+    <s:url id="rolesUrl" action="roles" namespace="/security"/>
         
     <ul>
       <li>Go see the <s:a href="%{userlistUrl}">userlist</s:a>.</li>      
+      <li>Go see the <s:a href="%{rolesUrl}">roles</s:a>.</li>
     </ul>
     
 
