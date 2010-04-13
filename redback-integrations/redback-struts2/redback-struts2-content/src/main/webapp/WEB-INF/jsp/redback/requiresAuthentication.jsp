@@ -44,7 +44,7 @@
 
 <ol>
 <li>
-  <s:url id="login" action="login" namespace="/security" />
+  <s:url id="login" action="login" namespace="/security" includeParams="none"/>
   <s:text name="requires.authentication.go.ahead"/><s:a href="%{login}"><s:text name="login"/></s:a>
 </li>
 </ol>

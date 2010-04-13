@@ -201,6 +201,40 @@ public class MainPageTest
             assert fmt.parse( row[dateCreatedIndex] ) != null;
         }
     }
+    
+    @Test( dependsOnMethods = { "loginAdmin" }, description = "REDBACK-262" )
+    public void testUserListUrlLength()
+        throws Exception
+    {
+        selenium.open( "/security/userlist.action" );
+
+        selenium.deleteAllVisibleCookies();
+
+        selenium.type( "ec_f_username", "admin" );
+        selenium.keyPress( "ec_f_username", "13" );
+
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+
+        assert selenium.getTitle().contains( "Security Alert - Action Requires Authentication" );
+
+        selenium.click( "link=Login" );
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+        selenium.type( "loginForm_username", "admin" );
+        selenium.type( "loginForm_password", "admin1" );
+        selenium.click( "loginForm__login" );
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+
+        assert selenium.getTitle().contains( "[Admin] User List" );
+        
+        assert ( selenium.getLocation().length() < 256 );
+        
+        selenium.click( "link=admin" );
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+        
+        assert selenium.getTitle().contains( "[Admin] User Edit" );
+        assert ( selenium.getLocation().length() < 256 );
+        assert selenium.getLocation().endsWith( "username=admin" );
+    }
 
     @AfterClass
     public void shutdownSelenium()

@@ -74,14 +74,14 @@
         	filterCell="org.codehaus.redback.integration.eXc.SecurityFilterCell">
           <img src="<c:url value="/images/redback/icon-user.gif"/>" />
           <redback:ifAuthorized permission="user-management-user-edit" resource="${user.username}">
-            <s:url id="usereditUrl" action="useredit">
+            <s:url id="usereditUrl" action="useredit" includeParams="none">
               <s:param name="username">${user.username}</s:param>
             </s:url>
             <s:a href="%{usereditUrl}">${user.username}</s:a>
           </redback:ifAuthorized>
           <redback:elseAuthorized>
             <redback:ifAuthorized permission="user-management-user-role" resource="${user.username}">
-              <s:url id="usereditUrl" action="useredit">
+              <s:url id="usereditUrl" action="useredit" includeParams="none">
                 <s:param name="username">${user.username}</s:param>
               </s:url>
               <s:a href="%{usereditUrl}">${user.username}</s:a>
@@ -105,7 +105,7 @@
         <ec:column title="${tasks}" alias="tasks" sortable="false" filterable="false" styleClass="tasks">
           <c:if test="${user.permanent eq false}">
             <redback:ifAuthorized permission="user-management-user-delete" resource="${user.username}">
-              <s:url id="userdeleteUrl" action="userdelete">
+              <s:url id="userdeleteUrl" action="userdelete" includeParams="none">
                 <s:param name="username">${user.username}</s:param>
               </s:url>
               <s:a href="%{userdeleteUrl}" title="delete user">

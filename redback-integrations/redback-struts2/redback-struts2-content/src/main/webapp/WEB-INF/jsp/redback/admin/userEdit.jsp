@@ -66,7 +66,7 @@
 
 </c:if>
 
-  <s:url id="assignmentUrl" action="assignments">
+  <s:url id="assignmentUrl" action="assignments" includeParams="none">
     <s:param name="username">${user.username}</s:param>
   </s:url>
   <s:a href="%{assignmentUrl}"><s:text name="user.edit.roles"/></s:a>

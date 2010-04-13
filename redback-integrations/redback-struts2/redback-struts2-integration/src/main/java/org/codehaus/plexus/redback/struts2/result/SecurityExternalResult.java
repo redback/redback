@@ -27,6 +27,7 @@ import com.opensymphony.xwork2.ActionInvocation;
  * role-hint="securityExternalResult"
  * instantiation-strategy="per-lookup"
  */
+@SuppressWarnings("serial")
 public class SecurityExternalResult
     extends AbstractBackTrackingResult
 {

@@ -27,13 +27,14 @@ import org.codehaus.plexus.redback.struts2.interceptor.SavedActionInvocation;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.config.entities.ResultConfig;
 
+@SuppressWarnings("serial")
 public class AbstractBackTrackingResult
     extends ServletActionRedirectResult
 {
     public static final int PREVIOUS = 1;
 
     public static final int CURRENT = 2;
-
+    
     protected boolean setupBackTrackPrevious( ActionInvocation invocation )
     {
         return setupBackTrack( invocation, PREVIOUS );
@@ -68,6 +69,7 @@ public class AbstractBackTrackingResult
                 setNamespace( savedInvocation.getNamespace() );
                 setActionName( savedInvocation.getActionName() );
                 setMethod( savedInvocation.getMethodName() );
+                invocation.getInvocationContext().getParameters().clear();
                 invocation.getInvocationContext().getParameters().putAll( savedInvocation.getParametersMap() );
                 
                 // hack for REDBACK-188
@@ -75,13 +77,14 @@ public class AbstractBackTrackingResult
                 if( resultCode != null )
                 {
 	            	ResultConfig resultConfig = invocation.getProxy().getConfig().getResults().get( resultCode );
-	            	
+	            	resultConfig.getParams().clear();	            	
 	            	Map<String, String> filteredMap = new HashMap<String, String>();
 	            	Set<String> keys = savedInvocation.getParametersMap().keySet();
 	            	
 	            	for( String key : keys )
-	            	{
-	            		filteredMap.put( key , savedInvocation.getParametersMap().get(key)[0]);
+	            	{	
+	            		String value = savedInvocation.getParametersMap().get(key)[0];
+	            		filteredMap.put( key , value);
 	            	}
 	            	
 	            	resultConfig.getParams().putAll( filteredMap );
