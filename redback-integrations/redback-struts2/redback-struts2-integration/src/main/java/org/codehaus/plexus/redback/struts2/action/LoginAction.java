@@ -408,12 +408,12 @@ public class LoginAction
         }
         catch ( AuthenticationException ae )
         {
-            addActionError( getText( "authentication.exception", Arrays.asList( ae.getMessage() ) ) );
+            addActionError( getText( "authentication.exception", Arrays.asList( ( Object ) ae.getMessage() ) ) );
             return ERROR;
         }
         catch ( UserNotFoundException ue )
         {
-            addActionError( getText( "user.not.found.exception", Arrays.asList( username, ue.getMessage() ) ) );
+            addActionError( getText( "user.not.found.exception", Arrays.asList( ( Object ) username, ue.getMessage() ) ) );
 
             AuditEvent event = new AuditEvent( getText( "log.login.fail" ) );
             event.setAffectedUser( username );

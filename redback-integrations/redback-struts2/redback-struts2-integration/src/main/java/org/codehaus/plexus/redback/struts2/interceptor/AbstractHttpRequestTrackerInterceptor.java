@@ -50,7 +50,7 @@ public abstract class AbstractHttpRequestTrackerInterceptor
     protected synchronized ActionInvocationTracker addActionInvocation( ActionInvocation invocation )
         throws ComponentLookupException
     {
-        Map<String, ActionInvocationTracker> sessionMap = invocation.getInvocationContext().getSession();
+        Map<String, Object> sessionMap = invocation.getInvocationContext().getSession();
         
         ApplicationContext applicationContext = (ApplicationContext) ActionContext.getContext().getApplication().get(
                     WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);

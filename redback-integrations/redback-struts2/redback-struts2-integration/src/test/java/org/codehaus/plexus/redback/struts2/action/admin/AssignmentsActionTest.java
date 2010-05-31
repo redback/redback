@@ -18,15 +18,19 @@ package org.codehaus.plexus.redback.struts2.action.admin;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.ServletContext;
+
+import org.apache.struts2.dispatcher.Dispatcher;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authorization.AuthorizationResult;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
 import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.RbacObjectInvalidException;
-import org.codehaus.plexus.redback.rbac.RbacObjectNotFoundException;
 import org.codehaus.plexus.redback.struts2.model.ApplicationRoleDetails;
 import org.codehaus.plexus.redback.struts2.model.ApplicationRoleDetails.RoleTableCell;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
@@ -34,6 +38,12 @@ import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 
 import com.opensymphony.xwork2.Action;
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.config.Configuration;
+import com.opensymphony.xwork2.config.ConfigurationManager;
+import com.opensymphony.xwork2.inject.Container;
+import com.opensymphony.xwork2.util.ValueStack;
+import com.opensymphony.xwork2.util.ValueStackFactory;
 
 /**
  * @todo missing tests for success/fail on standard show/edit functions (non security testing related)
@@ -43,6 +53,7 @@ public class AssignmentsActionTest
 {
     private AssignmentsAction action;
 
+    @SuppressWarnings("unchecked")
     public void setUp()
         throws Exception
     {
@@ -52,6 +63,32 @@ public class AssignmentsActionTest
 
         login( action, "user", PASSWORD );
         action.setPrincipal( "user2" );
+        
+        // This fix allow initialization of ActionContext.getContext() to avoid NPE
+        
+        ConfigurationManager configurationManager = new ConfigurationManager();
+        configurationManager.addConfigurationProvider( new com.opensymphony.xwork2.config.providers.XWorkConfigurationProvider() );
+        Configuration config = configurationManager.getConfiguration();
+        Container container =  config.getContainer();
+        
+        ValueStack stack = container.getInstance( ValueStackFactory.class ).createValueStack();
+        stack.getContext().put( ActionContext.CONTAINER, container );
+        ActionContext.setContext( new ActionContext( stack.getContext() ) );
+        
+        assertNotNull( ActionContext.getContext() );
+    }
+    
+    public static Dispatcher prepareDispatcher( ServletContext servletContext, Map<String, String> params )
+    {
+        if (params == null)
+        {
+            params = new HashMap<String, String>();
+        }
+        Dispatcher dispatcher = new Dispatcher(servletContext, params);
+        dispatcher.init();
+        Dispatcher.setInstance(dispatcher);
+        
+        return dispatcher;
     }
 
     /**

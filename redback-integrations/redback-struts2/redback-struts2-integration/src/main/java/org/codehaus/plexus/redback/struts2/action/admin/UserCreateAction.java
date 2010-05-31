@@ -82,7 +82,7 @@ public class UserCreateAction
         {
             // Means that the role name doesn't exist.
             // We need to fail fast and return to the previous page.
-            addActionError( getText( "user.already.exists", Arrays.asList( user.getUsername() ) ) );
+            addActionError( getText( "user.already.exists", Arrays.asList( ( Object ) user.getUsername() ) ) );
         }
 
         if ( hasActionErrors() || hasFieldErrors() )

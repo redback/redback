@@ -114,7 +114,7 @@ public class MainPageTest
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
     }
 
-    @Test( dependsOnMethods = { "createUser1" } )
+    @Test( dependsOnMethods = { "createUser1", "testUserEdit" } )
     public void logout()
     {
         selenium.open( "/security/logout.action" );
@@ -142,6 +142,9 @@ public class MainPageTest
         selenium.type( "passwordForm_newPasswordConfirm", "user2" );
         selenium.click( "passwordForm__submit" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
+
+        logout();
+        loginAdmin();
     }
 
     @Test
@@ -225,7 +228,6 @@ public class MainPageTest
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
 
         assert selenium.getTitle().contains( "[Admin] User List" );
-        
         assert ( selenium.getLocation().length() < 256 );
         
         selenium.click( "link=admin" );
@@ -233,6 +235,30 @@ public class MainPageTest
         
         assert selenium.getTitle().contains( "[Admin] User Edit" );
         assert ( selenium.getLocation().length() < 256 );
+        assert selenium.getLocation().endsWith( "username=admin" );
+    }
+
+    @Test( dependsOnMethods = { "loginAdmin" }, description = "REDBACK-188" )
+    public void testUserEdit()
+        throws Exception
+    {
+        selenium.open( "/security/userlist.action" );
+
+        assert selenium.getTitle().contains( "[Admin] User List" );
+
+        selenium.deleteAllVisibleCookies();
+
+        selenium.click( "link=admin" );
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+
+        selenium.click( "link=Login" );
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+        selenium.type( "loginForm_username", "admin" );
+        selenium.type( "loginForm_password", "admin1" );
+        selenium.click( "loginForm__login" );
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+
+        assert selenium.getTitle().contains( "[Admin] User Edit" );
         assert selenium.getLocation().endsWith( "username=admin" );
     }
 

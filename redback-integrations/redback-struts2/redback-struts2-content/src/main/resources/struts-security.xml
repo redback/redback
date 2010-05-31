@@ -288,12 +288,12 @@
        
     <action name="backup" class="backup-restore" method="backup">
       <result name="custom_error">/WEB-INF/jsp/redback/admin/backupRestore.jsp</result>
-      <result type="redirect-action">backupRestore</result>
+      <result type="redirectAction">backupRestore</result>
     </action>
 
     <action name="restore" class="backup-restore" method="restore">
       <result name="custom_error">/WEB-INF/jsp/redback/admin/backupRestore.jsp</result>      
-      <result name="success" type="redirect-action">backupRestore</result>
+      <result name="success" type="redirectAction">backupRestore</result>
     </action>
     
   </package>

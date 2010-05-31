@@ -70,7 +70,7 @@ public class OperationsAction
         }
         catch ( RbacManagerException e )
         {
-            addActionError( getText( "cannot.list.all.operations", Arrays.asList( e.getMessage() ) ) );
+            addActionError( getText( "cannot.list.all.operations", Arrays.asList( ( Object ) e.getMessage() ) ) );
             log.error( "System error:", e );
             allOperations = Collections.emptyList();
         }
@@ -90,7 +90,7 @@ public class OperationsAction
         }
         catch ( RbacManagerException e )
         {
-            addActionError( getText( "cannot.save.operation", Arrays.asList( operationName ) ) );
+            addActionError( getText( "cannot.save.operation", Arrays.asList( ( Object ) operationName ) ) );
             log.error( "System error:", e );
             allOperations = Collections.emptyList();
         }
@@ -106,7 +106,7 @@ public class OperationsAction
         }
         catch ( RbacManagerException ne )
         {
-            addActionError( getText( "cannot.remove.operation", Arrays.asList( operationName ) ) );
+            addActionError( getText( "cannot.remove.operation", Arrays.asList( ( Object ) operationName ) ) );
             return ERROR;
         }
         return LIST;

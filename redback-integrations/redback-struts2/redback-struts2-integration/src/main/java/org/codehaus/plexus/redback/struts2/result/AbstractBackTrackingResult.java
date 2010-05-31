@@ -16,16 +16,13 @@ package org.codehaus.plexus.redback.struts2.result;
  * limitations under the License.
  */
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.struts2.dispatcher.ServletActionRedirectResult;
 import org.codehaus.plexus.redback.struts2.interceptor.ActionInvocationTracker;
 import org.codehaus.plexus.redback.struts2.interceptor.SavedActionInvocation;
-
 import com.opensymphony.xwork2.ActionInvocation;
-import com.opensymphony.xwork2.config.entities.ResultConfig;
 
 @SuppressWarnings("serial")
 public class AbstractBackTrackingResult
@@ -69,27 +66,32 @@ public class AbstractBackTrackingResult
                 setNamespace( savedInvocation.getNamespace() );
                 setActionName( savedInvocation.getActionName() );
                 setMethod( savedInvocation.getMethodName() );
+                                
                 invocation.getInvocationContext().getParameters().clear();
                 invocation.getInvocationContext().getParameters().putAll( savedInvocation.getParametersMap() );
                 
                 // hack for REDBACK-188
                 String resultCode = invocation.getResultCode();
+
                 if( resultCode != null )
                 {
-	            	ResultConfig resultConfig = invocation.getProxy().getConfig().getResults().get( resultCode );
-	            	resultConfig.getParams().clear();	            	
-	            	Map<String, String> filteredMap = new HashMap<String, String>();
-	            	Set<String> keys = savedInvocation.getParametersMap().keySet();
-	            	
-	            	for( String key : keys )
-	            	{	
-	            		String value = savedInvocation.getParametersMap().get(key)[0];
-	            		filteredMap.put( key , value);
-	            	}
-	            	
-	            	resultConfig.getParams().putAll( filteredMap );
+                    // hack for REDBACK-262
+                    // set this to null so the ResultConfig parameters won't be added in the ServletActionRedirectResult
+                    // because we can't clear the parameters of ResultConfig since it's read-only
+                    invocation.setResultCode( null );
+                    
+                    Set<String> keys = savedInvocation.getParametersMap().keySet();
+                    
+                    for( String key : keys )
+                    {   
+                        if ( !prohibitedResultParam.contains( key ) )
+                        {
+                            String value = ( (String[]) savedInvocation.getParametersMap().get( key ) )[0];
+                            addParameter( key, value == null ? "" : conditionalParse( value, invocation ) );
+                        }
+                    }
                 }
-                
+
                 tracker.unsetBackTrack();
             }
 

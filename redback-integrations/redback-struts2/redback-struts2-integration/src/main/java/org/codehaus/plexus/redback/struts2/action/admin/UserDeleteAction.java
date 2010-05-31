@@ -84,7 +84,7 @@ public class UserDeleteAction extends AbstractSecurityAction implements Cancella
         }
         catch ( UserNotFoundException e )
         {
-        	addActionError( getText( "cannot.remove.user.not.found", Arrays.asList( username ) ) );
+        	addActionError( getText( "cannot.remove.user.not.found", Arrays.asList( ( Object ) username ) ) );
             return SUCCESS;
         }
 
@@ -115,11 +115,11 @@ public class UserDeleteAction extends AbstractSecurityAction implements Cancella
         }
         catch ( RbacObjectInvalidException e )
         {
-            addActionError( getText( "cannot.remove.user.role", Arrays.asList( username, e.getMessage() ) ) );
+            addActionError( getText( "cannot.remove.user.role", Arrays.asList( ( Object ) username, e.getMessage() ) ) );
         }
         catch ( RbacManagerException e )
         {
-            addActionError( getText( "cannot.remove.user.role", Arrays.asList( username, e.getMessage() ) ) );
+            addActionError( getText( "cannot.remove.user.role", Arrays.asList( ( Object ) username, e.getMessage() ) ) );
         }
 
         if ( getActionErrors().isEmpty() )
@@ -130,7 +130,7 @@ public class UserDeleteAction extends AbstractSecurityAction implements Cancella
             }
             catch ( UserNotFoundException e )
             {
-                addActionError( getText( "cannot.remove.user.non.existent", Arrays.asList( username ) ) );
+                addActionError( getText( "cannot.remove.user.non.existent", Arrays.asList( ( Object ) username ) ) );
             }
         }
         String currentUser = getCurrentUser();

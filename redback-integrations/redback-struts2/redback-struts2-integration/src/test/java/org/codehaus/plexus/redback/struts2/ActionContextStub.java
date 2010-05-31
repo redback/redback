@@ -44,7 +44,7 @@ public class ActionContextStub
         this.setName( CONTEXT_NAME );
         this.setSession( new HashMap() );
 
-        this.setParameters( new HashMap<String,String>() );
+        this.setParameters( new HashMap<String,Object>() );
         this.getParameters().put( PARAMETER_1, VALUE_1 );
         this.getParameters().put( PARAMETER_2, VALUE_2 );
         this.getParameters().put( PARAMETER_3, VALUE_3 );

@@ -88,7 +88,7 @@ public class AccountAction
         {
             // Means that the role name doesn't exist.
             // We need to fail fast and return to the previous page.
-            addActionError( getText( "user.does.not.exist", Arrays.asList( username ) ) );
+            addActionError( getText( "user.does.not.exist", Arrays.asList( ( Object ) username ) ) );
             return ERROR;
         }
 
@@ -107,7 +107,7 @@ public class AccountAction
         }
         catch ( UserNotFoundException e )
         {
-            addActionError( getText( "cannot.get.user", Arrays.asList( username, e.getMessage() ) ) );
+            addActionError( getText( "cannot.get.user", Arrays.asList( ( Object ) username, e.getMessage() ) ) );
             return ERROR;
         }
 
@@ -156,7 +156,7 @@ public class AccountAction
         {
             // Means that the role name doesn't exist.
             // We need to fail fast and return to the previous page.
-            addActionError( getText( "user.does.not.exist", Arrays.asList( username ) ) );
+            addActionError( getText( "user.does.not.exist", Arrays.asList( ( Object ) username ) ) );
             return ERROR;
         }
 
@@ -203,7 +203,7 @@ public class AccountAction
         }
         catch ( UserNotFoundException e )
         {
-            addActionError( getText( "cannot.get.user", Arrays.asList( username, e.getMessage() ) ) );
+            addActionError( getText( "cannot.get.user", Arrays.asList( ( Object ) username, e.getMessage() ) ) );
             return ERROR;
         }
         catch ( PasswordRuleViolationException e )

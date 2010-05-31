@@ -27,7 +27,7 @@ public class SavedActionInvocation
 
     private String actionName;
 
-    private Map<String, String[]> parameterMap;
+    private Map<String, Object> parameterMap;
 
     private String methodName;
 
@@ -38,9 +38,9 @@ public class SavedActionInvocation
         actionName = invocation.getProxy().getActionName();
         methodName = invocation.getProxy().getMethod();
 
-        parameterMap = new HashMap<String, String[]>();
+        parameterMap = new HashMap<String, Object>();
+
         parameterMap.putAll( invocation.getInvocationContext().getParameters() );
-        
     }
 
     public String getNamespace()
@@ -53,7 +53,7 @@ public class SavedActionInvocation
         return actionName;
     }
 
-    public Map<String,String[]> getParametersMap()
+    public Map<String,Object> getParametersMap()
     {
         return parameterMap;
     }

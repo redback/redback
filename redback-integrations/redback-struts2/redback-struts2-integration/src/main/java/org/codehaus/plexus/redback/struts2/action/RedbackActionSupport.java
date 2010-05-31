@@ -20,8 +20,7 @@ public abstract class RedbackActionSupport
     
     protected Map<String,Object> session;
 
-    @SuppressWarnings("unchecked")
-    public void setSession( Map map )
+    public void setSession( Map<String, Object > map )
     {
         //noinspection AssignmentToCollectionOrArrayFieldFromParameter
         this.session = map;

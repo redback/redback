@@ -138,7 +138,7 @@ public abstract class AbstractUserCredentialsActionTest
         session = system.authenticate( authdatasource );
         assertTrue( session.isAuthenticated() );
     
-        action.setSession( Collections.singletonMap( SecuritySystemConstants.SECURITY_SESSION_KEY, session ) );
+        action.setSession( Collections.singletonMap( SecuritySystemConstants.SECURITY_SESSION_KEY,( Object ) session ) );
     }
 
 }

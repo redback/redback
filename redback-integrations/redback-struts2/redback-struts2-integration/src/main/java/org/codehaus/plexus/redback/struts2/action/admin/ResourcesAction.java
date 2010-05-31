@@ -69,7 +69,7 @@ public class ResourcesAction
         }
         catch ( RbacManagerException e )
         {
-            addActionError( getText( "cannot.list.all.resources", Arrays.asList( e.getMessage() ) ) );
+            addActionError( getText( "cannot.list.all.resources", Arrays.asList( ( Object ) e.getMessage() ) ) );
             log.error( "System error:", e );
             allResources = Collections.emptyList();
         }
@@ -90,7 +90,7 @@ public class ResourcesAction
         }
         catch ( RbacManagerException e )
         {
-            addActionError( getText( "cannot.save.resource", Arrays.asList( e.getMessage() ) ) );
+            addActionError( getText( "cannot.save.resource", Arrays.asList( ( Object ) e.getMessage() ) ) );
             log.error( "System error:", e );
             allResources = Collections.emptyList();
         }
@@ -106,7 +106,7 @@ public class ResourcesAction
         }
         catch ( RbacManagerException ne )
         {
-            addActionError( getText( "cannot.remove.resource", Arrays.asList( resourceIdentifier ) ) );
+            addActionError( getText( "cannot.remove.resource", Arrays.asList( ( Object ) resourceIdentifier ) ) );
             return ERROR;
         }
         return LIST;

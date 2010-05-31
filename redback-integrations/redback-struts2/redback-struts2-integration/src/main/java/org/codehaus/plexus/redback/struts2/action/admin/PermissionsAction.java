@@ -90,7 +90,7 @@ public class PermissionsAction
         }
         catch ( RbacManagerException e )
         {
-            addActionError( getText( "cannot.list.all.permissions", Arrays.asList( e.getMessage() ) ) );
+            addActionError( getText( "cannot.list.all.permissions", Arrays.asList( ( Object ) e.getMessage() ) ) );
             log.error( "System error:", e );
             allPermissions = Collections.emptyList();
         }
@@ -144,7 +144,7 @@ public class PermissionsAction
         }
         catch ( RbacManagerException e )
         {
-            addActionError( getText( "cannot.get.permission", Arrays.asList( name, e.getMessage() ) ) );
+            addActionError( getText( "cannot.get.permission", Arrays.asList( ( Object ) name, e.getMessage() ) ) );
             return ERROR;
         }
 
@@ -191,11 +191,11 @@ public class PermissionsAction
 
             manager.savePermission( permission );
 
-            addActionMessage( getText( "save.permission.success", Arrays.asList( name ) ) );
+            addActionMessage( getText( "save.permission.success", Arrays.asList( ( Object ) name ) ) );
         }
         catch ( RbacManagerException e )
         {
-            addActionError( getText( "cannot.get.permission", Arrays.asList( name, e.getMessage() ) ) );
+            addActionError( getText( "cannot.get.permission", Arrays.asList( ( Object ) name, e.getMessage() ) ) );
             return ERROR;
         }
 

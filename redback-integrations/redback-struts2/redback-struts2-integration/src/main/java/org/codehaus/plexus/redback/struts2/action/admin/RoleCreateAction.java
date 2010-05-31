@@ -155,7 +155,7 @@ public class RoleCreateAction
 
             manager.saveRole( _role );
 
-            addActionMessage( getText( "save.role.success", Arrays.asList( roleName ) ) );
+            addActionMessage( getText( "save.role.success", Arrays.asList( ( Object ) roleName ) ) );
             String currentUser = getCurrentUser();
             AuditEvent event = new AuditEvent( getText( "log.role.create" ) );
             event.setRole( roleName );
@@ -164,7 +164,7 @@ public class RoleCreateAction
         }
         catch ( RbacManagerException e )
         {
-            addActionError( getText( "cannot.get.role", Arrays.asList( roleName, e.getMessage() ) ) );
+            addActionError( getText( "cannot.get.role", Arrays.asList( ( Object ) roleName, e.getMessage() ) ) );
             return ERROR;
         }
 

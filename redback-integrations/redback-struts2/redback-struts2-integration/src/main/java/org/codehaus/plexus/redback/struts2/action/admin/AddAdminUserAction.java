@@ -244,12 +244,12 @@ public class AddAdminUserAction
         }
         catch ( AuthenticationException ae )
         {
-            addActionError( getText( "authentication.exception", Arrays.asList( ae.getMessage() ) ) );
+            addActionError( getText( "authentication.exception", Arrays.asList( ( Object ) ae.getMessage() ) ) );
             return LOGIN_ERROR;
         }
         catch ( UserNotFoundException ue )
         {
-            addActionError( getText( "user.not.found.exception", Arrays.asList( principal, ue.getMessage() ) ) );
+            addActionError( getText( "user.not.found.exception", Arrays.asList( ( Object ) principal, ue.getMessage() ) ) );
 
             AuditEvent event = new AuditEvent( getText( "log.login.fail" ) );
             event.setAffectedUser( principal );

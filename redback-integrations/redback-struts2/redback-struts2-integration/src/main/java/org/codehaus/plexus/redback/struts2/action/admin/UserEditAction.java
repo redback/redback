@@ -102,7 +102,7 @@ public class UserEditAction
         {
             // Means that the role name doesn't exist.
             // We need to fail fast and return to the previous page.
-            addActionError( getText( "user.does.not.exist", Collections.singletonList( getUsername() ) ) );
+            addActionError( getText( "user.does.not.exist", Collections.singletonList( ( Object ) getUsername() ) ) );
             return ERROR;
         }
 
@@ -132,7 +132,7 @@ public class UserEditAction
         }
         catch ( UserNotFoundException e )
         {
-            addActionError( getText( "cannot.get.user", Arrays.asList( getUsername(), e.getMessage() ) ) );
+            addActionError( getText( "cannot.get.user", Arrays.asList( ( Object ) getUsername(), e.getMessage() ) ) );
             return ERROR;
         }
 
@@ -189,7 +189,7 @@ public class UserEditAction
         {
             // Means that the role name doesn't exist.
             // We need to fail fast and return to the previous page.
-            addActionError( getText( "user.does.not.exist", Collections.singletonList( getUsername() ) ) );
+            addActionError( getText( "user.does.not.exist", Collections.singletonList( ( Object ) getUsername() ) ) );
             return ERROR;
         }
 
@@ -223,7 +223,7 @@ public class UserEditAction
         }
         catch ( UserNotFoundException e )
         {
-            addActionError( getText( "cannot.find.user", Arrays.asList( getUsername(), e.getMessage() ) ) );
+            addActionError( getText( "cannot.find.user", Arrays.asList( ( Object ) getUsername(), e.getMessage() ) ) );
             return ERROR;
         }
         catch ( PasswordRuleViolationException pe )

@@ -160,7 +160,7 @@ public class AssignmentsAction
         }
         catch ( UserNotFoundException e )
         {
-            addActionError( getText( "user.not.found.exception", Arrays.asList( principal, e.getMessage() ) ) );
+            addActionError( getText( "user.not.found.exception", Arrays.asList( ( Object ) principal, e.getMessage() ) ) );
             return ERROR;
         }
 
@@ -262,7 +262,7 @@ public class AssignmentsAction
         }
         catch ( RbacManagerException ne )
         {
-            addActionError( getText( "error.removing.selected.roles", Arrays.asList( ne.getMessage() ) ) );
+            addActionError( getText( "error.removing.selected.roles", Arrays.asList( ( Object ) ne.getMessage() ) ) );
             return ERROR;
         }
         return SUCCESS;

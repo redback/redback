@@ -171,7 +171,7 @@ public class EditRoleAction
         }
         catch ( RbacManagerException e )
         {
-            List<String> list = new ArrayList<String>();
+            List<Object> list = new ArrayList<Object>();
             list.add( name );
             list.add( e.getMessage() );
             addActionError( getText( "cannot.get.role", list ) );
@@ -268,7 +268,7 @@ public class EditRoleAction
 
             getManager().saveRole( role );
 
-            List<String> list = new ArrayList<String>();
+            List<Object> list = new ArrayList<Object>();
             list.add( name );
             String currentUser = getCurrentUser();
             AuditEvent event = new AuditEvent( getText( "log.role.edit" ) );
@@ -279,7 +279,7 @@ public class EditRoleAction
         }
         catch ( RbacManagerException e )
         {
-            List<String> list = new ArrayList<String>();
+            List<Object> list = new ArrayList<Object>();
             list.add( name );
             list.add( e.getMessage() );
             addActionError( getText( "cannot.get.role", list ) );
@@ -302,7 +302,7 @@ public class EditRoleAction
             {
                 // Means that the role name doesn't exist.
                 // We need to fail fast and return to the previous page.
-                List<String> list = new ArrayList<String>();
+                List<Object> list = new ArrayList<Object>();
                 list.add( principal );
                 addActionError( getText( "user.does.not.exist", list ) );
                 return ERROR;
@@ -327,7 +327,7 @@ public class EditRoleAction
             }
             catch ( RbacManagerException e )
             {
-                List<String> list = new ArrayList<String>();
+                List<Object> list = new ArrayList<Object>();
                 list.add( principal );
                 list.add( e.getMessage() );
                 addActionError( getText( "cannot.assign.role", list ) );
@@ -352,7 +352,7 @@ public class EditRoleAction
             {
                 // Means that the role name doesn't exist.
                 // We need to fail fast and return to the previous page.
-                List<String> list = new ArrayList<String>();
+                List<Object> list = new ArrayList<Object>();
                 list.add( principal );
                 addActionError( getText( "user.does.not.exist", list ) );
                 return ERROR;
@@ -377,7 +377,7 @@ public class EditRoleAction
             }
             catch ( RbacManagerException e )
             {
-                List<String> list = new ArrayList<String>();
+                List<Object> list = new ArrayList<Object>();
                 list.add( principal );
                 list.add( e.getMessage() );
                 addActionError( getText( "cannot.assign.role", list ) );

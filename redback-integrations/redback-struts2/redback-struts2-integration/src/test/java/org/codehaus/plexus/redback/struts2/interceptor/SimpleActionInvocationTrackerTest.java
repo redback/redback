@@ -55,7 +55,7 @@ public class SimpleActionInvocationTrackerTest
 
         // first entry int the stack
         SavedActionInvocation actionInvocation = tracker.getActionInvocationAt( 0 );
-        Map<String,String[]> parametersMap = actionInvocation.getParametersMap();
+        Map<String,Object> parametersMap = actionInvocation.getParametersMap();
 
         assertEquals( ActionProxyStub.ACTION_NAME, actionInvocation.getActionName() );
         assertEquals( ActionProxyStub.METHOD, actionInvocation.getMethodName() );

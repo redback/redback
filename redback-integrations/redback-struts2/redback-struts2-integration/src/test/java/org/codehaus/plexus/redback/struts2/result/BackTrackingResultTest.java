@@ -73,7 +73,7 @@ public class BackTrackingResultTest
         actionInvocation1.getInvocationContext().getSession().put( ActionInvocationTracker.ROLE, tracker );
 
         // before backtrack
-        Map<String,String> parametersMap = actionInvocation1.getInvocationContext().getParameters();
+        Map<String,Object> parametersMap = actionInvocation1.getInvocationContext().getParameters();
 
         assertEquals( ActionProxyStub.ACTION_NAME, backtrackingResult.getActionName() );
         assertEquals( ActionProxyStub.METHOD, backtrackingResult.getMethod() );
@@ -132,7 +132,7 @@ public class BackTrackingResultTest
         actionInvocation1.getInvocationContext().getSession().put( ActionInvocationTracker.ROLE, tracker );
 
         // before backtrack
-        Map<String, String> parametersMap = actionInvocation1.getInvocationContext().getParameters();
+        Map<String, Object> parametersMap = actionInvocation1.getInvocationContext().getParameters();
 
         assertEquals( ActionProxyStub.ACTION_NAME, backtrackingResult.getActionName() );
         assertEquals( ActionProxyStub.METHOD, backtrackingResult.getMethod() );

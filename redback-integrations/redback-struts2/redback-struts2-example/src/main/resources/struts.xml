@@ -9,6 +9,8 @@
        Application Webapp Specific Configuration.
        ==================================================================  -->
 
+  <constant name="struts.action.extension" value="action" />
+  
   <package name="root" extends="struts-default" namespace="/">    
     <interceptors>
       <interceptor name="redbackForceAdminUser" class="redbackForceAdminUserInterceptor"/>

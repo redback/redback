@@ -52,7 +52,7 @@ public class RolesAction
         }
         catch ( RbacManagerException e )
         {
-            List<String> list = new ArrayList<String>();
+            List<Object> list = new ArrayList<Object>();
             list.add( e.getMessage() );
             addActionError( getText( "cannot.list.all.roles", list ) );
             log.error( "System error:", e );

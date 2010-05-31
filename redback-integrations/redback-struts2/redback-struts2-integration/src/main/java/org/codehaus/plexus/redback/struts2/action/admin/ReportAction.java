@@ -64,7 +64,7 @@ public class ReportAction
         }
         catch ( ReportException e )
         {
-            addActionError( getText( "cannot.get.report", Arrays.asList( e.getMessage() ) ) );
+            addActionError( getText( "cannot.get.report", Arrays.asList( ( Object ) e.getMessage() ) ) );
             return ERROR;
         }
 

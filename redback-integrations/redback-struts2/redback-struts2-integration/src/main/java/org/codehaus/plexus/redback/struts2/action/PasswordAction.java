@@ -147,7 +147,7 @@ public class PasswordAction
         }
         catch ( UserNotFoundException e )
         {
-            addActionError( getText( "cannot.update.user.not.found", Arrays.asList( user.getUsername() ) ) );
+            addActionError( getText( "cannot.update.user.not.found", Arrays.asList( ( Object ) user.getUsername() ) ) );
             addActionError( getText( "admin.deleted.account" ) );
 
             return ERROR;
