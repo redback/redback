@@ -42,7 +42,7 @@
       </table>
     </div>
     <div class="functnbar3">
-        <s:submit value="%{getText('save')}" />
+        <s:submit value="%{getText('save')}" theme="simple"/>
     </div>
   </s:form>
 

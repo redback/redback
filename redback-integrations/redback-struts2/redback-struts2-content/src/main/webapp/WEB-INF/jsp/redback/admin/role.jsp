@@ -40,7 +40,7 @@
   <div class="functnbar3">
     <s:form action="roleedit" namespace="/security">
       <s:hidden name="name" />
-      <s:submit value="%{getText('edit')}" />
+      <s:submit value="%{getText('edit')}" theme="simple" />
     </s:form>
   </div>
 

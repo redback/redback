@@ -81,7 +81,7 @@
           <s:textfield name="addpermission.resourceIdentifier" theme="simple" />
         </td>
         <td>
-          <s:submit value="%{getText('role.create.add.permission')}" theme="simple" 
+          <s:submit value="%{getText('role.create.add.permission')}" 
                      onclick="setSubmitMode('addPermission')" />
         </td>
       </tr>

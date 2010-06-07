@@ -31,7 +31,7 @@
       </p>
 
       <s:form action="backup" method="post" >
-        <s:submit value="Create Backup" />
+        <s:submit value="Create Backup" theme="simple"/>
       </s:form>  
     </div>
  
@@ -50,7 +50,7 @@
         <table>
           <s:textfield name="restoreDirectory" label="Backup directory"
             size="70" required="true" />
-          <s:submit value="Restore Backup" />
+          <s:submit value="Restore Backup" theme="simple" />
         </table>         
       </s:form>
     </div>
