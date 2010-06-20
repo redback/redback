@@ -33,6 +33,7 @@ import org.codehaus.redback.integration.util.AutoLoginCookies;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.Interceptor;
 
@@ -108,6 +109,7 @@ public class AutoLoginInterceptor
 
                     if ( securitySession != null && securitySession.isAuthenticated() )
                     {
+                        ActionContext.getContext().getSession().put( SecuritySystemConstants.SECURITY_SESSION_KEY, securitySession );
                         checkCookieConsistency( securitySession );
                     }
                     else
