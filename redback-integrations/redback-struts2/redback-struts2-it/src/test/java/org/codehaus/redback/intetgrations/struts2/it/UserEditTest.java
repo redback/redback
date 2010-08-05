@@ -25,7 +25,7 @@ public class UserEditTest
     extends AbstractSeleniumTestCase
 {
 
-    @Test( dependsOnMethods = { "login" } )
+    @Test
     public void createUser1()
     {
         doLogin( ADMIN_USERNAME, ADMIN_PASSWORD );
@@ -44,7 +44,7 @@ public class UserEditTest
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
     }
 
-    @Test( dependsOnMethods = { "login" }, description = "REDBACK-262" )
+    @Test( description = "REDBACK-262" )
     public void testUserListUrlLength()
         throws Exception
     {
@@ -70,16 +70,16 @@ public class UserEditTest
 
         assert selenium.getTitle().contains( "[Admin] User List" );
         assert ( selenium.getLocation().length() < 256 );
-        
+
         selenium.click( "link=admin" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
-        
+
         assert selenium.getTitle().contains( "[Admin] User Edit" );
         assert ( selenium.getLocation().length() < 256 );
         assert selenium.getLocation().endsWith( "username=admin" );
     }
 
-    @Test( dependsOnMethods = { "login" }, description = "REDBACK-188" )
+    @Test( description = "REDBACK-188" )
     public void testUserEdit()
         throws Exception
     {
@@ -105,4 +105,18 @@ public class UserEditTest
         assert selenium.getLocation().endsWith( "username=admin" );
     }
 
+    @Test( description = "REDBACK-166", enabled = false )
+    public void testFeedbackAfterUserEdit()
+        throws Exception
+    {
+        selenium.open( "/security/userlist.action" );
+        selenium.click( "link=user1" );
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+        selenium.type( "userEditForm_user_fullName", "User Edited" );
+        selenium.click( "userEditForm__submit" );
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+
+        // Not yet implemented. Since we redirect to the userlist, it is difficult to pass the success message there.
+        assert selenium.isTextPresent( "User details for 'user1' successfully changed" );
+    }
 }
