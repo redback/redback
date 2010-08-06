@@ -16,14 +16,13 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.ServletContext;
-
+import com.opensymphony.xwork2.Action;
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.config.Configuration;
+import com.opensymphony.xwork2.config.ConfigurationManager;
+import com.opensymphony.xwork2.inject.Container;
+import com.opensymphony.xwork2.util.ValueStack;
+import com.opensymphony.xwork2.util.ValueStackFactory;
 import org.apache.struts2.dispatcher.Dispatcher;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authorization.AuthorizationResult;
@@ -38,13 +37,12 @@ import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 
-import com.opensymphony.xwork2.Action;
-import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.config.Configuration;
-import com.opensymphony.xwork2.config.ConfigurationManager;
-import com.opensymphony.xwork2.inject.Container;
-import com.opensymphony.xwork2.util.ValueStack;
-import com.opensymphony.xwork2.util.ValueStackFactory;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.servlet.ServletContext;
 
 /**
  * @todo missing tests for success/fail on standard show/edit functions (non security testing related)
@@ -163,7 +161,8 @@ public class AssignmentsActionTest
 
         assertEquals( 2, action.getApplicationRoleDetails().size() );
         ApplicationRoleDetails details = (ApplicationRoleDetails) action.getApplicationRoleDetails().get( 0 );
-        assertEquals( "redback-xwork-integration-core", details.getName() );
+        assertEquals( "System", details.getName() );
+        assertEquals( "Roles that apply system-wide, across all of the applications", details.getDescription() );
         assertEquals( 0, details.getAvailableRoles().size() );
         details = (ApplicationRoleDetails) action.getApplicationRoleDetails().get( 1 );
         assertEquals( "Continuum", details.getName() );
@@ -469,7 +468,8 @@ public class AssignmentsActionTest
 
         assertEquals( 2, action.getApplicationRoleDetails().size() );
         ApplicationRoleDetails details = (ApplicationRoleDetails) action.getApplicationRoleDetails().get( 0 );
-        assertEquals( "redback-xwork-integration-core", details.getName() );
+        assertEquals( "System", details.getName() );
+        assertEquals( "Roles that apply system-wide, across all of the applications", details.getDescription() );
         assertEquals( 4, details.getAvailableRoles().size() );
         assertEquals( "Guest", details.getAvailableRoles().get( 0 ) );
         assertEquals( "Registered User", details.getAvailableRoles().get( 1 ) );
@@ -502,7 +502,8 @@ public class AssignmentsActionTest
 
         assertEquals( 2, action.getApplicationRoleDetails().size() );
         ApplicationRoleDetails details = (ApplicationRoleDetails) action.getApplicationRoleDetails().get( 0 );
-        assertEquals( "redback-xwork-integration-core", details.getName() );
+        assertEquals( "System", details.getName() );
+        assertEquals( "Roles that apply system-wide, across all of the applications", details.getDescription() );
         // TODO assertEquals( 3, details.getAvailableRoles().size() );
         assertEquals( "Guest", details.getAvailableRoles().get( 0 ) );
         assertEquals( "Registered User", details.getAvailableRoles().get( 1 ) );

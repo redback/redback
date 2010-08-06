@@ -2,8 +2,8 @@
     <modelVersion>1.0.0</modelVersion>
     <applications>
         <application>
-        <id>redback-xwork-integration-core</id>
-        <description>Redback XWork Integration Security Core</description>
+          <id>System</id>
+          <description>Roles that apply system-wide, across all of the applications</description>
         <version>1.0.0</version>
         <resources>
             <resource>
