@@ -224,15 +224,15 @@
                 </roleDefault>
               </roleDefaults>
               <descriptors>
-                <descriptor>${basedir}/src/main/resources/META-INF/plexus/components.xml</descriptor>
-                <descriptor>
-                  ${project.build.directory}/generated-resources/plexus/META-INF/plexus/components.xml
-                </descriptor>
+                <descriptor>${basedir}/src/main/resources/META-INF/plexus/components-fragment.xml</descriptor>
+                <descriptor>${project.build.directory}/generated-resources/plexus/META-INF/plexus/components.xml</descriptor>
               </descriptors>
+              <output>${project.build.outputDirectory}/META-INF/plexus/components.xml</output>
             </configuration>
             <goals>
               <goal>merge-descriptors</goal>
             </goals>
+            <phase>process-resources</phase>
           </execution>
         </executions>
       </plugin>
