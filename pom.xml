@@ -140,7 +140,9 @@
   </licenses>
 
   <repositories>
-    <!-- TODO: remove -->
+    <!-- only needed for these two artifacts that can't be redistributed
+         javax.transaction:jta:jar:1.0.1B
+         javax.resource:connector:jar:1.0
     <repository>
       <id>java.net</id>
       <url>http://download.java.net/maven/2</url>
@@ -148,19 +150,8 @@
       <releases>
         <enabled>true</enabled>
       </releases>
-   </repository>
-    <repository>
-      <id>maven1-repository.dev.java.net</id>
-      <name>Java.net Repository for Maven 1</name>
-      <url>http://download.java.net/maven/1/</url>
-      <layout>legacy</layout>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>      
-    </repository>   
+    </repository>
+    -->
   </repositories>
 
   <dependencyManagement>
