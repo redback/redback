@@ -697,6 +697,7 @@
     <module>redback-data-management</module>
     <module>redback-integrations</module>
     <module>plexus-spring</module>
+    <module>redback-xmlrpc</module>
   </modules>
   <properties>
     <security.version>1.3-SNAPSHOT</security.version>
