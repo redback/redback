@@ -1,0 +1,114 @@
+ -----
+ Cleanup Unused Roles
+ -----
+ Maria Odea Ching
+ -----
+ 16 July 2009
+ -----
+
+Cleanup Unused Roles
+
+ This tool deletes unused resources, roles and related data from the Redback users database.
+
+* How It Works
+
+  [[1]] The resources from Archiva (repositories) or Continuum (project groups) or both will be retrieved.
+
+  [[2]] The resources from <<<SECURITY_RESOURCES>>> table of users database will be retrieved and checked against the
+  retrieved resources from Archiva and Continuum.
+
+  [[3]] The resource/role will be deleted in the tables (in order) <<<SECURITY_USERASSIGNMENT_ROLENAMES>>>,
+  <<<SECURITY_ROLE_CHILDROLE_MAP>>>, <<<SECURITY_ROLE_PERMISSION_MAP>>>, <<<SECURITY_PERMISSIONS>>>, <<<SECURITY_RESOURCES>>>
+  and <<<SECURITY_ROLES>>> if it doesn't exist in Archiva or/and Continuum resources list.
+
+  []
+
+  To use this tool, execute the following command with the specified parameters below:
+
++----+
+java -jar redback-roles-cleanup-${version}.jar [PARAMETERS]
++----+
+
+* Parameters
+
+  The executable jar accepts the following parameters:
+
+ [[1]] Application name - specify archiva, continuum or all
+
+ [[2]] JDBC driver class name for Redback users database
+
+ [[3]] Redback users database connection URL
+
+ [[4]] Redback users database username
+
+ [[5]] Redback users database password
+
+ [[6]] Path to Archiva configuration file (if application is continuum, just set this value to "")
+
+ [[7]] Path to Continuum database connection properties file
+
+ []
+ 
+ The Continuum database connection properties file (#7) is where the connection properties of all Continuum databases to be
+ queried are put. It should contain the following 4 key-value pairs for each database instance:
+
++----+
+continuum.db.driverClassName.${count}
+continuum.db.url.${count}
+continuum.db.username.${count}
+continuum.db.password.${count}
++----+
+
+ <<<${count}>>> serves as the index for each database instance. The set of keys above must have the same count as this would be used to
+ determine which properties are associated to the database instance.
+
+ Example configuration:
+
++----+
+# Continuum database instance 1
+continuum.db.driverClassName.1=com.mysql.jdbc.Driver
+continuum.db.url.1=jdbc:mysql://localhost:3306/continuum
+continuum.db.username.1=myusername
+continuum.db.password.1=mypassword
+
+# Continuum database instance 2
+continuum.db.driverClassName.2=com.mysql.jdbc.Driver
+continuum.db.url.2=jdbc:mysql://example.com:3306/continuum
+continuum.db.username.2=anotherusername
+continuum.db.password.2=anotherpassword
++----+
+
+ <<Notes:>>
+ 
+ * Make sure that you add the JDBC driver(s) in the classpath either by setting <<<-cp [JDBC driver jar]>>> when executing
+   the redback roles cleanup utility jar or if that doesn't work, put the JDBC driver jar in <<<${JAVA_HOME}/jre/lib/ext>>>
+
+ * When Archiva and Continuum are configured to share their own database, make sure to specify <<all>> for
+   the application name parameter or else you might accidentally delete used resource roles from the other application.
+
+ * When connecting to a remote Continuum database, make sure that the server is configured to accept remote connections.
+
+* Sample Usages
+
+ [[1]] Users database is used by Continuum only:
+
++----+
+java -jar redback-roles-cleanup-${version}.jar continuum com.mysql.jdbc.Driver
+          jdbc:mysql://localhost:3306/users usersdbUsername usersdbPassword ""
+          /path/to/continuum.props
++----+
+
+ [[2]] Users database is used by Archiva only:
+
++----+
+java -jar redback-roles-cleanup-${version}.jar archiva com.mysql.jdbc.Driver
+          jdbc:mysql://localhost:3306/users usersdbUsername usersdbPassword /path/to/archiva.xml
++----+
+
+ [[3]] Archiva and Continuum are sharing one users database:
+
++----+
+java -jar redback-roles-cleanup-${version}.jar all com.mysql.jdbc.Driver
+         jdbc:mysql://localhost:3306/users usersdbUsername usersdbPassword /path/to/archiva.xml
+         /path/to/continuum.props
++----+

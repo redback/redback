@@ -16,15 +16,29 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * limitations under the License.
  */
 
+import java.util.Arrays;
+import java.util.Date;
+
+import org.apache.struts2.ServletActionContext;
+import org.codehaus.plexus.redback.authentication.AuthenticationConstants;
+import org.codehaus.plexus.redback.authentication.AuthenticationDataSource;
+import org.codehaus.plexus.redback.authentication.AuthenticationException;
+import org.codehaus.plexus.redback.authentication.AuthenticationResult;
+import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
+import org.codehaus.plexus.redback.policy.AccountLockedException;
+import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.struts2.action.AuditEvent;
+import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
+import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.model.EditUserCredentials;
+import org.codehaus.redback.integration.util.AutoLoginCookies;
 
 /**
  * AddAdminUserAction
@@ -38,6 +52,14 @@ import org.codehaus.redback.integration.model.EditUserCredentials;
 public class AddAdminUserAction
     extends AbstractAdminUserCredentialsAction
 {
+    private static final String LOGIN_ERROR = "login-error";
+
+    private static final String LOGIN_SUCCESS = "security-login-success";
+
+    private static final String PASSWORD_CHANGE = "security-must-change-password";
+
+    private static final String ACCOUNT_LOCKED = "security-login-locked";
+
     /**
      * @plexus.requirement
      */
@@ -50,6 +72,11 @@ public class AddAdminUserAction
     private UserConfiguration config;
 
     private EditUserCredentials user;
+
+    /**
+     * @plexus.requirement
+     */
+    private AutoLoginCookies autologinCookies;
 
     public String show()
     {
@@ -124,7 +151,11 @@ public class AddAdminUserAction
             return ERROR;
         }
 
-        return "security-admin-user-created";
+        PasswordBasedAuthenticationDataSource authdatasource = new PasswordBasedAuthenticationDataSource();
+        authdatasource.setPrincipal( user.getUsername() );
+        authdatasource.setPassword( user.getPassword() );
+
+        return webLogin( authdatasource );
     }
 
     public EditUserCredentials getUser()
@@ -141,5 +172,114 @@ public class AddAdminUserAction
         throws SecureActionException
     {
         return SecureActionBundle.OPEN;
+    }
+
+    /**
+     * 1) attempts to authentication based on the passed in data source
+     * 2) if successful sets cookies and returns LOGIN_SUCCESS
+     * 3) if failure then check what kinda failure and return error
+     *
+     * @param authdatasource
+     * @return
+     */
+    private String webLogin( AuthenticationDataSource authdatasource )
+    {
+        // An attempt should log out your authentication tokens first!
+        setAuthTokens( null );
+
+        clearErrorsAndMessages();
+
+        String principal = authdatasource.getPrincipal();
+
+        try
+        {
+            SecuritySession securitySession = securitySystem.authenticate( authdatasource );
+
+            if ( securitySession.getAuthenticationResult().isAuthenticated() )
+            {
+                // Success!  Create tokens.
+                setAuthTokens( securitySession );
+
+                setCookies( authdatasource );
+
+                AuditEvent event = new AuditEvent( getText( "log.login.success" ) );
+                event.setAffectedUser( principal );
+                event.log();
+                
+                User u = securitySession.getUser();
+                u.setLastLoginDate( new Date() );
+                securitySystem.getUserManager().updateUser( u );
+
+                return LOGIN_SUCCESS;
+            }
+            else
+            {
+                log.debug( "Login Action failed against principal : " +
+                    securitySession.getAuthenticationResult().getPrincipal(),
+                                   securitySession.getAuthenticationResult().getException() );
+
+                AuthenticationResult result = securitySession.getAuthenticationResult();
+                if ( result.getExceptionsMap() != null && !result.getExceptionsMap().isEmpty() )
+                {
+                    if ( result.getExceptionsMap().get( AuthenticationConstants.AUTHN_NO_SUCH_USER ) != null )
+                    {
+                        addActionError( getText( "incorrect.username.password" ) );
+                    }
+                    else
+                    {
+                        addActionError( getText( "authentication.failed" ) );
+                    }
+                }
+                else
+                {
+                    addActionError( getText( "authentication.failed" ) );
+                }
+
+                AuditEvent event = new AuditEvent( getText( "log.login.fail" ) );
+                event.setAffectedUser( principal );
+                event.log();
+                
+                return LOGIN_ERROR;
+            }
+        }
+        catch ( AuthenticationException ae )
+        {
+            addActionError( getText( "authentication.exception", Arrays.asList( ae.getMessage() ) ) );
+            return LOGIN_ERROR;
+        }
+        catch ( UserNotFoundException ue )
+        {
+            addActionError( getText( "user.not.found.exception", Arrays.asList( principal, ue.getMessage() ) ) );
+
+            AuditEvent event = new AuditEvent( getText( "log.login.fail" ) );
+            event.setAffectedUser( principal );
+            event.log();
+            return LOGIN_ERROR;
+        }
+        catch ( AccountLockedException e )
+        {
+            addActionError( getText( "account.locked" ) );
+
+            AuditEvent event = new AuditEvent( getText( "log.login.fail.locked" ) );
+            event.setAffectedUser( principal );
+            event.log();
+            return ACCOUNT_LOCKED;
+        }
+        catch ( MustChangePasswordException e )
+        {
+            // TODO: preferably we would not set the cookies for this "partial" login state
+            setCookies( authdatasource );
+
+            AuditEvent event = new AuditEvent( getText( "log.login.fail.locked" ) );
+            event.setAffectedUser( principal );
+            event.log();
+            return PASSWORD_CHANGE;
+        }
+    }
+
+    private void setCookies( AuthenticationDataSource authdatasource )
+    {
+        autologinCookies.setSignonCookie( authdatasource.getPrincipal(), ServletActionContext.getResponse(),
+                                          ServletActionContext.getRequest() );
     }
 }

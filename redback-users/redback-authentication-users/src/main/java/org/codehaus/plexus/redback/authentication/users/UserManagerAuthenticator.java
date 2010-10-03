@@ -109,6 +109,7 @@ public class UserManagerAuthenticator
                 catch ( MustChangePasswordException e )
                 {
                     user.setPasswordChangeRequired( true );
+                    throw e;
                 }
                 
                 authenticationSuccess = true;

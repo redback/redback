@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <version>1</version>
+  <networkProxies/>
+  <repositoryScanning>
+    <fileTypes>
+      <fileType>
+        <id>artifacts</id>
+        <patterns>
+  		  <pattern>**/*.pom</pattern>
+		  <pattern>**/*.jar</pattern>
+		  <pattern>**/*.ear</pattern>
+        </patterns>
+      </fileType>
+      <fileType>
+        <id>indexable-content</id>
+        <patterns>
+          <pattern>**/*.txt</pattern>
+		  <pattern>**/*.TXT</pattern>
+		  <pattern>**/*.block</pattern>
+		  <pattern>**/*.config</pattern>
+		  <pattern>**/*.pom</pattern>
+		  <pattern>**/*.xml</pattern>
+	    </patterns>
+	  </fileType>      
+    </fileTypes>
+    <knownContentConsumers>
+	  <knownContentConsumer>update-db-artifact</knownContentConsumer>
+	  <knownContentConsumer>create-missing-checksums</knownContentConsumer>
+	  <knownContentConsumer>update-db-repository-metadata</knownContentConsumer>	
+    </knownContentConsumers>
+    <invalidContentConsumers>
+      <invalidContentConsumer>update-db-bad-content</invalidContentConsumer>
+    </invalidContentConsumers>
+  </repositoryScanning>
+  <databaseScanning>
+    <cronExpression>0 0 0 * * ?</cronExpression>
+    <unprocessedConsumers>
+      <unprocessedConsumer>index-artifact</unprocessedConsumer>
+	  <unprocessedConsumer>update-db-project</unprocessedConsumer>
+	  <unprocessedConsumer>validate-repository-metadata</unprocessedConsumer>
+	  <unprocessedConsumer>index-archive-toc</unprocessedConsumer>
+    </unprocessedConsumers>
+  </databaseScanning>
+  <managedRepositories>
+    <managedRepository>
+	  <location>file://path/to/repository/snapshots</location>
+	  <releases>false</releases>
+	  <snapshots>true</snapshots>
+	  <refreshCronExpression>0 15 3 * * ? *</refreshCronExpression>
+	  <id>snapshots</id>
+	  <name>Managed Snapshot Repository</name>
+    </managedRepository>
+    <managedRepository>
+	  <location>file://path/to/repository/releases</location>
+      <refreshCronExpression>0 15 3 * * ? *</refreshCronExpression>
+	  <id>releases</id>
+	  <name>Managed Release Repository</name>
+	</managedRepository>
+	<managedRepository>
+	  <location>file://path/to/repository/sandbox</location>
+	  <snapshots>true</snapshots>
+	  <refreshCronExpression>0 15 3 * * ? *</refreshCronExpression>
+	  <id>sandbox</id>
+	  <name>Managed Sandbox Repository</name>
+	</managedRepository>
+	<managedRepository>
+	  <location>file://path/to/test-repo</location>
+	  <indexDir></indexDir>
+	  <id>test-repo</id>
+	  <name>Test Repo</name>
+	</managedRepository>
+  </managedRepositories>  
+</configuration>

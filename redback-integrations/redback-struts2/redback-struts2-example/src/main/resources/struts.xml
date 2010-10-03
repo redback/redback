@@ -45,7 +45,6 @@
       <result name="security-register-cancel" type="redirectAction">main</result>
       <result name="security-account-success" type="redirectAction">main</result>
       <result name="security-account-cancel" type="redirectAction">main</result>
-      <result name="security-admin-user-created" type="redirectAction">main</result>
 
       <result name="security-admin-user-needed" type="redirectAction">
         <param name="actionName">addadmin</param>

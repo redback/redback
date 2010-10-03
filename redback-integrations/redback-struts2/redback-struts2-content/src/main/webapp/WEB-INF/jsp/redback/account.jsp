@@ -34,7 +34,7 @@
          id="registerForm" method="post" name="register" cssClass="security register">     
   <%@ include file="/WEB-INF/jsp/redback/include/userCredentials.jsp" %>
   <redback:isReadOnlyUserManager>
-  	<s:submit value="Go Back" method="cancel" />
+  	<s:submit value="%{getText('goback')}" method="cancel" />
   </redback:isReadOnlyUserManager>
   <redback:isNotReadOnlyUserManager>
     <s:submit value="%{getText('submit')}" method="submit" />

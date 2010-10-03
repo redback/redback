@@ -16,9 +16,6 @@ package org.codehaus.plexus.redback.struts2.result;
  * limitations under the License.
  */
 
-import com.opensymphony.xwork2.ActionInvocation;
-import com.opensymphony.xwork2.config.entities.ResultConfig;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -26,6 +23,9 @@ import java.util.Set;
 import org.apache.struts2.dispatcher.ServletActionRedirectResult;
 import org.codehaus.plexus.redback.struts2.interceptor.ActionInvocationTracker;
 import org.codehaus.plexus.redback.struts2.interceptor.SavedActionInvocation;
+
+import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.config.entities.ResultConfig;
 
 public class AbstractBackTrackingResult
     extends ServletActionRedirectResult
@@ -78,9 +78,10 @@ public class AbstractBackTrackingResult
 	            	
 	            	Map<String, String> filteredMap = new HashMap<String, String>();
 	            	Set<String> keys = savedInvocation.getParametersMap().keySet();
+	            	
 	            	for( String key : keys )
 	            	{
-	            		filteredMap.put( key , "" );
+	            		filteredMap.put( key , savedInvocation.getParametersMap().get(key)[0]);
 	            	}
 	            	
 	            	resultConfig.getParams().putAll( filteredMap );

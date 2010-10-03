@@ -28,9 +28,12 @@ import net.sf.ehcache.CacheManager;
 
 import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
 import org.codehaus.plexus.jdo.JdoFactory;
+import org.codehaus.plexus.redback.common.jdo.test.StoreManagerDebug;
 import org.codehaus.plexus.redback.rbac.AbstractRBACManager;
 import org.codehaus.plexus.redback.rbac.RBACManager;
+import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.tests.AbstractRbacManagerTestCase;
+import org.jpox.AbstractPersistenceManagerFactory;
 import org.jpox.SchemaTool;
 
 /**
@@ -43,6 +46,8 @@ import org.jpox.SchemaTool;
 public class JdoRbacManagerTest
     extends AbstractRbacManagerTestCase
 {
+    private StoreManagerDebug storeManager;
+
     /**
      * Creates a new RbacStore which contains no data.
      */
@@ -88,7 +93,13 @@ public class JdoRbacManagerTest
         jdoFactory.setProperty( "org.jpox.validateColumns", "true" );
 
         jdoFactory.setProperty( "org.jpox.validateConstraints", "true" );
-        
+
+        /* Enable the level 2 Ehcache class-based cache */
+        jdoFactory.setProperty( "org.jpox.cache.level2", "true" );
+        jdoFactory.setProperty( "org.jpox.cache.level2.type", "ehcacheclassbased" );
+        jdoFactory.setProperty( "org.jpox.cache.level2.configurationFile", "/ehcache.xml" ); // ehcache config
+        jdoFactory.setProperty( "org.jpox.cache.level2.cacheName", "default" ); // default cache name
+
         Properties properties = jdoFactory.getProperties();
 
         for ( Map.Entry<Object,Object> entry : properties.entrySet() )
@@ -107,18 +118,26 @@ public class JdoRbacManagerTest
         File propsFile = null; // intentional
         boolean verbose = true;
 
-        SchemaTool.deleteSchemaTables( jdoFileUrls, new URL[] {}, propsFile, verbose );
-        SchemaTool.createSchemaTables( jdoFileUrls, new URL[] {}, propsFile, verbose, null );
-
         PersistenceManagerFactory pmf = jdoFactory.getPersistenceManagerFactory();
 
         assertNotNull( pmf );
+
+        /* set our own Store Manager to allow counting SQL statements */
+        StoreManagerDebug.setup( (AbstractPersistenceManagerFactory) pmf );
+
+        /* clean up the db */
+        SchemaTool.deleteSchemaTables( jdoFileUrls, new URL[] {}, propsFile, verbose );
+        SchemaTool.createSchemaTables( jdoFileUrls, new URL[] {}, propsFile, verbose, null );
 
         PersistenceManager pm = pmf.getPersistenceManager();
 
         pm.close();
 
         setRbacManager( (AbstractRBACManager) lookup( RBACManager.ROLE, "jdo" ) );
+
+        /* save the store manager to access the queries executed */
+        JdoRbacManager rbacManager = (JdoRbacManager) getRbacManager();
+        storeManager = StoreManagerDebug.getConfiguredStoreManager( rbacManager.getJdo().getPersistenceManager());
     }
 
     @Override
@@ -130,4 +149,34 @@ public class JdoRbacManagerTest
         CacheManager.getInstance().removalAll();
         CacheManager.getInstance().shutdown();
     }
-}
+
+    @Override
+    public void testGetAssignedRoles()
+        throws RbacManagerException
+    {
+        super.testGetAssignedRoles();
+        int counter = storeManager.counter();
+        /* without Level 2 cache: 15 queries */
+        /* with    Level 2 cache:  8 queries */
+        assertEquals( "Number of SQL queries", 8, counter );
+    }
+
+    @Override
+    public void testGetAssignedPermissionsDeep()
+        throws RbacManagerException
+    {
+        super.testGetAssignedPermissionsDeep();
+        int counter = storeManager.counter();
+        /* without Level 2 cache: 26 queries */
+        /* with    Level 2 cache: 10 queries */
+        assertEquals( "Number of SQL queries", 10, counter );
+    }
+
+    @Override
+    protected void afterSetup()
+    {
+        super.afterSetup();
+        storeManager.resetCounter();
+    }
+
+ }

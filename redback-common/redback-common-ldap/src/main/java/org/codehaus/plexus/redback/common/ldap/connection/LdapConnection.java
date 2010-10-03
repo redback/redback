@@ -31,12 +31,13 @@ import java.util.Properties;
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
-import javax.naming.directory.InitialDirContext;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.sun.jndi.ldap.LdapCtxFactory;
 
 /**
  * The configuration for a connection will not change.
@@ -46,6 +47,8 @@ import org.slf4j.LoggerFactory;
  */
 public class LdapConnection
 {
+    private static LdapCtxFactory ctxFactory = new LdapCtxFactory();
+    
     private Logger log = LoggerFactory.getLogger( getClass() );
     
     private LdapConnectionConfiguration config;
@@ -78,7 +81,7 @@ public class LdapConnection
 
         try
         {
-            context = new InitialDirContext( e );
+            context = (DirContext) ctxFactory.getInitialContext( e );
         }
         catch ( NamingException ex )
         {
@@ -106,7 +109,7 @@ public class LdapConnection
         
         try
         {
-            context = new InitialDirContext( e );
+            context = (DirContext) ctxFactory.getInitialContext( e );
         }
         catch ( NamingException ex )
         {

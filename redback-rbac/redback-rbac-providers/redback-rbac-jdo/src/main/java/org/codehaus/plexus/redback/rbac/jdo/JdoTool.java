@@ -139,6 +139,12 @@ public class JdoTool
     public void enableCache( Class<?> clazz )
     {
         DataStoreCache cache = pmf.getDataStoreCache();
+        if ( cache.getClass().getName().equals( "org.jpox.cache.EhcacheClassBasedLevel2Cache" )
+            || cache.getClass().getName().equals( "org.jpox.cache.EhcacheLevel2Cache" ) )
+        {
+            /* Ehcache adapters don't support pinAll, the caching is handled in the configuration */
+            return;
+        }
         cache.pinAll( clazz, false ); // Pin all objects of type clazz from now on
     }
 
@@ -484,5 +490,10 @@ public class JdoTool
     public JdoFactory getJdoFactory()
     {
         return jdoFactory;
+    }
+
+    public void setJdoFactory( JdoFactory jdoFactory )
+    {
+        this.jdoFactory = jdoFactory;
     }
 }

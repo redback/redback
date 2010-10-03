@@ -27,8 +27,11 @@
            http://www.springframework.org/schema/context/spring-context-2.5.xsd"
        default-lazy-init="true">
 
-  <context:annotation-config />
-  <context:component-scan 
-    base-package="org.codehaus.plexus.redback.rbac.jdo"/>
- 
+  <bean name="rBACManager#jdo" class="org.codehaus.plexus.redback.rbac.jdo.JdoRbacManager" init-method="initialize">
+    <property name="jdo" ref="jdoTool"/>
+  </bean>
+
+  <bean id="jdoTool" class="org.codehaus.plexus.redback.rbac.jdo.JdoTool" init-method="initialize">
+    <property name="jdoFactory" ref="jdoFactory#users"/>
+  </bean>
 </beans>

@@ -144,11 +144,12 @@
       <interceptor-ref name="defaultStack"/>
       <result name="input">/WEB-INF/jsp/redback/admin/createAdmin.jsp</result>
       <result name="error">/WEB-INF/jsp/redback/admin/createAdmin.jsp</result>
-      <result name="security-admin-user-created" type="redirectAction">
-        <param name="actionName">login!login</param>
-        <param name="namespace">/security</param>
-        <param name="username">${user.username}</param>
-        <param name="password">${user.password}</param>
+      <result name="login-error">/WEB-INF/jsp/redback/login.jsp</result>
+      <result name="security-login-success" type="security-external">
+        <param name="externalResult">security-login-success</param>
+      </result>
+      <result name="security-login-locked" type="security-external">
+        <param name="externalResult">security-login-locked</param>
       </result>
     </action>
 

@@ -38,10 +38,10 @@
   </div>
 
   <div class="functnbar3">
-    <form action="roleedit.action">
-      <input type="hidden" name="name" value="${name}"/>
-      <input type="submit" value="Edit"/>
-    </form>
+    <s:form action="roleedit" namespace="/security">
+      <s:hidden name="name" />
+      <s:submit value="%{getText('edit')}" />
+    </s:form>
   </div>
 
   <h3><s:text name="role.model.parent.roles"/></h3>
@@ -79,6 +79,10 @@
     <s:text name="role.create.no.permissions.defined"/>
   </c:if>
   <c:if test="${!empty permissions}">
+    <!-- ec on redback should not be dependent on the resource bundle of the project using it -->
+	<s:set name="role_name" value="%{getText('name')}"/>
+	<s:set name="role_operation" value="%{getText('role.operation')}"/>
+	<s:set name="role_resource" value="%{getText('role.resource')}"/>
     <ec:table var="permission"
         items="permissions"
         cellspacing="2"
@@ -89,9 +93,9 @@
         showStatusBar="false"
         filterable="false">
       <ec:row>
-        <ec:column property="name" title="Name"/>
-        <ec:column property="operation.name" title="Operation"/>
-        <ec:column property="resource.identifier" title="Resource"/>
+        <ec:column property="name" title="${role_name}"/>
+        <ec:column property="operation.name" title="${role_operation}"/>
+        <ec:column property="resource.identifier" title="${role_resource}"/>
       </ec:row>
     </ec:table>
   </c:if>

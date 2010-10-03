@@ -381,7 +381,7 @@ public class JdoUserManager
         pmf = jdoFactory.getPersistenceManagerFactory();
     }
 
-    private PersistenceManager getPersistenceManager()
+    public PersistenceManager getPersistenceManager()
     {
         PersistenceManager pm = pmf.getPersistenceManager();
 
@@ -465,6 +465,11 @@ public class JdoUserManager
     public JdoFactory getJdoFactory()
     {
         return jdoFactory;
+    }
+
+    public void setJdoFactory( JdoFactory jdoFactory )
+    {
+        this.jdoFactory = jdoFactory;
     }
 
     public UserSecurityPolicy getUserSecurityPolicy()
