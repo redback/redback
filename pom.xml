@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.codehaus.redback</groupId>
   <artifactId>redback</artifactId>
-  <version>1.2.3</version>
+  <version>1.2.4-SNAPSHOT</version>
   <name>Redback</name>
   <packaging>pom</packaging>
   <url>http://redback.codehaus.org/</url>
