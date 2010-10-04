@@ -299,7 +299,8 @@
       <dependency>
         <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-rbac-jdo</artifactId>
-        <version>${security.version}</version>      </dependency>
+        <version>${security.version}</version>      
+      </dependency>
       <dependency>
         <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-rbac-role-manager</artifactId>
@@ -330,6 +331,26 @@
       <dependency>
         <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-common-integrations</artifactId>
+        <version>${security.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.redback</groupId>
+        <artifactId>redback-xmlrpc-api</artifactId>
+        <version>${security.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.redback</groupId>
+        <artifactId>redback-xmlrpc-client</artifactId>
+        <version>${security.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.redback</groupId>
+        <artifactId>redback-xmlrpc-services</artifactId>
+        <version>${security.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.redback</groupId>
+        <artifactId>redback-xmlrpc-security</artifactId>
         <version>${security.version}</version>
       </dependency>
       <dependency>

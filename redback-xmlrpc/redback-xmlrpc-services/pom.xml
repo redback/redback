@@ -41,6 +41,30 @@
       <artifactId>redback-rbac-role-manager</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.codehaus.redback</groupId>
+      <artifactId>redback-authentication-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.redback</groupId>
+      <artifactId>redback-system</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.redback</groupId>
+      <artifactId>redback-keys-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.redback</groupId>
+      <artifactId>redback-keys-jdo</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.redback</groupId>
+      <artifactId>redback-keys-memory</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus.cache</groupId>
+      <artifactId>plexus-cache-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.atlassian.xmlrpc</groupId>
       <artifactId>atlassian-xmlrpc-binder-server-spring</artifactId>
     </dependency>

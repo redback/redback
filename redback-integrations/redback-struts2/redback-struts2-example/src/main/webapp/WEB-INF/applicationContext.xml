@@ -10,5 +10,17 @@
   
   <bean name="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
     <property name="session" ref="mailSession"/>
+  </bean>
+
+  <bean id="loginService" class="org.codehaus.redback.xmlrpc.service.LoginServiceImpl">
+    <constructor-arg ref="securitySystem" />
+  </bean>
+  
+  <bean name="xmlrpcServicesList" class="java.util.ArrayList">
+    <constructor-arg>
+      <list>
+        <ref bean="loginService" />
+      </list>
+    </constructor-arg>
   </bean>    
 </beans>

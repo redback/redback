@@ -72,6 +72,27 @@
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
   
+  <servlet>
+    <servlet-name>RedbackXmlRpcServlet</servlet-name>
+    <servlet-class>
+      com.atlassian.xmlrpc.spring.BinderSpringXmlRpcServlet
+    </servlet-class>
+    <init-param>
+      <param-name>serviceListBeanName</param-name>
+      <param-value>xmlrpcServicesList</param-value>
+    </init-param>
+    <init-param>
+      <param-name>enabledForExtensions</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>RedbackXmlRpcServlet</servlet-name>
+    <url-pattern>/redback/xmlrpc</url-pattern>
+  </servlet-mapping>
+
   <!--resource-ref>
     <res-ref-name>jdbc/users</res-ref-name>
     <res-type>javax.sql.DataSource</res-type>
