@@ -49,10 +49,10 @@ public class LoginServiceClient
         return loginService.ping();
     }
 
-    public int addKey( String key, String principal, String purpose, int expirationMinutes )
+    public int addAuthenticationKey( String key, String principal, String purpose, int expirationMinutes )
         throws Exception
     {
-        return loginService.addKey( key, principal, purpose, expirationMinutes );
+        return loginService.addAuthenticationKey( key, principal, purpose, expirationMinutes );
     }
 
     public int removeFromCache( String username )

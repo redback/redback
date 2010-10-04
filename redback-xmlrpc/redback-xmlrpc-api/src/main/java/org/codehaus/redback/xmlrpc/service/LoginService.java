@@ -8,7 +8,7 @@ public interface LoginService
     public Boolean ping()
         throws Exception;
 
-    public int addKey( String key, String principal, String purpose, int expirationMinutes )
+    public int addAuthenticationKey( String key, String principal, String purpose, int expirationMinutes )
         throws Exception;
 
     public int removeFromCache( String username )

@@ -42,7 +42,7 @@ public class LoginServiceImpl
         this.securitySystem = securitySystem;
     }
 
-    public int addKey( String providedKey, String principal, String purpose, int expirationMinutes )
+    public int addAuthenticationKey( String providedKey, String principal, String purpose, int expirationMinutes )
         throws Exception
     {
         KeyManager keyManager = securitySystem.getKeyManager();
