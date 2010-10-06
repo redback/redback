@@ -31,20 +31,21 @@ import org.dom4j.io.SAXReader;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.PropertyEditorRegistrar;
 import org.springframework.beans.PropertyEditorRegistry;
-import org.springframework.beans.propertyeditors.PropertiesEditor;
+import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 
 /**
  * @author <a href="mailto:nicolas@apache.org">Nicolas De Loof</a>
  * @version $Id$
  */
 public class CollectionPropertyEditor
-    extends PropertiesEditor
+    extends CustomCollectionEditor
     implements PropertyEditorRegistrar
 {
     private Class type, implementation;
 
     public CollectionPropertyEditor( Class type, Class implementation )
     {
+        super( type );
         this.type = type;
         this.implementation = implementation;
     }
@@ -99,5 +100,4 @@ public class CollectionPropertyEditor
         {
         }
     }
-
 }

@@ -30,7 +30,7 @@ import org.dom4j.io.SAXReader;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.PropertyEditorRegistrar;
 import org.springframework.beans.PropertyEditorRegistry;
-import org.springframework.beans.propertyeditors.PropertiesEditor;
+import org.springframework.beans.propertyeditors.CustomMapEditor;
 
 /**
  * @author <a href="mailto:olamy@apache.org">olamy</a>
@@ -38,7 +38,7 @@ import org.springframework.beans.propertyeditors.PropertiesEditor;
  * @version $Id$
  */
 public class MapPropertyEditor
-    extends PropertiesEditor
+    extends CustomMapEditor
     implements PropertyEditorRegistrar
 {
 
@@ -46,6 +46,7 @@ public class MapPropertyEditor
     
     public MapPropertyEditor( Class type, Class implementation )
     {
+        super( type );
         this.type = type;
         this.implementation = implementation;
     }
