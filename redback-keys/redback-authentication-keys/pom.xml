@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-authentication-providers</artifactId>
-    <version>1.2.4-SNAPSHOT</version>
+    <version>1.2.4</version>
   </parent>
   <artifactId>redback-authentication-keys</artifactId>
   <name>Redback :: Authentication Provider :: Keys</name>
