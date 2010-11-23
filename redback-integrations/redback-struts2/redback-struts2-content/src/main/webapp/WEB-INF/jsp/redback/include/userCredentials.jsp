@@ -51,8 +51,8 @@
   <redback:isNotReadOnlyUserManager>
   <c:choose>
     <c:when test="${self}">
-      <s:password  label="%{getText('current.password')}"         name="oldPassword" size="20" required="true"/>
-      <s:password  label="%{getText('new.password')}"         name="user.password" size="20" required="true"/>
+      <s:password  label="%{getText('current.password')}" name="oldPassword" size="20" required="true"/>
+      <s:password  label="%{getText('new.password')}" name="user.password" size="20" required="true"/>
     </c:when>
     <c:otherwise>
       <s:password  label="%{getText('password')}"         name="user.password" size="20" required="true"/>

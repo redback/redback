@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.codehaus.plexus.redback.policy.PasswordEncoder;
 import org.codehaus.plexus.redback.policy.PasswordRuleViolationException;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
@@ -75,13 +76,25 @@ public class UserEditAction
     private boolean emailValidationRequired;
 
     private boolean hasHiddenRoles;
-    
+
+    private String oldPassword;
+
+    private String userAdminPassword;
+
+    private boolean self;
+
+    public static String CONFIRM = "confirm";
+
+    public static String CONFIRM_ERROR = "confirmError";
+
     // ------------------------------------------------------------------
     // Action Entry Points - (aka Names)
     // ------------------------------------------------------------------
 
     public String edit()
     {
+        oldPassword = "";
+        
     	emailValidationRequired = securitySystem.getPolicy().getUserValidationSettings().isEmailValidationRequired();
     	
         if ( getUsername() == null )
@@ -117,6 +130,12 @@ public class UserEditAction
             }
 
             user = new AdminEditUserCredentials( u );
+
+            // require user admin to provide his/her password if editing account of others
+            if( getUsername().equals( getCurrentUser() ) )
+            {
+                self = true;
+            }
 
             try
             {
@@ -183,6 +202,55 @@ public class UserEditAction
             return ERROR;
         }
 
+        if( !getUsername().equals( getCurrentUser() ) )
+        {
+            return CONFIRM;
+        }
+        else
+        {
+            return save( true );
+        }
+    }
+
+    // confirm user admin's password before allowing to proceed with the operation
+    public String confirmAdminPassword()
+    {
+        UserManager manager = super.securitySystem.getUserManager();
+
+        if( StringUtils.isEmpty( userAdminPassword ) )
+        {
+            addActionError( getText( "user.admin.password.required" ) );
+            return CONFIRM_ERROR;
+        }
+
+        try
+        {
+            User currentUser = manager.findUser( getCurrentUser() );
+
+            // check if user admin provided correct password!
+            PasswordEncoder encoder = securitySystem.getPolicy().getPasswordEncoder();
+            if ( !encoder.isPasswordValid( currentUser.getEncodedPassword(), userAdminPassword ) )
+            {
+                addActionError( getText( "user.admin.password.does.not.match.existing" ) );
+                return CONFIRM_ERROR;
+            }
+        }
+        catch ( UserNotFoundException e )
+        {
+            addActionError( getText( "cannot.find.user", Arrays.asList( getCurrentUser(), e.getMessage() ) ) );
+            return CONFIRM_ERROR;
+        }
+
+        return save( false );
+    }
+    
+    public String cancel() 
+    {
+		return CANCEL;
+	}
+
+    private String save( boolean validateOldPassword )
+    {
         UserManager manager = super.securitySystem.getUserManager();
 
         if ( !manager.userExists( getUsername() ) )
@@ -200,6 +268,25 @@ public class UserEditAction
             {
                 addActionError( getText( "cannot.operate.on.null.user" ) );
                 return ERROR;
+            }
+
+            if( validateOldPassword )
+            {
+                PasswordEncoder encoder = securitySystem.getPolicy().getPasswordEncoder();
+
+                if( StringUtils.isEmpty( oldPassword ) )
+                {
+                    self = true;
+                    addFieldError( "oldPassword", getText( "old.password.required" ) );
+                    return ERROR;
+                }
+
+                if ( !encoder.isPasswordValid( u.getEncodedPassword(), oldPassword ) )
+                {
+                    self = true;
+                    addFieldError( "oldPassword", getText( "password.provided.does.not.match.existing" ) );
+                    return ERROR;
+                }
             }
 
             u.setFullName( user.getFullName() );
@@ -237,14 +324,10 @@ public class UserEditAction
         event.setAffectedUser( getUsername() );
         event.setCurrentUser( currentUser );
         event.log();
-        
+
         return SUCCESS;
     }
-    
-    public String cancel() 
-    {
-		return CANCEL;
-	}
+
 
 	// ------------------------------------------------------------------
     // Parameter Accessor Methods
@@ -301,6 +384,18 @@ public class UserEditAction
         this.hasHiddenRoles = hasHiddenRoles;
     }
 
-    
-    
+    public void setOldPassword( String oldPassword )
+    {
+        this.oldPassword = oldPassword;
+    }
+
+    public void setUserAdminPassword( String userAdminPassword )
+    {
+        this.userAdminPassword = userAdminPassword;
+    }
+
+    public boolean isSelf()
+    {
+        return self;
+    }
 }

@@ -41,7 +41,9 @@
          <interceptor-ref name="redbackForceAdminUser"/>
          <interceptor-ref name="redbackAutoLogin"/>
          <interceptor-ref name="redbackPolicyEnforcement"/>
-         <interceptor-ref name="redbackSecureActions"/>
+         <interceptor-ref name="redbackSecureActions">
+           <param name="enableReferrerCheck">true</param>
+         </interceptor-ref>
       </interceptor-stack>
 
       <interceptor-stack name="securedStack">
@@ -179,6 +181,8 @@
     <action name="useredit" class="redback-admin-user-edit" method="edit">
       <result name="input">/WEB-INF/jsp/redback/admin/userEdit.jsp</result>
       <result name="error">/WEB-INF/jsp/redback/admin/userEdit.jsp</result>
+      <result name="confirm">/WEB-INF/jsp/redback/admin/confirmUserAdministrator.jsp</result>
+      <result name="confirmError">/WEB-INF/jsp/redback/admin/confirmUserAdministrator.jsp</result>
       <result name="success" type="redirectAction">userlist</result>
       <result name="cancel" type="redirectAction">userlist</result>
     </action>
