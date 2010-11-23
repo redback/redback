@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-rbac</artifactId>
-    <version>1.2.4</version>
+    <version>1.2.4-SNAPSHOT</version>
   </parent>
   <artifactId>redback-rbac-tests</artifactId>
   <name>Redback :: RBAC Test Framework</name>
