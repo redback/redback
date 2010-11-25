@@ -39,22 +39,22 @@
       <dependency>
         <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-xmlrpc-api</artifactId>
-        <version>${security.version}</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-xmlrpc-server</artifactId>
-        <version>${security.version}</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-xmlrpc-client</artifactId>
-        <version>${security.version}</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.redback</groupId>
         <artifactId>plexus-spring</artifactId>
-        <version>${security.version}</version>
+        <version>${project.version}</version>
         <exclusions>
           <exclusion>
             <groupId>org.codehaus.plexus</groupId>
