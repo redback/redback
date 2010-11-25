@@ -785,6 +785,7 @@
             <artifactId>maven-gpg-plugin</artifactId>
             <configuration>
               <passphrase>${gpg.passphrase}</passphrase>
+              <useAgent>true</useAgent>
             </configuration>
             <executions>
               <execution>
