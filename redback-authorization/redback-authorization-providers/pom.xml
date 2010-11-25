@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-authorization</artifactId>
-    <version>1.2.6-SNAPSHOT</version>
+    <version>1.2.5-SNAPSHOT</version>
   </parent>
   <artifactId>redback-authorization-providers</artifactId>
   <name>Redback :: Authorization Providers</name>
