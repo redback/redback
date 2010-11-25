@@ -666,6 +666,7 @@
           <goals>deploy</goals>
           <preparationGoals>clean install</preparationGoals>
           <arguments>-Prelease</arguments>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
         </configuration>
       </plugin>
       <plugin>
