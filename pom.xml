@@ -79,12 +79,12 @@
     <repository>
       <id>codehaus.org</id>
       <name>Redback Central Repository</name>
-      <url>dav:https://dav.codehaus.org/repository/redback</url>
+      <url>https://dav.codehaus.org/repository/redback</url>
     </repository>
     <snapshotRepository>
       <id>codehaus.org</id>
       <name>Redback Central Development Repository</name>
-      <url>dav:https://dav.codehaus.org/snapshots.repository/redback</url>
+      <url>https://dav.codehaus.org/snapshots.repository/redback</url>
     </snapshotRepository>
     <site>
       <id>codehaus.org</id>
