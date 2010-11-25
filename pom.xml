@@ -79,12 +79,12 @@
     <repository>
       <id>codehaus.org</id>
       <name>Redback Central Repository</name>
-      <url>https://dav.codehaus.org/repository/redback</url>
+      <url>dav:https://dav.codehaus.org/repository/redback</url>
     </repository>
     <snapshotRepository>
       <id>codehaus.org</id>
       <name>Redback Central Development Repository</name>
-      <url>https://dav.codehaus.org/snapshots.repository/redback</url>
+      <url>dav:https://dav.codehaus.org/snapshots.repository/redback</url>
     </snapshotRepository>
     <site>
       <id>codehaus.org</id>
@@ -584,6 +584,13 @@
   </scm>
 
   <build>
+    <extensions>
+      <extension>
+	<groupId>org.apache.maven.wagon</groupId>
+	<artifactId>wagon-webdav</artifactId>
+	<version>1.0-beta-1</version>
+      </extension>
+    </extensions>
     <pluginManagement>
       <plugins>
         <plugin>
