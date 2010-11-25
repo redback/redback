@@ -26,7 +26,7 @@ import org.codehaus.plexus.redback.policy.AccountLockedException;
 import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.RbacObjectInvalidException;
-import org.codehaus.plexus.redback.rbac.RbacObjectNotFoundException;
+import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.struts2.model.ApplicationRoleDetails;
 import org.codehaus.plexus.redback.struts2.model.ApplicationRoleDetails.RoleTableCell;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
@@ -387,8 +387,10 @@ public class AssignmentsActionTest
 
         assertEquals( Action.SUCCESS, action.edituser() );
 
-        assertEquals( Arrays.asList( "Project Administrator - other", "Registered User" ),
-                      rbacManager.getUserAssignment( "user2" ).getRoleNames() );
+        // Roles may be out of order, due to removal and subsequent re-add
+        List<String> user2roles = rbacManager.getUserAssignment( "user2" ).getRoleNames();
+        assertTrue( user2roles.contains( "Project Administrator - other" ) );
+        assertTrue( user2roles.contains( "Registered User" ) );
     }
 
     /**
@@ -417,7 +419,8 @@ public class AssignmentsActionTest
     /**
      * Check security - show should succeed and display all roles, even without 'user-management-role-grant' or
      * 'user-management-user-role' for the user administrators.
-     * @throws MustChangePasswordException 
+     * 
+     * @throws MustChangePasswordException
      */
     public void testSystemAdminCanShowRoles()
         throws Exception
@@ -534,5 +537,42 @@ public class AssignmentsActionTest
         assertEquals( Action.SUCCESS, action.edituser() );
 
         assertTrue( rbacManager.getUserAssignment( "user2" ).getRoleNames().isEmpty() );
+    }
+
+    /**
+     * Check that a configured struts2 redback app only removes roles configured for the app. Without this, redback
+     * applications sharing a user database will remove each other's roles on save.
+     */
+    public void testUserAdminCannotRemoveNonAppRoles()
+        throws Exception
+    {
+        login( action, "user-admin", PASSWORD );
+
+        // Create a role that isn't configured for apps
+        String nonAppRoleName = "Other App Role";
+        Role nonAppRole = rbacManager.createRole( nonAppRoleName );
+        rbacManager.saveRole( nonAppRole );
+
+        addAssignment( "user2", "Continuum Group Project Administrator" );
+        addAssignment( "user2", "Project Administrator - default" );
+        addAssignment( "user2", nonAppRoleName );
+
+        // set addDSelectedRoles (dynamic --> Resource Roles) and addNDSelectedRoles (non-dynamic --> Available Roles)
+        List<String> ndSelectedRoles = new ArrayList<String>();
+        action.setAddNDSelectedRoles( ndSelectedRoles );
+
+        List<String> dSelectedRoles = new ArrayList<String>();
+        action.setAddDSelectedRoles( dSelectedRoles );
+
+        assertEquals( Arrays.asList( "Continuum Group Project Administrator", "Project Administrator - default",
+                                     nonAppRoleName ), rbacManager.getUserAssignment( "user2" ).getRoleNames() );
+
+        assertEquals( Action.SUCCESS, action.edituser() );
+
+        // All roles except role from other app should be removed.
+        List<String> user2roles = rbacManager.getUserAssignment( "user2" ).getRoleNames();
+        assertTrue( !user2roles.contains( "Continuum Group Project Administrator" ) );
+        assertTrue( !user2roles.contains( "Project Administrator - default" ) );
+        assertTrue( user2roles.contains( nonAppRoleName ) );
     }
 }

@@ -34,6 +34,7 @@ import org.codehaus.plexus.redback.role.model.ModelApplication;
 import org.codehaus.plexus.redback.struts2.action.AbstractUserCredentialsAction;
 import org.codehaus.plexus.redback.struts2.action.AuditEvent;
 import org.codehaus.plexus.redback.struts2.model.ApplicationRoleDetails;
+import org.codehaus.plexus.redback.struts2.model.ApplicationRoleDetails.RoleTableCell;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
@@ -121,11 +122,11 @@ public class AssignmentsAction
      * also have a column of checkboxes that can be selected and then removed from the user. <p/> A table of roles that
      * can be assigned. This table should have a set of checkboxes that can be selected and then added to the user. <p/>
      * Duplicate role assignment needs to be taken care of.
-     *
+     * 
      * @throws RbacManagerException
      * @throws RbacObjectNotFoundException
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public String show()
         throws RbacObjectNotFoundException, RbacManagerException
     {
@@ -172,25 +173,31 @@ public class AssignmentsAction
         }
 
         List<Role> assignableRoles = getFilteredRolesForCurrentUserAccess();
-        for ( Iterator<ModelApplication> i = rmanager.getModel().getApplications().iterator(); i.hasNext(); )
-        {
-            ModelApplication application = i.next();
-
-            ApplicationRoleDetails details = new ApplicationRoleDetails( application,
-                                                                         getManager().getEffectivelyAssignedRoles(
-                                                                             principal ),
-                                                                         getManager().getAssignedRoles( principal ),
-                                                                         assignableRoles );
-
-            applicationRoleDetails.add( details );
-        }
+        List<ApplicationRoleDetails> appRoleDetails = lookupAppRoleDetails( principal, assignableRoles );
+        applicationRoleDetails.addAll( appRoleDetails );
 
         return SUCCESS;
     }
 
+    @SuppressWarnings( "unchecked" )
+    private List<ApplicationRoleDetails> lookupAppRoleDetails( String principal, List<Role> assignableRoles )
+        throws RbacObjectNotFoundException, RbacManagerException
+    {
+        List<ApplicationRoleDetails> appRoleDetails = new ArrayList<ApplicationRoleDetails>();
+        for ( Iterator<ModelApplication> i = rmanager.getModel().getApplications().iterator(); i.hasNext(); )
+        {
+            ModelApplication application = i.next();
+            ApplicationRoleDetails details =
+                new ApplicationRoleDetails( application, getManager().getEffectivelyAssignedRoles( principal ),
+                                            getManager().getAssignedRoles( principal ), assignableRoles );
+            appRoleDetails.add( details );
+        }
+        return appRoleDetails;
+    }
+
     /**
-     * Display the edit user panel.
-     *
+     * Applies role additions and removals and then displays the edit user panel.
+     * 
      * @return
      */
     public String edituser()
@@ -200,26 +207,59 @@ public class AssignmentsAction
             Collection<Role> assignedRoles = (Collection<Role>) getManager().getAssignedRoles( principal );
             List<Role> assignableRoles = getFilteredRolesForCurrentUserAccess();
 
+            // Compute set of roles usable by configured apps, add/del from this set only
+            List<ApplicationRoleDetails> appRoleDetails = lookupAppRoleDetails( principal, assignableRoles );
+            applicationRoleDetails.addAll( appRoleDetails );
+
+            Set<String> availableAppRoleNames = new HashSet<String>();
+            for ( ApplicationRoleDetails appRoleDetail : applicationRoleDetails )
+            {
+                availableAppRoleNames.addAll( appRoleDetail.getAssignedRoles() );
+                availableAppRoleNames.addAll( appRoleDetail.getAvailableRoles() );
+
+                // Add dynamic roles offered on page
+                for ( List<RoleTableCell> row : appRoleDetail.getTable() )
+                {
+                    for ( RoleTableCell col : row )
+                    {
+                        if ( !col.isLabel() )
+                        {
+                            availableAppRoleNames.add( col.getName() );
+                        }
+                    }
+                }
+            }
+
             Set<Role> availableRoles = new HashSet<Role>( assignedRoles );
             availableRoles.addAll( assignableRoles );
 
-            List<String> roles = new ArrayList<String>();
-            addSelectedRoles( availableRoles, roles, addNDSelectedRoles );
-            addSelectedRoles( availableRoles, roles, addDSelectedRoles );
+            // Filter the available roles so we only consider configured app roles
+            Iterator<Role> availableRoleIterator = availableRoles.iterator();
+            while ( availableRoleIterator.hasNext() )
+            {
+                Role availableRole = availableRoleIterator.next();
+                if ( !availableAppRoleNames.contains( availableRole.getName() ) )
+                {
+                    availableRoleIterator.remove();
+                }
+            }
 
-            // TODO: rather than assuming missing roles are removals, we should track which were actually on the page
-            // (and if possible, changed)
-            List<String> newRoles = new ArrayList<String>( roles );
+            List<String> selectedRoleNames = new ArrayList<String>();
+            addSelectedRoles( availableRoles, selectedRoleNames, addNDSelectedRoles );
+            addSelectedRoles( availableRoles, selectedRoleNames, addDSelectedRoles );
+
+            List<String> newRoles = new ArrayList<String>( selectedRoleNames );
             String currentUser = getCurrentUser();
             for ( Role assignedRole : assignedRoles )
             {
-                if ( !roles.contains( assignedRole.getName() ) )
+                if ( !selectedRoleNames.contains( assignedRole.getName() ) )
                 {
                     // removing a currently assigned role, check if we have permission
-                    if ( !checkRoleName( assignableRoles, assignedRole.getName() ) )
+                    if ( !availableRoles.contains( assignedRole )
+                        || !checkRoleName( assignableRoles, assignedRole.getName() ) )
                     {
                         // it may have not been on the page. Leave it assigned.
-                        roles.add( assignedRole.getName() );
+                        selectedRoleNames.add( assignedRole.getName() );
                     }
                     else
                     {
@@ -256,7 +296,7 @@ public class AssignmentsAction
                 assignment = getManager().createUserAssignment( principal );
             }
 
-            assignment.setRoleNames( roles );
+            assignment.setRoleNames( selectedRoleNames );
 
             assignment = getManager().saveUserAssignment( assignment );
         }
