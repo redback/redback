@@ -5,7 +5,7 @@
   <parent>
     <artifactId>redback-struts2</artifactId>
     <groupId>org.codehaus.redback</groupId>
-    <version>1.2.4-SNAPSHOT</version>
+    <version>1.2.5-SNAPSHOT</version>
   </parent>
   <artifactId>redback-struts2-it</artifactId>
   <name>Redback :: Struts 2 Integration Selenium Test Suite</name>
