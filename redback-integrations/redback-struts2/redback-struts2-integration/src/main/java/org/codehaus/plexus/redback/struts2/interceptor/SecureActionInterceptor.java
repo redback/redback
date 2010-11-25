@@ -18,8 +18,10 @@ package org.codehaus.plexus.redback.struts2.interceptor;
 
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.redback.authorization.AuthorizationResult;
@@ -51,6 +53,8 @@ public class SecureActionInterceptor
 
     private static final String REQUIRES_AUTHENTICATION = "requires-authentication";
 
+    private static final String HTTP_HEADER_REFERER = "Referer";
+
     /**
      * @plexus.requirement
      */
@@ -61,6 +65,8 @@ public class SecureActionInterceptor
      */
     private String trackerName;
 
+    private String enableReferrerCheck;
+
     @Override
     public void destroy()
     {
@@ -70,7 +76,17 @@ public class SecureActionInterceptor
     {
         return trackerName;
     }
-    
+
+    public String getEnableReferrerCheck()
+    {
+        return enableReferrerCheck;
+    }
+
+    public void setEnableReferrerCheck( String enableReferrerCheck )
+    {
+        this.enableReferrerCheck = enableReferrerCheck;
+    }
+
     /**
      * process the action to determine if it implements SecureAction and then act
      * accordingly
@@ -88,6 +104,12 @@ public class SecureActionInterceptor
         Action action = (Action) context.getActionInvocation().getAction();
 
         logger.debug( "SecureActionInterceptor: processing " + action.getClass().getName() );
+
+        if( Boolean.valueOf( enableReferrerCheck ) )
+        {
+            logger.debug( "Referrer security check enabled." );
+            executeReferrerSecurityCheck();
+        }
 
         try
         {
@@ -175,7 +197,54 @@ public class SecureActionInterceptor
             invocation.getAction().getClass().getName() );
         return result;
     }
-    
+
+    private void executeReferrerSecurityCheck()
+    {
+        String referrer = ServletActionContext.getRequest().getHeader( HTTP_HEADER_REFERER );
+
+        logger.debug( "HTTP Referer header: " + referrer );
+
+        String[] tokens = StringUtils.splitPreserveAllTokens( referrer, "/", 3 );
+        
+        if( tokens != null )
+        {
+            String path;
+            if( tokens.length < 3 )
+            {
+                path = referrer;
+            }
+            else
+            {
+                path = tokens[ tokens.length - 1 ];
+            }
+
+            logger.debug( "Calculated virtual path: " + path );
+
+            ServletContext servletContext = ServletActionContext.getServletContext();
+
+            String realPath = servletContext.getRealPath( path );
+
+            if( StringUtils.isNotEmpty( realPath ) )
+            {
+                if( !realPath.endsWith( path ) )
+                {
+                    String errorMsg = "Failed referrer security check: Request did not come from the same server. " +
+                        "Detected HTTP Referer header is '" + referrer + "'.";
+                    logger.error( errorMsg );
+                    throw new RuntimeException( errorMsg );
+                }
+                else
+                {
+                    logger.debug( "HTTP Referer header path found in server." );
+                }
+            }
+        }
+        else
+        {
+            logger.warn( "HTTP Referer header is null." );
+        }
+    }
+
     protected String processRequiresAuthorization( ActionInvocation invocation )
         throws ComponentLookupException
     {
