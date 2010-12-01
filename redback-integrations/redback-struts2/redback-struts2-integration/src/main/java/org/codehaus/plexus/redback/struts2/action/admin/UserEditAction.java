@@ -237,7 +237,7 @@ public class UserEditAction
         }
         catch ( UserNotFoundException e )
         {
-            addActionError( getText( "cannot.find.user", Arrays.asList( getCurrentUser(), e.getMessage() ) ) );
+            addActionError( getText( "cannot.find.user", Arrays.asList( ( Object ) getCurrentUser(), e.getMessage() ) ) );
             return CONFIRM_ERROR;
         }
 
