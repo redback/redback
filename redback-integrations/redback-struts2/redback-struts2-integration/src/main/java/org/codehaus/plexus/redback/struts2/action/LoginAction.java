@@ -331,7 +331,7 @@ public class LoginAction
         {
             SecuritySession securitySession = securitySystem.authenticate( authdatasource );
 
-            if ( securitySession.getAuthenticationResult().isAuthenticated() )
+            if ( securitySession.isAuthenticated() )
             {
                 // Success!  Create tokens.
                 setAuthTokens( securitySession );
