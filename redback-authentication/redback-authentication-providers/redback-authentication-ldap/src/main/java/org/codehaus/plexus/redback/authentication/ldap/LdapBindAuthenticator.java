@@ -23,6 +23,7 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.plexus.redback.authentication.AuthenticationDataSource;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
@@ -69,7 +70,8 @@ public class LdapBindAuthenticator
     {
         PasswordBasedAuthenticationDataSource source = (PasswordBasedAuthenticationDataSource) s;
 
-        if ( !config.getBoolean( "ldap.bind.authenticator.enabled" ) )
+        if ( !config.getBoolean( "ldap.bind.authenticator.enabled" )
+            || ( !config.getBoolean( "ldap.bind.authenticator.allowEmptyPasswords", false ) && StringUtils.isEmpty( source.getPassword() ) ) )
         {
             return new AuthenticationResult( false, source.getPrincipal(), null );
         }

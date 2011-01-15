@@ -73,12 +73,32 @@ public class LdapBindAuthenticatorTest
         context.unbind( createDn( "jesse" ) );
 
         context.unbind( createDn( "joakim" ) );
+        
+        context.unbind( createDn( "brent" ) );
 
         apacheDs.stopServer();
 
         super.tearDown();
     }
 
+    public void testAuthenticationEmptyPassword()
+        throws Exception
+    {
+        LdapBindAuthenticator authnr = (LdapBindAuthenticator) lookup( Authenticator.ROLE, "ldap" );
+        PasswordBasedAuthenticationDataSource authDs = new PasswordBasedAuthenticationDataSource();
+        
+        // Would throw NPE if attempting to bind, this hack tests bind prevention
+        authDs.setPrincipal( "brent" );
+        authDs.setPassword( null );
+        AuthenticationResult result = authnr.authenticate( authDs );
+        assertFalse( result.isAuthenticated() );
+        
+        // This passes anyway on ApacheDS, but not true for AD or Novel eDir
+        authDs.setPassword( "" );
+        result = authnr.authenticate( authDs );
+        assertFalse( result.isAuthenticated() );
+    }
+    
     public void testAuthentication()
         throws Exception
     {
@@ -101,6 +121,8 @@ public class LdapBindAuthenticatorTest
         cn = "joakim";
         bindUserObject( context, cn, createDn( cn ) );
 
+        cn = "brent";
+        bindUserObject( context, cn, createDn( cn ) );
     }
 
     private void bindUserObject( DirContext context, String cn, String dn )
