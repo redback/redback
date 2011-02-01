@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-rbac-providers</artifactId>
-    <version>1.2.6-SNAPSHOT</version>
+    <version>1.2.6</version>
   </parent>
   <artifactId>redback-rbac-cached</artifactId>
   <name>Redback :: RBAC Provider :: Cached</name>
