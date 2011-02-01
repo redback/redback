@@ -85,6 +85,7 @@
 	<s:set name="role_resource" value="%{getText('role.resource')}"/>
     <ec:table var="permission"
         items="permissions"
+        autoIncludeParameters="false"
         cellspacing="2"
         cellpadding="3"
         showExports="flase"

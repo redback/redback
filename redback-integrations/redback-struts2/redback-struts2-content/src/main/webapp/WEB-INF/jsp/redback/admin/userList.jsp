@@ -48,7 +48,7 @@
     items="users" 
     action="${pageContext.request.contextPath}/security/userlist!show.action"
     imagePath="${pageContext.request.contextPath}/images/redback/table/*.gif"
-    autoIncludeParameters="true" 
+    autoIncludeParameters="false"
     title="Users"
     filterable="true"
     showTitle="false"
