@@ -38,16 +38,30 @@
     <filter-class>org.apache.struts2.dispatcher.FilterDispatcher</filter-class>
   </filter>
 
+  <filter>
+    <filter-name>redback-csrf</filter-name>
+    <filter-class>org.codehaus.plexus.redback.struts2.filter.RedbackCSRFFilter</filter-class>
+    <init-param>
+      <param-name>excludedPaths</param-name>
+      <param-value>/css/**,/images/**,/struts/**,/js/**</param-value>
+    </init-param>
+  </filter>
+
   <filter-mapping>
     <filter-name>struts2-cleanup</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-  
+
   <filter-mapping>
     <filter-name>sitemesh</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-  
+
+  <filter-mapping>
+    <filter-name>redback-csrf</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping> 
+
   <filter-mapping>
     <filter-name>struts2</filter-name>
     <url-pattern>/*</url-pattern>
@@ -77,5 +91,5 @@
     <res-type>javax.sql.DataSource</res-type>
     <res-auth>Container</res-auth>
   </resource-ref-->
-
+  
 </web-app>
