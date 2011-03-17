@@ -18,7 +18,9 @@ public class XSSParameterCheckInterceptor
 {
     private Logger log = LoggerFactory.getLogger( XSSParameterCheckInterceptor.class );
 
-    private static final String SCRIPT_KEYWORD = "<script>";
+    private static final String SCRIPT_TAG_KEYWORD = "<script>";
+
+    private static final String JAVASCRIPT_KEYWORD = "javascript";
 
     private static final String POSSIBLE_XSS_ATTACK = "possible-xss-attack";
 
@@ -43,11 +45,9 @@ public class XSSParameterCheckInterceptor
             {
                 if ( value instanceof String )
                 {
-                    if ( StringUtils.containsIgnoreCase( (String) value, SCRIPT_KEYWORD ) )
+                    String strValue = cleanseString( (String) value );
+                    if ( containsBannedXSSKeywords( key, strValue ) )
                     {
-                        log.warn(
-                            "Possible XSS attack detected! A '" + SCRIPT_KEYWORD + "' tag was found in the request " +
-                                "parameter '" + key + "' of your action." );
                         return POSSIBLE_XSS_ATTACK;
                     }
                 }
@@ -56,10 +56,9 @@ public class XSSParameterCheckInterceptor
                     String[] val = (String[]) value;
                     for ( int i = 0; i < val.length; i++ )
                     {
-                        if ( StringUtils.containsIgnoreCase( val[i], SCRIPT_KEYWORD ) )
+                        String strValue = cleanseString( val[i] );
+                        if ( containsBannedXSSKeywords( key, strValue ) )
                         {
-                            log.warn( "Possible XSS attack detected! A '" + SCRIPT_KEYWORD +
-                                "' tag was found in the request " + "parameter '" + key + "' of your action." );
                             return POSSIBLE_XSS_ATTACK;
                         }
                     }
@@ -68,5 +67,35 @@ public class XSSParameterCheckInterceptor
         }
 
         return actionInvocation.invoke();
+    }
+
+    private boolean containsBannedXSSKeywords( String key, String strValue )
+    {
+        if ( StringUtils.containsIgnoreCase( strValue, SCRIPT_TAG_KEYWORD ) )
+        {
+            log.warn( "Possible XSS attack detected! '" + SCRIPT_TAG_KEYWORD + "' was found in the " +
+                "request parameter '" + key + "' of your action." );
+            return true;
+        }
+        else if( StringUtils.containsIgnoreCase( strValue, JAVASCRIPT_KEYWORD ) )
+        {
+            log.warn( "Possible XSS attack detected! '" + JAVASCRIPT_KEYWORD + "' was found in the " +
+                    "request parameter '" + key + "' of your action." );
+            return true;
+        }
+        return false;
+    }
+
+    private String cleanseString( String str )
+    {
+        String cleansed = new String( str );
+
+        cleansed = StringUtils.replace( cleansed, "&lt;", "<" );
+        cleansed = StringUtils.replace( cleansed, "&gt;", ">" );
+        cleansed = StringUtils.deleteWhitespace( cleansed );
+        cleansed = StringUtils.remove( cleansed, "%20" );
+        cleansed = StringUtils.lowerCase( cleansed );
+
+        return cleansed;
     }
 }

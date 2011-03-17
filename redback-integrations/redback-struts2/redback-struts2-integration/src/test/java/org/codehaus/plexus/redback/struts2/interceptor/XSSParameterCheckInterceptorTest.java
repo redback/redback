@@ -91,4 +91,61 @@ public class XSSParameterCheckInterceptorTest
         org.easymock.classextension.EasyMock.verify( actionContext );
     }
 
+    public void testScriptTagHasWhiteSpace()
+        throws Exception
+    {
+        Map<String, Object> requestParams = new HashMap<String, Object>();
+        requestParams.put( "name", "value<script >alert(xss)</script>" );
+
+        expect( actionInvocation.getInvocationContext() ).andReturn( actionContext );
+        expect( actionContext.getParameters() ).andReturn( requestParams );
+
+        replay( actionInvocation );
+        org.easymock.classextension.EasyMock.replay( actionContext );
+
+        String result = xssInterceptor.intercept( actionInvocation );
+        assertEquals( "possible-xss-attack", result );
+
+        verify( actionInvocation );
+        org.easymock.classextension.EasyMock.verify( actionContext );
+    }
+
+    public void testScriptTagIsEscaped()
+        throws Exception
+    {
+        Map<String, Object> requestParams = new HashMap<String, Object>();
+        requestParams.put( "name", "value&lt;script&gt;alert(xss)</script>" );
+
+        expect( actionInvocation.getInvocationContext() ).andReturn( actionContext );
+        expect( actionContext.getParameters() ).andReturn( requestParams );
+
+        replay( actionInvocation );
+        org.easymock.classextension.EasyMock.replay( actionContext );
+
+        String result = xssInterceptor.intercept( actionInvocation );
+        assertEquals( "possible-xss-attack", result );
+
+        verify( actionInvocation );
+        org.easymock.classextension.EasyMock.verify( actionContext );
+    }
+
+    public void testJavascriptCodeInsteadOfTag()
+        throws Exception
+    {
+        Map<String, Object> requestParams = new HashMap<String, Object>();
+        requestParams.put( "name", "value<img onerror=\"javascript:alert('xss')\" src=\"/images/archiva.png\"/>" );
+
+        expect( actionInvocation.getInvocationContext() ).andReturn( actionContext );
+        expect( actionContext.getParameters() ).andReturn( requestParams );
+
+        replay( actionInvocation );
+        org.easymock.classextension.EasyMock.replay( actionContext );
+
+        String result = xssInterceptor.intercept( actionInvocation );
+        assertEquals( "possible-xss-attack", result );
+
+        verify( actionInvocation );
+        org.easymock.classextension.EasyMock.verify( actionContext );
+    }
+
 }
