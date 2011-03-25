@@ -52,6 +52,7 @@
       <s:hidden name="user.timestampLastPasswordChange" value="%{user.timestampLastPasswordChange}"/>
       <s:hidden name="user.locked" value="%{user.locked}"/>
       <s:hidden name="user.passwordChangeRequired" value="%{user.passwordChangeRequired}"/>
+      <s:hidden name="method:confirmAdminPassword" value="Submit"/>
       <s:submit value="%{getText('submit')}" method="confirmAdminPassword" />
       <s:submit value="%{getText('cancel')}" method="cancel" />
     </redback:isNotReadOnlyUserManager>
