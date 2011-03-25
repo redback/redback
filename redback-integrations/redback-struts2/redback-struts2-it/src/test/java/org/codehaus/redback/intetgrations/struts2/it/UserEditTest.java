@@ -24,26 +24,6 @@ import org.testng.annotations.Test;
 public class UserEditTest
     extends AbstractSeleniumTestCase
 {
-
-    @Test
-    public void createUser1()
-    {
-        doLogin( ADMIN_USERNAME, ADMIN_PASSWORD );
-
-        selenium.open( "/security/userlist.action" );
-        selenium.click( "usercreate_0" );
-        selenium.waitForPageToLoad( PAGE_TIMEOUT );
-        selenium.type( "userCreateForm_user_username", "user1" );
-        selenium.type( "userCreateForm_user_fullName", "User" );
-        selenium.type( "userCreateForm_user_email", "user@localhost" );
-        selenium.type( "userCreateForm_user_password", "user1" );
-        selenium.type( "userCreateForm_user_confirmPassword", "user1" );
-        selenium.click( "userCreateForm_0" );
-        selenium.waitForPageToLoad( PAGE_TIMEOUT );
-        selenium.click( "addRolesToUser_submitRolesButton" );
-        selenium.waitForPageToLoad( PAGE_TIMEOUT );
-    }
-
     @Test( description = "REDBACK-262" )
     public void testUserListUrlLength()
         throws Exception
@@ -118,5 +98,45 @@ public class UserEditTest
 
         // Not yet implemented. Since we redirect to the userlist, it is difficult to pass the success message there.
         assert selenium.isTextPresent( "User details for 'user1' successfully changed" );
+    }
+
+    @Test( description = "REDBACK-157", dependsOnMethods = "loginForcedPasswordChange" )
+    public void testForceChangePassword()
+        throws Exception
+    {
+        doLogin( ADMIN_USERNAME, ADMIN_PASSWORD );
+
+        selenium.open( "/security/userlist.action" );
+        assert selenium.getTitle().contains( "[Admin] User List" );
+
+        selenium.click( "link=user1" );
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+        assert selenium.getTitle().contains( "[Admin] User Edit" );
+
+        selenium.type( "userEditForm_user_password", "user0" );
+        selenium.type( "userEditForm_user_confirmPassword", "user0" );
+        selenium.click( "userEditForm_user_passwordChangeRequired" );
+        selenium.click( "userEditForm__submit" );
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+
+        assert selenium.getTitle().contains( "[Admin] User Edit - Confirm Administrator Password" );
+
+        selenium.type( "userEditForm_userAdminPassword", ADMIN_PASSWORD );
+        selenium.click( "userEditForm__confirmAdminPassword" );
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+        //assert selenium.getTitle().contains( "[Admin] User List" );
+
+        selenium.click( "link=Logout" );
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+
+        doLogin( "user1", "user0" );
+
+        assert selenium.getTitle().contains( "Change Password" );
+        selenium.type( "passwordForm_existingPassword", "user0" );
+        selenium.type( "passwordForm_newPassword", "user3" );
+        selenium.type( "passwordForm_newPasswordConfirm", "user3" );
+        selenium.click( "passwordForm__submit" );
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+        assert selenium.isTextPresent( "Password successfully changed" );
     }
 }
