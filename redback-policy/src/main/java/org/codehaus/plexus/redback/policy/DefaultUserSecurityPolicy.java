@@ -321,6 +321,12 @@ public class DefaultUserSecurityPolicy
     public void extensionChangePassword( User user )
         throws PasswordRuleViolationException
     {
+        extensionChangePassword( user, false );
+    }
+    
+    public void extensionChangePassword( User user, boolean passwordChangeRequired )
+        throws PasswordRuleViolationException
+    {
         validatePassword( user );
 
         // set the current encoded password.
@@ -340,7 +346,7 @@ public class DefaultUserSecurityPolicy
         }
 
         user.setPreviousEncodedPasswords( previousPasswords );
-        user.setPasswordChangeRequired( false );
+        user.setPasswordChangeRequired( passwordChangeRequired );
 
         // Update timestamp for password change.
         user.setLastPasswordChange( new Date() );

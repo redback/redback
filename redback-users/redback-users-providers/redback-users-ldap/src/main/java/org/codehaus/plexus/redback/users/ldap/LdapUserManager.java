@@ -351,6 +351,12 @@ public class LdapUserManager
     public User updateUser( User user )
         throws UserNotFoundException
     {
+        return updateUser( user, false );
+    }
+
+    public User updateUser( User user, boolean passwordChangeRequired )
+        throws UserNotFoundException
+    {
         LdapConnection ldapConnection = getLdapConnection();
         try
         {

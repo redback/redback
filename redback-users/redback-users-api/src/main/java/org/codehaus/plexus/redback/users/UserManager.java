@@ -193,4 +193,7 @@ public interface UserManager
     void addUserUnchecked( User user );
 
     void eraseDatabase();
+
+    User updateUser( User user, boolean passwordChangeRequired )
+        throws UserNotFoundException;
 }

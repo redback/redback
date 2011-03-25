@@ -355,6 +355,12 @@ public class JdoUserManager
     public User updateUser( User user )
         throws UserNotFoundException
     {
+        return updateUser( user, false );
+    }
+
+    public User updateUser( User user, boolean passwordChangeRequired )
+        throws UserNotFoundException
+    {
         if ( !( user instanceof JdoUser ) )
         {
             throw new UserManagerException( "Unable to Update User. User object " + user.getClass().getName() +
@@ -365,7 +371,7 @@ public class JdoUserManager
         // TODO: Consider adding a boolean to the updateUser indicating a password change or not.
         if ( StringUtils.isNotEmpty( user.getPassword() ) )
         {
-            userSecurityPolicy.extensionChangePassword( user );
+            userSecurityPolicy.extensionChangePassword( user, passwordChangeRequired );
         }
 
         updateObject( user );

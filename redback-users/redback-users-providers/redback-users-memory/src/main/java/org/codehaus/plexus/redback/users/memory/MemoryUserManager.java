@@ -136,11 +136,14 @@ public class MemoryUserManager
 
     public User updateUser( User user )
     {
-        // If password is supplied, assume changing of password.
-        // TODO: Consider adding a boolean to the updateUser indicating a password change or not.
+        return updateUser( user, false );
+    }
+
+    public User updateUser( User user, boolean passwordChangeRequired )
+    {
         if ( StringUtils.isNotEmpty( user.getPassword() ) )
         {
-            userSecurityPolicy.extensionChangePassword( user );
+            userSecurityPolicy.extensionChangePassword( user, passwordChangeRequired );
         }
 
         saveUser( user );

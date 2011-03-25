@@ -171,7 +171,13 @@ public class ConfigurableUserManager
     public User updateUser( User user )
         throws UserNotFoundException
     {
-        return userManagerImpl.updateUser( user );
+        return updateUser( user, false );
+    }
+
+    public User updateUser( User user, boolean passwordChangeRequired )
+        throws UserNotFoundException
+    {
+        return userManagerImpl.updateUser( user, passwordChangeRequired );
     }
 
     public boolean userExists( Object principal )

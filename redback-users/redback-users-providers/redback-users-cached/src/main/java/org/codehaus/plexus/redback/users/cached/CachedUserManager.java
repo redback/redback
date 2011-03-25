@@ -222,11 +222,17 @@ public class CachedUserManager
     public User updateUser( User user )
         throws UserNotFoundException
     {
+        return updateUser( user, false );
+    }
+
+    public User updateUser( User user, boolean passwordChangeRequired )
+        throws UserNotFoundException
+    {
         if ( user != null )
         {
             usersCache.remove( user.getPrincipal() );
         }
-        return this.userImpl.updateUser( user );
+        return this.userImpl.updateUser( user, passwordChangeRequired );
     }
 
     public boolean userExists( Object principal )

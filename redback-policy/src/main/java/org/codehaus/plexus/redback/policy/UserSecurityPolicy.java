@@ -184,6 +184,9 @@ public interface UserSecurityPolicy
     void extensionChangePassword( User user )
         throws PasswordRuleViolationException;
 
+    void extensionChangePassword( User user, boolean passwordChangeRequired )
+        throws PasswordRuleViolationException;
+
     /**
      * Extension Point - Test User for Password Expiration.
      *

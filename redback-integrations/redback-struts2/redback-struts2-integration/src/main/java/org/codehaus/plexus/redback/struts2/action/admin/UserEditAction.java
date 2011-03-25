@@ -295,7 +295,7 @@ public class UserEditAction
             u.setLocked( user.isLocked() );
             u.setPasswordChangeRequired( user.isPasswordChangeRequired() );
 
-            manager.updateUser( u );
+            manager.updateUser( u, user.isPasswordChangeRequired() );
 
             //check if current user then update the session
             if ( getSecuritySession().getUser().getUsername().equals( u.getUsername() ) )
