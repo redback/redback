@@ -50,6 +50,7 @@ public class RbacAuthorizer
     implements Authorizer
 {
     private Logger log = LoggerFactory.getLogger( RbacAuthorizer.class );
+
     @Resource(name="rBACManager#cached")
     private RBACManager manager;
 
@@ -87,13 +88,19 @@ public class RbacAuthorizer
                 {
                     for ( Permission permission : permissionMap.get( operation.toString() ) )
                     {
-                        //getLogger().debug( "checking permission " + permission.getName() );
+                        //log.info( "checking permission " + permission.getName() + " for operation " + operation.toString() + " resource " + resource );
 
                         if ( evaluator.evaluate( permission, operation, resource, principal ) )
                         {
                             return new AuthorizationResult( true, permission, null );
                         }
                     }
+
+                    log.info( "no permission found for operation " +  operation.toString() + " resource " + resource );
+                }
+                else
+                {
+                    log.info( "permission map does not contain operation: " + operation.toString() );
                 }
             }
             // check if guest user is enabled, if so check the global permissions

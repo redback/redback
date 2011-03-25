@@ -4,6 +4,8 @@ import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,6 +21,8 @@ import org.springframework.stereotype.Service;
 public class DefaultPermissionEvaluator
     implements PermissionEvaluator
 {
+    private Logger log = LoggerFactory.getLogger( DefaultPermissionEvaluator.class );
+
     @javax.annotation.Resource(name="userManager#configurable")
     private UserManager userManager;
 
@@ -66,6 +70,14 @@ public class DefaultPermissionEvaluator
             {
                 return true;
             }
+            else
+            {
+                //log.info( "permission resource '" + permissionResource + "' does not match the resource '" + resource.toString() + "' we are checking against" );
+            }
+        }
+        else
+        {
+            //log.info( "permission operation '" + permission.getOperation().getName() + "' is not the same operation '" + operation.toString() + "' we are checking against" );
         }
 
         return false;

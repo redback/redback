@@ -24,6 +24,8 @@ import org.codehaus.plexus.redback.system.SecuritySystemConstants;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
 import org.codehaus.plexus.spring.PlexusToSpringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -36,6 +38,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class IfAuthorizedTag
     extends ConditionalTagSupport
 {
+    private Logger log = LoggerFactory.getLogger( IfAuthorizedTag.class );
+
     private String permission;
 
     private String resource;
@@ -74,6 +78,7 @@ public class IfAuthorizedTag
                     throw new JspTagException( "unable to locate security system" );
                 }
                 
+                //log.info( "Checking if user isAuthorized p: " + permission + " r: " + resource );
                 authzStatus = securitySystem.isAuthorized( securitySession, permission, resource );
                 pageContext.setAttribute( "redbackCache" + permission + resource, Boolean.valueOf( authzStatus ) );
             }

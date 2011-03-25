@@ -26,6 +26,8 @@ import java.util.StringTokenizer;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
 import org.codehaus.plexus.spring.PlexusToSpringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -38,6 +40,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class IfAnyAuthorizedTag
     extends ConditionalTagSupport
 {
+    private Logger log = LoggerFactory.getLogger( IfAnyAuthorizedTag.class );
+
     /**
      * comma delimited list of permissions to check
      */
@@ -77,6 +81,7 @@ public class IfAnyAuthorizedTag
             {
                 String permission = strtok.nextToken().trim();
 
+                //log.info( "Checking if user isAuthorized: p: " + permission + " r: " + resource  );
                 if ( securitySystem.isAuthorized( securitySession, permission, resource ) )
                 {
                     return true;
