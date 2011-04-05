@@ -72,3 +72,4 @@
 <s:if test="%{user.timestampLastPasswordChange != null}">
   <s:label     label="%{getText('last.password.change')}" name="user.timestampLastPasswordChange" />
 </s:if>
+<s:token/>

@@ -41,6 +41,7 @@
     <s:form action="addRolesToUser" namespace="/security" name="addRoles">
       <s:hidden name="principal"/>
       <s:hidden name="addRolesButton" value="true"/>
+      <s:token/>
 
       <s:iterator id="application" value="applicationRoleDetails">
 

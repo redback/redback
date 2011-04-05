@@ -36,6 +36,7 @@
   	<s:text name="email"/>: <s:property value="user.email"/><br/>
   </p>
   <s:hidden label="Username" name="username" />
+  <s:token/>
   <s:submit value="%{getText('user.delete')}" />
   <s:submit value="%{getText('cancel')}" action="userdelete!cancel"/>
 </s:form>

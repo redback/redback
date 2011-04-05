@@ -35,6 +35,7 @@
   <s:form action="rolesave" name="rolesave" namespace="/security">
     <s:hidden name="name"/>
     <s:hidden name="usersList"/>
+    <s:token/>
     <div class="axial">
       <table border="1" cellspacing="2" cellpadding="3" width="100%">
         <s:label label="%{getText('name')}" name="name"/>
@@ -119,6 +120,7 @@
   <h4><s:text name="role.edit.users.defined.in.current.role"/></h4>
   <form name="roleusers">
     <input type="hidden" name="name" value="${name}"/>
+    <s:token/>
   <table style="width:100%">
     <tr>
       <td style="width:40%">
