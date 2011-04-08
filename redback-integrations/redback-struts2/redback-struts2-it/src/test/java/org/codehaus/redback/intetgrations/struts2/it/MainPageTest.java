@@ -26,6 +26,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import static org.testng.Assert.assertTrue;
+
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
@@ -142,6 +144,42 @@ public class MainPageTest
         selenium.type( "passwordForm_newPasswordConfirm", "user2" );
         selenium.click( "passwordForm__submit" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
+    }
+
+    // REDBACK-274
+    @Test( dependsOnMethods = { "loginForcedPasswordChange" } )
+    public void csrfCreateUser()
+    {
+        selenium.deleteAllVisibleCookies();
+        homePage();
+        loginAdmin();
+        selenium.open( "http://localhost:" + System.getProperty( "jetty.port", "8080" ) + "/security/usercreate!submit.action?user.username=tester123" +
+            "&user.fullName=test&user.email=test%40test.com&user.password=abc&user.confirmPassword=abc" );
+        assertTrue( selenium.isTextPresent( "Security Alert - Invalid Token Found" ) );
+        assertTrue( selenium.isTextPresent( "Possible CSRF attack detected! Invalid token found in the request." ) );
+    }
+
+    // REDBACK-274
+    @Test( dependsOnMethods = { "csrfCreateUser" } )
+    public void csrfDeleteUser()
+    {
+        selenium.open( "/main.action" );
+        selenium.open( "http://localhost:" + System.getProperty( "jetty.port", "8080" ) + "/security/userdelete!submit.action?username=test" );
+        assertTrue( selenium.isTextPresent( "Security Alert - Invalid Token Found" ) );
+        assertTrue( selenium.isTextPresent( "Possible CSRF attack detected! Invalid token found in the request." ) );
+    }
+
+    // REDBACK-274
+    @Test( dependsOnMethods = { "csrfDeleteUser" } )
+    public void csrfAddRolesToUser()
+    {
+        selenium.open( "/main.action" );
+        selenium.open( "http://localhost:" + System.getProperty( "jetty.port", "8080" ) + "/security/addRolesToUser.action?principal=test&" +
+            "addRolesButton=true&__checkbox_addNDSelectedRoles=Guest&__checkbox_addNDSelectedRoles=Registered+User&addNDSelectedRoles=" +
+            "System+Administrator&__checkbox_addNDSelectedRoles=System+Administrator&__checkbox_addNDSelectedRoles=" +
+            "User+Administrator&__checkbox_addNDSelectedRoles=Global+Repository+Manager&__checkbox_addNDSelectedRoles=Global+Repository+Observer&submitRolesButton=Submit" );
+        assertTrue( selenium.isTextPresent( "Security Alert - Invalid Token Found" ) );
+        assertTrue( selenium.isTextPresent( "Possible CSRF attack detected! Invalid token found in the request." ) );
     }
 
     @Test
