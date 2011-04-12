@@ -90,6 +90,7 @@ public class MainPageTest
     @Test( dependsOnMethods = { "homePage" } )
     public void loginAdmin()
     {
+        selenium.open( "/main.action" );
         selenium.click( "link=Login." );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
         selenium.type( "loginForm_username", "admin" );
@@ -101,8 +102,7 @@ public class MainPageTest
     @Test( dependsOnMethods = { "homePage", "loginAdmin" } )
     public void createUser1()
     {
-        selenium.click( "link=userlist" );
-        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+        selenium.open( "/security/userlist.action" );
         selenium.click( "usercreate_0" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
         selenium.type( "userCreateForm_user_username", "user1" );
@@ -119,7 +119,7 @@ public class MainPageTest
     @Test( dependsOnMethods = { "createUser1" } )
     public void logout()
     {
-        selenium.click( "link=Logout" );
+        selenium.open( "/security/logout.action" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
         assert selenium.getHtmlSource().indexOf( "<h4>This is the example mainpage</h4>" ) >= 0;
     }
@@ -129,7 +129,7 @@ public class MainPageTest
     {
         selenium.deleteAllVisibleCookies();
 
-        selenium.open( "http://localhost:" + System.getProperty( "jetty.port", "8080" ) );
+        selenium.open( "/main.action" );
         selenium.click( "link=Login." );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
 
@@ -204,7 +204,6 @@ public class MainPageTest
         Date date = new Date();
 
         selenium.deleteAllVisibleCookies();
-        selenium.open( "/" );
         loginAdmin();
 
         String value = selenium.getCookieByName( "rbkSignon" );

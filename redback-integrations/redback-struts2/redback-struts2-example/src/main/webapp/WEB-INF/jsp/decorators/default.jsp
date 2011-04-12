@@ -36,7 +36,7 @@
 <body onload="<decorator:getProperty property="body.onload" />" class="composite">
 
 <div id="banner">
-  <s:url id="main" action="main" namespace="/" includeParams="get"/>
+  <s:url id="main" action="main" namespace="/" includeParams="none"/>
   <h1><s:a href="%{main}">Plexus Redback XWork Example Webapp</s:a></h1>
   <div class="clear">
   </div>

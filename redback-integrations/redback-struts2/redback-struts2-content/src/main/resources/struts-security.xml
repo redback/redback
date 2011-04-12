@@ -31,7 +31,6 @@
       <interceptor name="redbackAutoLogin" class="redbackAutoLoginInterceptor"/>
       <interceptor name="redbackPolicyEnforcement" class="redbackPolicyEnforcementInterceptor"/>
       <interceptor name="redbackSecureActions" class="redbackSecureActionInterceptor"/>
-      <interceptor name="redbackXssParameterCheck" class="redbackXSSParameterCheckInterceptor"/>
 
       <!--
       Stacks are order dependent and fail silently by not running the referenced stack.
@@ -45,7 +44,6 @@
          <interceptor-ref name="redbackSecureActions">
            <param name="enableReferrerCheck">true</param>
          </interceptor-ref>
-         <interceptor-ref name="redbackXssParameterCheck"/>
       </interceptor-stack>
 
       <interceptor-stack name="securedStack">
@@ -72,7 +70,6 @@
       </result>
       <result name="requires-authentication">/WEB-INF/jsp/redback/requiresAuthentication.jsp</result>
       <result name="requires-authorization">/WEB-INF/jsp/redback/accessDenied.jsp</result>
-      <result name="possible-xss-attack">/WEB-INF/jsp/redback/possibleXssAttack.jsp</result>
       <result name="security-must-change-password" type="redirectAction">
         <param name="actionName">password</param>
         <param name="namespace">/security</param>        

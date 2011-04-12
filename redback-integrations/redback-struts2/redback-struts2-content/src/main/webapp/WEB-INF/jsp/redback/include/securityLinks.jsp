@@ -22,13 +22,13 @@
 
 <c:choose>
   <c:when test="${sessionScope.securitySession.authenticated != true}">
-    <s:url id="loginUrl" action="login" namespace="/security" includeParams="get"/>  
-    <s:url id="registerUrl" action="register" namespace="/security" includeParams="get"/>
+    <s:url id="loginUrl" action="login" namespace="/security" includeParams="none"/>  
+    <s:url id="registerUrl" action="register" namespace="/security" includeParams="none"/>
     <s:a href="%{loginUrl}"><s:text name="login"/></s:a><redback:isNotReadOnlyUserManager> - <s:a href="%{registerUrl}"><s:text name="register"/></s:a></redback:isNotReadOnlyUserManager>
   </c:when>
   <c:otherwise>
-    <s:url id="logoutUrl" action="logout" namespace="/security" includeParams="get"/>
-    <s:url id="accountUrl" action="account" namespace="/security" includeParams="get" />
+    <s:url id="logoutUrl" action="logout" namespace="/security" includeParams="none"/>
+    <s:url id="accountUrl" action="account" namespace="/security" includeParams="none" />
     
     <s:text name="current.user"/>
     <c:choose>

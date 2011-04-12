@@ -54,7 +54,7 @@
   <c:if test="${!empty parentRoleNames}">
     <ul>
     <s:iterator id="parentRoleName" value="parentRoleNames">
-      <s:url id="roleeditUrl" action="roleedit" includeParams="get">
+      <s:url id="roleeditUrl" action="roleedit" includeParams="none">
         <s:param name="name">${parentRoleName}</s:param>
       </s:url>
       <li><s:a href="%{roleeditUrl}">${parentRoleName}</s:a></li>
@@ -69,7 +69,7 @@
   <c:if test="${!empty childRoleNames}">
     <ul>
     <s:iterator id="childRoleName" value="childRoleNames">
-      <s:url id="roleeditUrl" action="roleedit" includeParams="get">
+      <s:url id="roleeditUrl" action="roleedit" includeParams="none">
         <s:param name="name">${childRoleName}</s:param>
       </s:url>
       <li><s:a href="%{roleeditUrl}">${childRoleName}</s:a></li>
@@ -110,7 +110,7 @@
     <h4><s:text name="role.edit.users.defined.in.parent.roles"/></h4>
     <ul>
       <s:iterator id="user" value="parentUsers">
-        <s:url id="usereditUrl" action="useredit" includeParams="get">
+        <s:url id="usereditUrl" action="useredit" includeParams="none">
           <s:param name="username">${user.username}</s:param>
         </s:url>
         <li><s:a href="%{usereditUrl}">${user.fullName} (${user.username} - ${user.email})</s:a></li>

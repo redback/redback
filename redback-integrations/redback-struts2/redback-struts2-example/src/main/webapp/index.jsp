@@ -14,4 +14,4 @@
   ~ limitations under the License.
   --%>
 
-<% response.sendRedirect( response.encodeRedirectURL( request.getContextPath() + "/main.action" ) );%>
+<%response.sendRedirect( request.getContextPath() + "/main.action" );%>
