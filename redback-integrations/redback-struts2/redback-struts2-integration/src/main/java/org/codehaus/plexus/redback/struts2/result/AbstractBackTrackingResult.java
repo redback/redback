@@ -84,7 +84,7 @@ public class AbstractBackTrackingResult
                     
                     for( String key : keys )
                     {   
-                        if ( !prohibitedResultParam.contains( key ) )
+                        if ( !getProhibitedResultParams().contains( key ) )
                         {
                             String value = ( (String[]) savedInvocation.getParametersMap().get( key ) )[0];
                             addParameter( key, value == null ? "" : conditionalParse( value, invocation ) );

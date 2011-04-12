@@ -18,6 +18,7 @@ import java.util.Map;
 
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.Result;
+import com.opensymphony.xwork2.inject.Container;
 import com.opensymphony.xwork2.inject.Inject;
 import com.opensymphony.xwork2.interceptor.Interceptor;
 import com.opensymphony.xwork2.validator.Validator;
@@ -33,9 +34,11 @@ public class Struts2PlexusInSpringObjectFactory
             @Inject(value=StrutsConstants.STRUTS_OBJECTFACTORY_SPRING_AUTOWIRE,required=false) String autoWire,
             @Inject(value=StrutsConstants.STRUTS_OBJECTFACTORY_SPRING_AUTOWIRE_ALWAYS_RESPECT,required=false) String alwaysAutoWire,
             @Inject(value=StrutsConstants.STRUTS_OBJECTFACTORY_SPRING_USE_CLASS_CACHE,required=false) String useClassCacheStr,
-            @Inject ServletContext servletContext) {
-
-        super(autoWire, alwaysAutoWire, useClassCacheStr, servletContext);
+            @Inject ServletContext servletContext,
+            @Inject(StrutsConstants.STRUTS_DEVMODE) String devMode,
+            @Inject Container container)
+    {
+        super(autoWire, alwaysAutoWire, useClassCacheStr, servletContext, devMode, container);
     }
 
     /**
