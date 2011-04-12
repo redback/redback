@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.plexus.redback.policy.PasswordEncoder;
 import org.codehaus.plexus.redback.policy.PasswordRuleViolationException;
 import org.codehaus.plexus.redback.rbac.RBACManager;
@@ -94,7 +95,7 @@ public class UserEditAction
     public String edit()
     {
         oldPassword = "";
-        
+
     	emailValidationRequired = securitySystem.getPolicy().getUserValidationSettings().isEmailValidationRequired();
     	
         if ( getUsername() == null )
@@ -111,17 +112,19 @@ public class UserEditAction
 
         UserManager manager = super.securitySystem.getUserManager();
 
-        if ( !manager.userExists( getUsername() ) )
+        String escapedUsername = StringEscapeUtils.escapeXml( getUsername() );
+
+        if ( !manager.userExists( escapedUsername ) )
         {
             // Means that the role name doesn't exist.
             // We need to fail fast and return to the previous page.
-            addActionError( getText( "user.does.not.exist", Collections.singletonList( getUsername() ) ) );
+            addActionError( getText( "user.does.not.exist", Collections.singletonList( escapedUsername ) ) );
             return ERROR;
         }
 
         try
         {
-            User u = manager.findUser( getUsername() );
+            User u = manager.findUser( escapedUsername );
 
             if ( u == null )
             {
@@ -287,6 +290,12 @@ public class UserEditAction
                     addFieldError( "oldPassword", getText( "password.provided.does.not.match.existing" ) );
                     return ERROR;
                 }
+            }
+
+            if ( !user.getFullName().matches( VALID_FULLNAME_CHARS ) )
+            {
+                addFieldError( "fullName", getText( "fullName.invalid.characters" ) );
+                return ERROR;
             }
 
             u.setFullName( user.getFullName() );

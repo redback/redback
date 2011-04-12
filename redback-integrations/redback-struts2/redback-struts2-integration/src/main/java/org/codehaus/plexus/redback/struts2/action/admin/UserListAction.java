@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.struts2.ServletActionContext;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
@@ -112,6 +113,8 @@ public class UserListAction
         }
         else
         {
+            roleName = StringEscapeUtils.escapeXml( roleName );
+
             try
             {
                 Role target = rbac.getRole( roleName );

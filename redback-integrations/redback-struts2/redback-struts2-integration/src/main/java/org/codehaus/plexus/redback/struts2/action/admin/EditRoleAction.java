@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.Resource;
@@ -92,6 +93,8 @@ public class EditRoleAction
             addActionError( getText( "cannot.edit.empty.role" ) );
             return ERROR;
         }
+
+        name = StringEscapeUtils.escapeXml( name );
 
         if ( !getManager().roleExists( name ) )
         {

@@ -72,6 +72,8 @@ public class RoleCreateAction
 
     private String submitMode;
 
+    protected static final String VALID_ROLENAME_CHARS = "[a-zA-Z_0-9\\-\\s.,]*";
+
     // ------------------------------------------------------------------
     // Action Entry Points - (aka Names)
     // ------------------------------------------------------------------
@@ -126,6 +128,11 @@ public class RoleCreateAction
         if ( StringUtils.isEmpty( roleName ) )
         {
             addActionError( getText( "cannot.add.empty.role" ) );
+            return ERROR;
+        }
+        if (  !roleName.matches( VALID_ROLENAME_CHARS )  )
+        {
+            addActionError( getText( "roleName.invalid.characters" ) );
             return ERROR;
         }
 
