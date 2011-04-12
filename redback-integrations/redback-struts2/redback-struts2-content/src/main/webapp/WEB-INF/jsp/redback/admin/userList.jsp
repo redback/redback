@@ -105,8 +105,11 @@
         <ec:column title="${tasks}" alias="tasks" sortable="false" filterable="false" styleClass="tasks">
           <c:if test="${user.permanent eq false}">
             <redback:ifAuthorized permission="user-management-user-delete" resource="${user.username}">
-              <s:url id="userdeleteUrl" action="userdelete" includeParams="none">
+              <s:token/>
+              <s:url id="userdeleteUrl" action="userdelete">
                 <s:param name="username">${user.username}</s:param>
+                <s:param name="struts.token.name">struts.token</s:param>
+                <s:param name="struts.token"><s:property value="struts.token"/></s:param>
               </s:url>
               <s:a href="%{userdeleteUrl}" title="delete user">
      		  <img src="<c:url value="/images/redback/delete.gif"/>" border="none"/>
@@ -154,6 +157,7 @@
     <redback:ifAuthorized permission="user-management-user-create">
       <div class="task createUser">
         <s:form action="usercreate!show" namespace="/security" theme="simple" method="post">
+          <s:token/>
           <s:submit cssClass="button" value="%{getText('user.list.create.new.user')}" />
         </s:form>
       </div>
@@ -163,7 +167,6 @@
     <div class="task showRoles">
       <s:form action="userlist!show" namespace="/security" theme="simple" method="get">
         <s:submit cssClass="button" value="%{getText('user.list.show.users.in.role')}" />
-        
         <s:select list="roles"
                    name="roleName"
                    value="roleName"

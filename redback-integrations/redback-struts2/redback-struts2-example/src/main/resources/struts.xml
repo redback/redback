@@ -25,6 +25,9 @@
         <interceptor-ref name="redbackAutoLogin"/>
         <interceptor-ref name="redbackPolicyEnforcement"/>
         <interceptor-ref name="redbackSecureActions"/>
+        <interceptor-ref name="tokenSession">
+          <param name="excludeMethods">*</param>
+        </interceptor-ref>
       </interceptor-stack>
       <interceptor-stack name="securedPrepareParamsStack">
         <interceptor-ref name="paramsPrepareParamsStack"/>
@@ -59,6 +62,7 @@
       </result>
 
       <result name="error">/WEB-INF/jsp/redback/generalError.jsp</result>
+      <result name="invalid.token">/WEB-INF/jsp/redback/invalidToken.jsp</result>
       <result name="requires-authentication">/WEB-INF/jsp/requiresAuthentication.jsp</result>
       <result name="requires-authorization">/WEB-INF/jsp/accessDenied.jsp</result>
     </global-results>

@@ -49,6 +49,9 @@
       <interceptor-stack name="securedStack">
         <interceptor-ref name="defaultStack"/>
         <interceptor-ref name="redbackCommonStack"/>
+        <interceptor-ref name="tokenSession">
+          <param name="excludeMethods">*</param>  
+        </interceptor-ref>
       </interceptor-stack>
       
       <interceptor-stack name="securedPrepareParamsStack">
@@ -75,6 +78,7 @@
         <param name="actionName">userlist</param>
         <param name="namespace">/security</param>        
       </result>
+      <result name="invalid.token">/WEB-INF/jsp/redback/invalidToken.jsp</result>
     </global-results>
 
     <action name="login" class="redback-login" method="show">
@@ -194,6 +198,9 @@
         <param name="actionName">assignments</param>
         <param name="principal">${user.username}</param>
       </result>
+      <interceptor-ref name="securedStack">
+        <param name="tokenSession.includeMethods">*</param>
+      </interceptor-ref>
     </action>
 
     <action name="userdelete" class="redback-admin-user-delete" method="confirm">
@@ -201,6 +208,9 @@
       <result name="error" type="redirectAction">userlist</result>
       <result name="success" type="redirectAction">userlist</result>
       <result name="cancel" type="redirectAction">userlist</result>
+      <interceptor-ref name="securedStack">
+        <param name="tokenSession.includeMethods">*</param>
+      </interceptor-ref>
     </action>
 
     <!-- ==== RBAC Actions ========================================== -->
@@ -216,6 +226,9 @@
 
     <action name="addRolesToUser" class="redback-assignments" method="edituser">
       <result name="success" type="redirectAction">userlist</result>
+      <interceptor-ref name="securedStack">
+        <param name="tokenSession.includeMethods">*</param>
+      </interceptor-ref>
     </action>
 
     <action name="removeRolesFromUser" class="redback-assignments" method="edituser">
@@ -226,6 +239,9 @@
       <result name="input">/WEB-INF/jsp/redback/admin/roleCreate.jsp</result>
       <result name="error">/WEB-INF/jsp/redback/admin/roleCreate.jsp</result>
       <result name="success" type="redirectAction">userlist</result>
+      <interceptor-ref name="securedStack">
+        <param name="tokenSession.includeMethods">*</param>
+      </interceptor-ref>
     </action>
 
     <action name="role" class="redback-role-edit" method="input">
@@ -244,18 +260,27 @@
       <result name="input">/WEB-INF/jsp/redback/admin/roleEdit.jsp</result>
       <result name="error">/WEB-INF/jsp/redback/admin/roleEdit.jsp</result>
       <result name="success" type="redirectAction">roles</result>
+      <interceptor-ref name="securedStack">
+        <param name="tokenSession.includeMethods">*</param>
+      </interceptor-ref>
     </action>
 
     <action name="roleusersadd" class="redback-role-edit" method="addUsers">
       <result name="input">/WEB-INF/jsp/redback/admin/roleEdit.jsp</result>
       <result name="error">/WEB-INF/jsp/redback/admin/roleEdit.jsp</result>
       <result name="success">/WEB-INF/jsp/redback/admin/roleEdit.jsp</result>
+      <interceptor-ref name="securedStack">
+        <param name="tokenSession.includeMethods">*</param>
+      </interceptor-ref>
     </action>
 
     <action name="roleusersremove" class="redback-role-edit" method="removeUsers">
       <result name="input">/WEB-INF/jsp/redback/admin/roleEdit.jsp</result>
       <result name="error">/WEB-INF/jsp/redback/admin/roleEdit.jsp</result>
       <result name="success">/WEB-INF/jsp/redback/admin/roleEdit.jsp</result>
+      <interceptor-ref name="securedStack">
+        <param name="tokenSession.includeMethods">*</param>
+      </interceptor-ref>
     </action>
 
     <action name="roleSummary" class="redback-roles" method="list">
