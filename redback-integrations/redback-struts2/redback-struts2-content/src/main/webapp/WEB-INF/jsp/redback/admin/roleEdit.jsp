@@ -57,7 +57,7 @@
       <s:url id="roleeditUrl" action="roleedit" includeParams="none">
         <s:param name="name">${parentRoleName}</s:param>
       </s:url>
-      <li><s:a href="%{roleeditUrl}">${parentRoleName}</s:a></li>
+      <li><s:a href="%{roleeditUrl}"><c:out value="${parentRoleName}"/></s:a></li>
     </s:iterator>
     </ul>
   </c:if>
@@ -72,7 +72,7 @@
       <s:url id="roleeditUrl" action="roleedit" includeParams="none">
         <s:param name="name">${childRoleName}</s:param>
       </s:url>
-      <li><s:a href="%{roleeditUrl}">${childRoleName}</s:a></li>
+      <li><s:a href="%{roleeditUrl}"><c:out value="${childRoleName}" /></s:a></li>
     </s:iterator>
     </ul>
   </c:if>
@@ -113,7 +113,7 @@
         <s:url id="usereditUrl" action="useredit" includeParams="none">
           <s:param name="username">${user.username}</s:param>
         </s:url>
-        <li><s:a href="%{usereditUrl}">${user.fullName} (${user.username} - ${user.email})</s:a></li>
+        <li><s:a href="%{usereditUrl}"><c:out value="${user.fullName}"/> (<c:out value="${user.username}"/> - <c:out value="${user.email}"/>)</s:a></li>
       </s:iterator>
     </ul>
   </c:if>
@@ -126,7 +126,7 @@
       <td style="width:40%">
         <select size="20" multiple="multiple" id="allUsers" name="availableUsers" style="width: 100%">
           <s:iterator id="user" value="allUsers">
-            <option value="${user.username}">${user.fullName} - ${user.username}</option>
+            <option value="<c:out value="${user.username}" />"><c:out value="${user.fullName}"/> - <c:out value="${user.username}"/></option>
           </s:iterator>
         </select>
       </td>
@@ -139,7 +139,7 @@
         <c:if test="${!empty users}">
           <select size="20" multiple="multiple" id="users" name="currentUsers" style="width: 100%">
             <s:iterator id="user" value="users">
-              <option value="${user.username}">${user.fullName} - ${user.username}</option>
+              <option value="<c:out value="${user.username}" />"><c:out value="${user.fullName}"/> - <c:out value="${user.username}"/></option>
             </s:iterator>
           </select>
         </c:if>

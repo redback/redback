@@ -77,22 +77,24 @@
             <s:url id="usereditUrl" action="useredit" includeParams="none">
               <s:param name="username">${user.username}</s:param>
             </s:url>
-            <s:a href="%{usereditUrl}">${user.username}</s:a>
+            <s:a href="%{usereditUrl}"><c:out value="${user.username}" /></s:a>
           </redback:ifAuthorized>
           <redback:elseAuthorized>
             <redback:ifAuthorized permission="user-management-user-role" resource="${user.username}">
               <s:url id="usereditUrl" action="useredit" includeParams="none">
                 <s:param name="username">${user.username}</s:param>
               </s:url>
-              <s:a href="%{usereditUrl}">${user.username}</s:a>
+              <s:a href="%{usereditUrl}"><c:out value="${user.username}" /></s:a>
             </redback:ifAuthorized>
             <redback:elseAuthorized>
-              ${user.username}
+              <c:out value="${user.username}" />
             </redback:elseAuthorized>
           </redback:elseAuthorized>
         </ec:column>
         <ec:column property="fullName" title="${fullName}" alias="fullname" 
-        	filterCell="org.codehaus.redback.integration.eXc.SecurityFilterCell" />
+        	filterCell="org.codehaus.redback.integration.eXc.SecurityFilterCell">
+          <c:out value="${user.fullName}" />
+        </ec:column>
         <ec:column property="email" title="${email}" cell="org.codehaus.redback.integration.eXc.MailtoCell" 
         	filterCell="org.codehaus.redback.integration.eXc.SecurityFilterCell" />
         <ec:column property="permanent" cell="org.codehaus.redback.integration.eXc.CheckboxImageCell" 

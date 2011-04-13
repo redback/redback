@@ -69,7 +69,7 @@
       <s:url id="roleUrl" action="role" includeParams="none">
         <s:param name="name">${childRoleName}</s:param>
       </s:url>
-      <li><s:a href="%{roleUrl}">${childRoleName}</s:a></li>
+      <li><s:a href="%{roleUrl}"><c:out value="${childRoleName}" /></s:a></li>
     </s:iterator>
     </ul>
   </c:if>
@@ -109,7 +109,7 @@
         <s:url id="usereditUrl" action="useredit" includeParams="none">
           <s:param name="username">${user.username}</s:param>
         </s:url>
-        <li><s:a href="%{usereditUrl}">${user.fullName} (${user.username} - ${user.email})</s:a></li>
+        <li><s:a href="%{usereditUrl}"><c:out value="${user.fullName}" /> (<c:out value="${user.username}" /> - <c:out value="${user.email}" />)</s:a></li>
       </s:iterator>
     </ul>
   </c:if>
@@ -123,7 +123,7 @@
         <s:url id="usereditUrl" action="useredit" includeParams="none">
           <s:param name="username">${user.username}</s:param>
         </s:url>
-        <li><s:a href="%{usereditUrl}">${user.fullName} (${user.username} - ${user.email})</s:a></li>
+        <li><s:a href="%{usereditUrl}"><c:out value="${user.fullName}" /> (<c:out value="${user.username}" /> - <c:out value="${user.email}" />)</s:a></li>
       </s:iterator>
     </ul>
   </c:if>

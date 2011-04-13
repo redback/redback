@@ -29,6 +29,7 @@ import java.util.List;
 import com.thoughtworks.selenium.DefaultSelenium;
 
 import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.assertFalse;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterSuite;
@@ -67,7 +68,8 @@ public class MainPageTest
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
     }
 
-    // REDBACK-274
+    // start - REDBACK-274 tests
+
     @Test( dependsOnMethods = { "loginForcedPasswordChange" } )
     public void csrfCreateUser()
     {
@@ -80,7 +82,6 @@ public class MainPageTest
         assertTrue( selenium.isTextPresent( "Possible CSRF attack detected! Invalid token found in the request." ) );
     }
 
-    // REDBACK-274
     @Test( dependsOnMethods = { "csrfCreateUser" } )
     public void csrfDeleteUser()
     {
@@ -90,7 +91,6 @@ public class MainPageTest
         assertTrue( selenium.isTextPresent( "Possible CSRF attack detected! Invalid token found in the request." ) );
     }
 
-    // REDBACK-274
     @Test( dependsOnMethods = { "csrfDeleteUser" } )
     public void csrfAddRolesToUser()
     {
@@ -103,10 +103,89 @@ public class MainPageTest
         assertTrue( selenium.isTextPresent( "Possible CSRF attack detected! Invalid token found in the request." ) );
     }
 
+    // end - REDBACK-274 tests
+
+    // start - REDBACK-276 tests
+
+    @Test( dependsOnMethods = { "csrfAddRolesToUser" } )
+    public void createUserInvalidCharsInUsername()
+    {
+        selenium.open( "/main.action" );
+        selenium.click( "link=userlist" );
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+        selenium.click( "usercreate_0" );
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+        selenium.type( "userCreateForm_user_username", "user1<script/>" );
+        selenium.type( "userCreateForm_user_fullName", "User" );
+        selenium.type( "userCreateForm_user_email", "user@localhost" );
+        selenium.type( "userCreateForm_user_password", "user1" );
+        selenium.type( "userCreateForm_user_confirmPassword", "user1" );
+        selenium.click( "userCreateForm_0" );
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+
+        assertTrue( selenium.isTextPresent( "Invalid characters found in Username." ) );
+    }
+
+    @Test( dependsOnMethods = { "createUserInvalidCharsInUsername" } )
+    public void createUserInvalidCharsInFullname()
+    {
+        selenium.open( "/main.action" );
+        selenium.click( "link=userlist" );
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+        selenium.click( "usercreate_0" );
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+        selenium.type( "userCreateForm_user_username", "user2" );
+        selenium.type( "userCreateForm_user_fullName", "User()" );
+        selenium.type( "userCreateForm_user_email", "user@localhost" );
+        selenium.type( "userCreateForm_user_password", "user1" );
+        selenium.type( "userCreateForm_user_confirmPassword", "user1" );
+        selenium.click( "userCreateForm_0" );
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+
+        assertTrue( selenium.isTextPresent( "Invalid characters found in Full Name." ) );
+    }
+
+    @Test( dependsOnMethods = { "createUserInvalidCharsInFullname" } )
+    public void XSSUserEditAction()
+    {
+        selenium.open( "/main.action" );
+        selenium.open( "http://localhost:" + System.getProperty( "jetty.port", "8080" ) + "/security/useredit.action?username=test%3Cscript%3Ealert%28%27xss%27%29%3C/script%3E" );
+       
+        // html should have been escaped!
+        assertFalse( selenium.isAlertPresent() );
+        assertTrue( selenium.isTextPresent( "User 'test<script>alert('xss')</script>' does not exist." ) );
+    }
+
+    @Test( dependsOnMethods = { "XSSUserEditAction" } )
+    public void XSSUserListAction()
+    {
+        selenium.open( "/main.action" );
+        selenium.open( "http://localhost:" + System.getProperty( "jetty.port", "8080" ) + "/security/userlist!show.action?roleName=test%3Cscript%3Ealert%28%27xss%27%29%3C/script%3E" );
+
+        // html should have been escaped!
+        assertFalse( selenium.isAlertPresent() );
+        assertTrue( selenium.isTextPresent( "test<script>alert('xss')</script>" ) );
+        assertTrue( selenium.isTextPresent( "There were no results found." ) );
+    }
+
+    @Test( dependsOnMethods = { "XSSUserListAction" } )
+    public void XSSRoleEditAction()
+    {
+        selenium.open( "/main.action" );
+        selenium.open( "http://localhost:" + System.getProperty( "jetty.port", "8080" ) + "/security/roleedit.action?name=%22%3E%3Cscript%3Ealert%28%27xss%27%29%3C%2Fscript%3E" );
+
+        // html should have been escaped!
+        assertFalse( selenium.isAlertPresent() );
+        assertTrue( selenium.isTextPresent( "&quot;&gt;&lt;script&gt;alert(&apos;xss&apos;)&lt;/script&gt;" ) );
+    }
+    
+    // end - REDBACK-276 tests
+
     @Test
     public void homePage()
     {
         selenium.open( "/" );
         assert selenium.getHtmlSource().indexOf( "<h4>This is the example mainpage</h4>" ) >= 0;
     }
+
 }

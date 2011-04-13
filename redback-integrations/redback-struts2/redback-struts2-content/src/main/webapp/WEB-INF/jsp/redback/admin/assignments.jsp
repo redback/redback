@@ -45,9 +45,9 @@
 
       <s:iterator id="application" value="applicationRoleDetails">
 
-        <h3>${application.name}</h3>
+        <h3><c:out value="${application.name}" /></h3>
         <c:if test="${!empty application.description}">
-          <p><i>${application.description}</i></p>
+          <p><i><c:out value="${application.description}" /></i></p>
         </c:if>
 
           <c:if test="${!empty assignedRoles}">

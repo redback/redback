@@ -34,10 +34,10 @@
 
     <ul>
       <s:iterator id="role" value="allRoles">
-        <li><s:text name="role"/>: ${role.name}</li>
+        <li><s:text name="role"/>: <c:out value="${role.name}"/></li>
         <ul>
         <s:iterator id="permission" value="#role.permissions">
-          <li>P[${permission.name}] (${permission.operation.name}, ${permission.resource.identifier})</li>
+          <li>P[<c:out value="${permission.name}"/>] (<c:out value="${permission.operation.name}"/>, <c:out value="${permission.resource.identifier}"/>)</li>
         </s:iterator>
         </ul>
       </s:iterator>

@@ -183,6 +183,12 @@ public class AccountAction
                 
                 u.setPassword( user.getPassword() );
             }
+            
+            if ( !user.getFullName().matches( VALID_FULLNAME_CHARS ) )
+            {
+                addFieldError( "fullName", getText( "fullname.invalid.characters" ) );
+                return ERROR;
+            }
 
             u.setFullName( user.getFullName() );
             u.setEmail( user.getEmail() );

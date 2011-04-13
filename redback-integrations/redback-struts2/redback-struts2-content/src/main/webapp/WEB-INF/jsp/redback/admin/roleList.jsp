@@ -49,7 +49,7 @@
               <s:url id="roleUrl" action="role">
                 <s:param name="name">${role.name}</s:param>
               </s:url>
-              <s:a href="%{roleUrl}">${role.name}</s:a>
+              <s:a href="%{roleUrl}"><c:out value="${role.name}" /></s:a>
             </td>
             <td>
               <c:out value="${role.description}" />
