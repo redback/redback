@@ -153,7 +153,7 @@ public class MainPageTest
        
         // html should have been escaped!
         assertFalse( selenium.isAlertPresent() );
-        assertTrue( selenium.isTextPresent( "User 'test<script>alert('xss')</script>' does not exist." ) );
+        assertTrue( selenium.isTextPresent( "User 'test&lt;script&gt;alert(&apos;xss&apos;)&lt;/script&gt;' does not exist." ) );
     }
 
     @Test( dependsOnMethods = { "XSSUserEditAction" } )
