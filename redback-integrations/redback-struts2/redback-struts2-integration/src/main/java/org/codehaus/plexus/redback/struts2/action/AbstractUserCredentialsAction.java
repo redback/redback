@@ -65,8 +65,9 @@ public abstract class AbstractUserCredentialsAction
 
     protected UserCredentials internalUser;
 
-    protected final String VALID_USERNAME_CHARS = "[a-zA-Z_0-9\\-\\s.,!?]*";
+    protected final String VALID_USERNAME_CHARS = "[a-zA-Z_0-9\\-.@]*";
 
+    //TODO: need to handle i18n
     protected final String VALID_FULLNAME_CHARS = "[a-zA-Z_0-9\\s.,-]*";
 
     public RBACManager getManager()
@@ -104,10 +105,6 @@ public abstract class AbstractUserCredentialsAction
             if ( !internalUser.getUsername().matches( VALID_USERNAME_CHARS ) )
             {
                 addFieldError( "user.username", getText( "username.invalid.characters" ) );
-            }
-            else if ( internalUser.getUsername().indexOf( " " ) != -1 )
-            {
-                addFieldError( "user.username", getText( "username.has.spaces" ) );
             }
         }
 

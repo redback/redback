@@ -49,59 +49,14 @@ import com.thoughtworks.selenium.Selenium;
  * @todo dependencies are too complicated, should be grouped. Bear in mind what happens if one fails.
  */
 public class MainPageTest
+    extends AbstractSeleniumTestCase
 {
-    private static final String PAGE_TIMEOUT = "30000";
 
-    private Selenium selenium;
-
-    private String baseUrl;
-
-    @BeforeClass
-    public void createSeleniumInstance()
-    {
-        baseUrl = "http://localhost:" + System.getProperty( "jetty.port", "8080" );
-        selenium =
-            new DefaultSelenium( "localhost",
-                                 Integer.valueOf( System.getProperty( "selenium.server", "4444" ) ).intValue(),
-                                 System.getProperty( "selenium.browser", "*firefox" ), baseUrl );
-        selenium.start();
-    }
-
-    @BeforeSuite
-    public void createAdminPage()
-    {
-        createSeleniumInstance();
-
-        try
-        {
-            selenium.open( "/security/addadmin.action" );
-            selenium.type( "adminCreateForm_user_fullName", "Admin User" );
-            selenium.type( "adminCreateForm_user_email", "admin@localhost" );
-            selenium.type( "adminCreateForm_user_password", "admin1" );
-            selenium.type( "adminCreateForm_user_confirmPassword", "admin1" );
-            selenium.click( "adminCreateForm_0" );
-            selenium.waitForPageToLoad( PAGE_TIMEOUT );
-        }
-        finally
-        {
-            shutdownSelenium();
-        }
-    }
-
-    @Test( dependsOnMethods = { "homePage" } )
-    public void loginAdmin()
-    {
-        selenium.click( "link=Login." );
-        selenium.waitForPageToLoad( PAGE_TIMEOUT );
-        selenium.type( "loginForm_username", "admin" );
-        selenium.type( "loginForm_password", "admin1" );
-        selenium.click( "loginForm__login" );
-        selenium.waitForPageToLoad( PAGE_TIMEOUT );
-    }
-
-    @Test( dependsOnMethods = { "homePage", "loginAdmin" } )
+    @Test
     public void createUser1()
     {
+        homePage();
+        loginAdmin();
         selenium.click( "link=userlist" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
         selenium.click( "usercreate_0" );
@@ -115,14 +70,6 @@ public class MainPageTest
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
         selenium.click( "addRolesToUser_submitRolesButton" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
-    }
-
-    @Test( dependsOnMethods = { "createUser1" } )
-    public void logout()
-    {
-        selenium.click( "link=Logout" );
-        selenium.waitForPageToLoad( PAGE_TIMEOUT );
-        assert selenium.getHtmlSource().indexOf( "<h4>This is the example mainpage</h4>" ) >= 0;
     }
 
     @Test( dependsOnMethods = { "createUser1" } )
@@ -147,129 +94,10 @@ public class MainPageTest
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
     }
 
-    // start - REDBACK-274 tests
-
-    @Test( dependsOnMethods = { "loginForcedPasswordChange" } )
-    public void csrfCreateUser()
-    {
-        selenium.deleteAllVisibleCookies();
-        homePage();
-        loginAdmin();
-        selenium.open( "http://localhost:" + System.getProperty( "jetty.port", "8080" ) + "/security/usercreate!submit.action?user.username=tester123" +
-            "&user.fullName=test&user.email=test%40test.com&user.password=abc&user.confirmPassword=abc" );
-        assertTrue( selenium.isTextPresent( "Security Alert - Invalid Token Found" ) );
-        assertTrue( selenium.isTextPresent( "Possible CSRF attack detected! Invalid token found in the request." ) );
-    }
-
-    @Test( dependsOnMethods = { "csrfCreateUser" } )
-    public void csrfDeleteUser()
-    {
-        selenium.open( "/main.action" );
-        selenium.open( "http://localhost:" + System.getProperty( "jetty.port", "8080" ) + "/security/userdelete!submit.action?username=test" );
-        assertTrue( selenium.isTextPresent( "Security Alert - Invalid Token Found" ) );
-        assertTrue( selenium.isTextPresent( "Possible CSRF attack detected! Invalid token found in the request." ) );
-    }
-
-    @Test( dependsOnMethods = { "csrfDeleteUser" } )
-    public void csrfAddRolesToUser()
-    {
-        selenium.open( "/main.action" );
-        selenium.open( "http://localhost:" + System.getProperty( "jetty.port", "8080" ) + "/security/addRolesToUser.action?principal=test&" +
-            "addRolesButton=true&__checkbox_addNDSelectedRoles=Guest&__checkbox_addNDSelectedRoles=Registered+User&addNDSelectedRoles=" +
-            "System+Administrator&__checkbox_addNDSelectedRoles=System+Administrator&__checkbox_addNDSelectedRoles=" +
-            "User+Administrator&__checkbox_addNDSelectedRoles=Global+Repository+Manager&__checkbox_addNDSelectedRoles=Global+Repository+Observer&submitRolesButton=Submit" );
-        assertTrue( selenium.isTextPresent( "Security Alert - Invalid Token Found" ) );
-        assertTrue( selenium.isTextPresent( "Possible CSRF attack detected! Invalid token found in the request." ) );
-    }
-
-    // end - REDBACK-274 tests
-
-    // start - REDBACK-276 tests
-
-    @Test( dependsOnMethods = { "csrfAddRolesToUser" } )
-    public void createUserInvalidCharsInUsername()
-    {
-        selenium.open( "/main.action" );
-        selenium.click( "link=userlist" );
-        selenium.waitForPageToLoad( PAGE_TIMEOUT );
-        selenium.click( "usercreate_0" );
-        selenium.waitForPageToLoad( PAGE_TIMEOUT );
-        selenium.type( "userCreateForm_user_username", "user1<script/>" );
-        selenium.type( "userCreateForm_user_fullName", "User" );
-        selenium.type( "userCreateForm_user_email", "user@localhost" );
-        selenium.type( "userCreateForm_user_password", "user1" );
-        selenium.type( "userCreateForm_user_confirmPassword", "user1" );
-        selenium.click( "userCreateForm_0" );
-        selenium.waitForPageToLoad( PAGE_TIMEOUT );
-
-        assertTrue( selenium.isTextPresent( "Invalid characters found in Username." ) );
-    }
-
-    @Test( dependsOnMethods = { "createUserInvalidCharsInUsername" } )
-    public void createUserInvalidCharsInFullname()
-    {
-        selenium.open( "/main.action" );
-        selenium.click( "link=userlist" );
-        selenium.waitForPageToLoad( PAGE_TIMEOUT );
-        selenium.click( "usercreate_0" );
-        selenium.waitForPageToLoad( PAGE_TIMEOUT );
-        selenium.type( "userCreateForm_user_username", "user2" );
-        selenium.type( "userCreateForm_user_fullName", "User()" );
-        selenium.type( "userCreateForm_user_email", "user@localhost" );
-        selenium.type( "userCreateForm_user_password", "user1" );
-        selenium.type( "userCreateForm_user_confirmPassword", "user1" );
-        selenium.click( "userCreateForm_0" );
-        selenium.waitForPageToLoad( PAGE_TIMEOUT );
-
-        assertTrue( selenium.isTextPresent( "Invalid characters found in Full Name." ) );
-    }
-
-    @Test( dependsOnMethods = { "createUserInvalidCharsInFullname" } )
-    public void XSSUserEditAction()
-    {
-        selenium.open( "/main.action" );
-        selenium.open( "http://localhost:" + System.getProperty( "jetty.port", "8080" ) + "/security/useredit.action?username=test%3Cscript%3Ealert%28%27xss%27%29%3C/script%3E" );
-       
-        // html should have been escaped!
-        assertFalse( selenium.isAlertPresent() );
-        assertTrue( selenium.isTextPresent( "User 'test<script>alert('xss')</script>' does not exist." ) );
-    }
-
-    @Test( dependsOnMethods = { "XSSUserEditAction" } )
-    public void XSSUserListAction()
-    {
-        selenium.open( "/main.action" );
-        selenium.open( "http://localhost:" + System.getProperty( "jetty.port", "8080" ) + "/security/userlist!show.action?roleName=test%3Cscript%3Ealert%28%27xss%27%29%3C/script%3E" );
-
-        // html should have been escaped!
-        assertFalse( selenium.isAlertPresent() );
-        assertTrue( selenium.isTextPresent( "test<script>alert('xss')</script>" ) );
-        assertTrue( selenium.isTextPresent( "There were no results found." ) );
-    }
-
-    @Test( dependsOnMethods = { "XSSUserListAction" } )
-    public void XSSRoleEditAction()
-    {
-        selenium.open( "/main.action" );
-        selenium.open( "http://localhost:" + System.getProperty( "jetty.port", "8080" ) + "/security/roleedit.action?name=%22%3E%3Cscript%3Ealert%28%27xss%27%29%3C%2Fscript%3E" );
-
-        // html should have been escaped!
-        assertFalse( selenium.isAlertPresent() );
-        assertTrue( selenium.isTextPresent( "&quot;&gt;&lt;script&gt;alert(&apos;xss&apos;)&lt;/script&gt;" ) );
-    }
-    
-    // end - REDBACK-276 tests
-
-    @Test
-    public void homePage()
-    {
-        selenium.open( "/" );
-        assert selenium.getHtmlSource().indexOf( "<h4>This is the example mainpage</h4>" ) >= 0;
-    }
-
-    @Test( dependsOnMethods = { "logout" }, description = "REDBACK-207", groups = { "disabled" } )
+    @Test( description = "REDBACK-207", groups = { "disabled" } )
     public void logoutWhenAlreadyLoggedOut()
     {
+        logout();
         selenium.deleteAllVisibleCookies();
         logout();
     }
@@ -319,9 +147,4 @@ public class MainPageTest
         }
     }
 
-    @AfterClass
-    public void shutdownSelenium()
-    {
-        selenium.stop();
-    }
 }
