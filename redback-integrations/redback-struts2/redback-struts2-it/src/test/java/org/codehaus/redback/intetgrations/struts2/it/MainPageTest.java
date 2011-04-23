@@ -51,12 +51,38 @@ import com.thoughtworks.selenium.Selenium;
 public class MainPageTest
     extends AbstractSeleniumTestCase
 {
+    @Test
+    public void loginAdmin()
+    {
+        homePage();
+        selenium.click( "link=Login." );
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+        selenium.type( "loginForm_username", "admin" );
+        selenium.type( "loginForm_password", "admin1" );
+        selenium.click( "loginForm__login" );
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+    }
+
+    @Test
+    public void logout()
+    {
+        selenium.click( "link=Logout" );
+        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+        assert selenium.getHtmlSource().indexOf( "<h4>This is the example mainpage</h4>" ) >= 0;
+    }
+
+    @Test
+    public void homePage()
+    {
+        selenium.open( "/" );
+        assert selenium.getHtmlSource().indexOf( "<h4>This is the example mainpage</h4>" ) >= 0;
+    }
 
     @Test
     public void createUser1()
     {
         homePage();
-        loginAdmin();
+        doLogin( ADMIN_USERNAME, ADMIN_PASSWORD );
         selenium.click( "link=userlist" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
         selenium.click( "usercreate_0" );
@@ -75,16 +101,7 @@ public class MainPageTest
     @Test( dependsOnMethods = { "createUser1" } )
     public void loginForcedPasswordChange()
     {
-        selenium.deleteAllVisibleCookies();
-
-        selenium.open( "http://localhost:" + System.getProperty( "jetty.port", "8080" ) );
-        selenium.click( "link=Login." );
-        selenium.waitForPageToLoad( PAGE_TIMEOUT );
-
-        selenium.type( "loginForm_username", "user1" );
-        selenium.type( "loginForm_password", "user1" );
-        selenium.click( "loginForm__login" );
-        selenium.waitForPageToLoad( PAGE_TIMEOUT );
+        doLogin( "user1", "user1" );
         assert selenium.getTitle().endsWith( "Change Password" );
 
         selenium.type( "passwordForm_existingPassword", "user1" );
@@ -111,7 +128,7 @@ public class MainPageTest
 
         selenium.deleteAllVisibleCookies();
         selenium.open( "/" );
-        loginAdmin();
+        doLogin( ADMIN_USERNAME, ADMIN_PASSWORD );
 
         String value = selenium.getCookieByName( "rbkSignon" );
         WebConversation wc = new WebConversation();

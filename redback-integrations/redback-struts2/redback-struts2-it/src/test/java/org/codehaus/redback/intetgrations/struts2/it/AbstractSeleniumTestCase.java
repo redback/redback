@@ -33,6 +33,10 @@ public class AbstractSeleniumTestCase
 
     protected String baseUrl;
 
+    protected static final String ADMIN_USERNAME = "admin";
+
+    protected static final String ADMIN_PASSWORD = "admin1";
+
     @BeforeClass
     public void createSeleniumInstance()
     {
@@ -65,28 +69,15 @@ public class AbstractSeleniumTestCase
         }
     }
 
-    public void homePage()
+    protected void doLogin( String username, String password )
     {
-        selenium.open( "/" );
-        assert selenium.getHtmlSource().indexOf( "<h4>This is the example mainpage</h4>" ) >= 0;
-    }
-
-    public void loginAdmin()
-    {
-        homePage();
-        selenium.click( "link=Login." );
+        selenium.deleteAllVisibleCookies();
+        selenium.open( "/security/login.action" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
-        selenium.type( "loginForm_username", "admin" );
-        selenium.type( "loginForm_password", "admin1" );
+        selenium.type( "loginForm_username", username );
+        selenium.type( "loginForm_password", password );
         selenium.click( "loginForm__login" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
-    }
-
-    public void logout()
-    {
-        selenium.click( "link=Logout" );
-        selenium.waitForPageToLoad( PAGE_TIMEOUT );
-        assert selenium.getHtmlSource().indexOf( "<h4>This is the example mainpage</h4>" ) >= 0;
     }
 
     @AfterClass
