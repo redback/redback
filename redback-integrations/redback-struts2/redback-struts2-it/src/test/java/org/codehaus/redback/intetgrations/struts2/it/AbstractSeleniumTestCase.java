@@ -16,7 +16,10 @@ package org.codehaus.redback.intetgrations.struts2.it;
  * limitations under the License.
  */
 
+import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.Selenium;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
 
 /**
  * Note: dependencies are for interdependent tests (as in, won't pass if this doesn't), not for sequencing the UI.
@@ -44,4 +47,21 @@ public abstract class AbstractSeleniumTestCase
         selenium.click( "loginForm__login" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
     }
+
+    @BeforeSuite
+    public void createSeleniumInstance()
+    {
+        baseUrl = "http://localhost:" + System.getProperty( "jetty.port", "8080" );
+        selenium =
+            new DefaultSelenium( "localhost", Integer.valueOf( System.getProperty( "selenium.server", "4444" ) ),
+                                 System.getProperty( "selenium.browser", "*firefox" ), baseUrl );
+        selenium.start();
+    }
+
+    @AfterSuite
+    public void shutdownSelenium()
+    {
+        selenium.stop();
+    }
+
 }
