@@ -68,11 +68,7 @@
       <groupId>com.atlassian.xmlrpc</groupId>
       <artifactId>atlassian-xmlrpc-binder-server-spring</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.codehaus.redback</groupId>
-      <artifactId>plexus-spring</artifactId>
-    </dependency>
-    
+
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
