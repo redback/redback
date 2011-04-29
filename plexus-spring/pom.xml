@@ -23,7 +23,6 @@
   <name>Plexus to Spring Adapter</name>
   <description>Bridge utility to use plexus components in a SpringFramework context.</description>
   <properties>
-    <springVersion>2.5.6</springVersion>
     <mavenVersion>2.0.8</mavenVersion>
   </properties>
   <dependencies>
