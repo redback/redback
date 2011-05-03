@@ -292,12 +292,6 @@ public class UserEditAction
                 }
             }
 
-            if ( !user.getFullName().matches( VALID_FULLNAME_CHARS ) )
-            {
-                addFieldError( "fullName", getText( "fullName.invalid.characters" ) );
-                return ERROR;
-            }
-
             u.setFullName( user.getFullName() );
             u.setEmail( user.getEmail() );
             u.setPassword( user.getPassword() );
