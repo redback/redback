@@ -671,8 +671,7 @@
         <version>2.8.1</version>
         <configuration>
           <argLine>-Xmx256m -Xms256m</argLine>
-          <redirectTestOutputToFile>true</redirectTestOutputToFile>
-        </configuration>        
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
