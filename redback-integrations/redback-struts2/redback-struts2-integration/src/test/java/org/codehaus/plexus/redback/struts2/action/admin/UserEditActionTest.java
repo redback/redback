@@ -16,17 +16,12 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * limitations under the License.
  */
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.opensymphony.xwork2.Action;
+import com.opensymphony.xwork2.ActionContext;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.RbacObjectInvalidException;
 import org.codehaus.plexus.redback.rbac.Role;
-
-import com.opensymphony.xwork2.Action;
 import org.codehaus.plexus.redback.system.DefaultSecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySystemConstants;
@@ -34,12 +29,21 @@ import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.memory.SimpleUser;
 import org.codehaus.redback.integration.model.AdminEditUserCredentials;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 /**
  * @todo missing tests for success/fail on standard show/edit functions (non security testing related)
  */
 public class UserEditActionTest
     extends AbstractUserCredentialsActionTest
 {
+
+    private Locale originalLocale;
+
     private UserEditAction action;
 
     public void setUp()
@@ -49,7 +53,24 @@ public class UserEditActionTest
 
         action = (UserEditAction) lookup( Action.class, "redback-admin-user-edit" );
 
+        originalLocale = Locale.getDefault();
+        Locale.setDefault( Locale.ENGLISH );
+
         login( action, "user", PASSWORD );
+    }
+
+    @Override
+    protected void tearDown()
+        throws Exception
+    {
+        try
+        {
+            super.tearDown();
+        }
+        finally
+        {
+            Locale.setDefault( originalLocale );
+        }
     }
 
     public void testEditPageShowsAdministratableRoles()
@@ -128,7 +149,7 @@ public class UserEditActionTest
         action.setOldPassword( PASSWORD );
 
         Map<String, Object> mockSession = new HashMap<String, Object>();
-        
+
         User currentUser = new SimpleUser();
         currentUser.setUsername( "user" );
 
@@ -138,7 +159,7 @@ public class UserEditActionTest
         mockSession.put( SecuritySystemConstants.SECURITY_SESSION_KEY, securitySession );
         action.setSession( mockSession );
 
-        assertEquals( Action.SUCCESS , action.submit() );
+        assertEquals( Action.SUCCESS, action.submit() );
 
         assertEquals( 0, action.getFieldErrors().size() );
     }
@@ -158,10 +179,10 @@ public class UserEditActionTest
         user.setFullName( "User" );
         user.setPassword( PASSWORD );
         user.setConfirmPassword( PASSWORD );
-        
+
         action.setOldPassword( "notmatchingoldpassword" );
 
-        assertEquals( Action.ERROR , action.submit() );
+        assertEquals( Action.ERROR, action.submit() );
 
         Map<String, List<String>> fieldErrors = action.getFieldErrors();
         List<String> oldPasswordErrors = fieldErrors.get( "oldPassword" );
@@ -189,8 +210,8 @@ public class UserEditActionTest
         user.setConfirmPassword( PASSWORD );
 
         action.setOldPassword( null );
-        
-        assertEquals( Action.ERROR , action.submit() );
+
+        assertEquals( Action.ERROR, action.submit() );
 
         Map<String, List<String>> fieldErrors = action.getFieldErrors();
         List<String> oldPasswordErrors = fieldErrors.get( "oldPassword" );
@@ -198,7 +219,7 @@ public class UserEditActionTest
         assertNotNull( oldPasswordErrors );
         assertEquals( 1, oldPasswordErrors.size() );
 
-        assertEquals( action.getText( "old.password.required" ), oldPasswordErrors.get( 0 ) );    
+        assertEquals( action.getText( "old.password.required" ), oldPasswordErrors.get( 0 ) );
     }
 
     public void testRequireAdminPWWhenEditingOtherAccountPWIncorrect()
@@ -218,14 +239,14 @@ public class UserEditActionTest
         user.setPassword( PASSWORD );
         user.setConfirmPassword( PASSWORD );
 
-        assertEquals( UserEditAction.CONFIRM , action.submit() );
+        assertEquals( UserEditAction.CONFIRM, action.submit() );
 
         assertFalse( action.isSelf() );
 
         action.setUserAdminPassword( "boguspassword" );
 
         assertEquals( UserEditAction.CONFIRM_ERROR, action.confirmAdminPassword() );
-        
+
         Collection<String> errors = action.getActionErrors();
 
         assertNotNull( errors );
