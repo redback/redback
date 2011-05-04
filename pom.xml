@@ -19,79 +19,25 @@
   <groupId>org.codehaus.redback</groupId>
   <artifactId>redback</artifactId>
   <version>1.3-SNAPSHOT</version>
-  <name>Redback</name>
+
   <packaging>pom</packaging>
+  <name>Redback</name>
+
   <url>http://redback.codehaus.org/</url>
   <inceptionYear>2006</inceptionYear>
-  
-  <issueManagement>
-    <system>Jira</system>
-    <url>http://jira.codehaus.org/browse/REDBACK</url>
-  </issueManagement>
-  
-  <!-- ciManagement>
-    <notifiers>
-      <notifier>
-        <type>mail</type>
-        <configuration>
-          <address>dev@redback.codehaus.org</address>
-        </configuration>
-      </notifier>
-      <notifier>
-        <type>irc</type>
-        <configuration>
-          <host>irc.codehaus.org</host>
-          <port>6667</port>
-          <channel>#redback</channel>
-        </configuration>
-      </notifier>      
-    </notifiers>
-  </ciManagement -->
- 
-   <mailingLists>
-    <mailingList>
-      <name>Redback User List</name>
-      <subscribe>http://xircles.codehaus.org/manage_email/user%40redback.codehaus.org</subscribe>
-      <unsubscribe>http://xircles.codehaus.org/manage_email/user%40redback.codehaus.org</unsubscribe>
-      <archive>http://archive.hausfoundation.org/lists/org.codehaus.redback.user</archive>
-    </mailingList>
-    <mailingList>
-      <name>Redback Developer List</name>
-      <subscribe>http://xircles.codehaus.org/manage_email/dev%40redback.codehaus.org</subscribe>
-      <unsubscribe>http://xircles.codehaus.org/manage_email/dev%40redback.codehaus.org</unsubscribe>
-      <archive>http://archive.hausfoundation.org/lists/org.codehaus.redback.dev</archive>
-    </mailingList>
-    <mailingList>
-      <name>Redback Announce List</name>
-      <subscribe>http://xircles.codehaus.org/manage_email/announce%40redback.codehaus.org</subscribe>
-      <unsubscribe>http://xircles.codehaus.org/manage_email/announce%40redback.codehaus.org</unsubscribe>
-      <archive>http://archive.hausfoundation.org/lists/org.codehaus.redback.announce</archive>
-    </mailingList>
-    <mailingList>
-      <name>Redback Commit List</name>
-      <subscribe>http://xircles.codehaus.org/manage_email/scm%40redback.codehaus.org</subscribe>
-      <unsubscribe>http://xircles.codehaus.org/manage_email/scm%40redback.codehaus.org</unsubscribe>
-      <archive>http://archive.hausfoundation.org/lists/org.codehaus.redback.scm</archive>
-    </mailingList>
-  </mailingLists>
-  
-  <distributionManagement>
-    <repository>
-      <id>codehaus.org</id>
-      <name>Redback Central Repository</name>
-      <url>dav:https://dav.codehaus.org/repository/redback</url>
-    </repository>
-    <snapshotRepository>
-      <id>codehaus.org</id>
-      <name>Redback Central Development Repository</name>
-      <url>dav:https://dav.codehaus.org/snapshots.repository/redback</url>
-    </snapshotRepository>
-    <site>
-      <id>codehaus.org</id>
-      <url>dav:https://dav.codehaus.org/redback</url>
-    </site>
-  </distributionManagement>
-  
+
+  <organization>
+    <name>Codehaus</name>
+    <url>http://www.codehaus.org/</url>
+  </organization>
+
+  <licenses>
+    <license>
+      <name>Apache Source License 2.0</name>
+      <url>LICENSE.txt</url>
+    </license>
+  </licenses>
+
   <developers>
     <developer>
       <id>joakime</id>
@@ -124,20 +70,129 @@
       <roles>
         <role>Developer</role>
       </roles>
-    </developer>    
+    </developer>
   </developers>
 
-  <organization>
-    <name>Codehaus</name>
-    <url>http://www.codehaus.org/</url>
-  </organization>
+  <contributors>
+    <contributor>
+      <name>Lester Ecarma</name>
+    </contributor>
+    <contributor>
+      <name>Teodoro Cue</name>
+    </contributor>
+    <contributor>
+      <name>Eirik Bjørsnøs</name>
+    </contributor>
+    <contributor>
+      <name>Jan Ancajas</name>
+    </contributor>
+    <contributor>
+      <name>Damien Blugeon</name>
+    </contributor>
+    <contributor>
+      <name>Julien Henry</name>
+    </contributor>
+    <contributor>
+      <name>John Michael Luy</name>
+    </contributor>
+    <contributor>
+      <name>Maria Catherine Tan</name>
+    </contributor>
+    <contributor>
+      <name>Wolfgang Strunk</name>
+    </contributor>
+    <contributor>
+      <name>Jevica Arianne B. Zurbano</name>
+    </contributor>
+    <contributor>
+      <name>Stefan Prange</name>
+    </contributor>
+    <contributor>
+      <name>Napoleon Esmundo C. Ramirez</name>
+    </contributor>
+    <contributor>
+      <name>Brent Atkinson</name>
+    </contributor>
+  </contributors>
   
-  <licenses>
-    <license>
-      <name>Apache Source License 2.0</name>
-      <url>LICENSE.txt</url>
-    </license>
-  </licenses>
+  <issueManagement>
+    <system>Jira</system>
+    <url>http://jira.codehaus.org/browse/REDBACK</url>
+  </issueManagement>
+  
+
+  <mailingLists>
+    <mailingList>
+      <name>Redback User List</name>
+      <subscribe>http://xircles.codehaus.org/manage_email/user%40redback.codehaus.org</subscribe>
+      <unsubscribe>http://xircles.codehaus.org/manage_email/user%40redback.codehaus.org</unsubscribe>
+      <archive>http://archive.hausfoundation.org/lists/org.codehaus.redback.user</archive>
+    </mailingList>
+    <mailingList>
+      <name>Redback Developer List</name>
+      <subscribe>http://xircles.codehaus.org/manage_email/dev%40redback.codehaus.org</subscribe>
+      <unsubscribe>http://xircles.codehaus.org/manage_email/dev%40redback.codehaus.org</unsubscribe>
+      <archive>http://archive.hausfoundation.org/lists/org.codehaus.redback.dev</archive>
+    </mailingList>
+    <mailingList>
+      <name>Redback Announce List</name>
+      <subscribe>http://xircles.codehaus.org/manage_email/announce%40redback.codehaus.org</subscribe>
+      <unsubscribe>http://xircles.codehaus.org/manage_email/announce%40redback.codehaus.org</unsubscribe>
+      <archive>http://archive.hausfoundation.org/lists/org.codehaus.redback.announce</archive>
+    </mailingList>
+    <mailingList>
+      <name>Redback Commit List</name>
+      <subscribe>http://xircles.codehaus.org/manage_email/scm%40redback.codehaus.org</subscribe>
+      <unsubscribe>http://xircles.codehaus.org/manage_email/scm%40redback.codehaus.org</unsubscribe>
+      <archive>http://archive.hausfoundation.org/lists/org.codehaus.redback.scm</archive>
+    </mailingList>
+  </mailingLists>
+
+
+  <modules>
+    <module>redback-authentication</module>
+    <module>redback-authorization</module>
+    <module>redback-configuration</module>
+    <module>redback-common</module>
+    <module>redback-policy</module>
+    <module>redback-rbac</module>
+    <module>redback-system</module>
+    <module>redback-keys</module>
+    <module>redback-users</module>
+    <module>redback-data-management</module>
+    <module>redback-integrations</module>
+    <module>plexus-spring</module>
+    <module>redback-xmlrpc</module>
+  </modules>
+
+  <scm>
+    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk</developerConnection>
+    <url>http://fisheye.codehaus.org/browse/redback/redback/trunk</url>
+  </scm>
+  
+  <distributionManagement>
+    <repository>
+      <id>codehaus.org</id>
+      <name>Redback Central Repository</name>
+      <url>dav:https://dav.codehaus.org/repository/redback</url>
+    </repository>
+    <snapshotRepository>
+      <id>codehaus.org</id>
+      <name>Redback Central Development Repository</name>
+      <url>dav:https://dav.codehaus.org/snapshots.repository/redback</url>
+    </snapshotRepository>
+    <site>
+      <id>codehaus.org</id>
+      <url>dav:https://dav.codehaus.org/redback</url>
+    </site>
+  </distributionManagement>
+  
+  <properties>
+    <springVersion>2.5.6</springVersion>
+    <slf4jVersion>1.6.1</slf4jVersion>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
 
   <repositories>
     <!-- only needed for these two artifacts that can't be redistributed
@@ -588,11 +643,6 @@
     </dependencies>
   </dependencyManagement>
 
-  <scm>
-    <connection>scm:svn:http://svn.codehaus.org/redback/redback/trunk</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/trunk</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/redback/redback/trunk</url>
-  </scm>
 
   <build>
     <extensions>
@@ -716,68 +766,6 @@
     </plugins>
   </build>
 
-  <modules>
-    <module>redback-authentication</module>
-    <module>redback-authorization</module>
-    <module>redback-configuration</module>
-    <module>redback-common</module>
-    <module>redback-policy</module>
-    <module>redback-rbac</module>
-    <module>redback-system</module>
-    <module>redback-keys</module>
-    <module>redback-users</module>
-    <module>redback-data-management</module>
-    <module>redback-integrations</module>
-    <module>plexus-spring</module>
-    <module>redback-xmlrpc</module>
-  </modules>
-  <properties>
-    <springVersion>2.5.6</springVersion>
-    <slf4jVersion>1.6.1</slf4jVersion>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-
-  <contributors>
-    <contributor>
-      <name>Lester Ecarma</name>
-    </contributor>
-    <contributor>
-      <name>Teodoro Cue</name>
-    </contributor>
-    <contributor>
-      <name>Eirik Bjørsnøs</name>
-    </contributor>
-    <contributor>
-      <name>Jan Ancajas</name>
-    </contributor>
-    <contributor>
-      <name>Damien Blugeon</name>
-    </contributor>
-    <contributor>
-      <name>Julien Henry</name>
-    </contributor>
-    <contributor>
-      <name>John Michael Luy</name>
-    </contributor>
-    <contributor>
-      <name>Maria Catherine Tan</name>
-    </contributor>
-    <contributor>
-      <name>Wolfgang Strunk</name>
-    </contributor>
-    <contributor>
-      <name>Jevica Arianne B. Zurbano</name>
-    </contributor>
-    <contributor>
-      <name>Stefan Prange</name>
-    </contributor>
-    <contributor>
-      <name>Napoleon Esmundo C. Ramirez</name>
-    </contributor>
-    <contributor>
-      <name>Brent Atkinson</name>      
-    </contributor>
-  </contributors>
 
   <profiles>
     <profile>
