@@ -23,6 +23,9 @@
   </parent>
   <artifactId>redback-authentication-ldap</artifactId>
   <name>Redback :: Authentication Provider :: Ldap</name>
+  <properties>
+    <apacheds.version>1.5.1</apacheds.version>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.redback</groupId>
@@ -39,23 +42,38 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context-support</artifactId>
-    </dependency>   
+    </dependency>
+
     <dependency>
       <groupId>javax.annotation</groupId>
       <artifactId>jsr250-api</artifactId>
     </dependency>
     <dependency>
+      <groupId>javax.inject</groupId>
+      <artifactId>javax.inject</artifactId>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.directory.server</groupId>
+      <artifactId>apacheds-core</artifactId>
+      <version>${apacheds.version}</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-apacheds</artifactId>
-      <version>1.0-alpha-1</version>
+      <groupId>org.codehaus.redback.components</groupId>
+      <artifactId>spring-apacheds</artifactId>
       <scope>test</scope>
-    </dependency>        
+    </dependency>
+
   </dependencies>
 </project>

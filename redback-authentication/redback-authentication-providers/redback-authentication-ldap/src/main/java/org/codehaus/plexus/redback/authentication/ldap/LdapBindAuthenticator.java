@@ -17,6 +17,8 @@ package org.codehaus.plexus.redback.authentication.ldap;
  */
 
 import javax.annotation.Resource;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
@@ -51,13 +53,13 @@ public class LdapBindAuthenticator
     
     private Logger log = LoggerFactory.getLogger( getClass() );
     
-    @Resource(name="userMapper#ldap")
+    @Inject @Named(value="userMapper#ldap")
     private UserMapper mapper;
 
-    @Resource(name="ldapConnectionFactory#configurable")
+    @Inject @Named(value="ldapConnectionFactory#configurable")
     private LdapConnectionFactory connectionFactory;
 
-    @Resource(name="userConfiguration")
+    @Inject @Named(value="userConfiguration")
     private UserConfiguration config;
 
     public String getId()

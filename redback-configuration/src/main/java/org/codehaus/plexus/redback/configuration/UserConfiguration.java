@@ -216,4 +216,22 @@ public class UserConfiguration
             throw new ContextException( e.getMessage(), e );
         }
     }
+
+    /**
+     * @deprecated
+     * @return
+     */
+    public List<String> getConfigs()
+    {
+        return configs;
+    }
+
+    /**
+     * @deprecated
+     * @param configs
+     */
+    public void setConfigs( List<String> configs )
+    {
+        this.configs = configs;
+    }
 }
