@@ -31,8 +31,8 @@ import org.codehaus.plexus.evaluator.sources.SystemPropertyExpressionSource;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
-import org.codehaus.plexus.registry.Registry;
-import org.codehaus.plexus.registry.RegistryException;
+import org.codehaus.redback.components.registry.Registry;
+import org.codehaus.redback.components.registry.RegistryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -233,5 +233,15 @@ public class UserConfiguration
     public void setConfigs( List<String> configs )
     {
         this.configs = configs;
+    }
+
+    public Registry getRegistry()
+    {
+        return registry;
+    }
+
+    public void setRegistry( Registry registry )
+    {
+        this.registry = registry;
     }
 }

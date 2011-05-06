@@ -181,4 +181,104 @@ public class ConfigurableLdapConnectionFactory
     {
         return configuration;
     }
+
+    public String getHostname()
+    {
+        return hostname;
+    }
+
+    public void setHostname( String hostname )
+    {
+        this.hostname = hostname;
+    }
+
+    public int getPort()
+    {
+        return port;
+    }
+
+    public void setPort( int port )
+    {
+        this.port = port;
+    }
+
+    public boolean isSsl()
+    {
+        return ssl;
+    }
+
+    public void setSsl( boolean ssl )
+    {
+        this.ssl = ssl;
+    }
+
+    public String getBaseDn()
+    {
+        return baseDn;
+    }
+
+    public void setBaseDn( String baseDn )
+    {
+        this.baseDn = baseDn;
+    }
+
+    public String getContextFactory()
+    {
+        return contextFactory;
+    }
+
+    public void setContextFactory( String contextFactory )
+    {
+        this.contextFactory = contextFactory;
+    }
+
+    public String getBindDn()
+    {
+        return bindDn;
+    }
+
+    public void setBindDn( String bindDn )
+    {
+        this.bindDn = bindDn;
+    }
+
+    public String getPassword()
+    {
+        return password;
+    }
+
+    public void setPassword( String password )
+    {
+        this.password = password;
+    }
+
+    public String getAuthenticationMethod()
+    {
+        return authenticationMethod;
+    }
+
+    public void setAuthenticationMethod( String authenticationMethod )
+    {
+        this.authenticationMethod = authenticationMethod;
+    }
+
+    public Properties getExtraProperties()
+    {
+        return extraProperties;
+    }
+
+    public void setExtraProperties( Properties extraProperties )
+    {
+        this.extraProperties = extraProperties;
+    }
+
+    public UserConfiguration getUserConf()
+    {
+        return userConf;
+    }
+
+    public void setUserConf( UserConfiguration userConf )
+    {
+        this.userConf = userConf;
+    }
 }

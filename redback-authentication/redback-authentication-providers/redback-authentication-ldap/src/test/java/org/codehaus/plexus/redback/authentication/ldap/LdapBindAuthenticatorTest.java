@@ -16,42 +16,54 @@ package org.codehaus.plexus.redback.authentication.ldap;
  * limitations under the License.
  */
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 
-import org.codehaus.plexus.apacheds.ApacheDs;
+import org.codehaus.redback.components.apacheds.ApacheDs;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
-import org.codehaus.plexus.redback.authentication.Authenticator;
 import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
 import org.codehaus.plexus.redback.policy.PasswordEncoder;
 import org.codehaus.plexus.redback.policy.encoders.SHA1PasswordEncoder;
 import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath*:/META-INF/spring-context.xml")
 public class LdapBindAuthenticatorTest
     extends PlexusInSpringTestCase
 {
     
     protected Logger log = LoggerFactory.getLogger( getClass() );
 
+    @Inject @Named(value = "apacheDS#test")
     private ApacheDs apacheDs;
+
+    @Inject
+    private LdapBindAuthenticator authnr;
 
     private String suffix;
 
     private PasswordEncoder passwordEncoder;
 
-    protected void setUp()
+    @Before
+    public void setUp()
         throws Exception
     {
         super.setUp();
 
         passwordEncoder = new SHA1PasswordEncoder();
-
-        apacheDs = (ApacheDs) lookup( ApacheDs.ROLE, "test" );
 
         suffix = apacheDs.addSimplePartition( "test", new String[] { "redback", "plexus", "codehaus", "org" } )
             .getSuffix();
@@ -64,7 +76,8 @@ public class LdapBindAuthenticatorTest
 
     }
 
-    protected void tearDown()
+    @After
+    public void tearDown()
         throws Exception
     {
 
@@ -81,10 +94,10 @@ public class LdapBindAuthenticatorTest
         super.tearDown();
     }
 
+    @Test
     public void testAuthenticationEmptyPassword()
         throws Exception
     {
-        LdapBindAuthenticator authnr = (LdapBindAuthenticator) lookup( Authenticator.ROLE, "ldap" );
         PasswordBasedAuthenticationDataSource authDs = new PasswordBasedAuthenticationDataSource();
         
         // Would throw NPE if attempting to bind, this hack tests bind prevention
@@ -98,11 +111,11 @@ public class LdapBindAuthenticatorTest
         result = authnr.authenticate( authDs );
         assertFalse( result.isAuthenticated() );
     }
-    
+
+    @Test
     public void testAuthentication()
         throws Exception
     {
-        LdapBindAuthenticator authnr = (LdapBindAuthenticator) lookup( Authenticator.ROLE, "ldap" );
         PasswordBasedAuthenticationDataSource authDs = new PasswordBasedAuthenticationDataSource();
         authDs.setPrincipal( "jesse" );
         authDs.setPassword( passwordEncoder.encodePassword( "foo" ) );

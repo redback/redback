@@ -18,21 +18,21 @@
  */
 package org.codehaus.plexus.spring;
 
-import org.codehaus.plexus.registry.Registry;
+import org.codehaus.redback.components.registry.Registry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author <a href="mailto:olamy at codehaus.org">olamy</a>
- * @since 8 mars 2008
  * @version $Id$
+ * @since 8 mars 2008
  */
 public class TestPlexusSpringBean
     extends PlexusInSpringTestCase
 {
 
     private Logger log = LoggerFactory.getLogger( getClass() );
-    
+
     public void testdefaultWineSingleton()
     {
         Wine def = (Wine) lookup( Wine.ROLE, "default" );
@@ -69,16 +69,18 @@ public class TestPlexusSpringBean
         assertTrue( first.hashCode() != second.hashCode() );
 
     }
-    
+
     public void testPlexusRegistryMustFailed()
         throws Exception
     {
-        
-            Registry registry = (Registry) lookup( Registry.class, "commons-configuration-exists" );
-            assertEquals( "bar", registry.getSubset( "foo" ).getString( "foo" ) );
-        
+
+        Registry registry = (Registry) lookup( Registry.class,
+                                               "commons-configuration-exists" );
+        // FIXME remove those call
+        registry.initialize();
+        assertEquals( "bar", registry.getSubset( "foo" ).getString( "foo" ) );
+
     }
-    
-    
-    
+
+
 }

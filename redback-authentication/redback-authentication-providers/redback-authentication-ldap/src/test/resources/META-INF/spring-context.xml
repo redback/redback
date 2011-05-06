@@ -26,8 +26,8 @@
            http://www.springframework.org/schema/context 
            http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
-  <bean name="apacheDS" class="org.codehaus.plexus.apacheds.DefaultApacheDs">
-    <property name="basedir" value="/target/apacheds"/>
+  <bean name="apacheDS#test" class="org.codehaus.redback.components.apacheds.DefaultApacheDs">
+    <property name="basedir" value="./target/apacheds"/>
     <property name="port" value="10390"/>
     <property name="enableNetworking" value="true"/>
     <property name="password" value="secret"/>
@@ -44,21 +44,30 @@
   </bean>
 
   <bean name="userMapper#ldap" class="org.codehaus.plexus.redback.common.ldap.LdapUserMapper">
-    <property name="email-attribute" value="mail"/>
-    <property name="full-name-attribute" value="givenName"/>
-    <property name="password-attribute" value="userPassword"/>
-    <property name="user-id-attribute" value="cn"/>
-    <property name="user-base-dn" value="dc=redback,dc=plexus,dc=codehaus,dc=org"/>
-    <property name="user-object-class" value="inetOrgPerson"/>
+    <property name="emailAttribute" value="mail"/>
+    <property name="fullNameAttribute" value="givenName"/>
+    <property name="passwordAttribute" value="userPassword"/>
+    <property name="userIdAttribute" value="cn"/>
+    <property name="userBaseDn" value="dc=redback,dc=plexus,dc=codehaus,dc=org"/>
+    <property name="userObjectClass" value="inetOrgPerson"/>
     <property name="userConf" ref="userConf"/>
   </bean>
 
-  <bean name="userConf" class="org.codehaus.plexus.redback.configuration.UserConfiguration">
+  <bean name="userConf" class="org.codehaus.plexus.redback.configuration.UserConfiguration"
+      init-method="initialize">
     <property name="configs">
       <list>
         <value>src/test/resources/security.properties</value>
       </list>
     </property>
+
+    <property name="registry" ref="registry#commons-configuration"/>
+
+  </bean>
+
+  <bean name="registry#commons-configuration" class="org.codehaus.redback.components.registry.commons.CommonsConfigurationRegistry"
+      init-method="initialize">
+
   </bean>
 
 </beans>

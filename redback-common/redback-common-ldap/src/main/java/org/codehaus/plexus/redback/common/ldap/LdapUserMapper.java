@@ -295,4 +295,13 @@ public class LdapUserMapper
         return new String[] {getUserIdAttribute(), getEmailAttribute(), getFullNameAttribute(), getPasswordAttribute()};
     }
 
+    public UserConfiguration getUserConf()
+    {
+        return userConf;
+    }
+
+    public void setUserConf( UserConfiguration userConf )
+    {
+        this.userConf = userConf;
+    }
 }
