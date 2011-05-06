@@ -16,16 +16,28 @@ package org.codehaus.plexus.redback.common.ldap.connection;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import junit.framework.TestCase;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public class ConfigurableLdapConnectionFactoryTest
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
+
+    @Inject
+    @Named( value = "ldapConnectionFactory#configurable" )
+    ConfigurableLdapConnectionFactory factory;
+
+    @Test
     public void testConfiguration()
     {
-        ConfigurableLdapConnectionFactory factory =
-            (ConfigurableLdapConnectionFactory) lookup( ConfigurableLdapConnectionFactory.ROLE, "configurable" );
-
         assertEquals( "dc=codehaus,dc=org", factory.getConfiguration().getBaseDn().toString() );
         assertEquals( "uid=user,dc=codehaus,dc=org", factory.getConfiguration().getBindDn().toString() );
     }

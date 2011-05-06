@@ -23,19 +23,18 @@ package org.codehaus.plexus.redback.common.ldap.connection;
  * SOFTWARE.
  */
 
-import java.util.Properties;
+import org.codehaus.plexus.redback.configuration.UserConfiguration;
+import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
 import javax.naming.spi.ObjectFactory;
 import javax.naming.spi.StateFactory;
-
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
-import org.codehaus.plexus.redback.configuration.UserConfiguration;
-import org.springframework.stereotype.Service;
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
@@ -43,7 +42,7 @@ import org.springframework.stereotype.Service;
  */
 @Service("ldapConnectionFactory#configurable")
 public class ConfigurableLdapConnectionFactory
-    implements LdapConnectionFactory, Initializable
+    implements LdapConnectionFactory
 {
     /**
      * @plexus.configuration
@@ -93,15 +92,14 @@ public class ConfigurableLdapConnectionFactory
     private LdapConnectionConfiguration configuration;
 
 
-    @Resource(name="userConfiguration")
+    @Inject @Named(value="userConfiguration")
     private UserConfiguration userConf;
 
     // ----------------------------------------------------------------------
     // Component Lifecycle
     // ----------------------------------------------------------------------
-
+    @PostConstruct
     public void initialize()
-        throws InitializationException
     {
         try
         {
@@ -119,7 +117,7 @@ public class ConfigurableLdapConnectionFactory
         }
         catch ( InvalidNameException e )
         {
-            throw new InitializationException( "Error while initializing connection factory.", e );
+            throw new RuntimeException( "Error while initializing connection factory.", e );
         }
     }
 

@@ -16,20 +16,12 @@ package org.codehaus.plexus.redback.authentication.ldap;
  * limitations under the License.
  */
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.naming.directory.Attributes;
-import javax.naming.directory.BasicAttribute;
-import javax.naming.directory.BasicAttributes;
-import javax.naming.directory.DirContext;
-import javax.naming.directory.InitialDirContext;
-
-import org.codehaus.redback.components.apacheds.ApacheDs;
+import junit.framework.TestCase;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
 import org.codehaus.plexus.redback.policy.PasswordEncoder;
 import org.codehaus.plexus.redback.policy.encoders.SHA1PasswordEncoder;
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import org.codehaus.redback.components.apacheds.ApacheDs;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,15 +31,24 @@ import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:/META-INF/spring-context.xml")
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.naming.directory.Attributes;
+import javax.naming.directory.BasicAttribute;
+import javax.naming.directory.BasicAttributes;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.InitialDirContext;
+
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = "classpath*:/META-INF/spring-context.xml" )
 public class LdapBindAuthenticatorTest
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
-    
+
     protected Logger log = LoggerFactory.getLogger( getClass() );
 
-    @Inject @Named(value = "apacheDS#test")
+    @Inject
+    @Named( value = "apacheDS#test" )
     private ApacheDs apacheDs;
 
     @Inject
@@ -65,13 +66,13 @@ public class LdapBindAuthenticatorTest
 
         passwordEncoder = new SHA1PasswordEncoder();
 
-        suffix = apacheDs.addSimplePartition( "test", new String[] { "redback", "plexus", "codehaus", "org" } )
-            .getSuffix();
+        suffix =
+            apacheDs.addSimplePartition( "test", new String[]{ "redback", "plexus", "codehaus", "org" } ).getSuffix();
 
         log.info( "DN Suffix: " + suffix );
 
         apacheDs.startServer();
-       
+
         makeUsers();
 
     }
@@ -86,7 +87,7 @@ public class LdapBindAuthenticatorTest
         context.unbind( createDn( "jesse" ) );
 
         context.unbind( createDn( "joakim" ) );
-        
+
         context.unbind( createDn( "brent" ) );
 
         apacheDs.stopServer();
@@ -99,13 +100,13 @@ public class LdapBindAuthenticatorTest
         throws Exception
     {
         PasswordBasedAuthenticationDataSource authDs = new PasswordBasedAuthenticationDataSource();
-        
+
         // Would throw NPE if attempting to bind, this hack tests bind prevention
         authDs.setPrincipal( "brent" );
         authDs.setPassword( null );
         AuthenticationResult result = authnr.authenticate( authDs );
         assertFalse( result.isAuthenticated() );
-        
+
         // This passes anyway on ApacheDS, but not true for AD or Novel eDir
         authDs.setPassword( "" );
         result = authnr.authenticate( authDs );

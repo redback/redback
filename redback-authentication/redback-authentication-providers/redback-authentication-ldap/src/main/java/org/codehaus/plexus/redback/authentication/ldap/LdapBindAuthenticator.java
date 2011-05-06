@@ -16,15 +16,6 @@ package org.codehaus.plexus.redback.authentication.ldap;
  * limitations under the License.
  */
 
-import javax.annotation.Resource;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.naming.NamingEnumeration;
-import javax.naming.NamingException;
-import javax.naming.directory.DirContext;
-import javax.naming.directory.SearchControls;
-import javax.naming.directory.SearchResult;
-
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.plexus.redback.authentication.AuthenticationDataSource;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
@@ -40,26 +31,37 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.naming.NamingEnumeration;
+import javax.naming.NamingException;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.SearchControls;
+import javax.naming.directory.SearchResult;
+
 /**
  * LdapBindAuthenticator:
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
  * @version: $Id$
  */
-@Service("authenticator#ldap")
+@Service( "authenticator#ldap" )
 public class LdapBindAuthenticator
     implements Authenticator
 {
-    
+
     private Logger log = LoggerFactory.getLogger( getClass() );
-    
-    @Inject @Named(value="userMapper#ldap")
+
+    @Inject
+    @Named( value = "userMapper#ldap" )
     private UserMapper mapper;
 
-    @Inject @Named(value="ldapConnectionFactory#configurable")
+    @Inject
+    @Named( value = "ldapConnectionFactory#configurable" )
     private LdapConnectionFactory connectionFactory;
 
-    @Inject @Named(value="userConfiguration")
+    @Inject
+    @Named( value = "userConfiguration" )
     private UserConfiguration config;
 
     public String getId()
@@ -72,8 +74,9 @@ public class LdapBindAuthenticator
     {
         PasswordBasedAuthenticationDataSource source = (PasswordBasedAuthenticationDataSource) s;
 
-        if ( !config.getBoolean( "ldap.bind.authenticator.enabled" )
-            || ( !config.getBoolean( "ldap.bind.authenticator.allowEmptyPasswords", false ) && StringUtils.isEmpty( source.getPassword() ) ) )
+        if ( !config.getBoolean( "ldap.bind.authenticator.enabled" ) || (
+            !config.getBoolean( "ldap.bind.authenticator.allowEmptyPasswords", false ) && StringUtils.isEmpty(
+                source.getPassword() ) ) )
         {
             return new AuthenticationResult( false, source.getPrincipal(), null );
         }
@@ -86,12 +89,10 @@ public class LdapBindAuthenticator
         ctls.setSearchScope( SearchControls.SUBTREE_SCOPE );
 
         String filter = "(&(objectClass=" + mapper.getUserObjectClass() + ")"
-            + ( mapper.getUserFilter() != null ? mapper.getUserFilter() : "" ) + "(" + mapper.getUserIdAttribute()
-            + "=" + source.getPrincipal() + "))";
+            + ( mapper.getUserFilter() != null ? mapper.getUserFilter() : "" ) + "(" + mapper.getUserIdAttribute() + "="
+            + source.getPrincipal() + "))";
 
-        log.info(
-                          "Searching for users with filter: \'" + filter + "\'" + " from base dn: "
-                              + mapper.getUserBaseDn() );
+        log.info( "Searching for users with filter: \'{}\'" + " from base dn: {}", filter, mapper.getUserBaseDn() );
 
         LdapConnection ldapConnection = getLdapConnection();
         LdapConnection authLdapConnection = null;
@@ -110,7 +111,7 @@ public class LdapBindAuthenticator
 
                 String userDn = result.getNameInNamespace();
 
-                log.info( "Attempting Authenication: + " + userDn );
+                log.info( "Attempting Authenication: + {}", userDn );
 
                 authLdapConnection = connectionFactory.getConnection( userDn, source.getPassword() );
 
@@ -165,7 +166,7 @@ public class LdapBindAuthenticator
             ldapConnection.close();
         }
     }
-    
+
     private void closeNamingEnumeration( NamingEnumeration<SearchResult> results )
     {
         try

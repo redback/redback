@@ -26,7 +26,12 @@
            http://www.springframework.org/schema/context 
            http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-  <context:annotation-config />
-  <context:component-scan base-package="org.codehaus.plexus.redback.common.ldap"/>
+  <bean name="userConfiguration" class="org.codehaus.plexus.redback.configuration.UserConfiguration">
+    <property name="configs">
+      <list>
+        <value>src/test/resources/test.properties</value>
+      </list>
+    </property>
+  </bean>
  
 </beans>

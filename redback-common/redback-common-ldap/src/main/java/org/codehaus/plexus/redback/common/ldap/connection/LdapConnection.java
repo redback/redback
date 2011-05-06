@@ -220,7 +220,7 @@ public class LdapConnection
         }
         catch ( NamingException ex )
         {
-            log.info( "skip error closing ldap connection " + ex.getMessage() );
+            log.info( "skip error closing ldap connection {}", ex.getMessage() );
         }
         finally
         {

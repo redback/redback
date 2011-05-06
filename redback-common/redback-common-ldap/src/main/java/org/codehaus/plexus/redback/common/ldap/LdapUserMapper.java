@@ -16,18 +16,17 @@ package org.codehaus.plexus.redback.common.ldap;
  * limitations under the License.
  */
 
-import java.util.Date;
-
-import javax.annotation.Resource;
-import javax.naming.directory.Attributes;
-import javax.naming.directory.BasicAttributes;
-
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.naming.directory.Attributes;
+import javax.naming.directory.BasicAttributes;
+import java.util.Date;
 
 /**
  * @author <a href="jesse@codehaus.org"> jesse
@@ -35,7 +34,7 @@ import org.springframework.stereotype.Service;
  */
 @Service("userMapper#ldap")
 public class LdapUserMapper
-    implements UserMapper, Initializable
+    implements UserMapper
 {
     /**
      * @plexus.configuration default-value="mail"
@@ -77,11 +76,11 @@ public class LdapUserMapper
      */
     int maxResultCount = 0;
 
-    @Resource(name="userConfiguration")
+    @Inject @Named(value="userConfiguration")
     private UserConfiguration userConf;
 
+    @PostConstruct
     public void initialize()
-        throws InitializationException
     {
         emailAttribute = userConf.getString( "ldap.config.mapper.attribute.email", emailAttribute );
         fullNameAttribute = userConf.getString( "ldap.config.mapper.attribute.fullname", fullNameAttribute );

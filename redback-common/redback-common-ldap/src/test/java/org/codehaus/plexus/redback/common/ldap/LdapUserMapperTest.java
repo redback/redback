@@ -16,15 +16,26 @@ package org.codehaus.plexus.redback.common.ldap;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import junit.framework.TestCase;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public class LdapUserMapperTest
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
+    @Inject @Named(value = "userMapper#ldap")
+    LdapUserMapper mapper;
+
+    @Test
     public void testConfiguration()
     {
-        LdapUserMapper mapper = (LdapUserMapper) lookup( LdapUserMapper.ROLE, "ldap" );
-        
         assertEquals( "o=People,dc=codehaus,dc=org", mapper.getUserBaseDn() );
     }
 }
