@@ -16,9 +16,9 @@ package org.codehaus.plexus.redback.policy;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
 
 /**
  * SignonCookieSettings
@@ -29,10 +29,9 @@ import org.springframework.stereotype.Service;
 @Service("cookieSettings#signon")
 public class SignonCookieSettings
     extends AbstractCookieSettings
-    implements Initializable
 {
+    @PostConstruct
     public void initialize()
-        throws InitializationException
     {
         // cookie timeouts in the configuration settings is labeled to be in minutes, so adjust to minutes
         cookieTimeout = config.getInt( "security.signon.timeout" ) * 60;

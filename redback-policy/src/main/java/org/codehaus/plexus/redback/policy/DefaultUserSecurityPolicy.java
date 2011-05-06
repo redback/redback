@@ -16,27 +16,21 @@ package org.codehaus.plexus.redback.policy;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.codehaus.plexus.PlexusConstants;
-import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-import org.codehaus.plexus.context.Context;
-import org.codehaus.plexus.context.ContextException;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.policy.rules.MustHavePasswordRule;
 import org.codehaus.plexus.redback.users.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * User Security Policy.
@@ -44,9 +38,9 @@ import org.springframework.stereotype.Service;
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
-@Service("userSecurityPolicy")
+@Service( "userSecurityPolicy" )
 public class DefaultUserSecurityPolicy
-    implements UserSecurityPolicy, Initializable, Contextualizable
+    implements UserSecurityPolicy
 {
     private static final String ENABLEMENT_KEY = ROLE + ":ENABLED";
 
@@ -55,7 +49,7 @@ public class DefaultUserSecurityPolicy
     public static final String LOGIN_ATTEMPT_COUNT = "security.policy.allowed.login.attempt";
 
     public static final String PASSWORD_EXPIRATION_ENABLED = "security.policy.password.expiration.enabled";
-    
+
     public static final String PASSWORD_EXPIRATION = "security.policy.password.expiration.days";
 
     public static final String PASSWORD_ENCODER = "security.policy.password.encoder";
@@ -66,58 +60,59 @@ public class DefaultUserSecurityPolicy
 
     private PasswordRule defaultPasswordRule = new MustHavePasswordRule();
 
-    private PlexusContainer plexus;    
-    
-    @Resource (name="userConfiguration")
+    @Inject
+    @Named( value = "userConfiguration" )
     private UserConfiguration config;
 
-    @Resource(name="passwordEncoder#sha256")
+    @Inject
+    @Named( value = "passwordEncoder#sha256" )
     private PasswordEncoder passwordEncoder;
 
-    @Resource(name="userValidationSettings")
+    @Inject
+    @Named( value = "userValidationSettings" )
     private UserValidationSettings userValidationSettings;
 
-    @Resource(name="cookieSettings#rememberMe")
+    @Inject
+    @Named( value = "cookieSettings#rememberMe" )
     private CookieSettings rememberMeCookieSettings;
 
-    @Resource(name="cookieSettings#signon")
-    private CookieSettings signonCookieSettings;    
+    @Inject
+    @Named( value = "cookieSettings#signon" )
+    private CookieSettings signonCookieSettings;
+
+    // TODO use something more generic to be able to do change about container
+    @Inject
+    private ApplicationContext applicationContext;
 
     /**
      * The List of {@link PasswordRule} objects.
      */
-    private List<PasswordRule> rules = new ArrayList<PasswordRule>();    
-    
+    private List<PasswordRule> rules = new ArrayList<PasswordRule>();
+
     private int previousPasswordsCount;
 
     private int loginAttemptCount;
 
     private int passwordExpirationDays;
-    
+
     private boolean passwordExpirationEnabled;
 
     private List<String> unlockableAccounts;
 
-    
+
     // ---------------------------------------
     //  Component lifecycle
     // ---------------------------------------
-    @SuppressWarnings("unchecked")
+    // TODO move this to constructor
+    @SuppressWarnings( "unchecked" )
+    @PostConstruct
     public void initialize()
-        throws InitializationException
     {
         configurePolicy();
 
         configureEncoder();
 
-        try
-        {
-            this.rules = plexus.lookupList( PasswordRule.ROLE );
-        }
-        catch ( ComponentLookupException e )
-        {
-            throw new InitializationException( e.getMessage(), e );
-        }
+        this.rules = new ArrayList<PasswordRule>( applicationContext.getBeansOfType( PasswordRule.class ).values() );
         // In some configurations, rules can be unset.
         if ( rules == null )
         {
@@ -132,27 +127,13 @@ public class DefaultUserSecurityPolicy
         }
     }
 
-    public void contextualize( Context context )
-        throws ContextException
-    {
-        plexus = (PlexusContainer) context.get( PlexusConstants.PLEXUS_KEY );
-    }
-
     private void configureEncoder()
-        throws InitializationException
     {
         String encoder = config.getString( PASSWORD_ENCODER );
 
         if ( encoder != null )
         {
-            try
-            {
-                this.passwordEncoder = (PasswordEncoder) plexus.lookup( PasswordEncoder.ROLE, encoder );
-            }
-            catch ( ComponentLookupException e )
-            {
-                throw new InitializationException( "Unable to lookup password encoder.", e );
-            }
+            this.passwordEncoder = applicationContext.getBean( "passwordEncoder#" + encoder, PasswordEncoder.class );
         }
     }
 
@@ -164,8 +145,8 @@ public class DefaultUserSecurityPolicy
         this.passwordExpirationDays = config.getInt( PASSWORD_EXPIRATION );
         this.unlockableAccounts = config.getList( UNLOCKABLE_ACCOUNTS );
     }
-    
-    
+
+
     public String getId()
     {
         return "Default User Security Policy";
@@ -178,7 +159,7 @@ public class DefaultUserSecurityPolicy
 
     public List<String> getUnlockableAccounts()
     {
-        if (unlockableAccounts == null)
+        if ( unlockableAccounts == null )
         {
             unlockableAccounts = new ArrayList<String>();
         }
@@ -187,9 +168,10 @@ public class DefaultUserSecurityPolicy
 
     /**
      * Sets a list of accounts which should never be locked by security policy
+     *
      * @param unlockableAccounts
      */
-    public void setUnlockableAccounts(List<String> unlockableAccounts)
+    public void setUnlockableAccounts( List<String> unlockableAccounts )
     {
         this.unlockableAccounts = unlockableAccounts;
     }
@@ -274,7 +256,7 @@ public class DefaultUserSecurityPolicy
 
         // Intentionally iterating to ensure policy settings in provided rules.
 
-        for (PasswordRule rule : rules)
+        for ( PasswordRule rule : rules )
         {
             addPasswordRule( rule );
         }
@@ -292,8 +274,8 @@ public class DefaultUserSecurityPolicy
 
             if ( now.after( expirationDate ) )
             {
-                log.info( "User '" + user.getUsername() + "' flagged for password expiry (expired on: "
-                    + expirationDate + ")" );
+                log.info( "User '" + user.getUsername() + "' flagged for password expiry (expired on: " + expirationDate
+                              + ")" );
                 user.setPasswordChangeRequired( true );
                 throw new MustChangePasswordException( "Password Expired, You must change your password.", user );
             }
@@ -323,7 +305,7 @@ public class DefaultUserSecurityPolicy
     {
         extensionChangePassword( user, false );
     }
-    
+
     public void extensionChangePassword( User user, boolean passwordChangeRequired )
         throws PasswordRuleViolationException
     {
@@ -359,7 +341,7 @@ public class DefaultUserSecurityPolicy
         {
             PasswordRuleViolations violations = new PasswordRuleViolations();
 
-            for (PasswordRule rule : this.rules)
+            for ( PasswordRule rule : this.rules )
             {
                 if ( rule.isEnabled() )
                 {
@@ -386,7 +368,7 @@ public class DefaultUserSecurityPolicy
             user.setPassword( "" );
         }
     }
-    
+
     public int getPasswordExpirationDays()
     {
         return passwordExpirationDays;

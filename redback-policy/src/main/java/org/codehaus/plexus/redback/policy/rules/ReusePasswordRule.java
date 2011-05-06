@@ -16,13 +16,13 @@ package org.codehaus.plexus.redback.policy.rules;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.redback.policy.PasswordRuleViolations;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Iterator;
 
 /**
@@ -112,8 +112,8 @@ public class ReusePasswordRule
         }
     }
 
+    @PostConstruct
     public void initialize()
-        throws InitializationException
     {
         enabled = config.getBoolean( "security.policy.password.rule.reuse.enabled" );
     }

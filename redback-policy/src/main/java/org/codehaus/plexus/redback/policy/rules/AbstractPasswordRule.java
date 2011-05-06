@@ -16,11 +16,11 @@ package org.codehaus.plexus.redback.policy.rules;
  * limitations under the License.
  */
 
-import javax.annotation.Resource;
-
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.policy.PasswordRule;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * AbstractPasswordRule
@@ -29,11 +29,11 @@ import org.codehaus.plexus.redback.policy.PasswordRule;
  * @version $Id$
  */
 public abstract class AbstractPasswordRule
-    implements PasswordRule, Initializable
+    implements PasswordRule
 {
     protected boolean enabled = true;
 
-    @Resource (name="userConfiguration")
+    @Inject @Named (value="userConfiguration")
     protected UserConfiguration config;
 
     public boolean isEnabled()

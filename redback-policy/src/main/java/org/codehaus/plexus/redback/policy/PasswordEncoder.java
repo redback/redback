@@ -50,7 +50,7 @@ public interface PasswordEncoder
      * 
      * @param salt the salt to use as a default for the encoder.
      */
-    public void setSystemSalt( Object salt );
+    void setSystemSalt( Object salt );
 
     /**
      * <p>
@@ -67,7 +67,7 @@ public interface PasswordEncoder
      *
      * @return encoded password
      */
-    public String encodePassword( String rawPass );
+    String encodePassword( String rawPass );
     
     /**
      * <p>
@@ -94,7 +94,7 @@ public interface PasswordEncoder
      *             A <code>null</code> value is legal.
      * @return encoded password
      */
-    public String encodePassword( String rawPass, Object salt );
+    String encodePassword( String rawPass, Object salt );
     
 
     /**
@@ -117,7 +117,7 @@ public interface PasswordEncoder
      *
      * @return true if the password is valid , false otherwise
      */
-    public boolean isPasswordValid( String encPass, String rawPass );
+    boolean isPasswordValid( String encPass, String rawPass );
     
     /**
      * <p>
@@ -141,5 +141,5 @@ public interface PasswordEncoder
      *
      * @return true if the password is valid , false otherwise
      */
-    public boolean isPasswordValid( String encPass, String rawPass, Object salt );
+    boolean isPasswordValid( String encPass, String rawPass, Object salt );
 }

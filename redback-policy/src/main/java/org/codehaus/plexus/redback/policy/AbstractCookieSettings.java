@@ -17,6 +17,8 @@ package org.codehaus.plexus.redback.policy;
  */
 
 import javax.annotation.Resource;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 
@@ -30,7 +32,7 @@ import org.codehaus.plexus.redback.configuration.UserConfiguration;
 public abstract class AbstractCookieSettings
     implements CookieSettings
 {
-    @Resource(name="userConfiguration")
+    @Inject @Named(value="userConfiguration")
     protected UserConfiguration config;
 
     /**

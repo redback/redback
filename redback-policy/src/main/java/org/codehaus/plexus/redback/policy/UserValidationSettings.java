@@ -31,7 +31,7 @@ public interface UserValidationSettings
      * 
      * @return
      */
-    public boolean isEmailValidationRequired();
+    boolean isEmailValidationRequired();
     
     /**
      * Gets the number of minutes until the email validation message key
@@ -39,12 +39,12 @@ public interface UserValidationSettings
      *  
      * @return the email validation timeout (in minutes).
      */
-    public int getEmailValidationTimeout();
+    int getEmailValidationTimeout();
     
     /**
      * Get the subject line for the validation email.
      * 
      * @return the subject line for the validation email.
      */
-    public String getEmailSubject();
+    String getEmailSubject();
 }

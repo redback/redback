@@ -16,12 +16,11 @@ package org.codehaus.plexus.redback.policy;
  * limitations under the License.
  */
 
-import javax.annotation.Resource;
-
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 
 /**
  * DefaultUserValidationSettings
@@ -31,7 +30,7 @@ import org.springframework.stereotype.Service;
  */
 @Service("userValidationSettings")
 public class DefaultUserValidationSettings
-    implements UserValidationSettings, Initializable
+    implements UserValidationSettings
 {
     @Resource (name="userConfiguration")
     private UserConfiguration config;
@@ -57,8 +56,8 @@ public class DefaultUserValidationSettings
         return emailSubject;
     }
 
+    @PostConstruct
     public void initialize()
-        throws InitializationException
     {
         this.emailValidationRequired = config.getBoolean( "email.validation.required" );
         this.emailValidationTimeout = config.getInt( "email.validation.timeout" );

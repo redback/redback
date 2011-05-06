@@ -16,12 +16,13 @@ package org.codehaus.plexus.redback.policy.rules;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.redback.policy.PasswordRuleViolations;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
 
 /**
  * Basic Password Rule, Checks for non-empty passwords that have at least {@link #setMinimumCount(int)} of
@@ -99,8 +100,8 @@ public class NumericalPasswordRule
         }
     }
 
+    @PostConstruct
     public void initialize()
-        throws InitializationException
     {
         enabled = config.getBoolean( "security.policy.password.rule.numericalcount.enabled" );
         this.minimumCount = config.getInt( MINIMUM );

@@ -16,9 +16,9 @@ package org.codehaus.plexus.redback.policy;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
 
 /**
  * RememberMeCookieSettings
@@ -29,7 +29,6 @@ import org.springframework.stereotype.Service;
 @Service("cookieSettings#rememberMe")
 public class RememberMeCookieSettings
     extends AbstractCookieSettings
-    implements Initializable
 {
     private boolean enabled;
 
@@ -38,8 +37,8 @@ public class RememberMeCookieSettings
         return enabled;
     }
 
+    @PostConstruct
     public void initialize()
-        throws InitializationException
     {
         this.cookieTimeout = config.getInt( "security.rememberme.timeout" );
         this.domain = config.getString( "security.rememberme.domain" );
