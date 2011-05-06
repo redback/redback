@@ -16,8 +16,15 @@ package org.codehaus.plexus.redback.configuration;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import junit.framework.TestCase;
 import org.codehaus.plexus.util.StringUtils;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * UserConfigurationTest
@@ -25,9 +32,15 @@ import org.codehaus.plexus.util.StringUtils;
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public class UserConfigurationTest
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
+
+    @Inject  @Named(value = "test")
+    UserConfiguration config;
+
     private void assertEmpty( String str )
     {
         if ( StringUtils.isNotEmpty( str ) )
@@ -36,19 +49,19 @@ public class UserConfigurationTest
         }
     }
 
+    @Test
     public void testLoad()
         throws Exception
     {
-        UserConfiguration config = (UserConfiguration) lookup( UserConfiguration.ROLE );
         assertNotNull( config );
         // check that the configuration loaded correctly - if this fails, maybe you aren't in the right basedir
         assertNotNull( config.getString( "test.value" ) );
     }
 
+    @Test
     public void testGetString()
         throws Exception
     {
-        UserConfiguration config = (UserConfiguration) lookup( UserConfiguration.ROLE );
         // Test default configuration entry
         assertEquals( "25", config.getString( "email.smtp.port" ) );
         // Test overlaid configuration entry
@@ -65,26 +78,25 @@ public class UserConfigurationTest
         assertEmpty( config.getString( "email.smtp.foo.foo" ) );
     }
 
+    @Test
     public void testGetBoolean()
         throws Exception
     {
-        UserConfiguration config = (UserConfiguration) lookup( UserConfiguration.ROLE );
         assertFalse( config.getBoolean( "email.smtp.ssl.enabled" ) );
         assertFalse( config.getBoolean( "email.smtp.tls.enabled" ) );
     }
 
+    @Test
     public void testGetInt()
         throws Exception
     {
-        UserConfiguration config = (UserConfiguration) lookup( UserConfiguration.ROLE );
         assertEquals( 25, config.getInt( "email.smtp.port" ) );
         assertEquals( 8080, config.getInt( "email.smtp.port.bad", 8080 ) );
     }
-    
+
+    @Test
     public void testConcatenatedList()
     {
-        UserConfiguration config = (UserConfiguration) lookup( UserConfiguration.ROLE );
-
         assertEquals( "uid=brett,dc=codehaus,dc=org", config.getConcatenatedList( "ldap.bind.dn", null ) );
         assertEquals( "dc=codehaus,dc=org", config.getConcatenatedList( "ldap.base.dn", null ) );
         assertEquals( "foo", config.getConcatenatedList( "short.list", null ) );

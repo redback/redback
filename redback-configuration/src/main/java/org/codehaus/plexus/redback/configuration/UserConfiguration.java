@@ -16,44 +16,37 @@ package org.codehaus.plexus.redback.configuration;
  * limitations under the License.
  */
 
-import java.io.File;
-import java.util.List;
-
-import org.codehaus.plexus.PlexusConstants;
-import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-import org.codehaus.plexus.context.Context;
-import org.codehaus.plexus.context.ContextException;
 import org.codehaus.plexus.evaluator.DefaultExpressionEvaluator;
 import org.codehaus.plexus.evaluator.EvaluatorException;
 import org.codehaus.plexus.evaluator.ExpressionEvaluator;
 import org.codehaus.plexus.evaluator.sources.SystemPropertyExpressionSource;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.redback.components.registry.Registry;
 import org.codehaus.redback.components.registry.RegistryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.File;
+import java.util.List;
+
 /**
  * ConfigurationFactory
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * 
  */
-@Service("userConfiguration")
+@Service( "userConfiguration" )
 public class UserConfiguration
-    implements Contextualizable, Initializable
 {
     public static final String ROLE = UserConfiguration.class.getName();
 
     private static final String DEFAULT_CONFIG_RESOURCE = "org/codehaus/plexus/redback/config-defaults.properties";
 
     protected Logger log = LoggerFactory.getLogger( getClass() );
-    
+
     /**
      * @plexus.configuration
      * @deprecated Please configure the Plexus registry instead
@@ -64,39 +57,37 @@ public class UserConfiguration
 
     private static final String PREFIX = "org.codehaus.plexus.redback";
 
+    @Inject
+    @Named( value = "commons-configuration" )
     private Registry registry;
 
+    //TODO move this method call in the constructor
+
+    @PostConstruct
     public void initialize()
-        throws InitializationException
+        throws RegistryException
     {
+        performLegacyInitialization();
+
         try
         {
-            performLegacyInitialization();
-
-            try
-            {
-                registry.addConfigurationFromResource( DEFAULT_CONFIG_RESOURCE, PREFIX );
-            }
-            catch ( RegistryException e )
-            {
-                // Ok, not found in context classloader; try the one in this jar.
-
-                ClassLoader prevCl = Thread.currentThread().getContextClassLoader();
-                try
-                {
-
-                    Thread.currentThread().setContextClassLoader( getClass().getClassLoader() );
-                    registry.addConfigurationFromResource( DEFAULT_CONFIG_RESOURCE, PREFIX );
-                }
-                finally
-                {
-                    Thread.currentThread().setContextClassLoader( prevCl );
-                }
-            }
+            registry.addConfigurationFromResource( DEFAULT_CONFIG_RESOURCE, PREFIX );
         }
         catch ( RegistryException e )
         {
-            throw new InitializationException( e.getMessage(), e );
+            // Ok, not found in context classloader; try the one in this jar.
+
+            ClassLoader prevCl = Thread.currentThread().getContextClassLoader();
+            try
+            {
+
+                Thread.currentThread().setContextClassLoader( getClass().getClassLoader() );
+                registry.addConfigurationFromResource( DEFAULT_CONFIG_RESOURCE, PREFIX );
+            }
+            finally
+            {
+                Thread.currentThread().setContextClassLoader( prevCl );
+            }
         }
 
         lookupRegistry = registry.getSubset( PREFIX );
@@ -108,8 +99,7 @@ public class UserConfiguration
     }
 
     private void performLegacyInitialization()
-        throws InitializationException,
-            RegistryException
+        throws RegistryException
     {
         ExpressionEvaluator evaluator = new DefaultExpressionEvaluator();
         evaluator.addExpressionSource( new SystemPropertyExpressionSource() );
@@ -122,7 +112,7 @@ public class UserConfiguration
                 log.warn(
                     "DEPRECATED: the <configs> elements is deprecated. Please configure the Plexus registry instead" );
             }
-    
+
             for ( String configName : configs )
             {
                 try
@@ -133,9 +123,8 @@ public class UserConfiguration
                 {
                     log.warn( "Unable to resolve configuration name: " + e.getMessage(), e );
                 }
-                log.info(
-                    "Attempting to find configuration [" + configName + "] (resolved to [" + configName + "])" );
-    
+                log.info( "Attempting to find configuration [" + configName + "] (resolved to [" + configName + "])" );
+
                 registry.addConfigurationFromFile( new File( configName ), PREFIX );
             }
         }
@@ -171,7 +160,7 @@ public class UserConfiguration
         return lookupRegistry.getBoolean( key, defaultValue );
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public List<String> getList( String key )
     {
         return lookupRegistry.getList( key );
@@ -202,24 +191,9 @@ public class UserConfiguration
         return concatenatedList;
     }
 
-    public void contextualize( Context context )
-        throws ContextException
-    {
-        PlexusContainer container = (PlexusContainer) context.get( PlexusConstants.PLEXUS_KEY );
-        try
-        {
-            // elsewhere, this can be a requirement, but we need this for backwards compatibility
-            registry = (Registry) container.lookup( Registry.class.getName(), "commons-configuration" );
-        }
-        catch ( ComponentLookupException e )
-        {
-            throw new ContextException( e.getMessage(), e );
-        }
-    }
-
     /**
-     * @deprecated
      * @return
+     * @deprecated
      */
     public List<String> getConfigs()
     {
@@ -227,8 +201,8 @@ public class UserConfiguration
     }
 
     /**
-     * @deprecated
      * @param configs
+     * @deprecated
      */
     public void setConfigs( List<String> configs )
     {
