@@ -16,10 +16,17 @@ package org.codehaus.plexus.redback.authentication.memory;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import junit.framework.TestCase;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authentication.Authenticator;
 import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * MemoryAuthenticatorTest:
@@ -27,14 +34,20 @@ import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDat
  * @author: Jesse McConnell <jesse@codehaus.org>
  * @version: $Id$
  */
+@RunWith( SpringJUnit4ClassRunner.class )
+
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public class MemoryAuthenticatorTest
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
+    @Inject
+    @Named(value = "authenticator#memory")
+    Authenticator authenticator;
+
+    @Test
     public void testSimpleAuthentication()
         throws Exception
     {
-        Authenticator authenticator = (Authenticator) lookup( Authenticator.ROLE, "memory" );
-
         assertNotNull( authenticator );
 
         PasswordBasedAuthenticationDataSource ds = new PasswordBasedAuthenticationDataSource();

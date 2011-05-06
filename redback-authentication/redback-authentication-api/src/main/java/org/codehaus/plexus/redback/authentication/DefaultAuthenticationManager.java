@@ -16,18 +16,17 @@ package org.codehaus.plexus.redback.authentication;
  * limitations under the License.
  */
 
+import org.codehaus.plexus.redback.policy.AccountLockedException;
+import org.codehaus.plexus.redback.policy.MustChangePasswordException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-
-import org.codehaus.plexus.redback.policy.AccountLockedException;
-import org.codehaus.plexus.redback.policy.MustChangePasswordException;
-import org.codehaus.plexus.spring.PlexusToSpringUtils;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Service;
 
 
 /**
@@ -48,15 +47,15 @@ public class DefaultAuthenticationManager
     
     private List<Authenticator> authenticators;
 
-    @Resource
+    @Inject
     private ApplicationContext applicationContext;
     
     @SuppressWarnings("unchecked")
     @PostConstruct
     public void initialize()
     {
-        this.authenticators = PlexusToSpringUtils.lookupList( PlexusToSpringUtils.buildSpringId( Authenticator.class ),
-                                                              applicationContext );
+        this.authenticators = new ArrayList<Authenticator>
+       ( applicationContext.getBeansOfType( Authenticator.class ).values() );
     }
     
     
