@@ -90,7 +90,10 @@ public class LdapBindAuthenticatorTest
 
         context.unbind( createDn( "brent" ) );
 
-        apacheDs.stopServer();
+        if ( !apacheDs.isStopped() )
+        {
+            apacheDs.stopServer();
+        }
 
         super.tearDown();
     }
