@@ -437,9 +437,9 @@
         <version>1.4.5</version>
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.cache</groupId>
-        <artifactId>plexus-cache-api</artifactId>
-        <version>1.0-alpha-2</version>
+        <groupId>org.codehaus.redback.components.cache</groupId>
+        <artifactId>spring-cache-api</artifactId>
+        <version>1.0-SNAPSHOT</version>
         <exclusions>
           <exclusion>
             <groupId>org.codehaus.plexus</groupId>
@@ -448,9 +448,9 @@
         </exclusions>        
       </dependency>
       <dependency>
-        <groupId>org.codehaus.plexus.cache</groupId>
-        <artifactId>plexus-cache-ehcache</artifactId>
-        <version>1.0-alpha-2</version>
+        <groupId>org.codehaus.redback.components.cache</groupId>
+        <artifactId>spring-cache-ehcache</artifactId>
+        <version>1.0-SNAPSHOT</version>
         <exclusions>
           <exclusion>
             <groupId>org.codehaus.plexus</groupId>
@@ -460,8 +460,8 @@
       </dependency>
       <dependency>
         <groupId>net.sf.ehcache</groupId>
-        <artifactId>ehcache</artifactId>
-        <version>1.5.0</version>
+        <artifactId>ehcache-core</artifactId>
+        <version>2.4.2</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
@@ -772,9 +772,12 @@
                     <exclude>org.codehaus.plexus:plexus-container-default</exclude>
                     <exclude>org.codehaus.plexus.registry:plexus-registry-api</exclude>
                     <exclude>org.codehaus.plexus.registry:plexus-registry-commons</exclude>
+                    <exclude>org.codehaus.plexus.cache:plexus-cache-api</exclude>
+                    <exclude>org.codehaus.plexus.cache:plexus-cache-ehcache</exclude>
                     <exclude>org.codehaus.plexus:plexus-log4j-logging</exclude>
                     <exclude>org.codehaus.plexus:plexus-spring</exclude>
                     <exclude>org.codehaus.plexus:plexus-jdo2</exclude>
+                    <exclude>net.sf.ehcache:ehcache</exclude>
                   </excludes>
                 </bannedDependencies>
               </rules>

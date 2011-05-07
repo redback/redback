@@ -61,8 +61,8 @@
       <artifactId>redback-keys-memory</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.plexus.cache</groupId>
-      <artifactId>plexus-cache-api</artifactId>
+      <groupId>org.codehaus.redback.components.cache</groupId>
+      <artifactId>spring-cache-api</artifactId>
     </dependency>
     <dependency>
       <groupId>com.atlassian.xmlrpc</groupId>

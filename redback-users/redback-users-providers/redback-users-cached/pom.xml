@@ -30,16 +30,16 @@
       <artifactId>redback-policy</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.plexus.cache</groupId>
-      <artifactId>plexus-cache-api</artifactId>
+      <groupId>org.codehaus.redback.components.cache</groupId>
+      <artifactId>spring-cache-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.plexus.cache</groupId>
-      <artifactId>plexus-cache-ehcache</artifactId>
+      <groupId>org.codehaus.redback.components.cache</groupId>
+      <artifactId>spring-cache-ehcache</artifactId>
     </dependency>
     <dependency>
       <groupId>net.sf.ehcache</groupId>
-      <artifactId>ehcache</artifactId>
+      <artifactId>ehcache-core</artifactId>
     </dependency>     
     <dependency>
       <groupId>org.springframework</groupId>
@@ -66,6 +66,11 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

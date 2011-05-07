@@ -20,6 +20,12 @@ import net.sf.ehcache.CacheManager;
 
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.provider.test.AbstractUserManagerTestCase;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * CachedUserManagerTest 
@@ -30,20 +36,32 @@ import org.codehaus.plexus.redback.users.provider.test.AbstractUserManagerTestCa
 public class CachedUserManagerTest
     extends AbstractUserManagerTestCase
 {
-    protected void setUp()
+
+    @Inject @Named(value = "userManager#cached")
+    UserManager userManager;
+
+
+    @Before
+    public void setUp()
         throws Exception
     {
         super.setUp();
 
-        setUserManager( (UserManager) lookup( UserManager.ROLE, "cached" ) );
+        setUserManager( userManager );
 
         assertTrue( getUserManager() instanceof CachedUserManager );
     }
 
-    protected void tearDown()
+    @After
+    public void tearDown()
         throws Exception
     {
-        CacheManager.getInstance().removalAll();
         super.tearDown();
+    }
+
+    @AfterClass
+    public static void cleanCache()
+    {
+        CacheManager.getInstance().removalAll();
     }
 }

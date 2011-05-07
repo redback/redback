@@ -19,6 +19,8 @@ package org.codehaus.plexus.redback.users.cached;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.codehaus.plexus.cache.Cache;
 import org.codehaus.plexus.redback.users.User;
@@ -43,10 +45,10 @@ public class CachedUserManager
     
     private Logger log = LoggerFactory.getLogger( getClass() );
     
-    @Resource(name="userManager#jdo")
+    @Inject @Named(value="userManager#jdo")
     private UserManager userImpl;
 
-    @Resource(name="cache#users")
+    @Inject @Named(value="cache#users")
     private Cache usersCache;
 
     public boolean isReadOnly()
@@ -292,5 +294,25 @@ public class CachedUserManager
         {
             usersCache.remove( user.getPrincipal() );
         }
+    }
+
+    public UserManager getUserImpl()
+    {
+        return userImpl;
+    }
+
+    public void setUserImpl( UserManager userImpl )
+    {
+        this.userImpl = userImpl;
+    }
+
+    public Cache getUsersCache()
+    {
+        return usersCache;
+    }
+
+    public void setUsersCache( Cache usersCache )
+    {
+        this.usersCache = usersCache;
     }
 }
