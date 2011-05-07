@@ -20,6 +20,8 @@ import java.net.URL;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 
@@ -30,6 +32,8 @@ import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.provider.test.AbstractUserManagerTestCase;
 import org.jpox.AbstractPersistenceManagerFactory;
 import org.jpox.SchemaTool;
+import org.junit.Before;
+import org.springframework.context.annotation.Bean;
 
 /**
  * JdoUserManagerTest 
@@ -40,15 +44,20 @@ import org.jpox.SchemaTool;
 public class JdoUserManagerTest
     extends AbstractUserManagerTestCase
 {
+    @Inject @Named(value = "jdoFactory#users")
+    DefaultConfigurableJdoFactory jdoFactory;
+
+    @Inject @Named(value = "userManager#jdo")
+    JdoUserManager jdoUserManager;
+
     private StoreManagerDebug storeManager;
 
-    protected void setUp()
+    @Before
+    public void setUp()
         throws Exception
     {
         super.setUp();
 
-        DefaultConfigurableJdoFactory jdoFactory = (DefaultConfigurableJdoFactory) lookup( JdoFactory.ROLE, "users" );
-        
         jdoFactory.setPersistenceManagerFactoryClass( "org.jpox.PersistenceManagerFactoryImpl" ); //$NON-NLS-1$
 
         jdoFactory.setDriverName( "org.hsqldb.jdbcDriver" ); //$NON-NLS-1$
@@ -86,11 +95,13 @@ public class JdoUserManagerTest
 
         pm.close();
 
-        setUserManager( (JdoUserManager) lookup( UserManager.ROLE, "jdo" ) );
+        setUserManager( jdoUserManager );
 
         /* save the store manager to access the queries executed */
         JdoUserManager userManager = (JdoUserManager) getUserManager();
         storeManager = StoreManagerDebug.getConfiguredStoreManager( userManager.getPersistenceManager());
+
+        jdoFactory.initialize();
     }
 
 }

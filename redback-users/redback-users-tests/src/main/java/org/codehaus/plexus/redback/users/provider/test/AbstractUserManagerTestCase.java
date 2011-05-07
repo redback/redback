@@ -16,15 +16,20 @@ package org.codehaus.plexus.redback.users.provider.test;
  * limitations under the License.
  */
 
-import java.util.List;
-
+import junit.framework.TestCase;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.users.PermanentUserException;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.users.UserQuery;
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import javax.inject.Inject;
+import java.util.List;
 
 /**
  * AbstractUserManagerTestCase 
@@ -32,8 +37,10 @@ import org.codehaus.plexus.spring.PlexusInSpringTestCase;
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = {"classpath*:/META-INF/spring-context.xml","classpath*:/spring-context.xml"} )
 public class AbstractUserManagerTestCase
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
     /**
      * This value is set by the sub classes of this test case.
@@ -42,6 +49,7 @@ public class AbstractUserManagerTestCase
      */
     private UserManager userManager;
 
+    @Inject
     private UserSecurityPolicy securityPolicy;
     
     private UserManagerEventTracker eventTracker;
@@ -61,21 +69,15 @@ public class AbstractUserManagerTestCase
         }
     }
 
-    protected void setUp()
+    public void setUp()
         throws Exception
     {
         super.setUp();
-
-        securityPolicy = (UserSecurityPolicy) lookup( UserSecurityPolicy.ROLE );
     }
 
-    protected void tearDown()
+    public void tearDown()
         throws Exception
     {
-        if ( getUserManager() != null )
-        {
-            release( getUserManager() );
-        }
         super.tearDown();
     }
 
@@ -85,7 +87,8 @@ public class AbstractUserManagerTestCase
 
         assertEquals( "New UserManager should contain no users.", 0, userManager.getUsers().size() );
     }
-    
+
+    @Test
     public void testFindUserByNullPrincipal()
     {
         try
@@ -99,7 +102,8 @@ public class AbstractUserManagerTestCase
             // Expected Path.
         }
     }
-    
+
+    @Test
     public void testFindUserByEmptyUsername()
     {
         try
@@ -136,6 +140,7 @@ public class AbstractUserManagerTestCase
         }
     }
 
+    @Test
     public void testAddFindUserByPrincipal()
         throws UserNotFoundException
     {
@@ -165,6 +170,7 @@ public class AbstractUserManagerTestCase
         assertEquals( 0, getEventTracker().updatedUsernames.size() );
     }
 
+    @Test
     public void testAddFindUserLockedStatus() throws UserNotFoundException {
 		assertCleanUserManager();
 		securityPolicy.setEnabled(false);
@@ -198,7 +204,8 @@ public class AbstractUserManagerTestCase
 		assertEquals(0, getEventTracker().removedUsernames.size());
 		assertEquals(0, getEventTracker().updatedUsernames.size());
 	}
-    
+
+    @Test
     public void testAddFindUserByUsername()
         throws UserNotFoundException
     {
@@ -224,6 +231,7 @@ public class AbstractUserManagerTestCase
         assertEquals( 0, getEventTracker().updatedUsernames.size() );
     }
 
+    @Test
     public void testCreateUser()
         throws Exception
     {
@@ -247,6 +255,7 @@ public class AbstractUserManagerTestCase
         assertEquals( 0, getEventTracker().updatedUsernames.size() );
     }
 
+    @Test
     public void testAddUser()
         throws Exception
     {
@@ -274,6 +283,7 @@ public class AbstractUserManagerTestCase
         assertEquals( 0, getEventTracker().updatedUsernames.size() );
     }
 
+    @Test
     public void testDeleteUser()
         throws Exception
     {
@@ -311,6 +321,7 @@ public class AbstractUserManagerTestCase
         assertEquals( 0, getEventTracker().updatedUsernames.size() );
     }
 
+    @Test
     public void testFindUser()
         throws Exception
     {
@@ -366,6 +377,7 @@ public class AbstractUserManagerTestCase
         assertEquals( 0, getEventTracker().updatedUsernames.size() );
     }
 
+    @Test
     public void testFindUsersByQuery()
     {
         assertCleanUserManager();
@@ -470,9 +482,9 @@ public class AbstractUserManagerTestCase
         users = um.findUsersByQuery( query );
         assertEquals( 1, users.size() );
         assertEquals( "admin@somedomain.com", ( (User) users.get( 0 ) ).getEmail() );
-
-
     }
+
+    @Test
     public void testUserExists()
         throws Exception
     {
@@ -499,6 +511,7 @@ public class AbstractUserManagerTestCase
         assertEquals( 0, getEventTracker().updatedUsernames.size() );
     }
 
+    @Test
     public void testUpdateUser()
         throws Exception
     {
@@ -539,7 +552,8 @@ public class AbstractUserManagerTestCase
         assertEquals( 0, getEventTracker().removedUsernames.size() );
         assertEquals( 1, getEventTracker().updatedUsernames.size() );
     }
-    
+
+    @Test
     public void testDeletePermanentUser()
         throws UserNotFoundException
     {

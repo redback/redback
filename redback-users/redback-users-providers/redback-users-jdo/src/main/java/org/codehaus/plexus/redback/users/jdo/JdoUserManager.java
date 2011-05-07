@@ -20,8 +20,6 @@ import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.jdo.PlexusJdoUtils;
 import org.codehaus.plexus.jdo.PlexusObjectNotFoundException;
 import org.codehaus.plexus.jdo.PlexusStoreException;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.users.AbstractUserManager;
 import org.codehaus.plexus.redback.users.PermanentUserException;
@@ -32,7 +30,10 @@ import org.codehaus.plexus.redback.users.UserQuery;
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.jdo.Extent;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
@@ -51,12 +52,11 @@ import java.util.List;
 @Service("userManager#jdo")
 public class JdoUserManager
     extends AbstractUserManager
-    implements Initializable
 {
-    @Resource(name="jdoFactory#users")
+    @Inject @Named(value="jdoFactory#users")
     private JdoFactory jdoFactory;
 
-    @Resource
+    @Inject
     private UserSecurityPolicy userSecurityPolicy;
 
     private PersistenceManagerFactory pmf;
@@ -381,8 +381,8 @@ public class JdoUserManager
         return user;
     }
 
+    @PostConstruct
     public void initialize()
-        throws InitializationException
     {
         pmf = jdoFactory.getPersistenceManagerFactory();
     }

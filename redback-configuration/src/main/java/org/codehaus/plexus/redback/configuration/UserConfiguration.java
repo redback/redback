@@ -137,7 +137,8 @@ public class UserConfiguration
 
     public String getString( String key, String defaultValue )
     {
-        return lookupRegistry.getString( key, defaultValue );
+        String value = lookupRegistry.getString( key, defaultValue );
+        return value;
     }
 
     public int getInt( String key )

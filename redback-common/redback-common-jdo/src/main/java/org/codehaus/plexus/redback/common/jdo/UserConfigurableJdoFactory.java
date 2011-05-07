@@ -1,10 +1,11 @@
 package org.codehaus.plexus.redback.common.jdo;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Service;
@@ -18,10 +19,9 @@ import org.springframework.stereotype.Service;
 @Service("jdoFactory#users")
 public class UserConfigurableJdoFactory
     extends DefaultConfigurableJdoFactory
-    implements Initializable
 {
     
-    @Resource(name="userConfiguration")
+    @Inject @Named(value="userConfiguration")
     private UserConfiguration config;
 
     private String getConfigString( String key, String currentValue, String defaultValue )
@@ -36,8 +36,8 @@ public class UserConfigurableJdoFactory
         }
     }
 
+    @PostConstruct
     public void initialize()
-        throws InitializationException
     {
         String jdbcDriverName =
             getConfigString( "jdbc.driver.name", super.getDriverName(), "org.apache.derby.jdbc.EmbeddedDriver" );
