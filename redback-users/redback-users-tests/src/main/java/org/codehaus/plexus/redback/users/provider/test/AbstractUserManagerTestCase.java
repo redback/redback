@@ -81,11 +81,12 @@ public class AbstractUserManagerTestCase
         super.tearDown();
     }
 
-    private void assertCleanUserManager()
+    protected void assertCleanUserManager()
     {
+
         assertNotNull( getUserManager() );
 
-        assertEquals( "New UserManager should contain no users.", 0, userManager.getUsers().size() );
+        assertEquals( "New UserManager should contain no users. " + userManager.getUsers(), 0, userManager.getUsers().size() );
     }
 
     @Test

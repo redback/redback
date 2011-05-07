@@ -16,27 +16,27 @@ package org.codehaus.plexus.redback.users.jdo;
  * limitations under the License.
  */
 
-import java.net.URL;
-import java.util.Map;
-import java.util.Properties;
+import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
+import org.codehaus.plexus.redback.common.jdo.test.StoreManagerDebug;
+import org.codehaus.plexus.redback.users.UserManager;
+import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.codehaus.plexus.redback.users.provider.test.AbstractUserManagerTestCase;
+import org.jpox.AbstractPersistenceManagerFactory;
+import org.jpox.SchemaTool;
+import org.junit.Before;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
-
-import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
-import org.codehaus.plexus.jdo.JdoFactory;
-import org.codehaus.plexus.redback.common.jdo.test.StoreManagerDebug;
-import org.codehaus.plexus.redback.users.UserManager;
-import org.codehaus.plexus.redback.users.provider.test.AbstractUserManagerTestCase;
-import org.jpox.AbstractPersistenceManagerFactory;
-import org.jpox.SchemaTool;
-import org.junit.Before;
-import org.springframework.context.annotation.Bean;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 /**
- * JdoUserManagerTest 
+ * JdoUserManagerTest
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
@@ -44,10 +44,12 @@ import org.springframework.context.annotation.Bean;
 public class JdoUserManagerTest
     extends AbstractUserManagerTestCase
 {
-    @Inject @Named(value = "jdoFactory#users")
+    @Inject
+    @Named( value = "jdoFactory#users" )
     DefaultConfigurableJdoFactory jdoFactory;
 
-    @Inject @Named(value = "userManager#jdo")
+    @Inject
+    @Named( value = "userManager#jdo" )
     JdoUserManager jdoUserManager;
 
     private StoreManagerDebug storeManager;
@@ -76,7 +78,7 @@ public class JdoUserManagerTest
 
         Properties properties = jdoFactory.getProperties();
 
-        for ( Map.Entry<?,?> entry : properties.entrySet() )
+        for ( Map.Entry<?, ?> entry : properties.entrySet() )
         {
             System.setProperty( (String) entry.getKey(), (String) entry.getValue() );
         }
@@ -88,8 +90,9 @@ public class JdoUserManagerTest
         /* set our own Store Manager to allow counting SQL statements */
         StoreManagerDebug.setup( (AbstractPersistenceManagerFactory) pmf );
 
-        SchemaTool.createSchemaTables( new URL[] { getClass()
-            .getResource( "/org/codehaus/plexus/redback/users/jdo/package.jdo" ) }, new URL[] {}, null, false, null ); //$NON-NLS-1$
+        SchemaTool.createSchemaTables(
+            new URL[]{ getClass().getResource( "/org/codehaus/plexus/redback/users/jdo/package.jdo" ) }, new URL[]{ },
+            null, false, null ); //$NON-NLS-1$
 
         PersistenceManager pm = pmf.getPersistenceManager();
 
@@ -99,9 +102,19 @@ public class JdoUserManagerTest
 
         /* save the store manager to access the queries executed */
         JdoUserManager userManager = (JdoUserManager) getUserManager();
-        storeManager = StoreManagerDebug.getConfiguredStoreManager( userManager.getPersistenceManager());
+        storeManager = StoreManagerDebug.getConfiguredStoreManager( userManager.getPersistenceManager() );
 
-        jdoFactory.initialize();
     }
+
+    protected void assertCleanUserManager()
+    {
+        // database cleanup
+        ( (JdoUserManager) getUserManager()).eraseDatabase();
+
+        getEventTracker().userManagerInit( true );
+
+        super.assertCleanUserManager();
+    }
+
 
 }
