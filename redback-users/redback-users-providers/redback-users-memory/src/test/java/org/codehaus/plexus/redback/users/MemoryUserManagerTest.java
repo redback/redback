@@ -16,9 +16,12 @@ package org.codehaus.plexus.redback.users;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.redback.users.UserManager;
-import org.codehaus.plexus.redback.users.provider.test.AbstractUserManagerTestCase;
 import org.codehaus.plexus.redback.users.memory.MemoryUserManager;
+import org.codehaus.plexus.redback.users.provider.test.AbstractUserManagerTestCase;
+import org.junit.Before;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * {@link MemoryUserManager} test:
@@ -29,11 +32,14 @@ public class MemoryUserManagerTest
     extends AbstractUserManagerTestCase
 {
 
-    protected void setUp()
+    @Inject @Named(value = "userManager#memory")
+    UserManager userManager;
+
+    @Before
+    public void setUp()
         throws Exception
     {
         super.setUp();
-
-        setUserManager( (UserManager) lookup( UserManager.ROLE, "memory" ) );
+        setUserManager( userManager );
     }
 }

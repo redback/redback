@@ -84,6 +84,8 @@ public class AbstractUserManagerTestCase
     protected void assertCleanUserManager()
     {
 
+        getUserManager().eraseDatabase();
+        getEventTracker().userManagerInit( true );
         assertNotNull( getUserManager() );
 
         assertEquals( "New UserManager should contain no users. " + userManager.getUsers(), 0, userManager.getUsers().size() );

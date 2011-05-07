@@ -111,7 +111,7 @@ public class JdoUserManagerTest
         // database cleanup
         ( (JdoUserManager) getUserManager()).eraseDatabase();
 
-        getEventTracker().userManagerInit( true );
+
 
         super.assertCleanUserManager();
     }
