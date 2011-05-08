@@ -18,6 +18,10 @@ package org.codehaus.plexus.redback.keys.memory;
 
 import org.codehaus.plexus.redback.keys.KeyManager;
 import org.codehaus.plexus.redback.keys.KeyManagerTestCase;
+import org.junit.Before;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * MemoryKeyManagerTest 
@@ -28,13 +32,16 @@ import org.codehaus.plexus.redback.keys.KeyManagerTestCase;
 public class MemoryKeyManagerTest
     extends KeyManagerTestCase
 {
+    @Inject @Named(value="keyManager#memory")
+    KeyManager keyManager;
 
-    protected void setUp()
+    @Before
+    public void setUp()
         throws Exception
     {
         super.setUp();
         
-        super.setKeyManager( (KeyManager) lookup( KeyManager.ROLE, "memory" ) );
+        super.setKeyManager( keyManager );
     }
     
 }

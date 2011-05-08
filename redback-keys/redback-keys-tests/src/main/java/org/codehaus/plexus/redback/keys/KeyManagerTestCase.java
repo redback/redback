@@ -17,6 +17,10 @@ package org.codehaus.plexus.redback.keys;
  */
 
 import junit.framework.TestCase;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -30,6 +34,8 @@ import java.util.List;
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = "classpath*:/META-INF/spring-context.xml" )
 public class KeyManagerTestCase
     extends TestCase
 {
@@ -61,6 +67,7 @@ public class KeyManagerTestCase
         assertEquals( format.format( expected ), format.format( actual ) );
     }
 
+    @Test
     public void testNormal()
         throws KeyNotFoundException, KeyManagerException
     {
@@ -91,6 +98,7 @@ public class KeyManagerTestCase
         assertSameDates( expectedExpires, found.getDateExpires() );
     }
 
+    @Test
     public void testGetAllKeys()
         throws KeyManagerException
     {
@@ -130,6 +138,7 @@ public class KeyManagerTestCase
         assertSameDates( created2.getDateExpires(), found.getDateExpires() );
     }
 
+    @Test
     public void testNotThere()
         throws KeyManagerException
     {
@@ -157,6 +166,7 @@ public class KeyManagerTestCase
         }
     }
 
+    @Test
     public void testExpired()
         throws KeyManagerException, InterruptedException
     {
@@ -187,6 +197,7 @@ public class KeyManagerTestCase
         }
     }
 
+    @Test
     public void testPermanent()
         throws KeyManagerException
     {
