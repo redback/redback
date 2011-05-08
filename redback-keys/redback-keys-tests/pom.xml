@@ -30,10 +30,6 @@
       <artifactId>redback-keys-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.redback</groupId>
-      <artifactId>plexus-spring</artifactId>
-    </dependency>
-    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>

@@ -16,7 +16,7 @@ package org.codehaus.plexus.redback.keys;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import junit.framework.TestCase;
 
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -31,7 +31,7 @@ import java.util.List;
  * @version $Id$
  */
 public class KeyManagerTestCase
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
     private KeyManager manager;
 
