@@ -1,7 +1,13 @@
 package org.codehaus.plexus.redback.system;
 
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import junit.framework.TestCase;
 import org.codehaus.plexus.redback.authentication.AuthenticationManager;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import javax.inject.Inject;
 /*
  * Copyright 2006 The Apache Software Foundation.
  *
@@ -24,30 +30,20 @@ import org.codehaus.plexus.redback.authentication.AuthenticationManager;
  * @author: Jesse McConnell <jesse@codehaus.org>
  * @version: $ID:$
  */
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public class TestAuthenticationManager
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
 
-    protected void setUp()
+    @Inject
+    AuthenticationManager authManager;
+
+    @Test
+    public void testAuthenticatorPopulation()
         throws Exception
     {
-        super.setUp();
+        assertEquals( 1, authManager.getAuthenticators().size() );
     }
-
-
-   @Override
-    protected String getPlexusConfigLocation()
-    {
-        return "plexus.xml";
-    }
-
-
-public void testAuthenticatorPopulation()
-       throws Exception
-   {
-       AuthenticationManager authManager = (AuthenticationManager) lookup( AuthenticationManager.ROLE );
-
-       assertEquals( 1, authManager.getAuthenticators().size() );
-   }
 
 }
