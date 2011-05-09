@@ -19,6 +19,7 @@ package org.codehaus.plexus.redback.keys.jdo;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
@@ -143,6 +144,7 @@ public class JdoKeyManager
         return PlexusJdoUtils.getAllObjectsDetached( getPersistenceManager(), JdoAuthenticationKey.class );
     }
 
+    @PostConstruct
     public void initialize()
         throws InitializationException
     {

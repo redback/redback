@@ -16,18 +16,19 @@ package org.codehaus.plexus.redback.keys.jdo;
  * limitations under the License.
  */
 
-import java.net.URL;
-import java.util.Map;
-import java.util.Properties;
-
-import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
-
 import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
-import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.redback.keys.KeyManager;
 import org.codehaus.plexus.redback.keys.KeyManagerTestCase;
 import org.jpox.SchemaTool;
+import org.junit.Before;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.jdo.PersistenceManager;
+import javax.jdo.PersistenceManagerFactory;
+import java.net.URL;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * JdoKeyManagerTest 
@@ -39,13 +40,21 @@ public class JdoKeyManagerTest
     extends KeyManagerTestCase
 {
 
-    protected void setUp()
+    @Inject
+    @Named(value = "jdoFactory#users")
+    DefaultConfigurableJdoFactory jdoFactory;
+
+    @Inject @Named(value = "keyManager#jdo")
+    KeyManager keyManager;
+
+
+    @Before
+    public void setUp()
         throws Exception
     {
         
         super.setUp();
 
-        DefaultConfigurableJdoFactory jdoFactory = (DefaultConfigurableJdoFactory) lookup( JdoFactory.ROLE, "users" );
         assertEquals( DefaultConfigurableJdoFactory.class.getName(), jdoFactory.getClass().getName() );
 
         jdoFactory.setPersistenceManagerFactoryClass( "org.jpox.PersistenceManagerFactoryImpl" ); //$NON-NLS-1$
@@ -83,7 +92,6 @@ public class JdoKeyManagerTest
         PersistenceManager pm = pmf.getPersistenceManager();
 
         pm.close();
-        KeyManager keyManager = (KeyManager) getApplicationContext().getBean( "keyManager#jdo" );
         keyManager.eraseDatabase();
         setKeyManager( keyManager );
     }
