@@ -30,5 +30,16 @@
   <context:annotation-config />
   <context:component-scan 
     base-package="org.codehaus.plexus.redback.keys.cached"/>
+
+  <bean name="cache#keys" class="org.codehaus.plexus.cache.ehcache.EhcacheCache"
+      init-method="initialize">
+    <property name="diskPersistent" value="false"/>
+    <property name="eternal" value="false"/>
+    <property name="maxElementsInMemory" value="1000"/>
+    <property name="memoryEvictionPolicy" value="LRU"/>
+    <property name="name" value="usersCache"/>
+    <property name="timeToIdleSeconds" value="1800"/>
+    <property name="timeToLiveSeconds" value="14400"/>
+  </bean>
  
 </beans>

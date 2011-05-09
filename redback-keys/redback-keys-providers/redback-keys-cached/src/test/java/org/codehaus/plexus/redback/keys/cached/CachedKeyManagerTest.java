@@ -17,12 +17,15 @@ package org.codehaus.plexus.redback.keys.cached;
  */
 
 import net.sf.ehcache.CacheManager;
-
 import org.codehaus.plexus.redback.keys.KeyManager;
 import org.codehaus.plexus.redback.keys.KeyManagerTestCase;
+import org.junit.Before;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
- * CachedKeyManagerTest 
+ * CachedKeyManagerTest
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
@@ -30,12 +33,16 @@ import org.codehaus.plexus.redback.keys.KeyManagerTestCase;
 public class CachedKeyManagerTest
     extends KeyManagerTestCase
 {
-    protected void setUp()
+
+    @Inject
+    @Named( value = "keyManager#cached" )
+    KeyManager manager;
+
+    @Before
+    public void setUp()
         throws Exception
     {
         super.setUp();
-
-        KeyManager manager = (KeyManager) lookup( KeyManager.ROLE, "cached" );
 
         setKeyManager( manager );
 

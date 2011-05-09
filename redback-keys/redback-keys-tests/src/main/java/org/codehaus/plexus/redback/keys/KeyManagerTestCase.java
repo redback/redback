@@ -35,7 +35,7 @@ import java.util.List;
  * @version $Id$
  */
 @RunWith( SpringJUnit4ClassRunner.class )
-@ContextConfiguration( locations = {"classpath*:/META-INF/spring-context.xml","classpath:/spring-context.xml"} )
+@ContextConfiguration( locations = {"classpath*:/META-INF/spring-context.xml","classpath*:/spring-context.xml"} )
 public class KeyManagerTestCase
     extends TestCase
 {
@@ -102,6 +102,7 @@ public class KeyManagerTestCase
     public void testGetAllKeys()
         throws KeyManagerException
     {
+        getKeyManager().eraseDatabase();
         AuthenticationKey created1 = getKeyManager().createKey( "foo", "Testing", 15 );
         AuthenticationKey created2 = getKeyManager().createKey( "bar", "Something", 23 );
 

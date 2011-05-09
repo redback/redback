@@ -19,6 +19,8 @@ package org.codehaus.plexus.redback.keys.cached;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.codehaus.plexus.cache.Cache;
 import org.codehaus.plexus.redback.keys.AbstractKeyManager;
@@ -39,10 +41,10 @@ public class CachedKeyManager
     extends AbstractKeyManager
     implements KeyManager
 {
-    @Resource(name="keyManager#jdo")
+    @Inject @Named(value="keyManager#jdo")
     private KeyManager keyImpl;
 
-    @Resource(name="cache#keys")
+    @Inject @Named(value="cache#keys")
     private Cache keysCache;
 
     public AuthenticationKey addKey( AuthenticationKey key )
