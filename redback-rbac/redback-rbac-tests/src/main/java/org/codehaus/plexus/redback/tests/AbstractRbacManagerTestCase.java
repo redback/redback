@@ -134,6 +134,9 @@ public abstract class AbstractRbacManagerTestCase
     {
         assertNotNull( rbacManager );
 
+        rbacManager.eraseDatabase();
+        eventTracker.rbacInit( true );
+
         Role role = getAdminRole();
 
         assertNotNull( role );
@@ -164,6 +167,9 @@ public abstract class AbstractRbacManagerTestCase
         throws Exception
     {
         assertNotNull( rbacManager );
+
+        rbacManager.eraseDatabase();
+        eventTracker.rbacInit( true );
 
         Resource resource = rbacManager.createResource( "foo" );
         Resource resource2 = rbacManager.createResource( "bar" );
@@ -197,6 +203,9 @@ public abstract class AbstractRbacManagerTestCase
         throws RbacManagerException
     {
         assertNotNull( rbacManager );
+
+        rbacManager.eraseDatabase();
+        eventTracker.rbacInit( true );
 
         Role adminRole = rbacManager.saveRole( getAdminRole() );
         rbacManager.saveRole( getDeveloperRole() );
@@ -234,6 +243,9 @@ public abstract class AbstractRbacManagerTestCase
     {
         assertNotNull( rbacManager );
 
+        rbacManager.eraseDatabase();
+        eventTracker.rbacInit( true );
+
         Role adminRole = rbacManager.saveRole( getAdminRole() );
         Role develRole = rbacManager.saveRole( getDeveloperRole() );
 
@@ -261,6 +273,9 @@ public abstract class AbstractRbacManagerTestCase
         throws RbacManagerException
     {
         assertNotNull( rbacManager );
+
+        rbacManager.eraseDatabase();
+        eventTracker.rbacInit( true );
 
         String rolename = "Test Role";
 
@@ -294,6 +309,9 @@ public abstract class AbstractRbacManagerTestCase
     {
         RBACManager manager = rbacManager;
         assertNotNull( manager );
+
+        rbacManager.eraseDatabase();
+        eventTracker.rbacInit( true );
 
         Role adminRole = manager.saveRole( getAdminRole() );
         Role develRole = manager.saveRole( getDeveloperRole() );
@@ -369,6 +387,10 @@ public abstract class AbstractRbacManagerTestCase
         throws RbacManagerException
     {
         RBACManager manager = rbacManager;
+
+        rbacManager.eraseDatabase();
+        eventTracker.rbacInit( true );
+
         Role adminRole = manager.saveRole( getAdminRole() );
 
         assertEquals( 1, manager.getAllRoles().size() );
@@ -428,6 +450,10 @@ public abstract class AbstractRbacManagerTestCase
         throws RbacManagerException
     {
         RBACManager manager = rbacManager;
+
+        rbacManager.eraseDatabase();
+        eventTracker.rbacInit( true );
+
         Role admin = getAdminRole();
 
         admin = manager.saveRole( admin );
@@ -820,6 +846,9 @@ public abstract class AbstractRbacManagerTestCase
     {
         assertNotNull( rbacManager );
 
+        rbacManager.eraseDatabase();
+        eventTracker.rbacInit( true );
+
         Role adminRole = rbacManager.saveRole( getAdminRole() );
         rbacManager.saveRole( getDeveloperRole() );
 
@@ -877,6 +906,8 @@ public abstract class AbstractRbacManagerTestCase
         throws RbacManagerException
     {
         assertNotNull( rbacManager );
+        rbacManager.eraseDatabase();
+        eventTracker.rbacInit( true );
 
         Role adminRole = getAdminRole();
         adminRole.setPermanent( true );
@@ -928,6 +959,9 @@ public abstract class AbstractRbacManagerTestCase
     public void testAddRemovePermanentOperation()
         throws RbacManagerException
     {
+
+        rbacManager.eraseDatabase();
+        eventTracker.rbacInit( true );
         assertNotNull( rbacManager );
 
         Role adminRole = rbacManager.saveRole( getAdminRole() );
