@@ -16,6 +16,11 @@ package org.codehaus.plexus.redback.rbac;
  * limitations under the License.
  */
 
+import org.codehaus.plexus.util.CollectionUtils;
+import org.codehaus.plexus.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,13 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
-import org.codehaus.plexus.util.CollectionUtils;
-import org.codehaus.plexus.util.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * AbstractRBACManager
  *
@@ -39,7 +37,7 @@ import org.slf4j.LoggerFactory;
  * @version $Id$
  */
 public abstract class AbstractRBACManager
-    implements RBACManager, Initializable
+    implements RBACManager
 {
     protected Logger log = LoggerFactory.getLogger( getClass() );
     
@@ -789,7 +787,6 @@ public abstract class AbstractRBACManager
     }
 
     public void initialize()
-        throws InitializationException
     {
         // do nothing here.
     }

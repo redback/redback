@@ -16,7 +16,7 @@ package org.codehaus.plexus.redback.tests;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import junit.framework.TestCase;
 import org.codehaus.plexus.redback.rbac.Operation;
 import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
@@ -25,11 +25,16 @@ import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.redback.tests.utils.RBACDefaults;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Collections;
 
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public class AbstractRbacManagerPerformanceTestCase
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
     private RBACManager rbacManager;
 
@@ -50,10 +55,6 @@ public class AbstractRbacManagerPerformanceTestCase
     protected void tearDown()
         throws Exception
     {
-        if ( rbacManager != null )
-        {
-            release( rbacManager );
-        }
         super.tearDown();
     }
 

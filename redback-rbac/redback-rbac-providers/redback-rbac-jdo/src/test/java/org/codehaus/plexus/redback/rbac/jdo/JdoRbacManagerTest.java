@@ -16,25 +16,24 @@ package org.codehaus.plexus.redback.rbac.jdo;
  * limitations under the License.
  */
 
-import java.io.File;
-import java.net.URL;
-import java.util.Map;
-import java.util.Properties;
-
-import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
-
 import net.sf.ehcache.CacheManager;
-
 import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
-import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.redback.common.jdo.test.StoreManagerDebug;
-import org.codehaus.plexus.redback.rbac.AbstractRBACManager;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.tests.AbstractRbacManagerTestCase;
 import org.jpox.AbstractPersistenceManagerFactory;
 import org.jpox.SchemaTool;
+import org.junit.Before;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.jdo.PersistenceManager;
+import javax.jdo.PersistenceManagerFactory;
+import java.io.File;
+import java.net.URL;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * JdoRbacManagerTest:
@@ -48,20 +47,23 @@ public class JdoRbacManagerTest
 {
     private StoreManagerDebug storeManager;
 
+    @Inject
+    @Named(value = "jdoFactory#users")
+    DefaultConfigurableJdoFactory jdoFactory;
+
+    @Inject @Named(value = "rBACManager#jdo")
+    RBACManager rbacManager;
+
     /**
      * Creates a new RbacStore which contains no data.
      */
-    protected void setUp()
+    @Before
+    public void setUp()
         throws Exception
     {
 
-        CacheManager.getInstance().removeCache( "usersCache" );
-        CacheManager.getInstance().removalAll();
-        CacheManager.getInstance().shutdown();
-        
         super.setUp();
 
-        DefaultConfigurableJdoFactory jdoFactory = (DefaultConfigurableJdoFactory) lookup( JdoFactory.ROLE, "users" );
         assertEquals( DefaultConfigurableJdoFactory.class.getName(), jdoFactory.getClass().getName() );
 
         jdoFactory.setPersistenceManagerFactoryClass( "org.jpox.PersistenceManagerFactoryImpl" ); //$NON-NLS-1$
@@ -133,27 +135,19 @@ public class JdoRbacManagerTest
 
         pm.close();
 
-        setRbacManager( (AbstractRBACManager) lookup( RBACManager.ROLE, "jdo" ) );
+        setRbacManager( rbacManager );
 
         /* save the store manager to access the queries executed */
         JdoRbacManager rbacManager = (JdoRbacManager) getRbacManager();
         storeManager = StoreManagerDebug.getConfiguredStoreManager( rbacManager.getJdo().getPersistenceManager());
     }
 
-    @Override
-    protected void tearDown()
-        throws Exception
-    {
-        super.tearDown();
-        CacheManager.getInstance().removeCache( "usersCache" );
-        CacheManager.getInstance().removalAll();
-        CacheManager.getInstance().shutdown();
-    }
 
     @Override
     public void testGetAssignedRoles()
         throws RbacManagerException
     {
+        storeManager.resetCounter();
         super.testGetAssignedRoles();
         int counter = storeManager.counter();
         /* without Level 2 cache: 15 queries */

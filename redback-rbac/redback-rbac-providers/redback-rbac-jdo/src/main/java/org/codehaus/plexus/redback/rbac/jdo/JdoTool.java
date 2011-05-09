@@ -17,8 +17,6 @@ package org.codehaus.plexus.redback.rbac.jdo;
  */
 
 import org.codehaus.plexus.jdo.JdoFactory;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManagerListener;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
@@ -27,11 +25,7 @@ import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.io.PrintStream;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.jdo.Extent;
 import javax.jdo.JDOException;
@@ -48,6 +42,10 @@ import javax.jdo.listener.InstanceLifecycleEvent;
 import javax.jdo.listener.StoreLifecycleListener;
 import javax.jdo.spi.Detachable;
 import javax.jdo.spi.PersistenceCapable;
+import java.io.PrintStream;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * JdoTool - RBAC JDO Tools.
@@ -57,7 +55,7 @@ import javax.jdo.spi.PersistenceCapable;
  */
 @Service
 public class JdoTool
-    implements Initializable, DeleteLifecycleListener, StoreLifecycleListener
+    implements DeleteLifecycleListener, StoreLifecycleListener
 {
 
     @Resource(name="jdoFactory#users")
@@ -67,8 +65,8 @@ public class JdoTool
 
     private RBACManagerListener listener;
 
+    @PostConstruct
     public void initialize()
-        throws InitializationException
     {
         pmf = jdoFactory.getPersistenceManagerFactory();
 

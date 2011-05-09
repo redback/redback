@@ -16,11 +16,7 @@ package org.codehaus.plexus.redback.tests;
  * limitations under the License.
  */
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
+import junit.framework.TestCase;
 import org.codehaus.plexus.redback.rbac.Operation;
 import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
@@ -30,7 +26,15 @@ import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.redback.tests.utils.RBACDefaults;
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 /**
  * AbstractRbacManagerTestCase
@@ -38,8 +42,10 @@ import org.codehaus.plexus.spring.PlexusInSpringTestCase;
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
+ @RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public abstract class AbstractRbacManagerTestCase
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
     private RBACManager rbacManager;
 
@@ -63,19 +69,15 @@ public abstract class AbstractRbacManagerTestCase
         return this.rbacManager;
     }
 
-    protected void setUp()
+    public void setUp()
         throws Exception
     {
         super.setUp();
     }
 
-    protected void tearDown()
+    public void tearDown()
         throws Exception
     {
-        if ( rbacManager != null )
-        {
-            release( rbacManager );
-        }
         super.tearDown();
     }
 
@@ -126,6 +128,7 @@ public abstract class AbstractRbacManagerTestCase
         return role;
     }
 
+    @Test
     public void testStoreInitialization()
         throws Exception
     {
@@ -156,6 +159,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 0, eventTracker.removedPermissionNames.size() );
     }
 
+    @Test
     public void testResources()
         throws Exception
     {
@@ -188,6 +192,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 0, eventTracker.removedPermissionNames.size() );
     }
 
+    @Test
     public void testAddGetPermission()
         throws RbacManagerException
     {
@@ -223,6 +228,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 0, eventTracker.removedPermissionNames.size() );
     }
 
+    @Test
     public void testAddGetRole()
         throws RbacManagerException
     {
@@ -250,6 +256,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 0, eventTracker.removedPermissionNames.size() );
     }
 
+    @Test
     public void testAllowRoleWithoutPermissions()
         throws RbacManagerException
     {
@@ -281,6 +288,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 0, eventTracker.removedPermissionNames.size() );
     }
 
+    @Test
     public void testAddGetChildRole()
         throws RbacManagerException
     {
@@ -316,6 +324,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 0, eventTracker.removedPermissionNames.size() );
     }
 
+    @Test
     public void testAddGetChildRoleViaName()
         throws RbacManagerException
     {
@@ -355,6 +364,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 0, eventTracker.removedPermissionNames.size() );
     }
 
+    @Test
     public void testUserAssignmentAddRole()
         throws RbacManagerException
     {
@@ -391,6 +401,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 0, eventTracker.removedPermissionNames.size() );
     }
 
+    @Test
     public void testUserAssignmentWithChildRoles()
         throws RbacManagerException
     {
@@ -412,6 +423,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 1, manager.getAssignedRoles( adminPrincipal ).size() );
     }
 
+    @Test
     public void testGetAssignedPermissionsNoChildRoles()
         throws RbacManagerException
     {
@@ -448,6 +460,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 0, eventTracker.removedPermissionNames.size() );
     }
 
+    @Test
     public void testGlobalResource()
         throws RbacManagerException
     {
@@ -481,6 +494,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 0, eventTracker.removedPermissionNames.size() );
     }
 
+    @Test
     public void testGlobalResourceOneLiner()
         throws RbacManagerException
     {
@@ -501,6 +515,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 0, eventTracker.removedPermissionNames.size() );
     }
 
+    @Test
     public void testUserAssignmentAddRemoveSecondRole()
         throws RbacManagerException
     {
@@ -569,6 +584,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 0, eventTracker.removedPermissionNames.size() );
     }
 
+    @Test
     public void testUserAssignmentMultipleRoles()
         throws RbacManagerException
     {
@@ -604,6 +620,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 0, eventTracker.removedPermissionNames.size() );
     }
 
+    @Test
     public void testUserAssignmentMultipleRolesWithChildRoles()
         throws RbacManagerException
     {
@@ -646,6 +663,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 0, eventTracker.removedPermissionNames.size() );
     }
 
+    @Test
     public void testGetAssignedRoles()
         throws RbacManagerException
     {
@@ -680,6 +698,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 3, assignedRoles.size() );
     }
 
+    @Test
     public void testGetAssignedPermissions()
         throws RbacManagerException
     {
@@ -727,6 +746,7 @@ public abstract class AbstractRbacManagerTestCase
         return childRole;
     }
 
+    @Test
     public void testGetRolesDeep()
         throws RbacManagerException
     {
@@ -757,6 +777,7 @@ public abstract class AbstractRbacManagerTestCase
         getChildRole( rbacManager, sysAdmin, "User Administrator", 1 );
     }
 
+    @Test
     public void testGetAssignedPermissionsDeep()
         throws RbacManagerException
     {
@@ -782,6 +803,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 6, assignedPermissions.size() );
     }
 
+    @Test
     public void testLargeApplicationInit()
         throws RbacManagerException
     {
@@ -792,6 +814,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 4, rbacManager.getAllRoles().size() );
     }
 
+    @Test
     public void testAddRemovePermanentPermission()
         throws RbacManagerException
     {
@@ -849,6 +872,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 0, eventTracker.removedPermissionNames.size() );
     }
 
+    @Test
     public void testAddRemovePermanentRole()
         throws RbacManagerException
     {
@@ -900,6 +924,7 @@ public abstract class AbstractRbacManagerTestCase
         assertEquals( 0, eventTracker.removedPermissionNames.size() );
     }
 
+    @Test
     public void testAddRemovePermanentOperation()
         throws RbacManagerException
     {

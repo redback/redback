@@ -16,15 +16,6 @@ package org.codehaus.plexus.redback.rbac.jdo;
  * limitations under the License.
  */
 
-import java.util.Collection;
-import java.util.List;
-
-import javax.jdo.JDOHelper;
-import javax.jdo.PersistenceManager;
-import javax.jdo.Transaction;
-
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.redback.rbac.AbstractRBACManager;
 import org.codehaus.plexus.redback.rbac.Operation;
 import org.codehaus.plexus.redback.rbac.Permission;
@@ -39,6 +30,14 @@ import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.jdo.JDOHelper;
+import javax.jdo.PersistenceManager;
+import javax.jdo.Transaction;
+import java.util.Collection;
+import java.util.List;
+
 /**
  * JdoRbacManager:
  *
@@ -49,9 +48,9 @@ import org.springframework.stereotype.Service;
 @Service("rBACManager#jdo")
 public class JdoRbacManager
     extends AbstractRBACManager
-    implements RBACManagerListener, Initializable
+    implements RBACManagerListener
 {
-    @javax.annotation.Resource
+    @Inject
     private JdoTool jdo;
 
     // private static final String ROLE_DETAIL = "role-child-detail";
@@ -617,8 +616,8 @@ public class JdoRbacManager
         jdo.removeAll( RbacJdoModelModelloMetadata.class );
     }
 
+    @PostConstruct
     public void initialize()
-        throws InitializationException
     {
         super.initialize();
         
