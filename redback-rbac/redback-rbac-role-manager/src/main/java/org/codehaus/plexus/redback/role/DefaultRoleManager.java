@@ -438,5 +438,75 @@ public class DefaultRoleManager
     {
         // create also serves as update
         templateProcessor.create( blessedModel, templateId, resource );
-    } 
+    }
+
+    public RedbackRoleModel getBlessedModel()
+    {
+        return blessedModel;
+    }
+
+    public void setBlessedModel( RedbackRoleModel blessedModel )
+    {
+        this.blessedModel = blessedModel;
+    }
+
+    public RedbackRoleModel getUnblessedModel()
+    {
+        return unblessedModel;
+    }
+
+    public void setUnblessedModel( RedbackRoleModel unblessedModel )
+    {
+        this.unblessedModel = unblessedModel;
+    }
+
+    public Map<String, ModelApplication> getKnownResources()
+    {
+        return knownResources;
+    }
+
+    public void setKnownResources( Map<String, ModelApplication> knownResources )
+    {
+        this.knownResources = knownResources;
+    }
+
+    public RoleModelValidator getModelValidator()
+    {
+        return modelValidator;
+    }
+
+    public void setModelValidator( RoleModelValidator modelValidator )
+    {
+        this.modelValidator = modelValidator;
+    }
+
+    public RoleModelProcessor getModelProcessor()
+    {
+        return modelProcessor;
+    }
+
+    public void setModelProcessor( RoleModelProcessor modelProcessor )
+    {
+        this.modelProcessor = modelProcessor;
+    }
+
+    public RoleTemplateProcessor getTemplateProcessor()
+    {
+        return templateProcessor;
+    }
+
+    public void setTemplateProcessor( RoleTemplateProcessor templateProcessor )
+    {
+        this.templateProcessor = templateProcessor;
+    }
+
+    public RBACManager getRbacManager()
+    {
+        return rbacManager;
+    }
+
+    public void setRbacManager( RBACManager rbacManager )
+    {
+        this.rbacManager = rbacManager;
+    }
 }

@@ -48,7 +48,7 @@ public class JpoxRoleManagerTest
     @Named( value = "rBACManager#jdo" )
     RBACManager rbacManagerJdo;
 
-    @Inject
+    @Inject @Named(value = "roleManager")
     RoleManager roleManagerInjected;
 
     /**

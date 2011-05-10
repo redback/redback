@@ -283,4 +283,16 @@ public class DefaultRoleModelProcessor
         }
         return rbacPermissions;
     }
+
+    public RBACManager getRbacManager()
+    {
+        return rbacManager;
+    }
+
+    public void setRbacManager( RBACManager rbacManager )
+    {
+        this.rbacManager = rbacManager;
+    }
 }
+
+

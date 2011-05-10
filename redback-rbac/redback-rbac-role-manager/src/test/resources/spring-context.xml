@@ -49,4 +49,20 @@
 
   <alias name="commons-configuration" alias="test-conf"/>
 
+  <bean name="roleManager" class="org.codehaus.plexus.redback.role.DefaultRoleManager">
+    <property name="modelValidator" ref="roleModelValidator"/>
+    <property name="modelProcessor" ref="modelProcessor#memory"/>
+    <property name="templateProcessor" ref="templateProcessor#memory"/>
+    <property name="rbacManager" ref="rBACManager#memory"/>
+  </bean>
+
+  <bean name="modelProcessor#memory" class="org.codehaus.plexus.redback.role.processor.DefaultRoleModelProcessor">
+    <property name="rbacManager" ref="rBACManager#memory"/>
+  </bean>
+
+  <bean name="templateProcessor#memory" class="org.codehaus.plexus.redback.role.template.DefaultRoleTemplateProcessor">
+    <property name="rbacManager" ref="rBACManager#memory"/>
+  </bean>
+
+
 </beans>
