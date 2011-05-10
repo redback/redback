@@ -80,13 +80,13 @@ public interface RBACManager
     public Role getRole( String roleName )
         throws RbacObjectNotFoundException, RbacManagerException;
 
-    public Map<String,Role> getRoles( Collection<String> roleNames )
+    public Map<String, Role> getRoles( Collection<String> roleNames )
         throws RbacObjectNotFoundException, RbacManagerException;
 
     public void addChildRole( Role role, Role childRole )
         throws RbacObjectInvalidException, RbacManagerException;
 
-    public Map<String,Role> getChildRoles( Role role )
+    public Map<String, Role> getChildRoles( Role role )
         throws RbacManagerException;
 
     public Map<String, Role> getParentRoles( Role role )
@@ -123,6 +123,7 @@ public interface RBACManager
     // ------------------------------------------------------------------
     // Permission Methods
     // ------------------------------------------------------------------
+
     /**
      * Creates an implementation specific {@link Permission}, or return an existing {@link Permission}, depending
      * on the provided <code>name</code> parameter.
@@ -206,13 +207,13 @@ public interface RBACManager
      * @throws RbacObjectInvalidException
      * @throws RbacManagerException
      */
-    public Operation saveOperation( Operation operation )
+    Operation saveOperation( Operation operation )
         throws RbacObjectInvalidException, RbacManagerException;
 
-    public Operation getOperation( String operationName )
+    Operation getOperation( String operationName )
         throws RbacObjectNotFoundException, RbacManagerException;
 
-    public List<Operation> getAllOperations()
+    List<Operation> getAllOperations()
         throws RbacManagerException;
 
     public void removeOperation( Operation operation )

@@ -791,6 +791,7 @@ public abstract class AbstractRbacManagerTestCase
     public void testGetRolesDeep()
         throws RbacManagerException
     {
+        rbacManager.eraseDatabase();
         rbacDefaults.createDefaults();
 
         // Setup User / Assignment with 1 role.
@@ -848,8 +849,9 @@ public abstract class AbstractRbacManagerTestCase
     public void testLargeApplicationInit()
         throws RbacManagerException
     {
-        rbacDefaults.createDefaults();
 
+        rbacManager.eraseDatabase();
+        rbacDefaults.createDefaults();
         assertEquals( 6, rbacManager.getAllPermissions().size() );
         assertEquals( 11, rbacManager.getAllOperations().size() );
         assertEquals( 4, rbacManager.getAllRoles().size() );
