@@ -49,7 +49,7 @@ public abstract class AbstractRbacManagerTestCase
 {
     private RBACManager rbacManager;
 
-    private RbacManagerEventTracker eventTracker;
+    protected RbacManagerEventTracker eventTracker;
 
     private RBACDefaults rbacDefaults;
 
@@ -134,8 +134,8 @@ public abstract class AbstractRbacManagerTestCase
     {
         assertNotNull( rbacManager );
 
-        rbacManager.eraseDatabase();
-        eventTracker.rbacInit( true );
+        //rbacManager.eraseDatabase();
+        //eventTracker.rbacInit( true );
 
         Role role = getAdminRole();
 

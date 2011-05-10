@@ -199,4 +199,14 @@ public class JdoRbacManagerTest
         }
         super.testGetRolesDeep();
     }
+
+
+    @Override
+    public void testStoreInitialization()
+        throws Exception
+    {
+        rbacManager.eraseDatabase();
+        eventTracker.rbacInit( true );
+        super.testStoreInitialization();
+    }
 }
