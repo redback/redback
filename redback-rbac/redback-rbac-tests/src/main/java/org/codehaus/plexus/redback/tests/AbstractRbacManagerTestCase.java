@@ -347,6 +347,8 @@ public abstract class AbstractRbacManagerTestCase
         throws RbacManagerException
     {
         RBACManager manager = rbacManager;
+        rbacManager.eraseDatabase();
+        eventTracker.rbacInit( true );
         assertNotNull( manager );
 
         Role adminRole = manager.saveRole( getAdminRole() );
@@ -491,6 +493,8 @@ public abstract class AbstractRbacManagerTestCase
         throws RbacManagerException
     {
         RBACManager manager = rbacManager;
+        rbacManager.eraseDatabase();
+        eventTracker.rbacInit( true );
         Permission editConfiguration = manager.createPermission( "Edit Configuration" );
         editConfiguration.setOperation( manager.createOperation( "edit-configuration" ) );
         editConfiguration.setResource( manager.getGlobalResource() );
@@ -525,6 +529,8 @@ public abstract class AbstractRbacManagerTestCase
         throws RbacManagerException
     {
         RBACManager manager = rbacManager;
+        rbacManager.eraseDatabase();
+        eventTracker.rbacInit( true );
         manager
             .savePermission( manager.createPermission( "Edit Configuration", "edit-configuration", Resource.GLOBAL ) );
         manager.savePermission(
@@ -546,6 +552,9 @@ public abstract class AbstractRbacManagerTestCase
         throws RbacManagerException
     {
         RBACManager manager = rbacManager;
+
+        rbacManager.eraseDatabase();
+        eventTracker.rbacInit( true );
 
         Role developerRole = getDeveloperRole();
         manager.saveRole( developerRole );
@@ -616,6 +625,9 @@ public abstract class AbstractRbacManagerTestCase
     {
         RBACManager manager = rbacManager;
 
+        rbacManager.eraseDatabase();
+        eventTracker.rbacInit( true );
+
         Role devRole = getDeveloperRole();
         manager.saveRole( devRole );
 
@@ -651,6 +663,9 @@ public abstract class AbstractRbacManagerTestCase
         throws RbacManagerException
     {
         RBACManager manager = rbacManager;
+
+        rbacManager.eraseDatabase();
+        eventTracker.rbacInit( true );
 
         Role devRole = getDeveloperRole();
         Role devPlusRole = getSuperDeveloperRole();
