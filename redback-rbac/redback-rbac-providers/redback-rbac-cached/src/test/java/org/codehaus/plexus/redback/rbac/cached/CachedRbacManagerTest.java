@@ -56,4 +56,13 @@ public class CachedRbacManagerTest
     {
         super.tearDown();
     }
+
+    @Override
+    public void testStoreInitialization()
+        throws Exception
+    {
+        rbacManager.eraseDatabase();
+        eventTracker.rbacInit( true );
+        super.testStoreInitialization();
+    }
 }
