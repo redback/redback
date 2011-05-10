@@ -166,4 +166,14 @@ public abstract class AbstractRoleManagerTest
         }
         return false;
     }
+
+    public void setRbacManager( RBACManager rbacManager )
+    {
+        this.rbacManager = rbacManager;
+    }
+
+    public void setRoleManager( RoleManager roleManager )
+    {
+        this.roleManager = roleManager;
+    }
 }

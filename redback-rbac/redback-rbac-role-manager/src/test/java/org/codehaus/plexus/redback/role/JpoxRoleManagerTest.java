@@ -21,6 +21,9 @@ import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.jpox.SchemaTool;
 import org.junit.Before;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -37,6 +40,8 @@ import java.util.Properties;
  * @author: Jesse McConnell <jesse@codehaus.org>
  * @version: $Id:$
  */
+ @RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath:/jpox-spring-context.xml" } )
 public class JpoxRoleManagerTest
     extends AbstractRoleManagerTest
 {
@@ -48,7 +53,7 @@ public class JpoxRoleManagerTest
     @Named( value = "rBACManager#jdo" )
     RBACManager rbacManagerJdo;
 
-    @Inject @Named(value = "roleManager")
+    @Inject @Named(value = "roleManager#jpox")
     RoleManager roleManagerInjected;
 
     /**
@@ -124,9 +129,9 @@ public class JpoxRoleManagerTest
 
         pm.close();
 
-        rbacManager = rbacManagerJdo;
+        setRbacManager( rbacManagerJdo );
 
-        roleManager = roleManagerInjected;
+        setRoleManager( roleManagerInjected );
     }
 
 }
