@@ -16,11 +16,6 @@ package org.codehaus.plexus.redback.rbac.cached;
  * limitations under the License.
  */
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.codehaus.plexus.cache.Cache;
 import org.codehaus.plexus.redback.rbac.Operation;
 import org.codehaus.plexus.redback.rbac.Permission;
@@ -36,41 +31,56 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * CachedRbacManager is a wrapped RBACManager with caching.
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
-@Service("rBACManager#cached")
+@Service( "rBACManager#cached" )
 public class CachedRbacManager
     implements RBACManager, RBACManagerListener
 {
-    
+
     private Logger log = LoggerFactory.getLogger( getClass() );
-    
-    @javax.annotation.Resource(name="rBACManager#jdo")
+
+    @Inject
+    @Named( value = "rBACManager#jdo" )
     private RBACManager rbacImpl;
 
-    @javax.annotation.Resource(name="cache#operations")
+    @Inject
+    @Named( value = "cache#operations" )
     private Cache operationsCache;
 
-    @javax.annotation.Resource(name="cache#permissions")
+    @Inject
+    @Named( value = "cache#permissions" )
     private Cache permissionsCache;
 
-    @javax.annotation.Resource(name="cache#resources")
+    @Inject
+    @Named( value = "cache#resources" )
     private Cache resourcesCache;
 
-    @javax.annotation.Resource(name="cache#roles")
+    @Inject
+    @Named( value = "cache#roles" )
     private Cache rolesCache;
 
-    @javax.annotation.Resource(name="cache#userAssignments")
+    @Inject
+    @Named( value = "cache#userAssignments" )
     private Cache userAssignmentsCache;
 
-    @javax.annotation.Resource(name="cache#userPermissions")
+    @Inject
+    @Named( value = "cache#userPermissions" )
     private Cache userPermissionsCache;
 
-    @javax.annotation.Resource(name="cache#effectiveRoleSet")
+    @Inject
+    @Named( value = "cache#effectiveRoleSet" )
     private Cache effectiveRoleSetCache;
 
     public void addChildRole( Role role, Role childRole )
@@ -146,7 +156,7 @@ public class CachedRbacManager
         }
     }
 
-    /** 
+    /**
      * @see org.codehaus.plexus.redback.rbac.RBACManager#getAllAssignableRoles()
      */
     public List<Role> getAllAssignableRoles()
@@ -191,10 +201,10 @@ public class CachedRbacManager
         return this.rbacImpl.getAllUserAssignments();
     }
 
-    /** 
+    /**
      * @see org.codehaus.plexus.redback.rbac.RBACManager#getAssignedPermissionMap(java.lang.String)
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public Map getAssignedPermissionMap( String principal )
         throws RbacObjectNotFoundException, RbacManagerException
     {
@@ -263,7 +273,7 @@ public class CachedRbacManager
         return this.rbacImpl.getEffectivelyUnassignedRoles( principal );
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public Set<Role> getEffectiveRoles( Role role )
         throws RbacObjectNotFoundException, RbacManagerException
     {
@@ -278,7 +288,7 @@ public class CachedRbacManager
         {
             log.debug( "building effective role set" );
             Set<Role> effectiveRoleSet = this.rbacImpl.getEffectiveRoles( role );
-            effectiveRoleSetCache.put( role.getName(), effectiveRoleSet ) ;
+            effectiveRoleSetCache.put( role.getName(), effectiveRoleSet );
             return effectiveRoleSet;
         }
     }
@@ -334,7 +344,7 @@ public class CachedRbacManager
         else
         {
             Resource resource = this.rbacImpl.getResource( resourceIdentifier );
-            resourcesCache.put( resourceIdentifier, resource);
+            resourcesCache.put( resourceIdentifier, resource );
             return resource;
         }
     }
@@ -350,7 +360,7 @@ public class CachedRbacManager
         else
         {
             Role role = this.rbacImpl.getRole( roleName );
-            rolesCache.put(roleName, role );
+            rolesCache.put( roleName, role );
             return role;
         }
     }
@@ -783,5 +793,85 @@ public class CachedRbacManager
     {
         userAssignmentsCache.clear();
         userPermissionsCache.clear();
+    }
+
+    public Cache getOperationsCache()
+    {
+        return operationsCache;
+    }
+
+    public void setOperationsCache( Cache operationsCache )
+    {
+        this.operationsCache = operationsCache;
+    }
+
+    public Cache getPermissionsCache()
+    {
+        return permissionsCache;
+    }
+
+    public void setPermissionsCache( Cache permissionsCache )
+    {
+        this.permissionsCache = permissionsCache;
+    }
+
+    public Cache getResourcesCache()
+    {
+        return resourcesCache;
+    }
+
+    public void setResourcesCache( Cache resourcesCache )
+    {
+        this.resourcesCache = resourcesCache;
+    }
+
+    public Cache getRolesCache()
+    {
+        return rolesCache;
+    }
+
+    public void setRolesCache( Cache rolesCache )
+    {
+        this.rolesCache = rolesCache;
+    }
+
+    public Cache getUserAssignmentsCache()
+    {
+        return userAssignmentsCache;
+    }
+
+    public void setUserAssignmentsCache( Cache userAssignmentsCache )
+    {
+        this.userAssignmentsCache = userAssignmentsCache;
+    }
+
+    public Cache getUserPermissionsCache()
+    {
+        return userPermissionsCache;
+    }
+
+    public void setUserPermissionsCache( Cache userPermissionsCache )
+    {
+        this.userPermissionsCache = userPermissionsCache;
+    }
+
+    public Cache getEffectiveRoleSetCache()
+    {
+        return effectiveRoleSetCache;
+    }
+
+    public void setEffectiveRoleSetCache( Cache effectiveRoleSetCache )
+    {
+        this.effectiveRoleSetCache = effectiveRoleSetCache;
+    }
+
+    public RBACManager getRbacImpl()
+    {
+        return rbacImpl;
+    }
+
+    public void setRbacImpl( RBACManager rbacImpl )
+    {
+        this.rbacImpl = rbacImpl;
     }
 }

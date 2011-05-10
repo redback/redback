@@ -21,6 +21,9 @@ import net.sf.ehcache.CacheManager;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.tests.AbstractRbacManagerPerformanceTestCase;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 /**
  * CachedRbacManagerPerformanceTest 
  *
@@ -30,6 +33,12 @@ import org.codehaus.plexus.redback.tests.AbstractRbacManagerPerformanceTestCase;
 public class CachedRbacManagerPerformanceTest
     extends AbstractRbacManagerPerformanceTestCase
 {
+
+
+    @Inject
+    @Named( value = "rBACManager#cached" )
+    RBACManager rbacManager;
+
     /**
      * Creates a new RbacStore which contains no data.
      */
@@ -38,7 +47,7 @@ public class CachedRbacManagerPerformanceTest
     {
         super.setUp();
 
-        RBACManager store = (RBACManager) lookup( RBACManager.ROLE, "cached" );
+        RBACManager store = rbacManager;
         assertTrue( store instanceof CachedRbacManager );
         setRbacManager( store );
     }
@@ -46,7 +55,6 @@ public class CachedRbacManagerPerformanceTest
     protected void tearDown()
         throws Exception
     {
-        CacheManager.getInstance().removalAll();
         super.tearDown();
     }
 }

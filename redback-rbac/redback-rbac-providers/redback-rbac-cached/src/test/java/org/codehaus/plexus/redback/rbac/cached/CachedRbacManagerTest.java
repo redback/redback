@@ -17,34 +17,43 @@ package org.codehaus.plexus.redback.rbac.cached;
  */
 
 import net.sf.ehcache.CacheManager;
-
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.tests.AbstractRbacManagerTestCase;
+import org.junit.Before;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 public class CachedRbacManagerTest
     extends AbstractRbacManagerTestCase
 {
+
+    @Inject
+    @Named( value = "rBACManager#cached" )
+    RBACManager rbacManager;
+
     /**
      * Creates a new RbacStore which contains no data.
      */
-    protected void setUp()
+    @Before
+    public void setUp()
         throws Exception
     {
+        /*
         CacheManager.getInstance().removeCache( "usersCache" );
         CacheManager.getInstance().removalAll();
         CacheManager.getInstance().shutdown();
+        */
         super.setUp();
         CacheManager.getInstance().clearAll();
-        setRbacManager( (RBACManager) getApplicationContext().getBean( "rBACManager#cached" ) );
+        setRbacManager( rbacManager );
 
         assertTrue( getRbacManager() instanceof CachedRbacManager );
     }
 
-    protected void tearDown()
+    public void tearDown()
         throws Exception
     {
-        CacheManager.getInstance().clearAll();
-        CacheManager.getInstance().removalAll();
         super.tearDown();
     }
 }
