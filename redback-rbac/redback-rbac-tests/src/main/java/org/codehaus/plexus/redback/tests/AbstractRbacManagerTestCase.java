@@ -134,9 +134,6 @@ public abstract class AbstractRbacManagerTestCase
     {
         assertNotNull( rbacManager );
 
-        //rbacManager.eraseDatabase();
-        //eventTracker.rbacInit( true );
-
         Role role = getAdminRole();
 
         assertNotNull( role );

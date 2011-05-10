@@ -62,7 +62,7 @@ public class CachedRbacManagerTest
         throws Exception
     {
         rbacManager.eraseDatabase();
-        eventTracker.rbacInit( true );
+        //eventTracker.rbacInit( true );
         super.testStoreInitialization();
     }
 }

@@ -117,6 +117,7 @@ public class AbstractRbacManagerPerformanceTestCase
         throws RbacManagerException
     {
         assertNotNull( rbacManager );
+        rbacManager.eraseDatabase();
 
         Resource resource = rbacManager.createResource( "foo" );
         Resource resource2 = rbacManager.createResource( "bar" );
@@ -156,6 +157,8 @@ public class AbstractRbacManagerPerformanceTestCase
         throws RbacManagerException
     {
         RBACManager manager = rbacManager;
+
+        rbacManager.eraseDatabase();
 
         Role devRole = getDeveloperRole();
         Role devPlusRole = getSuperDeveloperRole();
