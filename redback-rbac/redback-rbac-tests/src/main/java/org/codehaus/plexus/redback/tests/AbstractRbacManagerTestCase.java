@@ -430,6 +430,7 @@ public abstract class AbstractRbacManagerTestCase
         throws RbacManagerException
     {
         RBACManager manager = rbacManager;
+        rbacManager.eraseDatabase();
         Role developerRole = manager.saveRole( getDeveloperRole() );
 
         Role adminRole = getAdminRole();
@@ -709,6 +710,7 @@ public abstract class AbstractRbacManagerTestCase
         throws RbacManagerException
     {
         RBACManager manager = rbacManager;
+        rbacManager.eraseDatabase();
 
         Role adminRole = manager.saveRole( getAdminRole() );
         Role projectAdminRole = manager.saveRole( getProjectAdminRole() );
@@ -744,6 +746,7 @@ public abstract class AbstractRbacManagerTestCase
         throws RbacManagerException
     {
         RBACManager manager = rbacManager;
+        rbacManager.eraseDatabase();
         // Setup 3 roles.
         manager.saveRole( getAdminRole() );
         manager.saveRole( getProjectAdminRole() );
