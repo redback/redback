@@ -42,7 +42,7 @@ import java.util.Set;
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
- @RunWith( SpringJUnit4ClassRunner.class )
+@RunWith( SpringJUnit4ClassRunner.class )
 @ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public abstract class AbstractRbacManagerTestCase
     extends TestCase
@@ -63,7 +63,7 @@ public abstract class AbstractRbacManagerTestCase
         }
         rbacDefaults = new RBACDefaults( rbacManager );
     }
-    
+
     public RBACManager getRbacManager()
     {
         return this.rbacManager;
@@ -532,8 +532,8 @@ public abstract class AbstractRbacManagerTestCase
         RBACManager manager = rbacManager;
         rbacManager.eraseDatabase();
         eventTracker.rbacInit( true );
-        manager
-            .savePermission( manager.createPermission( "Edit Configuration", "edit-configuration", Resource.GLOBAL ) );
+        manager.savePermission(
+            manager.createPermission( "Edit Configuration", "edit-configuration", Resource.GLOBAL ) );
         manager.savePermission(
             manager.createPermission( "Delete Configuration", "delete-configuration", Resource.GLOBAL ) );
 
@@ -681,10 +681,10 @@ public abstract class AbstractRbacManagerTestCase
         assignment = manager.saveUserAssignment( assignment );
 
         assertEquals( 1, manager.getAllUserAssignments().size() );
-        assertEquals( "should be only one role assigned", 1, manager.getAssignedRoles( assignment.getPrincipal() )
-            .size() );
-        assertEquals( "should be one role left to assign", 1, manager.getUnassignedRoles( assignment.getPrincipal() )
-            .size() );
+        assertEquals( "should be only one role assigned", 1,
+                      manager.getAssignedRoles( assignment.getPrincipal() ).size() );
+        assertEquals( "should be one role left to assign", 1,
+                      manager.getUnassignedRoles( assignment.getPrincipal() ).size() );
         assertEquals( 2, manager.getAllRoles().size() );
 
         // assign the same role again to the same user

@@ -16,11 +16,7 @@ package org.codehaus.plexus.redback.role.processor;
  * limitations under the License.
  */
 
-import java.io.File;
-import java.io.IOException;
-
-import javax.xml.stream.XMLStreamException;
-
+import junit.framework.TestCase;
 import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.Role;
@@ -28,7 +24,17 @@ import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
 import org.codehaus.plexus.redback.role.model.io.stax.RedbackRoleModelStaxReader;
 import org.codehaus.plexus.redback.role.validator.RoleModelValidator;
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.xml.stream.XMLStreamException;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * RoleProfileTest:
@@ -36,50 +42,58 @@ import org.codehaus.plexus.spring.PlexusInSpringTestCase;
  * @author: Jesse McConnell <jesse@codehaus.org>
  * @version: $Id:$
  */
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public class RoleModelProcessorTest
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
+    @Inject
+    @Named( value = "rBACManager#memory" )
     private RBACManager rbacManager;
 
+    @Inject
     private RoleModelValidator modelValidator;
-    
+
+    @Inject
     private RoleModelProcessor roleProcessor;
 
     /**
      * Creates a new RbacStore which contains no data.
      */
-    protected void setUp()
+    @Before
+    public void setUp()
         throws Exception
     {
         super.setUp();
-
-        modelValidator = (RoleModelValidator) lookup ( RoleModelValidator.ROLE, "default" );
-        
-        roleProcessor = (RoleModelProcessor) lookup ( RoleModelProcessor.ROLE, "default" );
-
-        rbacManager = (RBACManager) lookup ( RBACManager.ROLE, "memory" );
     }
-    
-    public void testProcessing() throws Exception 
+
+    String getBasedir()
     {
-        RedbackRoleModel redback = getModelFromFile("/src/test/processor-tests/redback-1.xml");
-        
+        return System.getProperty( "basedir" );
+    }
+
+    @Test
+    public void testProcessing()
+        throws Exception
+    {
+        RedbackRoleModel redback = getModelFromFile( "/src/test/processor-tests/redback-1.xml" );
+
         processModel( redback );
-        
+
         assertTrue( rbacManager.resourceExists( "cornflakes" ) );
     }
 
-    private RedbackRoleModel getModelFromFile(String file)
+    private RedbackRoleModel getModelFromFile( String file )
         throws IOException, XMLStreamException
     {
-        File resource = new File( getBasedir() + file);
-        
+        File resource = new File( getBasedir() + file );
+
         assertNotNull( resource );
-        
+
         RedbackRoleModelStaxReader modelReader = new RedbackRoleModelStaxReader();
-        
+
         RedbackRoleModel redback = modelReader.read( resource.getAbsolutePath() );
-        
+
         assertNotNull( redback );
         return redback;
     }
@@ -88,39 +102,43 @@ public class RoleModelProcessorTest
         throws RoleManagerException
     {
         assertTrue( modelValidator.validate( redback ) );
-        
+
         roleProcessor.process( redback );
     }
- 
-    public void testMultipleProcessing() throws Exception 
+
+    @Test
+    public void testMultipleProcessing()
+        throws Exception
     {
         rbacManager.eraseDatabase();
-        
-        RedbackRoleModel redback = getModelFromFile("/src/test/processor-tests/redback-2.xml");
-        
+
+        RedbackRoleModel redback = getModelFromFile( "/src/test/processor-tests/redback-2.xml" );
+
         processModel( redback );
         roleProcessor.process( redback );
-        
+
         Role systemAdmin = rbacManager.getRole( "System Administrator" );
-        
+
         assertTrue( systemAdmin.hasChildRoles() );
     }
 
-    /** @todo there are other things that are not synced - role descriptions, removal of operations, etc. */
-    
+    /**
+     * @todo there are other things that are not synced - role descriptions, removal of operations, etc.
+     */
+    @Test
     public void testSyncPermissionsOnUpgrade()
         throws Exception
     {
         rbacManager.eraseDatabase();
-        
-        processModel( getModelFromFile("/src/test/processor-tests/redback-1.xml") );
+
+        processModel( getModelFromFile( "/src/test/processor-tests/redback-1.xml" ) );
 
         Role role = rbacManager.getRole( "Baby" );
         assertFalse( hasPermissionOnOperation( role, "Eat Cornflakes" ) );
         assertTrue( hasPermissionOnOperation( role, "Drink Milk" ) );
 
-        processModel( getModelFromFile("/src/test/processor-tests/redback-1-updated.xml") );
-        
+        processModel( getModelFromFile( "/src/test/processor-tests/redback-1-updated.xml" ) );
+
         role = rbacManager.getRole( "Baby" );
         assertTrue( hasPermissionOnOperation( role, "Eat Cornflakes" ) );
         assertFalse( hasPermissionOnOperation( role, "Drink Milk" ) );

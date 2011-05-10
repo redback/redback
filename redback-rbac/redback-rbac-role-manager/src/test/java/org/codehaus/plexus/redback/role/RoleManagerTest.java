@@ -17,6 +17,10 @@ package org.codehaus.plexus.redback.role;
  */
 
 import org.codehaus.plexus.redback.rbac.RBACManager;
+import org.junit.Before;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * RoleManagerTest:
@@ -27,17 +31,24 @@ import org.codehaus.plexus.redback.rbac.RBACManager;
 public class RoleManagerTest
     extends AbstractRoleManagerTest
 {
+
+    @Inject @Named(value = "rBACManager#memory")
+    RBACManager rbacManagerMemory;
+
+    @Inject
+    RoleManager roleManagerInjected;
     /**
      * Creates a new RbacStore which contains no data.
      */
-    protected void setUp()
+    @Before
+    public void setUp()
         throws Exception
     {
         super.setUp();
 
-        rbacManager = (RBACManager) lookup ( RBACManager.ROLE, "memory" );
+        rbacManager = rbacManagerMemory;
 
-        roleManager = (RoleManager) lookup ( RoleManager.ROLE, "default" );
+        roleManager = roleManagerInjected;
     }
  
  

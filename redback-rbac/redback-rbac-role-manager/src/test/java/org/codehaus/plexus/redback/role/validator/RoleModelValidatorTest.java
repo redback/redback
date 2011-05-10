@@ -16,12 +16,19 @@ package org.codehaus.plexus.redback.role.validator;
  * limitations under the License.
  */
 
-import java.io.File;
-import java.util.List;
-
+import junit.framework.TestCase;
 import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
 import org.codehaus.plexus.redback.role.model.io.stax.RedbackRoleModelStaxReader;
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.File;
+import java.util.List;
 
 /**
  * RoleModelMergerTest:
@@ -29,25 +36,37 @@ import org.codehaus.plexus.spring.PlexusInSpringTestCase;
  * @author: Jesse McConnell <jesse@codehaus.org>
  * @version: $Id:$
  */
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public class RoleModelValidatorTest
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
+
+    @Inject
+    RoleModelValidator modelValidator;
+
 
     /**
      * Creates a new RbacStore which contains no data.
      */
-    protected void setUp()
+    @Before
+    public void setUp()
         throws Exception
     {
         super.setUp();
     }
     
-    @Override
     protected String getPlexusConfigLocation()
     {
         return "plexus.xml";
     }
 
+    String getBasedir()
+    {
+        return System.getProperty( "basedir" );
+    }
+
+    @Test
     public void testGood() throws Exception 
     {
         File resource = new File( getBasedir() + "/src/test/validation-tests/redback-good.xml");
@@ -59,14 +78,13 @@ public class RoleModelValidatorTest
         RedbackRoleModel redback = modelReader.read( resource.getAbsolutePath() );
         
         assertNotNull( redback );
-        
-        RoleModelValidator modelValidator = (RoleModelValidator)lookup( RoleModelValidator.ROLE, "default" );
-        
+
         assertTrue( modelValidator.validate( redback ) );
         
         assertNull( modelValidator.getValidationErrors() );
     }
- 
+
+    @Test
     public void testBad() throws Exception 
     {
         File resource = new File( getBasedir() + "/src/test/validation-tests/redback-bad.xml");
@@ -78,9 +96,7 @@ public class RoleModelValidatorTest
         RedbackRoleModel redback = modelReader.read( resource.getAbsolutePath() );
         
         assertNotNull( redback );
-        
-        RoleModelValidator modelValidator = (RoleModelValidator)lookup( RoleModelValidator.ROLE, "default" );
-        
+
         assertFalse( modelValidator.validate( redback ) );
         
         assertNotNull( modelValidator.getValidationErrors() );
@@ -98,7 +114,8 @@ public class RoleModelValidatorTest
         assertTrue( checkForValidationError( modelValidator.getValidationErrors(), "template cycle detected" ) );
         
     }
-    
+
+    @Test
     public void testCore() throws Exception 
     {
         File resource = new File( getBasedir() + "/src/test/validation-tests/redback-core.xml");
@@ -110,9 +127,7 @@ public class RoleModelValidatorTest
         RedbackRoleModel redback = modelReader.read( resource.getAbsolutePath() );
         
         assertNotNull( redback );
-        
-        RoleModelValidator modelValidator = (RoleModelValidator)lookup( RoleModelValidator.ROLE, "default" );
-        
+
         assertTrue( modelValidator.validate( redback ) );
         
         assertNull( modelValidator.getValidationErrors() );

@@ -16,8 +16,7 @@ package org.codehaus.plexus.redback.role;
  * limitations under the License.
  */
 
-import java.util.List;
-
+import junit.framework.TestCase;
 import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.Role;
@@ -25,7 +24,12 @@ import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.redback.role.model.ModelPermission;
 import org.codehaus.plexus.redback.role.model.ModelTemplate;
 import org.codehaus.plexus.redback.role.util.RoleModelUtils;
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
 
 /**
  * AbstractRoleManagerTest:
@@ -33,8 +37,10 @@ import org.codehaus.plexus.spring.PlexusInSpringTestCase;
  * @author: Jesse McConnell <jesse@codehaus.org>
  * @version: $Id:$
  */
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public abstract class AbstractRoleManagerTest
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
 
     protected RBACManager rbacManager;
@@ -46,6 +52,7 @@ public abstract class AbstractRoleManagerTest
         super();
     }
 
+    @Test
     public void testLoading()
         throws Exception
     {
@@ -74,6 +81,7 @@ public abstract class AbstractRoleManagerTest
         assertTrue( roleManager.templatedRoleExists( "test-template-2", "hot" ) );
     }
 
+    @Test
     public void testUserAssignmentUpdate()
         throws Exception
     {
@@ -99,7 +107,8 @@ public abstract class AbstractRoleManagerTest
             assertTrue( "Test Role".equals( roleName ) || "Foo 2 - frigid".equals( roleName ) );
         }
     }
-    
+
+    @Test
     public void testVerifyTemplatedRole()
         throws Exception
     {

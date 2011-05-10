@@ -31,8 +31,8 @@ public interface RoleModelValidator
 {
     public static final String ROLE = RoleModelValidator.class.getName();
     
-    public List<String> getValidationErrors();
+    List<String> getValidationErrors();
     
-    public boolean validate( RedbackRoleModel model ) throws RoleManagerException;
+    boolean validate( RedbackRoleModel model ) throws RoleManagerException;
     
 }

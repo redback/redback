@@ -16,20 +16,6 @@ package org.codehaus.plexus.redback.role;
  * limitations under the License.
  */
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.xml.stream.XMLStreamException;
-
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.Resource;
@@ -48,6 +34,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.xml.stream.XMLStreamException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * RoleProfileManager:
  *
@@ -57,7 +57,7 @@ import org.springframework.stereotype.Service;
  */
 @Service("roleManager")
 public class DefaultRoleManager
-    implements RoleManager, Initializable
+    implements RoleManager
 {
     private Logger log = LoggerFactory.getLogger(DefaultRoleManager.class);
     
@@ -76,16 +76,16 @@ public class DefaultRoleManager
      */
     private Map<String, ModelApplication> knownResources = new HashMap<String, ModelApplication>();
 
-    @javax.annotation.Resource(name="roleModelValidator")
+    @Inject @Named(value="roleModelValidator")
     private RoleModelValidator modelValidator;
 
-    @javax.annotation.Resource(name="roleModelProcessor")
+    @Inject @Named(value="roleModelProcessor")
     private RoleModelProcessor modelProcessor;
 
-    @javax.annotation.Resource(name="roleTemplateProcessor")
+    @Inject @Named(value="roleTemplateProcessor")
     private RoleTemplateProcessor templateProcessor;
 
-    @javax.annotation.Resource(name="rBACManager#cached")
+    @Inject @Named(value="rBACManager#cached")
     private RBACManager rbacManager;
 
 
@@ -396,8 +396,8 @@ public class DefaultRoleManager
         }
     }
 
+    @PostConstruct
     public void initialize()
-        throws InitializationException
     {
         try
         {
@@ -405,7 +405,7 @@ public class DefaultRoleManager
 
             if ( baseResource == null )
             {
-                throw new InitializationException( "unable to initialize role manager, missing redback-core.xml" );
+                throw new RuntimeException( "unable to initialize role manager, missing redback-core.xml" );
             }
 
             loadRoleModel( baseResource );
@@ -421,11 +421,11 @@ public class DefaultRoleManager
         }
         catch ( RoleManagerException e )
         {
-            throw new InitializationException( "unable to initialize RoleManager", e );
+            throw new RuntimeException( "unable to initialize RoleManager", e );
         }
         catch ( IOException e )
         {
-            throw new InitializationException( "unable to initialize RoleManager, problem with redback.xml loading", e );
+            throw new RuntimeException( "unable to initialize RoleManager, problem with redback.xml loading", e );
         }
     }
 

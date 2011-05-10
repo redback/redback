@@ -29,6 +29,6 @@ public interface RoleModelProcessor
 {
     public static final String ROLE = RoleModelProcessor.class.getName();
     
-    public void process( RedbackRoleModel model ) throws RoleManagerException;
+    void process( RedbackRoleModel model ) throws RoleManagerException;
     
 }

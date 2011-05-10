@@ -16,7 +16,7 @@ package org.codehaus.plexus.redback.role.template;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import junit.framework.TestCase;
 import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.Role;
@@ -25,7 +25,13 @@ import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
 import org.codehaus.plexus.redback.role.model.io.stax.RedbackRoleModelStaxReader;
 import org.codehaus.plexus.redback.role.processor.RoleModelProcessor;
 import org.codehaus.plexus.redback.role.util.RoleModelUtils;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.File;
 
 /**
@@ -34,13 +40,20 @@ import java.io.File;
  * @author: Jesse McConnell <jesse@codehaus.org>
  * @version: $Id:$
  */
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public class RoleTemplateProcessorTest
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
+
+    @Inject
+    @Named( value = "rBACManager#memory" )
     private RBACManager rbacManager;
 
+    @Inject
     private RoleModelProcessor roleProcessor;
 
+    @Inject
     private RoleTemplateProcessor templateProcessor;
 
     /**
@@ -50,69 +63,70 @@ public class RoleTemplateProcessorTest
         throws Exception
     {
         super.setUp();
-
-        rbacManager = (RBACManager) lookup ( RBACManager.ROLE, "memory" );
-
-        roleProcessor = (RoleModelProcessor) lookup ( RoleModelProcessor.ROLE, "default" );
-        
-        templateProcessor = (RoleTemplateProcessor) lookup ( RoleTemplateProcessor.ROLE, "default" );
     }
-    
-    public void testLoading() throws Exception 
+
+    String getBasedir()
     {
-        File resource = new File( getBasedir() + "/src/test/template-tests/redback-1.xml");
-        
+        return System.getProperty( "basedir" );
+    }
+
+    @Test
+    public void testLoading()
+        throws Exception
+    {
+        File resource = new File( getBasedir() + "/src/test/template-tests/redback-1.xml" );
+
         assertNotNull( resource );
-        
+
         RedbackRoleModelStaxReader modelReader = new RedbackRoleModelStaxReader();
-        
+
         RedbackRoleModel redback = modelReader.read( resource.getAbsolutePath() );
-        
+
         assertNotNull( redback );
-        
+
         roleProcessor.process( redback );
-        
+
         templateProcessor.create( redback, "test-template", "foo" );
-        
+
         ModelTemplate template = RoleModelUtils.getModelTemplate( redback, "test-template" );
-        
+
         String templateName = template.getNamePrefix() + template.getDelimiter() + "foo";
-        
-        assertTrue( rbacManager.resourceExists( "cornflakes name" ) );        
-        
+
+        assertTrue( rbacManager.resourceExists( "cornflakes name" ) );
+
         assertTrue( rbacManager.roleExists( templateName ) );
-        
+
         Role testRole = rbacManager.getRole( templateName );
-        
+
         assertNotNull( testRole );
-        
-        Permission testPermission = (Permission)testRole.getPermissions().get( 0 );
-        
+
+        Permission testPermission = (Permission) testRole.getPermissions().get( 0 );
+
         assertNotNull( testPermission );
-        
+
         assertEquals( "Eat Cornflakes - cornflakes name", testPermission.getName() );
-        
+
         templateProcessor.remove( redback, "test-template", "foo" );
-        
+
         assertFalse( rbacManager.roleExists( templateName ) );
-        
+
         templateProcessor.create( redback, "test-template-2", "foo" );
-        
+
         ModelTemplate template2 = RoleModelUtils.getModelTemplate( redback, "test-template-2" );
-        
+
         String templateName2 = template2.getNamePrefix() + template2.getDelimiter() + "foo";
-        
+
         assertTrue( rbacManager.roleExists( templateName2 ) );
-        
+
         Role role = rbacManager.getRole( templateName2 );
-        
+
         assertNotNull( role );
-        
+
         assertEquals( 3, template2.getPermissions().size() );
         assertEquals( 3, role.getPermissions().size() );
-        
+
         assertEquals( 1, role.getChildRoleNames().size() );
-        
+
     }
-  
+
 }

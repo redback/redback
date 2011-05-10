@@ -29,7 +29,7 @@ public interface RoleTemplateProcessor
 {
     public static final String ROLE = RoleTemplateProcessor.class.getName();
     
-    public void create( RedbackRoleModel model, String templateId, String resource ) throws RoleManagerException;
+    void create( RedbackRoleModel model, String templateId, String resource ) throws RoleManagerException;
     
-    public void remove( RedbackRoleModel model, String templateId, String resource ) throws RoleManagerException;   
+    void remove( RedbackRoleModel model, String templateId, String resource ) throws RoleManagerException;
 }

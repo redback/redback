@@ -31,6 +31,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.*;
 
 /**
@@ -46,7 +48,7 @@ public class DefaultRoleModelProcessor
 {
     private Logger log = LoggerFactory.getLogger( DefaultRoleModelProcessor.class );
     
-    @javax.annotation.Resource(name = "rBACManager#cached")
+    @Inject @Named(value = "rBACManager#cached")
     private RBACManager rbacManager;
 
     private Map<String, Resource> resourceMap = new HashMap<String, Resource>();

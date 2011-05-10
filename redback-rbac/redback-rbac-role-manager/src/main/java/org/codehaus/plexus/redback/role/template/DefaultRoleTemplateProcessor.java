@@ -39,6 +39,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 /**
  * DefaultRoleTemplateProcessor: inserts the components of a template into the rbac manager
  * 
@@ -53,7 +56,8 @@ public class DefaultRoleTemplateProcessor
 {
     private Logger log = LoggerFactory.getLogger( DefaultRoleTemplateProcessor.class );
     
-    @javax.annotation.Resource(name="rBACManager#cached")
+    @Inject
+    @Named(value = "rBACManager#cached")
     private RBACManager rbacManager;
 
     @SuppressWarnings("unchecked")
