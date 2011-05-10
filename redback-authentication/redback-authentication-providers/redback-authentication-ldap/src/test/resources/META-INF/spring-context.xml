@@ -26,17 +26,19 @@
            http://www.springframework.org/schema/context 
            http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
+  <context:property-placeholder system-properties-mode="OVERRIDE"/>
+
   <bean name="apacheDS#test" class="org.codehaus.redback.components.apacheds.DefaultApacheDs"
       scope="prototype">
-    <property name="basedir" value="./target/apacheds"/>
-    <property name="port" value="10390"/>
+    <property name="basedir" value="${basedir}/target/apacheds"/>
+    <property name="port" value="${ldapPort}"/>
     <property name="enableNetworking" value="true"/>
     <property name="password" value="secret"/>
   </bean>
 
   <bean name="ldapConnectionFactory#configurable" class="org.codehaus.plexus.redback.common.ldap.connection.ConfigurableLdapConnectionFactory">
     <property name="hostname" value="localhost"/>
-    <property name="port" value="10390"/>
+    <property name="port" value="${ldapPort}"/>
     <property name="baseDn" value="dc=redback,dc=plexus,dc=codehaus,dc=org"/>
     <property name="contextFactory" value="com.sun.jndi.ldap.LdapCtxFactory"/>
     <property name="password" value="secret"/>
