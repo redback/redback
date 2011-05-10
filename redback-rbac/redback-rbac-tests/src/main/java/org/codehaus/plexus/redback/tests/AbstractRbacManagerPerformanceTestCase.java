@@ -25,6 +25,7 @@ import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.redback.tests.utils.RBACDefaults;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -46,13 +47,13 @@ public class AbstractRbacManagerPerformanceTestCase
         rbacDefaults = new RBACDefaults( rbacManager );
     }
 
-    protected void setUp()
+    public void setUp()
         throws Exception
     {
         super.setUp();
     }
 
-    protected void tearDown()
+    public void tearDown()
         throws Exception
     {
         super.tearDown();
@@ -111,6 +112,7 @@ public class AbstractRbacManagerPerformanceTestCase
         }
     }
 
+    @Test
     public void testPerformanceResource()
         throws RbacManagerException
     {
@@ -149,6 +151,7 @@ public class AbstractRbacManagerPerformanceTestCase
         assertPerformance( "Resource", startTime, endTime, ITERATIONS, 500.0 );
     }
 
+    @Test
     public void testPerformanceUserAssignment()
         throws RbacManagerException
     {
@@ -226,6 +229,7 @@ public class AbstractRbacManagerPerformanceTestCase
         assertPerformance( "UserAssignment", startTime, endTime, ITERATIONS, 350.0 );
     }
 
+    @Test
     public void testPerformanceRoles()
         throws RbacManagerException
     {
@@ -253,6 +257,7 @@ public class AbstractRbacManagerPerformanceTestCase
         assertPerformance( "Roles", startTime, endTime, ITERATIONS, 130 );
     }
 
+    @Test
     public void testPerformancePermissions()
         throws RbacManagerException
     {
@@ -280,6 +285,7 @@ public class AbstractRbacManagerPerformanceTestCase
         assertPerformance( "Permissions", startTime, endTime, ITERATIONS, 350 );
     }
 
+    @Test
     public void testPerformanceOperations()
         throws RbacManagerException
     {

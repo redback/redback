@@ -20,6 +20,8 @@ import net.sf.ehcache.CacheManager;
 
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.tests.AbstractRbacManagerPerformanceTestCase;
+import org.junit.After;
+import org.junit.Before;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -42,7 +44,8 @@ public class CachedRbacManagerPerformanceTest
     /**
      * Creates a new RbacStore which contains no data.
      */
-    protected void setUp()
+    @Before
+    public void setUp()
         throws Exception
     {
         super.setUp();
@@ -52,7 +55,8 @@ public class CachedRbacManagerPerformanceTest
         setRbacManager( store );
     }
 
-    protected void tearDown()
+    @After
+    public void tearDown()
         throws Exception
     {
         super.tearDown();
