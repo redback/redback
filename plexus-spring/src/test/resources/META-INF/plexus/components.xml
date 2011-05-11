@@ -25,7 +25,15 @@
       <implementation>org.codehaus.redback.components.registry.commons.CommonsConfigurationRegistry</implementation>
       <role-hint>commons-configuration-exists</role-hint>
       <configuration>
-        <properties>./src/test/resources/registry-configuration.xml</properties>
+          <properties>
+            <![CDATA[
+              <configuration>
+                  <system/>
+                  <xml fileName="${target}/.foo/zloug.xml" config-optional="true"/>
+                  <properties fileName="foo/bar/foo.properties" config-at="foo"/>
+              </configuration>
+            ]]>
+          </properties>
       </configuration>
     </component>
     
