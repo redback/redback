@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-users</artifactId>
-    <version>1.2.8</version>
+    <version>1.2.9-SNAPSHOT</version>
   </parent>
   <artifactId>redback-users-tests</artifactId>
   <name>Redback :: User Tests</name>
