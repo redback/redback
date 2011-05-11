@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-integrations</artifactId>
-    <version>1.2.8-SNAPSHOT</version>
+    <version>1.2.8</version>
   </parent>
   <artifactId>redback-common-integrations</artifactId>
   <name>Redback :: Integration :: Common</name>
