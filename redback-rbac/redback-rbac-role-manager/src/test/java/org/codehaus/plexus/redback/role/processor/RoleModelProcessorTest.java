@@ -54,7 +54,7 @@ public class RoleModelProcessorTest
     @Inject
     private RoleModelValidator modelValidator;
 
-    @Inject
+    @Inject @Named(value = "modelProcessor#memory")
     private RoleModelProcessor roleProcessor;
 
     /**
