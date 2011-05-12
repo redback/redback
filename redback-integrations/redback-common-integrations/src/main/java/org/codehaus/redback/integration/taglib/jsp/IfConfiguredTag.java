@@ -17,12 +17,11 @@ package org.codehaus.redback.integration.taglib.jsp;
  */
 
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
-import org.codehaus.plexus.spring.PlexusToSpringUtils;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * IfConfiguredTag:
@@ -36,12 +35,12 @@ public class IfConfiguredTag
     private String option;
 
     private String value;
-    
+
     public void setOption( String option )
     {
         this.option = option;
     }
-   
+
     public void setValue( String value )
     {
         this.value = value;
@@ -49,10 +48,11 @@ public class IfConfiguredTag
 
     protected boolean condition()
         throws JspTagException
-    { 
-        ApplicationContext applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(pageContext.getServletContext());
+    {
+        ApplicationContext applicationContext =
+            WebApplicationContextUtils.getRequiredWebApplicationContext( pageContext.getServletContext() );
 
-        UserConfiguration config = (UserConfiguration) applicationContext.getBean(PlexusToSpringUtils.buildSpringId(UserConfiguration.ROLE));            
+        UserConfiguration config = applicationContext.getBean( "userConfiguration", UserConfiguration.class );
 
         if ( value != null )
         {

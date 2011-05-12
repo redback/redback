@@ -16,10 +16,6 @@ package org.codehaus.redback.integration.checks.security;
  * limitations under the License.
  */
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
@@ -30,21 +26,24 @@ import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
+import java.util.List;
+
 /**
  * RequiredRolesEnvironmentCheck:
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
  * @version: $Id$
  */
-@Service("environmentCheck#guest-user-check")
+@Service( "environmentCheck#guest-user-check" )
 public class GuestUserEnvironmentCheck
     implements EnvironmentCheck
 {
 
-    @Resource
+    @Inject
     private RoleManager roleManager;
 
-    @Resource
+    @Inject
     private SecuritySystem securitySystem;
 
     /**

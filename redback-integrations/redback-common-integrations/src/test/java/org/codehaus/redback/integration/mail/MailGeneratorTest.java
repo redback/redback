@@ -16,49 +16,69 @@ package org.codehaus.redback.integration.mail;
 * limitations under the License.
 */
 
-import java.net.URL;
-import java.util.Properties;
-import java.util.Map.Entry;
-
-import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
-
+import junit.framework.TestCase;
 import net.sf.ehcache.CacheManager;
-
 import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
 import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.keys.KeyManager;
 import org.codehaus.plexus.redback.keys.KeyManagerException;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 import org.jpox.SchemaTool;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.jdo.PersistenceManager;
+import javax.jdo.PersistenceManagerFactory;
+import java.net.URL;
+import java.util.Map.Entry;
+import java.util.Properties;
 
 /**
  * Test the Mailer class.
  */
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public class MailGeneratorTest
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
+    @Inject
+    @Named(value = "mailGenerator#velocity")
     private MailGenerator generator;
 
+    @Inject
+    @Named(value = "mailGenerator#custom-url")
+    private MailGenerator customGenerator;
+
+    @Inject
+    @Named(value = "userSecurityPolicy")
     private UserSecurityPolicy policy;
 
+    @Inject
+    @Named(value = "keyManager#memory")
     private KeyManager keyManager;
-    
+
+    @Inject
+    @Named(value = "jdoFactory#users")
+    DefaultConfigurableJdoFactory jdoFactory;
+
     private Logger log = LoggerFactory.getLogger( getClass() );
 
-    protected void setUp()
+    @Before
+    public void setUp()
         throws Exception
     {
         CacheManager.getInstance().clearAll();
         CacheManager.getInstance().removalAll();
         CacheManager.getInstance().shutdown();
         super.setUp();
-
-        DefaultConfigurableJdoFactory jdoFactory = (DefaultConfigurableJdoFactory) lookup( JdoFactory.ROLE, "users" );
 
         jdoFactory.setPassword( "" );
 
@@ -86,13 +106,9 @@ public class MailGeneratorTest
 
         pm.close();        
         
-        generator = (MailGenerator) lookup( MailGenerator.ROLE, "velocity" );
-
-        policy = (UserSecurityPolicy) lookup( UserSecurityPolicy.ROLE );
-
-        keyManager = (KeyManager) lookup( KeyManager.ROLE, "memory" );
     }
 
+    @Test
     public void testGeneratePasswordResetMail()
         throws KeyManagerException
     {
@@ -105,6 +121,7 @@ public class MailGeneratorTest
         assertTrue( content.indexOf( '$' ) == -1 ); // make sure everything is properly populate
     }
 
+    @Test
     public void testGenerateAccountValidationMail()
         throws KeyManagerException
     {
@@ -117,28 +134,28 @@ public class MailGeneratorTest
         assertTrue( content.indexOf( '$' ) == -1 ); // make sure everything is properly populate
     }
 
+    @Test
     public void testGenerateAccountValidationMailCustomUrl()
         throws Exception
     {
         AuthenticationKey authkey = keyManager.createKey( "username", "New User Email Validation",
                                                           policy.getUserValidationSettings().getEmailValidationTimeout() );
 
-        generator = (MailGenerator) lookup( MailGenerator.ROLE, "custom-url" );
-        String content = generator.generateMail( "newAccountValidationEmail", authkey, "baseUrl" );
+        String content = customGenerator.generateMail( "newAccountValidationEmail", authkey, "baseUrl" );
 
         assertNotNull( content );
         assertTrue( content.indexOf( "baseUrl" ) == -1 ); // make sure everything is properly populate
         assertTrue( content.indexOf( "MY_APPLICATION_URL/security" ) > 0 ); // make sure everything is properly populate
     }
 
+    @Test
     public void testGeneratePasswordResetMailCustomUrl()
         throws Exception
     {
         AuthenticationKey authkey = keyManager.createKey( "username", "Password Reset Request",
                                                           policy.getUserValidationSettings().getEmailValidationTimeout() );
 
-        generator = (MailGenerator) lookup( MailGenerator.ROLE, "custom-url" );
-        String content = generator.generateMail( "passwordResetEmail", authkey, "baseUrl" );
+        String content = customGenerator.generateMail( "passwordResetEmail", authkey, "baseUrl" );
 
         assertNotNull( content );
         

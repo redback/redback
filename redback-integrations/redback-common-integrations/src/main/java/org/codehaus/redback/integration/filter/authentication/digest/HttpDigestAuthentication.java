@@ -16,13 +16,6 @@ package org.codehaus.redback.integration.filter.authentication.digest;
  * limitations under the License.
  */
 
-import java.io.IOException;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authentication.TokenBasedAuthenticationDataSource;
@@ -37,6 +30,13 @@ import org.codehaus.redback.integration.filter.authentication.HttpAuthentication
 import org.codehaus.redback.integration.filter.authentication.HttpAuthenticator;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+
 /**
  * HttpDigestAuthentication methods for working with <a href="http://www.faqs.org/rfcs/rfc2617.html">RFC 2617 HTTP Authentication</a>.
  *
@@ -47,7 +47,8 @@ import org.springframework.stereotype.Service;
 public class HttpDigestAuthentication
     extends HttpAuthenticator
 {
-    @Resource(name="userManager#configurable")
+    @Inject
+    @Named(value="userManager#configurable")
     private UserManager userManager;
 
     /**

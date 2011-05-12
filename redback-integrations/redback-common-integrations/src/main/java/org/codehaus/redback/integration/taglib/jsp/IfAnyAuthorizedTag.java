@@ -20,14 +20,12 @@ import org.codehaus.plexus.redback.authorization.AuthorizationException;
 import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.system.SecuritySystemConstants;
-
-import java.util.StringTokenizer;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
-import org.codehaus.plexus.spring.PlexusToSpringUtils;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import java.util.StringTokenizer;
 
 /**
  * IfAnyAuthorizedTag:
@@ -58,17 +56,18 @@ public class IfAnyAuthorizedTag
     protected boolean condition()
         throws JspTagException
     {
-        ApplicationContext applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(pageContext.getServletContext());
+        ApplicationContext applicationContext =
+            WebApplicationContextUtils.getRequiredWebApplicationContext( pageContext.getServletContext() );
 
         SecuritySession securitySession =
             (SecuritySession) pageContext.getSession().getAttribute( SecuritySystemConstants.SECURITY_SESSION_KEY );
 
         try
         {
-            final SecuritySystem securitySystem = (SecuritySystem) applicationContext.getBean(PlexusToSpringUtils.buildSpringId(SecuritySystem.ROLE));
-            if (securitySystem == null)
+            final SecuritySystem securitySystem = applicationContext.getBean( "securitySystem", SecuritySystem.class );
+            if ( securitySystem == null )
             {
-                throw new JspTagException( "unable to locate the security system");
+                throw new JspTagException( "unable to locate the security system" );
             }
 
             StringTokenizer strtok = new StringTokenizer( permissions, "," );

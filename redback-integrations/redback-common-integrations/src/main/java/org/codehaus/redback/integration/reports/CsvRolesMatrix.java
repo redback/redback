@@ -16,16 +16,6 @@ package org.codehaus.redback.integration.reports;
  * limitations under the License.
  */
 
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
@@ -38,20 +28,31 @@ import org.codehaus.redback.integration.util.RoleSorter;
 import org.codehaus.redback.integration.util.UserComparator;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * CsvRolesMatrix
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
-@Service("report#rolesmatrix-csv")
+@Service( "report#rolesmatrix-csv" )
 public class CsvRolesMatrix
     implements Report
 {
-    @Resource
+    @Inject
     private SecuritySystem securitySystem;
 
-    @Resource(name="rBACManager#jdo")
+    @Inject
+    @Named( value = "rBACManager#jdo" )
     private RBACManager rbacManager;
 
     public String getName()
@@ -114,7 +115,8 @@ public class CsvRolesMatrix
         out.println();
     }
 
-    private void writeCsvRow( PrintWriter out, User user, Map<String,List<String>> assignmentsMap, List<Role> allRoles )
+    private void writeCsvRow( PrintWriter out, User user, Map<String, List<String>> assignmentsMap,
+                              List<Role> allRoles )
     {
         out.print( escapeCell( user.getUsername() ) );
         out.print( "," + escapeCell( user.getFullName() ) );
@@ -125,7 +127,7 @@ public class CsvRolesMatrix
         {
             assignedRoleNames = new ArrayList<String>();
         }
-        
+
         for ( Role role : allRoles )
         {
             out.print( ',' );

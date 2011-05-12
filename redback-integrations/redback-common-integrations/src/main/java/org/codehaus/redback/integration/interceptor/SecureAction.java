@@ -28,7 +28,7 @@ public interface SecureAction
     /**
      * get an authorization bundle to process for authn and authz
      */
-    public SecureActionBundle getSecureActionBundle()
+    SecureActionBundle getSecureActionBundle()
         throws SecureActionException;
 
 }

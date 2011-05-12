@@ -16,13 +16,6 @@ package org.codehaus.redback.integration.reports;
  * limitations under the License.
  */
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
@@ -30,13 +23,19 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * ReportManager
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
-@Service("reportManager")
+@Service( "reportManager" )
 public class ReportManager
     implements Initializable
 {
@@ -44,11 +43,11 @@ public class ReportManager
      * @plexus.requirement role="org.codehaus.plexus.redback.xwork.reports.Report"
      */
     private List<Report> availableReports;
-    
-    @Resource
+
+    @Inject
     private PlexusContainer plexusContainer;
 
-    private Map<String,Map<String,Report>> reportMap;
+    private Map<String, Map<String, Report>> reportMap;
 
     public Report findReport( String id, String type )
         throws ReportException
@@ -84,7 +83,7 @@ public class ReportManager
         return Collections.unmodifiableMap( reportMap );
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public void initialize()
         throws InitializationException
     {

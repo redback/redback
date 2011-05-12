@@ -22,6 +22,8 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -52,16 +54,16 @@ public class MailerImpl
 {
     protected Logger log = LoggerFactory.getLogger( getClass() );
     
-    @Resource(name="mailGenerator#velocity")
+    @Inject  @Named(value="mailGenerator#velocity")
     private MailGenerator generator;
 
-    @Resource(name="mailSender")
+    @Inject  @Named(value="mailSender")
     private JavaMailSender javaMailSender;
 
-    @Resource
+    @Inject
     private SecuritySystem securitySystem;
 
-    @Resource(name="userConfiguration")
+    @Inject  @Named(value="userConfiguration")
     private UserConfiguration config;
 
     public void sendAccountValidationEmail( Collection<String> recipients, AuthenticationKey authkey, String baseUrl )

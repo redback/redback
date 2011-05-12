@@ -16,12 +16,6 @@ package org.codehaus.redback.integration.mail;
  * limitations under the License.
  */
 
-import java.io.StringWriter;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-
-import javax.annotation.Resource;
-
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
@@ -32,6 +26,12 @@ import org.codehaus.plexus.velocity.VelocityComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.StringWriter;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 /**
  * Mail generator component implementation using velocity.
@@ -45,11 +45,12 @@ public class VelocityMailGenerator
 {
     private Logger log = LoggerFactory.getLogger( VelocityMailGenerator.class );
     
-    @Resource(name="userConfiguration")
+    @Inject
+    @Named(value="userConfiguration")
     private UserConfiguration config;
 
     // FIXME use the spring directly 
-    @Resource
+    @Inject
     private VelocityComponent velocity;
 
     public String generateMail( String templateName, AuthenticationKey authkey, String baseUrl )

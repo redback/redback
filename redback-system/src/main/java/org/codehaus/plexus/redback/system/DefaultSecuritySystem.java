@@ -16,8 +16,6 @@ package org.codehaus.plexus.redback.system;
  * limitations under the License.
  */
 
-import javax.annotation.Resource;
-
 import org.codehaus.plexus.redback.authentication.AuthenticationDataSource;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationManager;
@@ -37,31 +35,37 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 /**
  * DefaultSecuritySystem:
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
  * @version: $Id$
  */
-@Service("securitySystem")
+@Service( "securitySystem" )
 public class DefaultSecuritySystem
     implements SecuritySystem
 {
     private Logger log = LoggerFactory.getLogger( DefaultSecuritySystem.class );
-    
-    @Resource
+
+    @Inject
     private AuthenticationManager authnManager;
 
-    @Resource(name="authorizer#rbac")
+    @Inject
+    @Named( value = "authorizer#rbac" )
     private Authorizer authorizer;
 
-    @Resource(name="userManager#configurable")
+    @Inject
+    @Named( value = "userManager#configurable" )
     private UserManager userManager;
 
-    @Resource(name="keyManager#cached")
+    @Inject
+    @Named( value = "keyManager#cached" )
     private KeyManager keyManager;
 
-    @Resource
+    @Inject
     private UserSecurityPolicy policy;
 
     // ----------------------------------------------------------------------------
@@ -85,7 +89,7 @@ public class DefaultSecuritySystem
      * @throws UserNotFoundException
      * @throws MustChangePasswordException
      * @throws AccountLockedException
-     * @throws MustChangePasswordException 
+     * @throws MustChangePasswordException
      */
     public SecuritySession authenticate( AuthenticationDataSource source )
         throws AuthenticationException, UserNotFoundException, AccountLockedException, MustChangePasswordException

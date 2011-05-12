@@ -19,6 +19,8 @@ package org.codehaus.redback.integration.filter.authentication;
 import java.io.IOException;
 
 import javax.annotation.Resource;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -48,7 +50,7 @@ public abstract class HttpAuthenticator
 
     public static final String ROLE = HttpAuthenticator.class.getName();
 
-    @Resource
+    @Inject
     protected SecuritySystem securitySystem;
 
     /**

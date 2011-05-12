@@ -16,11 +16,6 @@ package org.codehaus.redback.integration.checks.security;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Resource;
-
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
@@ -33,6 +28,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * LockedAdminEnvironmentCheck: checks if accounts marked as system administrator are locked
  * and unlocks them on startup.
@@ -40,17 +40,19 @@ import org.springframework.stereotype.Service;
  * @author: Jesse McConnell <jesse@codehaus.org>
  * @version: $Id$
  */
-@Service("environmentCheck#locked-admin-check")
+@Service( "environmentCheck#locked-admin-check" )
 public class LockedAdminEnvironmentCheck
     implements EnvironmentCheck
 {
-    
+
     protected Logger log = LoggerFactory.getLogger( getClass() );
 
-    @Resource(name="userManager#configurable")
+    @Inject
+    @Named( value = "userManager#configurable" )
     private UserManager userManager;
 
-    @Resource(name="rBACManager#cached")
+    @Inject
+    @Named( value = "rBACManager#cached" )
     private RBACManager rbacManager;
 
     /**
@@ -61,7 +63,7 @@ public class LockedAdminEnvironmentCheck
     /**
      * This environment check will unlock system administrator accounts that are locked on the restart of the
      * application when the environment checks are processed.
-     * 
+     *
      * @param violations
      */
     public void validateEnvironment( List<String> violations )
@@ -75,16 +77,16 @@ public class LockedAdminEnvironmentCheck
             try
             {
                 systemAdminstrators = rbacManager.getUserAssignmentsForRoles( roles );
-                
+
                 for ( UserAssignment userAssignment : systemAdminstrators )
                 {
                     try
                     {
                         User admin = userManager.findUser( userAssignment.getPrincipal() );
-                        
+
                         if ( admin.isLocked() )
                         {
-                            log.info(  "Unlocking system administrator: " + admin.getUsername() );
+                            log.info( "Unlocking system administrator: " + admin.getUsername() );
                             admin.setLocked( false );
                             userManager.updateUser( admin );
                         }
@@ -96,10 +98,10 @@ public class LockedAdminEnvironmentCheck
                 }
             }
             catch ( RbacManagerException e )
-            {                
+            {
                 log.warn( "Exception when checking for locked admin user: " + e.getMessage(), e );
             }
-            
+
             checked = true;
         }
     }

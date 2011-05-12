@@ -31,7 +31,7 @@ public interface Report
      *
      * @return the name of the report.
      */
-    public String getName();
+    String getName();
 
     /**
      * The type of report (example: 'csv', 'xls', 'pdf')
@@ -39,21 +39,21 @@ public interface Report
      *
      * @return the type of report.
      */
-    public String getType();
+    String getType();
 
     /**
      * The mimetype of the report. (used to set download content type correctly)
      *
      * @return the mimetype.
      */
-    public String getMimeType();
+    String getMimeType();
 
     /**
      * The ID for this report.
      *
      * @return the ID for this report.
      */
-    public String getId();
+    String getId();
 
     /**
      * Write Report to provided outputstream.
@@ -61,6 +61,6 @@ public interface Report
      * @param os the outputstream to write to.
      * @throws ReportException if there was a problem in generating the report.
      */
-    public void writeReport( OutputStream os )
+    void writeReport( OutputStream os )
         throws ReportException;
 }

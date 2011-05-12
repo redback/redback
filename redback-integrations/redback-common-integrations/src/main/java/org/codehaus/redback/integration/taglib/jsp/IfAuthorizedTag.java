@@ -20,12 +20,11 @@ import org.codehaus.plexus.redback.authorization.AuthorizationException;
 import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.system.SecuritySystemConstants;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
-import org.codehaus.plexus.spring.PlexusToSpringUtils;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * IfAuthorizedTag:
@@ -68,7 +67,7 @@ public class IfAuthorizedTag
             
             try
             {
-                SecuritySystem securitySystem = (SecuritySystem) applicationContext.getBean(PlexusToSpringUtils.buildSpringId(SecuritySystem.ROLE));
+                SecuritySystem securitySystem = applicationContext.getBean("securitySystem",SecuritySystem.class);
                 if (securitySystem == null)
                 {
                     throw new JspTagException( "unable to locate security system" );

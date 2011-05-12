@@ -17,12 +17,11 @@ package org.codehaus.redback.integration.taglib.jsp;
  */
 
 import org.codehaus.plexus.redback.users.UserManager;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
-import org.codehaus.plexus.spring.PlexusToSpringUtils;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * IsReadOnlyUserManagerTag:
@@ -38,7 +37,7 @@ public class IsNotReadOnlyUserManagerTag
     { 
         ApplicationContext applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(pageContext.getServletContext());
 
-        UserManager config = (UserManager) applicationContext.getBean(PlexusToSpringUtils.buildSpringId(UserManager.ROLE, "configurable"));           
+        UserManager config = applicationContext.getBean(  "userManager#configurable" , UserManager.class );
         if (config == null)
         {
             throw new JspTagException( "unable to locate security system" );

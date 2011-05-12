@@ -16,7 +16,13 @@ package org.codehaus.redback.integration.filter.authorization;
  * limitations under the License.
  */
 
-import java.io.IOException;
+import org.codehaus.plexus.redback.authorization.AuthorizationException;
+import org.codehaus.plexus.redback.system.SecuritySession;
+import org.codehaus.plexus.redback.system.SecuritySystem;
+import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.redback.integration.filter.SpringServletFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -24,12 +30,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
-
-import org.codehaus.plexus.redback.authorization.AuthorizationException;
-import org.codehaus.plexus.redback.system.SecuritySession;
-import org.codehaus.plexus.redback.system.SecuritySystem;
-import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.redback.integration.filter.PlexusServletFilter;
+import java.io.IOException;
 
 /**
  * SimpleAuthorizationFilter
@@ -38,8 +39,11 @@ import org.codehaus.redback.integration.filter.PlexusServletFilter;
  * @version $Id$
  */
 public class SimpleAuthorizationFilter
-    extends PlexusServletFilter
+    extends SpringServletFilter
 {
+
+    private Logger logger = LoggerFactory.getLogger( getClass() );
+
     private String permission;
 
     private String resource;
@@ -57,23 +61,24 @@ public class SimpleAuthorizationFilter
 
         if ( StringUtils.isEmpty( accessDeniedLocation ) )
         {
-            throw new ServletException( "Missing parameter 'accessDeniedLocation' from " +
-                SimpleAuthorizationFilter.class.getName() + " configuration." );
+            throw new ServletException(
+                "Missing parameter 'accessDeniedLocation' from " + SimpleAuthorizationFilter.class.getName()
+                    + " configuration." );
         }
     }
 
     public void doFilter( ServletRequest request, ServletResponse response, FilterChain chain )
         throws IOException, ServletException
     {
-        SecuritySession securitySession = (SecuritySession) lookup( SecuritySession.ROLE );
+        SecuritySession securitySession = getApplicationContext().getBean( "securitySession", SecuritySession.class );
 
         if ( securitySession == null )
         {
-            getLogger().warn( "Security Session is null." );
+            logger.warn( "Security Session is null." );
             return;
         }
 
-        SecuritySystem securitySystem = (SecuritySystem) lookup( SecuritySystem.ROLE );
+        SecuritySystem securitySystem = getApplicationContext().getBean( "securitySystem", SecuritySystem.class );
 
         boolean isAuthorized = false;
 

@@ -16,7 +16,10 @@ package org.codehaus.redback.integration.filter.authentication.digest;
  * limitations under the License.
  */
 
-import java.io.IOException;
+import org.codehaus.plexus.redback.authentication.AuthenticationException;
+import org.codehaus.redback.integration.filter.authentication.AbstractHttpAuthenticationFilter;
+import org.codehaus.redback.integration.filter.authentication.HttpAuthenticator;
+import org.codehaus.redback.integration.filter.authentication.basic.HttpBasicAuthentication;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -25,11 +28,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.codehaus.plexus.redback.authentication.AuthenticationException;
-import org.codehaus.redback.integration.filter.authentication.AbstractHttpAuthenticationFilter;
-import org.codehaus.redback.integration.filter.authentication.HttpAuthenticator;
-import org.codehaus.redback.integration.filter.authentication.basic.HttpBasicAuthentication;
+import java.io.IOException;
 
 /**
  * HttpDigestAuthenticationFilter.
@@ -55,7 +54,9 @@ public class HttpDigestAuthenticationFilter
     {
         super.init( filterConfig );
 
-        httpAuthentication = (HttpDigestAuthentication) lookup( HttpAuthenticator.ROLE, "digest" );
+        httpAuthentication =
+            getApplicationContext().getBean( "httpAuthenticator#digest", HttpDigestAuthentication.class );
+
     }
 
     public void doFilter( ServletRequest request, ServletResponse response, FilterChain chain )

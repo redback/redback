@@ -16,7 +16,9 @@ package org.codehaus.redback.integration.filter.authentication.basic;
  * limitations under the License.
  */
 
-import java.io.IOException;
+import org.codehaus.plexus.redback.authentication.AuthenticationException;
+import org.codehaus.redback.integration.filter.authentication.AbstractHttpAuthenticationFilter;
+import org.codehaus.redback.integration.filter.authentication.HttpAuthenticator;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -25,10 +27,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.codehaus.plexus.redback.authentication.AuthenticationException;
-import org.codehaus.redback.integration.filter.authentication.AbstractHttpAuthenticationFilter;
-import org.codehaus.redback.integration.filter.authentication.HttpAuthenticator;
+import java.io.IOException;
 
 /**
  * HttpBasicAuthenticationFilter
@@ -47,7 +46,7 @@ public class HttpBasicAuthenticationFilter
     {
         super.init( filterConfig );
 
-        httpAuthentication = (HttpAuthenticator) lookup( HttpAuthenticator.ROLE, "basic" );
+        httpAuthentication = getApplicationContext().getBean( "httpAuthenticator#basic", HttpAuthenticator.class );
     }
 
     public void doFilter( ServletRequest request, ServletResponse response, FilterChain chain )

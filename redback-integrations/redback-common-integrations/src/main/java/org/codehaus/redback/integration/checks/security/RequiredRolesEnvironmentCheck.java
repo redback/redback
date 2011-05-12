@@ -19,6 +19,8 @@ package org.codehaus.redback.integration.checks.security;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
@@ -42,7 +44,7 @@ public class RequiredRolesEnvironmentCheck
 
     protected Logger log = LoggerFactory.getLogger( getClass() );
     
-    @Resource
+    @Inject
     private RoleManager roleManager;
 
     /**

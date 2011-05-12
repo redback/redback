@@ -1,4 +1,4 @@
-package org.codehaus.redback.integration.filter.authentication;
+package org.codehaus.redback.integration.filter;
 
 /*
  * Copyright 2005-2006 The Codehaus.
@@ -16,35 +16,41 @@ package org.codehaus.redback.integration.filter.authentication;
  * limitations under the License.
  */
 
+import org.codehaus.plexus.logging.Logger;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import javax.servlet.Filter;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 
-import org.codehaus.redback.integration.filter.SpringServletFilter;
-
 /**
- * AbstractHttpAuthenticationFilter
+ * SpringServletFilter
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
-public abstract class AbstractHttpAuthenticationFilter
-    extends SpringServletFilter
+public abstract class SpringServletFilter
+    implements Filter
 {
-    private String realmName;
+    private ApplicationContext applicationContext;
+
+    private Logger logger;
+
+    public void destroy()
+    {
+        // Do nothing here.
+    }
+
+    protected ApplicationContext getApplicationContext()
+    {
+        return applicationContext;
+    }
 
     public void init( FilterConfig filterConfig )
         throws ServletException
     {
-        realmName = filterConfig.getInitParameter( "realm-name" );
-    }
+        applicationContext = WebApplicationContextUtils.getWebApplicationContext( filterConfig.getServletContext() );
 
-    public String getRealmName()
-    {
-        return realmName;
-    }
-
-    public void setRealmName( String realmName )
-    {
-        this.realmName = realmName;
     }
 }

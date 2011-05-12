@@ -18,10 +18,12 @@ package org.codehaus.plexus.redback.system;
 
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.users.User;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Jason van Zyl
  */
+@Service( "securitySession" )
 public class DefaultSecuritySession
     implements SecuritySession
 {

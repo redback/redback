@@ -16,17 +16,6 @@ package org.codehaus.redback.integration.reports;
  * limitations under the License.
  */
 
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.plexus.redback.system.SecuritySystem;
@@ -37,26 +26,36 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 /**
  * CsvUserList
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
-@Service("report#userlist-csv")
+@Service( "report#userlist-csv" )
 public class CsvUserList
     implements Report
 {
-    private Logger log = LoggerFactory.getLogger( CsvUserList.class );    
-    
-    @Resource
+    private Logger log = LoggerFactory.getLogger( CsvUserList.class );
+
+    @Inject
     private SecuritySystem securitySystem;
 
-    private Map<String,String> fields;
+    private Map<String, String> fields;
 
     public CsvUserList()
     {
-        fields = new HashMap<String,String>();
+        fields = new HashMap<String, String>();
         fields.put( "username", "User Name" );
         fields.put( "fullName", "Full Name" );
         fields.put( "email", "Email Address" );
@@ -128,14 +127,14 @@ public class CsvUserList
         out.println();
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     private void writeCsvRow( PrintWriter out, User user )
         throws ReportException
     {
         try
         {
             boolean hasPreviousField = false;
-            Map<String,Object> propMap = PropertyUtils.describe( user );
+            Map<String, Object> propMap = PropertyUtils.describe( user );
             for ( String propName : fields.keySet() )
             {
                 Object propValue = propMap.get( propName );
