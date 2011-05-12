@@ -27,8 +27,11 @@
            http://www.springframework.org/schema/context/spring-context-3.0.xsd"
        default-lazy-init="true">
 
-  <context:annotation-config />
-  <context:component-scan 
-    base-package="org.codehaus.plexus.redback.authentication.users"/>
- 
+  <bean name="authenticator#user-manager" class="org.codehaus.plexus.redback.authentication.users.UserManagerAuthenticator">
+    <property name="userManager" ref="userManager#memory"/>
+    <property name="securityPolicy" ref="userSecurityPolicy"/>
+  </bean>
+
+  <alias name="userManager#memory" alias="userManager#jdo"/>
+
 </beans>

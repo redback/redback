@@ -160,13 +160,13 @@ public interface UserSecurityPolicy
      * Gets a list of accounts which should never be locked by security policy
      * @return accounts that should never be locked
      */
-    public List<String> getUnlockableAccounts();
+    List<String> getUnlockableAccounts();
 
     /**
      * Sets a list of accounts which should never be locked by security policy
      * @param unlockableAccounts
      */
-    public void setUnlockableAccounts(List<String> unlockableAccounts);
+    void setUnlockableAccounts(List<String> unlockableAccounts);
 
     /**
      * Extension Point - Change the password of a user.

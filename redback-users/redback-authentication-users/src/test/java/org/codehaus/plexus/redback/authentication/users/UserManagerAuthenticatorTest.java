@@ -15,10 +15,8 @@ package org.codehaus.plexus.redback.authentication.users;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import java.util.Calendar;
-import java.util.Date;
 
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import junit.framework.TestCase;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authentication.Authenticator;
@@ -29,42 +27,60 @@ import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Tests for {@link UserManagerAuthenticator} implementation.
+ *
  * @author <a href='mailto:rahul.thakur.xdev@gmail.com'>Rahul Thakur</a>
  */
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public class UserManagerAuthenticatorTest
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
-    /**
-     * @plexus.requirement
-     */
+    @Inject
     private UserSecurityPolicy userSecurityPolicy;
-    
-    @Override
-    protected void setUp()
+
+    @Inject
+    @Named(value = "authenticator#user-manager")
+    Authenticator component;
+
+    @Inject
+    @Named(value = "userManager#memory")
+    UserManager um;
+
+    @Before
+    public void setUp()
         throws Exception
     {
         super.setUp();
-        userSecurityPolicy = (UserSecurityPolicy) lookup( UserSecurityPolicy.ROLE );
         userSecurityPolicy.setEnabled( false );
     }
 
+    @Test
     public void testLookup()
         throws Exception
     {
-        Authenticator component = (Authenticator) lookup( Authenticator.ROLE, "user-manager" );
         assertNotNull( component );
         assertEquals( UserManagerAuthenticator.class.getName(), component.getClass().getName() );
     }
 
+    @Test
     public void testAuthenticate()
         throws Exception
     {
         // Set up a few users for the Authenticator
-        
-        UserManager um = (UserManager) lookup( UserManager.ROLE, "memory" );
+
         User user = um.createUser( "test", "Test User", "testuser@somedomain.com" );
         user.setPassword( "testpass" );
         um.addUser( user );
@@ -78,7 +94,7 @@ public class UserManagerAuthenticatorTest
         um.addUser( user );
 
         // test with valid credentials
-        Authenticator auth = (Authenticator) lookup( Authenticator.ROLE, "user-manager" );
+        Authenticator auth = component;
         assertNotNull( auth );
 
         AuthenticationResult result = auth.authenticate( createAuthDataSource( "anonymous", "nopass" ) );
@@ -96,20 +112,20 @@ public class UserManagerAuthenticatorTest
         assertEquals( result.getException().getClass().getName(), UserNotFoundException.class.getName() );
     }
 
+    @Test
     public void testAuthenticateLockedPassword()
         throws AuthenticationException, MustChangePasswordException, UserNotFoundException
     {
         userSecurityPolicy.setEnabled( true );
 
         // Set up a user for the Authenticator
-        UserManager um = (UserManager) lookup( UserManager.ROLE, "memory" );
         User user = um.createUser( "testuser", "Test User Locked Password", "testuser@somedomain.com" );
         user.setPassword( "correctpass1" );
         user.setValidated( true );
         user.setPasswordChangeRequired( false );
         um.addUser( user );
 
-        Authenticator auth = (Authenticator) lookup( Authenticator.ROLE, "user-manager" );
+        Authenticator auth = component;
         assertNotNull( auth );
 
         boolean hasException = false;
@@ -135,6 +151,7 @@ public class UserManagerAuthenticatorTest
         }
     }
 
+    @Test
     public void testAuthenticateExpiredPassword()
         throws AuthenticationException, AccountLockedException, UserNotFoundException
     {
@@ -142,14 +159,13 @@ public class UserManagerAuthenticatorTest
         userSecurityPolicy.setPasswordExpirationDays( 15 );
 
         // Set up a user for the Authenticator
-	UserManager um = (UserManager) lookup( UserManager.ROLE, "memory" );
         User user = um.createUser( "testuser", "Test User Expired Password", "testuser@somedomain.com" );
         user.setPassword( "expiredpass1" );
         user.setValidated( true );
         user.setPasswordChangeRequired( false );
         um.addUser( user );
 
-        Authenticator auth = (Authenticator) lookup( Authenticator.ROLE, "user-manager" );
+        Authenticator auth = component;
         assertNotNull( auth );
 
         boolean hasException = false;
@@ -182,14 +198,14 @@ public class UserManagerAuthenticatorTest
         }
     }
 
-    private PasswordBasedAuthenticationDataSource createAuthDataSource(String username, String password)
+    private PasswordBasedAuthenticationDataSource createAuthDataSource( String username, String password )
     {
         PasswordBasedAuthenticationDataSource source = new PasswordBasedAuthenticationDataSource();
-        
+
         source.setPrincipal( username );
         source.setPassword( password );
-        
+
         return source;
-        
+
     }
 }
