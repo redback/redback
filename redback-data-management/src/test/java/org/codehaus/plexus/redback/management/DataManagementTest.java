@@ -16,8 +16,7 @@ package org.codehaus.plexus.redback.management;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
-import org.codehaus.plexus.jdo.JdoFactory;
+import junit.framework.TestCase;
 import org.codehaus.plexus.redback.common.jdo.UserConfigurableJdoFactory;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.keys.KeyManager;
@@ -32,7 +31,14 @@ import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.StringWriter;
@@ -42,66 +48,76 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public class DataManagementTest
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
+    @Inject
     private DataManagementTool dataManagementTool;
 
     private File targetDirectory;
 
-    protected void setUp()
+    @Inject
+    @Named( value = "jdoFactory#users" )
+    UserConfigurableJdoFactory jdoFactory;
+
+    @Inject
+    @Named( value = "userManager#jdo" )
+    UserManager userManager;
+
+    @Inject
+    @Named( value = "keyManager#jdo" )
+    KeyManager keyManager;
+
+
+    @Inject
+    @Named( value = "rBACManager#jdo" )
+    RBACManager rbacManager;
+
+    @Before
+    public void setUp()
         throws Exception
     {
         super.setUp();
-
-        UserConfigurableJdoFactory jdoFactory = (UserConfigurableJdoFactory) lookup( JdoFactory.ROLE, "users" );
-
-        File database = getTestFile( "target/database/" + getName() );
-        FileUtils.deleteDirectory( database );
-        assertFalse( database.exists() );
-        database.getParentFile().mkdirs();
-
-        jdoFactory.setUrl(
-            System.getProperty( "jdo.test.url", "jdbc:derby:" + database.getAbsolutePath() + ";create=true" ) );
-
-        dataManagementTool = (DataManagementTool) lookup( DataManagementTool.ROLE, "jdo" );
-
         targetDirectory = createBackupDirectory();
     }
 
+    @Test
     public void testEraseUsers()
         throws Exception
     {
-        UserManager manager = (UserManager) lookup( UserManager.ROLE, "jdo" );
 
-        dataManagementTool.eraseUsersDatabase( manager );
-        
-        createUserDatabase( manager );
+        dataManagementTool.eraseUsersDatabase( userManager );
 
-        dataManagementTool.eraseUsersDatabase( manager );
+        createUserDatabase( userManager );
 
-        assertEmpty( manager );
+        dataManagementTool.eraseUsersDatabase( userManager );
+
+        assertEmpty( userManager );
     }
 
+    @Test
     public void testEraseKeys()
         throws Exception
     {
-        KeyManager manager = (KeyManager) lookup( KeyManager.ROLE, "jdo" );
 
-        createKeyDatabase( manager );
+        createKeyDatabase( keyManager );
 
-        dataManagementTool.eraseKeysDatabase( manager );
+        dataManagementTool.eraseKeysDatabase( keyManager );
 
-        assertEmpty( manager );
+        assertEmpty( keyManager );
     }
 
+    @Test
     public void testBackupRbac()
         throws Exception
     {
-        RBACManager manager = (RBACManager) lookup( RBACManager.ROLE, "jdo" );
-        
+        RBACManager manager = rbacManager;
+
         dataManagementTool.eraseRBACDatabase( manager );
-        
+
         createRbacDatabase( manager );
 
         dataManagementTool.backupRBACDatabase( manager, targetDirectory );
@@ -114,11 +130,10 @@ public class DataManagementTest
 
         IOUtil.copy( getClass().getResourceAsStream( "/expected-rbac.xml" ), sw );
 
-        assertEquals( "Check database content", convertLineEndings( sw.toString() ).trim(), fixXmlQuotes( FileUtils.fileRead( backupFile ) ).trim() );
-        
+        assertEquals( "Check database content", convertLineEndings( sw.toString() ).trim(),
+                      fixXmlQuotes( FileUtils.fileRead( backupFile ) ).trim() );
+
     }
-    
-    
 
     private void createRbacDatabase( RBACManager manager )
         throws RbacManagerException
@@ -136,10 +151,11 @@ public class DataManagementTest
         manager.saveUserAssignment( assignment );
     }
 
+    @Test
     public void testBackupUsers()
         throws Exception
     {
-        UserManager manager = (UserManager) lookup( UserManager.ROLE, "jdo" );
+        UserManager manager = userManager;
 
         createUserDatabase( manager );
 
@@ -174,13 +190,14 @@ public class DataManagementTest
         manager.addUser( user );
     }
 
+    @Test
     public void testBackupKeys()
         throws Exception
     {
-        KeyManager manager = (KeyManager) lookup( KeyManager.ROLE, "jdo" );
+        KeyManager manager = keyManager;
 
         createKeyDatabase( manager );
-        
+
         Thread.sleep( 60000 );
 
         dataManagementTool.backupKeyDatabase( manager, targetDirectory );
@@ -208,13 +225,14 @@ public class DataManagementTest
         manager.createKey( "tony", "Expired", 0 );
     }
 
+    @Test
     public void testRestoreRbac()
         throws Exception
     {
-        RBACManager manager = (RBACManager) lookup( RBACManager.ROLE, "jdo" );
+        RBACManager manager = rbacManager;
 
         dataManagementTool.eraseRBACDatabase( manager );
-        
+
         assertEmpty( manager );
 
         File backupFile = new File( targetDirectory, "rbac.xml" );
@@ -287,13 +305,14 @@ public class DataManagementTest
         assertEquals( 0, manager.getAllPermissions().size() );
     }
 
+    @Test
     public void testRestoreUsers()
         throws Exception
     {
-        UserManager manager = (UserManager) lookup( UserManager.ROLE, "jdo" );
+        UserManager manager = userManager;
 
         dataManagementTool.eraseUsersDatabase( manager );
-        
+
         assertEmpty( manager );
 
         File backupFile = new File( targetDirectory, "users.xml" );
@@ -311,7 +330,7 @@ public class DataManagementTest
         assertEquals( "Steve McQueen", user.getFullName() );
         assertEquals( "the cooler king", user.getEmail() );
         assertEquals( 1164424661686L, user.getLastPasswordChange().getTime() );
-        assertEquals( Arrays.asList( new String[]{"bKE9UspwyIPg8LsQHkJaiehiTeUdstI5JZOvaoQRgJA="} ),
+        assertEquals( Arrays.asList( new String[]{ "bKE9UspwyIPg8LsQHkJaiehiTeUdstI5JZOvaoQRgJA=" } ),
                       user.getPreviousEncodedPasswords() );
 
         user = (User) users.get( 1 );
@@ -320,7 +339,7 @@ public class DataManagementTest
         assertEquals( "Sideshow Bob", user.getFullName() );
         assertEquals( "bob_862@hotmail.com", user.getEmail() );
         assertEquals( 1164424669526L, user.getLastPasswordChange().getTime() );
-        assertEquals( Arrays.asList( new String[]{"A0MR+q0lm554bD6Uft60ztlYZ8N1pEqXhKNM9H7SlS8="} ),
+        assertEquals( Arrays.asList( new String[]{ "A0MR+q0lm554bD6Uft60ztlYZ8N1pEqXhKNM9H7SlS8=" } ),
                       user.getPreviousEncodedPasswords() );
 
         user = (User) users.get( 2 );
@@ -329,7 +348,7 @@ public class DataManagementTest
         assertEquals( "Betty", user.getFullName() );
         assertEquals( "betty@aol.com", user.getEmail() );
         assertEquals( 1164424669536L, user.getLastPasswordChange().getTime() );
-        assertEquals( Arrays.asList( new String[]{"L/mA/suWallwvYzw4wyRYkn5y8zWxAITuv4sLhJLN1E="} ),
+        assertEquals( Arrays.asList( new String[]{ "L/mA/suWallwvYzw4wyRYkn5y8zWxAITuv4sLhJLN1E=" } ),
                       user.getPreviousEncodedPasswords() );
     }
 
@@ -339,13 +358,14 @@ public class DataManagementTest
         assertEquals( 0, users.size() );
     }
 
+    @Test
     public void testRestoreKeys()
         throws Exception
     {
-        KeyManager manager = (KeyManager) lookup( KeyManager.ROLE, "jdo" );
+        KeyManager manager = keyManager;
 
         dataManagementTool.eraseKeysDatabase( manager );
-        
+
         assertEmpty( manager );
 
         File backupFile = new File( targetDirectory, "keys.xml" );
@@ -410,7 +430,7 @@ public class DataManagementTest
     {
         String timestamp = new SimpleDateFormat( "yyyyMMdd.HHmmss", Locale.US ).format( new Date() );
 
-        File targetDirectory = getTestFile( "target/backups/" + timestamp );
+        File targetDirectory = new File( "./target/backups/" + timestamp );
         targetDirectory.mkdirs();
 
         return targetDirectory;
@@ -418,9 +438,10 @@ public class DataManagementTest
 
     private static String fixXmlQuotes( String s )
     {
-        if ( s.startsWith( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"))
+        if ( s.startsWith( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" ) )
         {
-            return "<?xml version='1.0' encoding='UTF-8'?>" + s.substring( "<?xml version='1.0' encoding='UTF-8'?>".length() );
+            return "<?xml version='1.0' encoding='UTF-8'?>" + s.substring(
+                "<?xml version='1.0' encoding='UTF-8'?>".length() );
         }
         return s;
     }
