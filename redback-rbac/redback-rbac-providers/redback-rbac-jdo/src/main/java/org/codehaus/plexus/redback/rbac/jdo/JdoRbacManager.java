@@ -45,13 +45,15 @@ import java.util.List;
  * @author Jesse McConnell <jmcconnell@apache.org>
  * @version $Id$
  */
-@Service("rBACManager#jdo")
+@Service( "rBACManager#jdo" )
 public class JdoRbacManager
     extends AbstractRBACManager
     implements RBACManagerListener
 {
     @Inject
     private JdoTool jdo;
+
+    private boolean enableCache = true;
 
     // private static final String ROLE_DETAIL = "role-child-detail";
     private static final String ROLE_DETAIL = null;
@@ -98,7 +100,7 @@ public class JdoRbacManager
     {
         RBACObjectAssertions.assertValid( role );
 
-        return (Role) jdo.saveObject( role, new String[]{ROLE_DETAIL} );
+        return (Role) jdo.saveObject( role, new String[]{ ROLE_DETAIL } );
     }
 
     public boolean roleExists( Role role )
@@ -133,7 +135,7 @@ public class JdoRbacManager
     /**
      * Method getRoles
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public List<Role> getAllRoles()
         throws RbacManagerException
     {
@@ -307,7 +309,7 @@ public class JdoRbacManager
         return (Permission) jdo.getObjectById( JdoPermission.class, permissionName, null );
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public List<Permission> getAllPermissions()
         throws RbacManagerException
     {
@@ -330,6 +332,7 @@ public class JdoRbacManager
     // ----------------------------------------------------------------------
     // Operation methods
     // ----------------------------------------------------------------------
+
     /**
      * Creates an implementation specific {@link Operation}.
      * <p/>
@@ -389,7 +392,7 @@ public class JdoRbacManager
         return (Operation) jdo.getObjectById( JdoOperation.class, operationName, null );
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public List<Operation> getAllOperations()
         throws RbacManagerException
     {
@@ -412,6 +415,7 @@ public class JdoRbacManager
     // ----------------------------------------------------------------------
     // Resource methods
     // ----------------------------------------------------------------------
+
     /**
      * Creates an implementation specific {@link Resource}.
      * <p/>
@@ -431,13 +435,13 @@ public class JdoRbacManager
         try
         {
             resource = getResource( identifier );
-            log.debug( "Create Resource [" + identifier + "] Returning Existing." );
+            log.debug( "Create Resource [ {} ] Returning Existing.", identifier );
         }
         catch ( RbacObjectNotFoundException e )
         {
             resource = new JdoResource();
             resource.setIdentifier( identifier );
-            log.debug( "Create Resource [" + identifier + "] New JdoResource." );
+            log.debug( "Create Resource [ {} ] New JdoResource.", identifier );
         }
 
         return resource;
@@ -473,7 +477,7 @@ public class JdoRbacManager
         return (Resource) jdo.getObjectById( JdoResource.class, resourceIdentifier, null );
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public List<Resource> getAllResources()
         throws RbacManagerException
     {
@@ -538,7 +542,7 @@ public class JdoRbacManager
 
         fireRbacUserAssignmentSaved( userAssignment );
 
-        return (UserAssignment) jdo.saveObject( userAssignment, new String[]{ROLE_DETAIL} );
+        return (UserAssignment) jdo.saveObject( userAssignment, new String[]{ ROLE_DETAIL } );
     }
 
     public boolean userAssignmentExists( String principal )
@@ -567,7 +571,7 @@ public class JdoRbacManager
     /**
      * Method getAssignments
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public List<UserAssignment> getAllUserAssignments()
         throws RbacManagerException
     {
@@ -577,7 +581,7 @@ public class JdoRbacManager
     /**
      * Method getUserAssignmentsForRoles
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public List<UserAssignment> getUserAssignmentsForRoles( Collection<String> roleNames )
         throws RbacManagerException
     {
@@ -620,13 +624,16 @@ public class JdoRbacManager
     public void initialize()
     {
         super.initialize();
-        
+
         jdo.setListener( this );
-        jdo.enableCache( JdoRole.class );
-        jdo.enableCache( JdoOperation.class );
-        jdo.enableCache( JdoResource.class );
-        jdo.enableCache( JdoUserAssignment.class );
-        jdo.enableCache( JdoPermission.class );
+        if ( enableCache )
+        {
+            jdo.enableCache( JdoRole.class );
+            jdo.enableCache( JdoOperation.class );
+            jdo.enableCache( JdoResource.class );
+            jdo.enableCache( JdoUserAssignment.class );
+            jdo.enableCache( JdoPermission.class );
+        }
     }
 
     public void rbacInit( boolean freshdb )
@@ -673,5 +680,15 @@ public class JdoRbacManager
     public void setJdo( JdoTool jdo )
     {
         this.jdo = jdo;
+    }
+
+    public boolean isEnableCache()
+    {
+        return enableCache;
+    }
+
+    public void setEnableCache( boolean enableCache )
+    {
+        this.enableCache = enableCache;
     }
 }

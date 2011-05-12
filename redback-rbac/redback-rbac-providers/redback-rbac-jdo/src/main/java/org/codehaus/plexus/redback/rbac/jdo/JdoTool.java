@@ -53,7 +53,7 @@ import java.util.List;
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
-@Service
+@Service("jdoTool")
 public class JdoTool
     implements DeleteLifecycleListener, StoreLifecycleListener
 {

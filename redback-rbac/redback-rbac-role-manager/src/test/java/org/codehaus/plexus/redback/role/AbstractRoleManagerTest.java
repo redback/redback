@@ -19,6 +19,7 @@ package org.codehaus.plexus.redback.role;
 import junit.framework.TestCase;
 import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
+import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.redback.role.model.ModelPermission;
@@ -56,6 +57,10 @@ public abstract class AbstractRoleManagerTest
     public void testLoading()
         throws Exception
     {
+
+        List<Resource> all = rbacManager.getAllResources();
+
+
         assertTrue( rbacManager.resourceExists( "*" ) );
         assertTrue( rbacManager.operationExists( "Test Operation" ) );
         assertTrue( rbacManager.roleExists( "Test Role" ) );

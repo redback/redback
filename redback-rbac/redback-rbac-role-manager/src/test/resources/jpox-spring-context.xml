@@ -24,23 +24,37 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
            http://www.springframework.org/schema/context 
-           http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+       default-lazy-init="true">
 
 
-  <bean name="roleManager#jpox" class="org.codehaus.plexus.redback.role.DefaultRoleManager">
+
+
+
+  <bean name="roleModelProcessor" class="org.codehaus.plexus.redback.role.processor.DefaultRoleModelProcessor">
+    <property name="rbacManager" ref="rBACManager#jdo"/>
+  </bean>
+
+  <alias name="roleModelProcessor" alias="roleModelProcessor#jpox"/>
+
+  <bean name="roleTemplateProcessor" class="org.codehaus.plexus.redback.role.template.DefaultRoleTemplateProcessor">
+    <property name="rbacManager" ref="rBACManager#jdo"/>
+  </bean>
+
+  <alias name="roleTemplateProcessor" alias="roleTemplateProcessor#jpox"/>
+
+  <bean name="roleManager" class="org.codehaus.plexus.redback.role.DefaultRoleManager">
     <property name="modelValidator" ref="roleModelValidator"/>
-    <property name="modelProcessor" ref="modelProcessor#jpox"/>
-    <property name="templateProcessor" ref="templateProcessor#jpox"/>
+    <property name="modelProcessor" ref="roleModelProcessor#jpox"/>
+    <property name="templateProcessor" ref="roleTemplateProcessor#jpox"/>
     <property name="rbacManager" ref="rBACManager#jdo"/>
   </bean>
+  <alias name="roleManager" alias="roleManager#jpox"/>
 
 
-  <bean name="modelProcessor#jpox" class="org.codehaus.plexus.redback.role.processor.DefaultRoleModelProcessor">
-    <property name="rbacManager" ref="rBACManager#jdo"/>
-  </bean>
-
-  <bean name="templateProcessor#jpox" class="org.codehaus.plexus.redback.role.template.DefaultRoleTemplateProcessor">
-    <property name="rbacManager" ref="rBACManager#jdo"/>
+  <bean name="rBACManager#jdo" class="org.codehaus.plexus.redback.rbac.jdo.JdoRbacManager">
+    <property name="jdo" ref="jdoTool"/>
+    <property name="enableCache" value="false"/>
   </bean>
 
   <bean name="jdoFactory#users" class="org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory">
@@ -52,7 +66,12 @@
     <property name="otherProperties">
       <props>
         <prop key="org.jpox.rdbms.dateTimezone">JDK_DEFAULT_TIMEZONE</prop>
+        <prop key="org.jpox.transactionIsolation">READ_UNCOMMITTED</prop>
+        <prop key="org.jpox.poid.transactionIsolation">READ_UNCOMMITTED</prop>
         <prop key="org.jpox.autoCreateTables">true</prop>
+        <prop key="org.jpox.autoCreateSchema">true</prop>
+        <prop key="javax.jdo.option.RetainValues">true</prop>
+        <prop key="javax.jdo.option.RestoreValues">true</prop>
       </props>
     </property>
   </bean>

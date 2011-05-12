@@ -30,6 +30,7 @@ import org.codehaus.plexus.redback.role.processor.RoleModelProcessor;
 import org.codehaus.plexus.redback.role.template.RoleTemplateProcessor;
 import org.codehaus.plexus.redback.role.util.RoleModelUtils;
 import org.codehaus.plexus.redback.role.validator.RoleModelValidator;
+import org.codehaus.plexus.util.IOUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -95,9 +96,14 @@ public class DefaultRoleManager
     {
         RedbackRoleModelStaxReader reader = new RedbackRoleModelStaxReader();
 
+        InputStreamReader inputStreamReader = null;
+
         try
         {
-            RedbackRoleModel roleModel = reader.read( new InputStreamReader( resource.openStream() ) );
+
+            inputStreamReader = new InputStreamReader( resource.openStream() );
+
+            RedbackRoleModel roleModel = reader.read( inputStreamReader );
 
             for ( ModelApplication app : (List<ModelApplication>) roleModel.getApplications() )
             {
@@ -119,6 +125,8 @@ public class DefaultRoleManager
         catch ( XMLStreamException e )
         {
             throw new RoleManagerException( "error parsing redback profile", e );
+        } finally {
+            IOUtil.close( inputStreamReader );
         }
     }
 
