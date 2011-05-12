@@ -86,14 +86,14 @@ public class LockedAdminEnvironmentCheck
 
                         if ( admin.isLocked() )
                         {
-                            log.info( "Unlocking system administrator: " + admin.getUsername() );
+                            log.info( "Unlocking system administrator: {}", admin.getUsername() );
                             admin.setLocked( false );
                             userManager.updateUser( admin );
                         }
                     }
                     catch ( UserNotFoundException ne )
                     {
-                        log.warn( "Dangling UserAssignment -> " + userAssignment.getPrincipal() );
+                        log.warn( "Dangling UserAssignment -> {}", userAssignment.getPrincipal() );
                     }
                 }
             }
