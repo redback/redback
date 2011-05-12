@@ -28,9 +28,6 @@
        default-lazy-init="true">
 
 
-
-
-
   <bean name="roleModelProcessor" class="org.codehaus.plexus.redback.role.processor.DefaultRoleModelProcessor">
     <property name="rbacManager" ref="rBACManager#jdo"/>
   </bean>
@@ -59,7 +56,7 @@
 
   <bean name="jdoFactory#users" class="org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory">
     <property name="driverName" value="org.hsqldb.jdbcDriver"/>
-    <property name="url" value="jdbc:hsqldb:mem:redback-users-tests" />
+    <property name="url" value="jdbc:hsqldb:mem:redback-jpox-role-manager-test" />
     <property name="userName" value="sa"/>
     <property name="password" value=""/>
     <property name="persistenceManagerFactoryClass" value="org.jpox.PersistenceManagerFactoryImpl"/>
