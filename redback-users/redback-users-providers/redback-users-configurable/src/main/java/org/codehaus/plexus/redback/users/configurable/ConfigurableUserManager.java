@@ -16,60 +16,52 @@ package org.codehaus.plexus.redback.users.configurable;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.users.AbstractUserManager;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.users.UserQuery;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.List;
-
-import javax.annotation.Resource;
 
 /**
  * @author <a href="jesse@codehaus.org"> jesse
  * @version "Id$
  */
-@Service("userManager#configurable")
+@Service( "userManager#configurable" )
 public class ConfigurableUserManager
     extends AbstractUserManager
-    implements Initializable
 {
-    @Resource (name="userConfiguration")
+    @Inject
+    @Named( value = "userConfiguration" )
     private UserConfiguration config;
 
-    @Resource
-    private PlexusContainer container;
+    @Inject
+    private ApplicationContext applicationContext;
 
     private UserManager userManagerImpl;
 
     public static final String USER_MANAGER_IMPL = "user.manager.impl";
 
+    @PostConstruct
     public void initialize()
-        throws InitializationException
     {
         String userManagerRole = config.getString( USER_MANAGER_IMPL );
 
         if ( userManagerRole == null )
         {
-            throw new InitializationException(
+            throw new RuntimeException(
                 "User Manager Configuration Missing: " + USER_MANAGER_IMPL + " configuration property" );
         }
 
-        try
-        {
-            userManagerImpl = (UserManager) container.lookup( UserManager.class.getName(), userManagerRole );
-        }
-        catch ( ComponentLookupException e )
-        {
-            throw new InitializationException( "unable to resolve user manager implementation", e );
-        }
+        userManagerImpl = applicationContext.getBean( "userManager#" + userManagerRole, UserManager.class );
+        // (UserManager) container.lookup( UserManager.class.getName(), userManagerRole );
     }
 
     public User addUser( User user )

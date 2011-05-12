@@ -16,11 +16,6 @@ package org.codehaus.plexus.redback.authorization.rbac;
  * limitations under the License.
  */
 
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
 import org.codehaus.plexus.redback.authorization.AuthorizationDataSource;
 import org.codehaus.plexus.redback.authorization.AuthorizationException;
 import org.codehaus.plexus.redback.authorization.AuthorizationResult;
@@ -39,6 +34,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.List;
+import java.util.Map;
+
 /**
  * RbacAuthorizer:
  *
@@ -51,13 +51,13 @@ public class RbacAuthorizer
 {
     private Logger log = LoggerFactory.getLogger( RbacAuthorizer.class );
 
-    @Resource(name="rBACManager#cached")
+    @Inject @Named(value="rBACManager#cached")
     private RBACManager manager;
 
-    @Resource(name="userManager#configurable")
+    @Inject @Named(value="userManager#configurable")
     private UserManager userManager;
 
-    @Resource
+    @Inject
     private PermissionEvaluator evaluator;
 
     public String getId()

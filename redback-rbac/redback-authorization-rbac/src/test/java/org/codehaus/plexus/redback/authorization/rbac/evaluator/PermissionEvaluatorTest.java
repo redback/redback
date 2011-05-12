@@ -16,17 +16,30 @@ package org.codehaus.plexus.redback.authorization.rbac.evaluator;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import junit.framework.TestCase;
 import org.codehaus.plexus.redback.rbac.Operation;
 import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.memory.MemoryOperation;
 import org.codehaus.plexus.redback.rbac.memory.MemoryPermission;
 import org.codehaus.plexus.redback.rbac.memory.MemoryResource;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.inject.Inject;
+
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public class PermissionEvaluatorTest
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
+
+    @Inject
+    PermissionEvaluator permissionEvaluator;
+
+    @Test
     public void testNullResource()
         throws PermissionEvaluationException
     {
@@ -45,7 +58,6 @@ public class PermissionEvaluatorTest
         permission.setOperation( operation );
         permission.setResource( resource );
 
-        PermissionEvaluator eval = (PermissionEvaluator) lookup( PermissionEvaluator.ROLE );
-        assertTrue( eval.evaluate( permission, "Operation", null, "brett" ) );
+        assertTrue( permissionEvaluator.evaluate( permission, "Operation", null, "brett" ) );
     }
 }

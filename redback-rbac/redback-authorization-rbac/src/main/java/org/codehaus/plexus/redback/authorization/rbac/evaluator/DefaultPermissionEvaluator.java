@@ -6,6 +6,9 @@ import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 /**
  * DefaultPermissionEvaluator:
  * <p/>
@@ -19,7 +22,8 @@ import org.springframework.stereotype.Service;
 public class DefaultPermissionEvaluator
     implements PermissionEvaluator
 {
-    @javax.annotation.Resource(name="userManager#configurable")
+    @Inject
+    @Named(value="userManager#configurable")
     private UserManager userManager;
 
     public boolean evaluate( Permission permission, Object operation, Object resource, Object principal )
