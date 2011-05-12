@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Resource;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
@@ -51,7 +53,8 @@ public class DefaultLdapController
 
     private Logger log = LoggerFactory.getLogger( getClass() );
 
-    @Resource(name="userMapper#ldap")
+    @Inject
+    @Named(value = "userMapper#ldap")
     private UserMapper mapper;
 
     /**
@@ -252,7 +255,7 @@ public class DefaultLdapController
     {
         String username = key.toString();
 
-        log.info( "Searching for user: " + username );
+        log.info( "Searching for user: {}", username );
         LdapUserQuery query = new LdapUserQuery();
         query.setUsername( username );
 

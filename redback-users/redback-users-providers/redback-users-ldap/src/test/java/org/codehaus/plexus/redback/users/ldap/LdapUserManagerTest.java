@@ -16,8 +16,26 @@ package org.codehaus.plexus.redback.users.ldap;
  * limitations under the License.
  */
 
-import java.util.List;
+import junit.framework.TestCase;
+import org.codehaus.plexus.redback.common.ldap.connection.LdapConnection;
+import org.codehaus.plexus.redback.common.ldap.connection.LdapConnectionFactory;
+import org.codehaus.plexus.redback.policy.PasswordEncoder;
+import org.codehaus.plexus.redback.policy.encoders.SHA1PasswordEncoder;
+import org.codehaus.plexus.redback.users.User;
+import org.codehaus.plexus.redback.users.UserManager;
+import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.codehaus.redback.components.apacheds.ApacheDs;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
@@ -28,18 +46,7 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
-
-import org.codehaus.plexus.apacheds.ApacheDs;
-import org.codehaus.plexus.redback.common.ldap.connection.LdapConnection;
-import org.codehaus.plexus.redback.common.ldap.connection.LdapConnectionFactory;
-import org.codehaus.plexus.redback.policy.PasswordEncoder;
-import org.codehaus.plexus.redback.policy.encoders.SHA1PasswordEncoder;
-import org.codehaus.plexus.redback.users.User;
-import org.codehaus.plexus.redback.users.UserManager;
-import org.codehaus.plexus.redback.users.UserNotFoundException;
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.List;
 
 
 /**
@@ -49,20 +56,28 @@ import org.slf4j.LoggerFactory;
  * @version $Id$
  */  
 
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public class LdapUserManagerTest
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
     
     protected Logger log = LoggerFactory.getLogger( getClass() );
-    
+
+    @Inject
+    @Named(value = "userManager#ldap")
     private UserManager userManager;
 
+    @Inject
+    @Named( value = "apacheDS#test" )
     private ApacheDs apacheDs;
 
     private String suffix;
 
     private PasswordEncoder passwordEncoder;
 
+    @Inject
+    @Named(value = "ldapConnectionFactory#configurable")
     private LdapConnectionFactory connectionFactory;
 
     public void testFoo()
@@ -71,14 +86,13 @@ public class LdapUserManagerTest
 
     }
 
-    protected void setUp()
+    @Before
+    public void setUp()
         throws Exception
     {
         super.setUp();
 
         passwordEncoder = new SHA1PasswordEncoder();
-
-        apacheDs = (ApacheDs) lookup( ApacheDs.ROLE, "test" );
 
         suffix = apacheDs.addSimplePartition( "test", new String[] { "redback", "plexus", "codehaus", "org" } )
             .getSuffix();
@@ -91,12 +105,10 @@ public class LdapUserManagerTest
 
         makeUsers();
 
-        userManager = (UserManager) lookup( UserManager.ROLE, "ldap" );
-
-        connectionFactory = (LdapConnectionFactory) lookup( LdapConnectionFactory.ROLE, "configurable" );
     }
 
-    protected void tearDown()
+    @After
+    public void tearDown()
         throws Exception
     {
 
@@ -126,6 +138,7 @@ public class LdapUserManagerTest
 
     }
 
+    @Test
     public void testConnection()
         throws Exception
     {
@@ -146,6 +159,7 @@ public class LdapUserManagerTest
         }
     }
 
+    @Test
     public void testDirectUsersExistence()
         throws Exception
     {
@@ -164,6 +178,7 @@ public class LdapUserManagerTest
         
     }
 
+    @Test
     public void testUserManager()
         throws Exception
     {
@@ -190,6 +205,7 @@ public class LdapUserManagerTest
 
     }
 
+    @Test
     public void testUserNotFoundException()
         throws Exception
     {
@@ -203,7 +219,8 @@ public class LdapUserManagerTest
             // cool it works !
         }
     }
-    
+
+    @Test
     public void testWithManyUsers()
         throws Exception
     {

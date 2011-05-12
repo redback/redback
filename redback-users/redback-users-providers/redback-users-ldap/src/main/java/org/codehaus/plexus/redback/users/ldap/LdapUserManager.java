@@ -21,6 +21,8 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.naming.directory.DirContext;
 
 import org.codehaus.plexus.redback.common.ldap.MappingException;
@@ -44,13 +46,15 @@ import org.springframework.stereotype.Service;
 public class LdapUserManager
     extends AbstractUserManager
 {
-    @Resource(name = "ldapConnectionFactory#configurable")
+    @Inject
+    @Named(value = "ldapConnectionFactory#configurable")
     private LdapConnectionFactory connectionFactory;
 
-    @Resource
+    @Inject
     private LdapController controller;
 
-    @Resource(name = "userMapper#ldap")
+    @Inject
+    @Named(value = "userMapper#ldap")
     private UserMapper mapper;
 
     private User guestUser;
@@ -125,7 +129,7 @@ public class LdapUserManager
         }
         catch ( LdapControllerException e )
         {
-            log.error( "Failed to delete user: " + principal, e );
+            log.error( "Failed to delete user: {}", principal, e );
         }
         finally
         {
@@ -183,12 +187,12 @@ public class LdapUserManager
         }
         catch ( LdapControllerException e )
         {
-            log.error( "Failed to find user: " + username, e );
+            log.error( "Failed to find user: {}", username, e );
             return null;
         }
         catch ( MappingException e )
         {
-            log.error( "Failed to map user: " + username, e );
+            log.error( "Failed to map user: {}", username, e );
             return null;
         }
         finally
@@ -228,12 +232,12 @@ public class LdapUserManager
         }
         catch ( LdapControllerException e )
         {
-            log.error( "Failed to find user: " + principal, e );
+            log.error( "Failed to find user: {}", principal, e );
             return null;
         }
         catch ( MappingException e )
         {
-            log.error( "Failed to map user: " + principal, e );
+            log.error( "Failed to map user: {}", principal, e );
             return null;
         }
         finally

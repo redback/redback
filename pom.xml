@@ -777,6 +777,7 @@
                     <exclude>org.codehaus.plexus:plexus-log4j-logging</exclude>
                     <exclude>org.codehaus.plexus:plexus-spring</exclude>
                     <exclude>org.codehaus.plexus:plexus-jdo2</exclude>
+                    <exclude>org.codehaus.plexus:plexus-apacheds</exclude>
                     <exclude>net.sf.ehcache:ehcache</exclude>
                   </excludes>
                 </bannedDependencies>

@@ -35,27 +35,54 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.2</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-apacheds</artifactId>
-      <version>1.0-alpha-1</version>
+      <groupId>org.codehaus.redback.components</groupId>
+      <artifactId>spring-apacheds</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
-  
+
+
   <build>
-      <plugins>
-        <plugin>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <configuration>
-            <source>1.5</source>
-            <target>1.5</target>
-          </configuration>
+    <plugins>
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>port-allocator-maven-plugin</artifactId>
+        <version>1.1</version>
+        <executions>
+          <execution>
+            <id>allocate-ldap-port</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>allocate-ports</goal>
+            </goals>
+            <configuration>
+              <ports>
+                <port>
+                  <name>ldapPort</name>
+                  <portNumber>10390</portNumber>
+                </port>
+              </ports>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <forkMode>once</forkMode>
+          <systemPropertyVariables>
+            <ldapPort>${ldapPort}</ldapPort>
+            <basedir>${basedir}</basedir>
+          </systemPropertyVariables>
+        </configuration>
       </plugin>
     </plugins>
   </build>
+
+  
 </project>
