@@ -1,14 +1,13 @@
 package org.codehaus.plexus.redback.common.jdo;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * UserConfigurableJdoFactory
@@ -16,12 +15,13 @@ import org.springframework.stereotype.Service;
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
-@Service("jdoFactory#users")
+@Service( "jdoFactory#users" )
 public class UserConfigurableJdoFactory
     extends DefaultConfigurableJdoFactory
 {
-    
-    @Inject @Named(value="userConfiguration")
+
+    @Inject
+    @Named( value = "userConfiguration" )
     private UserConfiguration config;
 
     private String getConfigString( String key, String currentValue, String defaultValue )
