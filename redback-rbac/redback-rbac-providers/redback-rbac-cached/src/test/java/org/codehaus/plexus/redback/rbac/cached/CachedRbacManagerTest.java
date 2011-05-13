@@ -61,8 +61,9 @@ public class CachedRbacManagerTest
     public void testStoreInitialization()
         throws Exception
     {
+        CacheManager.getInstance().clearAll();
         rbacManager.eraseDatabase();
-        eventTracker.rbacInit( true );
+        //eventTracker.rbacInit( true );
         super.testStoreInitialization();
     }
 }
