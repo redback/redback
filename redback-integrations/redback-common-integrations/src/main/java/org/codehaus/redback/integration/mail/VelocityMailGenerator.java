@@ -17,12 +17,12 @@ package org.codehaus.redback.integration.mail;
  */
 
 import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
-import org.codehaus.plexus.velocity.VelocityComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -39,19 +39,19 @@ import java.util.Locale;
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id$
  */
-@Service("mailGenerator#velocity")
+@Service( "mailGenerator#velocity" )
 public class VelocityMailGenerator
     implements MailGenerator
 {
     private Logger log = LoggerFactory.getLogger( VelocityMailGenerator.class );
-    
+
     @Inject
-    @Named(value="userConfiguration")
+    @Named( value = "userConfiguration" )
     private UserConfiguration config;
 
     // FIXME use the spring directly 
-    @Inject
-    private VelocityComponent velocity;
+    @Inject @Named(value = "velocityEngine#redback")
+    private VelocityEngine velocityEngine;
 
     public String generateMail( String templateName, AuthenticationKey authkey, String baseUrl )
     {
@@ -64,11 +64,11 @@ public class VelocityMailGenerator
 
         try
         {
-            velocity.getEngine().mergeTemplate( templateFile, context, writer );
+            velocityEngine.mergeTemplate( templateFile, context, writer );
         }
         catch ( ResourceNotFoundException e )
         {
-            log.error( "No such template: '" + templateFile + "'." );
+            log.error( "No such template: '{}'.", templateFile );
         }
         catch ( ParseErrorException e )
         {
@@ -121,5 +121,26 @@ public class VelocityMailGenerator
             context.put( "expiresOn", "(does not expire)" );
         }
         return context;
+    }
+
+
+    public UserConfiguration getConfig()
+    {
+        return config;
+    }
+
+    public void setConfig( UserConfiguration config )
+    {
+        this.config = config;
+    }
+
+    public VelocityEngine getVelocityEngine()
+    {
+        return velocityEngine;
+    }
+
+    public void setVelocityEngine( VelocityEngine velocityEngine )
+    {
+        this.velocityEngine = velocityEngine;
     }
 }

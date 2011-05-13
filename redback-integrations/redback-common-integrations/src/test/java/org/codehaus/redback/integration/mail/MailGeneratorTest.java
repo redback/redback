@@ -76,8 +76,6 @@ public class MailGeneratorTest
         throws Exception
     {
         CacheManager.getInstance().clearAll();
-        CacheManager.getInstance().removalAll();
-        CacheManager.getInstance().shutdown();
         super.setUp();
 
         jdoFactory.setPassword( "" );
@@ -97,6 +95,8 @@ public class MailGeneratorTest
 
         SchemaTool.createSchemaTables( new URL[] { getClass()
             .getResource( "/org/codehaus/plexus/redback/keys/jdo/package.jdo" ) }, new URL[] {}, null, false, null ); //$NON-NLS-1$
+
+        log.info( "jdoFactory driverName {} " , jdoFactory.getDriverName() );
 
         PersistenceManagerFactory pmf = jdoFactory.getPersistenceManagerFactory();
 

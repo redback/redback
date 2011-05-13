@@ -24,11 +24,21 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
            http://www.springframework.org/schema/context 
-           http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd"
        default-lazy-init="true">
 
   <context:annotation-config />
-  <context:component-scan 
-    base-package="org.codehaus.redback.integration"/>
+  <context:component-scan  base-package="org.codehaus.redback.integration"/>
+
+  <bean name="velocityEngine#redback" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+    <property name="velocityProperties">
+      <props>
+        <prop key="resource.loader">classpath</prop>
+        <prop key="classpath.resource.loader.class">org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader</prop>
+        <prop key="classpath.resource.loader.class.cache">true</prop>
+        <prop key="resource.manager.logwhenfound">true</prop>
+      </props>
+    </property>
+  </bean>
  
 </beans>
