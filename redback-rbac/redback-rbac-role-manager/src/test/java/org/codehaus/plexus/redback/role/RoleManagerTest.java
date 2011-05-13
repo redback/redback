@@ -16,6 +16,7 @@ package org.codehaus.plexus.redback.role;
  * limitations under the License.
  */
 
+import net.sf.ehcache.CacheManager;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.junit.Before;
 
@@ -26,7 +27,6 @@ import javax.inject.Named;
  * RoleManagerTest:
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
- * @version: $Id:$
  */
 public class RoleManagerTest
     extends AbstractRoleManagerTest
@@ -44,6 +44,7 @@ public class RoleManagerTest
     public void setUp()
         throws Exception
     {
+        CacheManager.getInstance().clearAll();
         super.setUp();
 
         rbacManager = rbacManagerMemory;
