@@ -49,25 +49,4 @@
     <property name="velocityEngine" ref="velocityEngine#redback"/>
   </bean>
 
-  <!--
-
-    <component>
-      <role>org.codehaus.redback.integration.mail.MailGenerator</role>
-      <role-hint>velocity</role-hint>
-      <implementation>org.codehaus.redback.integration.mail.VelocityMailGenerator</implementation>
-      <description>Mail generator component implementation using velocity.</description>
-      <requirements>
-        <requirement>
-          <role>org.codehaus.plexus.redback.configuration.UserConfiguration</role>
-          <field-name>config</field-name>
-          <role-hint>default</role-hint>
-        </requirement>
-        <requirement>
-          <role>org.codehaus.plexus.velocity.VelocityComponent</role>
-          <field-name>velocity</field-name>
-        </requirement>
-      </requirements>
-    </component>
-  -->
-
 </beans>
