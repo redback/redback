@@ -14,6 +14,7 @@ package org.codehaus.redback.xmlrpc.security;
  * the License.
  */
 
+import junit.framework.TestCase;
 import org.apache.xmlrpc.XmlRpcRequest;
 import org.apache.xmlrpc.common.XmlRpcHttpRequestConfigImpl;
 import org.codehaus.plexus.redback.role.RoleManager;
@@ -21,12 +22,21 @@ import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 import org.easymock.MockControl;
 import org.easymock.classextension.MockClassControl;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public class XmlRpcAuthenticatorTest
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
     protected static final String USER_GUEST = "guest";
 
@@ -36,8 +46,11 @@ public class XmlRpcAuthenticatorTest
 
     private static final String PASSWORD = "password123";
 
+    @Inject
+    @Named( value = "securitySystem#testable" )
     protected SecuritySystem securitySystem;
 
+    @Inject
     protected RoleManager roleManager;
 
     private MockControl xmlRpcRequestControl;
@@ -50,14 +63,10 @@ public class XmlRpcAuthenticatorTest
 
     private XmlRpcHttpRequestConfigImpl config;
 
+    @Before
     public void setUp()
         throws Exception
     {
-        super.setUp();
-
-        securitySystem = (SecuritySystem) lookup( SecuritySystem.class, "testable" );
-        roleManager = (RoleManager) lookup( RoleManager.class, "default" );
-
         // Some basic asserts.
         assertNotNull( securitySystem );
         assertNotNull( roleManager );
@@ -95,6 +104,7 @@ public class XmlRpcAuthenticatorTest
         return user;
     }
 
+    @Test
     public void testIsAuthorizedUserExistsButNotAuthorized()
         throws Exception
     {
@@ -117,8 +127,7 @@ public class XmlRpcAuthenticatorTest
 
         configControl.expectAndReturn( config.getBasicPassword(), PASSWORD );
 
-        xmlRpcRequestControl.expectAndReturn( xmlRpcRequest.getMethodName(),
-                                              "UserService.getUsers" );
+        xmlRpcRequestControl.expectAndReturn( xmlRpcRequest.getMethodName(), "UserService.getUsers" );
 
         xmlRpcRequestControl.replay();
         configControl.replay();
@@ -131,6 +140,7 @@ public class XmlRpcAuthenticatorTest
         assertFalse( isAuthorized );
     }
 
+    @Test
     public void testIsAuthorizedUserExistsAndAuthorized()
         throws Exception
     {
@@ -153,14 +163,12 @@ public class XmlRpcAuthenticatorTest
 
         configControl.expectAndReturn( config.getBasicPassword(), PASSWORD );
 
-        xmlRpcRequestControl.expectAndReturn( xmlRpcRequest.getMethodName(),
-                                              "UserService.getUsers" );
+        xmlRpcRequestControl.expectAndReturn( xmlRpcRequest.getMethodName(), "UserService.getUsers" );
 
         xmlRpcRequestControl.replay();
         configControl.replay();
 
-        @SuppressWarnings("unused")
-        boolean isAuthorized = authenticator.isAuthorized( xmlRpcRequest );
+        @SuppressWarnings( "unused" ) boolean isAuthorized = authenticator.isAuthorized( xmlRpcRequest );
         // TODO: broken or bad test?
         // assertTrue( isAuthorized );
 
@@ -168,6 +176,7 @@ public class XmlRpcAuthenticatorTest
         configControl.verify();
     }
 
+    @Test
     public void testIsAuthorizedUserDoesNotExist()
         throws Exception
     {
@@ -188,8 +197,7 @@ public class XmlRpcAuthenticatorTest
 
         configControl.expectAndReturn( config.getBasicPassword(), PASSWORD );
 
-        xmlRpcRequestControl.expectAndReturn( xmlRpcRequest.getMethodName(),
-                                              "UserService.getUsers" );
+        xmlRpcRequestControl.expectAndReturn( xmlRpcRequest.getMethodName(), "UserService.getUsers" );
 
         xmlRpcRequestControl.replay();
         configControl.replay();

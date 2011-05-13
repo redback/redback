@@ -25,8 +25,6 @@ import org.codehaus.plexus.redback.rbac.Permission;
  */
 public interface PermissionEvaluator
 {
-    public static final String ROLE = PermissionEvaluator.class.getName();
-
-    public boolean evaluate( Permission permission, Object operation, Object resource, Object principal )
+    boolean evaluate( Permission permission, Object operation, Object resource, Object principal )
         throws PermissionEvaluationException;
 }

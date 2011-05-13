@@ -42,7 +42,7 @@ import java.util.List;
 public class DefaultUserSecurityPolicy
     implements UserSecurityPolicy
 {
-    private static final String ENABLEMENT_KEY = ROLE + ":ENABLED";
+    private static final String ENABLEMENT_KEY = "UserSecurityPolicy" + ":ENABLED";
 
     public static final String PASSWORD_RETENTION_COUNT = "security.policy.password.previous.count";
 

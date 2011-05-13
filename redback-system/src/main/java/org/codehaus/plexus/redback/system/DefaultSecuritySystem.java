@@ -247,4 +247,34 @@ public class DefaultSecuritySystem
     {
         return authorizer;
     }
+
+    public AuthenticationManager getAuthnManager()
+    {
+        return authnManager;
+    }
+
+    public void setAuthnManager( AuthenticationManager authnManager )
+    {
+        this.authnManager = authnManager;
+    }
+
+    public void setAuthorizer( Authorizer authorizer )
+    {
+        this.authorizer = authorizer;
+    }
+
+    public void setUserManager( UserManager userManager )
+    {
+        this.userManager = userManager;
+    }
+
+    public void setKeyManager( KeyManager keyManager )
+    {
+        this.keyManager = keyManager;
+    }
+
+    public void setPolicy( UserSecurityPolicy policy )
+    {
+        this.policy = policy;
+    }
 }

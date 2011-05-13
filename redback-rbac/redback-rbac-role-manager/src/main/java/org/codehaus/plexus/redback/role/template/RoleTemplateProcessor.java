@@ -23,7 +23,6 @@ import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
  * RoleModelValidator:
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
- * @version: $Id:$
  */
 public interface RoleTemplateProcessor
 {

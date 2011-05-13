@@ -27,8 +27,7 @@ import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
  */
 public interface RoleModelProcessor
 {
-    public static final String ROLE = RoleModelProcessor.class.getName();
-    
+
     void process( RedbackRoleModel model ) throws RoleManagerException;
     
 }

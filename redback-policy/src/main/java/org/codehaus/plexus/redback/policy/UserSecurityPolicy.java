@@ -29,8 +29,6 @@ import java.util.List;
  */
 public interface UserSecurityPolicy
 {
-    String ROLE = UserSecurityPolicy.class.getName();
-
     /**
      * Get identifying string for the User Security Policy implementation.
      *

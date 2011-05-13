@@ -45,16 +45,18 @@ import java.util.Map;
  * @author Jesse McConnell <jmcconnell@apache.org>
  * @version $Id$
  */
-@Service("authorizer#rbac")
+@Service( "authorizer#rbac" )
 public class RbacAuthorizer
     implements Authorizer
 {
-    private Logger log = LoggerFactory.getLogger( RbacAuthorizer.class );
+    private Logger log = LoggerFactory.getLogger( getClass() );
 
-    @Inject @Named(value="rBACManager#cached")
+    @Inject
+    @Named( value = "rBACManager#cached" )
     private RBACManager manager;
 
-    @Inject @Named(value="userManager#configurable")
+    @Inject
+    @Named( value = "userManager#configurable" )
     private UserManager userManager;
 
     @Inject
@@ -96,7 +98,7 @@ public class RbacAuthorizer
                         }
                     }
 
-                    log.info( "no permission found for operation " +  operation.toString() + " resource " + resource );
+                    log.info( "no permission found for operation " + operation.toString() + " resource " + resource );
                 }
                 else
                 {
@@ -109,7 +111,8 @@ public class RbacAuthorizer
             if ( !guest.isLocked() )
             {
                 // Set permissions = manager.getAssignedPermissions( principal.toString(), operation );
-                Map<String, List<Permission>> permissionMap = manager.getAssignedPermissionMap( guest.getPrincipal().toString() );
+                Map<String, List<Permission>> permissionMap =
+                    manager.getAssignedPermissionMap( guest.getPrincipal().toString() );
 
                 if ( permissionMap.keySet().contains( operation.toString() ) )
                 {
@@ -144,5 +147,35 @@ public class RbacAuthorizer
         {
             return new AuthorizationResult( false, null, rme );
         }
+    }
+
+    public RBACManager getManager()
+    {
+        return manager;
+    }
+
+    public void setManager( RBACManager manager )
+    {
+        this.manager = manager;
+    }
+
+    public UserManager getUserManager()
+    {
+        return userManager;
+    }
+
+    public void setUserManager( UserManager userManager )
+    {
+        this.userManager = userManager;
+    }
+
+    public PermissionEvaluator getEvaluator()
+    {
+        return evaluator;
+    }
+
+    public void setEvaluator( PermissionEvaluator evaluator )
+    {
+        this.evaluator = evaluator;
     }
 }

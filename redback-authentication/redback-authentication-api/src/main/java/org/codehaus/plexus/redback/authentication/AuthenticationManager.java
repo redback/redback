@@ -29,12 +29,10 @@ import java.util.List;
  */
 public interface AuthenticationManager
 {
-    String ROLE = AuthenticationManager.class.getName();
+    String getId();
 
-    public String getId();
+    List<Authenticator> getAuthenticators();
 
-    public List<Authenticator> getAuthenticators();
-
-    public AuthenticationResult authenticate( AuthenticationDataSource source )
+    AuthenticationResult authenticate( AuthenticationDataSource source )
         throws AccountLockedException, AuthenticationException, MustChangePasswordException;
 }
