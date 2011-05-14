@@ -17,6 +17,8 @@ package org.codehaus.plexus.redback.struts2.action;
  */
 
 import org.codehaus.plexus.util.StringUtils;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 
 /**
  * SecurityRedirectAction
@@ -25,6 +27,8 @@ import org.codehaus.plexus.util.StringUtils;
  * @version $Id$
  * @plexus.component role="com.opensymphony.xwork2.Action" role-hint="redback-redirect" instantiation-strategy="per-lookup"
  */
+@Controller( "redback-redirect" )
+@Scope( "prototype" )
 public class SecurityRedirectAction
     extends RedbackActionSupport
 {

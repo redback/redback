@@ -16,10 +16,6 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * limitations under the License.
  */
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import org.codehaus.plexus.redback.rbac.Operation;
 import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
@@ -31,6 +27,14 @@ import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.role.RoleConstants;
 import org.codehaus.redback.integration.util.PermissionSorter;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * PermissionsAction
@@ -41,6 +45,8 @@ import org.codehaus.redback.integration.util.PermissionSorter;
  * role-hint="redback-permissions"
  * instantiation-strategy="per-lookup"
  */
+@Controller( "redback-permissions" )
+@Scope( "prototype" )
 public class PermissionsAction
     extends RedbackActionSupport
 {
@@ -53,6 +59,8 @@ public class PermissionsAction
     /**
      * @plexus.requirement role-hint="cached"
      */
+    @Inject
+    @Named( value = "rBACManager#cached" )
     private RBACManager manager;
 
     // ------------------------------------------------------------------
@@ -90,7 +98,7 @@ public class PermissionsAction
         }
         catch ( RbacManagerException e )
         {
-            addActionError( getText( "cannot.list.all.permissions", Arrays.asList( ( Object ) e.getMessage() ) ) );
+            addActionError( getText( "cannot.list.all.permissions", Arrays.asList( (Object) e.getMessage() ) ) );
             log.error( "System error:", e );
             allPermissions = Collections.emptyList();
         }
@@ -144,7 +152,7 @@ public class PermissionsAction
         }
         catch ( RbacManagerException e )
         {
-            addActionError( getText( "cannot.get.permission", Arrays.asList( ( Object ) name, e.getMessage() ) ) );
+            addActionError( getText( "cannot.get.permission", Arrays.asList( (Object) name, e.getMessage() ) ) );
             return ERROR;
         }
 
@@ -191,11 +199,11 @@ public class PermissionsAction
 
             manager.savePermission( permission );
 
-            addActionMessage( getText( "save.permission.success", Arrays.asList( ( Object ) name ) ) );
+            addActionMessage( getText( "save.permission.success", Arrays.asList( (Object) name ) ) );
         }
         catch ( RbacManagerException e )
         {
-            addActionError( getText( "cannot.get.permission", Arrays.asList( ( Object ) name, e.getMessage() ) ) );
+            addActionError( getText( "cannot.get.permission", Arrays.asList( (Object) name, e.getMessage() ) ) );
             return ERROR;
         }
 

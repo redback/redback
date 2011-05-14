@@ -17,13 +17,12 @@ package org.codehaus.redback.integration.reports;
  */
 
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +36,6 @@ import java.util.Map;
  */
 @Service( "reportManager" )
 public class ReportManager
-    implements Initializable
 {
     /**
      * @plexus.requirement role="org.codehaus.plexus.redback.xwork.reports.Report"
@@ -45,7 +43,7 @@ public class ReportManager
     private List<Report> availableReports;
 
     @Inject
-    private PlexusContainer plexusContainer;
+    private ApplicationContext applicationContext;
 
     private Map<String, Map<String, Report>> reportMap;
 
@@ -84,17 +82,10 @@ public class ReportManager
     }
 
     @SuppressWarnings( "unchecked" )
+    @PostConstruct
     public void initialize()
-        throws InitializationException
     {
-        try
-        {
-            availableReports = this.plexusContainer.lookupList( Report.class );
-        }
-        catch ( ComponentLookupException e )
-        {
-            throw new InitializationException( e.getMessage(), e );
-        }
+        availableReports = new ArrayList<Report>( applicationContext.getBeansOfType( Report.class ).values() );
         reportMap = new HashMap<String, Map<String, Report>>();
 
         for ( Report report : availableReports )

@@ -20,7 +20,8 @@ import com.opensymphony.xwork2.ActionInvocation;
 
 public interface ActionInvocationTracker
 {
-    public static final String ROLE = ActionInvocationTracker.class.getName();
+
+    static final String SESSION_KEY = ActionInvocationTracker.class.getName();
 
     void setHistorySize( int size );
 

@@ -16,8 +16,6 @@ package org.codehaus.plexus.redback.struts2.action;
  * limitations under the License.
  */
 
-import java.util.Arrays;
-
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.keys.KeyManager;
 import org.codehaus.plexus.redback.keys.KeyManagerException;
@@ -30,6 +28,11 @@ import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.mail.Mailer;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
+import java.util.Arrays;
 
 /**
  * PasswordResetAction
@@ -40,6 +43,8 @@ import org.codehaus.redback.integration.mail.Mailer;
  * role-hint="redback-password-reset"
  * instantiation-strategy="per-lookup"
  */
+@Controller( "redback-password-reset" )
+@Scope( "prototype" )
 public class PasswordResetAction
     extends AbstractSecurityAction
     implements CancellableAction
@@ -51,11 +56,13 @@ public class PasswordResetAction
     /**
      * @plexus.requirement
      */
+    @Inject
     private Mailer mailer;
 
     /**
      * @plexus.requirement
      */
+    @Inject
     private SecuritySystem securitySystem;
 
     private String username;

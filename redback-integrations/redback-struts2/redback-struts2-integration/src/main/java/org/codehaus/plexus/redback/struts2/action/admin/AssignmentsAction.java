@@ -16,14 +16,6 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.RbacObjectNotFoundException;
 import org.codehaus.plexus.redback.rbac.Resource;
@@ -43,8 +35,18 @@ import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.model.AdminEditUserCredentials;
 import org.codehaus.redback.integration.role.RoleConstants;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * AssignmentsAction
@@ -55,6 +57,8 @@ import edu.emory.mathcs.backport.java.util.Collections;
  * role-hint="redback-assignments"
  * instantiation-strategy="per-lookup"
  */
+@Controller("redback-assignments")
+@Scope("prototype")
 public class AssignmentsAction
     extends AbstractUserCredentialsAction
 {
@@ -65,6 +69,7 @@ public class AssignmentsAction
     /**
      * @plexus.requirement role-hint="default"
      */
+    @Inject
     private RoleManager rmanager;
 
     // ------------------------------------------------------------------
@@ -143,7 +148,7 @@ public class AssignmentsAction
 
         if ( !userManager.userExists( principal ) )
         {
-            addActionError( getText( "user.does.not.exist", Collections.singletonList( principal ) ) );
+            addActionError( getText( "user.does.not.exist", new String[]{principal} ) );
             return ERROR;
         }
 

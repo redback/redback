@@ -16,10 +16,6 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.rbac.Role;
@@ -27,6 +23,12 @@ import org.codehaus.plexus.redback.struts2.action.AbstractUserCredentialsAction;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.role.RoleConstants;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * RolesAction
@@ -37,6 +39,8 @@ import org.codehaus.redback.integration.role.RoleConstants;
  * role-hint="redback-roles"
  * instantiation-strategy="per-lookup"
  */
+@Controller( "redback-roles" )
+@Scope( "prototype" )
 public class RolesAction
     extends AbstractUserCredentialsAction
 {

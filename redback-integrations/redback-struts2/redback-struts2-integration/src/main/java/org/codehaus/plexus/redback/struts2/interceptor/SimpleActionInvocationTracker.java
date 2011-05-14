@@ -17,6 +17,9 @@ package org.codehaus.plexus.redback.struts2.interceptor;
  */
 
 import com.opensymphony.xwork2.ActionInvocation;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
 import java.util.Stack;
 
 /**
@@ -24,13 +27,15 @@ import java.util.Stack;
  * role-hint="simple"      
  * instantiation-strategy="per-lookup"
  */
+@Controller( "simple" )
+@Scope( "prototype" )
 public class SimpleActionInvocationTracker
     implements ActionInvocationTracker
 { 
     /**
      * @plexus.configuration default-value="5"
      */
-    private int historySize;
+    private int historySize = 5;
 
     private boolean backTrack;
 

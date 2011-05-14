@@ -41,6 +41,11 @@ import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.role.RoleConstants;
 
 import com.opensymphony.xwork2.Preparable;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 
 /**
@@ -50,6 +55,8 @@ import com.opensymphony.xwork2.Preparable;
  * role-hint="backup-restore"
  * instantiation-strategy="per-lookup"
  */
+@Controller("backup-restore")
+@Scope("prototype")
 public class BackupRestoreAction
     extends AbstractSecurityAction
     implements SecureAction, Preparable
@@ -64,21 +71,25 @@ public class BackupRestoreAction
     /**
      * @plexus.requirement role-hint="jdo"
      */
+    @Inject
     private DataManagementTool dataManagementTool;
     
     /**
      * @plexus.requirement role-hint="jdo"
      */
+    @Inject @Named(value = "rBACManager#jdo" )
     private RBACManager rbacManager;
 
     /**
      * @plexus.requirement role-hint="jdo"
      */
+    @Inject @Named(value = "userManager#jdo")
     private UserManager userManager;
 
     /**
      * @plexus.requirement role-hint="jdo"
      */
+    @Inject @Named(value = "keyManager#jdo")
     private KeyManager keyManager;    
 
     private File backupDirectory;

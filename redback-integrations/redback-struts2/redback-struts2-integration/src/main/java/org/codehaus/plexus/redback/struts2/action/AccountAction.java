@@ -16,8 +16,6 @@ package org.codehaus.plexus.redback.struts2.action;
  * limitations under the License.
  */
 
-import java.util.Arrays;
-
 import org.codehaus.plexus.redback.policy.PasswordEncoder;
 import org.codehaus.plexus.redback.policy.PasswordRuleViolationException;
 import org.codehaus.plexus.redback.system.DefaultSecuritySession;
@@ -30,6 +28,10 @@ import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.model.EditUserCredentials;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import java.util.Arrays;
 
 /**
  * AccountAction
@@ -40,6 +42,8 @@ import org.codehaus.redback.integration.model.EditUserCredentials;
  * role-hint="redback-account"
  * instantiation-strategy="per-lookup"
  */
+@Controller( "redback-account" )
+@Scope( "prototype" )
 public class AccountAction
     extends AbstractUserCredentialsAction
     implements CancellableAction
@@ -51,7 +55,7 @@ public class AccountAction
     // ------------------------------------------------------------------
 
     private EditUserCredentials user;
-    
+
     private String oldPassword;
 
     // ------------------------------------------------------------------
@@ -88,7 +92,7 @@ public class AccountAction
         {
             // Means that the role name doesn't exist.
             // We need to fail fast and return to the previous page.
-            addActionError( getText( "user.does.not.exist", Arrays.asList( ( Object ) username ) ) );
+            addActionError( getText( "user.does.not.exist", Arrays.asList( (Object) username ) ) );
             return ERROR;
         }
 
@@ -107,7 +111,7 @@ public class AccountAction
         }
         catch ( UserNotFoundException e )
         {
-            addActionError( getText( "cannot.get.user", Arrays.asList( ( Object ) username, e.getMessage() ) ) );
+            addActionError( getText( "cannot.get.user", Arrays.asList( (Object) username, e.getMessage() ) ) );
             return ERROR;
         }
 
@@ -156,7 +160,7 @@ public class AccountAction
         {
             // Means that the role name doesn't exist.
             // We need to fail fast and return to the previous page.
-            addActionError( getText( "user.does.not.exist", Arrays.asList( ( Object ) username ) ) );
+            addActionError( getText( "user.does.not.exist", Arrays.asList( (Object) username ) ) );
             return ERROR;
         }
 
@@ -170,7 +174,7 @@ public class AccountAction
                 addActionError( getText( "cannot.operate.on.null.user" ) );
                 return ERROR;
             }
-            
+
             if ( StringUtils.isNotEmpty( user.getPassword() ) )
             {
                 PasswordEncoder encoder = securitySystem.getPolicy().getPasswordEncoder();
@@ -180,10 +184,10 @@ public class AccountAction
                     addFieldError( "oldPassword", getText( "password.provided.does.not.match.existing" ) );
                     return ERROR;
                 }
-                
+
                 u.setPassword( user.getPassword() );
             }
-          
+
             u.setFullName( user.getFullName() );
             u.setEmail( user.getEmail() );
             u.setPassword( user.getPassword() );
@@ -203,7 +207,7 @@ public class AccountAction
         }
         catch ( UserNotFoundException e )
         {
-            addActionError( getText( "cannot.get.user", Arrays.asList( ( Object ) username, e.getMessage() ) ) );
+            addActionError( getText( "cannot.get.user", Arrays.asList( (Object) username, e.getMessage() ) ) );
             return ERROR;
         }
         catch ( PasswordRuleViolationException e )
@@ -214,13 +218,13 @@ public class AccountAction
 
         return ACCOUNT_SUCCESS;
     }
-    
+
     public String cancel()
     {
-		return CANCEL;
-	}
+        return CANCEL;
+    }
 
-	// ------------------------------------------------------------------
+    // ------------------------------------------------------------------
     // Parameter Accessor Methods
     // ------------------------------------------------------------------
 
@@ -246,7 +250,7 @@ public class AccountAction
     {
         this.oldPassword = oldPassword;
     }
-    
+
     public boolean isSelf()
     {
         return true;

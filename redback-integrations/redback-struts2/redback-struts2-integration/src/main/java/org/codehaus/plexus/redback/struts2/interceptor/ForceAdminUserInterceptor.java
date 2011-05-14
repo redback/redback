@@ -26,6 +26,11 @@ import org.slf4j.LoggerFactory;
 
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.Interceptor;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * EnvironmentCheckInterceptor
@@ -35,6 +40,8 @@ import com.opensymphony.xwork2.interceptor.Interceptor;
  * @plexus.component role="com.opensymphony.xwork2.interceptor.Interceptor"
  * role-hint="redbackForceAdminUserInterceptor"
  */
+@Controller( "redbackForceAdminUserInterceptor" )
+@Scope( "prototype" )
 public class ForceAdminUserInterceptor
     implements Interceptor
 {
@@ -47,16 +54,20 @@ public class ForceAdminUserInterceptor
     /**
      * @plexus.requirement role-hint="configurable"
      */
+    @Inject
+    @Named(value = "userManager#configurable")
     private UserManager userManager;
 
     /**
      * @plexus.requirement role-hint="default"
      */
+    @Inject
     private RoleManager roleManager;
     
     /**
      * @plexus.requirement role-hint="default"
      */
+    @Inject
     private UserConfiguration config;
     
     public void destroy()

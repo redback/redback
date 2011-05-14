@@ -30,6 +30,10 @@ import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.mail.Mailer;
 import org.codehaus.redback.integration.model.CreateUserCredentials;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
 
 /**
  * RegisterAction
@@ -40,6 +44,8 @@ import org.codehaus.redback.integration.model.CreateUserCredentials;
  * role-hint="redback-register"
  * instantiation-strategy="per-lookup"
  */
+@Controller( "redback-register" )
+@Scope( "prototype" )
 public class RegisterAction
     extends AbstractUserCredentialsAction
     implements CancellableAction
@@ -57,11 +63,13 @@ public class RegisterAction
     /**
      * @plexus.requirement
      */
+    @Inject
     private Mailer mailer;
 
     /**
      * @plexus.requirement
      */
+    @Inject
     private RoleManager roleManager;
 
     private CreateUserCredentials user;

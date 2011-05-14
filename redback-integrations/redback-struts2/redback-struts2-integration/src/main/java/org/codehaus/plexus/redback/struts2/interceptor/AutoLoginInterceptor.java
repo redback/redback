@@ -16,6 +16,7 @@ package org.codehaus.plexus.redback.struts2.interceptor;
  * limitations under the License.
  */
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.ServletActionContext;
@@ -36,6 +37,8 @@ import org.slf4j.LoggerFactory;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.Interceptor;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 
 /**
  * AutoLoginInterceptor
@@ -45,6 +48,8 @@ import com.opensymphony.xwork2.interceptor.Interceptor;
  * @plexus.component role="com.opensymphony.xwork2.interceptor.Interceptor"
  * role-hint="redbackAutoLoginInterceptor"
  */
+@Controller( "redbackAutoLoginInerceptor" )
+@Scope( "prototype" )
 public class AutoLoginInterceptor
     implements Interceptor
 {
@@ -57,11 +62,13 @@ public class AutoLoginInterceptor
     /**
      * @plexus.requirement
      */
+    @Inject
     private SecuritySystem securitySystem;
 
     /**
      * @plexus.requirement
      */
+    @Inject
     private AutoLoginCookies autologinCookies;
 
     public void destroy()

@@ -16,15 +16,19 @@ package org.codehaus.plexus.redback.struts2.interceptor;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.interceptor.Interceptor;
 import org.codehaus.plexus.redback.system.check.EnvironmentCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 
-import com.opensymphony.xwork2.ActionInvocation;
-import com.opensymphony.xwork2.interceptor.Interceptor;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * EnvironmentCheckInterceptor
@@ -34,12 +38,17 @@ import com.opensymphony.xwork2.interceptor.Interceptor;
  * @plexus.component role="com.opensymphony.xwork2.interceptor.Interceptor"
  * role-hint="redbackEnvironmentCheckInterceptor"
  */
+@Controller( "redbackEnvironmentCheckInterceptor" )
+@Scope( "prototype" )
 public class EnvironmentCheckInterceptor
     implements Interceptor
 {
     private static boolean checked = false;
 
     private Logger log = LoggerFactory.getLogger( EnvironmentCheckInterceptor.class );
+
+    @Inject
+    private ApplicationContext applicationContext;
 
     /**
      * @plexus.requirement role="org.codehaus.plexus.redback.system.check.EnvironmentCheck"
@@ -51,8 +60,13 @@ public class EnvironmentCheckInterceptor
         // no-op
     }
 
+    @PostConstruct
     public void init()
     {
+
+        this.checkers =
+            new ArrayList<EnvironmentCheck>( applicationContext.getBeansOfType( EnvironmentCheck.class ).values() );
+
         if ( EnvironmentCheckInterceptor.checked )
         {
             // No need to check twice.

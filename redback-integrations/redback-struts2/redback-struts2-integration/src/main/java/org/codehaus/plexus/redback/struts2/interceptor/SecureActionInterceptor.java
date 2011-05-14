@@ -16,11 +16,9 @@ package org.codehaus.plexus.redback.struts2.interceptor;
  * limitations under the License.
  */
 
-import java.util.List;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
-
+import com.opensymphony.xwork2.Action;
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionInvocation;
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
@@ -31,10 +29,13 @@ import org.codehaus.plexus.redback.system.SecuritySystemConstants;
 import org.codehaus.redback.integration.interceptor.SecureAction;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 
-import com.opensymphony.xwork2.Action;
-import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionInvocation;
+import javax.inject.Inject;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * SecureActionInterceptor: Interceptor that will detect webwork actions that implement the SecureAction
@@ -46,6 +47,8 @@ import com.opensymphony.xwork2.ActionInvocation;
  * @plexus.component role="com.opensymphony.xwork2.interceptor.Interceptor"
  * role-hint="redbackSecureActionInterceptor"
  */
+@Controller( "redbackSecureActionInterceptor" )
+@Scope( "prototype" )
 public class SecureActionInterceptor
     extends AbstractHttpRequestTrackerInterceptor
 {
@@ -58,34 +61,22 @@ public class SecureActionInterceptor
     /**
      * @plexus.requirement
      */
+    @Inject
     private SecuritySystem securitySystem;
 
     /**
      * @plexus.configuration default-value="simple"
      */
-    private String trackerName;
+    private String trackerName = "simple";
 
     private String enableReferrerCheck;
 
     @Override
     public void destroy()
     {
+        // noop
     }
 
-    protected String getTrackerName()
-    {
-        return trackerName;
-    }
-
-    public String getEnableReferrerCheck()
-    {
-        return enableReferrerCheck;
-    }
-
-    public void setEnableReferrerCheck( String enableReferrerCheck )
-    {
-        this.enableReferrerCheck = enableReferrerCheck;
-    }
 
     /**
      * process the action to determine if it implements SecureAction and then act
@@ -103,9 +94,9 @@ public class SecureActionInterceptor
 
         Action action = (Action) context.getActionInvocation().getAction();
 
-        logger.debug( "SecureActionInterceptor: processing " + action.getClass().getName() );
+        logger.debug( "SecureActionInterceptor: processing {}", action.getClass().getName() );
 
-        if( Boolean.valueOf( enableReferrerCheck ) )
+        if ( Boolean.valueOf( enableReferrerCheck ) )
         {
             logger.debug( "Referrer security check enabled." );
             executeReferrerSecurityCheck();
@@ -142,7 +133,7 @@ public class SecureActionInterceptor
                     if ( session == null || !session.isAuthenticated() )
                     {
                         logger.debug( "not authenticated, need to authenticate for this action" );
-                        return processRequiresAuthentication( invocation );                        
+                        return processRequiresAuthentication( invocation );
                     }
                 }
 
@@ -166,13 +157,13 @@ public class SecureActionInterceptor
                         AuthorizationResult authzResult =
                             securitySystem.authorize( session, tuple.getOperation(), tuple.getResource() );
 
-                        logger.debug( "checking the interceptor authz " + authzResult.isAuthorized() + " for " +
-                            tuple.toString() );
+                        logger.debug( "checking the interceptor authz " + authzResult.isAuthorized() + " for "
+                                          + tuple.toString() );
 
                         if ( authzResult.isAuthorized() )
                         {
-                            logger.debug( session.getUser().getPrincipal() + " is authorized for action " +
-                                secureAction.getClass().getName() + " by " + tuple.toString() );
+                            logger.debug( session.getUser().getPrincipal() + " is authorized for action "
+                                              + secureAction.getClass().getName() + " by " + tuple.toString() );
                             return invocation.invoke();
                         }
                     }
@@ -191,10 +182,10 @@ public class SecureActionInterceptor
             return processRequiresAuthentication( invocation );
         }
 
-        logger.debug( "not a secure action " + action.getClass().getName() );
+        logger.debug( "not a secure action {}", action.getClass().getName() );
         String result = invocation.invoke();
-        logger.debug( "Passing invocation up, result is [" + result + "] on call " +
-            invocation.getAction().getClass().getName() );
+        logger.debug( "Passing invocation up, result is [" + result + "] on call "
+                          + invocation.getAction().getClass().getName() );
         return result;
     }
 
@@ -202,34 +193,34 @@ public class SecureActionInterceptor
     {
         String referrer = ServletActionContext.getRequest().getHeader( HTTP_HEADER_REFERER );
 
-        logger.debug( "HTTP Referer header: " + referrer );
+        logger.debug( "HTTP Referer header: {}", referrer );
 
         String[] tokens = StringUtils.splitPreserveAllTokens( referrer, "/", 3 );
-        
-        if( tokens != null )
+
+        if ( tokens != null )
         {
             String path;
-            if( tokens.length < 3 )
+            if ( tokens.length < 3 )
             {
                 path = referrer;
             }
             else
             {
-                path = tokens[ tokens.length - 1 ];
+                path = tokens[tokens.length - 1];
             }
 
-            logger.debug( "Calculated virtual path: " + path );
+            logger.debug( "Calculated virtual path: {}", path );
 
             ServletContext servletContext = ServletActionContext.getServletContext();
 
             String realPath = servletContext.getRealPath( path );
 
-            if( StringUtils.isNotEmpty( realPath ) )
+            if ( StringUtils.isNotEmpty( realPath ) )
             {
-                if( !realPath.endsWith( path ) )
+                if ( !realPath.endsWith( path ) )
                 {
-                    String errorMsg = "Failed referrer security check: Request did not come from the same server. " +
-                        "Detected HTTP Referer header is '" + referrer + "'.";
+                    String errorMsg = "Failed referrer security check: Request did not come from the same server. "
+                        + "Detected HTTP Referer header is '" + referrer + "'.";
                     logger.error( errorMsg );
                     throw new RuntimeException( errorMsg );
                 }
@@ -251,18 +242,48 @@ public class SecureActionInterceptor
         addActionInvocation( invocation ).setBackTrack();
         return REQUIRES_AUTHORIZATION;
     }
-    
+
     protected String processRequiresAuthentication( ActionInvocation invocation )
         throws ComponentLookupException
     {
         HttpSession session = ServletActionContext.getRequest().getSession();
-        
+
         if ( session != null )
         {
             session.removeAttribute( SecuritySystemConstants.SECURITY_SESSION_KEY );
         }
-        
+
         addActionInvocation( invocation ).setBackTrack();
         return REQUIRES_AUTHENTICATION;
-    }    
+    }
+
+    public SecuritySystem getSecuritySystem()
+    {
+        return securitySystem;
+    }
+
+    public void setSecuritySystem( SecuritySystem securitySystem )
+    {
+        this.securitySystem = securitySystem;
+    }
+
+    protected String getTrackerName()
+    {
+        return trackerName;
+    }
+
+    public String getEnableReferrerCheck()
+    {
+        return enableReferrerCheck;
+    }
+
+    public void setEnableReferrerCheck( String enableReferrerCheck )
+    {
+        this.enableReferrerCheck = enableReferrerCheck;
+    }
+
+    public void setTrackerName( String trackerName )
+    {
+        this.trackerName = trackerName;
+    }
 }

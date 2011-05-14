@@ -16,13 +16,6 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
@@ -30,10 +23,21 @@ import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.struts2.action.AbstractSecurityAction;
 import org.codehaus.plexus.redback.system.SecuritySystem;
-import org.codehaus.plexus.registry.Registry;
+import org.codehaus.redback.components.registry.Registry;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.role.RoleConstants;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * SystemInfoAction
@@ -44,6 +48,8 @@ import org.codehaus.redback.integration.role.RoleConstants;
  * role-hint="redback-sysinfo"
  * instantiation-strategy="per-lookup"
  */
+@Controller( "redback-sysinfo" )
+@Scope( "prototype" )
 public class SystemInfoAction
     extends AbstractSecurityAction
 {
@@ -54,16 +60,21 @@ public class SystemInfoAction
     /**
      * @plexus.requirement
      */
+    @Inject
     private SecuritySystem securitySystem;
 
     /**
      * @plexus.requirement role-hint="commons-configuration"
      */
+    @Inject
+    @Named( value = "commons-configuration" )
     private Registry registry;
 
     /**
      * @plexus.requirement role-hint="cached"
      */
+    @Inject
+    @Named( value = "rBACManager#cached" )
     private RBACManager rbacManager;
 
     // Class.getClass() and some JPOX classes
@@ -121,7 +132,8 @@ public class SystemInfoAction
      * @param indent      the current indent string.
      * @param depth       the depth in the tree.
      */
-    private void dumpObjectSwitchboard( List<Object> seenObjects, StringBuffer sb, Object obj, String indent, int depth )
+    private void dumpObjectSwitchboard( List<Object> seenObjects, StringBuffer sb, Object obj, String indent,
+                                        int depth )
     {
         if ( obj == null )
         {
@@ -184,7 +196,7 @@ public class SystemInfoAction
         depth--;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     private void dumpObjectReaders( List<Object> seenObjects, StringBuffer sb, Object obj, String indent, int depth )
     {
         sb.append( obj.toString() ).append( LN );
@@ -230,7 +242,8 @@ public class SystemInfoAction
         }
     }
 
-    private void dumpIterator( List<Object> seenObjects, StringBuffer sb, Iterator<?> iterator, String indent, int depth )
+    private void dumpIterator( List<Object> seenObjects, StringBuffer sb, Iterator<?> iterator, String indent,
+                               int depth )
     {
         sb.append( LN );
         while ( iterator.hasNext() )

@@ -16,8 +16,6 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * limitations under the License.
  */
 
-import java.util.Arrays;
-
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.RbacObjectInvalidException;
@@ -33,16 +31,26 @@ import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.role.RoleConstants;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.Arrays;
 
 /**
  * UserDeleteAction
- * 
+ *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  * @plexus.component role="com.opensymphony.xwork2.Action" role-hint="redback-admin-user-delete"
- *                   instantiation-strategy="per-lookup"
+ * instantiation-strategy="per-lookup"
  */
-public class UserDeleteAction extends AbstractSecurityAction implements CancellableAction
+@Controller( "redback-admin-user-delete" )
+@Scope( "prototype" )
+public class UserDeleteAction
+    extends AbstractSecurityAction
+    implements CancellableAction
 {
     // ------------------------------------------------------------------
     // Plexus Component Requirements
@@ -51,11 +59,15 @@ public class UserDeleteAction extends AbstractSecurityAction implements Cancella
     /**
      * @plexus.requirement role-hint="configurable"
      */
+    @Inject
+    @Named( value = "userManager#configurable" )
     private UserManager userManager;
 
     /**
      * @plexus.requirement role-hint="cached"
      */
+    @Inject
+    @Named( value = "rBACManager#cached" )
     private RBACManager rbacManager;
 
     // ------------------------------------------------------------------
@@ -63,7 +75,7 @@ public class UserDeleteAction extends AbstractSecurityAction implements Cancella
     // ------------------------------------------------------------------
 
     private String username;
-    
+
     private User user;
 
     // ------------------------------------------------------------------
@@ -77,14 +89,14 @@ public class UserDeleteAction extends AbstractSecurityAction implements Cancella
             addActionError( getText( "cannot.remove.user.null.username" ) );
             return SUCCESS;
         }
-        
+
         try
         {
-        	user = userManager.findUser( username );
+            user = userManager.findUser( username );
         }
         catch ( UserNotFoundException e )
         {
-        	addActionError( getText( "cannot.remove.user.not.found", Arrays.asList( ( Object ) username ) ) );
+            addActionError( getText( "cannot.remove.user.not.found", Arrays.asList( (Object) username ) ) );
             return SUCCESS;
         }
 
@@ -115,11 +127,11 @@ public class UserDeleteAction extends AbstractSecurityAction implements Cancella
         }
         catch ( RbacObjectInvalidException e )
         {
-            addActionError( getText( "cannot.remove.user.role", Arrays.asList( ( Object ) username, e.getMessage() ) ) );
+            addActionError( getText( "cannot.remove.user.role", Arrays.asList( (Object) username, e.getMessage() ) ) );
         }
         catch ( RbacManagerException e )
         {
-            addActionError( getText( "cannot.remove.user.role", Arrays.asList( ( Object ) username, e.getMessage() ) ) );
+            addActionError( getText( "cannot.remove.user.role", Arrays.asList( (Object) username, e.getMessage() ) ) );
         }
 
         if ( getActionErrors().isEmpty() )
@@ -130,11 +142,11 @@ public class UserDeleteAction extends AbstractSecurityAction implements Cancella
             }
             catch ( UserNotFoundException e )
             {
-                addActionError( getText( "cannot.remove.user.non.existent", Arrays.asList( ( Object ) username ) ) );
+                addActionError( getText( "cannot.remove.user.non.existent", Arrays.asList( (Object) username ) ) );
             }
         }
         String currentUser = getCurrentUser();
-        
+
         AuditEvent event = new AuditEvent( getText( "log.account.delete" ) );
         event.setAffectedUser( username );
         event.setCurrentUser( currentUser );
@@ -145,7 +157,7 @@ public class UserDeleteAction extends AbstractSecurityAction implements Cancella
 
     /**
      * Returns the cancel result. <p/> A basic implementation would simply be to return CANCEL.
-     * 
+     *
      * @return
      */
     public String cancel()
@@ -167,15 +179,18 @@ public class UserDeleteAction extends AbstractSecurityAction implements Cancella
         this.username = username;
     }
 
-    public User getUser() {
-		return user;
-	}
+    public User getUser()
+    {
+        return user;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public void setUser( User user )
+    {
+        this.user = user;
+    }
 
-	public SecureActionBundle initSecureActionBundle() throws SecureActionException
+    public SecureActionBundle initSecureActionBundle()
+        throws SecureActionException
     {
         SecureActionBundle bundle = new SecureActionBundle();
         bundle.setRequiresAuthentication( true );

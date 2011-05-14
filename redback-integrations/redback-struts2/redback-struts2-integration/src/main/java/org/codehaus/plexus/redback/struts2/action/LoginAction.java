@@ -40,6 +40,10 @@ import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.util.AutoLoginCookies;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
 
 /**
  * LoginAction
@@ -51,6 +55,8 @@ import org.codehaus.redback.integration.util.AutoLoginCookies;
  * role-hint="redback-login"
  * instantiation-strategy="per-lookup"
  */
+@Controller( "redback-login" )
+@Scope( "prototype" )
 public class LoginAction
     extends AbstractSecurityAction
     implements CancellableAction
@@ -68,6 +74,7 @@ public class LoginAction
     /**
      * @plexus.requirement
      */
+    @Inject
     protected SecuritySystem securitySystem;
 
     private String username;
@@ -83,11 +90,13 @@ public class LoginAction
     /**
      * @plexus.requirement
      */
+    @Inject
     private AutoLoginCookies autologinCookies;
 
     /**
      * @plexus.requirement
      */
+    @Inject
     private UserConfiguration config;
     
     // ------------------------------------------------------------------

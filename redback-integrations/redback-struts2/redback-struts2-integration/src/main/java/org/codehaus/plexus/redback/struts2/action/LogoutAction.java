@@ -22,6 +22,11 @@ import org.codehaus.plexus.cache.Cache;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.util.AutoLoginCookies;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * LogoutAction
@@ -32,6 +37,8 @@ import org.codehaus.redback.integration.util.AutoLoginCookies;
  * role-hint="redback-logout"
  * instantiation-strategy="per-lookup"
  */
+@Controller( "redback-logout" )
+@Scope( "prototype" )
 public class LogoutAction
     extends AbstractSecurityAction
 {
@@ -40,28 +47,35 @@ public class LogoutAction
 
     /**
      * cache used for user assignments
-     * 
+     *
      * @plexus.requirement role-hint="userAssignments"
      */
+    @Inject
+    @Named( value = "userAssignments" )
     private Cache userAssignmentsCache;
-    
+
     /**
      * cache used for user permissions
-     * 
+     *
      * @plexus.requirement role-hint="userPermissions"
      */
+    @Inject
+    @Named( value = "userPermissions" )
     private Cache userPermissionsCache;
-    
+
     /**
      * Cache used for users
-     * 
+     *
      * @plexus.requirement role-hint="users"
      */
+    @Inject
+    @Named( value = "users" )
     private Cache usersCache;
-    
+
     /**
      * @plexus.requirement
      */
+    @Inject
     private AutoLoginCookies autologinCookies;
 
     public String logout()
@@ -71,15 +85,15 @@ public class LogoutAction
             return LOGOUT;
         }
 
-        String currentUser = (String)getSecuritySession().getUser().getPrincipal();
-        
+        String currentUser = (String) getSecuritySession().getUser().getPrincipal();
+
         if ( getSecuritySession() != null )
-        {            
+        {
             // [PLXREDBACK-65] this is a bit of a hack around the cached managers since they don't have the ability to 
             // purge their caches through the API.  Instead try and bring them in here and invalidate 
             // the keys directly.  This will not be required once we move to a different model for pre-calculated
             // permission sets since that will not have the overhead that required these caches in the first place.
-            Object principal = (String)getSecuritySession().getUser().getPrincipal();
+            Object principal = (String) getSecuritySession().getUser().getPrincipal();
             if ( userAssignmentsCache != null )
             {
                 userAssignmentsCache.remove( principal );
@@ -93,8 +107,9 @@ public class LogoutAction
                 usersCache.remove( principal );
             }
         }
-        
-        autologinCookies.removeRememberMeCookie( ServletActionContext.getResponse(), ServletActionContext.getRequest() );
+
+        autologinCookies.removeRememberMeCookie( ServletActionContext.getResponse(),
+                                                 ServletActionContext.getRequest() );
         autologinCookies.removeSignonCookie( ServletActionContext.getResponse(), ServletActionContext.getRequest() );
 
         setAuthTokens( null );
@@ -103,11 +118,11 @@ public class LogoutAction
         {
             ( (SessionMap) session ).invalidate();
         }
-        
+
         AuditEvent event = new AuditEvent( getText( "log.logout.success" ) );
         event.setAffectedUser( currentUser );
         event.log();
-        
+
         return LOGOUT;
     }
 

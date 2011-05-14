@@ -16,10 +16,6 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
@@ -32,6 +28,14 @@ import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.model.SimplePermission;
 import org.codehaus.redback.integration.role.RoleConstants;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * RoleCreateAction
@@ -42,6 +46,8 @@ import org.codehaus.redback.integration.role.RoleConstants;
  * role-hint="redback-role-create"
  * instantiation-strategy="per-lookup"
  */
+@Controller( "redback-role-create" )
+@Scope( "prototype" )
 public class RoleCreateAction
     extends AbstractSecurityAction
 {
@@ -52,6 +58,8 @@ public class RoleCreateAction
     /**
      * @plexus.requirement role-hint="cached"
      */
+    @Inject
+    @Named( value = "rBACManager#cached" )
     private RBACManager manager;
 
     // ------------------------------------------------------------------
@@ -130,7 +138,7 @@ public class RoleCreateAction
             addActionError( getText( "cannot.add.empty.role" ) );
             return ERROR;
         }
-        if (  !roleName.matches( VALID_ROLENAME_CHARS )  )
+        if ( !roleName.matches( VALID_ROLENAME_CHARS ) )
         {
             addActionError( getText( "roleName.invalid.characters" ) );
             return ERROR;
@@ -162,7 +170,7 @@ public class RoleCreateAction
 
             manager.saveRole( _role );
 
-            addActionMessage( getText( "save.role.success", Arrays.asList( ( Object ) roleName ) ) );
+            addActionMessage( getText( "save.role.success", Arrays.asList( (Object) roleName ) ) );
             String currentUser = getCurrentUser();
             AuditEvent event = new AuditEvent( getText( "log.role.create" ) );
             event.setRole( roleName );
@@ -171,7 +179,7 @@ public class RoleCreateAction
         }
         catch ( RbacManagerException e )
         {
-            addActionError( getText( "cannot.get.role", Arrays.asList( ( Object ) roleName, e.getMessage() ) ) );
+            addActionError( getText( "cannot.get.role", Arrays.asList( (Object) roleName, e.getMessage() ) ) );
             return ERROR;
         }
 

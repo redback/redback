@@ -16,10 +16,6 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * limitations under the License.
  */
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.Resource;
@@ -28,6 +24,14 @@ import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.role.RoleConstants;
 import org.codehaus.redback.integration.util.ResourceSorter;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * OperationsAction:
@@ -38,6 +42,8 @@ import org.codehaus.redback.integration.util.ResourceSorter;
  * role-hint="redback-resources"
  * instantiation-strategy="per-lookup"
  */
+@Controller( "redback-resources" )
+@Scope( "prototype" )
 public class ResourcesAction
     extends AbstractSecurityAction
 {
@@ -46,6 +52,8 @@ public class ResourcesAction
     /**
      * @plexus.requirement role-hint="cached"
      */
+    @Inject
+    @Named( value = "rBACManager#cached" )
     private RBACManager manager;
 
     private String resourceIdentifier;
@@ -69,7 +77,7 @@ public class ResourcesAction
         }
         catch ( RbacManagerException e )
         {
-            addActionError( getText( "cannot.list.all.resources", Arrays.asList( ( Object ) e.getMessage() ) ) );
+            addActionError( getText( "cannot.list.all.resources", Arrays.asList( (Object) e.getMessage() ) ) );
             log.error( "System error:", e );
             allResources = Collections.emptyList();
         }
@@ -90,7 +98,7 @@ public class ResourcesAction
         }
         catch ( RbacManagerException e )
         {
-            addActionError( getText( "cannot.save.resource", Arrays.asList( ( Object ) e.getMessage() ) ) );
+            addActionError( getText( "cannot.save.resource", Arrays.asList( (Object) e.getMessage() ) ) );
             log.error( "System error:", e );
             allResources = Collections.emptyList();
         }
@@ -106,7 +114,7 @@ public class ResourcesAction
         }
         catch ( RbacManagerException ne )
         {
-            addActionError( getText( "cannot.remove.resource", Arrays.asList( ( Object ) resourceIdentifier ) ) );
+            addActionError( getText( "cannot.remove.resource", Arrays.asList( (Object) resourceIdentifier ) ) );
             return ERROR;
         }
         return LIST;

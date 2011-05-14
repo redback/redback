@@ -16,12 +16,6 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.plexus.redback.policy.PasswordEncoder;
 import org.codehaus.plexus.redback.policy.PasswordRuleViolationException;
@@ -42,6 +36,16 @@ import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.model.AdminEditUserCredentials;
 import org.codehaus.redback.integration.role.RoleConstants;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * UserEditAction
@@ -52,6 +56,8 @@ import org.codehaus.redback.integration.role.RoleConstants;
  * role-hint="redback-admin-user-edit"
  * instantiation-strategy="per-lookup"
  */
+@Controller( "redback-admin-user-edit" )
+@Scope( "prototype" )
 public class UserEditAction
     extends AbstractAdminUserCredentialsAction
     implements CancellableAction
@@ -59,6 +65,8 @@ public class UserEditAction
     /**
      * @plexus.requirement role-hint="cached"
      */
+    @Inject
+    @Named( value = "rBACManager#cached" )
     private RBACManager rbacManager;
 
     /**
@@ -96,8 +104,8 @@ public class UserEditAction
     {
         oldPassword = "";
 
-    	emailValidationRequired = securitySystem.getPolicy().getUserValidationSettings().isEmailValidationRequired();
-    	
+        emailValidationRequired = securitySystem.getPolicy().getUserValidationSettings().isEmailValidationRequired();
+
         if ( getUsername() == null )
         {
             addActionError( getText( "cannot.edit.user.null.username" ) );
@@ -118,7 +126,7 @@ public class UserEditAction
         {
             // Means that the role name doesn't exist.
             // We need to fail fast and return to the previous page.
-            addActionError( getText( "user.does.not.exist", Collections.singletonList( ( Object ) escapedUsername ) ) );
+            addActionError( getText( "user.does.not.exist", Collections.singletonList( (Object) escapedUsername ) ) );
             return ERROR;
         }
 
@@ -135,7 +143,7 @@ public class UserEditAction
             user = new AdminEditUserCredentials( u );
 
             // require user admin to provide his/her password if editing account of others
-            if( getUsername().equals( getCurrentUser() ) )
+            if ( getUsername().equals( getCurrentUser() ) )
             {
                 self = true;
             }
@@ -154,10 +162,9 @@ public class UserEditAction
         }
         catch ( UserNotFoundException e )
         {
-            addActionError( getText( "cannot.get.user", Arrays.asList( ( Object ) getUsername(), e.getMessage() ) ) );
+            addActionError( getText( "cannot.get.user", Arrays.asList( (Object) getUsername(), e.getMessage() ) ) );
             return ERROR;
         }
-
 
         return INPUT;
     }
@@ -205,7 +212,7 @@ public class UserEditAction
             return ERROR;
         }
 
-        if( !getUsername().equals( getCurrentUser() ) )
+        if ( !getUsername().equals( getCurrentUser() ) )
         {
             return CONFIRM;
         }
@@ -220,7 +227,7 @@ public class UserEditAction
     {
         UserManager manager = super.securitySystem.getUserManager();
 
-        if( StringUtils.isEmpty( userAdminPassword ) )
+        if ( StringUtils.isEmpty( userAdminPassword ) )
         {
             addActionError( getText( "user.admin.password.required" ) );
             return CONFIRM_ERROR;
@@ -240,17 +247,17 @@ public class UserEditAction
         }
         catch ( UserNotFoundException e )
         {
-            addActionError( getText( "cannot.find.user", Arrays.asList( ( Object ) getCurrentUser(), e.getMessage() ) ) );
+            addActionError( getText( "cannot.find.user", Arrays.asList( (Object) getCurrentUser(), e.getMessage() ) ) );
             return CONFIRM_ERROR;
         }
 
         return save( false );
     }
-    
-    public String cancel() 
+
+    public String cancel()
     {
-		return CANCEL;
-	}
+        return CANCEL;
+    }
 
     private String save( boolean validateOldPassword )
     {
@@ -260,7 +267,7 @@ public class UserEditAction
         {
             // Means that the role name doesn't exist.
             // We need to fail fast and return to the previous page.
-            addActionError( getText( "user.does.not.exist", Collections.singletonList( ( Object ) getUsername() ) ) );
+            addActionError( getText( "user.does.not.exist", Collections.singletonList( (Object) getUsername() ) ) );
             return ERROR;
         }
 
@@ -273,11 +280,11 @@ public class UserEditAction
                 return ERROR;
             }
 
-            if( validateOldPassword )
+            if ( validateOldPassword )
             {
                 PasswordEncoder encoder = securitySystem.getPolicy().getPasswordEncoder();
 
-                if( StringUtils.isEmpty( oldPassword ) )
+                if ( StringUtils.isEmpty( oldPassword ) )
                 {
                     self = true;
                     addFieldError( "oldPassword", getText( "old.password.required" ) );
@@ -313,7 +320,7 @@ public class UserEditAction
         }
         catch ( UserNotFoundException e )
         {
-            addActionError( getText( "cannot.find.user", Arrays.asList( ( Object ) getUsername(), e.getMessage() ) ) );
+            addActionError( getText( "cannot.find.user", Arrays.asList( (Object) getUsername(), e.getMessage() ) ) );
             return ERROR;
         }
         catch ( PasswordRuleViolationException pe )
@@ -331,8 +338,7 @@ public class UserEditAction
         return SUCCESS;
     }
 
-
-	// ------------------------------------------------------------------
+    // ------------------------------------------------------------------
     // Parameter Accessor Methods
     // ------------------------------------------------------------------
 
@@ -373,9 +379,10 @@ public class UserEditAction
         return effectivelyAssignedRoles;
     }
 
-	public boolean isEmailValidationRequired() {
-		return emailValidationRequired;
-	}
+    public boolean isEmailValidationRequired()
+    {
+        return emailValidationRequired;
+    }
 
     public boolean isHasHiddenRoles()
     {

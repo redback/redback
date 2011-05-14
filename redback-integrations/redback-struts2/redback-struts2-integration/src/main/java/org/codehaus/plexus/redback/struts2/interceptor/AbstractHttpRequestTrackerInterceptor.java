@@ -16,57 +16,54 @@ package org.codehaus.plexus.redback.struts2.interceptor;
  * limitations under the License.
  */
 
-import java.util.Map;
-
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 import org.apache.struts2.StrutsException;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-import org.codehaus.plexus.spring.PlexusToSpringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionInvocation;
-import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
+import java.util.Map;
 
 public abstract class AbstractHttpRequestTrackerInterceptor
     extends AbstractInterceptor
 {
-    public static final String TRACKER_NAME = ActionInvocationTracker.ROLE + ":name";
-    
+    public static final String TRACKER_NAME = ActionInvocationTracker.class.getName( )+ ":name";
+
     protected Logger logger = LoggerFactory.getLogger( getClass() );
-    
+
     protected abstract String getTrackerName();
 
     @Override
     public void init()
     {
         super.init();
-        logger.info( this.getClass().getName() + " initialized!" );
+        logger.info( "{} initialized!", this.getClass().getName() );
     }
-    
-    @SuppressWarnings("unchecked")
+
+    @SuppressWarnings( "unchecked" )
     protected synchronized ActionInvocationTracker addActionInvocation( ActionInvocation invocation )
         throws ComponentLookupException
     {
         Map<String, Object> sessionMap = invocation.getInvocationContext().getSession();
-        
+
         ApplicationContext applicationContext = (ApplicationContext) ActionContext.getContext().getApplication().get(
-                    WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
-        if (applicationContext == null)
+            WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE );
+        if ( applicationContext == null )
         {
-            throw new StrutsException("Could not locate ApplicationContext");
+            throw new StrutsException( "Could not locate ApplicationContext" );
         }
-        
-        ActionInvocationTracker tracker = (ActionInvocationTracker) sessionMap.get( ActionInvocationTracker.ROLE );
+
+        ActionInvocationTracker tracker = (ActionInvocationTracker) sessionMap.get( ActionInvocationTracker.class.getName() );
 
         if ( tracker == null )
         {
-            final String beanName = PlexusToSpringUtils.buildSpringId(ActionInvocationTracker.ROLE, getTrackerName());
             //noinspection deprecation
-            tracker = (ActionInvocationTracker) applicationContext.getBean(beanName);
-            sessionMap.put( ActionInvocationTracker.ROLE, tracker );
+            tracker = applicationContext.getBean( getTrackerName(), ActionInvocationTracker.class );
+            sessionMap.put( ActionInvocationTracker.class.getName(), tracker );
         }
 
         tracker.addActionInvocation( invocation );

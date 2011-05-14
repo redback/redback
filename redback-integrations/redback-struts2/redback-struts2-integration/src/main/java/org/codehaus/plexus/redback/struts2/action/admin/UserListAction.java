@@ -16,14 +16,6 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.struts2.ServletActionContext;
 import org.codehaus.plexus.redback.rbac.RBACManager;
@@ -50,6 +42,18 @@ import org.extremecomponents.table.limit.Limit;
 import org.extremecomponents.table.limit.LimitFactory;
 import org.extremecomponents.table.limit.TableLimit;
 import org.extremecomponents.table.limit.TableLimitFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * UserListAction
@@ -60,6 +64,8 @@ import org.extremecomponents.table.limit.TableLimitFactory;
  * role-hint="redback-admin-user-list"
  * instantiation-strategy="per-lookup"
  */
+@Controller( "redback-admin-user-list" )
+@Scope( "prototype" )
 public class UserListAction
     extends AbstractSecurityAction
 {
@@ -70,16 +76,20 @@ public class UserListAction
     /**
      * @plexus.requirement
      */
+    @Inject
     private SecuritySystem securitySystem;
 
     /**
      * @plexus.requirement role-hint="cached"
      */
+    @Inject
+    @Named( value = "rBACManager#cached" )
     private RBACManager rbac;
 
     /**
      * @plexus.requirement
      */
+    @Inject
     private ReportManager reportManager;
 
     // ------------------------------------------------------------------
@@ -174,25 +184,28 @@ public class UserListAction
 
         return filteredUsers;
     }
-    
+
     private List<User> findUsersWithFilter()
     {
-        Context context = new HttpServletRequestContext(ServletActionContext.getRequest());
-        LimitFactory limitFactory = new TableLimitFactory(context);
-        Limit limit = new TableLimit(limitFactory);
-        FilterSet filterSet = limit.getFilterSet();            
+        Context context = new HttpServletRequestContext( ServletActionContext.getRequest() );
+        LimitFactory limitFactory = new TableLimitFactory( context );
+        Limit limit = new TableLimit( limitFactory );
+        FilterSet filterSet = limit.getFilterSet();
 
         UserQuery query = getUserManager().createUserQuery();
-        if (filterSet.getFilter("username")!=null) {
-            query.setUsername(filterSet.getFilter("username").getValue());
+        if ( filterSet.getFilter( "username" ) != null )
+        {
+            query.setUsername( filterSet.getFilter( "username" ).getValue() );
         }
-        if (filterSet.getFilter("fullName")!=null) {
-            query.setFullName(filterSet.getFilter("fullName").getValue());
+        if ( filterSet.getFilter( "fullName" ) != null )
+        {
+            query.setFullName( filterSet.getFilter( "fullName" ).getValue() );
         }
-        if (filterSet.getFilter("email")!=null) {
-            query.setEmail(filterSet.getFilter("email").getValue());
+        if ( filterSet.getFilter( "email" ) != null )
+        {
+            query.setEmail( filterSet.getFilter( "email" ).getValue() );
         }
-        return getUserManager().findUsersByQuery(query);
+        return getUserManager().findUsersByQuery( query );
     }
 
     private List<String> getUsernamesForRoles( Collection<String> roleNames )

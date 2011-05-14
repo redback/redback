@@ -16,9 +16,6 @@ package org.codehaus.plexus.redback.struts2.action;
  * limitations under the License.
  */
 
-import java.util.Arrays;
-import java.util.Map;
-
 import org.codehaus.plexus.redback.policy.PasswordEncoder;
 import org.codehaus.plexus.redback.policy.PasswordRuleViolationException;
 import org.codehaus.plexus.redback.policy.PasswordRuleViolations;
@@ -29,6 +26,12 @@ import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
+import java.util.Arrays;
+import java.util.Map;
 
 /**
  * PasswordAction
@@ -39,6 +42,8 @@ import org.codehaus.redback.integration.interceptor.SecureActionException;
  * role-hint="redback-password"
  * instantiation-strategy="per-lookup"
  */
+@Controller( "redback-password" )
+@Scope( "prototype" )
 public class PasswordAction
     extends AbstractSecurityAction
     implements CancellableAction
@@ -52,6 +57,7 @@ public class PasswordAction
     /**
      * @plexus.requirement
      */
+    @Inject
     protected SecuritySystem securitySystem;
 
     // ------------------------------------------------------------------
@@ -63,8 +69,8 @@ public class PasswordAction
     private String newPassword;
 
     private String newPasswordConfirm;
-    
-    private String targetUrl;   
+
+    private String targetUrl;
 
     private boolean provideExisting;
 
@@ -95,7 +101,7 @@ public class PasswordAction
         // Test existing Password.
         PasswordEncoder encoder = securitySystem.getPolicy().getPasswordEncoder();
 
-        if ( provideExisting  )
+        if ( provideExisting )
         {
             if ( !encoder.isPasswordValid( user.getEncodedPassword(), existingPassword ) )
             {
@@ -111,7 +117,7 @@ public class PasswordAction
             securitySystem.getPolicy().validatePassword( tempUser );
         }
         catch ( PasswordRuleViolationException e )
-        {        	
+        {
             PasswordRuleViolations violations = e.getViolations();
 
             if ( violations != null )
@@ -147,13 +153,13 @@ public class PasswordAction
         }
         catch ( UserNotFoundException e )
         {
-            addActionError( getText( "cannot.update.user.not.found", Arrays.asList( ( Object ) user.getUsername() ) ) );
+            addActionError( getText( "cannot.update.user.not.found", Arrays.asList( (Object) user.getUsername() ) ) );
             addActionError( getText( "admin.deleted.account" ) );
 
             return ERROR;
         }
         catch ( PasswordRuleViolationException e )
-        {        	
+        {
             PasswordRuleViolations violations = e.getViolations();
 
             if ( violations != null )
@@ -171,7 +177,7 @@ public class PasswordAction
                 user.setEncodedPassword( "" );
                 user.setPassword( "" );
             }
-            
+
             return ERROR;
         }
 
@@ -194,30 +200,29 @@ public class PasswordAction
          * external link
          */
         if ( !provideExisting )
-        {                                              
+        {
             return CHANGE_PASSWORD_SUCCESS;
         }
         else
         {
 
-                      
             if ( super.session != null )
-            {            
-                
+            {
+
                 Map<String, Object> map = (Map<String, Object>) super.session;
                 String url = "";
-                if ( map.containsKey( "targetUrl" ) ) 
+                if ( map.containsKey( "targetUrl" ) )
                 {
-                    url = map.remove( "targetUrl" ).toString() ;                    
+                    url = map.remove( "targetUrl" ).toString();
                     log.info( "targetUrl is retrieved and removed from the session: " + url );
                 }
-                else 
+                else
                 {
                     log.info( "targetUrl is empty, redirect to change password success page" );
                     return CHANGE_PASSWORD_SUCCESS;
                 }
                 setTargetUrl( url );
-            }    
+            }
             return SUCCESS;
         }
     }

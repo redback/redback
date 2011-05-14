@@ -23,6 +23,10 @@ import org.codehaus.plexus.redback.struts2.action.AbstractSecurityAction;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.role.RoleConstants;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
 
 /**
  * RolesAction
@@ -33,20 +37,23 @@ import org.codehaus.redback.integration.role.RoleConstants;
  * role-hint="redback-role-model"
  * instantiation-strategy="per-lookup"
  */
+@Controller( "redback-role-model" )
+@Scope( "prototype" )
 public class RoleModelAction
     extends AbstractSecurityAction
 {
     /**
      * @plexus.requirement role-hint="default"
      */
+    @Inject
     private RoleManager manager;
 
     private RedbackRoleModel model;
 
     public String view()
-    {     
+    {
         model = manager.getModel();
-        
+
         return SUCCESS;
     }
 

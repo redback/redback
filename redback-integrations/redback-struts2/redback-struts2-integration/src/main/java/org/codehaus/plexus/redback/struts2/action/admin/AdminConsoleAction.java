@@ -21,6 +21,8 @@ import org.codehaus.plexus.redback.struts2.action.AbstractSecurityAction;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.role.RoleConstants;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 
 /**
  * AdminConsoleAction
@@ -31,6 +33,8 @@ import org.codehaus.redback.integration.role.RoleConstants;
  * role-hint="redback-admin-console"
  * instantiation-strategy="per-lookup"
  */
+@Controller("redback-admin-console")
+@Scope("prototype")
 public class AdminConsoleAction
     extends AbstractSecurityAction
 {

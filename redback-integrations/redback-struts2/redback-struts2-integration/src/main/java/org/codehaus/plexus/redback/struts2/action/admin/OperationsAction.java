@@ -16,10 +16,6 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * limitations under the License.
  */
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import org.codehaus.plexus.redback.rbac.Operation;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
@@ -29,6 +25,14 @@ import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.role.RoleConstants;
 import org.codehaus.redback.integration.util.OperationSorter;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * OperationsAction:
@@ -39,6 +43,8 @@ import org.codehaus.redback.integration.util.OperationSorter;
  * role-hint="redback-operations"
  * instantiation-strategy="per-lookup"
  */
+@Controller( "redback-operations" )
+@Scope( "prototype" )
 public class OperationsAction
     extends RedbackActionSupport
 {
@@ -47,6 +53,8 @@ public class OperationsAction
     /**
      * @plexus.requirement role-hint="cached"
      */
+    @Inject
+    @Named( value = "rBACManager#cached" )
     private RBACManager manager;
 
     private String operationName;
@@ -70,7 +78,7 @@ public class OperationsAction
         }
         catch ( RbacManagerException e )
         {
-            addActionError( getText( "cannot.list.all.operations", Arrays.asList( ( Object ) e.getMessage() ) ) );
+            addActionError( getText( "cannot.list.all.operations", Arrays.asList( (Object) e.getMessage() ) ) );
             log.error( "System error:", e );
             allOperations = Collections.emptyList();
         }
@@ -90,7 +98,7 @@ public class OperationsAction
         }
         catch ( RbacManagerException e )
         {
-            addActionError( getText( "cannot.save.operation", Arrays.asList( ( Object ) operationName ) ) );
+            addActionError( getText( "cannot.save.operation", Arrays.asList( (Object) operationName ) ) );
             log.error( "System error:", e );
             allOperations = Collections.emptyList();
         }
@@ -106,7 +114,7 @@ public class OperationsAction
         }
         catch ( RbacManagerException ne )
         {
-            addActionError( getText( "cannot.remove.operation", Arrays.asList( ( Object ) operationName ) ) );
+            addActionError( getText( "cannot.remove.operation", Arrays.asList( (Object) operationName ) ) );
             return ERROR;
         }
         return LIST;

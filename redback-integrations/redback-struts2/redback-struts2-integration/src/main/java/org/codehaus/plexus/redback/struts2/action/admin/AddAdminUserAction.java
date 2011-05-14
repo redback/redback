@@ -39,6 +39,10 @@ import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.model.EditUserCredentials;
 import org.codehaus.redback.integration.util.AutoLoginCookies;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
 
 /**
  * AddAdminUserAction
@@ -49,6 +53,8 @@ import org.codehaus.redback.integration.util.AutoLoginCookies;
  * role-hint="redback-admin-account"
  * instantiation-strategy="per-lookup"
  */
+@Controller("redback-admin-account")
+@Scope("prototype")
 public class AddAdminUserAction
     extends AbstractAdminUserCredentialsAction
 {
@@ -60,22 +66,16 @@ public class AddAdminUserAction
 
     private static final String ACCOUNT_LOCKED = "security-login-locked";
 
-    /**
-     * @plexus.requirement
-     */
+    @Inject
     private RoleManager roleManager;
 
 
-    /**
-     * @plexus.requirement role-hint="default"
-     */
+    @Inject
     private UserConfiguration config;
 
     private EditUserCredentials user;
 
-    /**
-     * @plexus.requirement
-     */
+    @Inject
     private AutoLoginCookies autologinCookies;
 
     public String show()

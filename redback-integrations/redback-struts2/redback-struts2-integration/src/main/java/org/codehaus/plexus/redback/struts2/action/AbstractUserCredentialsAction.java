@@ -29,6 +29,8 @@ import org.codehaus.redback.integration.model.UserCredentials;
 import org.codehaus.redback.integration.role.RoleConstants;
 import org.codehaus.redback.integration.util.RoleSorter;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import java.util.ArrayList;
@@ -52,11 +54,14 @@ public abstract class AbstractUserCredentialsAction
     /**
      * @plexus.requirement role-hint="cached"
      */
+    @Inject
+    @Named( value = "rBACManager#cached" )
     private RBACManager manager;
 
     /**
      * @plexus.requirement
      */
+    @Inject
     protected SecuritySystem securitySystem;
 
     // ------------------------------------------------------------------
@@ -109,7 +114,7 @@ public abstract class AbstractUserCredentialsAction
         {
             addFieldError( "user.fullName", getText( "fullName.required" ) );
         }
-       
+
         if ( StringUtils.isEmpty( internalUser.getEmail() ) )
         {
             addFieldError( "user.email", getText( "email.required" ) );
@@ -119,7 +124,7 @@ public abstract class AbstractUserCredentialsAction
         {
             addFieldError( "user.confirmPassword", getText( "passwords.does.not.match" ) );
         }
-        
+
         try
         {
             if ( !StringUtils.isEmpty( internalUser.getEmail() ) )
@@ -136,7 +141,7 @@ public abstract class AbstractUserCredentialsAction
     public void validateCredentialsStrict()
     {
         validateCredentialsLoose();
-        
+
         User tmpuser = internalUser.createUser( securitySystem.getUserManager() );
 
         try
@@ -199,12 +204,12 @@ public abstract class AbstractUserCredentialsAction
         }
 
         String delimiter = " - ";
-        
+
         // we should have a list of resourceGrants now, this will provide us with the information necessary to restrict
         // the role list
         for ( Role role : roleList )
         {
-            int delimiterIndex = role.getName().indexOf( delimiter );         
+            int delimiterIndex = role.getName().indexOf( delimiter );
             for ( String resourceIdentifier : resourceGrants )
             {
 
@@ -213,7 +218,7 @@ public abstract class AbstractUserCredentialsAction
                     String resourceName = role.getName().substring( delimiterIndex + delimiter.length() );
                     if ( resourceName.equals( resourceIdentifier ) )
                     {
-                      filteredRoleList.add( role );
+                        filteredRoleList.add( role );
                     }
                 }
             }

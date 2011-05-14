@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.ServletActionContext;
@@ -33,6 +34,8 @@ import org.codehaus.redback.integration.reports.ReportManager;
 import org.codehaus.redback.integration.role.RoleConstants;
 
 import com.opensymphony.module.sitemesh.filter.PageResponseWrapper;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 
 /**
  * ReportAction
@@ -43,12 +46,15 @@ import com.opensymphony.module.sitemesh.filter.PageResponseWrapper;
  * role-hint="redback-report"
  * instantiation-strategy="per-lookup"
  */
+@Controller("redback-report")
+@Scope("prototype")
 public class ReportAction
     extends AbstractSecurityAction
 {
     /**
      * @plexus.requirement
      */
+    @Inject
     private ReportManager reportManager;
 
     private String reportId;

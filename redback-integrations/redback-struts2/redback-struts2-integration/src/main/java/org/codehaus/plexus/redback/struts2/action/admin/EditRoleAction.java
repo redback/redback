@@ -35,6 +35,8 @@ import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.role.RoleConstants;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 
 /**
  * EditRoleAction
@@ -45,6 +47,8 @@ import org.codehaus.redback.integration.role.RoleConstants;
  * role-hint="redback-role-edit"
  * instantiation-strategy="per-lookup"
  */
+@Controller("redback-role-edit")
+@Scope("prototype")
 public class EditRoleAction
     extends AbstractUserCredentialsAction
 {

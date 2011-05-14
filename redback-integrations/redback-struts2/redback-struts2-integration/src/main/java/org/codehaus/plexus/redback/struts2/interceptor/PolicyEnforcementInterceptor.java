@@ -19,6 +19,7 @@ package org.codehaus.plexus.redback.struts2.interceptor;
 import java.util.Calendar;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts2.ServletActionContext;
@@ -36,13 +37,18 @@ import org.slf4j.LoggerFactory;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.Interceptor;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 
 /**
  * Interceptor to force the user to perform actions, when required.
  *
  * @author Edwin Punzalan
- * @plexus.component role="com.opensymphony.xwork2.interceptor.Interceptor" role-hint="redbackPolicyEnforcementInterceptor"
+ * @plexus.component role="com.opensymphony.xwork2.interceptor.Interceptor"
+ * role-hint="redbackPolicyEnforcementInterceptor"
  */
+@Controller( "redbackPolicyEnforcementInterceptor" )
+@Scope( "prototype" )
 public class PolicyEnforcementInterceptor
     implements Interceptor
 {
@@ -53,11 +59,13 @@ public class PolicyEnforcementInterceptor
     /**
      * @plexus.requirement
      */
+    @Inject
     private UserConfiguration config;
 
     /**
      * @plexus.requirement
      */
+    @Inject
     protected SecuritySystem securitySystem;
 
     public void destroy()
@@ -125,7 +133,7 @@ public class PolicyEnforcementInterceptor
                 
                 session.put( "targetUrl", targetUrl  );
  
-                log.info( "storing targetUrl : " + targetUrl );                   
+                log.info( "storing targetUrl : {}", targetUrl );
                 
                 return SECURITY_USER_MUST_CHANGE_PASSWORD;
             }

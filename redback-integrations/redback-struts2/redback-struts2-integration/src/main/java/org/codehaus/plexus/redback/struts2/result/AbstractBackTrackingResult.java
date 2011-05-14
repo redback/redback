@@ -46,7 +46,7 @@ public class AbstractBackTrackingResult
     protected boolean setupBackTrack( ActionInvocation invocation, int order )
     {
         Map session = invocation.getInvocationContext().getSession();
-        ActionInvocationTracker tracker = (ActionInvocationTracker) session.get( ActionInvocationTracker.ROLE );
+        ActionInvocationTracker tracker = (ActionInvocationTracker) session.get( ActionInvocationTracker.SESSION_KEY );
 
         if ( tracker != null && tracker.isBackTracked() )
         {
