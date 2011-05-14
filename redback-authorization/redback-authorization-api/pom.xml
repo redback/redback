@@ -23,22 +23,4 @@
   </parent>
   <artifactId>redback-authorization-api</artifactId>
   <name>Redback :: Authorization API</name>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-maven-plugin</artifactId>
-        <configuration>
-          <containerDescriptor>true</containerDescriptor>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>descriptor</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build> 
 </project>
