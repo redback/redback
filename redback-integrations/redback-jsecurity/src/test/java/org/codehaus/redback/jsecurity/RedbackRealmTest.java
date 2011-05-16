@@ -19,6 +19,7 @@ package org.codehaus.redback.jsecurity;
  * under the License.
  */
 
+import junit.framework.TestCase;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.rbac.Operation;
 import org.codehaus.plexus.redback.rbac.Permission;
@@ -28,38 +29,52 @@ import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
 import org.jsecurity.authc.IncorrectCredentialsException;
 import org.jsecurity.authc.UsernamePasswordToken;
 import org.jsecurity.mgt.DefaultSecurityManager;
 import org.jsecurity.subject.PrincipalCollection;
 import org.jsecurity.subject.SimplePrincipalCollection;
 import org.jsecurity.subject.Subject;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public class RedbackRealmTest
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
     private DefaultSecurityManager securityManager;
 
     private RedbackRealm realm;
 
+    @Inject
+    @Named( value = "userManager#memory" )
     private UserManager userManager;
 
+    @Inject
+    @Named( value = "rBACManager#memory" )
     private RBACManager rbacManager;
 
+    @Inject
     private UserSecurityPolicy userSecurityPolicy;
 
     private User user;
 
-    @Override
-    protected void setUp()
+    @Before
+    public void setUp()
         throws Exception
     {
         super.setUp();
         securityManager = new DefaultSecurityManager();
-        userManager = (UserManager) lookup( UserManager.ROLE, "memory" );
-        rbacManager = (RBACManager) lookup( RBACManager.ROLE, "memory" );
-        userSecurityPolicy = (UserSecurityPolicy) lookup( userSecurityPolicy.ROLE );
+
+
 
         realm = new RedbackRealm( userManager, rbacManager, userSecurityPolicy );
         securityManager.setRealm( realm );
@@ -70,8 +85,8 @@ public class RedbackRealmTest
         userManager.updateUser( user );
     }
 
-    @Override
-    protected void tearDown()
+    @After
+    public void tearDown()
         throws Exception
     {
         super.tearDown();
@@ -80,7 +95,6 @@ public class RedbackRealmTest
         realm = null;
     }
 
-    @Override
     protected String getPlexusConfigLocation()
     {
         return "plexus.xml";
@@ -118,7 +132,8 @@ public class RedbackRealmTest
         }
     }
 
-    public void testUnsuccessfullAuthAttemptsLockAccount() throws Exception
+    public void testUnsuccessfullAuthAttemptsLockAccount()
+        throws Exception
     {
         assertFalse( user.isLocked() );
         userSecurityPolicy.setLoginAttemptCount( 2 );
@@ -127,7 +142,7 @@ public class RedbackRealmTest
             securityManager.login( new UsernamePasswordToken( "test1", "incorrectpassowrd" ) );
             fail( "password should be incorrect" );
         }
-        catch (IncorrectCredentialsException e)
+        catch ( IncorrectCredentialsException e )
         {
             assertFalse( user.isLocked() );
         }

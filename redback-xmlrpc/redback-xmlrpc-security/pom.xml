@@ -55,7 +55,6 @@
     <dependency>
       <groupId>org.codehaus.redback</groupId>
       <artifactId>redback-policy</artifactId>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.redback</groupId>
