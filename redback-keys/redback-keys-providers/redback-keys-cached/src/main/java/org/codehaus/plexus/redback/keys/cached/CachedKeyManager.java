@@ -128,4 +128,23 @@ public class CachedKeyManager
         return "Cached Key Manager [" + this.keyImpl.getId() + "]";
     }
 
+    public KeyManager getKeyImpl()
+    {
+        return keyImpl;
+    }
+
+    public void setKeyImpl( KeyManager keyImpl )
+    {
+        this.keyImpl = keyImpl;
+    }
+
+    public Cache getKeysCache()
+    {
+        return keysCache;
+    }
+
+    public void setKeysCache( Cache keysCache )
+    {
+        this.keysCache = keysCache;
+    }
 }

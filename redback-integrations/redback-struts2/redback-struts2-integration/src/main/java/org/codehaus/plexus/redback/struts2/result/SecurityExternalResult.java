@@ -1,7 +1,5 @@
 package org.codehaus.plexus.redback.struts2.result;
 
-import com.opensymphony.xwork2.ActionInvocation;
-
 /*
  * Copyright 2005-2006 The Codehaus.
  *
@@ -18,6 +16,14 @@ import com.opensymphony.xwork2.ActionInvocation;
  * limitations under the License.
  */
 
+import com.opensymphony.xwork2.ActionInvocation;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+
+
+
+
 /**
  * SecurityExternalResult
  *
@@ -28,6 +34,8 @@ import com.opensymphony.xwork2.ActionInvocation;
  * instantiation-strategy="per-lookup"
  */
 @SuppressWarnings("serial")
+@Controller("securityExternalResult")
+@Scope("prototype")
 public class SecurityExternalResult
     extends AbstractBackTrackingResult
 {

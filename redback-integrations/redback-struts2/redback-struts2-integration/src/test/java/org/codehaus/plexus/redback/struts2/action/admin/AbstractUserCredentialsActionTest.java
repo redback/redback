@@ -125,13 +125,9 @@ public abstract class AbstractUserCredentialsActionTest
 
         assignment = rbacManager.createUserAssignment( "user2" );
         rbacManager.saveUserAssignment( assignment );
-
-
     }
 
-    private static class FakeXWorkConverter extends  XWorkConverter{
-        // noop
-    }
+
 
     protected void addAssignment( String principal, String roleName )
         throws RbacManagerException, RbacObjectInvalidException
