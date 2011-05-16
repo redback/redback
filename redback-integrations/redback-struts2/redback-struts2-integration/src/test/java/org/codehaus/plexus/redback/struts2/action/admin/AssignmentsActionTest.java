@@ -18,6 +18,7 @@ package org.codehaus.plexus.redback.struts2.action.admin;
 
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionProxy;
 import com.opensymphony.xwork2.config.Configuration;
 import com.opensymphony.xwork2.config.ConfigurationManager;
 import com.opensymphony.xwork2.inject.Container;
@@ -60,7 +61,8 @@ public class AssignmentsActionTest
     {
         super.setUp();
 
-        action =  (AssignmentsAction) getActionProxy( "redback-assignments" );
+        ActionProxy actionProxy = getActionProxy( "/security/assignments" );
+        action =  (AssignmentsAction) actionProxy.getAction();
 
         //action = (AssignmentsAction) lookup( Action.class, "redback-assignments" );
 

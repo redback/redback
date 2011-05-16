@@ -36,13 +36,19 @@ public class SystemInfoActionTest
 {
     private SystemInfoAction systeminfo;
 
+    @Override
+    protected String[] getContextLocations()
+    {
+        return new String[]{ "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" };
+    }
+
     @Before
-    protected void setUp()
+    public void setUp()
         throws Exception
     {
         super.setUp();
 
-        systeminfo = (SystemInfoAction) getActionProxy( "redback-sysinfo" );
+        systeminfo = (SystemInfoAction) getActionProxy( "/security/systeminfo" ).getAction();
 
         //systeminfo = (SystemInfoAction) lookup( "com.opensymphony.xwork2.Action", "redback-sysinfo" );
     }

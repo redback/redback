@@ -55,7 +55,8 @@ public class UserEditActionTest
     {
         super.setUp();
 
-        action = (UserEditAction) getActionProxy( "/security/redback-admin-user-edit" );
+        action = (UserEditAction) getActionProxy( "/security/useredit" ).getAction();
+
         //action = (UserEditAction) lookup( Action.class, "redback-admin-user-edit" );
 
         originalLocale = Locale.getDefault();

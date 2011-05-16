@@ -16,11 +16,14 @@ package org.codehaus.plexus.redback.struts2.interceptor;
  * limitations under the License.
  */
 
+import org.springframework.stereotype.Service;
+
 /**
  * @author <a href='mailto:rahul.thakur.xdev@gmail.com'>Rahul Thakur</a>
  * @version $Id: MockComponentImpl.java 5687 2007-02-14 00:11:28Z brett $
  * @plexus.component
  */
+@Service
 public class MockComponentImpl
     implements MockComponent
 {

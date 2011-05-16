@@ -18,12 +18,14 @@ package org.codehaus.plexus.redback.struts2.interceptor;
 
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.Interceptor;
+import org.springframework.stereotype.Service;
 
 /**
  * @author <a href='mailto:rahul.thakur.xdev@gmail.com'>Rahul Thakur</a>
  * @version $Id: MockCustomInterceptor.java 5687 2007-02-14 00:11:28Z brett $
  * @plexus.component role="com.opensymphony.xwork2.interceptor.Interceptor role-hint="testCustomInterceptor"
  */
+@Service("testCustomInterceptor")
 public class MockCustomInterceptor
     implements Interceptor
 {
