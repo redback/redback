@@ -36,54 +36,53 @@ import org.codehaus.plexus.redback.users.UserNotFoundException;
  */
 public interface SecuritySystem
 {
-    static String ROLE = SecuritySystem.class.getName();
 
     // ----------------------------------------------------------------------------
     // Authentication
     // ----------------------------------------------------------------------------
 
-    public SecuritySession authenticate( AuthenticationDataSource source )
+    SecuritySession authenticate( AuthenticationDataSource source )
         throws AuthenticationException, UserNotFoundException, AccountLockedException, MustChangePasswordException;
 
-    public boolean isAuthenticated( AuthenticationDataSource source )
+    boolean isAuthenticated( AuthenticationDataSource source )
         throws AuthenticationException, UserNotFoundException, AccountLockedException, MustChangePasswordException;
 
     // ----------------------------------------------------------------------------
     // Authorization
     // ----------------------------------------------------------------------------
 
-    public AuthorizationResult authorize( SecuritySession session, Object permission )
+    AuthorizationResult authorize( SecuritySession session, Object permission )
         throws AuthorizationException;
 
-    public boolean isAuthorized( SecuritySession session, Object permission )
+    boolean isAuthorized( SecuritySession session, Object permission )
         throws AuthorizationException;
 
-    public AuthorizationResult authorize( SecuritySession session, Object permission, Object resource )
+    AuthorizationResult authorize( SecuritySession session, Object permission, Object resource )
         throws AuthorizationException;
 
-    public boolean isAuthorized( SecuritySession session, Object permission, Object resource )
+    boolean isAuthorized( SecuritySession session, Object permission, Object resource )
         throws AuthorizationException;
 
     // ----------------------------------------------------------------------------
     // User Management
     // ----------------------------------------------------------------------------
 
-    public UserManager getUserManager();
+    UserManager getUserManager();
     
     // ----------------------------------------------------------------------------
     // Key Management
     // ----------------------------------------------------------------------------
     
-    public KeyManager getKeyManager();
+    KeyManager getKeyManager();
 
     // ----------------------------------------------------------------------------
     // Policy Management
     // ----------------------------------------------------------------------------
     
-    public UserSecurityPolicy getPolicy();
+    UserSecurityPolicy getPolicy();
 
-    public String getUserManagementId();
-    public String getAuthenticatorId();
-    public String getAuthorizerId();
+    String getUserManagementId();
+    String getAuthenticatorId();
+    String getAuthorizerId();
 }
 

@@ -48,7 +48,7 @@ import org.springframework.stereotype.Controller;
  * @plexus.component role="com.opensymphony.xwork2.interceptor.Interceptor"
  * role-hint="redbackAutoLoginInterceptor"
  */
-@Controller( "redbackAutoLoginInerceptor" )
+@Controller( "redbackAutoLoginInterceptor" )
 @Scope( "prototype" )
 public class AutoLoginInterceptor
     implements Interceptor

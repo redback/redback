@@ -19,14 +19,6 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * under the License.
  */
 
-import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
-import com.opensymphony.xwork2.inject.Container;
-import com.opensymphony.xwork2.inject.Scope;
-import com.opensymphony.xwork2.ognl.OgnlReflectionProvider;
-import com.opensymphony.xwork2.util.CompoundRoot;
-import com.opensymphony.xwork2.util.ValueStack;
-import com.opensymphony.xwork2.util.reflection.ReflectionProvider;
 import net.sf.ehcache.CacheManager;
 import org.apache.struts2.StrutsSpringTestCase;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
@@ -54,9 +46,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 @RunWith( SpringJUnit4ClassRunner.class )
 @ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
@@ -65,16 +54,23 @@ public abstract class AbstractUserCredentialsActionTest
 {
     protected static final String PASSWORD = "password1";
 
-    @Inject @Named(value = "rBACManager#memory")
+    //@Inject
+    //@Named( value = "rBACManager#memory" )
     protected RBACManager rbacManager;
 
-    @Inject
+    //@Inject
     private RoleManager roleManager;
 
-    @Inject
+    //@Inject
     protected SecuritySystem system;
 
     protected SecuritySession session;
+
+    @Override
+    protected String[] getContextLocations()
+    {
+        return new String[]{ "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" };
+    }
 
     @Before
     public void setUp()
@@ -82,6 +78,11 @@ public abstract class AbstractUserCredentialsActionTest
     {
         CacheManager.getInstance().clearAll();
         super.setUp();
+
+        rbacManager = applicationContext.getBean( "rBACManager#memory" , RBACManager.class );
+        roleManager = applicationContext.getBean( RoleManager.class );
+        system = applicationContext.getBean( SecuritySystem.class );
+
 
         roleManager.loadRoleModel( getClass().getResource( "/redback.xml" ) );
         roleManager.createTemplatedRole( "project-administrator", "default" );
@@ -128,12 +129,11 @@ public abstract class AbstractUserCredentialsActionTest
     }
 
 
-
     protected void addAssignment( String principal, String roleName )
         throws RbacManagerException, RbacObjectInvalidException
     {
         UserAssignment assignment;
-    
+
         if ( rbacManager.userAssignmentExists( principal ) )
         {
             assignment = rbacManager.getUserAssignment( principal );
@@ -154,8 +154,8 @@ public abstract class AbstractUserCredentialsActionTest
         authdatasource.setPassword( password );
         session = system.authenticate( authdatasource );
         assertTrue( session.isAuthenticated() );
-    
-        action.setSession( Collections.singletonMap( SecuritySystemConstants.SECURITY_SESSION_KEY,( Object ) session ) );
+
+        action.setSession( Collections.singletonMap( SecuritySystemConstants.SECURITY_SESSION_KEY, (Object) session ) );
     }
 
 }
