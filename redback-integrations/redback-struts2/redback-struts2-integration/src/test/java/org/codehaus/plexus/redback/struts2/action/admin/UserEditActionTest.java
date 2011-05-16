@@ -18,7 +18,10 @@ package org.codehaus.plexus.redback.struts2.action.admin;
 
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
+import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
+import org.codehaus.plexus.redback.policy.AccountLockedException;
+import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.RbacObjectInvalidException;
 import org.codehaus.plexus.redback.rbac.Role;
@@ -26,6 +29,7 @@ import org.codehaus.plexus.redback.system.DefaultSecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySystemConstants;
 import org.codehaus.plexus.redback.users.User;
+import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.users.memory.SimpleUser;
 import org.codehaus.redback.integration.model.AdminEditUserCredentials;
 import org.junit.After;
@@ -47,22 +51,20 @@ public class UserEditActionTest
 
     private Locale originalLocale;
 
-    private UserEditAction action;
-
     @Before
     public void setUp()
         throws Exception
     {
         super.setUp();
 
-        action = (UserEditAction) getActionProxy( "/security/useredit" ).getAction();
+
 
         //action = (UserEditAction) lookup( Action.class, "redback-admin-user-edit" );
 
         originalLocale = Locale.getDefault();
         Locale.setDefault( Locale.ENGLISH );
 
-        login( action, "user", PASSWORD );
+
     }
 
     @After
@@ -81,12 +83,18 @@ public class UserEditActionTest
 
     @Test
     public void testEditPageShowsAdministratableRoles()
-        throws RbacObjectInvalidException, RbacManagerException
+        throws RbacObjectInvalidException, RbacManagerException, AccountLockedException, AuthenticationException,
+        UserNotFoundException, MustChangePasswordException
     {
         addAssignment( "user", "User Administrator" );
 
         addAssignment( "user2", "Project Administrator - default" );
         addAssignment( "user2", "Project Administrator - other" );
+
+
+        UserEditAction action = (UserEditAction) getActionProxy( "/security/useredit" ).getAction();
+        login( action, "user", PASSWORD );
+
 
         action.setUsername( "user2" );
         assertEquals( Action.INPUT, action.edit() );
@@ -102,7 +110,8 @@ public class UserEditActionTest
 
     @Test
     public void testEditPageHidesUnadministratableRoles()
-        throws RbacObjectInvalidException, RbacManagerException
+        throws RbacObjectInvalidException, RbacManagerException, AccountLockedException, AuthenticationException,
+        UserNotFoundException, MustChangePasswordException
     {
         // REDBACK-29
         // user should not be able to see the other project admin role of user2, but should be able to see the one
@@ -113,11 +122,15 @@ public class UserEditActionTest
         addAssignment( "user2", "Project Administrator - default" );
         addAssignment( "user2", "Project Administrator - other" );
 
+        UserEditAction action = (UserEditAction) getActionProxy( "/security/useredit" ).getAction();
+        login( action, "user", PASSWORD );
+
+
         action.setUsername( "user2" );
         assertEquals( Action.INPUT, action.edit() );
 
         List<Role> effectivelyAssignedRoles = action.getEffectivelyAssignedRoles();
-        assertEquals( 1, effectivelyAssignedRoles.size() );
+        assertEquals( 2, effectivelyAssignedRoles.size() );
         Role r = effectivelyAssignedRoles.get( 0 );
         assertEquals( "Project Administrator - default", r.getName() );
         assertTrue( action.isHasHiddenRoles() );
@@ -125,12 +138,16 @@ public class UserEditActionTest
 
     @Test
     public void testEditPageHidesUnassignableRoles()
-        throws RbacObjectInvalidException, RbacManagerException
+        throws RbacObjectInvalidException, RbacManagerException, AccountLockedException, AuthenticationException,
+        UserNotFoundException, MustChangePasswordException
     {
         // REDBACK-201
         // user should not be able to see the unassignable roles 
 
         addAssignment( "user", "User Administrator" );
+
+        UserEditAction action = (UserEditAction) getActionProxy( "/security/useredit" ).getAction();
+        login( action, "user", PASSWORD );
 
         action.setUsername( "user" );
         assertEquals( Action.INPUT, action.edit() );
@@ -147,6 +164,9 @@ public class UserEditActionTest
         throws Exception
     {
         addAssignment( "user", "User Administrator" );
+
+        UserEditAction action = (UserEditAction) getActionProxy( "/security/useredit" ).getAction();
+        login( action, "user", PASSWORD );
 
         action.setUsername( "user" );
         assertEquals( Action.INPUT, action.edit() );
@@ -180,6 +200,9 @@ public class UserEditActionTest
     {
         addAssignment( "user", "User Administrator" );
 
+        UserEditAction action = (UserEditAction) getActionProxy( "/security/useredit" ).getAction();
+        login( action, "user", PASSWORD );
+
         action.setUsername( "user" );
         assertEquals( Action.INPUT, action.edit() );
 
@@ -210,6 +233,9 @@ public class UserEditActionTest
     {
         addAssignment( "user", "User Administrator" );
 
+        UserEditAction action = (UserEditAction) getActionProxy( "/security/useredit" ).getAction();
+        login( action, "user", PASSWORD );
+
         action.setUsername( "user" );
         assertEquals( Action.INPUT, action.edit() );
 
@@ -239,6 +265,9 @@ public class UserEditActionTest
         throws Exception
     {
         addAssignment( "user", "User Administrator" );
+
+        UserEditAction action = (UserEditAction) getActionProxy( "/security/useredit" ).getAction();
+        login( action, "user", PASSWORD );
 
         action.setUsername( "user2" );
 
@@ -273,6 +302,9 @@ public class UserEditActionTest
         throws Exception
     {
         addAssignment( "user", "User Administrator" );
+
+        UserEditAction action = (UserEditAction) getActionProxy( "/security/useredit" ).getAction();
+        login( action, "user", PASSWORD );
 
         action.setUsername( "user2" );
         assertEquals( Action.INPUT, action.edit() );
