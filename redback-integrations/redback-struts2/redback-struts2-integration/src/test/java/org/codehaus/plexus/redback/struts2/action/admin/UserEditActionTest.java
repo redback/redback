@@ -74,7 +74,7 @@ public class UserEditActionTest
         }
         finally
         {
-            Locale.setDefault( originalLocale );
+            Locale.setDefault( originalLocale == null ? Locale.ENGLISH : originalLocale );
         }
     }
 

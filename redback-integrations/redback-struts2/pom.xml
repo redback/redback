@@ -41,6 +41,16 @@
         <artifactId>struts2-junit-plugin</artifactId>
         <version>${struts.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.apache.struts.xwork</groupId>
+        <artifactId>xwork-core</artifactId>
+        <version>${struts.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>ognl</groupId>
+        <artifactId>ognl</artifactId>
+        <version>3.0.1</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   
@@ -60,6 +70,6 @@
   </profiles>
 
   <properties>
-    <struts.version>2.2.1.1</struts.version>
+    <struts.version>2.2.3</struts.version>
   </properties>
 </project>
