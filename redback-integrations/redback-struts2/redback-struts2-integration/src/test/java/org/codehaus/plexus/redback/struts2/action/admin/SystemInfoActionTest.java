@@ -16,7 +16,12 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import org.apache.struts2.StrutsSpringTestCase;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * SystemInfoActionTest
@@ -24,19 +29,25 @@ import org.codehaus.plexus.spring.PlexusInSpringTestCase;
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public class SystemInfoActionTest
-    extends PlexusInSpringTestCase
+    extends StrutsSpringTestCase
 {
     private SystemInfoAction systeminfo;
 
+    @Before
     protected void setUp()
         throws Exception
     {
         super.setUp();
 
-        systeminfo = (SystemInfoAction) lookup( "com.opensymphony.xwork2.Action", "redback-sysinfo" );
+        systeminfo = (SystemInfoAction) getActionProxy( "redback-sysinfo" );
+
+        //systeminfo = (SystemInfoAction) lookup( "com.opensymphony.xwork2.Action", "redback-sysinfo" );
     }
 
+    @Test
     public void testSystemInfoDump()
     {
         String result = systeminfo.show();

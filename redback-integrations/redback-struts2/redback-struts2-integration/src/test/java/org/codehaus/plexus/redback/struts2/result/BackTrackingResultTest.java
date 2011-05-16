@@ -16,27 +16,32 @@ package org.codehaus.plexus.redback.struts2.result;
  * limitations under the License.
  */
 
-import java.util.Map;
+import junit.framework.TestCase;
 import org.codehaus.plexus.redback.struts2.ActionContextStub;
 import org.codehaus.plexus.redback.struts2.ActionInvocationStub;
 import org.codehaus.plexus.redback.struts2.ActionProxyStub;
 import org.codehaus.plexus.redback.struts2.interceptor.ActionInvocationTracker;
 import org.codehaus.plexus.redback.struts2.interceptor.SimpleActionInvocationTracker;
-import org.codehaus.plexus.redback.struts2.result.SimpleBackTrackingResult;
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Map;
+
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public class BackTrackingResultTest
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
     public static final int HISTORY_SIZE = 2;
 
-    @Override
     protected String getPlexusConfigLocation()
     {
         return "plexus.xml";
     }    
     
-    @SuppressWarnings("unchecked")
+    @Test
     public void testBackTrackPrevious()
         throws Exception
     {
@@ -70,7 +75,7 @@ public class BackTrackingResultTest
         tracker.addActionInvocation( currentActionInvocation );
         tracker.setBackTrack();
         // add the tracker to the session
-        actionInvocation1.getInvocationContext().getSession().put( ActionInvocationTracker.ROLE, tracker );
+        actionInvocation1.getInvocationContext().getSession().put( ActionInvocationTracker.SESSION_KEY, tracker );
 
         // before backtrack
         Map<String,Object> parametersMap = actionInvocation1.getInvocationContext().getParameters();
@@ -129,7 +134,7 @@ public class BackTrackingResultTest
         tracker.addActionInvocation( currentActionInvocation );
         tracker.setBackTrack();
         // add the tracker to the session
-        actionInvocation1.getInvocationContext().getSession().put( ActionInvocationTracker.ROLE, tracker );
+        actionInvocation1.getInvocationContext().getSession().put( ActionInvocationTracker.SESSION_KEY, tracker );
 
         // before backtrack
         Map<String, Object> parametersMap = actionInvocation1.getInvocationContext().getParameters();

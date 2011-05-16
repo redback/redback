@@ -36,6 +36,8 @@ import org.codehaus.plexus.redback.struts2.model.ApplicationRoleDetails.RoleTabl
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,13 +54,15 @@ public class AssignmentsActionTest
 {
     private AssignmentsAction action;
 
-    @SuppressWarnings("unchecked")
+    @Before
     public void setUp()
         throws Exception
     {
         super.setUp();
 
-        action = (AssignmentsAction) lookup( Action.class, "redback-assignments" );
+        action =  (AssignmentsAction) getActionProxy( "redback-assignments" );
+
+        //action = (AssignmentsAction) lookup( Action.class, "redback-assignments" );
 
         login( action, "user", PASSWORD );
         action.setPrincipal( "user2" );
@@ -76,24 +80,12 @@ public class AssignmentsActionTest
         
         assertNotNull( ActionContext.getContext() );
     }
-    
-    public static Dispatcher prepareDispatcher( ServletContext servletContext, Map<String, String> params )
-    {
-        if (params == null)
-        {
-            params = new HashMap<String, String>();
-        }
-        Dispatcher dispatcher = new Dispatcher(servletContext, params);
-        dispatcher.init();
-        Dispatcher.setInstance(dispatcher);
-        
-        return dispatcher;
-    }
 
     /**
      * Check security - show/edituser should fail if the permission 'user-management-user-role' is not present, but a
      * valid 'user-management-role-grant' is.
      */
+    @Test
     public void testUserWithOnlyRoleGrantHasNoAccess()
         throws Exception
     {
@@ -112,6 +104,7 @@ public class AssignmentsActionTest
      * Check security - check success if the permission 'user-management-user-role' is present along with global
      * 'user-management-role-grant'.
      */
+    @Test
     public void testUserWithOnlyRoleGrantHasAccess()
         throws Exception
     {
@@ -137,6 +130,7 @@ public class AssignmentsActionTest
     /**
      * Check roles can be assigned if the user has no previous assignments.
      */
+    @Test
     public void testShowWhenUserHasNoAssignments()
         throws Exception
     {
@@ -152,6 +146,7 @@ public class AssignmentsActionTest
     /**
      * Check security - show should filter out roles that the 'user-management-role-grant' is not present for
      */
+    @Test
     public void testRoleGrantFilteringOnShow()
         throws Exception
     {
@@ -213,6 +208,7 @@ public class AssignmentsActionTest
      * Check security - edituser should skip adding a role that 'user-management-role-grant' is not present for a
      * non-templated role
      */
+    @Test
     public void testRoleGrantFilteringOnAddRolesNotPermittedTemplated()
         throws RbacObjectInvalidException, RbacManagerException
     {
@@ -235,6 +231,7 @@ public class AssignmentsActionTest
      * Check security - edituser should skip adding a role that 'user-management-role-grant' is not present for a
      * templated role
      */
+    @Test
     public void testRoleGrantFilteringOnAddRolesNotPermittedNotTemplated()
         throws RbacObjectInvalidException, RbacManagerException
     {
@@ -257,6 +254,7 @@ public class AssignmentsActionTest
      * Check security - edituser should succeed if adding a role that 'user-management-role-grant' is present for
      * untemplated roles
      */
+    @Test
     public void testRoleGrantFilteringOnAddRolesPermittedNotTemplated()
         throws RbacObjectInvalidException, RbacManagerException, AccountLockedException, AuthenticationException,
         UserNotFoundException
@@ -281,6 +279,7 @@ public class AssignmentsActionTest
      * Check security - edituser should succeed if adding a role that 'user-management-role-grant' is present for
      * templated roles
      */
+    @Test
     public void testRoleGrantFilteringOnAddRolesPermittedTemplated()
         throws RbacObjectInvalidException, RbacManagerException, AccountLockedException, AuthenticationException,
         UserNotFoundException
@@ -305,6 +304,7 @@ public class AssignmentsActionTest
      * Check security - edituser should succeed if adding a role that 'user-management-role-grant' is present for
      * templated roles
      */
+    @Test
     public void testRoleGrantFilteringOnAddRolesPermittedTemplatedExistingRole()
         throws RbacObjectInvalidException, RbacManagerException, AccountLockedException, AuthenticationException,
         UserNotFoundException
@@ -332,6 +332,7 @@ public class AssignmentsActionTest
      * Check security - edituser should fail if removing a role that 'user-management-role-grant' is not present for
      * untemplated roles
      */
+    @Test
     public void testRoleGrantFilteringOnRemoveRolesNotPermittedNotTemplated()
         throws RbacObjectInvalidException, RbacManagerException
     {
@@ -356,6 +357,7 @@ public class AssignmentsActionTest
      * Check security - edituser should fail if removing a role that 'user-management-role-grant' is not present for
      * templated roles
      */
+    @Test
     public void testRoleGrantFilteringOnRemoveRolesNotPermittedTemplated()
         throws RbacObjectInvalidException, RbacManagerException
     {
@@ -380,6 +382,7 @@ public class AssignmentsActionTest
      * Check security - edituser should succeed if removing a role that 'user-management-role-grant' is present for
      * untemplated roles
      */
+    @Test
     public void testRoleGrantFilteringOnRemoveRolesPermittedNotTemplated()
         throws RbacObjectInvalidException, RbacManagerException, AccountLockedException, AuthenticationException,
         UserNotFoundException
@@ -404,6 +407,7 @@ public class AssignmentsActionTest
      * Check security - edituser should succeed if removing a role that 'user-management-role-grant' is present for
      * templated roles and there is an existing role that is not assignable by the current user.
      */
+    @Test
     public void testRoleGrantFilteringOnRemoveRolesPermittedTemplatedExistingRole()
         throws RbacObjectInvalidException, RbacManagerException
     {
@@ -434,6 +438,7 @@ public class AssignmentsActionTest
      * Check security - edituser should succeed if removing a role that 'user-management-role-grant' is present for
      * templated roles
      */
+    @Test
     public void testRoleGrantFilteringOnRemoveRolesPermittedTemplated()
         throws RbacObjectInvalidException, RbacManagerException
     {
@@ -459,6 +464,7 @@ public class AssignmentsActionTest
      * 
      * @throws MustChangePasswordException
      */
+    @Test
     public void testSystemAdminCanShowRoles()
         throws Exception
     {
@@ -493,6 +499,7 @@ public class AssignmentsActionTest
      * Check security - show should succeed and display all roles, even without 'user-management-role-grant' or
      * 'user-management-user-role' for the user administrators.
      */
+    @Test
     public void testUserAdminCanShowRoles()
         throws Exception
     {
@@ -526,6 +533,7 @@ public class AssignmentsActionTest
      * Check security - edituser should succeed in adding a role, even without 'user-management-role-grant' or
      * 'user-management-user-role' for the user administrators.
      */
+    @Test
     public void testUserAdminCanAddRoles()
         throws Exception
     {
@@ -555,6 +563,7 @@ public class AssignmentsActionTest
      * Check security - edituser should succeed in removing a role, even without 'user-management-role-grant' or
      * 'user-management-user-role' for the user administrators.
      */
+    @Test
     public void testUserAdminCanRemoveRoles()
         throws Exception
     {
@@ -582,6 +591,7 @@ public class AssignmentsActionTest
      * Check that a configured struts2 redback app only removes roles configured for the app. Without this, redback
      * applications sharing a user database will remove each other's roles on save.
      */
+    @Test
     public void testUserAdminCannotRemoveNonAppRoles()
         throws Exception
     {

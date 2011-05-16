@@ -19,30 +19,38 @@ package org.codehaus.plexus.redback.struts2.interceptor;
  * limitations under the License.
  */
 
-import com.opensymphony.xwork2.interceptor.Interceptor;
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import junit.framework.TestCase;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 
 /**
- * Test for {@link PlexusObjectFactory} when it attempts to lookup Custom Xwork interceptors.
  *
  * @author <a href='mailto:rahul.thakur.xdev@gmail.com'>Rahul Thakur</a>
  * @version $Id: CustomInterceptorTest.java 5687 2007-02-14 00:11:28Z brett $
  */
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public class CustomInterceptorTest
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
 
+    @Inject @Named(value = "testCustomInterceptor")
+    MockCustomInterceptor component;
+
     /**
-     * Tests a plain Interceptor lookup that <em>does not</em> use the {@link PlexusObjectFactory}
      *
      * @throws Exception on errors
      */
+    @Test
     public void testLookup()
         throws Exception
     {
-        MockCustomInterceptor component =
-            (MockCustomInterceptor) lookup( Interceptor.class.getName(), "testCustomInterceptor" );
         assertNotNull( component );
     }
 }

@@ -16,14 +16,22 @@ package org.codehaus.plexus.redback.struts2.interceptor;
  * limitations under the License.
  */
 
-import java.util.Map;
+import junit.framework.TestCase;
 import org.codehaus.plexus.redback.struts2.ActionContextStub;
 import org.codehaus.plexus.redback.struts2.ActionInvocationStub;
 import org.codehaus.plexus.redback.struts2.ActionProxyStub;
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Map;
+
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public class SimpleActionInvocationTrackerTest
-    extends PlexusInSpringTestCase
+    extends TestCase
 {
     private static final int HISTORY_SIZE = 2;
 
@@ -31,12 +39,13 @@ public class SimpleActionInvocationTrackerTest
 
     
     
-    @Override
+
     protected String getPlexusConfigLocation()
     {
         return "plexus.xml";
     }
 
+    @Before
     public void setUp()
         throws Exception
     {
@@ -44,7 +53,7 @@ public class SimpleActionInvocationTrackerTest
         tracker = new SimpleActionInvocationTracker();
     }
 
-    @SuppressWarnings("unchecked")
+    @Test
     public void testAddActionInvocation()
         throws Exception
     {
@@ -97,6 +106,7 @@ public class SimpleActionInvocationTrackerTest
         assertEquals( ActionContextStub.VALUE_3, parametersMap.get( ActionContextStub.PARAMETER_3 ) );
     }
 
+    @Test
     public void testHistoryCounter()
         throws Exception
     {

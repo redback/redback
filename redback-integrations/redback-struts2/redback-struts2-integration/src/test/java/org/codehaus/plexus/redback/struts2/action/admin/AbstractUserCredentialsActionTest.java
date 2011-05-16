@@ -19,23 +19,16 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * under the License.
  */
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.conversion.impl.XWorkConverter;
 import com.opensymphony.xwork2.inject.Container;
 import com.opensymphony.xwork2.inject.Scope;
 import com.opensymphony.xwork2.ognl.OgnlReflectionProvider;
 import com.opensymphony.xwork2.util.CompoundRoot;
-import com.opensymphony.xwork2.util.LocalizedTextUtil;
-import com.opensymphony.xwork2.util.TextParseUtil;
 import com.opensymphony.xwork2.util.ValueStack;
 import com.opensymphony.xwork2.util.reflection.ReflectionProvider;
 import net.sf.ehcache.CacheManager;
-
+import org.apache.struts2.StrutsSpringTestCase;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
@@ -53,38 +46,47 @@ import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.users.memory.SimpleUser;
-import org.codehaus.plexus.spring.PlexusInSpringTestCase;
+import org.junit.Before;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
 public abstract class AbstractUserCredentialsActionTest
-    extends PlexusInSpringTestCase
+    extends StrutsSpringTestCase
 {
     protected static final String PASSWORD = "password1";
 
+    @Inject @Named(value = "rBACManager#memory")
     protected RBACManager rbacManager;
 
+    @Inject
     private RoleManager roleManager;
 
+    @Inject
     protected SecuritySystem system;
 
     protected SecuritySession session;
 
+    @Before
     public void setUp()
         throws Exception
     {
         CacheManager.getInstance().clearAll();
-        CacheManager.getInstance().removalAll();
-        CacheManager.getInstance().shutdown();
         super.setUp();
 
-        system = (SecuritySystem) lookup( SecuritySystem.ROLE );
-
-        roleManager = (RoleManager) lookup( RoleManager.class );
         roleManager.loadRoleModel( getClass().getResource( "/redback.xml" ) );
         roleManager.createTemplatedRole( "project-administrator", "default" );
         roleManager.createTemplatedRole( "project-administrator", "other" );
         roleManager.createTemplatedRole( "project-grant-only", "default" );
-
-        rbacManager = (RBACManager) lookup( RBACManager.class, "memory" );
 
         UserManager userManager = system.getUserManager();
 

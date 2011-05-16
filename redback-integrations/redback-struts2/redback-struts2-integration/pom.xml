@@ -149,6 +149,12 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jsp-api</artifactId>
+      <version>2.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>taglibs</groupId>
       <artifactId>standard</artifactId>
     </dependency>
@@ -205,18 +211,16 @@
       <version>2.2</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.apache.struts</groupId>
+      <artifactId>struts2-junit-plugin</artifactId>
+      <scope>test</scope>
+    </dependency>
 
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jcl-over-slf4j</artifactId>
       <version>${slf4jVersion}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-slf4j-logging</artifactId>
-      <version>1.1</version>
       <scope>test</scope>
     </dependency>
 
@@ -248,34 +252,5 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>merge</id>
-            <configuration>
-              <roleDefaults>
-                <roleDefault>
-                  <role>com.opensymphony.xwork2.Action</role>
-                  <instantiation-strategy>per-lookup</instantiation-strategy>
-                </roleDefault>
-              </roleDefaults>
-              <descriptors>
-                <descriptor>${basedir}/src/main/resources/META-INF/plexus/components-fragment.xml</descriptor>
-                <descriptor>${project.build.directory}/generated-resources/plexus/META-INF/plexus/components.xml</descriptor>
-              </descriptors>
-              <output>${project.build.outputDirectory}/META-INF/plexus/components.xml</output>
-            </configuration>
-            <goals>
-              <goal>merge-descriptors</goal>
-            </goals>
-            <phase>process-resources</phase>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+
 </project>

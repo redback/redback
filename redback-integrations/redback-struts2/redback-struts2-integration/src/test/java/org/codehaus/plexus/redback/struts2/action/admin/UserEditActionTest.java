@@ -28,6 +28,9 @@ import org.codehaus.plexus.redback.system.SecuritySystemConstants;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.memory.SimpleUser;
 import org.codehaus.redback.integration.model.AdminEditUserCredentials;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -46,12 +49,14 @@ public class UserEditActionTest
 
     private UserEditAction action;
 
+    @Before
     public void setUp()
         throws Exception
     {
         super.setUp();
 
-        action = (UserEditAction) lookup( Action.class, "redback-admin-user-edit" );
+        action = (UserEditAction) getActionProxy( "redback-admin-user-edit" );
+        //action = (UserEditAction) lookup( Action.class, "redback-admin-user-edit" );
 
         originalLocale = Locale.getDefault();
         Locale.setDefault( Locale.ENGLISH );
@@ -59,8 +64,8 @@ public class UserEditActionTest
         login( action, "user", PASSWORD );
     }
 
-    @Override
-    protected void tearDown()
+    @After
+    public void tearDown()
         throws Exception
     {
         try
@@ -73,6 +78,7 @@ public class UserEditActionTest
         }
     }
 
+    @Test
     public void testEditPageShowsAdministratableRoles()
         throws RbacObjectInvalidException, RbacManagerException
     {
@@ -93,6 +99,7 @@ public class UserEditActionTest
         assertFalse( action.isHasHiddenRoles() );
     }
 
+    @Test
     public void testEditPageHidesUnadministratableRoles()
         throws RbacObjectInvalidException, RbacManagerException
     {
@@ -115,6 +122,7 @@ public class UserEditActionTest
         assertTrue( action.isHasHiddenRoles() );
     }
 
+    @Test
     public void testEditPageHidesUnassignableRoles()
         throws RbacObjectInvalidException, RbacManagerException
     {
@@ -133,6 +141,7 @@ public class UserEditActionTest
         assertFalse( action.isHasHiddenRoles() );
     }
 
+    @Test
     public void testRequireOldPWWhenEditingOwnAccountSuccess()
         throws Exception
     {
@@ -164,6 +173,7 @@ public class UserEditActionTest
         assertEquals( 0, action.getFieldErrors().size() );
     }
 
+    @Test
     public void testRequireOldPWWhenEditingOwnAccountFailed()
         throws Exception
     {
@@ -193,6 +203,7 @@ public class UserEditActionTest
         assertEquals( action.getText( "password.provided.does.not.match.existing" ), oldPasswordErrors.get( 0 ) );
     }
 
+    @Test
     public void testRequireOldPWWhenEditingOwnAccountOldPasswordIsNull()
         throws Exception
     {
@@ -222,6 +233,7 @@ public class UserEditActionTest
         assertEquals( action.getText( "old.password.required" ), oldPasswordErrors.get( 0 ) );
     }
 
+    @Test
     public void testRequireAdminPWWhenEditingOtherAccountPWIncorrect()
         throws Exception
     {
@@ -255,6 +267,7 @@ public class UserEditActionTest
         assertEquals( action.getText( "user.admin.password.does.not.match.existing" ), errors.iterator().next() );
     }
 
+    @Test
     public void testRequireAdminPWWhenEditingOtherAccountPWEmpty()
         throws Exception
     {

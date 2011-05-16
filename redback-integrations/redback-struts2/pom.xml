@@ -36,6 +36,11 @@
         <artifactId>struts2-core</artifactId>
         <version>${struts.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.apache.struts</groupId>
+        <artifactId>struts2-junit-plugin</artifactId>
+        <version>${struts.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   
@@ -55,6 +60,6 @@
   </profiles>
 
   <properties>
-    <struts.version>2.1.8.1</struts.version>
+    <struts.version>2.2.1.1</struts.version>
   </properties>
 </project>
