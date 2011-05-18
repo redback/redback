@@ -86,6 +86,9 @@ public class UserEditActionTest
         throws RbacObjectInvalidException, RbacManagerException, AccountLockedException, AuthenticationException,
         UserNotFoundException, MustChangePasswordException
     {
+
+        rbacManager.removeUserAssignment( "user2" );
+
         addAssignment( "user", "User Administrator" );
 
         addAssignment( "user2", "Project Administrator - default" );
@@ -93,9 +96,7 @@ public class UserEditActionTest
 
 
         UserEditAction action = (UserEditAction) getActionProxy( "/security/useredit" ).getAction();
-        login( action, "user", PASSWORD );
-
-
+        login( action, "user2", PASSWORD );
         action.setUsername( "user2" );
         assertEquals( Action.INPUT, action.edit() );
 
@@ -110,12 +111,14 @@ public class UserEditActionTest
 
     @Test
     public void testEditPageHidesUnadministratableRoles()
-        throws RbacObjectInvalidException, RbacManagerException, AccountLockedException, AuthenticationException,
-        UserNotFoundException, MustChangePasswordException
+        throws Exception
     {
         // REDBACK-29
         // user should not be able to see the other project admin role of user2, but should be able to see the one
         // from their own group
+
+        rbacManager.removeUserAssignment( "user" );
+        rbacManager.removeUserAssignment( "user2" );
 
         addAssignment( "user", "Project Administrator - default" );
 
@@ -123,8 +126,7 @@ public class UserEditActionTest
         addAssignment( "user2", "Project Administrator - other" );
 
         UserEditAction action = (UserEditAction) getActionProxy( "/security/useredit" ).getAction();
-        login( action, "user", PASSWORD );
-
+        login( action, "user2", PASSWORD );
 
         action.setUsername( "user2" );
         assertEquals( Action.INPUT, action.edit() );
@@ -143,6 +145,8 @@ public class UserEditActionTest
     {
         // REDBACK-201
         // user should not be able to see the unassignable roles 
+
+        rbacManager.removeUserAssignment( "user" );
 
         addAssignment( "user", "User Administrator" );
 

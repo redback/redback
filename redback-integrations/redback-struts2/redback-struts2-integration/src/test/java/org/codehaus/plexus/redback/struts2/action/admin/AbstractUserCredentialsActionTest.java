@@ -40,15 +40,12 @@ import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.users.memory.SimpleUser;
 import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.junit.runners.BlockJUnit4ClassRunner;
+import org.junit.runners.JUnit4;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.Collections;
 
-@RunWith( SpringJUnit4ClassRunner.class )
-@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
+@RunWith( JUnit4.class )
 public abstract class AbstractUserCredentialsActionTest
     extends StrutsSpringTestCase
 {

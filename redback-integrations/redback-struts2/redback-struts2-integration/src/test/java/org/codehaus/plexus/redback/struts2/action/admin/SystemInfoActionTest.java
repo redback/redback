@@ -20,6 +20,7 @@ import org.apache.struts2.StrutsSpringTestCase;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -29,8 +30,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
-@RunWith( SpringJUnit4ClassRunner.class )
-@ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml", "classpath*:/spring-context.xml" } )
+@RunWith( JUnit4.class )
 public class SystemInfoActionTest
     extends StrutsSpringTestCase
 {
