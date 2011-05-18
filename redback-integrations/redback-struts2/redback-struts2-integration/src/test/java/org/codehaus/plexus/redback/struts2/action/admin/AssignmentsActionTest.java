@@ -68,19 +68,7 @@ public class AssignmentsActionTest
 
         login( action, "user", PASSWORD );
         action.setPrincipal( "user2" );
-        
-        // This fix allow initialization of ActionContext.getContext() to avoid NPE
-        
-        ConfigurationManager configurationManager = new ConfigurationManager();
-        configurationManager.addConfigurationProvider( new com.opensymphony.xwork2.config.providers.XWorkConfigurationProvider() );
-        Configuration config = configurationManager.getConfiguration();
-        Container container =  config.getContainer();
-        
-        ValueStack stack = container.getInstance( ValueStackFactory.class ).createValueStack();
-        stack.getContext().put( ActionContext.CONTAINER, container );
-        ActionContext.setContext( new ActionContext( stack.getContext() ) );
-        
-        assertNotNull( ActionContext.getContext() );
+
     }
 
     /**
@@ -283,9 +271,10 @@ public class AssignmentsActionTest
      */
     @Test
     public void testRoleGrantFilteringOnAddRolesPermittedTemplated()
-        throws RbacObjectInvalidException, RbacManagerException, AccountLockedException, AuthenticationException,
-        UserNotFoundException
+        throws Exception
     {
+
+        rbacManager.removeUserAssignment( "user" );
         addAssignment( "user", "Project Administrator - default" );
 
         // set addDSelectedRoles (dynamic --> Resource Roles) and addNDSelectedRoles (non-dynamic --> Available Roles)
@@ -308,10 +297,12 @@ public class AssignmentsActionTest
      */
     @Test
     public void testRoleGrantFilteringOnAddRolesPermittedTemplatedExistingRole()
-        throws RbacObjectInvalidException, RbacManagerException, AccountLockedException, AuthenticationException,
-        UserNotFoundException
+        throws Exception
     {
         addAssignment( "user", "Project Administrator - default" );
+
+        // cleanup before next test
+        rbacManager.removeUserAssignment( "user2" );
 
         addAssignment( "user2", "Project Administrator - other" );
 
@@ -336,8 +327,11 @@ public class AssignmentsActionTest
      */
     @Test
     public void testRoleGrantFilteringOnRemoveRolesNotPermittedNotTemplated()
-        throws RbacObjectInvalidException, RbacManagerException
+        throws Exception
     {
+
+        rbacManager.removeUserAssignment( "user2" );
+
         addAssignment( "user", "Project Administrator - default" );
 
         addAssignment( "user2", "Continuum Group Project Administrator" );
@@ -361,15 +355,21 @@ public class AssignmentsActionTest
      */
     @Test
     public void testRoleGrantFilteringOnRemoveRolesNotPermittedTemplated()
-        throws RbacObjectInvalidException, RbacManagerException
+        throws Exception
     {
+        rbacManager.removeUserAssignment( "user2" );
+
         addAssignment( "user", "Project Administrator - other" );
 
         addAssignment( "user2", "Project Administrator - default" );
 
         // set addDSelectedRoles (dynamic --> Resource Roles) and addNDSelectedRoles (non-dynamic --> Available Roles)
         List<String> dSelectedRoles = new ArrayList<String>();
-        action.setAddDSelectedRoles( dSelectedRoles );
+
+        ActionProxy actionProxy = getActionProxy( "/security/assignments" );
+        AssignmentsAction newAction =  (AssignmentsAction) actionProxy.getAction();
+
+        newAction.setAddDSelectedRoles( dSelectedRoles );
 
         assertEquals( Arrays.asList( "Project Administrator - default" ),
                       rbacManager.getUserAssignment( "user2" ).getRoleNames() );
@@ -386,8 +386,7 @@ public class AssignmentsActionTest
      */
     @Test
     public void testRoleGrantFilteringOnRemoveRolesPermittedNotTemplated()
-        throws RbacObjectInvalidException, RbacManagerException, AccountLockedException, AuthenticationException,
-        UserNotFoundException
+        throws Exception
     {
         addAssignment( "user", "Global Grant Administrator" );
 
@@ -411,9 +410,11 @@ public class AssignmentsActionTest
      */
     @Test
     public void testRoleGrantFilteringOnRemoveRolesPermittedTemplatedExistingRole()
-        throws RbacObjectInvalidException, RbacManagerException
+        throws Exception
     {
         addAssignment( "user", "Project Administrator - default" );
+
+        rbacManager.removeUserAssignment( "user2" );
 
         addAssignment( "user2", "Project Administrator - default" );
         addAssignment( "user2", "Project Administrator - other" );
@@ -442,8 +443,10 @@ public class AssignmentsActionTest
      */
     @Test
     public void testRoleGrantFilteringOnRemoveRolesPermittedTemplated()
-        throws RbacObjectInvalidException, RbacManagerException
+        throws Exception
     {
+        rbacManager.removeUserAssignment( "user2" );
+
         addAssignment( "user", "Project Administrator - default" );
 
         addAssignment( "user2", "Project Administrator - default" );
@@ -470,6 +473,7 @@ public class AssignmentsActionTest
     public void testSystemAdminCanShowRoles()
         throws Exception
     {
+
         login( action, "admin", PASSWORD );
 
         assertEquals( Action.SUCCESS, action.show() );
@@ -515,7 +519,7 @@ public class AssignmentsActionTest
         assertEquals( "Roles that apply system-wide, across all of the applications", details.getDescription() );
         // TODO assertEquals( 3, details.getAvailableRoles().size() );
         assertEquals( "Guest", details.getAvailableRoles().get( 0 ) );
-        assertEquals( "Registered User", details.getAvailableRoles().get( 1 ) );
+        assertEquals( "not role Registered User roles :" + details.getAvailableRoles(), details.getAvailableRoles().contains( "Registered User" ) );
         // TODO: assertEquals( "User Administrator", details.getAvailableRoles().get( 2 ) );
 
         details = (ApplicationRoleDetails) action.getApplicationRoleDetails().get( 1 );
@@ -571,6 +575,8 @@ public class AssignmentsActionTest
     {
         login( action, "user-admin", PASSWORD );
 
+        rbacManager.removeUserAssignment( "user2" );
+
         addAssignment( "user2", "Continuum Group Project Administrator" );
         addAssignment( "user2", "Project Administrator - default" );
 
@@ -603,6 +609,8 @@ public class AssignmentsActionTest
         String nonAppRoleName = "Other App Role";
         Role nonAppRole = rbacManager.createRole( nonAppRoleName );
         rbacManager.saveRole( nonAppRole );
+
+        rbacManager.removeUserAssignment( "user2" );
 
         addAssignment( "user2", "Continuum Group Project Administrator" );
         addAssignment( "user2", "Project Administrator - default" );

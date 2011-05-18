@@ -209,7 +209,7 @@ public class AssignmentsAction
     {
         try
         {
-            Collection<Role> assignedRoles = (Collection<Role>) getManager().getAssignedRoles( principal );
+            Collection<Role> assignedRoles = getManager().getAssignedRoles( principal );
             List<Role> assignableRoles = getFilteredRolesForCurrentUserAccess();
 
             // Compute set of roles usable by configured apps, add/del from this set only
