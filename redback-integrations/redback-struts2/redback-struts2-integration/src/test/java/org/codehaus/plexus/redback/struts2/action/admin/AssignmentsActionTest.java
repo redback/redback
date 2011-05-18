@@ -509,20 +509,24 @@ public class AssignmentsActionTest
     public void testUserAdminCanShowRoles()
         throws Exception
     {
-        login( action, "user-admin", PASSWORD );
 
-        assertEquals( Action.SUCCESS, action.show() );
+        ActionProxy actionProxy = getActionProxy( "/security/assignments" );
+        AssignmentsAction newAction =  (AssignmentsAction) actionProxy.getAction();
 
-        assertEquals( 2, action.getApplicationRoleDetails().size() );
-        ApplicationRoleDetails details = (ApplicationRoleDetails) action.getApplicationRoleDetails().get( 0 );
+        login( newAction, "user-admin", PASSWORD );
+
+        assertEquals( Action.SUCCESS, newAction.show() );
+
+        assertEquals( 2, newAction.getApplicationRoleDetails().size() );
+        ApplicationRoleDetails details = (ApplicationRoleDetails) newAction.getApplicationRoleDetails().get( 0 );
         assertEquals( "System", details.getName() );
         assertEquals( "Roles that apply system-wide, across all of the applications", details.getDescription() );
         // TODO assertEquals( 3, details.getAvailableRoles().size() );
         assertEquals( "Guest", details.getAvailableRoles().get( 0 ) );
-        assertEquals( "not role Registered User roles :" + details.getAvailableRoles(), details.getAvailableRoles().contains( "Registered User" ) );
+        assertEquals( "not role Registered User roles : " + details.getAvailableRoles(), details.getAvailableRoles().contains( "Registered User" ) );
         // TODO: assertEquals( "User Administrator", details.getAvailableRoles().get( 2 ) );
 
-        details = (ApplicationRoleDetails) action.getApplicationRoleDetails().get( 1 );
+        details = newAction.getApplicationRoleDetails().get( 1 );
         assertEquals( "Continuum", details.getName() );
 
         assertEquals( 2, details.getAvailableRoles().size() );
