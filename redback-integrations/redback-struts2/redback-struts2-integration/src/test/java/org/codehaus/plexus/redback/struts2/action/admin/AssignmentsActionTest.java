@@ -369,12 +369,16 @@ public class AssignmentsActionTest
         ActionProxy actionProxy = getActionProxy( "/security/assignments" );
         AssignmentsAction newAction =  (AssignmentsAction) actionProxy.getAction();
 
+        login( newAction, "user2", PASSWORD );
+
+        newAction.setPrincipal( "user2" );
+
         newAction.setAddDSelectedRoles( dSelectedRoles );
 
         assertEquals( Arrays.asList( "Project Administrator - default" ),
                       rbacManager.getUserAssignment( "user2" ).getRoleNames() );
 
-        assertEquals( Action.SUCCESS, action.edituser() );
+        assertEquals( Action.SUCCESS, newAction.edituser() );
 
         assertEquals( Arrays.asList( "Project Administrator - default" ),
                       rbacManager.getUserAssignment( "user2" ).getRoleNames() );
@@ -515,6 +519,8 @@ public class AssignmentsActionTest
 
         login( newAction, "user-admin", PASSWORD );
 
+        newAction.setPrincipal( "user-admin" );
+
         assertEquals( Action.SUCCESS, newAction.show() );
 
         assertEquals( 2, newAction.getApplicationRoleDetails().size() );
@@ -523,7 +529,7 @@ public class AssignmentsActionTest
         assertEquals( "Roles that apply system-wide, across all of the applications", details.getDescription() );
         // TODO assertEquals( 3, details.getAvailableRoles().size() );
         assertEquals( "Guest", details.getAvailableRoles().get( 0 ) );
-        assertEquals( "not role Registered User roles : " + details.getAvailableRoles(), details.getAvailableRoles().contains( "Registered User" ) );
+        assertEquals( "not role Registered User roles : " + details.getAvailableRoles(),"Registered User", details.getAvailableRoles().get( 1 ) );
         // TODO: assertEquals( "User Administrator", details.getAvailableRoles().get( 2 ) );
 
         details = newAction.getApplicationRoleDetails().get( 1 );
