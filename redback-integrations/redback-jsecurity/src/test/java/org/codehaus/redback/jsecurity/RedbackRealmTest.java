@@ -37,6 +37,7 @@ import org.jsecurity.subject.SimplePrincipalCollection;
 import org.jsecurity.subject.Subject;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -116,6 +117,7 @@ public class RedbackRealmTest
         }
     }
 
+    @Test
     public void testThrowsExceptionIfUserAccountNeedsPasswordChange()
         throws Exception
     {
@@ -132,6 +134,7 @@ public class RedbackRealmTest
         }
     }
 
+    @Test
     public void testUnsuccessfullAuthAttemptsLockAccount()
         throws Exception
     {
@@ -158,6 +161,7 @@ public class RedbackRealmTest
         }
     }
 
+    @Test
     public void testBasic()
         throws Exception
     {
