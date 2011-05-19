@@ -23,7 +23,7 @@ import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.struts2.action.AbstractSecurityAction;
 import org.codehaus.plexus.redback.system.SecuritySystem;
-import org.codehaus.redback.components.registry.Registry;
+import org.codehaus.plexus.registry.Registry;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.role.RoleConstants;
@@ -92,7 +92,7 @@ public class SystemInfoAction
     // Action Parameters
     // ------------------------------------------------------------------
 
-    private StringBuffer details;
+    private StringBuilder details;
 
     // ------------------------------------------------------------------
     // Action Entry Points - (aka Names)
@@ -100,7 +100,7 @@ public class SystemInfoAction
 
     public String show()
     {
-        details = new StringBuffer();
+        details = new StringBuilder();
 
         details.append( "Configuration: " );
         dumpObject( details, registry, INDENT );
@@ -118,7 +118,7 @@ public class SystemInfoAction
         return SUCCESS;
     }
 
-    private void dumpObject( StringBuffer sb, Object obj, String indent )
+    private void dumpObject( StringBuilder sb, Object obj, String indent )
     {
         dumpObjectSwitchboard( new ArrayList<Object>(), sb, obj, indent, 0 );
     }
@@ -132,7 +132,7 @@ public class SystemInfoAction
      * @param indent      the current indent string.
      * @param depth       the depth in the tree.
      */
-    private void dumpObjectSwitchboard( List<Object> seenObjects, StringBuffer sb, Object obj, String indent,
+    private void dumpObjectSwitchboard( List<Object> seenObjects, StringBuilder sb, Object obj, String indent,
                                         int depth )
     {
         if ( obj == null )
@@ -197,7 +197,7 @@ public class SystemInfoAction
     }
 
     @SuppressWarnings( "unchecked" )
-    private void dumpObjectReaders( List<Object> seenObjects, StringBuffer sb, Object obj, String indent, int depth )
+    private void dumpObjectReaders( List<Object> seenObjects, StringBuilder sb, Object obj, String indent, int depth )
     {
         sb.append( obj.toString() ).append( LN );
         String name = null;
@@ -242,7 +242,7 @@ public class SystemInfoAction
         }
     }
 
-    private void dumpIterator( List<Object> seenObjects, StringBuffer sb, Iterator<?> iterator, String indent,
+    private void dumpIterator( List<Object> seenObjects, StringBuilder sb, Iterator<?> iterator, String indent,
                                int depth )
     {
         sb.append( LN );
