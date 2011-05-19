@@ -180,7 +180,12 @@ public class XmlRpcAuthenticatorTest
     public void testIsAuthorizedUserDoesNotExist()
         throws Exception
     {
+
         UserManager userManager = securitySystem.getUserManager();
+
+        // cleanup from previous test
+        userManager.deleteUser( USER_REDBACK );
+
         try
         {
             userManager.findUser( USER_REDBACK );
