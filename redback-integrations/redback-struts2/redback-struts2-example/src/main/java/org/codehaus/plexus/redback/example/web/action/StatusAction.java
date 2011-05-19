@@ -17,10 +17,12 @@ package org.codehaus.plexus.redback.example.web.action;
  */
 
 import org.codehaus.plexus.redback.struts2.action.RedbackActionSupport;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 
 /**
  * PlexusSecuritySystemAction:
-22 *
+ *
  * @author Jesse McConnell <jesse@codehaus.org>
  * @version $Id:$
  *
@@ -28,6 +30,8 @@ import org.codehaus.plexus.redback.struts2.action.RedbackActionSupport;
  *   role="com.opensymphony.xwork2.Action"
  *   role-hint="status"
  */
+@Controller("status")
+@Scope("prototype")
 public class StatusAction
     extends RedbackActionSupport
 {

@@ -28,6 +28,8 @@ import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 
 /**
  * TestUsersEnvironmentCheck 
@@ -38,6 +40,8 @@ import org.slf4j.LoggerFactory;
  * @plexus.component role="org.codehaus.plexus.redback.system.check.EnvironmentCheck"
  * role-hint="test-users-check"
  */
+@Controller("test-users-check")
+@Scope("prototype")
 public class TestUsersEnvironmentCheck
     implements EnvironmentCheck
 {

@@ -20,6 +20,8 @@ import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.struts2.action.RedbackActionSupport;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 
 /**
  * MainAction 
@@ -31,6 +33,8 @@ import org.codehaus.plexus.redback.struts2.action.RedbackActionSupport;
  *   role="com.opensymphony.xwork2.Action"
  *   role-hint="main"
  */
+@Controller("main")
+@Scope("prototype")
 public class MainAction
     extends RedbackActionSupport
 {

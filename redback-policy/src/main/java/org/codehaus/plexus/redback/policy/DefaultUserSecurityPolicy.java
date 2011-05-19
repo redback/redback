@@ -399,4 +399,13 @@ public class DefaultUserSecurityPolicy
         return signonCookieSettings;
     }
 
+    public UserConfiguration getConfig()
+    {
+        return config;
+    }
+
+    public void setConfig( UserConfiguration config )
+    {
+        this.config = config;
+    }
 }
