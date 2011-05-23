@@ -17,7 +17,7 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback</artifactId>
-    <version>1.3-SNAPSHOT</version>
+    <version>1.3-M1-SNAPSHOT</version>
   </parent>
   <artifactId>plexus-spring</artifactId>
   <name>Plexus to Spring Adapter</name>

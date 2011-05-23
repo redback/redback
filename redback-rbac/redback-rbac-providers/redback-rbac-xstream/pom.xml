@@ -9,10 +9,10 @@
   <packaging>pom</packaging>
   <scm>
     <connection>
-      scm:svn:http://svn.codehaus.org/redback/redback/trunk/redback-rbac/redback-rbac-providers/redback-rbac-xstream
+      scm:svn:http://svn.codehaus.org/redback/redback/branches/redback-1.3-Mx/redback-rbac/redback-rbac-providers/redback-rbac-xstream
     </connection>
     <developerConnection>
-      scm:svn:https://svn.codehaus.org/redback/redback/trunk/redback-rbac/redback-rbac-providers/redback-rbac-xstream
+      scm:svn:https://svn.codehaus.org/redback/redback/branches/redback-1.3-Mx/redback-rbac/redback-rbac-providers/redback-rbac-xstream
     </developerConnection>
   </scm>
 </project>

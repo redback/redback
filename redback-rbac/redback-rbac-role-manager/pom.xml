@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-rbac</artifactId>
-    <version>1.3-SNAPSHOT</version>
+    <version>1.3-M1-SNAPSHOT</version>
   </parent>
   <artifactId>redback-rbac-role-manager</artifactId>
   <name>Redback :: RBAC Role Manager</name>
