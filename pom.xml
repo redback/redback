@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.codehaus.redback</groupId>
   <artifactId>redback</artifactId>
-  <version>1.3-M1-SNAPSHOT</version>
+  <version>1.3-M1</version>
   <name>Redback</name>
   <packaging>pom</packaging>
   <url>http://redback.codehaus.org/</url>
@@ -589,9 +589,9 @@
   </dependencyManagement>
 
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/redback/redback/branches/redback-1.3-Mx</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/branches/redback-1.3-Mx</developerConnection>
-    <url>http://fisheye.codehaus.org/browse/redback/redback/branches/redback-1.3-Mx</url>
+    <connection>scm:svn:http://svn.codehaus.org/redback/redback/tags/redback-1.3-M1</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/redback/redback/tags/redback-1.3-M1</developerConnection>
+    <url>http://fisheye.codehaus.org/browse/redback/redback/tags/redback-1.3-M1</url>
   </scm>
 
   <build>
