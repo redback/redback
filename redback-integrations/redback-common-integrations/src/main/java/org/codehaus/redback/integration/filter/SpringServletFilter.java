@@ -16,7 +16,6 @@ package org.codehaus.redback.integration.filter;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.logging.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -34,8 +33,6 @@ public abstract class SpringServletFilter
     implements Filter
 {
     private ApplicationContext applicationContext;
-
-    private Logger logger;
 
     public void destroy()
     {

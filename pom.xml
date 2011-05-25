@@ -725,6 +725,7 @@
                 <bannedDependencies>
                   <excludes>
                     <exclude>org.codehaus.plexus:plexus-container-default</exclude>
+                    <exclude>org.codehaus.plexus:plexus-component-api</exclude>
                     <exclude>org.codehaus.plexus.registry:plexus-registry-api</exclude>
                     <exclude>org.codehaus.plexus.registry:plexus-registry-commons</exclude>
                     <exclude>org.codehaus.plexus.cache:plexus-cache-api</exclude>

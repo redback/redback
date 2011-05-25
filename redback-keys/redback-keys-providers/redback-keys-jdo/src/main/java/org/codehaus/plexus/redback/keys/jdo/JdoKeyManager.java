@@ -16,20 +16,10 @@ package org.codehaus.plexus.redback.keys.jdo;
  * limitations under the License.
  */
 
-import java.util.Calendar;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
-
 import org.codehaus.plexus.jdo.JdoFactory;
 import org.codehaus.plexus.jdo.PlexusJdoUtils;
 import org.codehaus.plexus.jdo.PlexusObjectNotFoundException;
 import org.codehaus.plexus.jdo.PlexusStoreException;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.redback.keys.AbstractKeyManager;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.keys.KeyManagerException;
@@ -38,18 +28,26 @@ import org.codehaus.plexus.util.StringUtils;
 import org.jpox.PersistenceManagerFactoryImpl;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.jdo.PersistenceManager;
+import javax.jdo.PersistenceManagerFactory;
+import java.util.Calendar;
+import java.util.List;
+
 /**
  * JdoKeyManager
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
-@Service("keyManager#jdo")
+@Service( "keyManager#jdo" )
 public class JdoKeyManager
     extends AbstractKeyManager
-    implements Initializable
 {
-    @Resource(name="jdoFactory#users")
+    @Inject
+    @Named( value = "jdoFactory#users" )
     private JdoFactory jdoFactory;
 
     private PersistenceManagerFactory pmf;
@@ -96,8 +94,9 @@ public class JdoKeyManager
 
         try
         {
-            JdoAuthenticationKey authkey = (JdoAuthenticationKey) PlexusJdoUtils
-                .getObjectById( getPersistenceManager(), JdoAuthenticationKey.class, key );
+            JdoAuthenticationKey authkey = (JdoAuthenticationKey) PlexusJdoUtils.getObjectById( getPersistenceManager(),
+                                                                                                JdoAuthenticationKey.class,
+                                                                                                key );
 
             if ( authkey == null )
             {
@@ -138,7 +137,7 @@ public class JdoKeyManager
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public List<AuthenticationKey> getAllKeys()
     {
         return PlexusJdoUtils.getAllObjectsDetached( getPersistenceManager(), JdoAuthenticationKey.class );
@@ -146,7 +145,6 @@ public class JdoKeyManager
 
     @PostConstruct
     public void initialize()
-        throws InitializationException
     {
         pmf = jdoFactory.getPersistenceManagerFactory();
 
@@ -155,8 +153,8 @@ public class JdoKeyManager
             PersistenceManagerFactoryImpl jpoxpmf = (PersistenceManagerFactoryImpl) pmf;
             if ( !StringUtils.equals( "JDK_DEFAULT_TIMEZONE", jpoxpmf.getDateTimezone() ) )
             {
-                throw new InitializationException( "The JdoFactory property 'org.jpox.rdbms.dateTimezone' MUST BE " +
-                    "Set to 'JDK_DEFAULT_TIMEZONE' in order for jpox and JdoKeyManager to operate correctly." );
+                throw new RuntimeException( "The JdoFactory property 'org.jpox.rdbms.dateTimezone' MUST BE "
+                                                       + "Set to 'JDK_DEFAULT_TIMEZONE' in order for jpox and JdoKeyManager to operate correctly." );
             }
         }
     }
