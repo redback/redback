@@ -21,7 +21,6 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.redback.authorization.AuthorizationResult;
 import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySystem;
@@ -59,13 +58,13 @@ public class SecureActionInterceptor
     private static final String HTTP_HEADER_REFERER = "Referer";
 
     /**
-     * @plexus.requirement
+     * plexus.requirement
      */
     @Inject
     private SecuritySystem securitySystem;
 
     /**
-     * @plexus.configuration default-value="simple"
+     * plexus.configuration default-value="simple"
      */
     private String trackerName = "simple";
 
@@ -237,14 +236,12 @@ public class SecureActionInterceptor
     }
 
     protected String processRequiresAuthorization( ActionInvocation invocation )
-        throws ComponentLookupException
     {
         addActionInvocation( invocation ).setBackTrack();
         return REQUIRES_AUTHORIZATION;
     }
 
     protected String processRequiresAuthentication( ActionInvocation invocation )
-        throws ComponentLookupException
     {
         HttpSession session = ServletActionContext.getRequest().getSession();
 

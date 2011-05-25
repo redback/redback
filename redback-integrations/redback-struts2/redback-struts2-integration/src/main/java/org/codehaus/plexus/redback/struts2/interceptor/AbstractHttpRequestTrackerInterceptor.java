@@ -20,7 +20,6 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 import org.apache.struts2.StrutsException;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -46,7 +45,6 @@ public abstract class AbstractHttpRequestTrackerInterceptor
 
     @SuppressWarnings( "unchecked" )
     protected synchronized ActionInvocationTracker addActionInvocation( ActionInvocation invocation )
-        throws ComponentLookupException
     {
         Map<String, Object> sessionMap = invocation.getInvocationContext().getSession();
 
