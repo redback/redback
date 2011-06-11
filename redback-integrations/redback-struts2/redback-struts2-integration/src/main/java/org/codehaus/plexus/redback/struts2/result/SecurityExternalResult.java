@@ -29,7 +29,7 @@ import org.springframework.stereotype.Controller;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="com.opensymphony.xwork2.Result"
+ * plexus.component role="com.opensymphony.xwork2.Result"
  * role-hint="securityExternalResult"
  * instantiation-strategy="per-lookup"
  */
@@ -40,9 +40,9 @@ public class SecurityExternalResult
     extends AbstractBackTrackingResult
 {
     /**
-     * @plexus.configuration default-value="redbackRedirect"
+     * plexus.configuration default-value="redbackRedirect"
      */
-    private String externalActionName;
+    private String externalActionName ="redbackRedirect";
 
     private String externalResult;
 
