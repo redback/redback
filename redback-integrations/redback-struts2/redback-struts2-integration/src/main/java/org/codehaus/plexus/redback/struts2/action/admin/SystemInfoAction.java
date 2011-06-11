@@ -54,24 +54,24 @@ public class SystemInfoAction
     extends AbstractSecurityAction
 {
     // ------------------------------------------------------------------
-    // Plexus Component Requirements
+    // Component Requirements
     // ------------------------------------------------------------------
 
     /**
-     * @plexus.requirement
+     * plexus.requirement
      */
     @Inject
     private SecuritySystem securitySystem;
 
     /**
-     * @plexus.requirement role-hint="commons-configuration"
+     * plexus.requirement role-hint="commons-configuration"
      */
     @Inject
     @Named( value = "commons-configuration" )
     private Registry registry;
 
     /**
-     * @plexus.requirement role-hint="cached"
+     * plexus.requirement role-hint="cached"
      */
     @Inject
     @Named( value = "rBACManager#cached" )

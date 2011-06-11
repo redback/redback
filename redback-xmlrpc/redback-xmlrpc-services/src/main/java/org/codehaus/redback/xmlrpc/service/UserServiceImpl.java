@@ -16,21 +16,23 @@ package org.codehaus.redback.xmlrpc.service;
  * limitations under the License.
  */
 
+import org.codehaus.plexus.redback.users.UserManager;
+import org.codehaus.redback.xmlrpc.bean.User;
+import org.codehaus.redback.xmlrpc.util.BeanConverterUtil;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.codehaus.plexus.redback.users.UserManager;
-import org.codehaus.redback.xmlrpc.bean.User;
-import org.codehaus.redback.xmlrpc.service.UserService;
-import org.codehaus.redback.xmlrpc.util.BeanConverterUtil;
 
 public class UserServiceImpl
     implements UserService
 {
     private UserManager userManager;
 
-    public UserServiceImpl( UserManager userManager )
+    @Inject
+    public UserServiceImpl( @Named( value = "userManager#cached" ) UserManager userManager )
     {
         this.userManager = userManager;
     }
@@ -54,8 +56,8 @@ public class UserServiceImpl
         throws Exception
     {
         org.codehaus.plexus.redback.users.User user = userManager.findUser( username );
-        User simpleUser = new User( user.getUsername(), user.getFullName(), user.getEmail(), user.isValidated(), user
-            .isLocked() );
+        User simpleUser =
+            new User( user.getUsername(), user.getFullName(), user.getEmail(), user.isValidated(), user.isLocked() );
         return simpleUser;
     }
 

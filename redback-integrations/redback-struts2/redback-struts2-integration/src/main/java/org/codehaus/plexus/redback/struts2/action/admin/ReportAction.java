@@ -52,7 +52,7 @@ public class ReportAction
     extends AbstractSecurityAction
 {
     /**
-     * @plexus.requirement
+     * plexus.requirement
      */
     @Inject
     private ReportManager reportManager;

@@ -43,7 +43,7 @@ public class RoleModelAction
     extends AbstractSecurityAction
 {
     /**
-     * @plexus.requirement role-hint="default"
+     * plexus.requirement role-hint="default"
      */
     @Inject
     private RoleManager manager;

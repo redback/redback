@@ -20,6 +20,8 @@ import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.Interceptor;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
+
 /**
  * @author <a href='mailto:rahul.thakur.xdev@gmail.com'>Rahul Thakur</a>
  * @version $Id: MockCustomInterceptor.java 5687 2007-02-14 00:11:28Z brett $
@@ -30,8 +32,9 @@ public class MockCustomInterceptor
     implements Interceptor
 {
     /**
-     * @plexus.requirement
+     * plexus.requirement
      */
+    @Inject
     private MockComponent testComponent;
 
     public MockCustomInterceptor()

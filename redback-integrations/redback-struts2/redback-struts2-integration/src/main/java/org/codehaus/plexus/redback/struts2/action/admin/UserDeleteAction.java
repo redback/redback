@@ -53,18 +53,18 @@ public class UserDeleteAction
     implements CancellableAction
 {
     // ------------------------------------------------------------------
-    // Plexus Component Requirements
+    // Component Requirements
     // ------------------------------------------------------------------
 
     /**
-     * @plexus.requirement role-hint="configurable"
+     * plexus.requirement role-hint="configurable"
      */
     @Inject
     @Named( value = "userManager#configurable" )
     private UserManager userManager;
 
     /**
-     * @plexus.requirement role-hint="cached"
+     * plexus.requirement role-hint="cached"
      */
     @Inject
     @Named( value = "rBACManager#cached" )

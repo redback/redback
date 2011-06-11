@@ -57,17 +57,17 @@ public class RegisterAction
     private static final String RESEND_VALIDATION_EMAIL = "security-resend-validation-email";
     
     // ------------------------------------------------------------------
-    // Plexus Component Requirements
+    //  Component Requirements
     // ------------------------------------------------------------------
 
     /**
-     * @plexus.requirement
+     * plexus.requirement
      */
     @Inject
     private Mailer mailer;
 
     /**
-     * @plexus.requirement
+     * plexus.requirement
      */
     @Inject
     private RoleManager roleManager;

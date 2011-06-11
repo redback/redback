@@ -57,13 +57,13 @@ public class PolicyEnforcementInterceptor
     private static final String SECURITY_USER_MUST_CHANGE_PASSWORD = "security-must-change-password";
 
     /**
-     * @plexus.requirement
+     * plexus.requirement
      */
     @Inject
     private UserConfiguration config;
 
     /**
-     * @plexus.requirement
+     * plexus.requirement
      */
     @Inject
     protected SecuritySystem securitySystem;

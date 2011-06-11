@@ -21,13 +21,20 @@ import java.util.List;
 
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.redback.xmlrpc.bean.Resource;
+import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+@Service
 public class ResourceServiceImpl
     implements ResourceService
 {
     private RBACManager rbacManager;
 
-    public ResourceServiceImpl( RBACManager rbacManager )
+
+    @Inject
+    public ResourceServiceImpl(@Named( value = "rBACManager#cached" ) RBACManager rbacManager )
     {
         this.rbacManager = rbacManager;
     }

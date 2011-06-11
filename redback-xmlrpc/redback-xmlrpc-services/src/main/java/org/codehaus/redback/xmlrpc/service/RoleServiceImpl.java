@@ -14,12 +14,14 @@ package org.codehaus.redback.xmlrpc.service;
  * the License.
  */
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.redback.xmlrpc.bean.Role;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RoleServiceImpl
     implements RoleService
@@ -28,7 +30,8 @@ public class RoleServiceImpl
 
     private RoleManager roleManager;
 
-    public RoleServiceImpl( RBACManager rbacManager, RoleManager roleManager )
+    @Inject
+    public RoleServiceImpl( @Named( value = "rBACManager#cached" ) RBACManager rbacManager, RoleManager roleManager )
     {
         this.rbacManager = rbacManager;
         this.roleManager = roleManager;
@@ -78,8 +81,8 @@ public class RoleServiceImpl
                 permissionNames.add( permission.getName() );
             }
 
-            simpleRoles
-                .add( new Role( role.getName(), role.getDescription(), role.isAssignable(), role.isPermanent() ) );
+            simpleRoles.add(
+                new Role( role.getName(), role.getDescription(), role.isAssignable(), role.isPermanent() ) );
         }
 
         return simpleRoles;

@@ -21,13 +21,19 @@ import java.util.List;
 
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.redback.xmlrpc.bean.Permission;
+import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+@Service
 public class PermissionServiceImpl
     implements PermissionService
 {
     private RBACManager rbacManager;
 
-    public PermissionServiceImpl( RBACManager rbacManager )
+    @Inject
+    public PermissionServiceImpl(@Named( value = "rBACManager#cached" ) RBACManager rbacManager )
     {
         this.rbacManager = rbacManager;
     }

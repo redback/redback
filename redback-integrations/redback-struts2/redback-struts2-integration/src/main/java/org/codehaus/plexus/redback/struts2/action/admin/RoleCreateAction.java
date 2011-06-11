@@ -52,11 +52,11 @@ public class RoleCreateAction
     extends AbstractSecurityAction
 {
     // ------------------------------------------------------------------
-    // Plexus Component Requirements
+    //  Component Requirements
     // ------------------------------------------------------------------
 
     /**
-     * @plexus.requirement role-hint="cached"
+     * plexus.requirement role-hint="cached"
      */
     @Inject
     @Named( value = "rBACManager#cached" )

@@ -38,7 +38,7 @@ import java.util.Map;
 public class ReportManager
 {
     /**
-     * @plexus.requirement role="org.codehaus.plexus.redback.xwork.reports.Report"
+     * plexus.requirement role="org.codehaus.plexus.redback.xwork.reports.Report"
      */
     private List<Report> availableReports;
 

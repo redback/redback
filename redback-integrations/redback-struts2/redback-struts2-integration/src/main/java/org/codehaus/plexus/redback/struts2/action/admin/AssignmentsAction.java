@@ -63,11 +63,11 @@ public class AssignmentsAction
     extends AbstractUserCredentialsAction
 {
     // ------------------------------------------------------------------
-    // Plexus Component Requirements
+    //  Component Requirements
     // ------------------------------------------------------------------
 
     /**
-     * @plexus.requirement role-hint="default"
+     * plexus.requirement role-hint="default"
      */
     @Inject
     private RoleManager rmanager;

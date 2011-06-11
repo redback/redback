@@ -1,8 +1,5 @@
 package org.codehaus.plexus.redback.http.authentication;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.codehaus.plexus.redback.authentication.AuthenticationDataSource;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
@@ -16,6 +13,10 @@ import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * HttpAuthenticator is the workings of an authenticator for http with the session storage abstracted
  *
@@ -27,19 +28,22 @@ public abstract class AbstractHttpAuthenticator
     implements HttpAuthenticator
 {
     protected Logger log = LoggerFactory.getLogger( getClass() );
-    
+
     public static final String ROLE = AbstractHttpAuthenticator.class.getName();
 
     /**
-     * @plexus.requirement
+     * plexus.requirement
      */
+    @Inject
     protected SecuritySystem securitySystem;
 
     /**
      * The Public Face of the Authenticator.
      *
      * @throws org.codehaus.plexus.redback.policy.MustChangePasswordException
+     *
      * @throws org.codehaus.plexus.redback.policy.AccountLockedException
+     *
      */
     protected AuthenticationResult authenticate( AuthenticationDataSource ds, Object session )
         throws AuthenticationException, AccountLockedException, MustChangePasswordException
@@ -71,6 +75,7 @@ public abstract class AbstractHttpAuthenticator
      * @param request
      * @param response
      * @throws org.codehaus.plexus.redback.authentication.AuthenticationException
+     *
      */
     public void authenticate( HttpServletRequest request, HttpServletResponse response )
         throws AuthenticationException

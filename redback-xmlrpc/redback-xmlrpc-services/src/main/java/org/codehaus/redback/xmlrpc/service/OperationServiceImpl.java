@@ -16,18 +16,23 @@ package org.codehaus.redback.xmlrpc.service;
  * limitations under the License.
  */
 
+import org.codehaus.plexus.redback.rbac.RBACManager;
+import org.codehaus.redback.xmlrpc.bean.Operation;
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.plexus.redback.rbac.RBACManager;
-import org.codehaus.redback.xmlrpc.bean.Operation;
-
+@Service
 public class OperationServiceImpl
     implements OperationService
 {
     private RBACManager rbacManager;
 
-    public OperationServiceImpl( RBACManager rbacManager )
+    @Inject
+    public OperationServiceImpl( @Named( value = "rBACManager#cached" ) RBACManager rbacManager )
     {
         this.rbacManager = rbacManager;
     }
@@ -43,7 +48,8 @@ public class OperationServiceImpl
         throws Exception
     {
         org.codehaus.plexus.redback.rbac.Operation operation = rbacManager.getOperation( operationName );
-        Operation simpleOperation = new Operation( operation.getName(), operation.getDescription(), operation.isPermanent() );
+        Operation simpleOperation =
+            new Operation( operation.getName(), operation.getDescription(), operation.isPermanent() );
         return simpleOperation;
     }
 
@@ -55,7 +61,8 @@ public class OperationServiceImpl
 
         for ( org.codehaus.plexus.redback.rbac.Operation operation : operations )
         {
-            simpleOperations.add( new Operation( operation.getName(), operation.getDescription(), operation.isPermanent() ) );
+            simpleOperations.add(
+                new Operation( operation.getName(), operation.getDescription(), operation.isPermanent() ) );
         }
 
         return simpleOperations;

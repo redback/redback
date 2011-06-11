@@ -55,7 +55,7 @@ public class PasswordAction
     protected static final String CHANGE_PASSWORD_SUCCESS = "security-change-password-success";
 
     /**
-     * @plexus.requirement
+     * plexus.requirement
      */
     @Inject
     protected SecuritySystem securitySystem;

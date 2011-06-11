@@ -50,17 +50,17 @@ public class PasswordResetAction
     implements CancellableAction
 {
     // ------------------------------------------------------------------
-    // Plexus Component Requirements
+    //  Component Requirements
     // ------------------------------------------------------------------
 
     /**
-     * @plexus.requirement
+     * plexus.requirement
      */
     @Inject
     private Mailer mailer;
 
     /**
-     * @plexus.requirement
+     * plexus.requirement
      */
     @Inject
     private SecuritySystem securitySystem;

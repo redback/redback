@@ -60,13 +60,13 @@ public class AutoLoginInterceptor
     static final String ACCOUNT_LOCKED = "security-login-locked";
 
     /**
-     * @plexus.requirement
+     * plexus.requirement
      */
     @Inject
     private SecuritySystem securitySystem;
 
     /**
-     * @plexus.requirement
+     * plexus.requirement
      */
     @Inject
     private AutoLoginCookies autologinCookies;

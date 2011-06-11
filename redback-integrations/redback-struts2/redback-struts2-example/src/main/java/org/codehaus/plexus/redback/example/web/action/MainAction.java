@@ -16,38 +16,36 @@ package org.codehaus.plexus.redback.example.web.action;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.struts2.action.RedbackActionSupport;
+import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 /**
- * MainAction 
+ * MainAction
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * 
- * @plexus.component
- *   role="com.opensymphony.xwork2.Action"
- *   role-hint="main"
+ * @plexus.component role="com.opensymphony.xwork2.Action"
+ * role-hint="main"
  */
-@Controller("main")
-@Scope("prototype")
+@Controller( "main" )
+@Scope( "prototype" )
 public class MainAction
     extends RedbackActionSupport
 {
     /**
-     * @plexus.requirement
+     * plexus.requirement
      */
     private SecuritySystem securitySystem;
 
     /**
-     * @plexus.requirement role-hint="default"
+     * plexus.requirement role-hint="default"
      */
     private RoleManager roleManager;
-    
+
     public String show()
     {
         if ( securitySystem == null )
@@ -91,7 +89,7 @@ public class MainAction
         }
         catch ( RoleManagerException e )
         {
-        	e.printStackTrace();
+            e.printStackTrace();
         }
         return SUCCESS;
     }

@@ -48,18 +48,18 @@ public abstract class AbstractUserCredentialsAction
     extends AbstractSecurityAction
 {
     // ------------------------------------------------------------------
-    // Plexus Component Requirements
+    //  Component Requirements
     // ------------------------------------------------------------------
 
     /**
-     * @plexus.requirement role-hint="cached"
+     * plexus.requirement role-hint="cached"
      */
     @Inject
     @Named( value = "rBACManager#cached" )
     private RBACManager manager;
 
     /**
-     * @plexus.requirement
+     * plexus.requirement
      */
     @Inject
     protected SecuritySystem securitySystem;

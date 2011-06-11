@@ -31,6 +31,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import javax.inject.Inject;
+
 /**
  * TestUsersEnvironmentCheck 
  *
@@ -47,13 +49,15 @@ public class TestUsersEnvironmentCheck
 {
     private Logger log = LoggerFactory.getLogger( TestUsersEnvironmentCheck.class );
     /**
-     * @plexus.requirement
+     * plexus.requirement
      */
+    @Inject
     private RoleManager roleManager;
 
     /**
-     * @plexus.requirement
+     * plexus.requirement
      */
+    @Inject
     private SecuritySystem securitySystem;
 
     /**
