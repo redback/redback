@@ -40,59 +40,60 @@ import java.util.Properties;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
-@Service("ldapConnectionFactory#configurable")
+@Service( "ldapConnectionFactory#configurable" )
 public class ConfigurableLdapConnectionFactory
     implements LdapConnectionFactory
 {
     /**
-     * @plexus.configuration
+     * plexus.configuration
      */
     private String hostname;
 
     /**
-     * @plexus.configuration
+     * plexus.configuration
      */
     private int port;
 
     /**
-     * @plexus.configuration
+     * plexus.configuration
      */
     private boolean ssl;
 
     /**
-     * @plexus.configuration
+     * plexus.configuration
      */
     private String baseDn;
 
     /**
-     * @plexus.configuration
+     * plexus.configuration
      */
     private String contextFactory;
 
     /**
-     * @plexus.configuration
+     * plexus.configuration
      */
     private String bindDn;
 
     /**
-     * @plexus.configuration
+     * plexus.configuration
      */
     private String password;
 
     /**
-     * @plexus.configuration
+     * plexus.configuration
      */
     private String authenticationMethod;
 
     /**
-     * @plexus.configuration
+     * plexus.configuration
      */
     private Properties extraProperties;
 
     private LdapConnectionConfiguration configuration;
 
 
-    @Inject @Named(value="userConfiguration")
+    @Inject
+    @Named( value = "userConfiguration" )
     private UserConfiguration userConf;
 
     // ----------------------------------------------------------------------
@@ -111,8 +112,8 @@ public class ConfigurableLdapConnectionFactory
             configuration.setContextFactory( userConf.getString( "ldap.config.context.factory", contextFactory ) );
             configuration.setBindDn( userConf.getConcatenatedList( "ldap.config.bind.dn", bindDn ) );
             configuration.setPassword( userConf.getString( "ldap.config.password", password ) );
-            configuration.setAuthenticationMethod( userConf.getString( "ldap.config.authentication.method",
-                                                                       authenticationMethod ) );
+            configuration.setAuthenticationMethod(
+                userConf.getString( "ldap.config.authentication.method", authenticationMethod ) );
             configuration.setExtraProperties( extraProperties );
         }
         catch ( InvalidNameException e )

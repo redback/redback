@@ -33,7 +33,7 @@ public class SimpleActionInvocationTracker
     implements ActionInvocationTracker
 { 
     /**
-     * @plexus.configuration default-value="5"
+     * plexus.configuration default-value="5"
      */
     private int historySize = 5;
 

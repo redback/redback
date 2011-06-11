@@ -64,30 +64,30 @@ public class BackupRestoreAction
     public final static String CUSTOM_ERROR = "custom_error";
 	
     /**
-     * @plexus.configuration default-value="data"
+     * plexus.configuration default-value="data"
      */
-    private File applicationHome;
+    private File applicationHome = new File("data");
     
     /**
-     * @plexus.requirement role-hint="jdo"
+     * plexus.requirement role-hint="jdo"
      */
     @Inject
     private DataManagementTool dataManagementTool;
     
     /**
-     * @plexus.requirement role-hint="jdo"
+     * plexus.requirement role-hint="jdo"
      */
     @Inject @Named(value = "rBACManager#jdo" )
     private RBACManager rbacManager;
 
     /**
-     * @plexus.requirement role-hint="jdo"
+     * plexus.requirement role-hint="jdo"
      */
     @Inject @Named(value = "userManager#jdo")
     private UserManager userManager;
 
     /**
-     * @plexus.requirement role-hint="jdo"
+     * plexus.requirement role-hint="jdo"
      */
     @Inject @Named(value = "keyManager#jdo")
     private KeyManager keyManager;    

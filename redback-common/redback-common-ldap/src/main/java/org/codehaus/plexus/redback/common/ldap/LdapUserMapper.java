@@ -32,51 +32,52 @@ import java.util.Date;
  * @author <a href="jesse@codehaus.org"> jesse
  * @version $Id$
  */
-@Service("userMapper#ldap")
+@Service( "userMapper#ldap" )
 public class LdapUserMapper
     implements UserMapper
 {
     /**
-     * @plexus.configuration default-value="mail"
+     * plexus.configuration default-value="mail"
      */
     String emailAttribute = "mail";
 
     /**
-     * @plexus.configuration default-value="givenName"
+     * plexus.configuration default-value="givenName"
      */
     String fullNameAttribute = "givenName";
 
     /**
-     * @plexus.configuration default-value="userPassword"
+     * plexus.configuration default-value="userPassword"
      */
     String passwordAttribute = "userPassword";
 
     /**
-     * @plexus.configuration default-value="cn"
+     * plexus.configuration default-value="cn"
      */
     String userIdAttribute = "cn";
 
     /**
-     * @plexus.configuration default-value=""
+     * plexus.configuration default-value=""
      */
     String userBaseDn;
 
     /**
-     * @plexus.configuration default-value="inetOrgPerson"
+     * plexus.configuration default-value="inetOrgPerson"
      */
     String userObjectClass = "inetOrgPerson";
 
     /**
-     * @plexus.configuration default-value=""
+     * plexus.configuration default-value=""
      */
     String userFilter;
-    
+
     /**
-     * @plexus.configuration default-value="0"
+     * plexus.configuration default-value="0"
      */
     int maxResultCount = 0;
 
-    @Inject @Named(value="userConfiguration")
+    @Inject
+    @Named( value = "userConfiguration" )
     private UserConfiguration userConf;
 
     @PostConstruct
@@ -86,9 +87,8 @@ public class LdapUserMapper
         fullNameAttribute = userConf.getString( "ldap.config.mapper.attribute.fullname", fullNameAttribute );
         passwordAttribute = userConf.getString( "ldap.config.mapper.attribute.password", passwordAttribute );
         userIdAttribute = userConf.getString( "ldap.config.mapper.attribute.user.id", userIdAttribute );
-        userBaseDn =
-            userConf.getConcatenatedList( "ldap.config.mapper.attribute.user.base.dn",
-                                          userConf.getConcatenatedList( "ldap.config.base.dn", userBaseDn ) );
+        userBaseDn = userConf.getConcatenatedList( "ldap.config.mapper.attribute.user.base.dn",
+                                                   userConf.getConcatenatedList( "ldap.config.base.dn", userBaseDn ) );
         userObjectClass = userConf.getString( "ldap.config.mapper.attribute.user.object.class", userObjectClass );
         userFilter = userConf.getString( "ldap.config.mapper.attribute.user.filter", userFilter );
         maxResultCount = userConf.getInt( "ldap.config.max.result.count", maxResultCount );
@@ -136,10 +136,11 @@ public class LdapUserMapper
 
     public String[] getUserAttributeNames()
     {
-        return new String[]{emailAttribute, fullNameAttribute, passwordAttribute, userIdAttribute};
+        return new String[]{ emailAttribute, fullNameAttribute, passwordAttribute, userIdAttribute };
     }
-    
-    public int getMaxResultCount() {
+
+    public int getMaxResultCount()
+    {
         return maxResultCount;
     }
 
@@ -236,7 +237,8 @@ public class LdapUserMapper
         this.fullNameAttribute = fullNameAttribute;
     }
 
-    public void setMaxResultCount(int maxResultCount) {
+    public void setMaxResultCount( int maxResultCount )
+    {
         this.maxResultCount = maxResultCount;
     }
 
@@ -289,9 +291,11 @@ public class LdapUserMapper
     {
         return new LdapUser();
     }
-    
-    public String[] getReturningAttributes() {
-        return new String[] {getUserIdAttribute(), getEmailAttribute(), getFullNameAttribute(), getPasswordAttribute()};
+
+    public String[] getReturningAttributes()
+    {
+        return new String[]{ getUserIdAttribute(), getEmailAttribute(), getFullNameAttribute(),
+            getPasswordAttribute() };
     }
 
     public UserConfiguration getUserConf()

@@ -52,16 +52,16 @@ public class HttpDigestAuthentication
     private UserManager userManager;
 
     /**
-     * @plexus.configuration default-value="300"
+     * plexus.configuration default-value="300"
      */
     private int nonceLifetimeSeconds = 300;
 
     /**
      * NOTE: Must be alphanumeric.
      *
-     * @plexus.configuration default-value="OrycteropusAfer"
+     * plexus.configuration default-value="OrycteropusAfer"
      */
-    private String digestKey;
+    private String digestKey ="OrycteropusAfer";
 
     private String realm;
 
