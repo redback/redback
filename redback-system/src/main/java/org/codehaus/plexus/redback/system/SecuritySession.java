@@ -19,18 +19,21 @@ package org.codehaus.plexus.redback.system;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.users.User;
 
+import java.io.Serializable;
+
 /**
  * @author Jason van Zyl
  */
 public interface SecuritySession
+    extends Serializable
 {
-    public static final String ROLE = SecuritySession.class.getName(); 
+    public static final String ROLE = SecuritySession.class.getName();
 
     public static final String USERKEY = "SecuritySessionUser";
 
     AuthenticationResult getAuthenticationResult();
 
     User getUser();
-    
+
     boolean isAuthenticated();
 }

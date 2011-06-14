@@ -18,34 +18,43 @@ package org.codehaus.plexus.redback.common.ldap;
 
 import org.codehaus.plexus.redback.users.User;
 
+import javax.naming.directory.Attributes;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.naming.directory.Attributes;
-
 // TODO this class should be able to be replaced with a model
 public class LdapUser
-    implements User
+    implements User, Serializable
 {
 
     private String key;
+
     private String username;
+
     private String fullName;
+
     private String email;
+
     private String encodedPassword;
 
     private List<String> previousEncodedPasswords;
 
     private boolean locked = false;
+
     private boolean requiresPasswordChange = false;
+
     private boolean permanent = true;
+
     private boolean valid = true;
 
     private Date creationDate = null;
 
     private int failedLoginAttempts;
+
     private Date lastLoginDate = null;
+
     private Date lastPasswordChange = null;
 
     // DO NOT STORE AS SUCH!!!
@@ -118,7 +127,7 @@ public class LdapUser
     {
         return newPassword;
     }
-            
+
     public List<String> getPreviousEncodedPasswords()
     {
         return previousEncodedPasswords;

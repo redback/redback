@@ -20,12 +20,14 @@ import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.users.User;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
+
 /**
  * @author Jason van Zyl
  */
 @Service( "securitySession" )
 public class DefaultSecuritySession
-    implements SecuritySession
+    implements SecuritySession, Serializable
 {
     private AuthenticationResult authenticationResult;
 

@@ -18,26 +18,27 @@ package org.codehaus.plexus.redback.users.memory;
 
 import org.codehaus.plexus.redback.users.User;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
  * A Simple User record.
- * 
+ *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  */
 public class SimpleUser
-    implements User
+    implements User, Serializable
 {
     private String username;
 
     private String password;
 
     private String email;
-    
+
     private String fullName;
-    
+
     private String encodedPassword;
 
     private Date lastPasswordChange;
@@ -47,18 +48,18 @@ public class SimpleUser
     private int countFailedLoginAttempts = 0;
 
     private boolean locked = false;
-    
+
     private boolean permanent = false;
-    
+
     private boolean validated = false;
 
     private List<String> previousEncodedPasswords;
 
     private Date accountCreationDate;
-    
+
     private boolean passwordChangeRequired;
 
-    public SimpleUser( )
+    public SimpleUser()
     {
     }
 
@@ -109,7 +110,7 @@ public class SimpleUser
 
     public List<String> getPreviousEncodedPasswords()
     {
-        if(previousEncodedPasswords == null)
+        if ( previousEncodedPasswords == null )
         {
             previousEncodedPasswords = new ArrayList<String>();
         }
