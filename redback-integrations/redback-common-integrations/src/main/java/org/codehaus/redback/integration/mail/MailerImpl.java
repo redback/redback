@@ -127,8 +127,7 @@ public class MailerImpl
 
             message.setRecipients(Message.RecipientType.TO, tos.toArray(new Address[tos.size()]));
 
-
-            log.debug( content );
+            log.debug("mail content {}", content );
 
             javaMailSender.send( message );
         }

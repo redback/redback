@@ -68,14 +68,14 @@ public class AutoLoginCookies
 
         if ( rememberMeCookie == null )
         {
-            log.debug( "Remember Me Cookie Not Found: " + REMEMBER_ME_KEY );
+            log.debug( "Remember Me Cookie Not Found: {}", REMEMBER_ME_KEY );
             return null;
         }
 
         // Found user with a remember me key.
         String providedKey = rememberMeCookie.getValue();
 
-        log.debug( "Found remember me cookie : " + providedKey );
+        log.debug( "Found remember me cookie : {}", providedKey );
 
         CookieSettings settings = securitySystem.getPolicy().getRememberMeCookieSettings();
         return findAuthKey( REMEMBER_ME_KEY, providedKey, settings.getDomain(), settings.getPath(), httpServletResponse, httpServletRequest );
@@ -121,7 +121,7 @@ public class AutoLoginCookies
 
         if ( ssoCookie == null )
         {
-            log.debug( "Single Sign On Cookie Not Found: " + SIGNON_KEY );
+            log.debug( "Single Sign On Cookie Not Found: {}", SIGNON_KEY );
             return null;
         }
 
@@ -129,7 +129,7 @@ public class AutoLoginCookies
 
         String providedKey = ssoCookie.getValue();
 
-        log.debug( "Found sso cookie : " + providedKey );
+        log.debug( "Found sso cookie : {}", providedKey );
 
         CookieSettings settings = securitySystem.getPolicy().getSignonCookieSettings();
         return findAuthKey( SIGNON_KEY, providedKey, settings.getDomain(), settings.getPath(), httpServletResponse, httpServletRequest );
@@ -195,7 +195,7 @@ public class AutoLoginCookies
         {
             AuthenticationKey authkey = securitySystem.getKeyManager().findKey( providedKey );
 
-            log.debug( "Found AuthKey: " + authkey );
+            log.debug( "Found AuthKey: {}", authkey );
 
             return authkey;
         }

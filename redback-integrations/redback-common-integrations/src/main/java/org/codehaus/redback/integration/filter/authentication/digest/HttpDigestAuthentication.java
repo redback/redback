@@ -139,7 +139,7 @@ public class HttpDigestAuthentication
         throws IOException
     {
         // The Challenge Header
-        StringBuffer authHeader = new StringBuffer();
+        StringBuilder authHeader = new StringBuilder();
         authHeader.append( "Digest " );
         // [REQUIRED] The name to appear in the dialog box to the user.
         authHeader.append( "realm=\"" ).append( realmName ).append( "\"" );
