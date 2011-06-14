@@ -14,14 +14,6 @@ package org.codehaus.redback.xmlrpc.client;
  * the License.
  */
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-
 import org.codehaus.redback.xmlrpc.bean.Operation;
 import org.codehaus.redback.xmlrpc.bean.Permission;
 import org.codehaus.redback.xmlrpc.bean.Resource;
@@ -33,6 +25,14 @@ import org.codehaus.redback.xmlrpc.service.ResourceService;
 import org.codehaus.redback.xmlrpc.service.RoleService;
 import org.codehaus.redback.xmlrpc.service.UserService;
 import org.codehaus.redback.xmlrpc.util.BeanConverterUtil;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 public class CommandLineClient
 {
@@ -338,14 +338,14 @@ public class CommandLineClient
 
             else if ( command.containsKey( COMMAND_HELP ) )
             {
-                String commandList = "";
+                StringBuilder commandList = new StringBuilder();
 
                 for ( String commandName : COMMANDS )
                 {
-                    commandList += commandName + ", ";
+                    commandList.append( commandName ).append( ", " );
                 }
                 log( "Available commands:" );
-                log( commandList );
+                log( commandList.toString() );
             }
 
             else if ( command.containsKey( COMMAND_EXIT ) )
@@ -416,8 +416,8 @@ public class CommandLineClient
                 ( (UserService) userService ).updateUser( BeanConverterUtil.toMap( user ) );
 
                 log( "User('" + user.getUsername() + "', '" + user.getFullname() + "', '" + user.getEmail() + "', "
-                    + ( user.isValidated() ? "VALIDATED" : "NOT VALIDATED" ) + ", "
-                    + ( user.isLocked() ? "LOCKED" : "NOT LOCKED" ) + ")" );
+                         + ( user.isValidated() ? "VALIDATED" : "NOT VALIDATED" ) + ", "
+                         + ( user.isLocked() ? "LOCKED" : "NOT LOCKED" ) + ")" );
             }
 
             else if ( command.containsKey( COMMAND_USER_DELETE ) )
@@ -456,8 +456,8 @@ public class CommandLineClient
                 User user = ( (UserService) userService ).getUser( username );
 
                 log( "User('" + user.getUsername() + "', '" + user.getFullname() + "', '" + user.getEmail() + "', "
-                    + ( user.isValidated() ? "VALIDATED" : "NOT VALIDATED" ) + ", "
-                    + ( user.isLocked() ? "LOCKED" : "NOT LOCKED" ) + ")" );
+                         + ( user.isValidated() ? "VALIDATED" : "NOT VALIDATED" ) + ", "
+                         + ( user.isLocked() ? "LOCKED" : "NOT LOCKED" ) + ")" );
             }
 
             else if ( command.containsKey( COMMAND_USER_GETALL ) )
@@ -467,8 +467,8 @@ public class CommandLineClient
                 for ( User user : users )
                 {
                     log( "User('" + user.getUsername() + "', '" + user.getFullname() + "', '" + user.getEmail() + "', "
-                        + ( user.isValidated() ? "VALIDATED" : "NOT VALIDATED" ) + ", "
-                        + ( user.isLocked() ? "LOCKED" : "NOT LOCKED" ) + ")" );
+                             + ( user.isValidated() ? "VALIDATED" : "NOT VALIDATED" ) + ", "
+                             + ( user.isLocked() ? "LOCKED" : "NOT LOCKED" ) + ")" );
                 }
 
                 log( "Found " + users.size() + " user" + ( users.size() > 1 ? "s" : "" ) + "." );
@@ -529,8 +529,8 @@ public class CommandLineClient
                 Role role = ( (RoleService) roleService ).getRole( rolename );
 
                 log( "Role('" + role.getRoleName() + "', '" + role.getDescription() + "', "
-                    + ( role.isAssignable() ? "ASSIGNABLE" : "NOT ASSIGNABLE" ) + ", "
-                    + ( role.isPermanent() ? "PERMANENT" : "NOT PERMANENT" ) + ")" );
+                         + ( role.isAssignable() ? "ASSIGNABLE" : "NOT ASSIGNABLE" ) + ", "
+                         + ( role.isPermanent() ? "PERMANENT" : "NOT PERMANENT" ) + ")" );
             }
 
             else if ( command.containsKey( COMMAND_ROLE_GETALL ) )
@@ -540,8 +540,8 @@ public class CommandLineClient
                 for ( Role role : roles )
                 {
                     log( "Role('" + role.getRoleName() + "', '" + role.getDescription() + "', "
-                        + ( role.isAssignable() ? "ASSIGNABLE" : "NOT ASSIGNABLE" ) + ", "
-                        + ( role.isPermanent() ? "PERMANENT" : "NOT PERMANENT" ) + ")" );
+                             + ( role.isAssignable() ? "ASSIGNABLE" : "NOT ASSIGNABLE" ) + ", "
+                             + ( role.isPermanent() ? "PERMANENT" : "NOT PERMANENT" ) + ")" );
                 }
 
                 log( "Found " + roles.size() + " role" + ( roles.size() > 1 ? "s" : "" ) + "." );
@@ -697,7 +697,7 @@ public class CommandLineClient
                 Permission permission = ( (PermissionService) permissionService ).getPermission( permissionName );
 
                 log( "Permission('" + permission.getName() + "', '" + permission.getDescription() + "', '"
-                    + permission.getOperation() + "', '" + permission.getResource() + "')" );
+                         + permission.getOperation() + "', '" + permission.getResource() + "')" );
             }
 
             else if ( command.containsKey( COMMAND_PERMISSION_GETALL ) )
@@ -707,7 +707,7 @@ public class CommandLineClient
                 for ( Permission permission : permissions )
                 {
                     log( "Permission('" + permission.getName() + "', '" + permission.getDescription() + "', '"
-                        + permission.getOperation() + "', '" + permission.getResource() + "')" );
+                             + permission.getOperation() + "', '" + permission.getResource() + "')" );
                 }
 
                 log( "Found " + permissions.size() + " permission" + ( permissions.size() > 1 ? "s" : "" ) + "." );
@@ -768,7 +768,7 @@ public class CommandLineClient
                 Operation operation = ( (OperationService) operationService ).getOperation( operationName );
 
                 log( "Operation('" + operation.getName() + "', '" + operation.getDescription() + "', "
-                    + ( operation.isPermanent() ? "PERMANENT" : "NOT PERMANENT" ) + ")" );
+                         + ( operation.isPermanent() ? "PERMANENT" : "NOT PERMANENT" ) + ")" );
             }
 
             else if ( command.containsKey( COMMAND_OPERATION_GETALL ) )
@@ -778,7 +778,7 @@ public class CommandLineClient
                 for ( Operation operation : operations )
                 {
                     log( "Operation('" + operation.getName() + "', '" + operation.getDescription() + "', "
-                        + ( operation.isPermanent() ? "PERMANENT" : "NOT PERMANENT" ) + ")" );
+                             + ( operation.isPermanent() ? "PERMANENT" : "NOT PERMANENT" ) + ")" );
                 }
 
                 log( "Found " + operations.size() + " operation" + ( operations.size() > 1 ? "s" : "" ) + "." );
@@ -839,8 +839,8 @@ public class CommandLineClient
                 Resource resource = ( (ResourceService) resourceService ).getResource( resourceId );
 
                 log( "Resource('" + resource.getIdentifier() + "', "
-                    + ( resource.isPattern() ? "PATTERN" : "NOT A PATTERN" ) + ", "
-                    + ( resource.isPermanent() ? "PERMANENT" : "NOT PERMANENT" ) + ")" );
+                         + ( resource.isPattern() ? "PATTERN" : "NOT A PATTERN" ) + ", "
+                         + ( resource.isPermanent() ? "PERMANENT" : "NOT PERMANENT" ) + ")" );
             }
 
             else if ( command.containsKey( COMMAND_RESOURCE_GETALL ) )
@@ -850,8 +850,8 @@ public class CommandLineClient
                 for ( Resource resource : resources )
                 {
                     log( "Resource('" + resource.getIdentifier() + "', "
-                        + ( resource.isPattern() ? "PATTERN" : "NOT A PATTERN" ) + ", "
-                        + ( resource.isPermanent() ? "PERMANENT" : "NOT PERMANENT" ) + ")" );
+                             + ( resource.isPattern() ? "PATTERN" : "NOT A PATTERN" ) + ", "
+                             + ( resource.isPermanent() ? "PERMANENT" : "NOT PERMANENT" ) + ")" );
                 }
 
                 log( "Found " + resources.size() + " resource" + ( resources.size() > 1 ? "s" : "" ) + "." );
