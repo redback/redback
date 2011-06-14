@@ -97,29 +97,29 @@ public class DefaultSecuritySystem
         // Perform Authentication.
         AuthenticationResult result = authnManager.authenticate( source );
 
-        log.debug( "authnManager.authenticate() result: " + result );
+        log.debug( "authnManager.authenticate() result: {}", result );
 
         // Process Results.
         if ( result.isAuthenticated() )
         {
-            log.debug( "User '" + result.getPrincipal() + "' authenticated." );
+            log.debug( "User '{}' authenticated.", result.getPrincipal());
             if ( userManager.userExists( result.getPrincipal() ) )
             {
-                log.debug( "User '" + result.getPrincipal() + "' exists." );
+                log.debug( "User '{}' exists.", result.getPrincipal() );
                 User user = userManager.findUser( result.getPrincipal() );
-                log.debug( "User: " + user );
+                log.debug( "User: {}", user );
 
                 return new DefaultSecuritySession( result, user );
             }
             else
             {
-                log.debug( "User '" + result.getPrincipal() + "' DOES NOT exist." );
+                log.debug( "User '{}' DOES NOT exist.", result.getPrincipal() );
                 return new DefaultSecuritySession( result );
             }
         }
         else
         {
-            log.debug( "User '" + result.getPrincipal() + "' IS NOT authenticated." );
+            log.debug( "User '{}' IS NOT authenticated.", result.getPrincipal() );
             return new DefaultSecuritySession( result );
         }
     }

@@ -219,13 +219,13 @@ public class JdoRbacManager
         try
         {
             permission = getPermission( name );
-            log.debug( "Create Permission [" + name + "] Returning Existing." );
+            log.debug( "Create Permission [{}] Returning Existing.", name );
         }
         catch ( RbacObjectNotFoundException e )
         {
             permission = new JdoPermission();
             permission.setName( name );
-            log.debug( "Create Permission [" + name + "] New JdoPermission." );
+            log.debug( "Create Permission [{}] New JdoPermission.", name );
         }
 
         return permission;

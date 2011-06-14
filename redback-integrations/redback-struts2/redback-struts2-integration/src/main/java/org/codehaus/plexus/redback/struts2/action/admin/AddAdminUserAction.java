@@ -16,9 +16,6 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * limitations under the License.
  */
 
-import java.util.Arrays;
-import java.util.Date;
-
 import org.apache.struts2.ServletActionContext;
 import org.codehaus.plexus.redback.authentication.AuthenticationConstants;
 import org.codehaus.plexus.redback.authentication.AuthenticationDataSource;
@@ -43,6 +40,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
+import java.util.Arrays;
+import java.util.Date;
 
 /**
  * AddAdminUserAction
@@ -53,8 +52,8 @@ import javax.inject.Inject;
  * role-hint="redback-admin-account"
  * instantiation-strategy="per-lookup"
  */
-@Controller("redback-admin-account")
-@Scope("prototype")
+@Controller( "redback-admin-account" )
+@Scope( "prototype" )
 public class AddAdminUserAction
     extends AbstractAdminUserCredentialsAction
 {
@@ -132,7 +131,7 @@ public class AddAdminUserAction
         u.setPermanent( true );
 
         userManager.addUser( u );
-        
+
         AuditEvent event = new AuditEvent( getText( "log.account.create" ) );
         event.setAffectedUser( u.getUsername() );
         event.log();
@@ -205,7 +204,7 @@ public class AddAdminUserAction
                 AuditEvent event = new AuditEvent( getText( "log.login.success" ) );
                 event.setAffectedUser( principal );
                 event.log();
-                
+
                 User u = securitySession.getUser();
                 u.setLastLoginDate( new Date() );
                 securitySystem.getUserManager().updateUser( u );
@@ -214,9 +213,9 @@ public class AddAdminUserAction
             }
             else
             {
-                log.debug( "Login Action failed against principal : " +
-                    securitySession.getAuthenticationResult().getPrincipal(),
-                                   securitySession.getAuthenticationResult().getException() );
+                log.debug( "Login Action failed against principal : {}",
+                           securitySession.getAuthenticationResult().getPrincipal(),
+                           securitySession.getAuthenticationResult().getException() );
 
                 AuthenticationResult result = securitySession.getAuthenticationResult();
                 if ( result.getExceptionsMap() != null && !result.getExceptionsMap().isEmpty() )
@@ -238,18 +237,19 @@ public class AddAdminUserAction
                 AuditEvent event = new AuditEvent( getText( "log.login.fail" ) );
                 event.setAffectedUser( principal );
                 event.log();
-                
+
                 return LOGIN_ERROR;
             }
         }
         catch ( AuthenticationException ae )
         {
-            addActionError( getText( "authentication.exception", Arrays.asList( ( Object ) ae.getMessage() ) ) );
+            addActionError( getText( "authentication.exception", Arrays.asList( (Object) ae.getMessage() ) ) );
             return LOGIN_ERROR;
         }
         catch ( UserNotFoundException ue )
         {
-            addActionError( getText( "user.not.found.exception", Arrays.asList( ( Object ) principal, ue.getMessage() ) ) );
+            addActionError(
+                getText( "user.not.found.exception", Arrays.asList( (Object) principal, ue.getMessage() ) ) );
 
             AuditEvent event = new AuditEvent( getText( "log.login.fail" ) );
             event.setAffectedUser( principal );

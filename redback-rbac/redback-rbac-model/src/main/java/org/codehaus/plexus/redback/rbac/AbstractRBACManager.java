@@ -661,8 +661,8 @@ public abstract class AbstractRBACManager
         Collection<Role> assignedRoles = getEffectivelyAssignedRoles( principal );
         List<Role> allRoles = getAllAssignableRoles();
 
-        log.debug( "UR: assigned " + assignedRoles.size() );
-        log.debug( "UR: available " + allRoles.size() );
+        log.debug( "UR: assigned {}", assignedRoles.size() );
+        log.debug( "UR: available {}", allRoles.size() );
 
         return CollectionUtils.subtract( allRoles, assignedRoles );
     }
@@ -681,8 +681,8 @@ public abstract class AbstractRBACManager
         Collection<Role> assignedRoles = getAssignedRoles( principal );
         List<Role> allRoles = getAllAssignableRoles();
 
-        log.debug( "UR: assigned " + assignedRoles.size() );
-        log.debug( "UR: available " + allRoles.size() );
+        log.debug( "UR: assigned {}", assignedRoles.size() );
+        log.debug( "UR: available {}", allRoles.size() );
 
         return CollectionUtils.subtract( allRoles, assignedRoles );
     }

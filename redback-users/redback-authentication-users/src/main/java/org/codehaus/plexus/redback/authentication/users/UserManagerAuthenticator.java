@@ -98,7 +98,7 @@ public class UserManagerAuthenticator
             }
 
             PasswordEncoder encoder = securityPolicy.getPasswordEncoder();
-            log.debug( "PasswordEncoder: " + encoder.getClass().getName() );
+            log.debug( "PasswordEncoder: {}", encoder.getClass().getName() );
 
             boolean isPasswordValid = encoder.isPasswordValid( user.getEncodedPassword(), source.getPassword() );
             if ( isPasswordValid )

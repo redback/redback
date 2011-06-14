@@ -60,6 +60,10 @@
       <groupId>org.codehaus.redback</groupId>
       <artifactId>redback-authentication-keys</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
     <!-- RBAC Management / Authorization -->
     <dependency>
       <groupId>org.codehaus.redback</groupId>

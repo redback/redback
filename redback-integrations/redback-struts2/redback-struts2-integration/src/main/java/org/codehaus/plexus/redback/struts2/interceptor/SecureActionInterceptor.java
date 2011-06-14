@@ -16,6 +16,7 @@ package org.codehaus.plexus.redback.struts2.interceptor;
  * limitations under the License.
  */
 
+import com.google.common.collect.Lists;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
@@ -151,18 +152,23 @@ public class SecureActionInterceptor
 
                     for ( SecureActionBundle.AuthorizationTuple tuple : authzTuples )
                     {
-                        logger.debug( "checking authz for " + tuple.toString() );
+                        logger.debug( "checking authz for {}", tuple.toString() );
 
                         AuthorizationResult authzResult =
                             securitySystem.authorize( session, tuple.getOperation(), tuple.getResource() );
 
-                        logger.debug( "checking the interceptor authz " + authzResult.isAuthorized() + " for "
-                                          + tuple.toString() );
+                        logger.debug( "checking the interceptor authz {} for {}", authzResult.isAuthorized(),
+                                      tuple.toString() );
 
                         if ( authzResult.isAuthorized() )
                         {
-                            logger.debug( session.getUser().getPrincipal() + " is authorized for action "
-                                              + secureAction.getClass().getName() + " by " + tuple.toString() );
+                            if ( logger.isDebugEnabled() )
+                            {
+                                logger.debug( "{} is authorized for action {} by {}",
+                                              Lists.<Object>newArrayList( session.getUser().getPrincipal(),
+                                                                          secureAction.getClass().getName(),
+                                                                          tuple.toString() ) );
+                            }
                             return invocation.invoke();
                         }
                     }
@@ -172,7 +178,7 @@ public class SecureActionInterceptor
             }
             else
             {
-                logger.debug( "SecureActionInterceptor: " + action.getClass().getName() + " not a secure action" );
+                logger.debug( "SecureActionInterceptor: {} not a secure action", action.getClass().getName() );
             }
         }
         catch ( SecureActionException se )
@@ -183,8 +189,8 @@ public class SecureActionInterceptor
 
         logger.debug( "not a secure action {}", action.getClass().getName() );
         String result = invocation.invoke();
-        logger.debug( "Passing invocation up, result is [" + result + "] on call "
-                          + invocation.getAction().getClass().getName() );
+        logger.debug( "Passing invocation up, result is [{}] on call {}", result,
+                      invocation.getAction().getClass().getName() );
         return result;
     }
 

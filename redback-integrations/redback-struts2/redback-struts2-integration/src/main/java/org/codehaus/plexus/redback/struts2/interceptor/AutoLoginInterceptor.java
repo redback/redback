@@ -16,9 +16,9 @@ package org.codehaus.plexus.redback.struts2.interceptor;
  * limitations under the License.
  */
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
-
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.interceptor.Interceptor;
 import org.apache.struts2.ServletActionContext;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
@@ -33,12 +33,11 @@ import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.redback.integration.util.AutoLoginCookies;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionInvocation;
-import com.opensymphony.xwork2.interceptor.Interceptor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 
 /**
  * AutoLoginInterceptor
@@ -54,7 +53,7 @@ public class AutoLoginInterceptor
     implements Interceptor
 {
     private Logger log = LoggerFactory.getLogger( AutoLoginInterceptor.class );
-    
+
     static final String PASSWORD_CHANGE = "security-must-change-password";
 
     static final String ACCOUNT_LOCKED = "security-login-locked";
@@ -97,32 +96,33 @@ public class AutoLoginInterceptor
             if ( !checkCookieConsistency( securitySession ) )
             {
                 // update single sign on cookie
-                autologinCookies.setSignonCookie( securitySession.getUser().getUsername(), ServletActionContext
-                                                  .getResponse(), ServletActionContext.getRequest() );
+                autologinCookies.setSignonCookie( securitySession.getUser().getUsername(),
+                                                  ServletActionContext.getResponse(),
+                                                  ServletActionContext.getRequest() );
             }
         }
         else
         {
-            AuthenticationKey authkey = autologinCookies.getSignonKey( ServletActionContext.getResponse(),
-                                                                       ServletActionContext.getRequest() );
+            AuthenticationKey authkey =
+                autologinCookies.getSignonKey( ServletActionContext.getResponse(), ServletActionContext.getRequest() );
 
             if ( authkey != null )
             {
                 try
                 {
-                    securitySession =
-                        checkAuthentication( authkey,
-                                             invocation.getInvocationContext().getName().equals( PASSWORD_CHANGE ) );
+                    securitySession = checkAuthentication( authkey, invocation.getInvocationContext().getName().equals(
+                        PASSWORD_CHANGE ) );
 
                     if ( securitySession != null && securitySession.isAuthenticated() )
                     {
-                        ActionContext.getContext().getSession().put( SecuritySystemConstants.SECURITY_SESSION_KEY, securitySession );
+                        ActionContext.getContext().getSession().put( SecuritySystemConstants.SECURITY_SESSION_KEY,
+                                                                     securitySession );
                         checkCookieConsistency( securitySession );
                     }
                     else
                     {
-                        autologinCookies.removeSignonCookie( ServletActionContext.getResponse(), ServletActionContext
-                            .getRequest() );
+                        autologinCookies.removeSignonCookie( ServletActionContext.getResponse(),
+                                                             ServletActionContext.getRequest() );
                         autologinCookies.removeRememberMeCookie( ServletActionContext.getResponse(),
                                                                  ServletActionContext.getRequest() );
                     }
@@ -130,10 +130,10 @@ public class AutoLoginInterceptor
                 catch ( AccountLockedException e )
                 {
                     log.info( "Account Locked : Username [" + e.getUser().getUsername() + "]", e );
-                    autologinCookies.removeSignonCookie( ServletActionContext.getResponse(), ServletActionContext
-                        .getRequest() );
-                    autologinCookies.removeRememberMeCookie( ServletActionContext.getResponse(), ServletActionContext
-                        .getRequest() );
+                    autologinCookies.removeSignonCookie( ServletActionContext.getResponse(),
+                                                         ServletActionContext.getRequest() );
+                    autologinCookies.removeRememberMeCookie( ServletActionContext.getResponse(),
+                                                             ServletActionContext.getRequest() );
                     return ACCOUNT_LOCKED;
                 }
                 catch ( MustChangePasswordException e )
@@ -143,8 +143,8 @@ public class AutoLoginInterceptor
             }
             else if ( autologinCookies.isRememberMeEnabled() )
             {
-                authkey = autologinCookies.getRememberMeKey( ServletActionContext.getResponse(), ServletActionContext
-                    .getRequest() );
+                authkey = autologinCookies.getRememberMeKey( ServletActionContext.getResponse(),
+                                                             ServletActionContext.getRequest() );
 
                 if ( authkey != null )
                 {
@@ -182,27 +182,28 @@ public class AutoLoginInterceptor
 
         boolean failed = false;
 
-        AuthenticationKey key = autologinCookies.getRememberMeKey( ServletActionContext.getResponse(),
-                                                                   ServletActionContext.getRequest() );
+        AuthenticationKey key =
+            autologinCookies.getRememberMeKey( ServletActionContext.getResponse(), ServletActionContext.getRequest() );
         if ( key != null )
         {
             if ( !key.getForPrincipal().equals( username ) )
             {
-                log.debug( "Login invalidated: remember me cookie was for " + key.getForPrincipal() +
-                    "; but session was for " + username );
+                log.debug( "Login invalidated: remember me cookie was for{}; but session was for {}",
+                           key.getForPrincipal(), username );
                 failed = true;
             }
         }
 
         if ( !failed )
         {
-            key = autologinCookies.getSignonKey( ServletActionContext.getResponse(), ServletActionContext.getRequest() );
+            key =
+                autologinCookies.getSignonKey( ServletActionContext.getResponse(), ServletActionContext.getRequest() );
             if ( key != null )
             {
                 if ( !key.getForPrincipal().equals( username ) )
                 {
-                    log.debug( "Login invalidated: signon cookie was for " + key.getForPrincipal() +
-                        "; but session was for " + username );
+                    log.debug( "Login invalidated: signon cookie was for {}; but session was for {}",
+                               key.getForPrincipal(), username );
                     failed = true;
                 }
             }
@@ -225,7 +226,7 @@ public class AutoLoginInterceptor
         throws AccountLockedException, MustChangePasswordException
     {
         SecuritySession securitySession = null;
-        log.debug( "Logging in with an authentication key: " + authkey.getForPrincipal() );
+        log.debug( "Logging in with an authentication key: {}", authkey.getForPrincipal() );
         TokenBasedAuthenticationDataSource authsource = new TokenBasedAuthenticationDataSource();
         authsource.setPrincipal( authkey.getForPrincipal() );
         authsource.setToken( authkey.getKey() );
@@ -242,8 +243,7 @@ public class AutoLoginInterceptor
 
                 HttpSession session = ServletActionContext.getRequest().getSession( true );
                 session.setAttribute( SecuritySystemConstants.SECURITY_SESSION_KEY, securitySession );
-                log.debug(
-                    "Setting session:" + SecuritySystemConstants.SECURITY_SESSION_KEY + " to " + securitySession );
+                log.debug( "Setting session:{} to {}", SecuritySystemConstants.SECURITY_SESSION_KEY, securitySession );
 
                 autologinCookies.setSignonCookie( authkey.getForPrincipal(), ServletActionContext.getResponse(),
                                                   ServletActionContext.getRequest() );
@@ -251,8 +251,8 @@ public class AutoLoginInterceptor
             else
             {
                 AuthenticationResult result = securitySession.getAuthenticationResult();
-                log.info( "Login interceptor failed against principal : " + result.getPrincipal(),
-                                  result.getException() );
+                log.info( "Login interceptor failed against principal : {}", result.getPrincipal(),
+                          result.getException() );
             }
 
         }
@@ -269,7 +269,8 @@ public class AutoLoginInterceptor
 
     private void removeCookiesAndSession()
     {
-        autologinCookies.removeRememberMeCookie( ServletActionContext.getResponse(), ServletActionContext.getRequest() );
+        autologinCookies.removeRememberMeCookie( ServletActionContext.getResponse(),
+                                                 ServletActionContext.getRequest() );
         autologinCookies.removeSignonCookie( ServletActionContext.getResponse(), ServletActionContext.getRequest() );
 
         HttpSession session = ServletActionContext.getRequest().getSession();
@@ -290,7 +291,7 @@ public class AutoLoginInterceptor
 
         SecuritySession secSession =
             (SecuritySession) session.getAttribute( SecuritySystemConstants.SECURITY_SESSION_KEY );
-        log.debug( "Returning Security Session: " + secSession );
+        log.debug( "Returning Security Session: {}", secSession );
         return secSession;
     }
 }

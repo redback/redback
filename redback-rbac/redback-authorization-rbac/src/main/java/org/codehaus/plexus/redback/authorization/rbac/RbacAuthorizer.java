@@ -118,7 +118,7 @@ public class RbacAuthorizer
                 {
                     for ( Permission permission : permissionMap.get( operation.toString() ) )
                     {
-                        log.debug( "checking permission " + permission.getName() );
+                        log.debug( "checking permission {}", permission.getName() );
 
                         if ( evaluator.evaluate( permission, operation, resource, guest.getPrincipal() ) )
                         {

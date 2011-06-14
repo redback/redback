@@ -16,9 +16,6 @@ package org.codehaus.plexus.redback.struts2.action;
  * limitations under the License.
  */
 
-import java.util.Arrays;
-import java.util.Date;
-
 import org.apache.struts2.ServletActionContext;
 import org.codehaus.plexus.redback.authentication.AuthenticationConstants;
 import org.codehaus.plexus.redback.authentication.AuthenticationDataSource;
@@ -44,6 +41,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
+import java.util.Arrays;
+import java.util.Date;
 
 /**
  * LoginAction
@@ -98,13 +97,13 @@ public class LoginAction
      */
     @Inject
     private UserConfiguration config;
-    
+
     // ------------------------------------------------------------------
     // Action Entry Points - (aka Names)
     // ------------------------------------------------------------------
 
     public String show()
-    {             
+    {
         return INPUT;
     }
 
@@ -172,7 +171,7 @@ public class LoginAction
             authsource.setEnforcePasswordChange( false );
 
             securitySystem.getUserManager().updateUser( user );
-            
+
             AuditEvent event = new AuditEvent( getText( "log.password.change" ) );
             event.setAffectedUser( username );
             event.log();
@@ -231,7 +230,7 @@ public class LoginAction
 
             securitySystem.getUserManager().updateUser( user );
             String currentUser = getCurrentUser();
-            
+
             AuditEvent event = new AuditEvent( getText( "log.account.validation" ) );
             event.setAffectedUser( username );
             event.setCurrentUser( currentUser );
@@ -347,7 +346,8 @@ public class LoginAction
 
                 if ( securitySystem.getPolicy().getUserValidationSettings().isEmailValidationRequired() )
                 {
-                    if ( !securitySession.getUser().getUsername().equals( config.getString( "redback.default.admin" ) ) )
+                    if ( !securitySession.getUser().getUsername().equals(
+                        config.getString( "redback.default.admin" ) ) )
                     {
                         if ( !securitySession.getUser().isValidated() )
                         {
@@ -358,13 +358,13 @@ public class LoginAction
                         }
                     }
                 }
-                
+
                 setCookies( authdatasource, rememberMe );
 
                 AuditEvent event = new AuditEvent( getText( "log.login.success" ) );
                 event.setAffectedUser( username );
                 event.log();
-                
+
                 User user = securitySession.getUser();
                 user.setLastLoginDate( new Date() );
                 securitySystem.getUserManager().updateUser( user );
@@ -387,9 +387,9 @@ public class LoginAction
             }
             else
             {
-                log.debug( "Login Action failed against principal : " +
-                    securitySession.getAuthenticationResult().getPrincipal(),
-                                   securitySession.getAuthenticationResult().getException() );
+                log.debug( "Login Action failed against principal : {}",
+                           securitySession.getAuthenticationResult().getPrincipal(),
+                           securitySession.getAuthenticationResult().getException() );
 
                 AuthenticationResult result = securitySession.getAuthenticationResult();
                 if ( result.getExceptionsMap() != null && !result.getExceptionsMap().isEmpty() )
@@ -411,18 +411,19 @@ public class LoginAction
                 AuditEvent event = new AuditEvent( getText( "log.login.fail" ) );
                 event.setAffectedUser( username );
                 event.log();
-                
+
                 return ERROR;
             }
         }
         catch ( AuthenticationException ae )
         {
-            addActionError( getText( "authentication.exception", Arrays.asList( ( Object ) ae.getMessage() ) ) );
+            addActionError( getText( "authentication.exception", Arrays.asList( (Object) ae.getMessage() ) ) );
             return ERROR;
         }
         catch ( UserNotFoundException ue )
         {
-            addActionError( getText( "user.not.found.exception", Arrays.asList( ( Object ) username, ue.getMessage() ) ) );
+            addActionError(
+                getText( "user.not.found.exception", Arrays.asList( (Object) username, ue.getMessage() ) ) );
 
             AuditEvent event = new AuditEvent( getText( "log.login.fail" ) );
             event.setAffectedUser( username );
@@ -454,8 +455,8 @@ public class LoginAction
     {
         if ( rememberMe )
         {
-            autologinCookies.setRememberMeCookie( authdatasource.getPrincipal(), ServletActionContext
-                .getResponse(), ServletActionContext.getRequest() );
+            autologinCookies.setRememberMeCookie( authdatasource.getPrincipal(), ServletActionContext.getResponse(),
+                                                  ServletActionContext.getRequest() );
         }
         autologinCookies.setSignonCookie( authdatasource.getPrincipal(), ServletActionContext.getResponse(),
                                           ServletActionContext.getRequest() );
