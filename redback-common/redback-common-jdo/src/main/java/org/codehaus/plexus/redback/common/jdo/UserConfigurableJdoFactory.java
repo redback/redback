@@ -2,7 +2,7 @@ package org.codehaus.plexus.redback.common.jdo;
 
 import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;

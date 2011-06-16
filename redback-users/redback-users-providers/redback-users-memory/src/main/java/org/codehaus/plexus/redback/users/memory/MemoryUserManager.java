@@ -24,7 +24,7 @@ import org.codehaus.plexus.redback.users.UserQuery;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.users.memory.util.UserSorter;
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

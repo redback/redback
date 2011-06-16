@@ -22,7 +22,7 @@ package org.codehaus.plexus.redback.common.ldap.connection;
  * SOFTWARE.
  */
 
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;

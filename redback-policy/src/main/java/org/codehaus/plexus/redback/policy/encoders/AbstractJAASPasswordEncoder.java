@@ -19,8 +19,8 @@ package org.codehaus.plexus.redback.policy.encoders;
 import org.codehaus.plexus.redback.policy.PasswordEncoder;
 import org.codehaus.plexus.redback.policy.PasswordEncodingException;
 import org.codehaus.plexus.redback.users.Messages;
-import org.codehaus.plexus.util.StringUtils;
 import sun.misc.BASE64Encoder;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;

@@ -16,7 +16,7 @@ package org.codehaus.plexus.redback.authentication;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
