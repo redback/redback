@@ -53,8 +53,8 @@
       <s:hidden name="user.locked" value="%{user.locked}"/>
       <s:hidden name="user.passwordChangeRequired" value="%{user.passwordChangeRequired}"/>
       <s:hidden name="method:confirmAdminPassword" value="Submit"/>
-      <s:submit value="%{getText('submit')}" method="confirmAdminPassword" />
-      <s:submit value="%{getText('cancel')}" method="cancel" />
+      <s:submit id="confirmUserAdminSubmit" value="%{getText('submit')}" method="confirmAdminPassword" />
+      <s:submit id="cancelUserAdminSubmit" value="%{getText('cancel')}" method="cancel" />
     </redback:isNotReadOnlyUserManager>
   </s:form>
 </redback:ifAuthorized>
