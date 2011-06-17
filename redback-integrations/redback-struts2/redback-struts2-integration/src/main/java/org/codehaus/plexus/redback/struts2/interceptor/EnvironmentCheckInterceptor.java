@@ -64,14 +64,14 @@ public class EnvironmentCheckInterceptor
     public void init()
     {
 
-        this.checkers =
-            new ArrayList<EnvironmentCheck>( applicationContext.getBeansOfType( EnvironmentCheck.class ).values() );
-
         if ( EnvironmentCheckInterceptor.checked )
         {
             // No need to check twice.
             return;
         }
+
+        this.checkers =
+            new ArrayList<EnvironmentCheck>( applicationContext.getBeansOfType( EnvironmentCheck.class ).values() );
 
         if ( checkers != null )
         {
