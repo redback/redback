@@ -44,6 +44,16 @@
           <groupId>log4j</groupId>
           <artifactId>log4j</artifactId>
         </exclusion>
+
+        <exclusion>
+          <groupId>javax.resource</groupId>
+          <artifactId>connector</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>javax.transaction</groupId>
+          <artifactId>jta</artifactId>
+        </exclusion>
+
       </exclusions>
     </dependency>
     <dependency>
