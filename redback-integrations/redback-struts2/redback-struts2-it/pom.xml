@@ -9,6 +9,13 @@
   </parent>
   <artifactId>redback-struts2-it</artifactId>
   <name>Redback :: Struts 2 Integration Selenium Test Suite</name>
+
+  <properties>
+    <selenium.port>4444</selenium.port>
+    <jetty.port>8080</jetty.port>
+    <jetty.port.stop>8081</jetty.port.stop>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -181,11 +188,7 @@
       </plugin>
     </plugins>
   </build>
-  <properties>
-    <selenium.port>4444</selenium.port>
-    <jetty.port>8080</jetty.port>
-    <jetty.port.stop>8081</jetty.port.stop>
-  </properties>
+
   <profiles>
     <profile>
       <id>headless</id>

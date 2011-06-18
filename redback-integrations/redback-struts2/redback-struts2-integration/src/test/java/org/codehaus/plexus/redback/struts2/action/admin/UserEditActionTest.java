@@ -17,13 +17,13 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  */
 
 import com.opensymphony.xwork2.Action;
-import com.opensymphony.xwork2.ActionContext;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
 import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.RbacObjectInvalidException;
+import org.codehaus.plexus.redback.rbac.RbacObjectNotFoundException;
 import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.system.DefaultSecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySession;
@@ -57,14 +57,8 @@ public class UserEditActionTest
     {
         super.setUp();
 
-
-
-        //action = (UserEditAction) lookup( Action.class, "redback-admin-user-edit" );
-
         originalLocale = Locale.getDefault();
         Locale.setDefault( Locale.ENGLISH );
-
-
     }
 
     @After
@@ -94,7 +88,6 @@ public class UserEditActionTest
         addAssignment( "user2", "Project Administrator - default" );
         addAssignment( "user2", "Project Administrator - other" );
 
-
         UserEditAction action = (UserEditAction) getActionProxy( "/security/useredit" ).getAction();
         login( action, "user2", PASSWORD );
         action.setUsername( "user2" );
@@ -107,6 +100,8 @@ public class UserEditActionTest
         r = effectivelyAssignedRoles.get( 1 );
         assertEquals( "Project Administrator - other", r.getName() );
         assertFalse( action.isHasHiddenRoles() );
+
+        rbacManager.removeUserAssignment( "user2" );
     }
 
     @Test
@@ -122,7 +117,7 @@ public class UserEditActionTest
 
         addAssignment( "user", "Project Administrator - default" );
         addAssignment( "user", "User Administrator" );
-        addAssignment( "user", "Grant Administrator");
+        addAssignment( "user", "Grant Administrator" );
 
         addAssignment( "user2", "Project Administrator - default" );
         addAssignment( "user2", "Project Administrator - other" );
@@ -138,6 +133,9 @@ public class UserEditActionTest
         Role r = effectivelyAssignedRoles.get( 0 );
         assertEquals( "Project Administrator - default", r.getName() );
         //assertTrue( action.isHasHiddenRoles() );
+
+        rbacManager.removeUserAssignment( "user" );
+        rbacManager.removeUserAssignment( "user2" );
     }
 
     @Test
@@ -148,7 +146,17 @@ public class UserEditActionTest
         // REDBACK-201
         // user should not be able to see the unassignable roles 
 
-        rbacManager.removeUserAssignment( "user" );
+        try
+        {
+            if ( rbacManager.getUserAssignment( "user" ) != null )
+            {
+                rbacManager.removeUserAssignment( "user" );
+            }
+        }
+        catch ( RbacObjectNotFoundException e )
+        {
+            // ignore
+        }
 
         addAssignment( "user", "User Administrator" );
 
@@ -163,6 +171,8 @@ public class UserEditActionTest
         Role r = effectivelyAssignedRoles.get( 0 );
         assertEquals( "User Administrator", r.getName() );
         assertFalse( action.isHasHiddenRoles() );
+
+        rbacManager.removeUserAssignment( "user" );
     }
 
     @Test
@@ -231,6 +241,8 @@ public class UserEditActionTest
         assertEquals( 1, oldPasswordErrors.size() );
 
         assertEquals( action.getText( "password.provided.does.not.match.existing" ), oldPasswordErrors.get( 0 ) );
+
+        rbacManager.removeUserAssignment( "user" );
     }
 
     @Test
@@ -264,6 +276,9 @@ public class UserEditActionTest
         assertEquals( 1, oldPasswordErrors.size() );
 
         assertEquals( action.getText( "old.password.required" ), oldPasswordErrors.get( 0 ) );
+
+        rbacManager.removeUserAssignment( "user" );
+
     }
 
     @Test
@@ -301,6 +316,8 @@ public class UserEditActionTest
         assertEquals( 1, errors.size() );
 
         assertEquals( action.getText( "user.admin.password.does.not.match.existing" ), errors.iterator().next() );
+
+        rbacManager.removeUserAssignment( "user" );
     }
 
     @Test
@@ -337,6 +354,8 @@ public class UserEditActionTest
         assertEquals( 1, errors.size() );
 
         assertEquals( action.getText( "user.admin.password.required" ), errors.iterator().next() );
+
+        rbacManager.removeUserAssignment( "user" );
     }
 
 }

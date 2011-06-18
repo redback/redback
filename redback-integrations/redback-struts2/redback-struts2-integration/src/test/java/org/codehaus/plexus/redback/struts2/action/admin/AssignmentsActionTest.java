@@ -16,15 +16,9 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * limitations under the License.
  */
 
+import com.google.common.collect.Lists;
 import com.opensymphony.xwork2.Action;
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionProxy;
-import com.opensymphony.xwork2.config.Configuration;
-import com.opensymphony.xwork2.config.ConfigurationManager;
-import com.opensymphony.xwork2.inject.Container;
-import com.opensymphony.xwork2.util.ValueStack;
-import com.opensymphony.xwork2.util.ValueStackFactory;
-import org.apache.struts2.dispatcher.Dispatcher;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authorization.AuthorizationResult;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
@@ -32,7 +26,6 @@ import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.RbacObjectInvalidException;
 import org.codehaus.plexus.redback.rbac.Role;
-import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.redback.struts2.model.ApplicationRoleDetails;
 import org.codehaus.plexus.redback.struts2.model.ApplicationRoleDetails.RoleTableCell;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
@@ -44,10 +37,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import javax.servlet.ServletContext;
 
 /**
  * @todo missing tests for success/fail on standard show/edit functions (non security testing related)
@@ -64,9 +54,7 @@ public class AssignmentsActionTest
         super.setUp();
 
         ActionProxy actionProxy = getActionProxy( "/security/assignments" );
-        action =  (AssignmentsAction) actionProxy.getAction();
-
-        //action = (AssignmentsAction) lookup( Action.class, "redback-assignments" );
+        action = (AssignmentsAction) actionProxy.getAction();
 
         login( action, "user", PASSWORD );
         action.setPrincipal( "user2" );
@@ -81,10 +69,8 @@ public class AssignmentsActionTest
     public void testUserWithOnlyRoleGrantHasNoAccess()
         throws Exception
     {
-        UserAssignment ua = rbacManager.getUserAssignment( "user2" );
-        addAssignment( "user", "Grant Administrator - default" );
 
-        action.show();
+        addAssignment( "user", "Grant Administrator - default" );
 
         List<SecureActionBundle.AuthorizationTuple> authorizationTuples = getTuples();
         for ( SecureActionBundle.AuthorizationTuple tuple : authorizationTuples )
@@ -119,7 +105,7 @@ public class AssignmentsActionTest
     private List<SecureActionBundle.AuthorizationTuple> getTuples()
         throws SecureActionException
     {
-        return (List<SecureActionBundle.AuthorizationTuple>) action.getSecureActionBundle().getAuthorizationTuples();
+        return action.getSecureActionBundle().getAuthorizationTuples();
     }
 
     /**
@@ -153,10 +139,10 @@ public class AssignmentsActionTest
         ApplicationRoleDetails details = (ApplicationRoleDetails) action.getApplicationRoleDetails().get( 0 );
         assertEquals( "System", details.getName() );
         assertEquals( "Roles that apply system-wide, across all of the applications", details.getDescription() );
-        assertEquals( 0, details.getAvailableRoles().size() );
+        assertEquals( "found roles " + details.getAvailableRoles(), 0, details.getAvailableRoles().size() );
         details = (ApplicationRoleDetails) action.getApplicationRoleDetails().get( 1 );
         assertEquals( "Continuum", details.getName() );
-        assertEquals( 0, details.getAvailableRoles().size() );
+        assertEquals( "found roles " + details.getAvailableRoles(), 0, details.getAvailableRoles().size() );
 
         // This table rendering code clearly has to go
         List<List<RoleTableCell>> table = details.getTable();
@@ -199,6 +185,7 @@ public class AssignmentsActionTest
     // assertRow( table, 0, "default", "Project Administrator - default", false );
     // assertRow( table, 1, "other", "Project Administrator - other", false );
     // }
+
     /**
      * Check security - edituser should skip adding a role that 'user-management-role-grant' is not present for a
      * non-templated role
@@ -266,7 +253,7 @@ public class AssignmentsActionTest
 
         assertEquals( Action.SUCCESS, action.edituser() );
 
-        assertEquals( Arrays.asList( "Continuum Group Project Administrator" ),
+        assertEquals( Lists.<String>newArrayList( "Continuum Group Project Administrator" ),
                       rbacManager.getUserAssignment( "user2" ).getRoleNames() );
     }
 
@@ -288,7 +275,7 @@ public class AssignmentsActionTest
         dSelectedRoles.add( "Project Administrator - default" );
 
         ActionProxy actionProxy = getActionProxy( "/security/assignments" );
-        AssignmentsAction newAction =  (AssignmentsAction) actionProxy.getAction();
+        AssignmentsAction newAction = (AssignmentsAction) actionProxy.getAction();
 
         login( newAction, "user", PASSWORD );
 
@@ -324,7 +311,7 @@ public class AssignmentsActionTest
         dSelectedRoles.add( "Project Administrator - default" );
 
         ActionProxy actionProxy = getActionProxy( "/security/assignments" );
-        AssignmentsAction newAction =  (AssignmentsAction) actionProxy.getAction();
+        AssignmentsAction newAction = (AssignmentsAction) actionProxy.getAction();
 
         login( newAction, "user2", PASSWORD );
 
@@ -357,7 +344,7 @@ public class AssignmentsActionTest
         addAssignment( "user2", "Continuum Group Project Administrator" );
 
         ActionProxy actionProxy = getActionProxy( "/security/assignments" );
-        AssignmentsAction newAction =  (AssignmentsAction) actionProxy.getAction();
+        AssignmentsAction newAction = (AssignmentsAction) actionProxy.getAction();
 
         login( newAction, "user2", PASSWORD );
 
@@ -394,7 +381,7 @@ public class AssignmentsActionTest
         List<String> dSelectedRoles = new ArrayList<String>();
 
         ActionProxy actionProxy = getActionProxy( "/security/assignments" );
-        AssignmentsAction newAction =  (AssignmentsAction) actionProxy.getAction();
+        AssignmentsAction newAction = (AssignmentsAction) actionProxy.getAction();
 
         login( newAction, "user2", PASSWORD );
 
@@ -457,8 +444,9 @@ public class AssignmentsActionTest
         dSelectedRoles.add( "Registered User" );
         action.setAddDSelectedRoles( dSelectedRoles );
 
-        assertEquals( Arrays.asList( "Project Administrator - default", "Project Administrator - other",
-                                     "Registered User" ), rbacManager.getUserAssignment( "user2" ).getRoleNames() );
+        assertEquals(
+            Arrays.asList( "Project Administrator - default", "Project Administrator - other", "Registered User" ),
+            rbacManager.getUserAssignment( "user2" ).getRoleNames() );
 
         assertEquals( Action.SUCCESS, action.edituser() );
 
@@ -497,7 +485,7 @@ public class AssignmentsActionTest
     /**
      * Check security - show should succeed and display all roles, even without 'user-management-role-grant' or
      * 'user-management-user-role' for the user administrators.
-     * 
+     *
      * @throws MustChangePasswordException
      */
     @Test
@@ -542,7 +530,7 @@ public class AssignmentsActionTest
     {
 
         ActionProxy actionProxy = getActionProxy( "/security/assignments" );
-        AssignmentsAction newAction =  (AssignmentsAction) actionProxy.getAction();
+        AssignmentsAction newAction = (AssignmentsAction) actionProxy.getAction();
 
         login( newAction, "user-admin", PASSWORD );
 
@@ -556,7 +544,8 @@ public class AssignmentsActionTest
         assertEquals( "Roles that apply system-wide, across all of the applications", details.getDescription() );
         // TODO assertEquals( 3, details.getAvailableRoles().size() );
         assertEquals( "Guest", details.getAvailableRoles().get( 0 ) );
-        assertEquals( "not role Registered User roles : " + details.getAvailableRoles(),"Registered User", details.getAvailableRoles().get( 1 ) );
+        assertEquals( "not role Registered User roles : " + details.getAvailableRoles(), "Registered User",
+                      details.getAvailableRoles().get( 1 ) );
         // TODO: assertEquals( "User Administrator", details.getAvailableRoles().get( 2 ) );
 
         details = newAction.getApplicationRoleDetails().get( 1 );
@@ -660,8 +649,9 @@ public class AssignmentsActionTest
         List<String> dSelectedRoles = new ArrayList<String>();
         action.setAddDSelectedRoles( dSelectedRoles );
 
-        assertEquals( Arrays.asList( "Continuum Group Project Administrator", "Project Administrator - default",
-                                     nonAppRoleName ), rbacManager.getUserAssignment( "user2" ).getRoleNames() );
+        assertEquals(
+            Arrays.asList( "Continuum Group Project Administrator", "Project Administrator - default", nonAppRoleName ),
+            rbacManager.getUserAssignment( "user2" ).getRoleNames() );
 
         assertEquals( Action.SUCCESS, action.edituser() );
 
