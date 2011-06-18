@@ -118,7 +118,7 @@ public class BackupRestoreAction
         File backupDirectory = getTimestampedBackupDirectory();
         backupDirectory.mkdirs();
 
-        log.info( "Backing up security database to " + backupDirectory );
+        log.info( "Backing up security database to {}", backupDirectory );
         this.backupDatabase( backupDirectory );          
         
         log.info( "Done backing up security database" );
@@ -161,7 +161,7 @@ public class BackupRestoreAction
             return CUSTOM_ERROR;
         }
 
-        log.info( "Restoring security database from " + this.restoreDirectory );
+        log.info( "Restoring security database from {}", this.restoreDirectory );
         this.eraseDatabase();
         this.restoreDatabase( restoreDirectory );
         log.info( "Done restoring security database" );

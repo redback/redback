@@ -142,7 +142,7 @@ public class DefaultLdapController
         String finalFilter = "(&(objectClass=" + mapper.getUserObjectClass() + ")" +
             ( mapper.getUserFilter() != null ? mapper.getUserFilter() : "" ) + query.getLdapFilter(mapper) + ")";
 
-        log.info( "Searching for users with filter: \'" + finalFilter + "\'" + " from base dn: " + mapper.getUserBaseDn() );
+        log.info( "Searching for users with filter: \'{}\'" + " from base dn: {}",finalFilter, mapper.getUserBaseDn() );
 
         return context.search( mapper.getUserBaseDn(), finalFilter, ctls );
     }

@@ -180,7 +180,7 @@ public class LoginAction
         }
         catch ( KeyNotFoundException e )
         {
-            log.info( "Invalid key requested: " + resetPassword );
+            log.info( "Invalid key requested: {}", resetPassword );
             addActionError( getText( "cannot.find.key" ) );
             return ERROR;
         }
@@ -240,7 +240,7 @@ public class LoginAction
         }
         catch ( KeyNotFoundException e )
         {
-            log.info( "Invalid key requested: " + validateMe );
+            log.info( "Invalid key requested: {}", validateMe );
             addActionError( getText( "cannot.find.key" ) );
             return ERROR;
         }

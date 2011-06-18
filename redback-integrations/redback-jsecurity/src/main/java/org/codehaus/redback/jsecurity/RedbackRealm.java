@@ -149,7 +149,7 @@ public class RedbackRealm extends AuthorizingRealm
                     }
                     catch (AccountLockedException e)
                     {
-                        log.info("User " + user.getUsername() + " has been locked", e);
+                        log.info("User{} has been locked", user.getUsername(), e);
                     }
                     finally
                     {

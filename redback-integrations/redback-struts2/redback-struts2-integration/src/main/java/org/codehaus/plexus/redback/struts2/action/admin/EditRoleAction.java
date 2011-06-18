@@ -16,10 +16,6 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
@@ -38,6 +34,10 @@ import org.codehaus.redback.integration.role.RoleConstants;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * EditRoleAction
  *
@@ -47,8 +47,8 @@ import org.springframework.stereotype.Controller;
  * role-hint="redback-role-edit"
  * instantiation-strategy="per-lookup"
  */
-@Controller("redback-role-edit")
-@Scope("prototype")
+@Controller( "redback-role-edit" )
+@Scope( "prototype" )
 public class EditRoleAction
     extends AbstractUserCredentialsAction
 {
@@ -330,7 +330,7 @@ public class EditRoleAction
 
                 assignment.addRoleName( name );
                 assignment = getManager().saveUserAssignment( assignment );
-                log.info( name + " role assigned to " + principal );
+                log.info( "{} role assigned to {}", name, principal );
             }
             catch ( RbacManagerException e )
             {
@@ -380,7 +380,7 @@ public class EditRoleAction
 
                 assignment.removeRoleName( name );
                 assignment = getManager().saveUserAssignment( assignment );
-                log.info( name + " role unassigned to " + principal );
+                log.info( "{} role unassigned to {}", name, principal );
             }
             catch ( RbacManagerException e )
             {

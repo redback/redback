@@ -110,7 +110,7 @@ public class PasswordResetAction
             // validity of usernames.
             addActionMessage( getText( "password.reset.failure" ) );
 
-            log.info( "Password Reset on non-existant user [" + username + "]." );
+            log.info( "Password Reset on non-existant user [{}].", username );
         }
         catch ( KeyManagerException e )
         {

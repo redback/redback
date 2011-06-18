@@ -129,7 +129,7 @@ public class AutoLoginInterceptor
                 }
                 catch ( AccountLockedException e )
                 {
-                    log.info( "Account Locked : Username [" + e.getUser().getUsername() + "]", e );
+                    log.info( "Account Locked : Username [{}]", e.getUser().getUsername(), e );
                     autologinCookies.removeSignonCookie( ServletActionContext.getResponse(),
                                                          ServletActionContext.getRequest() );
                     autologinCookies.removeRememberMeCookie( ServletActionContext.getResponse(),
@@ -160,7 +160,7 @@ public class AutoLoginInterceptor
                     }
                     catch ( AccountLockedException e )
                     {
-                        log.info( "Account Locked : Username [" + e.getUser().getUsername() + "]", e );
+                        log.info( "Account Locked : Username [{}]", e.getUser().getUsername(), e );
                         autologinCookies.removeRememberMeCookie( ServletActionContext.getResponse(),
                                                                  ServletActionContext.getRequest() );
                         return ACCOUNT_LOCKED;
@@ -262,7 +262,7 @@ public class AutoLoginInterceptor
         }
         catch ( UserNotFoundException e )
         {
-            log.info( "User Not Found: " + authkey.getForPrincipal(), e );
+            log.info( "User Not Found: {}", authkey.getForPrincipal(), e );
         }
         return securitySession;
     }

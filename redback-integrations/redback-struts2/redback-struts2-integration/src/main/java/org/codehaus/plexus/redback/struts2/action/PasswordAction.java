@@ -214,7 +214,7 @@ public class PasswordAction
                 if ( map.containsKey( "targetUrl" ) )
                 {
                     url = map.remove( "targetUrl" ).toString();
-                    log.info( "targetUrl is retrieved and removed from the session: " + url );
+                    log.info( "targetUrl is retrieved and removed from the session: {}", url );
                 }
                 else
                 {

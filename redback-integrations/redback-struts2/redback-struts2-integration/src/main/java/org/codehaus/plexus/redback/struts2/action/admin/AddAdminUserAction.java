@@ -96,7 +96,7 @@ public class AddAdminUserAction
             return ERROR;
         }
 
-        log.info( "user = " + user );
+        log.info( "user = {}", user );
 
         internalUser = user;
 

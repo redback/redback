@@ -141,4 +141,23 @@
     </component>
   -->
 
+  <!--
+  <bean name="jdoFactory#users" class="org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory">
+    <property name="persistenceManagerFactoryClass" value="org.jpox.PersistenceManagerFactoryImpl"/>
+    <property name="driverName" value="org.hsqldb.jdbcDriver"/>
+    <property name="url" value="jdbc:hsqldb:mem:UnitTest"/>
+    <property name="userName" value="sa"/>
+    <property name="otherProperties">
+      <props>
+        <prop key="javax.jdo.PersistenceManagerFactoryClass">
+          org.jpox.PersistenceManagerFactoryImpl  
+        </prop>
+        <prop key="org.jpox.autoCreateTables">
+          true
+        </prop>
+        <prop key="org.jpox.rdbms.dateTimezone">JDK_DEFAULT_TIMEZONE</prop>
+      </props>
+    </property>
+  </bean>
+  -->
 </beans>

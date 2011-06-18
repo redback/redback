@@ -32,6 +32,7 @@ import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.RbacObjectInvalidException;
 import org.codehaus.plexus.redback.rbac.Role;
+import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.redback.struts2.model.ApplicationRoleDetails;
 import org.codehaus.plexus.redback.struts2.model.ApplicationRoleDetails.RoleTableCell;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
@@ -80,7 +81,10 @@ public class AssignmentsActionTest
     public void testUserWithOnlyRoleGrantHasNoAccess()
         throws Exception
     {
+        UserAssignment ua = rbacManager.getUserAssignment( "user2" );
         addAssignment( "user", "Grant Administrator - default" );
+
+        action.show();
 
         List<SecureActionBundle.AuthorizationTuple> authorizationTuples = getTuples();
         for ( SecureActionBundle.AuthorizationTuple tuple : authorizationTuples )

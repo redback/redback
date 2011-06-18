@@ -38,6 +38,7 @@ import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.users.memory.SimpleUser;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.junit.runners.BlockJUnit4ClassRunner;
@@ -125,6 +126,11 @@ public abstract class AbstractUserCredentialsActionTest
         rbacManager.saveUserAssignment( assignment );
     }
 
+    @After
+    public void after()
+    {
+        CacheManager.getInstance().clearAll();
+    }
 
     protected void addAssignment( String principal, String roleName )
         throws RbacManagerException, RbacObjectInvalidException

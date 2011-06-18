@@ -274,8 +274,8 @@ public class DefaultUserSecurityPolicy
 
             if ( now.after( expirationDate ) )
             {
-                log.info( "User '" + user.getUsername() + "' flagged for password expiry (expired on: " + expirationDate
-                              + ")" );
+                log.info( "User '{}' flagged for password expiry (expired on: {})", user.getUsername(),
+                          expirationDate );
                 user.setPasswordChangeRequired( true );
                 throw new MustChangePasswordException( "Password Expired, You must change your password.", user );
             }
@@ -293,7 +293,7 @@ public class DefaultUserSecurityPolicy
 
             if ( attempt >= loginAttemptCount )
             {
-                log.info( "User '" + user.getUsername() + "' locked due to excessive login attempts: " + attempt );
+                log.info( "User '{}' locked due to excessive login attempts: {}", user.getUsername(), attempt );
                 user.setLocked( true );
                 throw new AccountLockedException( "Account " + user.getUsername() + " is locked.", user );
             }

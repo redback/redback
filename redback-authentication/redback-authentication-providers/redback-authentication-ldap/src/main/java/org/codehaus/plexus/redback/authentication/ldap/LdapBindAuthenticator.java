@@ -103,7 +103,7 @@ public class LdapBindAuthenticator
 
             results = context.search( mapper.getUserBaseDn(), filter, ctls );
 
-            log.info( "Found user?: " + results.hasMoreElements() );
+            log.info( "Found user?: {}", results.hasMoreElements() );
 
             if ( results.hasMoreElements() )
             {

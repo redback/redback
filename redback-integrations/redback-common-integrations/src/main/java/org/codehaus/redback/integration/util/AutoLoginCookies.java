@@ -201,7 +201,7 @@ public class AutoLoginCookies
         }
         catch ( KeyNotFoundException e )
         {
-            log.info( "Invalid AuthenticationKey " + providedKey + " submitted. Invalidating cookie." );
+            log.info( "Invalid AuthenticationKey {} submitted. Invalidating cookie.", providedKey );
 
             // Invalid Cookie.  Remove it.
             removeCookie( httpServletResponse, httpServletRequest, cookieName, domain, path );

@@ -49,6 +49,7 @@ public class UserConfiguration
 
     /**
      * plexus.configuration
+     *
      * @deprecated Please configure the Plexus registry instead
      */
     private List<String> configs;
@@ -123,7 +124,7 @@ public class UserConfiguration
                 {
                     log.warn( "Unable to resolve configuration name: " + e.getMessage(), e );
                 }
-                log.info( "Attempting to find configuration [" + configName + "] (resolved to [" + configName + "])" );
+                log.info( "Attempting to find configuration [{}] (resolved to [{}])", configName, configName );
 
                 registry.addConfigurationFromFile( new File( configName ), PREFIX );
             }

@@ -57,6 +57,14 @@ public interface SecuritySystem
     boolean isAuthorized( SecuritySession session, Object permission )
         throws AuthorizationException;
 
+    /**
+     * return AuthorizationResult without changing authorization
+     * @param session
+     * @param permission
+     * @param resource
+     * @return
+     * @throws AuthorizationException
+     */
     AuthorizationResult authorize( SecuritySession session, Object permission, Object resource )
         throws AuthorizationException;
 
