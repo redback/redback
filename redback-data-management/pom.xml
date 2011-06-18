@@ -71,6 +71,7 @@
           <forkMode>once</forkMode>
           <systemPropertyVariables>
             <basedir>${basedir}</basedir>
+            <plexus.home>${basedir}/target</plexus.home>
           </systemPropertyVariables>
         </configuration>
       </plugin>
