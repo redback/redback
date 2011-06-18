@@ -49,6 +49,15 @@
     </dependency>
   </dependencies>
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>selenium-maven-plugin</artifactId>
+          <version>2.0-SNAPSHOT</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -78,7 +87,6 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>selenium-maven-plugin</artifactId>
-        <version>1.0.1</version>
         <configuration>
           <background>true</background>
           <logOutput>true</logOutput>
@@ -186,7 +194,6 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>selenium-maven-plugin</artifactId>
-            <version>1.0.1</version>
             <executions>
               <execution>
                 <id>xvfb</id>
@@ -201,4 +208,18 @@
       </build>
     </profile>
   </profiles>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>codehaus.snapshots</id>
+      <url>https://nexus.codehaus.org/content/repositories/snapshots/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+
 </project>
