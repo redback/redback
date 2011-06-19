@@ -191,6 +191,7 @@
     <springVersion>3.0.5.RELEASE</springVersion>
     <slf4jVersion>1.6.1</slf4jVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <gpg.useagent>true</gpg.useagent>
   </properties>
 
   <repositories>
@@ -794,7 +795,7 @@
             <artifactId>maven-gpg-plugin</artifactId>
             <configuration>
               <passphrase>${gpg.passphrase}</passphrase>
-              <useAgent>true</useAgent>
+              <useAgent>${gpg.useagent}</useAgent>
             </configuration>
             <executions>
               <execution>
