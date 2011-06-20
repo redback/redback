@@ -51,7 +51,7 @@ public class LogoutAction
      * plexus.requirement role-hint="userAssignments"
      */
     @Inject
-    @Named( value = "userAssignments" )
+    @Named( value = "cache#userAssignments" )
     private Cache userAssignmentsCache;
 
     /**
@@ -60,7 +60,7 @@ public class LogoutAction
      * plexus.requirement role-hint="userPermissions"
      */
     @Inject
-    @Named( value = "userPermissions" )
+    @Named( value = "cache#userPermissions" )
     private Cache userPermissionsCache;
 
     /**
@@ -69,7 +69,7 @@ public class LogoutAction
      * plexus.requirement role-hint="users"
      */
     @Inject
-    @Named( value = "users" )
+    @Named( value = "cache#users" )
     private Cache usersCache;
 
     /**
