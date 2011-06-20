@@ -211,6 +211,12 @@
         <selenium.browser>*googlechrome</selenium.browser>
       </properties>
     </profile>
+    <profile>
+      <id>iexplore</id>
+      <properties>
+        <selenium.browser>*iexplore</selenium.browser>
+      </properties>
+    </profile>
   </profiles>
 
   <pluginRepositories>
