@@ -21,6 +21,7 @@ import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.apache.struts2.ServletActionContext;
 import org.codehaus.plexus.redback.authorization.AuthorizationResult;
 import org.codehaus.plexus.redback.system.SecuritySession;
@@ -222,6 +223,12 @@ public class SecureActionInterceptor
 
             if ( StringUtils.isNotEmpty( realPath ) )
             {
+                // on windows realPath can return full path c:\\bla\\bla\....
+                // so transforming \\ to /
+                if ( SystemUtils.IS_OS_WINDOWS)
+                {
+                    realPath = StringUtils.replace( realPath, "\\", "/" );
+                }
                 if ( !realPath.endsWith( path ) )
                 {
                     String errorMsg = "Failed referrer security check: Request did not come from the same server. "
