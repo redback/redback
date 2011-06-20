@@ -40,8 +40,8 @@
       <s:textfield label="%{getText('username')}" name="username" size="30" />
       <s:password  label="%{getText('password')}" name="password" size="20" />
       <s:checkbox label="%{getText('login.remember.me')}" name="rememberMe" value="false" />
-      <s:submit value="%{getText('login')}" method="login" />
-      <s:submit value="%{getText('cancel')}" method="cancel" />
+      <s:submit value="%{getText('login')}" method="login" id="loginSubmit"/>
+      <s:submit value="%{getText('cancel')}" method="cancel" id="loginCancel" />
   </s:form>
 <%-- TODO: Figure out how to auto-focus to first field --%>
 
@@ -57,12 +57,12 @@
   <li>
      <s:text name="login.need.an.account"/>
      <s:url id="registerUrl" action="register" />
-     <s:a href="%{registerUrl}"><s:text name="login.register"/></s:a>
+     <s:a id="registerLinkLoginPage" href="%{registerUrl}"><s:text name="login.register"/></s:a>
   </li>
   <li>
      <s:text name="login.forgot.your.password"/>
      <s:url id="forgottenPassword" action="passwordReset" />
-     <s:a href="%{forgottenPassword}"><s:text name="login.request.password.reset"/></s:a>
+     <s:a id="forgottenPasswordLink" href="%{forgottenPassword}"><s:text name="login.request.password.reset"/></s:a>
   </li>
   </redback:isNotReadOnlyUserManager>
 </ul>
