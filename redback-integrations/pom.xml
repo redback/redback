@@ -58,10 +58,6 @@
     <module>redback-common-integrations</module>
     <module>redback-struts2</module>
     <module>redback-jee</module>
-<!--
-    <module>redback-swing</module>
-    <module>redback-acegi</module>
--->
     <module>redback-jsecurity</module>
   </modules>
 </project>
