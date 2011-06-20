@@ -46,7 +46,7 @@ public class LoginTest
         selenium.deleteAllVisibleCookies();
 
         selenium.open( "/main.action" );
-        selenium.click( "link=Login." );
+        selenium.click( "loginLink" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
         selenium.type( "loginForm_username", ADMIN_USERNAME );
         selenium.type( "loginForm_password", ADMIN_PASSWORD );

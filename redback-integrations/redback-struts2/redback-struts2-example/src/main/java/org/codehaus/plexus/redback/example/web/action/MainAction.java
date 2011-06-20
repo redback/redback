@@ -23,12 +23,14 @@ import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import javax.inject.Inject;
+
 /**
  * MainAction
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="com.opensymphony.xwork2.Action"
+ * plexus.component role="com.opensymphony.xwork2.Action"
  * role-hint="main"
  */
 @Controller( "main" )
@@ -39,11 +41,13 @@ public class MainAction
     /**
      * plexus.requirement
      */
+    @Inject
     private SecuritySystem securitySystem;
 
     /**
      * plexus.requirement role-hint="default"
      */
+    @Inject
     private RoleManager roleManager;
 
     public String show()
