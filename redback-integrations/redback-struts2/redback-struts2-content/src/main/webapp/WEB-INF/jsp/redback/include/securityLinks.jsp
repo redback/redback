@@ -42,7 +42,7 @@
     </c:choose>
     
     <redback:isNotReadOnlyUserManager>
-    - <s:a href="%{accountUrl}" cssClass="edit"><s:text name="edit.details"/></s:a>
+    - <s:a id="editUserLink" href="%{accountUrl}" cssClass="edit"><s:text name="edit.details"/></s:a>
     </redback:isNotReadOnlyUserManager>
     - <s:a id="logoutLink" href="%{logoutUrl}" cssClass="logout"><s:text name="logout"/></s:a>
     
