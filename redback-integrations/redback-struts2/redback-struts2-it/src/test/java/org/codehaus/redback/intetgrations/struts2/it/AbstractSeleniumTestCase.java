@@ -53,7 +53,7 @@ public abstract class AbstractSeleniumTestCase
     {
         baseUrl = "http://localhost:" + System.getProperty( "jetty.port", "8080" );
         selenium =
-            new DefaultSelenium( "localhost", Integer.valueOf( System.getProperty( "selenium.server", "4444" ) ),
+            new DefaultSelenium( "localhost", Integer.valueOf( System.getProperty( "selenium.port", "4444" ) ),
                                  System.getProperty( "selenium.browser", "*firefox" ), baseUrl );
         selenium.start();
     }

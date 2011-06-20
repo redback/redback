@@ -14,6 +14,7 @@
     <selenium.port>4444</selenium.port>
     <jetty.port>8080</jetty.port>
     <jetty.port.stop>8081</jetty.port.stop>
+    <selenium.browser>*firefox</selenium.browser>
   </properties>
 
   <dependencies>
@@ -26,7 +27,7 @@
     <dependency>
       <groupId>org.seleniumhq.selenium.client-drivers</groupId>
       <artifactId>selenium-java-client-driver</artifactId>
-      <version>1.0.1</version>
+      <version>1.0.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -67,6 +68,7 @@
     </pluginManagement>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <properties>
@@ -75,21 +77,13 @@
               <value>org.codehaus.redback.intetgrations.struts2.it.CaptureScreenShotsListener</value>
             </property>
           </properties>
-          <systemProperties>
-            <systemProperty>
-              <name>jetty.port</name>
-              <value>${jetty.port}</value>
-            </systemProperty>
-            <systemProperty>
-              <name>jetty.port.stop</name>
-              <value>${jetty.port.stop}</value>
-            </systemProperty>
-            <systemProperty>
-              <name>selenium.server</name>
-              <value>${selenium.server}</value>
-            </systemProperty>
-          </systemProperties>
-        </configuration>        
+          <systemPropertyVariables>
+            <jetty.port>${jetty.port}</jetty.port>
+            <jetty.port.stop>${jetty.port.stop}</jetty.port.stop>
+            <selenium.port>${selenium.port}</selenium.port>
+            <selenium.browser>${selenium.browser}</selenium.browser>
+          </systemPropertyVariables>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -174,7 +168,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
-        <version>2.1</version>
+        <version>2.2</version>
         <executions>
           <execution>
             <goals>
@@ -182,6 +176,7 @@
             </goals>
             <configuration>
               <includeArtifactIds>redback-struts2-example</includeArtifactIds>
+              <overWriteSnapshots>true</overWriteSnapshots>
             </configuration>
           </execution>
         </executions>
