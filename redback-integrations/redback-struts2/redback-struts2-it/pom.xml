@@ -205,6 +205,12 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>chrome</id>
+      <properties>
+        <selenium.browser>*googlechrome</selenium.browser>
+      </properties>
+    </profile>
   </profiles>
 
   <pluginRepositories>
