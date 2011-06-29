@@ -16,6 +16,7 @@ package org.codehaus.plexus.redback.role;
  * limitations under the License.
  */
 
+import org.apache.commons.lang.SystemUtils;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.Resource;
@@ -54,14 +55,13 @@ import java.util.Map;
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
  * @version: $Id$
- * 
  */
-@Service("roleManager")
+@Service( "roleManager" )
 public class DefaultRoleManager
     implements RoleManager
 {
-    private Logger log = LoggerFactory.getLogger(DefaultRoleManager.class);
-    
+    private Logger log = LoggerFactory.getLogger( DefaultRoleManager.class );
+
     /**
      * the blessed model that has been validated as complete
      */
@@ -77,20 +77,24 @@ public class DefaultRoleManager
      */
     private Map<String, ModelApplication> knownResources = new HashMap<String, ModelApplication>();
 
-    @Inject @Named(value="roleModelValidator")
+    @Inject
+    @Named( value = "roleModelValidator" )
     private RoleModelValidator modelValidator;
 
-    @Inject @Named(value="roleModelProcessor")
+    @Inject
+    @Named( value = "roleModelProcessor" )
     private RoleModelProcessor modelProcessor;
 
-    @Inject @Named(value="roleTemplateProcessor")
+    @Inject
+    @Named( value = "roleTemplateProcessor" )
     private RoleTemplateProcessor templateProcessor;
 
-    @Inject @Named(value="rBACManager#cached")
+    @Inject
+    @Named( value = "rBACManager#cached" )
     private RBACManager rbacManager;
 
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public void loadRoleModel( URL resource )
         throws RoleManagerException
     {
@@ -125,12 +129,14 @@ public class DefaultRoleManager
         catch ( XMLStreamException e )
         {
             throw new RoleManagerException( "error parsing redback profile", e );
-        } finally {
+        }
+        finally
+        {
             IOUtil.close( inputStreamReader );
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public void loadRoleModel( RedbackRoleModel roleModel )
         throws RoleManagerException
     {
@@ -160,14 +166,17 @@ public class DefaultRoleManager
         }
         else
         {
-            log.error( "Role Model Validation Errors:" );
+            StringBuilder stringBuilder = new StringBuilder( "Role Model Validation Errors:" );
 
             for ( String error : modelValidator.getValidationErrors() )
             {
-                log.error( error );
+                stringBuilder.append( error ).append( SystemUtils.LINE_SEPARATOR );
             }
 
-            throw new RoleManagerException( "Role Model Validation Error" );
+            log.error( stringBuilder.toString() );
+
+            throw new RoleManagerException(
+                "Role Model Validation Error " + SystemUtils.LINE_SEPARATOR + stringBuilder.toString() );
         }
 
         modelProcessor.process( blessedModel );
@@ -178,7 +187,6 @@ public class DefaultRoleManager
     /**
      * create a role for the given roleName using the resource passed in for
      * resolving the ${resource} expression
-     * 
      */
     public void createTemplatedRole( String templateId, String resource )
         throws RoleManagerException
@@ -189,7 +197,6 @@ public class DefaultRoleManager
     /**
      * remove the role corresponding to the role using the resource passed in for resolving the
      * ${resource} expression
-     * 
      */
     public void removeTemplatedRole( String templateId, String resource )
         throws RoleManagerException
@@ -202,7 +209,8 @@ public class DefaultRoleManager
         {
             Role role = rbacManager.getRole( roleName );
 
-            for ( UserAssignment assignment : rbacManager.getUserAssignmentsForRoles( Arrays.asList( role.getName() ) ) )
+            for ( UserAssignment assignment : rbacManager.getUserAssignmentsForRoles(
+                Arrays.asList( role.getName() ) ) )
             {
                 assignment.removeRoleName( role );
                 rbacManager.saveUserAssignment( assignment );
@@ -219,10 +227,9 @@ public class DefaultRoleManager
 
     /**
      * update the role from templateId from oldResource to newResource
-     * 
+     * <p/>
      * NOTE: this requires removal and creation of the role since the jdo store does not tolerate renaming
      * because of the use of the name as an identifier
-     * 
      */
     public void updateRole( String templateId, String oldResource, String newResource )
         throws RoleManagerException
@@ -240,7 +247,8 @@ public class DefaultRoleManager
             Role role = rbacManager.getRole( oldRoleName );
 
             // remove the user assignments
-            for ( UserAssignment assignment : rbacManager.getUserAssignmentsForRoles( Arrays.asList( role.getName() ) ) )
+            for ( UserAssignment assignment : rbacManager.getUserAssignmentsForRoles(
+                Arrays.asList( role.getName() ) ) )
             {
                 assignment.removeRoleName( oldRoleName );
                 assignment.addRoleName( newRoleName );
@@ -344,8 +352,8 @@ public class DefaultRoleManager
             }
             else
             {
-                throw new RoleManagerException( "UserAssignment for principal " + principal
-                    + "does not exist, can't unassign role." );
+                throw new RoleManagerException(
+                    "UserAssignment for principal " + principal + "does not exist, can't unassign role." );
             }
 
             userAssignment.removeRoleName( modelRole.getName() );
@@ -376,7 +384,7 @@ public class DefaultRoleManager
             {
                 // perhaps try and reload the model here?
                 throw new RoleManagerException(
-                                                "breakdown in role management, role exists in configuration but was not created in underlying store" );
+                    "breakdown in role management, role exists in configuration but was not created in underlying store" );
             }
         }
     }
@@ -418,7 +426,8 @@ public class DefaultRoleManager
 
             loadRoleModel( baseResource );
 
-            Enumeration<URL> enumerator = RoleManager.class.getClassLoader().getResources( "META-INF/redback/redback.xml" );
+            Enumeration<URL> enumerator =
+                RoleManager.class.getClassLoader().getResources( "META-INF/redback/redback.xml" );
 
             while ( enumerator.hasMoreElements() )
             {
@@ -442,7 +451,8 @@ public class DefaultRoleManager
         return blessedModel;
     }
 
-    public void verifyTemplatedRole( String templateId, String resource ) throws RoleManagerException
+    public void verifyTemplatedRole( String templateId, String resource )
+        throws RoleManagerException
     {
         // create also serves as update
         templateProcessor.create( blessedModel, templateId, resource );
