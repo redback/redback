@@ -112,4 +112,10 @@ public class RoleServiceClient
     {
         return roleService.assignRole( roleName, username );
     }
+
+    public Boolean unassignRole( String roleName, String username )
+        throws Exception
+    {
+        return roleService.unassignRole( roleName, username );
+    }
 }
