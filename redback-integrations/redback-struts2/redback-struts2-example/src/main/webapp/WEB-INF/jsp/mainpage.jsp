@@ -20,7 +20,7 @@
 <html>
 
 <head>
-  <title>Plexus Security Example Webapp</title>
+  <title>Redback Security Example Webapp</title>
   <s:head />
 </head>
 

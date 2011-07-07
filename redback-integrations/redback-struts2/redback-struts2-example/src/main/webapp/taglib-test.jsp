@@ -2,7 +2,7 @@
 <%@ taglib uri="http://plexus.codehaus.org/redback/taglib-1.0" prefix="redback" %>
 <html>
     <head>
-        <title>Plexus Security Example Webapp</title>
+        <title>Redback Security Example Webapp</title>
     </head>
     <body>
       <p>

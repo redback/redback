@@ -22,8 +22,8 @@
 
 <html>
 <head>
-  <title>Plexus Redback XWork Example Webapp ::
-    <decorator:title default="Plexus Redback XWork Example Webapp"/>
+  <title>Redback Struts2 Example Webapp ::
+    <decorator:title default="Redback Struts2 Example Webapp"/>
   </title>
 
   <style type="text/css" media="all">
@@ -37,7 +37,7 @@
 
 <div id="banner">
   <s:url id="main" action="main" namespace="/" includeParams="none"/>
-  <h1><s:a href="%{main}">Plexus Redback XWork Example Webapp</s:a></h1>
+  <h1><s:a href="%{main}">Redback Struts2 Example Webapp</s:a></h1>
   <div class="clear">
   </div>
 </div>
@@ -45,7 +45,7 @@
 <div id="breadcrumbs">
   <div class="xright">
     <a href="http://www.codehaus.org/">Codehaus</a> |
-    <a href="http://plexus.codehaus.org/">Plexus</a> 
+    <a href="http://redback.codehaus.org/">Redback</a>
   </div>
 
   <div class="xleft">
