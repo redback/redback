@@ -45,7 +45,7 @@ public class UserEditTest
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
         selenium.type( "loginForm_username", "admin" );
         selenium.type( "loginForm_password", "admin1" );
-        selenium.click( "loginForm__login" );
+        selenium.click( "loginSubmit" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
 
         assert selenium.getTitle().contains( "[Admin] User List" );
@@ -78,7 +78,7 @@ public class UserEditTest
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
         selenium.type( "loginForm_username", "admin" );
         selenium.type( "loginForm_password", "admin1" );
-        selenium.click( "loginForm__login" );
+        selenium.click( "loginSubmit" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
 
         assert selenium.getTitle().contains( "[Admin] User Edit" );

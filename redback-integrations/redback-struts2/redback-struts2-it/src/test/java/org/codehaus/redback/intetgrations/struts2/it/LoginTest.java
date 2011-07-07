@@ -50,7 +50,7 @@ public class LoginTest
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
         selenium.type( "loginForm_username", ADMIN_USERNAME );
         selenium.type( "loginForm_password", ADMIN_PASSWORD );
-        selenium.click( "loginForm__login" );
+        selenium.click( "loginSubmit" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
         // TODO: assertion
     }

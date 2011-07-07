@@ -44,7 +44,7 @@ public abstract class AbstractSeleniumTestCase
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
         selenium.type( "loginForm_username", username );
         selenium.type( "loginForm_password", password );
-        selenium.click( "loginForm__login" );
+        selenium.click( "loginSubmit" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
     }
 
