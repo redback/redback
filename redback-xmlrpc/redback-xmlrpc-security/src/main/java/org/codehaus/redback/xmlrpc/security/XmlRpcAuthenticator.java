@@ -92,13 +92,16 @@ public class XmlRpcAuthenticator
     {
         try
         {
-            if ( ServiceMethodsPermissionsMapping.SERVICE_METHODS_FOR_USER.contains( methodName )
-                || ServiceMethodsPermissionsMapping.SERVICE_METHODS_FOR_ROLE.contains( methodName )
+            if ( ServiceMethodsPermissionsMapping.SERVICE_METHODS_FOR_USER.contains( methodName ) )
+            {
+                return securitySystem.authorize( session, "user-management-user-create" );
+            }
+            else if ( ServiceMethodsPermissionsMapping.SERVICE_METHODS_FOR_ROLE.contains( methodName )
                 || ServiceMethodsPermissionsMapping.SERVICE_METHODS_FOR_PERMISSION.contains( methodName )
                 || ServiceMethodsPermissionsMapping.SERVICE_METHODS_FOR_OPERATION.contains( methodName )
                 || ServiceMethodsPermissionsMapping.SERVICE_METHODS_FOR_RESOURCE.contains( methodName ) )
             {
-                return securitySystem.authorize( session, "user-administrator" );
+                return securitySystem.authorize( session, "user-management-role-grant" );
             }
             else
             {
