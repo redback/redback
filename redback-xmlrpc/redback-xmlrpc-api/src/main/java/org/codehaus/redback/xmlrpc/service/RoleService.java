@@ -45,9 +45,15 @@ public interface RoleService
     List<String> getChildRoles( String roleName )
         throws Exception;
 
-    Boolean assignRole( String roleName, String username )
+    Boolean assignRole( String roleId, String username )
         throws Exception;
 
-    Boolean unassignRole( String roleName, String username )
+    Boolean assignRoleByName( String roleName, String username )
+        throws Exception;
+
+    Boolean unassignRole( String roleId, String username )
+        throws Exception;
+
+    Boolean unassignRoleByName( String roleName, String username )
         throws Exception;
 }

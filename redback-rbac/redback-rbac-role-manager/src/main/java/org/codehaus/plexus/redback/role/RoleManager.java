@@ -83,7 +83,16 @@ public interface RoleManager
      * @throws RoleManagerException
      */
     void assignRole( String roleId, String principal ) throws RoleManagerException;
-    
+
+    /**
+     * Assigns the role indicated by the roleName to the given principal
+     * 
+     * @param roleName
+     * @param principal
+     * @throws RoleManagerException
+     */
+    void assignRoleByName( String roleName, String principal ) throws RoleManagerException;
+
     /**
      * Assigns the templated role indicated by the templateId
      * 
@@ -103,7 +112,15 @@ public interface RoleManager
      * @throws RoleManagerException
      */
     void unassignRole( String roleId, String principal ) throws RoleManagerException;
-    
+
+    /**
+     * Unassigns the role indicated by the role name from the given principal
+     * @param roleName
+     * @param principal
+     * @throws RoleManagerException
+     */
+    void unassignRoleByName( String roleName, String principal ) throws RoleManagerException;
+
     /**
      * true of a role exists with the given roleId
      * 

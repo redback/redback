@@ -39,6 +39,9 @@ public class ServiceMethodsPermissionsMapping
             add( "RoleService.getRoles" );
             add( "RoleService.addChildRole" );
             add( "RoleService.assignRole" );
+            add( "RoleService.unassignRole" );
+            add( "RoleService.assignRoleByName" );
+            add( "RoleService.unassignRoleByName" );
         }
     };
 

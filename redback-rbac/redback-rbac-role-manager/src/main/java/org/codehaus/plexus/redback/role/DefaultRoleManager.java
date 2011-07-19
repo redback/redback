@@ -295,6 +295,36 @@ public class DefaultRoleManager
         }
     }
 
+    public void assignRoleByName( String roleName, String principal )
+        throws RoleManagerException
+    {
+        try
+        {
+            UserAssignment userAssignment;
+
+            if ( rbacManager.userAssignmentExists( principal ) )
+            {
+                userAssignment = rbacManager.getUserAssignment( principal );
+            }
+            else
+            {
+                userAssignment = rbacManager.createUserAssignment( principal );
+            }
+
+            if ( !rbacManager.roleExists( roleName ) )
+            {
+                throw new RoleManagerException( "Unable to assign role: " + roleName + " does not exist." );
+            }
+
+            userAssignment.addRoleName( roleName );
+            rbacManager.saveUserAssignment( userAssignment );
+        }
+        catch ( RbacManagerException e )
+        {
+            throw new RoleManagerException( "Unable to assign role: unable to manage user assignment", e );
+        }
+    }
+
     public void assignTemplatedRole( String templateId, String resource, String principal )
         throws RoleManagerException
     {
@@ -361,7 +391,38 @@ public class DefaultRoleManager
         }
         catch ( RbacManagerException e )
         {
-            throw new RoleManagerException( "Unable to assign role: unable to manage user assignment", e );
+            throw new RoleManagerException( "Unable to unassign role: unable to manage user assignment", e );
+        }
+    }
+
+    public void unassignRoleByName( String roleName, String principal )
+        throws RoleManagerException
+    {
+        try
+        {
+            UserAssignment userAssignment;
+
+            if ( rbacManager.userAssignmentExists( principal ) )
+            {
+                userAssignment = rbacManager.getUserAssignment( principal );
+            }
+            else
+            {
+                throw new RoleManagerException(
+                    "UserAssignment for principal " + principal + "does not exist, can't unassign role." );
+            }
+
+            if ( !rbacManager.roleExists( roleName ) )
+            {
+                throw new RoleManagerException( "Unable to unassign role: " + roleName + " does not exist." );
+            }
+
+            userAssignment.removeRoleName( roleName );
+            rbacManager.saveUserAssignment( userAssignment );
+        }
+        catch ( RbacManagerException e )
+        {
+            throw new RoleManagerException( "Unable to unassign role: unable to manage user assignment", e );
         }
     }
 
