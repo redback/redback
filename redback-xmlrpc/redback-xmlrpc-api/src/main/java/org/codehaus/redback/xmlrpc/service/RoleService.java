@@ -47,4 +47,7 @@ public interface RoleService
 
     Boolean assignRole( String roleName, String username )
         throws Exception;
+
+    Boolean unassignRole( String roleName, String username )
+        throws Exception;
 }

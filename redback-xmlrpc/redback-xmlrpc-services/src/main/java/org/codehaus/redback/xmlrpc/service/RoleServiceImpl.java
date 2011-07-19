@@ -116,4 +116,11 @@ public class RoleServiceImpl
         roleManager.assignRole( roleName, username );
         return Boolean.TRUE;
     }
+
+    public Boolean unassignRole( String roleName, String username )
+        throws Exception
+    {
+        roleManager.unassignRole( roleName, username );
+        return Boolean.TRUE;
+    }
 }
