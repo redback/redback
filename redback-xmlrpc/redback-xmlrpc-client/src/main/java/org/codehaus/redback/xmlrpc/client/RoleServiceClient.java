@@ -107,15 +107,27 @@ public class RoleServiceClient
         return roleService.getChildRoles( roleName );
     }
 
-    public Boolean assignRole( String roleName, String username )
+    public Boolean assignRole( String roleId, String username )
         throws Exception
     {
-        return roleService.assignRole( roleName, username );
+        return roleService.assignRole( roleId, username );
     }
 
-    public Boolean unassignRole( String roleName, String username )
+    public Boolean assignRoleByName( String roleName, String username )
         throws Exception
     {
-        return roleService.unassignRole( roleName, username );
+        return roleService.assignRoleByName( roleName, username );
+    }
+
+    public Boolean unassignRole( String roleId, String username )
+        throws Exception
+    {
+        return roleService.unassignRole( roleId, username );
+    }
+
+    public Boolean unassignRoleByName( String roleName, String username )
+        throws Exception
+    {
+        return roleService.unassignRoleByName( roleName, username );
     }
 }

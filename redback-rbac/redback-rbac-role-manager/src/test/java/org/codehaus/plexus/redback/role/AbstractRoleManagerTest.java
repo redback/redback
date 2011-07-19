@@ -80,6 +80,7 @@ public abstract class AbstractRoleManagerTest
         String principal = "joe";
 
         roleManager.assignRole( "test-role", principal );
+        roleManager.assignRoleByName( "Test Role 1", principal );
         roleManager.createTemplatedRole( "test-template-2", "cold" );
         roleManager.assignTemplatedRole( "test-template-2", "cold", principal );
 
@@ -91,12 +92,12 @@ public abstract class AbstractRoleManagerTest
 
         List<String> assignments = assignment.getRoleNames();
 
-        assertEquals( 2, assignments.size() );
+        assertEquals( 3, assignments.size() );
 
         for ( String roleName : assignments )
         {
             System.out.println( roleName );
-            assertTrue( "Test Role".equals( roleName ) || "Foo 2 - frigid".equals( roleName ) );
+            assertTrue( "Test Role".equals( roleName ) || "Foo 2 - frigid".equals( roleName ) || "Test Role 1".equals( roleName ) );
         }
     }
     

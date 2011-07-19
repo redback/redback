@@ -110,17 +110,31 @@ public class RoleServiceImpl
         return rbacManager.getRole( roleName ).getChildRoleNames();
     }
 
-    public Boolean assignRole( String roleName, String username )
+    public Boolean assignRole( String roleId, String username )
         throws Exception
     {
-        roleManager.assignRole( roleName, username );
+        roleManager.assignRole( roleId, username );
         return Boolean.TRUE;
     }
 
-    public Boolean unassignRole( String roleName, String username )
+    public Boolean assignRoleByName( String roleName, String username )
         throws Exception
     {
-        roleManager.unassignRole( roleName, username );
+        roleManager.assignRoleByName( roleName, username );
+        return Boolean.TRUE;
+    }
+
+    public Boolean unassignRole( String roleId, String username )
+        throws Exception
+    {
+        roleManager.unassignRole( roleId, username );
+        return Boolean.TRUE;
+    }
+
+    public Boolean unassignRoleByName( String roleName, String username )
+        throws Exception
+    {
+        roleManager.unassignRoleByName( roleName, username );
         return Boolean.TRUE;
     }
 }
