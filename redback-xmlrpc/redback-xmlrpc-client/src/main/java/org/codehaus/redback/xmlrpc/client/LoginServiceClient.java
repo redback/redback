@@ -4,9 +4,9 @@ import java.net.URL;
 
 import org.codehaus.redback.xmlrpc.service.LoginService;
 
-import com.atlassian.xmlrpc.AuthenticationInfo;
+import com.atlassian.xmlrpc.ApacheBinder;
 import com.atlassian.xmlrpc.Binder;
-import com.atlassian.xmlrpc.DefaultBinder;
+import com.atlassian.xmlrpc.ConnectionInfo;
 
 public class LoginServiceClient
     implements LoginService, ServiceClient
@@ -38,9 +38,13 @@ public class LoginServiceClient
     public void bind( String url, String username, String password )
         throws Exception
     {
-        Binder binder = new DefaultBinder();
+        Binder binder = new ApacheBinder();
 
-        loginService = binder.bind( LoginService.class, new URL( url ), new AuthenticationInfo( username, password ) );
+        ConnectionInfo info = new ConnectionInfo();
+        info.setUsername( username );
+        info.setPassword( password );
+
+        loginService = binder.bind( LoginService.class, new URL( url ), info );
     }
 
     public Boolean ping()

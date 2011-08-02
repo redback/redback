@@ -85,10 +85,15 @@
         <artifactId>atlassian-xmlrpc-binder</artifactId>
         <version>${atlassian.xmlrpc.version}</version>
       </dependency>
+      <dependency>
+        <groupId>com.atlassian.xmlrpc</groupId>
+        <artifactId>atlassian-xmlrpc-binder-client-apache</artifactId>
+        <version>${atlassian.xmlrpc.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   
   <properties>
-    <atlassian.xmlrpc.version>0.8.2</atlassian.xmlrpc.version>
+    <atlassian.xmlrpc.version>0.11</atlassian.xmlrpc.version>
   </properties>
 </project>

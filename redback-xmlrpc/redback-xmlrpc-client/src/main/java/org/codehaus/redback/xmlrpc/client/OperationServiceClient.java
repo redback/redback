@@ -22,9 +22,9 @@ import java.util.List;
 import org.codehaus.redback.xmlrpc.bean.Operation;
 import org.codehaus.redback.xmlrpc.service.OperationService;
 
-import com.atlassian.xmlrpc.AuthenticationInfo;
+import com.atlassian.xmlrpc.ApacheBinder;
 import com.atlassian.xmlrpc.Binder;
-import com.atlassian.xmlrpc.DefaultBinder;
+import com.atlassian.xmlrpc.ConnectionInfo;
 
 public class OperationServiceClient
     implements OperationService, ServiceClient
@@ -56,10 +56,13 @@ public class OperationServiceClient
     public void bind( String url, String username, String password )
         throws Exception
     {
-        Binder binder = new DefaultBinder();
+        Binder binder = new ApacheBinder();
 
-        operationService = binder.bind( OperationService.class, new URL( url ), new AuthenticationInfo( username,
-                                                                                                        password ) );
+        ConnectionInfo info = new ConnectionInfo();
+        info.setUsername( username );
+        info.setPassword( password );
+
+        operationService = binder.bind( OperationService.class, new URL( url ), info );
     }
 
     public Boolean createOperation( String operationName )

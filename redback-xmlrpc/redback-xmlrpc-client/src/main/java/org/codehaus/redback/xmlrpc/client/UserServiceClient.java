@@ -23,9 +23,9 @@ import java.util.Map;
 import org.codehaus.redback.xmlrpc.bean.User;
 import org.codehaus.redback.xmlrpc.service.UserService;
 
-import com.atlassian.xmlrpc.AuthenticationInfo;
+import com.atlassian.xmlrpc.ApacheBinder;
 import com.atlassian.xmlrpc.Binder;
-import com.atlassian.xmlrpc.DefaultBinder;
+import com.atlassian.xmlrpc.ConnectionInfo;
 
 public class UserServiceClient
     implements UserService, ServiceClient
@@ -57,9 +57,13 @@ public class UserServiceClient
     public void bind( String url, String username, String password )
         throws Exception
     {
-        Binder binder = new DefaultBinder();
+        Binder binder = new ApacheBinder();
 
-        userService = binder.bind( UserService.class, new URL( url ), new AuthenticationInfo( username, password ) );
+        ConnectionInfo info = new ConnectionInfo();
+        info.setUsername( username );
+        info.setPassword( password );
+
+        userService = binder.bind( UserService.class, new URL( url ), info );
     }
 
     public Boolean createUser( String username, String fullname, String email )

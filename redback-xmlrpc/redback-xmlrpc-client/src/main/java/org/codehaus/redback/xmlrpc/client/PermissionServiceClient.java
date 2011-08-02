@@ -22,9 +22,9 @@ import java.util.List;
 import org.codehaus.redback.xmlrpc.bean.Permission;
 import org.codehaus.redback.xmlrpc.service.PermissionService;
 
-import com.atlassian.xmlrpc.AuthenticationInfo;
+import com.atlassian.xmlrpc.ApacheBinder;
 import com.atlassian.xmlrpc.Binder;
-import com.atlassian.xmlrpc.DefaultBinder;
+import com.atlassian.xmlrpc.ConnectionInfo;
 
 public class PermissionServiceClient
     implements PermissionService, ServiceClient
@@ -56,10 +56,13 @@ public class PermissionServiceClient
     public void bind( String url, String username, String password )
         throws Exception
     {
-        Binder binder = new DefaultBinder();
+        Binder binder = new ApacheBinder();
 
-        permissionService = binder.bind( PermissionService.class, new URL( url ), new AuthenticationInfo( username,
-                                                                                                          password ) );
+        ConnectionInfo info = new ConnectionInfo();
+        info.setUsername( username );
+        info.setPassword( password );
+
+        permissionService = binder.bind( PermissionService.class, new URL( url ), info );
     }
 
     public Boolean createPermission( String permissionName, String operationName, String resourceName )
