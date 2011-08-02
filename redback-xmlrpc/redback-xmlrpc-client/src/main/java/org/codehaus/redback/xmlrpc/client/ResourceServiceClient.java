@@ -22,9 +22,9 @@ import java.util.List;
 import org.codehaus.redback.xmlrpc.bean.Resource;
 import org.codehaus.redback.xmlrpc.service.ResourceService;
 
-import com.atlassian.xmlrpc.AuthenticationInfo;
+import com.atlassian.xmlrpc.ApacheBinder;
 import com.atlassian.xmlrpc.Binder;
-import com.atlassian.xmlrpc.DefaultBinder;
+import com.atlassian.xmlrpc.ConnectionInfo;
 
 public class ResourceServiceClient
     implements ResourceService, ServiceClient
@@ -56,10 +56,13 @@ public class ResourceServiceClient
     public void bind( String url, String username, String password )
         throws Exception
     {
-        Binder binder = new DefaultBinder();
+        Binder binder = new ApacheBinder();
 
-        resourceService = binder.bind( ResourceService.class, new URL( url ), new AuthenticationInfo( username,
-                                                                                                      password ) );
+        ConnectionInfo info = new ConnectionInfo();
+        info.setUsername( username );
+        info.setPassword( password );
+
+        resourceService = binder.bind( ResourceService.class, new URL( url ), info );
     }
 
     public Boolean createResource( String identifier )

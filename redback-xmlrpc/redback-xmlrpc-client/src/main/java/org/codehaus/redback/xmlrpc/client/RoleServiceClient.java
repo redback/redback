@@ -20,9 +20,9 @@ import java.util.List;
 import org.codehaus.redback.xmlrpc.bean.Role;
 import org.codehaus.redback.xmlrpc.service.RoleService;
 
-import com.atlassian.xmlrpc.AuthenticationInfo;
+import com.atlassian.xmlrpc.ApacheBinder;
 import com.atlassian.xmlrpc.Binder;
-import com.atlassian.xmlrpc.DefaultBinder;
+import com.atlassian.xmlrpc.ConnectionInfo;
 
 public class RoleServiceClient
     implements RoleService, ServiceClient
@@ -54,9 +54,13 @@ public class RoleServiceClient
     public void bind( String url, String username, String password )
         throws Exception
     {
-        Binder binder = new DefaultBinder();
+        Binder binder = new ApacheBinder();
 
-        roleService = binder.bind( RoleService.class, new URL( url ), new AuthenticationInfo( username, password ) );
+        ConnectionInfo info = new ConnectionInfo();
+        info.setUsername( username );
+        info.setPassword( password );
+
+        roleService = binder.bind( RoleService.class, new URL( url ), info );
     }
 
     public Boolean addChildRole( String roleName, String childRoleName )
