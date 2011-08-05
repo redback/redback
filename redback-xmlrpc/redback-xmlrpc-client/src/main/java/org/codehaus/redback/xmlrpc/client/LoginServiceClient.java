@@ -1,6 +1,7 @@
 package org.codehaus.redback.xmlrpc.client;
 
 import java.net.URL;
+import java.util.TimeZone;
 
 import org.codehaus.redback.xmlrpc.service.LoginService;
 
@@ -43,6 +44,7 @@ public class LoginServiceClient
         ConnectionInfo info = new ConnectionInfo();
         info.setUsername( username );
         info.setPassword( password );
+        info.setTimeZone( TimeZone.getDefault() );
 
         loginService = binder.bind( LoginService.class, new URL( url ), info );
     }
