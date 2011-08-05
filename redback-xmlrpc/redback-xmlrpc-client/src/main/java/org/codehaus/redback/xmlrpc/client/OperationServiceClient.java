@@ -18,6 +18,7 @@ package org.codehaus.redback.xmlrpc.client;
 
 import java.net.URL;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.codehaus.redback.xmlrpc.bean.Operation;
 import org.codehaus.redback.xmlrpc.service.OperationService;
@@ -61,6 +62,7 @@ public class OperationServiceClient
         ConnectionInfo info = new ConnectionInfo();
         info.setUsername( username );
         info.setPassword( password );
+        info.setTimeZone( TimeZone.getDefault() );
 
         operationService = binder.bind( OperationService.class, new URL( url ), info );
     }
