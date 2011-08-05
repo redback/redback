@@ -685,12 +685,12 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>2.8</version>
+          <version>2.8.1-SNAPSHOT</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>2.3</version>
+          <version>3.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -813,8 +813,39 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.8</version>
+        <version>2.8.1-SNAPSHOT</version>
         <inherited>false</inherited>
+        <configuration>
+          <docletArtifact>
+            <groupId>com.google.doclava</groupId>
+            <artifactId>doclava</artifactId>
+            <version>1.0.3</version>
+          </docletArtifact>
+          <doclet>com.google.doclava.Doclava</doclet>
+          <!--
+            | bootclasspath required by Sun's JVM
+          -->
+          <bootclasspath>${sun.boot.class.path}</bootclasspath>
+          <additionalparam>
+            <!-- comment as produce an NPE
+             -federate JDK http://download.oracle.com/javase/6/docs/api/index.html?
+              -federationxml JDK http://doclava.googlecode.com/svn/static/api/openjdk-6.xml -->
+             -hdf project.name "${project.name}"
+             -d ${project.build.directory}/site/apidocs
+           </additionalparam>
+          <useStandardDocletOptions>false</useStandardDocletOptions>
+          <!--
+            | Apple's JVM sometimes requires more memory
+          -->
+          <additionalJOption>-J-Xmx1024m</additionalJOption>
+          <additionnalDependencies>
+            <additionnalDependency>
+              <groupId>org.jboss.spec.javax.resource</groupId>
+              <artifactId>jboss-connector-api_1.5_spec</artifactId>
+              <version>1.0.0.Final</version>
+            </additionnalDependency>
+          </additionnalDependencies>
+        </configuration>
         <reportSets>
           <reportSet>
             <id>aggregate</id>
@@ -873,26 +904,6 @@
             </executions>
           </plugin>
         </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>maven-3</id>
-      <activation>
-        <file>
-          <!--  This employs that the basedir expression is only recognized by Maven 3.x (see MNG-2363) -->
-          <exists>${basedir}</exists>
-        </file>
-      </activation>
-      <build>
-        <pluginManagement>
-          <plugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-site-plugin</artifactId>
-              <version>3.0-beta-3</version>
-            </plugin>
-          </plugins>
-        </pluginManagement>
       </build>
     </profile>
   </profiles>
