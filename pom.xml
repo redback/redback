@@ -162,6 +162,7 @@
     <module>redback-data-management</module>
     <module>redback-integrations</module>
     <module>redback-xmlrpc</module>
+    <module>redback-rest</module>
   </modules>
 
   <scm>
