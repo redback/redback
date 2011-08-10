@@ -1,7 +1,7 @@
 package org.codehaus.redback.rest.services;
 
 /*
- * Copyright 2009 The Codehaus.
+ * Copyright 2011 The Codehaus.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

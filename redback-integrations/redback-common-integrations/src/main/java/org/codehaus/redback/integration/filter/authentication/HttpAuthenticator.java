@@ -104,11 +104,11 @@ public abstract class HttpAuthenticator
         }
         catch ( AccountLockedException e )
         {
-            throw new HttpAuthenticationException( "Your account is locked." );
+            throw new HttpAuthenticationException( "Your account is locked.", e );
         }
         catch ( MustChangePasswordException e )
         {
-            throw new HttpAuthenticationException( "You must change your password." );
+            throw new HttpAuthenticationException( "You must change your password.", e );
         }
 
     }

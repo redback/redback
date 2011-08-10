@@ -23,6 +23,17 @@
 
     <dependency>
       <groupId>org.codehaus.redback</groupId>
+      <artifactId>redback-common-integrations</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.redback</groupId>
       <artifactId>redback-users-api</artifactId>
     </dependency>
     <dependency>

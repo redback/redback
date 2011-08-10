@@ -41,6 +41,10 @@
     base-package="org.codehaus.redback.rest.services"/>
 
   <jaxrs:server id="redbackServices" address="/redbackServices">
+    <jaxrs:providers>
+      <ref bean="authenticationInterceptor#rest"/>
+      <ref bean="permissionInterceptor#rest"/>
+    </jaxrs:providers>
 	  <jaxrs:serviceBeans>
       <ref bean="userService#rest"/>
     </jaxrs:serviceBeans>

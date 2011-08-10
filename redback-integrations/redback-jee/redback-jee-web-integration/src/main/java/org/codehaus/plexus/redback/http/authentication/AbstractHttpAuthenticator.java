@@ -65,7 +65,7 @@ public abstract class AbstractHttpAuthenticator
         catch ( UserNotFoundException e )
         {
             log.info( "Login attempt against unknown user: {}", ds );
-            throw new HttpAuthenticationException( "User name or password invalid." );
+            throw new HttpAuthenticationException( "User name or password invalid.", e );
         }
     }
 
