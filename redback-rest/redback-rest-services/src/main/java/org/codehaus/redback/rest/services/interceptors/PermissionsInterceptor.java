@@ -53,10 +53,9 @@ public class PermissionsInterceptor
     public Response handleRequest( Message message, ClassResourceInfo classResourceInfo )
     {
 
-        log.info( "keys " + Arrays.asList( message.keySet().toArray() ) );
         // FIXME provide a patch to cxf to have it as a constant in Message
         Method method = ( (Method) message.get( "org.apache.cxf.resource.method" ) );
-        log.info( " method name " + method.getName() );
+        log.debug( " method name " + method.getName() );
         //TODO create a new annotation which will marked exposed methods
         // @Redback(permission="")
         // then use methods mapping from XmlRpcAuthenticator to check karma
