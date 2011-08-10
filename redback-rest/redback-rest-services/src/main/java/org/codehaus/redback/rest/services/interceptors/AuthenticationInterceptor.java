@@ -62,8 +62,6 @@ public class AuthenticationInterceptor
 
         HttpServletResponse response = (HttpServletResponse) message.get( "HTTP.RESPONSE" );
 
-        //TODO use methods mapping from XmlRpcAuthenticator to check karma
-
         try
         {
             httpAuthenticator.authenticate( request, response );
