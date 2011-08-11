@@ -18,6 +18,7 @@ package org.codehaus.redback.rest.services;
 
 import org.apache.cxf.jaxrs.model.wadl.Description;
 import org.apache.cxf.jaxrs.model.wadl.DocTarget;
+import org.codehaus.plexus.redback.authorization.RedbackAuthorization;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.redback.rest.api.model.User;
 import org.codehaus.redback.rest.api.services.UserService;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -35,7 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Path( "/userService/" )
-@Service("userService#rest")
+@Service( "userService#rest" )
 public class DefaultUserService
     implements UserService
 {
@@ -49,7 +51,8 @@ public class DefaultUserService
 
     @Path( "createUser" )
     @GET
-    @Produces( {MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
+    @RedbackAuthorization( permission = "user-management-user-create" )
     public Boolean createUser( @Description( value = "the user name to create", target = DocTarget.PARAM ) @QueryParam(
         "userName" ) String userName, @QueryParam( "fullName" ) String fullName, @QueryParam( "email" ) String email )
         throws Exception
@@ -59,7 +62,11 @@ public class DefaultUserService
         return Boolean.TRUE;
     }
 
-    public Boolean deleteUser( String username )
+    @Path( "deleteUser/{userName}" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
+    @RedbackAuthorization( permission = "user-management-user-create" )
+    public Boolean deleteUser( @PathParam( "userName" ) String username )
         throws Exception
     {
         userManager.deleteUser( username );
@@ -68,8 +75,9 @@ public class DefaultUserService
 
     @Path( "getUser/{userName}" )
     @GET
-    @Produces( {MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    public User getUser(@PathParam("userName") String username )
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
+    @RedbackAuthorization( permission = "user-management-user-create" )
+    public User getUser( @PathParam( "userName" ) String username )
         throws Exception
     {
         org.codehaus.plexus.redback.users.User user = userManager.findUser( username );
@@ -80,7 +88,8 @@ public class DefaultUserService
 
     @Path( "getUsers" )
     @GET
-    @Produces( {MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
+    @RedbackAuthorization( permission = "user-management-user-create" )
     public List<User> getUsers()
         throws Exception
     {
@@ -96,6 +105,10 @@ public class DefaultUserService
         return simpleUsers;
     }
 
+    @Path( "updateUser" )
+    @POST
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
+    @RedbackAuthorization( permission = "user-management-user-create" )
     public Boolean updateUser( User user )
         throws Exception
     {
@@ -109,6 +122,9 @@ public class DefaultUserService
         return Boolean.TRUE;
     }
 
+    @Path( "ping" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
     public Boolean ping()
         throws Exception
     {

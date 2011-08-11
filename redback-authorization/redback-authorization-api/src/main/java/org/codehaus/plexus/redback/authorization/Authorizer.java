@@ -25,9 +25,7 @@ package org.codehaus.plexus.redback.authorization;
  */
 public interface Authorizer
 {
-    public static final String ROLE = Authorizer.class.getName();
-    
-    public String getId();
+    String getId();
 
     AuthorizationResult isAuthorized( AuthorizationDataSource source )
         throws AuthorizationException;

@@ -17,10 +17,13 @@ package org.codehaus.redback.rest.services.interceptors;
 */
 
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.cxf.jaxrs.ext.RequestHandler;
 import org.apache.cxf.jaxrs.model.ClassResourceInfo;
 import org.apache.cxf.message.Message;
-import org.codehaus.plexus.redback.authentication.AuthenticationException;
+import org.codehaus.plexus.redback.authorization.AuthorizationException;
+import org.codehaus.plexus.redback.authorization.RedbackAuthorization;
+import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.redback.integration.filter.authentication.basic.HttpBasicAuthentication;
 import org.slf4j.Logger;
@@ -30,10 +33,8 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 /**
  * @author Olivier Lamy
@@ -48,18 +49,60 @@ public class PermissionsInterceptor
     @Named( value = "securitySystem" )
     private SecuritySystem securitySystem;
 
+    @Inject
+    @Named( value = "httpAuthenticator#basic" )
+    private HttpBasicAuthentication httpAuthenticator;
+
     private Logger log = LoggerFactory.getLogger( getClass() );
 
     public Response handleRequest( Message message, ClassResourceInfo classResourceInfo )
     {
-
         // FIXME provide a patch to cxf to have it as a constant in Message
         Method method = ( (Method) message.get( "org.apache.cxf.resource.method" ) );
         log.debug( " method name " + method.getName() );
-        //TODO create a new annotation which will marked exposed methods
-        // @Redback(permission="")
-        // then use methods mapping from XmlRpcAuthenticator to check karma
 
-        return null;
+        // FIXME use a constant from cxf
+        HttpServletRequest request = (HttpServletRequest) message.get( "HTTP.REQUEST" );
+
+        RedbackAuthorization redbackAuthorization = method.getAnnotation( RedbackAuthorization.class );
+
+        if ( redbackAuthorization != null )
+        {
+            String permission = redbackAuthorization.permission();
+            if ( StringUtils.isNotBlank( permission ) )
+            {
+                SecuritySession session = httpAuthenticator.getSecuritySession( request.getSession() );
+                if ( session != null )
+                {
+                    if ( session.getAuthenticationResult().isAuthenticated() )
+                    {
+                        try
+                        {
+                            if ( securitySystem.isAuthorized( session, permission ) )
+                            {
+                                return null;
+                            }
+                            else
+                            {
+                                log.debug( "user {} not authorized for permission {}", session.getUser().getPrincipal(),
+                                           permission );
+                            }
+                        }
+                        catch ( AuthorizationException e )
+                        {
+                            log.debug( e.getMessage(), e );
+                            return Response.status( Response.Status.FORBIDDEN ).build();
+                        }
+
+                    }
+                    else
+                    {
+                        log.debug( "user {} not authenticated", session.getUser().getUsername() );
+                    }
+                }
+            }
+        }
+        // here we failed to authenticate so 403
+        return Response.status( Response.Status.FORBIDDEN ).build();
     }
 }

@@ -31,10 +31,10 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response;
-import java.lang.reflect.Method;
-import java.util.Arrays;
 
 /**
+ * This interceptor will check if the user is already logged in the session.
+ * If not ask the redback system to authentication trough BASIC http
  * @author Olivier Lamy
  * @since 1.3
  */
@@ -53,7 +53,6 @@ public class AuthenticationInterceptor
     {
         // FIXME use a constant from cxf
         HttpServletRequest request = (HttpServletRequest) message.get( "HTTP.REQUEST" );
-
         HttpServletResponse response = (HttpServletResponse) message.get( "HTTP.RESPONSE" );
 
         try
