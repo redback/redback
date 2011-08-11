@@ -78,7 +78,10 @@ public class PermissionsInterceptor
                     {
                         try
                         {
-                            if ( securitySystem.isAuthorized( session, permission ) )
+                            if ( securitySystem.isAuthorized( session, permission,
+                                                              StringUtils.isBlank( redbackAuthorization.resource() )
+                                                                  ? null
+                                                                  : redbackAuthorization.resource() ) )
                             {
                                 return null;
                             }

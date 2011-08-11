@@ -31,5 +31,7 @@ public @interface RedbackAuthorization
 {
     String permission() default ("");
 
+    String resource() default ("");
+
     String description() default ( "" );
 }
