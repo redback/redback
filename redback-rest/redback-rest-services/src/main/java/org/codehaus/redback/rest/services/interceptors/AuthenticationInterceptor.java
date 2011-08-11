@@ -21,6 +21,7 @@ import org.apache.cxf.jaxrs.ext.RequestHandler;
 import org.apache.cxf.jaxrs.model.ClassResourceInfo;
 import org.apache.cxf.message.Message;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
+import org.codehaus.plexus.redback.authorization.RedbackAuthorization;
 import org.codehaus.redback.integration.filter.authentication.basic.HttpBasicAuthentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,11 +36,13 @@ import javax.ws.rs.core.Response;
 /**
  * This interceptor will check if the user is already logged in the session.
  * If not ask the redback system to authentication trough BASIC http
+ *
  * @author Olivier Lamy
  * @since 1.3
  */
 @Service( "authenticationInterceptor#rest" )
 public class AuthenticationInterceptor
+    extends AbstractInterceptor
     implements RequestHandler
 {
 
@@ -51,9 +54,24 @@ public class AuthenticationInterceptor
 
     public Response handleRequest( Message message, ClassResourceInfo classResourceInfo )
     {
-        // FIXME use a constant from cxf
-        HttpServletRequest request = (HttpServletRequest) message.get( "HTTP.REQUEST" );
-        HttpServletResponse response = (HttpServletResponse) message.get( "HTTP.RESPONSE" );
+
+        RedbackAuthorization redbackAuthorization = getRedbackAuthorization( message );
+        if ( redbackAuthorization == null )
+        {
+            log.warn( "http path {} doesn't contain any informations regarding permissions ",
+                      message.get( Message.REQUEST_URI ) );
+            // here we failed to authenticate so 403 as there is no detail on karma for this
+            // it must be marked as it's exposed
+            return Response.status( Response.Status.FORBIDDEN ).build();
+        }
+
+        if ( redbackAuthorization.noRestriction() )
+        {
+            return null;
+        }
+
+        HttpServletRequest request = getHttpServletRequest( message );
+        HttpServletResponse response = getHttpServletResponse( message );
 
         try
         {

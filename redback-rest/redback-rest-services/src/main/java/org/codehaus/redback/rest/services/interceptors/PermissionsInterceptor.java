@@ -42,6 +42,7 @@ import java.lang.reflect.Method;
  */
 @Service( "permissionInterceptor#rest" )
 public class PermissionsInterceptor
+    extends AbstractInterceptor
     implements RequestHandler
 {
 
@@ -57,20 +58,19 @@ public class PermissionsInterceptor
 
     public Response handleRequest( Message message, ClassResourceInfo classResourceInfo )
     {
-        // FIXME provide a patch to cxf to have it as a constant in Message
-        Method method = ( (Method) message.get( "org.apache.cxf.resource.method" ) );
-        log.debug( " method name " + method.getName() );
-
-        // FIXME use a constant from cxf
-        HttpServletRequest request = (HttpServletRequest) message.get( "HTTP.REQUEST" );
-
-        RedbackAuthorization redbackAuthorization = method.getAnnotation( RedbackAuthorization.class );
+        RedbackAuthorization redbackAuthorization = getRedbackAuthorization( message );
 
         if ( redbackAuthorization != null )
         {
+            if ( redbackAuthorization.noRestriction() )
+            {
+                // we are fine this services is marked as non restrictive acces
+                return null;
+            }
             String permission = redbackAuthorization.permission();
             if ( StringUtils.isNotBlank( permission ) )
             {
+                HttpServletRequest request = getHttpServletRequest( message );
                 SecuritySession session = httpAuthenticator.getSecuritySession( request.getSession() );
                 if ( session != null )
                 {
@@ -105,7 +105,10 @@ public class PermissionsInterceptor
                 }
             }
         }
-        // here we failed to authenticate so 403
+        log.warn( "http path {} doesn't contain any informations regarding permissions ",
+                  message.get( Message.REQUEST_URI ) );
+        // here we failed to authenticate so 403 as there is no detail on karma for this
+        // it must be marked as it's exposed
         return Response.status( Response.Status.FORBIDDEN ).build();
     }
 }

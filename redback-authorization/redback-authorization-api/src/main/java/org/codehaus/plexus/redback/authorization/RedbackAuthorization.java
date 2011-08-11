@@ -34,4 +34,6 @@ public @interface RedbackAuthorization
     String resource() default ("");
 
     String description() default ( "" );
+
+    boolean noRestriction() default false;
 }

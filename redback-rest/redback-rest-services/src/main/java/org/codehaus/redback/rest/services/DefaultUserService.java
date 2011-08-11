@@ -125,6 +125,7 @@ public class DefaultUserService
     @Path( "ping" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
+    @RedbackAuthorization(noRestriction = true)
     public Boolean ping()
         throws Exception
     {
