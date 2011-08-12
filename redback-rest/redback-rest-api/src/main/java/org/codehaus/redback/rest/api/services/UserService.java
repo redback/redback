@@ -16,11 +16,17 @@ package org.codehaus.redback.rest.api.services;
  * limitations under the License.
  */
 
+import org.codehaus.plexus.redback.authorization.RedbackAuthorization;
 import org.codehaus.redback.rest.api.model.User;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.Map;
 
+@Path( "/userService/" )
 public interface UserService
 {
     User getUser( String username )
@@ -38,6 +44,10 @@ public interface UserService
     Boolean updateUser( User user )
         throws Exception;
 
+    @Path( "ping" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
+    @RedbackAuthorization(noRestriction = true)
     Boolean ping()
         throws Exception;
 }

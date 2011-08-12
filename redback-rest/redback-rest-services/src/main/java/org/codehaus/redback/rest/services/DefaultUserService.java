@@ -36,7 +36,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.List;
 
-@Path( "/userService/" )
+//Path( "/userService/" )
 @Service( "userService#rest" )
 public class DefaultUserService
     implements UserService
@@ -122,10 +122,7 @@ public class DefaultUserService
         return Boolean.TRUE;
     }
 
-    @Path( "ping" )
-    @GET
-    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    @RedbackAuthorization(noRestriction = true)
+
     public Boolean ping()
         throws Exception
     {

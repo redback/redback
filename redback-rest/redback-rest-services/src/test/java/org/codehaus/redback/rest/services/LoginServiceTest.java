@@ -1,4 +1,4 @@
-package org.codehaus.redback.rest.api.services;
+package org.codehaus.redback.rest.services;
 
 /*
  * Copyright 2011 The Codehaus.
@@ -16,14 +16,22 @@ package org.codehaus.redback.rest.api.services;
  * limitations under the License.
  */
 
-public interface LoginService
+import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
+import org.codehaus.redback.rest.api.services.UserService;
+import org.junit.Test;
+
+/**
+ * @author Olivier Lamy
+ */
+public class LoginServiceTest
+    extends AbstractRestServicesTest
 {
-    Boolean ping()
-        throws Exception;
-
-    String addAuthenticationKey( String key, String principal, String purpose, int expirationMinutes )
-        throws Exception;
-
-    int removeFromCache( String username )
-        throws Exception;
+    @Test
+    public void adminLoginTest()
+        throws Exception
+    {
+        UserService userService =
+            JAXRSClientFactory.create( "http://localhost:" + port + "/services/redbackServices", UserService.class );
+        userService.ping();
+    }
 }

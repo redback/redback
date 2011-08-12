@@ -16,6 +16,8 @@ package org.codehaus.redback.rest.services.interceptors;
 * limitations under the License.
 */
 
+import org.apache.cxf.jaxrs.model.OperationResourceInfo;
+import org.apache.cxf.jaxrs.utils.JAXRSUtils;
 import org.apache.cxf.message.Message;
 import org.codehaus.plexus.redback.authorization.RedbackAuthorization;
 import org.slf4j.Logger;
@@ -26,8 +28,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 
 /**
- * @since 1.3
  * @author Olivier Lamy
+ * @since 1.3
  */
 public class AbstractInterceptor
 {
@@ -48,9 +50,11 @@ public class AbstractInterceptor
 
     public RedbackAuthorization getRedbackAuthorization( Message message )
     {
+        //OperationResourceInfo operationResourceInfo = message.getExchange().get( OperationResourceInfo.class );
         // FIXME provide a patch to cxf to have it as a constant in Message
+        //Method method = operationResourceInfo.getMethodToInvoke();
         Method method = ( (Method) message.get( "org.apache.cxf.resource.method" ) );
-        log.debug( " method name " + method.getName() );
+        log.debug( " method name {}", method == null ? "null" : method.getName() );
         RedbackAuthorization redbackAuthorization = method.getAnnotation( RedbackAuthorization.class );
         return redbackAuthorization;
     }
