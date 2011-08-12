@@ -33,7 +33,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -43,7 +42,6 @@ import java.util.TimeZone;
  * @since 1.3
  */
 @Service( "loginService#rest" )
-@Path( "/loginService/" )
 public class DefaultLoginService
     implements LoginService
 {
@@ -74,14 +72,8 @@ public class DefaultLoginService
         this.securitySystem = securitySystem;
     }
 
-    @Path( "addAuthenticationKey/" )
-    @GET
-    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    @RedbackAuthorization( noRestriction = true )
-    public String addAuthenticationKey( @QueryParam( "providerKey" ) String providedKey,
-                                        @QueryParam( "principal" ) String principal,
-                                        @QueryParam( "purpose" ) String purpose,
-                                        @QueryParam( "expirationMinutes" ) int expirationMinutes )
+
+    public String addAuthenticationKey( String providedKey, String principal, String purpose, int expirationMinutes )
         throws Exception
     {
         KeyManager keyManager = securitySystem.getKeyManager();
@@ -115,11 +107,8 @@ public class DefaultLoginService
         return key.getKey();
     }
 
-    @Path( "removeFromCache/{userName}" )
-    @GET
-    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    @RedbackAuthorization( permission = "user-management-user-create" )
-    public int removeFromCache( @PathParam( "userName" ) String userName )
+
+    public int removeFromCache( String userName )
         throws Exception
     {
         if ( userAssignmentsCache != null )

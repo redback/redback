@@ -17,14 +17,17 @@ package org.codehaus.redback.rest.services;
  */
 
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
+import org.codehaus.redback.rest.api.model.User;
 import org.codehaus.redback.rest.api.services.UserService;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 /**
  * @author Olivier Lamy
  */
-public class LoginServiceTest
+public class UserServiceTest
     extends AbstractRestServicesTest
 {
 
@@ -49,5 +52,17 @@ public class LoginServiceTest
 
         Boolean res = userService.ping();
         assertTrue( res.booleanValue() );
+    }
+
+    @Test
+    public void getUsers()
+        throws Exception
+    {
+        // 1000000L
+        //WebClient.getConfig( userService ).getHttpConduit().getClient().setReceiveTimeout(3000);
+
+        List<User> users = userService.getUsers();
+        assertTrue( users != null );
+        assertFalse( users.isEmpty() );
     }
 }

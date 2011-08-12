@@ -18,11 +18,16 @@ package org.codehaus.redback.rest.services;
 
 import junit.framework.TestCase;
 import org.apache.cxf.transport.servlet.CXFServlet;
+import org.eclipse.jetty.http.HttpCookie;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.SessionIdManager;
+import org.eclipse.jetty.server.SessionManager;
 import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.component.LifeCycle;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.After;
 import org.junit.Before;
@@ -35,6 +40,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.EventListener;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,6 +78,10 @@ public abstract class AbstractRestServicesTest
         context.addEventListener( contextLoaderListener );
 
         ServletHolder sh = new ServletHolder( CXFServlet.class );
+
+        SessionHandler sessionHandler = new SessionHandler( );
+
+        context.setSessionHandler( sessionHandler );
 
         context.addServlet( sh, "/services/*" );
         server.setHandler( context );
