@@ -17,8 +17,8 @@ package org.codehaus.redback.rest.services;
  */
 
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
-import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.redback.rest.api.services.UserService;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -27,15 +27,25 @@ import org.junit.Test;
 public class LoginServiceTest
     extends AbstractRestServicesTest
 {
-    @Test
-    public void adminLoginTest()
+
+    UserService userService;
+
+    @Before
+    public void setUp()
         throws Exception
     {
-
-        UserService userService =
+        super.startServer();
+        userService =
             JAXRSClientFactory.create( "http://localhost:" + port + "/services/redbackServices/", UserService.class );
+    }
 
-        WebClient.getConfig( userService ).getHttpConduit().getClient().setReceiveTimeout(1000000L);
+
+    @Test
+    public void ping()
+        throws Exception
+    {
+        // 1000000L
+        //WebClient.getConfig( userService ).getHttpConduit().getClient().setReceiveTimeout(3000);
 
         Boolean res = userService.ping();
         assertTrue( res.booleanValue() );
