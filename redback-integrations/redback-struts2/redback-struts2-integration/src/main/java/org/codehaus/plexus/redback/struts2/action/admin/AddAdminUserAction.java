@@ -87,6 +87,10 @@ public class AddAdminUserAction
         return INPUT;
     }
 
+    /**
+     * TODO this must done in a service !!
+     * @return
+     */
     public String submit()
     {
         if ( user == null )

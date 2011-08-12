@@ -27,11 +27,16 @@
       <param name="ConversionPattern" value="%d [%t] %-5p %c %x - %m%n"/>
     </layout>
   </appender>
+  <!--
   <logger name="org.apache.cxf.jaxrs.interceptor.JAXRSInInterceptor">
     <level value="trace"/>
   </logger>
   <logger name="org.apache.cxf.jaxrs.utils.JAXRSUtils">
     <level value="trace"/>
+  </logger>
+  -->
+  <logger name="org.codehaus.redback.rest.services" >
+    <level value="debug"/>
   </logger>
 
   <root>

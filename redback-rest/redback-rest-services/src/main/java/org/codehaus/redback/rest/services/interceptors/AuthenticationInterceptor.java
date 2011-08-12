@@ -82,6 +82,7 @@ public class AuthenticationInterceptor
         catch ( AuthenticationException e )
         {
             // FIXME take care about locked mustchange
+            log.debug( "failed to authenticate for path {}", message.get( Message.REQUEST_URI ) );
             return Response.status( Response.Status.FORBIDDEN ).build();
         }
     }

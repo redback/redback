@@ -18,33 +18,19 @@ package org.codehaus.redback.rest.services;
 
 import junit.framework.TestCase;
 import org.apache.cxf.transport.servlet.CXFServlet;
-import org.eclipse.jetty.http.HttpCookie;
+import org.codehaus.redback.integration.role.RoleConstants;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.SessionIdManager;
-import org.eclipse.jetty.server.SessionManager;
-import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.util.component.LifeCycle;
-import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.context.ContextLoaderListener;
-import org.springframework.web.context.WebApplicationContext;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.EventListener;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Olivier Lamy
@@ -54,11 +40,14 @@ import java.util.Map;
 public abstract class AbstractRestServicesTest
     extends TestCase
 {
-    private Logger log = LoggerFactory.getLogger( getClass() );
+    protected Logger log = LoggerFactory.getLogger( getClass() );
 
     Server server = null;
 
     int port;
+
+    String authorizationHeader = "Basic " + org.apache.cxf.common.util.Base64Utility.encode(
+        ( RoleConstants.ADMINISTRATOR_ACCOUNT_NAME + ":" + FakeCreateAdminService.ADMIN_TEST_PWD ).getBytes() );
 
     @Before
     public void startServer()
@@ -67,7 +56,7 @@ public abstract class AbstractRestServicesTest
 
         this.server = new Server( 0 );
 
-        ServletContextHandler context = new ServletContextHandler( );
+        ServletContextHandler context = new ServletContextHandler();
 
         context.setContextPath( "/" );
 
@@ -79,7 +68,7 @@ public abstract class AbstractRestServicesTest
 
         ServletHolder sh = new ServletHolder( CXFServlet.class );
 
-        SessionHandler sessionHandler = new SessionHandler( );
+        SessionHandler sessionHandler = new SessionHandler();
 
         context.setSessionHandler( sessionHandler );
 
@@ -89,8 +78,6 @@ public abstract class AbstractRestServicesTest
         Connector connector = this.server.getConnectors()[0];
         this.port = connector.getLocalPort();
         log.info( "start server on port " + this.port );
-
-        //WebApplicationContext webApplicationContext = (WebApplicationContext) context.getAttribute( WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE );
 
 
     }

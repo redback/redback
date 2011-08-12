@@ -17,6 +17,8 @@ package org.codehaus.redback.rest.services;
  */
 
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
+import org.apache.cxf.jaxrs.client.ServerWebApplicationException;
+import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.redback.rest.api.model.User;
 import org.codehaus.redback.rest.api.services.UserService;
 import org.junit.Before;
@@ -31,15 +33,24 @@ public class UserServiceTest
     extends AbstractRestServicesTest
 {
 
-    UserService userService;
-
     @Before
     public void setUp()
         throws Exception
     {
         super.startServer();
-        userService =
-            JAXRSClientFactory.create( "http://localhost:" + port + "/services/redbackServices/", UserService.class );
+
+        FakeCreateAdminService fakeCreateAdminService =
+            JAXRSClientFactory.create( "http://localhost:" + port + "/services/fakeCreateAdminService/",
+                                       FakeCreateAdminService.class );
+
+        Boolean res = fakeCreateAdminService.createAdminIfNeeded();
+        assertTrue( res.booleanValue() );
+    }
+
+    UserService getUserService()
+    {
+        return JAXRSClientFactory.create( "http://localhost:" + port + "/services/redbackServices/",
+                                          UserService.class );
     }
 
 
@@ -50,7 +61,7 @@ public class UserServiceTest
         // 1000000L
         //WebClient.getConfig( userService ).getHttpConduit().getClient().setReceiveTimeout(3000);
 
-        Boolean res = userService.ping();
+        Boolean res = getUserService().ping();
         assertTrue( res.booleanValue() );
     }
 
@@ -61,8 +72,28 @@ public class UserServiceTest
         // 1000000L
         //WebClient.getConfig( userService ).getHttpConduit().getClient().setReceiveTimeout(3000);
 
+        UserService userService = getUserService();
+
+        WebClient.client( userService ).header( "Authorization", authorizationHeader );
+
         List<User> users = userService.getUsers();
         assertTrue( users != null );
         assertFalse( users.isEmpty() );
+    }
+
+    @Test
+    public void getUsersWithoutAuthz()
+        throws Exception
+    {
+        UserService userService = getUserService();
+        try
+        {
+            userService.getUsers();
+        }
+        catch ( ServerWebApplicationException e )
+        {
+            assertEquals( 403, e.getStatus() );
+        }
+
     }
 }
