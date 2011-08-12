@@ -28,7 +28,10 @@
     </layout>
   </appender>
   <logger name="org.apache.cxf.jaxrs.interceptor.JAXRSInInterceptor">
-    <level value="debug"/>
+    <level value="trace"/>
+  </logger>
+  <logger name="org.apache.cxf.jaxrs.utils.JAXRSUtils">
+    <level value="trace"/>
   </logger>
 
   <root>

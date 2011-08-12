@@ -50,10 +50,11 @@ public class AbstractInterceptor
 
     public RedbackAuthorization getRedbackAuthorization( Message message )
     {
-        //OperationResourceInfo operationResourceInfo = message.getExchange().get( OperationResourceInfo.class );
+        OperationResourceInfo operationResourceInfo = message.getExchange().get( OperationResourceInfo.class );
         // FIXME provide a patch to cxf to have it as a constant in Message
         //Method method = operationResourceInfo.getMethodToInvoke();
-        Method method = ( (Method) message.get( "org.apache.cxf.resource.method" ) );
+        Method method = operationResourceInfo.getAnnotatedMethod();
+        // ( (Method) message.get( "org.apache.cxf.resource.method" ) );
         log.debug( " method name {}", method == null ? "null" : method.getName() );
         RedbackAuthorization redbackAuthorization = method.getAnnotation( RedbackAuthorization.class );
         return redbackAuthorization;

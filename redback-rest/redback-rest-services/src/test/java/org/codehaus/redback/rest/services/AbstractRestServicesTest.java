@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.context.ContextLoaderListener;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -76,6 +77,8 @@ public abstract class AbstractRestServicesTest
         Connector connector = this.server.getConnectors()[0];
         this.port = connector.getLocalPort();
         log.info( "start server on port " + this.port );
+
+        //WebApplicationContext webApplicationContext = (WebApplicationContext) context.getAttribute( WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE );
 
 
     }

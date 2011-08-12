@@ -46,7 +46,7 @@ public interface UserService
 
     @Path( "ping" )
     @GET
-    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
     @RedbackAuthorization(noRestriction = true)
     Boolean ping()
         throws Exception;

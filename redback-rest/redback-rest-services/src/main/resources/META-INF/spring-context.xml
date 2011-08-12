@@ -27,8 +27,7 @@
            http://www.springframework.org/schema/context 
            http://www.springframework.org/schema/context/spring-context-3.0.xsd
            http://cxf.apache.org/jaxrs
-           http://cxf.apache.org/schemas/jaxrs.xsd"
-       default-lazy-init="true">
+           http://cxf.apache.org/schemas/jaxrs.xsd">
 
   <import resource="classpath:META-INF/cxf/cxf.xml"/>
   <!--
@@ -41,17 +40,8 @@
     base-package="org.codehaus.redback.rest.services"/>
 
   <jaxrs:server id="redbackServices" address="/redbackServices">
-    <!--
-    <jaxrs:inInterceptors>
-      <ref bean="jaxrsInterceptor"/>
-    </jaxrs:inInterceptors>
-    -->
-    <!--
-    <jaxrs:invoker>
-      <ref bean="redbackJAXRSInvoker"/>
-    </jaxrs:invoker>
-    -->
-	  <jaxrs:serviceBeans>
+
+    <jaxrs:serviceBeans>
       <ref bean="userService#rest"/>
       <ref bean="loginService#rest"/>
     </jaxrs:serviceBeans>
@@ -59,12 +49,7 @@
       <ref bean="authenticationInterceptor#rest"/>
       <ref bean="permissionInterceptor#rest"/>
     </jaxrs:providers>
+
    </jaxrs:server>
 
-  <bean name="jaxrsInterceptor" class="org.codehaus.redback.rest.services.interceptors.DebugJAXRSInInterceptor" />
-  <!--
-  class="org.apache.cxf.jaxrs.interceptor.JAXRSInInterceptor"/>
-  -->
-
-  <bean name="redbackJAXRSInvoker" class="org.codehaus.redback.rest.services.interceptors.RedbackJAXRSInvoker" />
 </beans>
