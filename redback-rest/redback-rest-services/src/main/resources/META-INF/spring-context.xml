@@ -41,14 +41,30 @@
     base-package="org.codehaus.redback.rest.services"/>
 
   <jaxrs:server id="redbackServices" address="/redbackServices">
-    <jaxrs:providers>
-      <ref bean="authenticationInterceptor#rest"/>
-      <ref bean="permissionInterceptor#rest"/>
-    </jaxrs:providers>
+    <!--
+    <jaxrs:inInterceptors>
+      <ref bean="jaxrsInterceptor"/>
+    </jaxrs:inInterceptors>
+    -->
+    <!--
+    <jaxrs:invoker>
+      <ref bean="redbackJAXRSInvoker"/>
+    </jaxrs:invoker>
+    -->
 	  <jaxrs:serviceBeans>
       <ref bean="userService#rest"/>
       <ref bean="loginService#rest"/>
     </jaxrs:serviceBeans>
+    <jaxrs:providers>
+      <ref bean="authenticationInterceptor#rest"/>
+      <ref bean="permissionInterceptor#rest"/>
+    </jaxrs:providers>
    </jaxrs:server>
- 
+
+  <bean name="jaxrsInterceptor" class="org.codehaus.redback.rest.services.interceptors.DebugJAXRSInInterceptor" />
+  <!--
+  class="org.apache.cxf.jaxrs.interceptor.JAXRSInInterceptor"/>
+  -->
+
+  <bean name="redbackJAXRSInvoker" class="org.codehaus.redback.rest.services.interceptors.RedbackJAXRSInvoker" />
 </beans>
