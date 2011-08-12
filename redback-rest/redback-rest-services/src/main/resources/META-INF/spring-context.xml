@@ -47,6 +47,7 @@
     </jaxrs:providers>
 	  <jaxrs:serviceBeans>
       <ref bean="userService#rest"/>
+      <ref bean="loginService#rest"/>
     </jaxrs:serviceBeans>
    </jaxrs:server>
  

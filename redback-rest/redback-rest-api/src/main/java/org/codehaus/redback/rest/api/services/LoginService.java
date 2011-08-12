@@ -21,7 +21,7 @@ public interface LoginService
     Boolean ping()
         throws Exception;
 
-    int addAuthenticationKey( String key, String principal, String purpose, int expirationMinutes )
+    String addAuthenticationKey( String key, String principal, String purpose, int expirationMinutes )
         throws Exception;
 
     int removeFromCache( String username )
