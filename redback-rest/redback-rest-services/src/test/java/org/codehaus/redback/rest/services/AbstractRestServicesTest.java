@@ -42,9 +42,9 @@ public abstract class AbstractRestServicesTest
 {
     protected Logger log = LoggerFactory.getLogger( getClass() );
 
-    Server server = null;
+    public Server server = null;
 
-    int port;
+    public int port;
 
     String authorizationHeader = "Basic " + org.apache.cxf.common.util.Base64Utility.encode(
         ( RoleConstants.ADMINISTRATOR_ACCOUNT_NAME + ":" + FakeCreateAdminService.ADMIN_TEST_PWD ).getBytes() );
