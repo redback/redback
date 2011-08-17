@@ -63,16 +63,9 @@
       <groupId>org.codehaus.redback</groupId>
       <artifactId>redback-keys-memory</artifactId>
     </dependency>
-    <!--
-    <dependency>
-      <groupId>org.apache.cxf</groupId>
-      <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-    </dependency>
-    -->
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-bundle-jaxrs</artifactId>
-      <version>2.4.1</version>
       <exclusions>
         <exclusion>
           <groupId>org.eclipse.jetty</groupId>
