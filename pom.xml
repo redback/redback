@@ -658,11 +658,6 @@
         <artifactId>spring-apacheds</artifactId>
         <version>1.0</version>
       </dependency>
-      <dependency>
-        <groupId>org.apache.cxf</groupId>
-        <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-        <version>${cxfVersion}</version>
-      </dependency>
       <!--
       <dependency>
         <groupId>javax.mail</groupId>
