@@ -17,6 +17,7 @@ package org.codehaus.redback.rest.services;
  */
 
 import junit.framework.TestCase;
+import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.codehaus.redback.integration.role.RoleConstants;
 import org.eclipse.jetty.server.Connector;
@@ -79,7 +80,12 @@ public abstract class AbstractRestServicesTest
         this.port = connector.getLocalPort();
         log.info( "start server on port " + this.port );
 
+        FakeCreateAdminService fakeCreateAdminService =
+            JAXRSClientFactory.create( "http://localhost:" + port + "/services/fakeCreateAdminService/",
+                                       FakeCreateAdminService.class );
 
+        Boolean res = fakeCreateAdminService.createAdminIfNeeded();
+        assertTrue( res.booleanValue() );
     }
 
     @After

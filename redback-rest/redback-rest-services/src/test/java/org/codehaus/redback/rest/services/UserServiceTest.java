@@ -33,20 +33,6 @@ public class UserServiceTest
     extends AbstractRestServicesTest
 {
 
-    @Before
-    public void setUp()
-        throws Exception
-    {
-        super.startServer();
-
-        FakeCreateAdminService fakeCreateAdminService =
-            JAXRSClientFactory.create( "http://localhost:" + port + "/services/fakeCreateAdminService/",
-                                       FakeCreateAdminService.class );
-
-        Boolean res = fakeCreateAdminService.createAdminIfNeeded();
-        assertTrue( res.booleanValue() );
-    }
-
     UserService getUserService()
     {
         return JAXRSClientFactory.create( "http://localhost:" + port + "/services/redbackServices/",
