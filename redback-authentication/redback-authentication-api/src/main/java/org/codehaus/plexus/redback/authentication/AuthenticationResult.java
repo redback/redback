@@ -30,6 +30,9 @@ public class AuthenticationResult
 {
     private boolean isAuthenticated;
 
+    /**
+     * FIXME olamy this Object is a pain !!!
+     */
     private Object principal;
 
     // TODO: why aren't these just thrown from the authenticate() method?

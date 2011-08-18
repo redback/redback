@@ -25,8 +25,12 @@ import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authorization.RedbackAuthorization;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
 import org.codehaus.plexus.redback.policy.MustChangePasswordException;
+import org.codehaus.plexus.redback.users.User;
+import org.codehaus.plexus.redback.users.UserManager;
+import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.redback.integration.filter.authentication.HttpAuthenticationException;
 import org.codehaus.redback.integration.filter.authentication.basic.HttpBasicAuthentication;
+import org.codehaus.redback.rest.services.RedbackAuthenticationThreadLocal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -50,6 +54,9 @@ public class AuthenticationInterceptor
     extends AbstractInterceptor
     implements RequestHandler
 {
+    @Inject
+    @Named( value = "userManager#configurable" )
+    private UserManager userManager;
 
     @Inject
     @Named( value = "httpAuthenticator#basic" )
@@ -86,10 +93,17 @@ public class AuthenticationInterceptor
             {
                 throw new HttpAuthenticationException( "You are not authenticated." );
             }
-
+            // FIXME this is already called previously but authenticationResult doesn't return that
+            User user = userManager.findUser( (String) authenticationResult.getPrincipal() );
+            RedbackAuthenticationThreadLocal.set( user );
             message.put( AuthenticationResult.class, authenticationResult );
 
             return null;
+        }
+        catch ( UserNotFoundException e )
+        {
+            log.debug( "UserNotFoundException for path {}", message.get( Message.REQUEST_URI ) );
+            return Response.status( Response.Status.FORBIDDEN ).build();
         }
         catch ( AccountLockedException e )
         {

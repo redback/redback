@@ -108,7 +108,9 @@ public class UserServiceTest
             FakeCreateAdminService service = getFakeCreateAdminService();
 
             WebClient.client( service ).header( "Authorization", authorizationHeader );
+
             assertTrue( service.testAuthzWithoutKarmasNeededButAuthz().booleanValue() );
+
         }
         catch ( ServerWebApplicationException e )
         {

@@ -45,11 +45,13 @@
       <ref bean="userService#rest"/>
       <ref bean="loginService#rest"/>
     </jaxrs:serviceBeans>
+    <jaxrs:outInterceptors>
+      <ref bean="threadLocalUserCleaner#rest"/>
+    </jaxrs:outInterceptors>
     <jaxrs:providers>
       <ref bean="authenticationInterceptor#rest"/>
       <ref bean="permissionInterceptor#rest"/>
     </jaxrs:providers>
-
    </jaxrs:server>
 
 </beans>

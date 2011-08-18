@@ -39,6 +39,11 @@
     <jaxrs:serviceBeans>
       <ref bean="fakeCreateAdminService"/>
     </jaxrs:serviceBeans>
+    <!--
+    <jaxrs:outInterceptors>
+      <ref bean="threadLocalUserCleaner#rest"/>
+    </jaxrs:outInterceptors>
+    -->
    </jaxrs:server>
 
   <bean name="fakeCreateAdminService" class="org.codehaus.redback.rest.services.FakeCreateAdminServiceImpl"/>
