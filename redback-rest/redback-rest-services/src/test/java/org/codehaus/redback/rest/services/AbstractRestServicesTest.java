@@ -50,6 +50,11 @@ public abstract class AbstractRestServicesTest
     public String authorizationHeader = "Basic " + org.apache.cxf.common.util.Base64Utility.encode(
         ( RoleConstants.ADMINISTRATOR_ACCOUNT_NAME + ":" + FakeCreateAdminService.ADMIN_TEST_PWD ).getBytes() );
 
+    protected String getSpringConfigLocation()
+    {
+        return "classpath*:META-INF/spring-context.xml";
+    }
+
     @Before
     public void startServer()
         throws Exception
@@ -61,7 +66,7 @@ public abstract class AbstractRestServicesTest
 
         context.setContextPath( "/" );
 
-        context.setInitParameter( "contextConfigLocation", "classpath*:META-INF/spring-context.xml" );
+        context.setInitParameter( "contextConfigLocation", getSpringConfigLocation() );
 
         ContextLoaderListener contextLoaderListener = new ContextLoaderListener();
 
