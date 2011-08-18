@@ -46,7 +46,7 @@ public abstract class AbstractRestServicesTest
 
     public int port;
 
-    String authorizationHeader = "Basic " + org.apache.cxf.common.util.Base64Utility.encode(
+    public String authorizationHeader = "Basic " + org.apache.cxf.common.util.Base64Utility.encode(
         ( RoleConstants.ADMINISTRATOR_ACCOUNT_NAME + ":" + FakeCreateAdminService.ADMIN_TEST_PWD ).getBytes() );
 
     @Before
