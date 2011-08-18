@@ -40,4 +40,10 @@ public interface FakeCreateAdminService
     @RedbackAuthorization( noRestriction = true )
     Boolean createAdminIfNeeded()
         throws Exception;
+
+    @Path( "/testAuthzWithoutKarmasNeeded" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( noRestriction = false, noPermission = true )
+    Boolean testAuthzWithoutKarmasNeededButAuthz();
 }

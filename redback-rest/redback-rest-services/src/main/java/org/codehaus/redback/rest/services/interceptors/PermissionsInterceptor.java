@@ -102,6 +102,15 @@ public class PermissionsInterceptor
                     log.debug( "user {} not authenticated", session.getUser().getUsername() );
                 }
             }
+            else
+            {
+                if ( redbackAuthorization.noPermission() )
+                {
+                    log.debug( "path {} doesn't need special permission", message.get( Message.REQUEST_URI ) );
+                    return null;
+                }
+                return Response.status( Response.Status.FORBIDDEN ).build();
+            }
         }
         log.warn( "http path {} doesn't contain any informations regarding permissions ",
                   message.get( Message.REQUEST_URI ) );

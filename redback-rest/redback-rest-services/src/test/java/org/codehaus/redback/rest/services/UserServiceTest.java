@@ -21,7 +21,6 @@ import org.apache.cxf.jaxrs.client.ServerWebApplicationException;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.redback.rest.api.model.User;
 import org.codehaus.redback.rest.api.services.UserService;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
@@ -67,7 +66,7 @@ public class UserServiceTest
         assertFalse( users.isEmpty() );
     }
 
-    @Test
+    @Test( expected = ServerWebApplicationException.class )
     public void getUsersWithoutAuthz()
         throws Exception
     {
@@ -79,7 +78,42 @@ public class UserServiceTest
         catch ( ServerWebApplicationException e )
         {
             assertEquals( 403, e.getStatus() );
+            throw e;
         }
 
     }
+
+    @Test
+    public void getNoPermissionNotAuthz()
+        throws Exception
+    {
+
+        try
+        {
+            getFakeCreateAdminService().testAuthzWithoutKarmasNeededButAuthz();
+        }
+        catch ( ServerWebApplicationException e )
+        {
+            assertEquals( 403, e.getStatus() );
+        }
+    }
+
+    @Test
+    public void getNoPermissionAuthz()
+        throws Exception
+    {
+
+        try
+        {
+            FakeCreateAdminService service = getFakeCreateAdminService();
+
+            WebClient.client( service ).header( "Authorization", authorizationHeader );
+            assertTrue( service.testAuthzWithoutKarmasNeededButAuthz().booleanValue() );
+        }
+        catch ( ServerWebApplicationException e )
+        {
+            assertEquals( 403, e.getStatus() );
+        }
+    }
+
 }

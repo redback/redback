@@ -29,11 +29,28 @@ import java.lang.annotation.Target;
 @Retention( RetentionPolicy.RUNTIME )
 public @interface RedbackAuthorization
 {
-    String permission() default ("");
+    /**
+     * @return the redback role needed
+     */
+    String permission() default ( "" );
 
-    String resource() default ("");
+    /**
+     * @return the redback ressource karma needed
+     */
+    String resource() default ( "" );
 
+    /**
+     * @return doc
+     */
     String description() default ( "" );
 
+    /**
+     * @return <code>true</code> if doesn't need any special permission
+     */
     boolean noRestriction() default false;
+
+    /**
+     * @return if this service need only authentication and not special karma
+     */
+    boolean noPermission() default false;
 }

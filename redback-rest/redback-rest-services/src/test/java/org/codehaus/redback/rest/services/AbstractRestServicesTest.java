@@ -80,12 +80,16 @@ public abstract class AbstractRestServicesTest
         this.port = connector.getLocalPort();
         log.info( "start server on port " + this.port );
 
-        FakeCreateAdminService fakeCreateAdminService =
-            JAXRSClientFactory.create( "http://localhost:" + port + "/services/fakeCreateAdminService/",
-                                       FakeCreateAdminService.class );
+        FakeCreateAdminService fakeCreateAdminService = getFakeCreateAdminService();
 
         Boolean res = fakeCreateAdminService.createAdminIfNeeded();
         assertTrue( res.booleanValue() );
+    }
+
+    protected FakeCreateAdminService getFakeCreateAdminService()
+    {
+        return JAXRSClientFactory.create( "http://localhost:" + port + "/services/fakeCreateAdminService/",
+                                          FakeCreateAdminService.class );
     }
 
     @After

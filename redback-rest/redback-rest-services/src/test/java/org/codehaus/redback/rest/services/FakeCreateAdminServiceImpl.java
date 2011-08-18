@@ -18,7 +18,6 @@ package org.codehaus.redback.rest.services;
 
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.rbac.RBACManager;
-import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
@@ -27,7 +26,6 @@ import org.codehaus.redback.integration.role.RoleConstants;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.Collections;
 
 /**
  * @author Olivier Lamy
@@ -71,7 +69,6 @@ public class FakeCreateAdminServiceImpl
 
         userManager.addUser( user );
 
-
         roleManager.assignRole( "system-administrator", user.getPrincipal().toString() );
 
         /*
@@ -79,6 +76,11 @@ public class FakeCreateAdminServiceImpl
         userAssignment.setRoleNames( Collections.singletonList( RoleConstants.USER_ADMINISTRATOR_ROLE ) );
         rbacManager.saveUserAssignment( userAssignment );
         */
+        return Boolean.TRUE;
+    }
+
+    public Boolean testAuthzWithoutKarmasNeededButAuthz()
+    {
         return Boolean.TRUE;
     }
 }
