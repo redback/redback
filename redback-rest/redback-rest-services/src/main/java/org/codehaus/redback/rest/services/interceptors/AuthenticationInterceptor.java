@@ -21,7 +21,11 @@ import org.apache.cxf.jaxrs.ext.RequestHandler;
 import org.apache.cxf.jaxrs.model.ClassResourceInfo;
 import org.apache.cxf.message.Message;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
+import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authorization.RedbackAuthorization;
+import org.codehaus.plexus.redback.policy.AccountLockedException;
+import org.codehaus.plexus.redback.policy.MustChangePasswordException;
+import org.codehaus.redback.integration.filter.authentication.HttpAuthenticationException;
 import org.codehaus.redback.integration.filter.authentication.basic.HttpBasicAuthentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +40,7 @@ import javax.ws.rs.core.Response;
 /**
  * This interceptor will check if the user is already logged in the session.
  * If not ask the redback system to authentication trough BASIC http
+ * If the user is logged the AuthenticationResult will in the cxf message with the key AuthenticationResult.class
  *
  * @author Olivier Lamy
  * @since 1.3
@@ -75,13 +80,31 @@ public class AuthenticationInterceptor
 
         try
         {
-            httpAuthenticator.authenticate( request, response );
+            AuthenticationResult authenticationResult = httpAuthenticator.getAuthenticationResult( request, response );
+
+            if ( ( authenticationResult == null ) || ( !authenticationResult.isAuthenticated() ) )
+            {
+                throw new HttpAuthenticationException( "You are not authenticated." );
+            }
+
+            message.put( AuthenticationResult.class, authenticationResult );
 
             return null;
         }
+        catch ( AccountLockedException e )
+        {
+            log.debug( "account locked for path {}", message.get( Message.REQUEST_URI ) );
+            return Response.status( Response.Status.FORBIDDEN ).build();
+
+        }
+        catch ( MustChangePasswordException e )
+        {
+            log.debug( "must change password for path {}", message.get( Message.REQUEST_URI ) );
+            return Response.status( Response.Status.FORBIDDEN ).build();
+
+        }
         catch ( AuthenticationException e )
         {
-            // FIXME take care about locked mustchange
             log.debug( "failed to authenticate for path {}", message.get( Message.REQUEST_URI ) );
             return Response.status( Response.Status.FORBIDDEN ).build();
         }

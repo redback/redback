@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.cxf.jaxrs.ext.RequestHandler;
 import org.apache.cxf.jaxrs.model.ClassResourceInfo;
 import org.apache.cxf.message.Message;
+import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authorization.AuthorizationException;
 import org.codehaus.plexus.redback.authorization.RedbackAuthorization;
 import org.codehaus.plexus.redback.system.SecuritySession;
@@ -34,7 +35,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
-import java.lang.reflect.Method;
 
 /**
  * @author Olivier Lamy
@@ -72,36 +72,34 @@ public class PermissionsInterceptor
             {
                 HttpServletRequest request = getHttpServletRequest( message );
                 SecuritySession session = httpAuthenticator.getSecuritySession( request.getSession() );
-                if ( session != null )
+                AuthenticationResult authenticationResult = message.get( AuthenticationResult.class );
+                if ( authenticationResult != null && authenticationResult.isAuthenticated() )
                 {
-                    if ( session.getAuthenticationResult().isAuthenticated() )
+                    try
                     {
-                        try
+                        if ( securitySystem.isAuthorized( session, permission,
+                                                          StringUtils.isBlank( redbackAuthorization.resource() )
+                                                              ? null
+                                                              : redbackAuthorization.resource() ) )
                         {
-                            if ( securitySystem.isAuthorized( session, permission,
-                                                              StringUtils.isBlank( redbackAuthorization.resource() )
-                                                                  ? null
-                                                                  : redbackAuthorization.resource() ) )
-                            {
-                                return null;
-                            }
-                            else
-                            {
-                                log.debug( "user {} not authorized for permission {}", session.getUser().getPrincipal(),
-                                           permission );
-                            }
+                            return null;
                         }
-                        catch ( AuthorizationException e )
+                        else
                         {
-                            log.debug( e.getMessage(), e );
-                            return Response.status( Response.Status.FORBIDDEN ).build();
+                            log.debug( "user {} not authorized for permission {}", session.getUser().getPrincipal(),
+                                       permission );
                         }
+                    }
+                    catch ( AuthorizationException e )
+                    {
+                        log.debug( e.getMessage(), e );
+                        return Response.status( Response.Status.FORBIDDEN ).build();
+                    }
 
-                    }
-                    else
-                    {
-                        log.debug( "user {} not authenticated", session.getUser().getUsername() );
-                    }
+                }
+                else
+                {
+                    log.debug( "user {} not authenticated", session.getUser().getUsername() );
                 }
             }
         }
