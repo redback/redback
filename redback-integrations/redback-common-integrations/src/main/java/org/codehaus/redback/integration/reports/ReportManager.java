@@ -40,6 +40,7 @@ public class ReportManager
     /**
      * plexus.requirement role="org.codehaus.plexus.redback.xwork.reports.Report"
      */
+    @Inject
     private List<Report> availableReports;
 
     @Inject
@@ -85,7 +86,6 @@ public class ReportManager
     @PostConstruct
     public void initialize()
     {
-        availableReports = new ArrayList<Report>( applicationContext.getBeansOfType( Report.class ).values() );
         reportMap = new HashMap<String, Map<String, Report>>();
 
         for ( Report report : availableReports )

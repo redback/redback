@@ -47,12 +47,11 @@ public class EnvironmentCheckInterceptor
 
     private Logger log = LoggerFactory.getLogger( EnvironmentCheckInterceptor.class );
 
-    @Inject
-    private ApplicationContext applicationContext;
 
     /**
      * plexus.requirement role="org.codehaus.plexus.redback.system.check.EnvironmentCheck"
      */
+    @Inject
     private List<EnvironmentCheck> checkers;
 
     public void destroy()
@@ -69,9 +68,6 @@ public class EnvironmentCheckInterceptor
             // No need to check twice.
             return;
         }
-
-        this.checkers =
-            new ArrayList<EnvironmentCheck>( applicationContext.getBeansOfType( EnvironmentCheck.class ).values() );
 
         if ( checkers != null )
         {

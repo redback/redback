@@ -21,6 +21,7 @@ import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -44,6 +45,12 @@ public abstract class AbstractRBACManager
     private List<RBACManagerListener> listeners = new ArrayList<RBACManagerListener>();
 
     private Resource globalResource;
+
+    @PostConstruct
+    public void initialize()
+    {
+        //no op
+    }
 
     public void addListener( RBACManagerListener listener )
     {
@@ -784,10 +791,5 @@ public abstract class AbstractRBACManager
         }
 
         return roleMap;
-    }
-
-    public void initialize()
-    {
-        // do nothing here.
     }
 }

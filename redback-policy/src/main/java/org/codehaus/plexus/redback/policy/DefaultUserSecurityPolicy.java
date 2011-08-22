@@ -87,6 +87,7 @@ public class DefaultUserSecurityPolicy
     /**
      * The List of {@link PasswordRule} objects.
      */
+    @Inject
     private List<PasswordRule> rules = new ArrayList<PasswordRule>();
 
     private int previousPasswordsCount;
@@ -112,7 +113,6 @@ public class DefaultUserSecurityPolicy
 
         configureEncoder();
 
-        this.rules = new ArrayList<PasswordRule>( applicationContext.getBeansOfType( PasswordRule.class ).values() );
         // In some configurations, rules can be unset.
         if ( rules == null )
         {
