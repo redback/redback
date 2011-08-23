@@ -566,6 +566,11 @@
         <version>3.2</version>
       </dependency>
       <dependency>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+        <version>1.5</version>
+      </dependency>
+      <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>jcl-over-slf4j</artifactId>
         <version>${slf4jVersion}</version>
@@ -653,6 +658,16 @@
         <artifactId>guava</artifactId>
         <version>r09</version>
       </dependency>
+      <!--
+      using apacheds client api rather than com.sun.jndi.ldap
+      issue is apacheds client doesn't getDirContext
+      so this need to rewrite a lot !
+      <dependency>
+        <groupId>org.apache.directory.shared</groupId>
+        <artifactId>shared-ldap-client-api</artifactId>
+        <version>1.0.0-M7</version>
+      </dependency>
+      -->
       <dependency>
         <groupId>org.codehaus.redback.components</groupId>
         <artifactId>spring-apacheds</artifactId>
@@ -693,7 +708,15 @@
       </dependency>      
     </dependencies>
   </dependencyManagement>
-
+  <dependencies>
+    <dependency>
+      <!-- for JRE requirement check annotation -->
+      <groupId>org.jvnet</groupId>
+      <artifactId>animal-sniffer-annotation</artifactId>
+      <version>1.0</version>
+      <optional>true</optional><!-- no need to have this at runtime -->
+    </dependency>
+  </dependencies>
 
   <build>
     <extensions>

@@ -16,10 +16,10 @@ package org.codehaus.plexus.redback.policy.encoders;
  * limitations under the License.
  */
 
+import org.apache.commons.codec.binary.Base64;
 import org.codehaus.plexus.redback.policy.PasswordEncoder;
 import org.codehaus.plexus.redback.policy.PasswordEncodingException;
 import org.codehaus.plexus.redback.users.Messages;
-import sun.misc.BASE64Encoder;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.UnsupportedEncodingException;
@@ -72,7 +72,7 @@ public class AbstractJAASPasswordEncoder
             md.update( precode.getBytes( "UTF-8" ) ); //$NON-NLS-1$
 
             byte raw[] = md.digest();
-            return ( new BASE64Encoder() ).encode( raw );
+            return (new Base64().encodeToString( raw ));
         }
         catch ( NoSuchAlgorithmException e )
         {

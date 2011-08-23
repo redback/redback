@@ -23,21 +23,20 @@ package org.codehaus.plexus.redback.common.ldap.connection;
  * SOFTWARE.
  */
 
-import java.util.Collections;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Properties;
+import com.sun.jndi.ldap.LdapCtxFactory;
+import org.jvnet.animal_sniffer.IgnoreJRERequirement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.sun.jndi.ldap.LdapCtxFactory;
+import java.util.Collections;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * The configuration for a connection will not change.
@@ -47,23 +46,37 @@ import com.sun.jndi.ldap.LdapCtxFactory;
  */
 public class LdapConnection
 {
-    private static LdapCtxFactory ctxFactory = new LdapCtxFactory();
-    
+
+    private static LdapCtxFactory ctxFactory;// = new LdapCtxFactory();
+
+
+    static
+    {
+        initCtxFactory();
+    }
+
+
     private Logger log = LoggerFactory.getLogger( getClass() );
-    
+
     private LdapConnectionConfiguration config;
 
     private DirContext context;
 
     private List<Rdn> baseDnRdns;
 
+    @IgnoreJRERequirement
+    private static void initCtxFactory()
+    {
+        ctxFactory = new LdapCtxFactory();
+    }
+
+    @IgnoreJRERequirement
     public LdapConnection( LdapConnectionConfiguration config, Rdn subRdn )
         throws LdapException
     {
         this.config = config;
-        
+
         LdapName baseDn = new LdapName( config.getBaseDn().getRdns() );
-       
 
         if ( subRdn != null )
         {
@@ -90,15 +103,17 @@ public class LdapConnection
     }
 
     /**
-     * This ldap connection will attempt to establish a connection using the configuration, 
-     * replacing the principal and the password 
-     * 
+     * This ldap connection will attempt to establish a connection using the configuration,
+     * replacing the principal and the password
+     *
      * @param config
      * @param bindDn
      * @param password
      * @throws LdapException
      */
-    public LdapConnection( LdapConnectionConfiguration config, String bindDn, String password ) throws LdapException
+    @IgnoreJRERequirement
+    public LdapConnection( LdapConnectionConfiguration config, String bindDn, String password )
+        throws LdapException
     {
         this.config = config;
 
@@ -106,7 +121,7 @@ public class LdapConnection
 
         e.put( Context.SECURITY_PRINCIPAL, bindDn );
         e.put( Context.SECURITY_CREDENTIALS, password );
-        
+
         try
         {
             context = (DirContext) ctxFactory.getInitialContext( e );
@@ -116,7 +131,7 @@ public class LdapConnection
             throw new LdapException( "Could not connect to the server.", ex );
         }
     }
-    
+
     // ----------------------------------------------------------------------
     // Connection Managment
     // ----------------------------------------------------------------------
