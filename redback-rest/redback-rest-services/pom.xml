@@ -149,6 +149,9 @@
           <excludes>
             <exclude>**/FakeCreateAdminService**.java</exclude>
           </excludes>
+          <systemPropertyVariables>
+            <plexus.home>${project.build.outputDirectory}</plexus.home>
+          </systemPropertyVariables>
         </configuration>
       </plugin>
       <plugin>

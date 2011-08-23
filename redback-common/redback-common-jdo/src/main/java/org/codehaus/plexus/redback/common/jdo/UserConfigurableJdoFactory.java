@@ -1,8 +1,13 @@
 package org.codehaus.plexus.redback.common.jdo;
 
+import org.apache.commons.lang.StringUtils;
+import org.codehaus.plexus.interpolation.InterpolationException;
+import org.codehaus.plexus.interpolation.PropertiesBasedValueSource;
+import org.codehaus.plexus.interpolation.StringSearchInterpolator;
 import org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
-import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -20,19 +25,36 @@ public class UserConfigurableJdoFactory
     extends DefaultConfigurableJdoFactory
 {
 
+    private Logger log = LoggerFactory.getLogger( getClass() );
+
     @Inject
     @Named( value = "userConfiguration" )
     private UserConfiguration config;
 
     private String getConfigString( String key, String currentValue, String defaultValue )
     {
+        String value = null;
         if ( StringUtils.isNotEmpty( currentValue ) )
         {
-            return config.getString( key, currentValue );
+            value = config.getString( key, currentValue );
         }
         else
         {
-            return config.getString( key, defaultValue );
+            value = config.getString( key, defaultValue );
+        }
+        // do some interpolation as we can have some ${plexus.home} etc...
+        StringSearchInterpolator interpolator = new StringSearchInterpolator();
+        interpolator.addValueSource( new PropertiesBasedValueSource( System.getProperties() ) );
+
+        try
+        {
+            return interpolator.interpolate( value );
+        }
+        catch ( InterpolationException e )
+        {
+            // ignore interpolation issue
+            log.warn( "skip issue during interpolation " + e.getMessage() );
+            return value;
         }
     }
 
@@ -43,6 +65,7 @@ public class UserConfigurableJdoFactory
             getConfigString( "jdbc.driver.name", super.getDriverName(), "org.apache.derby.jdbc.EmbeddedDriver" );
         String jdbcUrl =
             getConfigString( "jdbc.url", super.getUrl(), "jdbc:derby:${plexus.home}/database;create=true" );
+
         String jdbcUsername = getConfigString( "jdbc.username", super.getUserName(), "sa" );
         String jdbcPassword = getConfigString( "jdbc.password", super.getPassword(), "" );
 
