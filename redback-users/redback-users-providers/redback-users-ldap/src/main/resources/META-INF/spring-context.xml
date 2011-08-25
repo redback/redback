@@ -30,5 +30,31 @@
   <context:annotation-config />
   <context:component-scan 
     base-package="org.codehaus.plexus.redback.users.ldap"/>
- 
+
+  <!-- Cache for LDAP users. Data is refreshed every 10 mins. -->
+  <bean name="cache#ldapUser" class="org.codehaus.plexus.cache.ehcache.EhcacheCache">
+    <property name="diskExpiryThreadIntervalSeconds" value="600"/>
+    <property name="diskPersistent" value="false"/>
+    <property name="eternal" value="false"/>
+    <property name="maxElementsInMemory"  value="1000"/>
+    <property name="memoryEvictionPolicy" value="LRU"/>
+    <property name="name" value="ldapUsersCache"/>
+    <property name="overflowToDisk" value="false"/>
+    <property name="timeToIdleSeconds" value="300"/>
+    <property name="timeToLiveSeconds" value="600"/>
+  </bean>
+
+  <!-- Cache for LDAP connections. Data is refreshed every 5 mins. -->
+  <bean name="cache#ldapConnection" class="org.codehaus.plexus.cache.ehcache.EhcacheCache">
+    <property name="diskExpiryThreadIntervalSeconds" value="600"/>
+    <property name="diskPersistent" value="false"/>
+    <property name="eternal" value="false"/>
+    <property name="maxElementsInMemory"  value="1000"/>
+    <property name="memoryEvictionPolicy" value="LRU"/>
+    <property name="name" value="ldapUsersCache"/>
+    <property name="overflowToDisk" value="false"/>
+    <property name="timeToIdleSeconds" value="150"/>
+    <property name="timeToLiveSeconds" value="300"/>
+  </bean>
+
 </beans>

@@ -27,6 +27,7 @@ import org.codehaus.plexus.redback.common.ldap.connection.LdapConnection;
 import org.codehaus.plexus.redback.common.ldap.connection.LdapConnectionFactory;
 import org.codehaus.plexus.redback.common.ldap.connection.LdapException;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
+import org.codehaus.plexus.redback.users.ldap.service.LdapCacheService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -64,6 +65,9 @@ public class LdapBindAuthenticator
     @Named( value = "userConfiguration" )
     private UserConfiguration config;
 
+    @Inject
+    private LdapCacheService ldapCacheService;
+
     public String getId()
     {
         return "LdapBindAuthenticator";
@@ -81,6 +85,15 @@ public class LdapBindAuthenticator
             return new AuthenticationResult( false, source.getPrincipal(), null );
         }
 
+        // REDBACK-289/MRM-1488
+        // check if there is already an existing LDAP connection for the user in the cache
+        if( ldapCacheService.getLdapConnection( source.getPrincipal() ) != null )
+        {
+            log.info( "LDAP connection for user {} found in cache.", source.getPrincipal() );
+
+            return new AuthenticationResult( true, source.getPrincipal(), null );
+        }
+
         SearchControls ctls = new SearchControls();
 
         ctls.setCountLimit( 1 );
@@ -93,7 +106,7 @@ public class LdapBindAuthenticator
             + source.getPrincipal() + "))";
 
         log.info( "Searching for users with filter: \'{}\'" + " from base dn: {}", filter, mapper.getUserBaseDn() );
-
+                                                              
         LdapConnection ldapConnection = getLdapConnection();
         LdapConnection authLdapConnection = null;
         NamingEnumeration<SearchResult> results = null;
@@ -115,6 +128,12 @@ public class LdapBindAuthenticator
 
                 authLdapConnection = connectionFactory.getConnection( userDn, source.getPassword() );
 
+                // REDBACK-289/MRM-1488
+                // add ldap connection for user to the cache
+                log.info( "Adding ldap connection for user {} to cache..", source.getPrincipal() );
+
+                ldapCacheService.addLdapConnection( source.getPrincipal(), authLdapConnection );
+                                            
                 return new AuthenticationResult( true, source.getPrincipal(), null );
             }
             else

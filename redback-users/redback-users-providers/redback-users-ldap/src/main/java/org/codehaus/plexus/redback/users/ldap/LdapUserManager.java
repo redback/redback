@@ -20,11 +20,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.naming.directory.DirContext;
 
+import org.codehaus.plexus.redback.common.ldap.LdapUser;
 import org.codehaus.plexus.redback.common.ldap.MappingException;
 import org.codehaus.plexus.redback.common.ldap.UserMapper;
 import org.codehaus.plexus.redback.common.ldap.connection.LdapConnection;
@@ -36,6 +36,7 @@ import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.users.UserQuery;
 import org.codehaus.plexus.redback.users.ldap.ctl.LdapController;
 import org.codehaus.plexus.redback.users.ldap.ctl.LdapControllerException;
+import org.codehaus.plexus.redback.users.ldap.service.LdapCacheService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -56,6 +57,9 @@ public class LdapUserManager
     @Inject
     @Named(value = "userMapper#ldap")
     private UserMapper mapper;
+
+    @Inject
+    private LdapCacheService ldapCacheService;
 
     private User guestUser;
 
@@ -121,6 +125,11 @@ public class LdapUserManager
     public void deleteUser( Object principal )
         throws UserNotFoundException
     {
+        if( principal != null )
+        {
+            clearFromCache( principal.toString() );
+        }
+
         LdapConnection ldapConnection = getLdapConnection();
         try
         {
@@ -140,6 +149,11 @@ public class LdapUserManager
     public void deleteUser( String username )
         throws UserNotFoundException
     {
+        if( username != null )
+        {
+            clearFromCache( username );
+        }
+        
         LdapConnection ldapConnection = getLdapConnection();
         try
         {
@@ -174,6 +188,15 @@ public class LdapUserManager
             return getGuestUser();
         }
 
+        // REDBACK-289/MRM-1488
+        // look for the user in the cache first
+        LdapUser ldapUser = ldapCacheService.getUser( username );
+        if( ldapUser != null )
+        {
+            log.debug( "User {} found in cache.", username );
+            return ldapUser;
+        }
+
         LdapConnection ldapConnection = getLdapConnection();
         try
         {
@@ -183,6 +206,12 @@ public class LdapUserManager
             {
                 throw new UserNotFoundException( "user with name " + username + " not found " );
             }
+
+            // REDBACK-289/MRM-1488
+            log.debug( "Adding user {} to cache..", username );
+
+            ldapCacheService.addUser( (LdapUser) user );
+
             return user;
         }
         catch ( LdapControllerException e )
@@ -224,11 +253,28 @@ public class LdapUserManager
             return getGuestUser();
         }
 
+        // REDBACK-289/MRM-1488
+        // look for the user in the cache first
+        LdapUser ldapUser = ldapCacheService.getUser( principal.toString() );
+        if( ldapUser != null )
+        {
+            log.debug( "User {} found in cache.", principal );
+            return ldapUser;
+        }
+
         LdapConnection ldapConnection = getLdapConnection();
         try
         {
             DirContext context = ldapConnection.getDirContext();
-            return controller.getUser( principal, context );
+
+            User user = controller.getUser( principal, context );
+
+            // REDBACK-289/MRM-1488
+            log.debug( "Adding user {} to cache..", principal );
+            
+            ldapCacheService.addUser( (LdapUser) user );
+            
+            return user;
         }
         catch ( LdapControllerException e )
         {
@@ -361,6 +407,11 @@ public class LdapUserManager
     public User updateUser( User user, boolean passwordChangeRequired )
         throws UserNotFoundException
     {
+        if( user != null )
+        {
+            clearFromCache( user.getUsername() );
+        }
+
         LdapConnection ldapConnection = getLdapConnection();
         try
         {
@@ -384,6 +435,20 @@ public class LdapUserManager
 
     public boolean userExists( Object principal )
     {
+        if( principal == null )
+        {
+            return false;
+        }
+
+        // REDBACK-289/MRM-1488
+        // look for the user in the cache first
+        LdapUser ldapUser = ldapCacheService.getUser( principal.toString() );
+        if( ldapUser != null )
+        {
+            log.debug( "User {} found in cache.", principal );
+            return true;
+        }
+
         LdapConnection ldapConnection = getLdapConnection();
         try
         {
@@ -420,6 +485,16 @@ public class LdapUserManager
         {
             ldapConnection.close();
         }
+    }
+
+    // REDBACK-289/MRM-1488
+    private void clearFromCache( String username )
+    {
+        log.debug( "Removing user {} from cache..", username );
+        ldapCacheService.removeUser( username );
+
+        log.debug( "Removing ldap connections for user {} from cache..", username );
+        ldapCacheService.removeLdapConnection( username );
     }
     
 }

@@ -24,6 +24,7 @@ import org.codehaus.plexus.redback.policy.encoders.SHA1PasswordEncoder;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.codehaus.plexus.redback.users.ldap.service.LdapCacheService;
 import org.codehaus.redback.components.apacheds.ApacheDs;
 import org.junit.After;
 import org.junit.Before;
@@ -80,6 +81,9 @@ public class LdapUserManagerTest
     @Named(value = "ldapConnectionFactory#configurable")
     private LdapConnectionFactory connectionFactory;
 
+    @Inject
+    private LdapCacheService ldapCacheService;
+
     public void testFoo()
         throws Exception
     {
@@ -111,6 +115,8 @@ public class LdapUserManagerTest
     public void tearDown()
         throws Exception
     {
+        // clear cache
+        ldapCacheService.removeAllUsers();
 
         InitialDirContext context = apacheDs.getAdminContext();
 
@@ -184,7 +190,11 @@ public class LdapUserManagerTest
     {
         assertNotNull( userManager );
 
+        //assertNull( ldapCacheService.getUser( "jesse" ) );
+
         assertTrue( userManager.userExists( "jesse" ) );
+
+        //assertNotNull( ldapCacheService.getUser( "jesse" ) );
 
         List<User> users = userManager.getUsers();
 

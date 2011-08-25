@@ -70,6 +70,10 @@ public class LdapConnection
         ctxFactory = new LdapCtxFactory();
     }
 
+    public LdapConnection()
+    {
+    }
+
     @IgnoreJRERequirement
     public LdapConnection( LdapConnectionConfiguration config, Rdn subRdn )
         throws LdapException

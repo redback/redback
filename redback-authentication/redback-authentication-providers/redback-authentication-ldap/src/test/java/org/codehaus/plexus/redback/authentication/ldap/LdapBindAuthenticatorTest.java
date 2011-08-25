@@ -17,10 +17,14 @@ package org.codehaus.plexus.redback.authentication.ldap;
  */
 
 import junit.framework.TestCase;
+import org.codehaus.plexus.cache.builder.CacheBuilder;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
+import org.codehaus.plexus.redback.common.ldap.LdapUser;
+import org.codehaus.plexus.redback.common.ldap.connection.LdapConnection;
 import org.codehaus.plexus.redback.policy.PasswordEncoder;
 import org.codehaus.plexus.redback.policy.encoders.SHA1PasswordEncoder;
+import org.codehaus.plexus.redback.users.ldap.service.LdapCacheService;
 import org.codehaus.redback.components.apacheds.ApacheDs;
 import org.junit.After;
 import org.junit.Before;
@@ -38,6 +42,8 @@ import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
+import java.util.Calendar;
+import java.util.Date;
 
 @RunWith( SpringJUnit4ClassRunner.class )
 @ContextConfiguration( locations = "classpath*:/META-INF/spring-context.xml" )
@@ -57,6 +63,9 @@ public class LdapBindAuthenticatorTest
     private String suffix;
 
     private PasswordEncoder passwordEncoder;
+
+    @Inject
+    private LdapCacheService ldapCacheService;
 
     @Before
     public void setUp()
@@ -81,6 +90,8 @@ public class LdapBindAuthenticatorTest
     public void tearDown()
         throws Exception
     {
+        // clear the cache
+        ldapCacheService.removeAllLdapConnections();
 
         InitialDirContext context = apacheDs.getAdminContext();
 
@@ -125,6 +136,38 @@ public class LdapBindAuthenticatorTest
         authDs.setPassword( passwordEncoder.encodePassword( "foo" ) );
         AuthenticationResult result = authnr.authenticate( authDs );
         assertTrue( result.isAuthenticated() );
+    }
+
+    // REDBACK-289/MRM-1488
+    @Test
+    public void testAuthenticationFromCache()
+        throws Exception
+    {
+        PasswordBasedAuthenticationDataSource authDs = new PasswordBasedAuthenticationDataSource();
+        authDs.setPrincipal( "jesse" );
+        authDs.setPassword( passwordEncoder.encodePassword( "foo" ) );
+
+        // user shouldn't be in the cache yet
+        assertNull( ldapCacheService.getLdapConnection( "jesse" ) );
+
+        long startTime = Calendar.getInstance().getTimeInMillis();
+        AuthenticationResult result = authnr.authenticate( authDs );
+        long endTime = Calendar.getInstance().getTimeInMillis();
+
+        assertTrue( result.isAuthenticated() );
+
+        long firstAuth = endTime - startTime;
+
+        // user should be in the cache now
+        assertNotNull( ldapCacheService.getLdapConnection( "jesse" ) );
+
+        startTime = Calendar.getInstance().getTimeInMillis();
+        result = authnr.authenticate( authDs );
+        endTime = Calendar.getInstance().getTimeInMillis();
+
+        long secondAuth = endTime - startTime;
+
+        assertTrue( "Second authn should be quicker!", secondAuth < firstAuth );        
     }
 
     private void makeUsers()
