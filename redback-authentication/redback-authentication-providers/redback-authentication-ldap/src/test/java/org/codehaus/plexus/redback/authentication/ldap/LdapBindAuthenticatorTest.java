@@ -91,7 +91,7 @@ public class LdapBindAuthenticatorTest
         throws Exception
     {
         // clear the cache
-        ldapCacheService.removeAllLdapConnections();
+        ldapCacheService.removeAllLdapUserDn();
 
         InitialDirContext context = apacheDs.getAdminContext();
 
@@ -148,7 +148,7 @@ public class LdapBindAuthenticatorTest
         authDs.setPassword( passwordEncoder.encodePassword( "foo" ) );
 
         // user shouldn't be in the cache yet
-        assertNull( ldapCacheService.getLdapConnection( "jesse" ) );
+        assertNull( ldapCacheService.getLdapUserDn( "jesse" ) );
 
         long startTime = Calendar.getInstance().getTimeInMillis();
         AuthenticationResult result = authnr.authenticate( authDs );
@@ -159,7 +159,7 @@ public class LdapBindAuthenticatorTest
         long firstAuth = endTime - startTime;
 
         // user should be in the cache now
-        assertNotNull( ldapCacheService.getLdapConnection( "jesse" ) );
+        assertNotNull( ldapCacheService.getLdapUserDn( "jesse" ) );
 
         startTime = Calendar.getInstance().getTimeInMillis();
         result = authnr.authenticate( authDs );

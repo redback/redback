@@ -18,7 +18,6 @@ package org.codehaus.plexus.redback.users.ldap.service;
 
 import junit.framework.TestCase;
 import org.codehaus.plexus.redback.common.ldap.LdapUser;
-import org.codehaus.plexus.redback.common.ldap.connection.LdapConnection;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,39 +45,35 @@ public class LdapCacheServiceTest
         throws Exception
     {
         ldapCacheService.removeAllUsers();
-        ldapCacheService.removeAllLdapConnections();
+        ldapCacheService.removeAllLdapUserDn();
 
         super.tearDown();
     }
 
     @Test
-    public void testLdapConnectionCache()
+    public void testLdapUserDnCache()
         throws Exception
     {
-        LdapConnection ldapConnection = new LdapConnection();
+        ldapCacheService.addLdapUserDn( USERNAME, "userDn" );
 
-        ldapCacheService.addLdapConnection( USERNAME, ldapConnection );
+        assertNotNull( ldapCacheService.getLdapUserDn( USERNAME ) );
 
-        assertNotNull( ldapCacheService.getLdapConnection( USERNAME ) );
+        ldapCacheService.removeLdapUserDn( USERNAME );
 
-        ldapCacheService.removeLdapConnection( USERNAME );
-
-        assertNull( ldapCacheService.getLdapConnection( USERNAME ) );
+        assertNull( ldapCacheService.getLdapUserDn( USERNAME ) );
     }
 
     @Test
-    public void testClearLdapConnectionCache()
+    public void testClearLdapUserDnCache()
         throws Exception
     {
-        LdapConnection ldapConnection = new LdapConnection();
+        ldapCacheService.addLdapUserDn( USERNAME, "userDn" );
 
-        ldapCacheService.addLdapConnection( USERNAME, ldapConnection );
+        assertNotNull( ldapCacheService.getLdapUserDn( USERNAME ) );
 
-        assertNotNull( ldapCacheService.getLdapConnection( USERNAME ) );
+        ldapCacheService.removeLdapUserDn( USERNAME );
 
-        ldapCacheService.removeAllLdapConnections();
-
-        assertNull( ldapCacheService.getLdapConnection( USERNAME ) );
+        assertNull( ldapCacheService.getLdapUserDn( USERNAME ) );
     }
 
     @Test

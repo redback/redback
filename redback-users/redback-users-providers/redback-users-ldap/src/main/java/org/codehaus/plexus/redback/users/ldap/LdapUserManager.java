@@ -493,8 +493,8 @@ public class LdapUserManager
         log.debug( "Removing user {} from cache..", username );
         ldapCacheService.removeUser( username );
 
-        log.debug( "Removing ldap connections for user {} from cache..", username );
-        ldapCacheService.removeLdapConnection( username );
+        log.debug( "Removing userDn for user {} from cache..", username );
+        ldapCacheService.removeLdapUserDn( username );
     }
     
 }

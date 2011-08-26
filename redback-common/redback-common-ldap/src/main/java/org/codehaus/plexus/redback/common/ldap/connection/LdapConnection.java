@@ -70,10 +70,6 @@ public class LdapConnection
         ctxFactory = new LdapCtxFactory();
     }
 
-    public LdapConnection()
-    {
-    }
-
     @IgnoreJRERequirement
     public LdapConnection( LdapConnectionConfiguration config, Rdn subRdn )
         throws LdapException
@@ -150,6 +146,13 @@ public class LdapConnection
         config.check();
 
         env.put( Context.INITIAL_CONTEXT_FACTORY, config.getContextFactory() );
+
+        // REDBACK-289/MRM-1488
+        // enable connection pooling when using Sun's LDAP context factory
+        if( config.getContextFactory().equals( "com.sun.jndi.ldap.LdapCtxFactory" ) )
+        {
+            env.put( "com.sun.jndi.ldap.connect.pool", "true");
+        }
 
         if ( config.getHostname() != null )
         {

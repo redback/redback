@@ -18,7 +18,6 @@ package org.codehaus.plexus.redback.users.ldap.service;
 
 import org.codehaus.plexus.cache.builder.CacheBuilder;
 import org.codehaus.plexus.redback.common.ldap.LdapUser;
-import org.codehaus.plexus.redback.common.ldap.connection.LdapConnection;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -76,43 +75,44 @@ public class DefaultLdapCacheService
         cacheBuilder.getCache( "ldapUser" ).put( user.getUsername(), user );
     }
 
-    // LDAP Connections
+    // LDAP UserDn
 
     /**
-     * @see LdapCacheService#getLdapConnection(String)
+     * @see LdapCacheService#getLdapUserDn(String)
      */
-    public LdapConnection getLdapConnection( String username )
+    public String getLdapUserDn( String username )
     {
-        return (LdapConnection) cacheBuilder.getCache( "ldapConnection" ).get( username );
+        return (String) cacheBuilder.getCache( "ldapUserDn" ).get( username );
     }
 
     /**
-     * @see LdapCacheService#removeLdapConnection(String)
+     * @see LdapCacheService#removeLdapUserDn(String)
      */
-    public boolean removeLdapConnection( String username )
+    public boolean removeLdapUserDn( String username )
     {
-        return ( cacheBuilder.getCache( "ldapConnection" ).remove( username ) == null ? false : true );
+        return ( cacheBuilder.getCache( "ldapUserDn" ).remove( username ) == null ? false : true );
     }
 
     /**
-     * @see LdapCacheService#removeAllLdapConnections()
+     * @see org.codehaus.plexus.redback.users.ldap.service.LdapCacheService#removeAllLdapUserDn()
      */
-    public void removeAllLdapConnections()
+    public void removeAllLdapUserDn()
     {
-        cacheBuilder.getCache( "ldapConnection" ).clear();
+        cacheBuilder.getCache( "ldapUserDn" ).clear();
     }
 
     /**
-     * @see LdapCacheService#addLdapConnection(String, org.codehaus.plexus.redback.common.ldap.connection.LdapConnection)  
+     * @see LdapCacheService#addLdapUserDn(String, String) 
      */
-    public void addLdapConnection( String username, LdapConnection ldapConnection )
+    public void addLdapUserDn( String username, String userDn )
     {
-        LdapUser existingUser = (LdapUser) cacheBuilder.getCache( "ldapConnection" ).get( username );
-        if( existingUser != null )
+        String existingUserDn = (String) cacheBuilder.getCache( "ldapUserDn" ).get( username );
+        if( existingUserDn != null )
         {
-            removeLdapConnection( username );
+            removeUser( username );
         }
 
-        cacheBuilder.getCache( "ldapConnection" ).put( username, ldapConnection );
+        cacheBuilder.getCache( "ldapUserDn" ).put( username, userDn );    
     }
+    
 }

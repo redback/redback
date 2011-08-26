@@ -85,15 +85,6 @@ public class LdapBindAuthenticator
             return new AuthenticationResult( false, source.getPrincipal(), null );
         }
 
-        // REDBACK-289/MRM-1488
-        // check if there is already an existing LDAP connection for the user in the cache
-        if( ldapCacheService.getLdapConnection( source.getPrincipal() ) != null )
-        {
-            log.debug( "LDAP connection for user {} found in cache.", source.getPrincipal() );
-
-            return new AuthenticationResult( true, source.getPrincipal(), null );
-        }
-
         SearchControls ctls = new SearchControls();
 
         ctls.setCountLimit( 1 );
@@ -112,34 +103,41 @@ public class LdapBindAuthenticator
         NamingEnumeration<SearchResult> results = null;
         try
         {
-            DirContext context = ldapConnection.getDirContext();
-
-            results = context.search( mapper.getUserBaseDn(), filter, ctls );
-
-            log.info( "Found user?: {}", results.hasMoreElements() );
-
-            if ( results.hasMoreElements() )
+            // check the cache for user's userDn in the ldap server
+            String userDn = ldapCacheService.getLdapUserDn( source.getPrincipal() );
+            
+            if( userDn == null )
             {
-                SearchResult result = results.nextElement();
+                log.debug( "userDn for user {} not found in cache. Retrieving from ldap server..", source.getPrincipal() );
 
-                String userDn = result.getNameInNamespace();
+                DirContext context = ldapConnection.getDirContext();
 
-                log.info( "Attempting Authenication: + {}", userDn );
+                results = context.search( mapper.getUserBaseDn(), filter, ctls );
 
-                authLdapConnection = connectionFactory.getConnection( userDn, source.getPassword() );
+                log.info( "Found user?: {}", results.hasMoreElements() );
 
-                // REDBACK-289/MRM-1488
-                // add ldap connection for user to the cache
-                log.info( "Adding ldap connection for user {} to cache..", source.getPrincipal() );
+                if ( results.hasMoreElements() )
+                {
+                    SearchResult result = results.nextElement();
 
-                ldapCacheService.addLdapConnection( source.getPrincipal(), authLdapConnection );
-                                            
-                return new AuthenticationResult( true, source.getPrincipal(), null );
+                    userDn = result.getNameInNamespace();
+
+                    log.debug( "Adding userDn {} for user {} to the cache..", userDn, source.getPrincipal() );
+
+                    // REDBACK-289/MRM-1488 cache the ldap user's userDn to lessen calls to ldap server
+                    ldapCacheService.addLdapUserDn( source.getPrincipal(), userDn );
+                }
+                else
+                {
+                    return new AuthenticationResult( false, source.getPrincipal(), null );
+                }
             }
-            else
-            {
-                return new AuthenticationResult( false, source.getPrincipal(), null );
-            }
+
+            log.info( "Attempting Authenication: + {}", userDn );
+
+            authLdapConnection = connectionFactory.getConnection( userDn, source.getPassword() );
+
+            return new AuthenticationResult( true, source.getPrincipal(), null );
         }
         catch ( LdapException e )
         {

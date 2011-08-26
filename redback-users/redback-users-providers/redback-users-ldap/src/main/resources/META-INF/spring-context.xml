@@ -31,30 +31,31 @@
   <context:component-scan 
     base-package="org.codehaus.plexus.redback.users.ldap"/>
 
-  <!-- Cache for LDAP users. Data is refreshed every 2 mins. -->
+  <!-- REDBACK-289/MRM-1488 -->
+  <!-- Cache for LDAP users. Data is refreshed every 3 mins. -->
   <bean name="cache#ldapUser" class="org.codehaus.plexus.cache.ehcache.EhcacheCache">
-    <property name="diskExpiryThreadIntervalSeconds" value="120"/>
+    <property name="diskExpiryThreadIntervalSeconds" value="180"/>
     <property name="diskPersistent" value="false"/>
     <property name="eternal" value="false"/>
     <property name="maxElementsInMemory"  value="1000"/>
     <property name="memoryEvictionPolicy" value="LRU"/>
     <property name="name" value="ldapUsersCache"/>
     <property name="overflowToDisk" value="false"/>
-    <property name="timeToIdleSeconds" value="60"/>
-    <property name="timeToLiveSeconds" value="120"/>
+    <property name="timeToIdleSeconds" value="90"/>
+    <property name="timeToLiveSeconds" value="180"/>
   </bean>
 
-  <!-- Cache for LDAP connections. Data is refreshed every 15secs. -->
-  <bean name="cache#ldapConnection" class="org.codehaus.plexus.cache.ehcache.EhcacheCache">
-    <property name="diskExpiryThreadIntervalSeconds" value="15"/>
+  <!-- Cache for users' LDAP userDn. Data is refreshed every 3 mins. -->
+  <bean name="cache#ldapUserDn" class="org.codehaus.plexus.cache.ehcache.EhcacheCache">
+    <property name="diskExpiryThreadIntervalSeconds" value="180"/>
     <property name="diskPersistent" value="false"/>
     <property name="eternal" value="false"/>
     <property name="maxElementsInMemory"  value="1000"/>
     <property name="memoryEvictionPolicy" value="LRU"/>
-    <property name="name" value="ldapConnectionsCache"/>
+    <property name="name" value="ldapUserDnCache"/>
     <property name="overflowToDisk" value="false"/>
-    <property name="timeToIdleSeconds" value="10"/>
-    <property name="timeToLiveSeconds" value="15"/>
+    <property name="timeToIdleSeconds" value="90"/>
+    <property name="timeToLiveSeconds" value="180"/>
   </bean>
 
 </beans>

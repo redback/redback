@@ -17,7 +17,6 @@ package org.codehaus.plexus.redback.users.ldap.service;
  */
 
 import org.codehaus.plexus.redback.common.ldap.LdapUser;
-import org.codehaus.plexus.redback.common.ldap.connection.LdapConnection;
 
 /**
  * LdapCacheService
@@ -61,30 +60,31 @@ public interface LdapCacheService
     void addUser( LdapUser user );
 
     /**
-     * Retrieve LDAP connection for the given user from the cache.
+     * Retrieve the cached LDAP userDn for the given user.
      *
      * @param username
      * @return
      */
-    LdapConnection getLdapConnection( String username );
+    String getLdapUserDn( String username );
 
     /**
-     * Remove the LDAP connection for the given user from the cache.
+     * Remove the cached LDAP userDn for the given user.
      *
      * @param username
      * @return
      */
-    boolean removeLdapConnection( String username );
+    boolean removeLdapUserDn( String username );
 
     /**
-     * Flushes all LDAP connections in the cache.
+     * Remove all cached LDAP userDn
      */
-    void removeAllLdapConnections();
+    void removeAllLdapUserDn();
 
     /**
-     * Adds the LDAP connection to the LDAP connections cache.
+     * All the LDAP userDn for the given user to the cache
      *
-     * @param ldapConnection
+     * @param username
+     * @param userDn
      */
-    void addLdapConnection( String username, LdapConnection ldapConnection );
+    void addLdapUserDn( String username, String userDn );
 }
