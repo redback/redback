@@ -152,6 +152,8 @@ public class LdapConnection
         if( config.getContextFactory().equals( "com.sun.jndi.ldap.LdapCtxFactory" ) )
         {
             env.put( "com.sun.jndi.ldap.connect.pool", "true");
+
+            env.put( "com.sun.jndi.ldap.connect.pool.timeout", "3600" );
         }
 
         if ( config.getHostname() != null )
