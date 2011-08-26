@@ -364,6 +364,7 @@
           </exclusion>
         </exclusions>
       </dependency>
+      
       <!-- Plexus -->
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
@@ -569,7 +570,7 @@
         <groupId>org.springframework</groupId>
         <artifactId>spring-context-support</artifactId>
         <version>${springVersion}</version>
-      </dependency>   
+      </dependency>
       <dependency>
         <groupId>javax.annotation</groupId>
         <artifactId>jsr250-api</artifactId>

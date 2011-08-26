@@ -132,6 +132,15 @@ public class LdapConnection
 
         env.put( Context.INITIAL_CONTEXT_FACTORY, config.getContextFactory() );
 
+        // REDBACK-289/MRM-1488
+        // enable connection pooling when using Sun's LDAP context factory
+        if( config.getContextFactory().equals( "com.sun.jndi.ldap.LdapCtxFactory" ) )
+        {
+            env.put( "com.sun.jndi.ldap.connect.pool", "true");
+
+            env.put( "com.sun.jndi.ldap.connect.pool.timeout", "3600" );
+        }
+
         if ( config.getHostname() != null )
         {
             String protocol = config.isSsl() ? "ldaps" : "ldap";

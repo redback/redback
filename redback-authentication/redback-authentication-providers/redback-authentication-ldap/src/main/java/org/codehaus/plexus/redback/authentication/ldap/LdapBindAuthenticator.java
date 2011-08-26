@@ -34,6 +34,7 @@ import org.codehaus.plexus.redback.common.ldap.connection.LdapConnection;
 import org.codehaus.plexus.redback.common.ldap.connection.LdapConnectionFactory;
 import org.codehaus.plexus.redback.common.ldap.connection.LdapException;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
+import org.codehaus.plexus.redback.users.ldap.service.LdapCacheService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -59,6 +60,9 @@ public class LdapBindAuthenticator
 
     @Resource(name="userConfiguration")
     private UserConfiguration config;
+
+    @Resource
+    private LdapCacheService ldapCacheService;
 
     public String getId()
     {
@@ -90,34 +94,47 @@ public class LdapBindAuthenticator
         log.info(
                           "Searching for users with filter: \'" + filter + "\'" + " from base dn: "
                               + mapper.getUserBaseDn() );
-
+                                                              
         LdapConnection ldapConnection = getLdapConnection();
         LdapConnection authLdapConnection = null;
         NamingEnumeration<SearchResult> results = null;
         try
         {
-            DirContext context = ldapConnection.getDirContext();
-
-            results = context.search( mapper.getUserBaseDn(), filter, ctls );
-
-            log.info( "Found user?: " + results.hasMoreElements() );
-
-            if ( results.hasMoreElements() )
+            // check the cache for user's userDn in the ldap server
+            String userDn = ldapCacheService.getLdapUserDn( source.getPrincipal() );
+            
+            if( userDn == null )
             {
-                SearchResult result = results.nextElement();
+                log.debug( "userDn for user {} not found in cache. Retrieving from ldap server..", source.getPrincipal() );
 
-                String userDn = result.getNameInNamespace();
+                DirContext context = ldapConnection.getDirContext();
 
-                log.info( "Attempting Authenication: + " + userDn );
+                results = context.search( mapper.getUserBaseDn(), filter, ctls );
 
-                authLdapConnection = connectionFactory.getConnection( userDn, source.getPassword() );
+                log.info( "Found user?: {}", results.hasMoreElements() );
 
-                return new AuthenticationResult( true, source.getPrincipal(), null );
+                if ( results.hasMoreElements() )
+                {
+                    SearchResult result = results.nextElement();
+
+                    userDn = result.getNameInNamespace();
+
+                    log.debug( "Adding userDn {} for user {} to the cache..", userDn, source.getPrincipal() );
+
+                    // REDBACK-289/MRM-1488 cache the ldap user's userDn to lessen calls to ldap server
+                    ldapCacheService.addLdapUserDn( source.getPrincipal(), userDn );
+                }
+                else
+                {
+                    return new AuthenticationResult( false, source.getPrincipal(), null );
+                }
             }
-            else
-            {
-                return new AuthenticationResult( false, source.getPrincipal(), null );
-            }
+
+            log.info( "Attempting Authenication: + {}", userDn );
+
+            authLdapConnection = connectionFactory.getConnection( userDn, source.getPassword() );
+
+            return new AuthenticationResult( true, source.getPrincipal(), null );
         }
         catch ( LdapException e )
         {

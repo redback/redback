@@ -27,7 +27,15 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context-support</artifactId>
-    </dependency>   
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus.cache</groupId>
+      <artifactId>plexus-cache-api</artifactId>
+    </dependency>
+    <dependency>
+       <groupId>org.codehaus.plexus.cache</groupId>
+       <artifactId>plexus-cache-ehcache</artifactId>
+    </dependency>
     <dependency>
       <groupId>javax.annotation</groupId>
       <artifactId>jsr250-api</artifactId>

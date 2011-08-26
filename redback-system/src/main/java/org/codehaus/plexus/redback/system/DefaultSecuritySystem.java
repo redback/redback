@@ -99,12 +99,11 @@ public class DefaultSecuritySystem
         if ( result.isAuthenticated() )
         {
             log.debug( "User '" + result.getPrincipal() + "' authenticated." );
-            if ( userManager.userExists( result.getPrincipal() ) )
+            User user = userManager.findUser( result.getPrincipal() );
+            if ( user != null )
             {
                 log.debug( "User '" + result.getPrincipal() + "' exists." );
-                User user = userManager.findUser( result.getPrincipal() );
                 log.debug( "User: " + user );
-
                 return new DefaultSecuritySession( result, user );
             }
             else

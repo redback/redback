@@ -16,7 +16,16 @@ package org.codehaus.plexus.redback.users.ldap;
  * limitations under the License.
  */
 
-import java.util.List;
+import org.codehaus.plexus.redback.common.ldap.connection.LdapConnection;
+import org.codehaus.plexus.redback.common.ldap.connection.LdapConnectionFactory;
+import org.codehaus.plexus.redback.policy.PasswordEncoder;
+import org.codehaus.plexus.redback.policy.encoders.SHA1PasswordEncoder;
+import org.codehaus.plexus.redback.users.User;
+import org.codehaus.plexus.redback.users.UserManager;
+import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.codehaus.plexus.redback.users.ldap.service.LdapCacheService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
@@ -30,16 +39,9 @@ import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
 import org.codehaus.plexus.apacheds.ApacheDs;
-import org.codehaus.plexus.redback.common.ldap.connection.LdapConnection;
-import org.codehaus.plexus.redback.common.ldap.connection.LdapConnectionFactory;
-import org.codehaus.plexus.redback.policy.PasswordEncoder;
-import org.codehaus.plexus.redback.policy.encoders.SHA1PasswordEncoder;
-import org.codehaus.plexus.redback.users.User;
-import org.codehaus.plexus.redback.users.UserManager;
-import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.spring.PlexusInSpringTestCase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 
 /**
@@ -65,6 +67,8 @@ public class LdapUserManagerTest
 
     private LdapConnectionFactory connectionFactory;
 
+    private LdapCacheService ldapCacheService;
+
     public void testFoo()
         throws Exception
     {
@@ -75,6 +79,8 @@ public class LdapUserManagerTest
         throws Exception
     {
         super.setUp();
+
+        ldapCacheService = (LdapCacheService) lookup( LdapCacheService.class.getName() );
 
         passwordEncoder = new SHA1PasswordEncoder();
 
@@ -99,6 +105,8 @@ public class LdapUserManagerTest
     protected void tearDown()
         throws Exception
     {
+        // clear cache
+        ldapCacheService.removeAllUsers();
 
         InitialDirContext context = apacheDs.getAdminContext();
 
@@ -169,7 +177,11 @@ public class LdapUserManagerTest
     {
         assertNotNull( userManager );
 
+        //assertNull( ldapCacheService.getUser( "jesse" ) );
+
         assertTrue( userManager.userExists( "jesse" ) );
+
+        //assertNotNull( ldapCacheService.getUser( "jesse" ) );
 
         List<User> users = userManager.getUsers();
 
