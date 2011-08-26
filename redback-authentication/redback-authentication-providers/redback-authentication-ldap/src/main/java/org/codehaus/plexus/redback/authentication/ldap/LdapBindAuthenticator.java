@@ -89,7 +89,7 @@ public class LdapBindAuthenticator
         // check if there is already an existing LDAP connection for the user in the cache
         if( ldapCacheService.getLdapConnection( source.getPrincipal() ) != null )
         {
-            log.info( "LDAP connection for user {} found in cache.", source.getPrincipal() );
+            log.debug( "LDAP connection for user {} found in cache.", source.getPrincipal() );
 
             return new AuthenticationResult( true, source.getPrincipal(), null );
         }
