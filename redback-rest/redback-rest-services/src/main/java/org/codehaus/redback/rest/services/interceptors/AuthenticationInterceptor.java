@@ -31,6 +31,7 @@ import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.redback.integration.filter.authentication.HttpAuthenticationException;
 import org.codehaus.redback.integration.filter.authentication.basic.HttpBasicAuthentication;
 import org.codehaus.redback.rest.services.RedbackAuthenticationThreadLocal;
+import org.codehaus.redback.rest.services.RedbackRequestInformation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -95,7 +96,10 @@ public class AuthenticationInterceptor
             }
             // FIXME this is already called previously but authenticationResult doesn't return that
             User user = userManager.findUser( (String) authenticationResult.getPrincipal() );
-            RedbackAuthenticationThreadLocal.set( user );
+            RedbackRequestInformation redbackRequestInformation =
+                new RedbackRequestInformation( user, request.getRemoteAddr() );
+
+            RedbackAuthenticationThreadLocal.set( redbackRequestInformation );
             message.put( AuthenticationResult.class, authenticationResult );
 
             return null;

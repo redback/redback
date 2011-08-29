@@ -1,5 +1,4 @@
 package org.codehaus.redback.rest.services;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,22 +18,41 @@ package org.codehaus.redback.rest.services;
  * under the License.
  */
 
+import org.codehaus.plexus.redback.users.User;
+
 /**
  * @author Olivier Lamy
  * @since 1.4
  */
-public class RedbackAuthenticationThreadLocal
+public class RedbackRequestInformation
 {
-    private static final ThreadLocal<RedbackRequestInformation> userThreadLocal =
-        new ThreadLocal<RedbackRequestInformation>();
+    private User user;
 
-    public static void set( RedbackRequestInformation redbackRequestInformation )
+    private String remoteAddr;
+
+    public RedbackRequestInformation( User user, String remoteAddr )
     {
-        userThreadLocal.set( redbackRequestInformation );
+        this.user = user;
+        this.remoteAddr = remoteAddr;
     }
 
-    public static RedbackRequestInformation get()
+    public User getUser()
     {
-        return userThreadLocal.get();
+        return user;
+    }
+
+    public void setUser( User user )
+    {
+        this.user = user;
+    }
+
+    public String getRemoteAddr()
+    {
+        return remoteAddr;
+    }
+
+    public void setRemoteAddr( String remoteAddr )
+    {
+        this.remoteAddr = remoteAddr;
     }
 }
