@@ -141,21 +141,8 @@ public class ForceAdminUserInterceptor
             if ( user != null )
             {
                 assignAdminRole( user );
-                PasswordBasedAuthenticationDataSource authdatasource = new PasswordBasedAuthenticationDataSource();
-                authdatasource.setPrincipal( user.getUsername() );
-                authdatasource.setPassword( user.getPassword() );
-                SecuritySession securitySession = securitySystem.authenticate( authdatasource );
-                if ( securitySession.getAuthenticationResult().isAuthenticated() )
-                {
-                    // good add various tokens.
-                    ServletActionContext.getRequest().getSession( true ).setAttribute(
-                        SecuritySystemConstants.SECURITY_SESSION_KEY, securitySession );
-                    autologinCookies.setSignonCookie( authdatasource.getPrincipal(), ServletActionContext.getResponse(),
-                                                      ServletActionContext.getRequest() );
-                    User u = securitySession.getUser();
-                    u.setLastLoginDate( new Date() );
-                    securitySystem.getUserManager().updateUser( u );
-                }
+
+                checked = true;
             }
             else
             {
@@ -169,64 +156,88 @@ public class ForceAdminUserInterceptor
 
     private User useForceAdminFile()
     {
-        String forceAdminFilePath = System.getProperty( FORCE_ADMIN_FILE_PATH );
-        if ( StringUtils.isBlank( forceAdminFilePath ) )
-        {
-            log.info( FORCE_ADMIN_FILE_PATH + " system props is empty don't use an auto creation admin " );
-            return null;
-        }
-        File file = new File( forceAdminFilePath );
-        if ( !file.exists() )
-        {
-            log.warn( "file set in sysprops " + FORCE_ADMIN_FILE_PATH + " not exists skip admin auto creation" );
-            return null;
-        }
-        Properties properties = new Properties();
-        FileInputStream fis = null;
         try
         {
-            properties.load( new FileInputStream( file ) );
+            String forceAdminFilePath = System.getProperty( FORCE_ADMIN_FILE_PATH );
+            if ( StringUtils.isBlank( forceAdminFilePath ) )
+            {
+                log.info( FORCE_ADMIN_FILE_PATH + " system props is empty don't use an auto creation admin " );
+                return null;
+            }
+            File file = new File( forceAdminFilePath );
+            if ( !file.exists() )
+            {
+                log.warn( "file set in sysprops " + FORCE_ADMIN_FILE_PATH + " not exists skip admin auto creation" );
+                return null;
+            }
+            Properties properties = new Properties();
+            FileInputStream fis = null;
+            try
+            {
+                properties.load( new FileInputStream( file ) );
+            }
+            catch ( Exception e )
+            {
+                log.warn( "error loading properties from file " + forceAdminFilePath + " skip admin auto creation" );
+                return null;
+            }
+
+            // ensure we have all properties
+            String password = properties.getProperty( ADMIN_PASSWORD_KEY );
+            String email = properties.getProperty( ADMIN_EMAIL_KEY );
+            String fullName = properties.getProperty( ADMIN_FULL_NAME_KEY );
+
+            if ( StringUtils.isBlank( password ) )
+            {
+                log.warn( "property " + ADMIN_PASSWORD_KEY + " not set skip auto admin creation" );
+                return null;
+            }
+
+            if ( StringUtils.isBlank( email ) )
+            {
+                log.warn( "property " + ADMIN_EMAIL_KEY + " not set skip auto admin creation" );
+                return null;
+            }
+
+            if ( StringUtils.isBlank( fullName ) )
+            {
+                log.warn( "property " + ADMIN_FULL_NAME_KEY + " not set skip auto admin creation" );
+                return null;
+            }
+
+            User u = userManager.createUser( getAdminUid(), fullName, email );
+
+            u.setPassword( password );
+            u.setLocked( false );
+            u.setPasswordChangeRequired( false );
+            u.setPermanent( true );
+
+            u = userManager.addUser( u );
+            u.setPassword( password );
+
+            PasswordBasedAuthenticationDataSource authdatasource = new PasswordBasedAuthenticationDataSource();
+            authdatasource.setPrincipal( u.getUsername() );
+            authdatasource.setPassword( u.getPassword() );
+            SecuritySession securitySession = securitySystem.authenticate( authdatasource );
+            if ( securitySession.getAuthenticationResult().isAuthenticated() )
+            {
+                // good add various tokens.
+                ServletActionContext.getRequest().getSession( true ).setAttribute(
+                    SecuritySystemConstants.SECURITY_SESSION_KEY, securitySession );
+                autologinCookies.setSignonCookie( authdatasource.getPrincipal(), ServletActionContext.getResponse(),
+                                                  ServletActionContext.getRequest() );
+                User u = securitySession.getUser();
+                u.setLastLoginDate( new Date() );
+                securitySystem.getUserManager().updateUser( u );
+            }
+
+            return u;
         }
         catch ( Exception e )
         {
-            log.warn( "error loading properties from file " + forceAdminFilePath + " skip admin auto creation" );
-            return null;
+            log.warn( "failed to automatically create an admin account " + e.getMessage(), e );
         }
-
-        // ensure we have all properties
-        String password = properties.getProperty( ADMIN_PASSWORD_KEY );
-        String email = properties.getProperty( ADMIN_EMAIL_KEY );
-        String fullName = properties.getProperty( ADMIN_FULL_NAME_KEY );
-
-        if ( StringUtils.isBlank( password ) )
-        {
-            log.warn( "property " + ADMIN_PASSWORD_KEY + " not set skip auto admin creation" );
-            return null;
-        }
-
-        if ( StringUtils.isBlank( email ) )
-        {
-            log.warn( "property " + ADMIN_EMAIL_KEY + " not set skip auto admin creation" );
-            return null;
-        }
-
-        if ( StringUtils.isBlank( fullName ) )
-        {
-            log.warn( "property " + ADMIN_FULL_NAME_KEY + " not set skip auto admin creation" );
-            return null;
-        }
-
-        User u = userManager.createUser( getAdminUid(), fullName, email );
-
-        u.setPassword( password );
-        u.setLocked( false );
-        u.setPasswordChangeRequired( false );
-        u.setPermanent( true );
-
-        u = userManager.addUser( u );
-        u.setPassword( password );
-        return u;
-
+        return null;
     }
 
     private String getAdminUid()
