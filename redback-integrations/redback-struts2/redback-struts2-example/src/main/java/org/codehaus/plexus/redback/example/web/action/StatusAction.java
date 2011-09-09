@@ -25,10 +25,6 @@ import org.springframework.stereotype.Controller;
  *
  * @author Jesse McConnell <jesse@codehaus.org>
  * @version $Id:$
- *
- * plexus.component
- *   role="com.opensymphony.xwork2.Action"
- *   role-hint="status"
  */
 @Controller("status")
 @Scope("prototype")

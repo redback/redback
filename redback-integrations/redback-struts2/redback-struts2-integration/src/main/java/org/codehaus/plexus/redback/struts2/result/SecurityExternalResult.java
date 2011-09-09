@@ -29,9 +29,6 @@ import org.springframework.stereotype.Controller;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * plexus.component role="com.opensymphony.xwork2.Result"
- * role-hint="securityExternalResult"
- * instantiation-strategy="per-lookup"
  */
 @SuppressWarnings("serial")
 @Controller("securityExternalResult")

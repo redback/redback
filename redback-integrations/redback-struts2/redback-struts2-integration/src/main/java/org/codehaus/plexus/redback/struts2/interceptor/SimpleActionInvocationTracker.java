@@ -23,9 +23,7 @@ import org.springframework.stereotype.Controller;
 import java.util.Stack;
 
 /**
- * @plexus.component role="org.codehaus.plexus.redback.struts2.interceptor.ActionInvocationTracker"
- * role-hint="simple"      
- * instantiation-strategy="per-lookup"
+ *
  */
 @Controller( "simple" )
 @Scope( "prototype" )

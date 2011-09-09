@@ -35,8 +35,6 @@ import java.util.List;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="com.opensymphony.xwork2.interceptor.Interceptor"
- * role-hint="redbackEnvironmentCheckInterceptor"
  */
 @Controller( "redbackEnvironmentCheckInterceptor" )
 @Scope( "prototype" )

@@ -45,8 +45,6 @@ import java.util.List;
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @author Jesse McConnell <jesse@codehaus.org>
  * @version $Id: SecureActionInterceptor.java 4035 2006-09-14 12:59:40Z joakime $
- * @plexus.component role="com.opensymphony.xwork2.interceptor.Interceptor"
- * role-hint="redbackSecureActionInterceptor"
  */
 @Controller( "redbackSecureActionInterceptor" )
 @Scope( "prototype" )

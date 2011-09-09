@@ -49,8 +49,6 @@ import java.util.Properties;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id: EnvironmentCheckInterceptor.java 4057 2006-09-15 23:43:16Z joakime $
- * @plexus.component role="com.opensymphony.xwork2.interceptor.Interceptor"
- * role-hint="redbackForceAdminUserInterceptor"
  */
 @Controller( "redbackForceAdminUserInterceptor" )
 @Scope( "prototype" )

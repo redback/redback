@@ -39,9 +39,6 @@ import java.util.List;
  *
  * @author Jesse McConnell <jmcconnell@apache.org>
  * @version $Id$
- * @plexus.component role="com.opensymphony.xwork2.Action"
- * role-hint="redback-operations"
- * instantiation-strategy="per-lookup"
  */
 @Controller( "redback-operations" )
 @Scope( "prototype" )

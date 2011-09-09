@@ -44,8 +44,6 @@ import org.springframework.stereotype.Controller;
  * Interceptor to force the user to perform actions, when required.
  *
  * @author Edwin Punzalan
- * @plexus.component role="com.opensymphony.xwork2.interceptor.Interceptor"
- * role-hint="redbackPolicyEnforcementInterceptor"
  */
 @Controller( "redbackPolicyEnforcementInterceptor" )
 @Scope( "prototype" )

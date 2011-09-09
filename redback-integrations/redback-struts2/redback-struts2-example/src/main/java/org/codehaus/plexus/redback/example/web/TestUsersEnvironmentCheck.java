@@ -38,9 +38,6 @@ import javax.inject.Inject;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * 
- * @plexus.component role="org.codehaus.plexus.redback.system.check.EnvironmentCheck"
- * role-hint="test-users-check"
  */
 @Controller("test-users-check")
 @Scope("prototype")

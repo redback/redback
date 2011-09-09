@@ -32,10 +32,7 @@
       <interfaces>
         <interface>org.codehaus.plexus.redback.users.User</interface>
       </interfaces>
-      <description>
-        @plexus.component role="org.codehaus.plexus.redback.users.User"
-        role-hint="jdo"
-      </description>
+      <description></description>
       <fields>
         <field jpox.primary-key="true" jpox.value-strategy="off" jpox.persistence-modifier="persistent">
           <name>username</name>

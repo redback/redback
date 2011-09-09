@@ -43,9 +43,6 @@ import javax.servlet.http.HttpSession;
  * AutoLoginInterceptor
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
- * @version $Id$
- * @plexus.component role="com.opensymphony.xwork2.interceptor.Interceptor"
- * role-hint="redbackAutoLoginInterceptor"
  */
 @Controller( "redbackAutoLoginInterceptor" )
 @Scope( "prototype" )

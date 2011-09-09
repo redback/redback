@@ -43,8 +43,6 @@ import java.util.Arrays;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="com.opensymphony.xwork2.Action" role-hint="redback-admin-user-delete"
- * instantiation-strategy="per-lookup"
  */
 @Controller( "redback-admin-user-delete" )
 @Scope( "prototype" )

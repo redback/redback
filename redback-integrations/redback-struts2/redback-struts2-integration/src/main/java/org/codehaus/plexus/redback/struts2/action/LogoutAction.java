@@ -33,9 +33,6 @@ import javax.inject.Named;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="com.opensymphony.xwork2.Action"
- * role-hint="redback-logout"
- * instantiation-strategy="per-lookup"
  */
 @Controller( "redback-logout" )
 @Scope( "prototype" )

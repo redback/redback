@@ -48,9 +48,6 @@ import java.util.Date;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id: AddAdminUserAction.java 448077 2006-09-20 05:42:22Z joakime $
- * @plexus.component role="com.opensymphony.xwork2.Action"
- * role-hint="redback-admin-account"
- * instantiation-strategy="per-lookup"
  */
 @Controller( "redback-admin-account" )
 @Scope( "prototype" )

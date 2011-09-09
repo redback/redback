@@ -44,9 +44,6 @@ import java.util.Set;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * @plexus.component role="com.opensymphony.xwork2.Action"
- * role-hint="redback-sysinfo"
- * instantiation-strategy="per-lookup"
  */
 @Controller( "redback-sysinfo" )
 @Scope( "prototype" )

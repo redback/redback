@@ -42,9 +42,7 @@ import com.opensymphony.xwork2.config.ConfigurationManager;
  * @version $Id$
  * 
  * TODO: Address comment below and add back in the component declaration
- * 
- * plexus.component role="org.codehaus.plexus.redback.system.check.EnvironmentCheck"
- * role-hint="ExpectedStandardWebXwork"
+ *
  */
 public class ExpectedXworkConfiguration
     extends AbstractXworkConfigurationCheck

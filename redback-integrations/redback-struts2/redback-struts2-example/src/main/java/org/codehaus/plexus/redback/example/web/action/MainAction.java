@@ -30,8 +30,6 @@ import javax.inject.Inject;
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
- * plexus.component role="com.opensymphony.xwork2.Action"
- * role-hint="main"
  */
 @Controller( "main" )
 @Scope( "prototype" )

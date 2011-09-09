@@ -25,7 +25,6 @@ import javax.inject.Inject;
 /**
  * @author <a href='mailto:rahul.thakur.xdev@gmail.com'>Rahul Thakur</a>
  * @version $Id: MockCustomInterceptor.java 5687 2007-02-14 00:11:28Z brett $
- * @plexus.component role="com.opensymphony.xwork2.interceptor.Interceptor role-hint="testCustomInterceptor"
  */
 @Service("testCustomInterceptor")
 public class MockCustomInterceptor

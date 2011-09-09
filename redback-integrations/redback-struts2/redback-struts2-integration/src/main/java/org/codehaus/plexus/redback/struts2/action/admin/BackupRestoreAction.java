@@ -50,10 +50,6 @@ import javax.inject.Named;
 
 /**
  * BackupRestoreAction
- *
- * @plexus.component role="com.opensymphony.xwork2.Action"
- * role-hint="backup-restore"
- * instantiation-strategy="per-lookup"
  */
 @Controller("backup-restore")
 @Scope("prototype")
