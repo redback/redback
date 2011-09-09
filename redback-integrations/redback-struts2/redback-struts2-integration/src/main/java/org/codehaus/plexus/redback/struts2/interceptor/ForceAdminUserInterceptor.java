@@ -226,7 +226,7 @@ public class ForceAdminUserInterceptor
                     SecuritySystemConstants.SECURITY_SESSION_KEY, securitySession );
                 autologinCookies.setSignonCookie( authdatasource.getPrincipal(), ServletActionContext.getResponse(),
                                                   ServletActionContext.getRequest() );
-                User u = securitySession.getUser();
+                u = securitySession.getUser();
                 u.setLastLoginDate( new Date() );
                 securitySystem.getUserManager().updateUser( u );
             }
