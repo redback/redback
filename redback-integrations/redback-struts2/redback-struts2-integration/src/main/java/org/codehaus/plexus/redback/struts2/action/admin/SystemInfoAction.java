@@ -55,20 +55,20 @@ public class SystemInfoAction
     // ------------------------------------------------------------------
 
     /**
-     * plexus.requirement
+     *
      */
     @Inject
     private SecuritySystem securitySystem;
 
     /**
-     * plexus.requirement role-hint="commons-configuration"
+     *  role-hint="commons-configuration"
      */
     @Inject
     @Named( value = "commons-configuration" )
     private Registry registry;
 
     /**
-     * plexus.requirement role-hint="cached"
+     *  role-hint="cached"
      */
     @Inject
     @Named( value = "rBACManager#cached" )

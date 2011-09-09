@@ -68,7 +68,7 @@ public class LoginAction
     // ------------------------------------------------------------------
 
     /**
-     * plexus.requirement
+     *
      */
     @Inject
     protected SecuritySystem securitySystem;
@@ -84,13 +84,13 @@ public class LoginAction
     private boolean rememberMe;
 
     /**
-     * plexus.requirement
+     *
      */
     @Inject
     private AutoLoginCookies autologinCookies;
 
     /**
-     * plexus.requirement
+     *
      */
     @Inject
     private UserConfiguration config;

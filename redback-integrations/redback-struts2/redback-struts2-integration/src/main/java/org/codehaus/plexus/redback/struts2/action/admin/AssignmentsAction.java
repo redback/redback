@@ -64,7 +64,7 @@ public class AssignmentsAction
     // ------------------------------------------------------------------
 
     /**
-     * plexus.requirement role-hint="default"
+     *  role-hint="default"
      */
     @Inject
     private RoleManager rmanager;

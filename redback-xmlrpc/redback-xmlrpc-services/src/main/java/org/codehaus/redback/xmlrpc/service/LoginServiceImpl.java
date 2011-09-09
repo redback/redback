@@ -42,7 +42,7 @@ public class LoginServiceImpl
     /**
      * cache used for user assignments
      * <p/>
-     * plexus.requirement role-hint="userAssignments"
+     *  role-hint="userAssignments"
      */
     @Inject
     @Named( value ="cache#userAssignments" )
@@ -51,7 +51,7 @@ public class LoginServiceImpl
     /**
      * cache used for user permissions
      * <p/>
-     * plexus.requirement role-hint="userPermissions"
+     *  role-hint="userPermissions"
      */
     @Named( value = "cache#userPermissions" )
     private Cache userPermissionsCache;
@@ -59,7 +59,7 @@ public class LoginServiceImpl
     /**
      * Cache used for users
      * <p/>
-     * plexus.requirement role-hint="users"
+     *  role-hint="users"
      */
     @Named( value = "cache#users" )
     private Cache usersCache;

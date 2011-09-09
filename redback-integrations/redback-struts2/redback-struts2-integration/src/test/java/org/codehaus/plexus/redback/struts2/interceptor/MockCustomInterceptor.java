@@ -31,7 +31,7 @@ public class MockCustomInterceptor
     implements Interceptor
 {
     /**
-     * plexus.requirement
+     *
      */
     @Inject
     private MockComponent testComponent;

@@ -53,7 +53,7 @@ public class RoleCreateAction
     // ------------------------------------------------------------------
 
     /**
-     * plexus.requirement role-hint="cached"
+     *  role-hint="cached"
      */
     @Inject
     @Named( value = "rBACManager#cached" )

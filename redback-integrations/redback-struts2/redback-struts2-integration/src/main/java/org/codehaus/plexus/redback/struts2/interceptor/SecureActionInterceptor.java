@@ -58,7 +58,7 @@ public class SecureActionInterceptor
     private static final String HTTP_HEADER_REFERER = "Referer";
 
     /**
-     * plexus.requirement
+     *
      */
     @Inject
     private SecuritySystem securitySystem;

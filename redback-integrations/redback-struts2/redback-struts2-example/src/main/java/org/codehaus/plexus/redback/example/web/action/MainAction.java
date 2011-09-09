@@ -36,15 +36,9 @@ import javax.inject.Inject;
 public class MainAction
     extends RedbackActionSupport
 {
-    /**
-     * plexus.requirement
-     */
     @Inject
     private SecuritySystem securitySystem;
 
-    /**
-     * plexus.requirement role-hint="default"
-     */
     @Inject
     private RoleManager roleManager;
 

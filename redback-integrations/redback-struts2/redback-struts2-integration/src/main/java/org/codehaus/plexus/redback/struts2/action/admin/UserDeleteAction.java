@@ -55,14 +55,14 @@ public class UserDeleteAction
     // ------------------------------------------------------------------
 
     /**
-     * plexus.requirement role-hint="configurable"
+     *  role-hint="configurable"
      */
     @Inject
     @Named( value = "userManager#configurable" )
     private UserManager userManager;
 
     /**
-     * plexus.requirement role-hint="cached"
+     *  role-hint="cached"
      */
     @Inject
     @Named( value = "rBACManager#cached" )

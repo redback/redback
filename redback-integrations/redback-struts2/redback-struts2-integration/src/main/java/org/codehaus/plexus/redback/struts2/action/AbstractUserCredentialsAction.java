@@ -52,7 +52,7 @@ public abstract class AbstractUserCredentialsAction
     // ------------------------------------------------------------------
 
     /**
-     * plexus.requirement role-hint="cached"
+     *
      */
     @Inject
     @Named( value = "rBACManager#cached" )

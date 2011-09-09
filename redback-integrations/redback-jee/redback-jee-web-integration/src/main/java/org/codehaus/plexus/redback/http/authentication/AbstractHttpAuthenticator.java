@@ -31,9 +31,6 @@ public abstract class AbstractHttpAuthenticator
 
     public static final String ROLE = AbstractHttpAuthenticator.class.getName();
 
-    /**
-     * plexus.requirement
-     */
     @Inject
     protected SecuritySystem securitySystem;
 

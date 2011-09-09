@@ -65,25 +65,25 @@ public class BackupRestoreAction
     private File applicationHome = new File("data");
     
     /**
-     * plexus.requirement role-hint="jdo"
+     *  role-hint="jdo"
      */
     @Inject
     private DataManagementTool dataManagementTool;
     
     /**
-     * plexus.requirement role-hint="jdo"
+     *  role-hint="jdo"
      */
     @Inject @Named(value = "rBACManager#jdo" )
     private RBACManager rbacManager;
 
     /**
-     * plexus.requirement role-hint="jdo"
+     *  role-hint="jdo"
      */
     @Inject @Named(value = "userManager#jdo")
     private UserManager userManager;
 
     /**
-     * plexus.requirement role-hint="jdo"
+     *  role-hint="jdo"
      */
     @Inject @Named(value = "keyManager#jdo")
     private KeyManager keyManager;    

@@ -58,13 +58,13 @@ public class RegisterAction
     // ------------------------------------------------------------------
 
     /**
-     * plexus.requirement
+     *
      */
     @Inject
     private Mailer mailer;
 
     /**
-     * plexus.requirement
+     *
      */
     @Inject
     private RoleManager roleManager;

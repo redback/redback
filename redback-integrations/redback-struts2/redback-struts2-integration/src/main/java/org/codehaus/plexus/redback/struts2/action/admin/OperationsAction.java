@@ -48,7 +48,7 @@ public class OperationsAction
     private static final String LIST = "list";
 
     /**
-     * plexus.requirement role-hint="cached"
+     *  role-hint="cached"
      */
     @Inject
     @Named( value = "rBACManager#cached" )

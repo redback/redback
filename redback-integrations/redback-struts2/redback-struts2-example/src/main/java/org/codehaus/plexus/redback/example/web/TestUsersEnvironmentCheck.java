@@ -45,15 +45,10 @@ public class TestUsersEnvironmentCheck
     implements EnvironmentCheck
 {
     private Logger log = LoggerFactory.getLogger( TestUsersEnvironmentCheck.class );
-    /**
-     * plexus.requirement
-     */
+
     @Inject
     private RoleManager roleManager;
 
-    /**
-     * plexus.requirement
-     */
     @Inject
     private SecuritySystem securitySystem;
 

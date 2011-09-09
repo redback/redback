@@ -60,7 +60,7 @@ public class UserEditAction
     implements CancellableAction
 {
     /**
-     * plexus.requirement role-hint="cached"
+     *  role-hint="cached"
      */
     @Inject
     @Named( value = "rBACManager#cached" )

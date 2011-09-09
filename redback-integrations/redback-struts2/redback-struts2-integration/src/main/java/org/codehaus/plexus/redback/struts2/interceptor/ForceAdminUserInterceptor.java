@@ -70,20 +70,20 @@ public class ForceAdminUserInterceptor
     private static boolean checked = false;
 
     /**
-     * plexus.requirement role-hint="configurable"
+     *  role-hint="configurable"
      */
     @Inject
     @Named( value = "userManager#configurable" )
     private UserManager userManager;
 
     /**
-     * plexus.requirement role-hint="default"
+     *  role-hint="default"
      */
     @Inject
     private RoleManager roleManager;
 
     /**
-     * plexus.requirement role-hint="default"
+     *  role-hint="default"
      */
     @Inject
     private UserConfiguration config;

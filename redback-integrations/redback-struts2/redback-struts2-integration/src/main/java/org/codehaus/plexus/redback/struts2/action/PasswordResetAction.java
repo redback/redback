@@ -51,13 +51,13 @@ public class PasswordResetAction
     // ------------------------------------------------------------------
 
     /**
-     * plexus.requirement
+     *
      */
     @Inject
     private Mailer mailer;
 
     /**
-     * plexus.requirement
+     *
      */
     @Inject
     private SecuritySystem securitySystem;

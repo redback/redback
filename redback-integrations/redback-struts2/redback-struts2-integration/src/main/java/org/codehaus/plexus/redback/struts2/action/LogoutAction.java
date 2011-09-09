@@ -45,7 +45,7 @@ public class LogoutAction
     /**
      * cache used for user assignments
      *
-     * plexus.requirement role-hint="userAssignments"
+     *  role-hint="userAssignments"
      */
     @Inject
     @Named( value = "cache#userAssignments" )
@@ -54,7 +54,7 @@ public class LogoutAction
     /**
      * cache used for user permissions
      *
-     * plexus.requirement role-hint="userPermissions"
+     *  role-hint="userPermissions"
      */
     @Inject
     @Named( value = "cache#userPermissions" )
@@ -63,14 +63,14 @@ public class LogoutAction
     /**
      * Cache used for users
      *
-     * plexus.requirement role-hint="users"
+     *  role-hint="users"
      */
     @Inject
     @Named( value = "cache#users" )
     private Cache usersCache;
 
     /**
-     * plexus.requirement
+     *
      */
     @Inject
     private AutoLoginCookies autologinCookies;

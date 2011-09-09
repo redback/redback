@@ -37,9 +37,7 @@ import java.util.Map;
 @Service( "reportManager" )
 public class ReportManager
 {
-    /**
-     * plexus.requirement role="org.codehaus.plexus.redback.xwork.reports.Report"
-     */
+
     @Inject
     private List<Report> availableReports;
 

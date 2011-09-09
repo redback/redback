@@ -71,20 +71,20 @@ public class UserListAction
     // ------------------------------------------------------------------
 
     /**
-     * plexus.requirement
+     *
      */
     @Inject
     private SecuritySystem securitySystem;
 
     /**
-     * plexus.requirement role-hint="cached"
+     *  role-hint="cached"
      */
     @Inject
     @Named( value = "rBACManager#cached" )
     private RBACManager rbac;
 
     /**
-     * plexus.requirement
+     *
      */
     @Inject
     private ReportManager reportManager;
