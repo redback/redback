@@ -59,7 +59,7 @@ public abstract class AbstractUserCredentialsAction
     private RBACManager manager;
 
     /**
-     * plexus.requirement
+     *
      */
     @Inject
     protected SecuritySystem securitySystem;
