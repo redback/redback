@@ -19,15 +19,7 @@ package org.codehaus.plexus.redback.struts2.action.admin;
  * under the License.
  */
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
+import com.opensymphony.xwork2.Preparable;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.plexus.redback.keys.KeyManager;
 import org.codehaus.plexus.redback.management.DataManagementTool;
@@ -39,69 +31,78 @@ import org.codehaus.redback.integration.interceptor.SecureAction;
 import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.role.RoleConstants;
-
-import com.opensymphony.xwork2.Preparable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 
 /**
  * BackupRestoreAction
  */
-@Controller("backup-restore")
-@Scope("prototype")
+@Controller( "backup-restore" )
+@Scope( "prototype" )
 public class BackupRestoreAction
     extends AbstractSecurityAction
     implements SecureAction, Preparable
 {
     public final static String CUSTOM_ERROR = "custom_error";
-	
+
     /**
-     * plexus.configuration default-value="data"
+     *
      */
-    private File applicationHome = new File("data");
-    
+    private File applicationHome = new File( "data" );
+
     /**
-     *  role-hint="jdo"
+     * role-hint="jdo"
      */
     @Inject
     private DataManagementTool dataManagementTool;
-    
+
     /**
-     *  role-hint="jdo"
+     * role-hint="jdo"
      */
-    @Inject @Named(value = "rBACManager#jdo" )
+    @Inject
+    @Named( value = "rBACManager#jdo" )
     private RBACManager rbacManager;
 
     /**
-     *  role-hint="jdo"
+     * role-hint="jdo"
      */
-    @Inject @Named(value = "userManager#jdo")
+    @Inject
+    @Named( value = "userManager#jdo" )
     private UserManager userManager;
 
     /**
-     *  role-hint="jdo"
+     * role-hint="jdo"
      */
-    @Inject @Named(value = "keyManager#jdo")
-    private KeyManager keyManager;    
+    @Inject
+    @Named( value = "keyManager#jdo" )
+    private KeyManager keyManager;
 
     private File backupDirectory;
 
     private String restoreDirectory;
 
     private List<BackupRecord> previousBackups;
-    
-    private boolean confirmed ;
-    
+
+    private boolean confirmed;
+
     public static final String BACKUP_DIRECTORY = "user-backup-directory";
 
     public String view()
         throws Exception
     {
-        
+
         retrievePreviousBackups();
 
         return SUCCESS;
@@ -115,8 +116,8 @@ public class BackupRestoreAction
         backupDirectory.mkdirs();
 
         log.info( "Backing up security database to {}", backupDirectory );
-        this.backupDatabase( backupDirectory );          
-        
+        this.backupDatabase( backupDirectory );
+
         log.info( "Done backing up security database" );
 
         return SUCCESS;
@@ -125,12 +126,12 @@ public class BackupRestoreAction
     public String restore()
         throws Exception
     {
-        if (StringUtils.isEmpty( restoreDirectory ))
+        if ( StringUtils.isEmpty( restoreDirectory ) )
         {
-            addActionError( getText("backupRestore.backup.empty.error") );
+            addActionError( getText( "backupRestore.backup.empty.error" ) );
             return CUSTOM_ERROR;
         }
-            
+
         File restoreDirectory = new File( this.restoreDirectory );
 
         boolean fileExists = restoreDirectory.exists() && restoreDirectory.isDirectory();
@@ -145,14 +146,14 @@ public class BackupRestoreAction
         if ( !fileExists )
         {
             log.warn( "Backup: " + this.restoreDirectory + " not found." );
-            addActionError( getText("backupRestore.backup.error") );
+            addActionError( getText( "backupRestore.backup.error" ) );
             retrievePreviousBackups();
             return CUSTOM_ERROR;
         }
         else if ( !isValidBackup )
         {
             log.warn( "Backup: " + this.restoreDirectory + " is not a valid backup directory." );
-            addActionError( getText("backupRestore.backup.error") );
+            addActionError( getText( "backupRestore.backup.error" ) );
             retrievePreviousBackups();
             return CUSTOM_ERROR;
         }
@@ -161,7 +162,6 @@ public class BackupRestoreAction
         this.eraseDatabase();
         this.restoreDatabase( restoreDirectory );
         log.info( "Done restoring security database" );
-
 
         return SUCCESS;
     }
@@ -223,7 +223,7 @@ public class BackupRestoreAction
         backupDirectory = this.getFile( BACKUP_DIRECTORY );
         retrievePreviousBackups();
     }
-    
+
     private void retrievePreviousBackups()
     {
         previousBackups = new ArrayList<BackupRecord>();
@@ -267,7 +267,7 @@ public class BackupRestoreAction
         bundle.addRequiredAuthorization( RoleConstants.USER_MANAGEMENT_MANAGE_DATA, Resource.GLOBAL );
         return bundle;
     }
-    
+
     public File getFile( String filename )
     {
         if ( filename == null )

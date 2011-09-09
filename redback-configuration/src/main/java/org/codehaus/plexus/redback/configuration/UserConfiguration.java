@@ -48,7 +48,7 @@ public class UserConfiguration
     protected Logger log = LoggerFactory.getLogger( getClass() );
 
     /**
-     * plexus.configuration
+     *
      *
      * @deprecated Please configure the Plexus registry instead
      */

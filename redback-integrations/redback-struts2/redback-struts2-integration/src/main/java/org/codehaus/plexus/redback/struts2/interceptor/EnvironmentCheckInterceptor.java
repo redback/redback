@@ -47,7 +47,7 @@ public class EnvironmentCheckInterceptor
 
 
     /**
-     *  role="org.codehaus.plexus.redback.system.check.EnvironmentCheck"
+     *
      */
     @Inject
     private List<EnvironmentCheck> checkers;

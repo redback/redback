@@ -45,47 +45,47 @@ public class ConfigurableLdapConnectionFactory
     implements LdapConnectionFactory
 {
     /**
-     * plexus.configuration
+     *
      */
     private String hostname;
 
     /**
-     * plexus.configuration
+     *
      */
     private int port;
 
     /**
-     * plexus.configuration
+     *
      */
     private boolean ssl;
 
     /**
-     * plexus.configuration
+     *
      */
     private String baseDn;
 
     /**
-     * plexus.configuration
+     *
      */
     private String contextFactory;
 
     /**
-     * plexus.configuration
+     *
      */
     private String bindDn;
 
     /**
-     * plexus.configuration
+     *
      */
     private String password;
 
     /**
-     * plexus.configuration
+     *
      */
     private String authenticationMethod;
 
     /**
-     * plexus.configuration
+     *
      */
     private Properties extraProperties;
 

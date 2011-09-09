@@ -21,25 +21,22 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 
-
-
-
 /**
  * SecurityExternalResult
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
-@SuppressWarnings("serial")
-@Controller("securityExternalResult")
-@Scope("prototype")
+@SuppressWarnings( "serial" )
+@Controller( "securityExternalResult" )
+@Scope( "prototype" )
 public class SecurityExternalResult
     extends AbstractBackTrackingResult
 {
     /**
-     * plexus.configuration default-value="redbackRedirect"
+     *
      */
-    private String externalActionName ="redbackRedirect";
+    private String externalActionName = "redbackRedirect";
 
     private String externalResult;
 
@@ -49,13 +46,13 @@ public class SecurityExternalResult
     {
         // the login redirection is not captured by the http request
         // tracker, so we backtrack to the current request
-        if ( !setupBackTrackCurrent( invocation ))
+        if ( !setupBackTrackCurrent( invocation ) )
         {
             setNamespace( "/" );
             setActionName( externalActionName );
         }
-        
-        super.execute( invocation );        
+
+        super.execute( invocation );
     }
 
     public String getExternalResult()
@@ -66,6 +63,6 @@ public class SecurityExternalResult
     public void setExternalResult( String externalResult )
     {
         this.externalResult = externalResult;
-    }    
-    
+    }
+
 }

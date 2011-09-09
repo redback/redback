@@ -64,7 +64,7 @@ public class SecureActionInterceptor
     private SecuritySystem securitySystem;
 
     /**
-     * plexus.configuration default-value="simple"
+     *
      */
     private String trackerName = "simple";
 
@@ -223,7 +223,7 @@ public class SecureActionInterceptor
             {
                 // on windows realPath can return full path c:\\bla\\bla\....
                 // so transforming \\ to /
-                if ( SystemUtils.IS_OS_WINDOWS)
+                if ( SystemUtils.IS_OS_WINDOWS )
                 {
                     realPath = StringUtils.replace( realPath, "\\", "/" );
                 }

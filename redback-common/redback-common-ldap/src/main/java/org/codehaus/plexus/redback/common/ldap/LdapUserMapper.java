@@ -37,42 +37,42 @@ public class LdapUserMapper
     implements UserMapper
 {
     /**
-     * plexus.configuration default-value="mail"
+     *
      */
     String emailAttribute = "mail";
 
     /**
-     * plexus.configuration default-value="givenName"
+     *
      */
     String fullNameAttribute = "givenName";
 
     /**
-     * plexus.configuration default-value="userPassword"
+     *
      */
     String passwordAttribute = "userPassword";
 
     /**
-     * plexus.configuration default-value="cn"
+     *
      */
     String userIdAttribute = "cn";
 
     /**
-     * plexus.configuration default-value=""
+     *
      */
     String userBaseDn;
 
     /**
-     * plexus.configuration default-value="inetOrgPerson"
+     *
      */
     String userObjectClass = "inetOrgPerson";
 
     /**
-     * plexus.configuration default-value=""
+     *
      */
     String userFilter;
 
     /**
-     * plexus.configuration default-value="0"
+     *
      */
     int maxResultCount = 0;
 
