@@ -36,6 +36,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -90,8 +91,12 @@ public class RbacAuthorizer
                 {
                     for ( Permission permission : permissionMap.get( operation.toString() ) )
                     {
-                        //log.info( "checking permission " + permission.getName() + " for operation " + operation.toString() + " resource " + resource );
-
+                        if ( log.isDebugEnabled() )
+                        {
+                            log.debug( "checking permission {} for operation {} resource {}",
+                                       Arrays.asList( permission != null ? permission.getName() : "null", operation,
+                                                      resource ).toArray() );
+                        }
                         if ( evaluator.evaluate( permission, operation, resource, principal ) )
                         {
                             return new AuthorizationResult( true, permission, null );

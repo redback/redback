@@ -52,27 +52,27 @@ public class IfAuthorizedTag
     protected boolean condition()
         throws JspTagException
     {
-        ApplicationContext applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(pageContext.getServletContext());
+        ApplicationContext applicationContext =
+            WebApplicationContextUtils.getRequiredWebApplicationContext( pageContext.getServletContext() );
 
         Boolean authzStatusBool = (Boolean) pageContext.getAttribute( "redbackCache" + permission + resource );
         boolean authzStatus;
 
         //long execTime = System.currentTimeMillis();
-        
+
         if ( authzStatusBool == null )
         {
             SecuritySession securitySession =
                 (SecuritySession) pageContext.getSession().getAttribute( SecuritySystemConstants.SECURITY_SESSION_KEY );
 
-            
             try
             {
-                SecuritySystem securitySystem = applicationContext.getBean("securitySystem",SecuritySystem.class);
-                if (securitySystem == null)
+                SecuritySystem securitySystem = applicationContext.getBean( "securitySystem", SecuritySystem.class );
+                if ( securitySystem == null )
                 {
                     throw new JspTagException( "unable to locate security system" );
                 }
-                
+
                 authzStatus = securitySystem.isAuthorized( securitySession, permission, resource );
                 pageContext.setAttribute( "redbackCache" + permission + resource, Boolean.valueOf( authzStatus ) );
             }
@@ -80,7 +80,7 @@ public class IfAuthorizedTag
             {
                 throw new JspTagException( "error with authorization", ae );
             }
-            
+
             //System.out.println( "[PERF] " + "redbackCache" + permission + resource + " Time: " + (System.currentTimeMillis() - execTime) ); 
         }
         else

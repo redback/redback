@@ -22,6 +22,7 @@ import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
+import org.codehaus.redback.rest.api.services.LoginService;
 import org.codehaus.redback.rest.api.services.RoleManagementService;
 import org.codehaus.redback.rest.api.services.UserService;
 import org.eclipse.jetty.server.Connector;
@@ -127,6 +128,9 @@ public abstract class AbstractRestServicesTest
         UserService service =
             JAXRSClientFactory.create( "http://localhost:" + port + "/services/redbackServices/", UserService.class );
 
+        // for debuging purpose
+        WebClient.getConfig( service ).getHttpConduit().getClient().setReceiveTimeout( 100000 );
+
         if ( authzHeader != null )
         {
             WebClient.client( service ).header( "Authorization", authzHeader );
@@ -140,7 +144,8 @@ public abstract class AbstractRestServicesTest
             JAXRSClientFactory.create( "http://localhost:" + port + "/services/redbackServices/",
                                        RoleManagementService.class );
 
-        WebClient.getConfig( service ).getHttpConduit().getClient().setReceiveTimeout( 3000 );
+        // for debuging purpose
+        WebClient.getConfig( service ).getHttpConduit().getClient().setReceiveTimeout( 100000 );
 
         if ( authzHeader != null )
         {
@@ -148,4 +153,20 @@ public abstract class AbstractRestServicesTest
         }
         return service;
     }
+
+    protected LoginService getLoginService( String authzHeader )
+    {
+        LoginService service =
+            JAXRSClientFactory.create( "http://localhost:" + port + "/services/redbackServices/", LoginService.class );
+
+        // for debuging purpose
+        WebClient.getConfig( service ).getHttpConduit().getClient().setReceiveTimeout( 100000 );
+
+        if ( authzHeader != null )
+        {
+            WebClient.client( service ).header( "Authorization", authzHeader );
+        }
+        return service;
+    }
+
 }

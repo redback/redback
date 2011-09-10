@@ -16,6 +16,7 @@ package org.codehaus.redback.rest.services;
  * limitations under the License.
  */
 
+import org.codehaus.plexus.cache.Cache;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.redback.rest.api.model.User;
@@ -34,6 +35,25 @@ public class DefaultUserService
 {
     private UserManager userManager;
 
+    /**
+     * cache used for user assignments
+     */
+    @Inject
+    @Named( value = "cache#userAssignments" )
+    private Cache userAssignmentsCache;
+
+    /**
+     * cache used for user permissions
+     */
+    @Named( value = "cache#userPermissions" )
+    private Cache userPermissionsCache;
+
+    /**
+     * Cache used for users
+     */
+    @Named( value = "cache#users" )
+    private Cache usersCache;
+
     @Inject
     public DefaultUserService( @Named( value = "userManager#cached" ) UserManager userManager )
     {
@@ -50,7 +70,7 @@ public class DefaultUserService
         u.setLocked( user.isLocked() );
         u.setPasswordChangeRequired( user.isPasswordChangeRequired() );
         u.setPermanent( user.isPermanent() );
-        userManager.addUser( u );
+        u = userManager.addUser( u );
         return Boolean.TRUE;
     }
 
@@ -82,6 +102,22 @@ public class DefaultUserService
         catch ( UserNotFoundException e )
         {
             throw new RedbackServiceException( e.getMessage() );
+        }
+    }
+
+    public User findUser( String username )
+        throws RedbackServiceException
+    {
+        try
+        {
+            org.codehaus.plexus.redback.users.User user = userManager.findUser( username );
+            User simpleUser = new User( user.getUsername(), user.getFullName(), user.getEmail(), user.isValidated(),
+                                        user.isLocked() );
+            return simpleUser;
+        }
+        catch ( UserNotFoundException e )
+        {
+            return null;
         }
     }
 
@@ -124,6 +160,24 @@ public class DefaultUserService
         }
     }
 
+    public int removeFromCache( String userName )
+        throws RedbackServiceException
+    {
+        if ( userAssignmentsCache != null )
+        {
+            userAssignmentsCache.remove( userName );
+        }
+        if ( userPermissionsCache != null )
+        {
+            userPermissionsCache.remove( userName );
+        }
+        if ( usersCache != null )
+        {
+            usersCache.remove( userName );
+        }
+
+        return 0;
+    }
 
     public Boolean ping()
         throws RedbackServiceException

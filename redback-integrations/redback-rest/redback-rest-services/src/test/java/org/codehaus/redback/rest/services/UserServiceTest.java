@@ -16,7 +16,6 @@ package org.codehaus.redback.rest.services;
  * limitations under the License.
  */
 
-import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.apache.cxf.jaxrs.client.ServerWebApplicationException;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.redback.rest.api.model.User;
@@ -31,8 +30,6 @@ import java.util.List;
 public class UserServiceTest
     extends AbstractRestServicesTest
 {
-
-
 
 
     @Test

@@ -22,7 +22,7 @@ import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
-import org.codehaus.redback.integration.role.RoleConstants;
+import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -60,7 +60,8 @@ public class FakeCreateAdminServiceImpl
         {
             // ignore
         }
-        User user = userManager.createUser( RoleConstants.ADMINISTRATOR_ACCOUNT_NAME, "root user", "foo@foo.com" );
+        User user =
+            userManager.createUser( RedbackRoleConstants.ADMINISTRATOR_ACCOUNT_NAME, "root user", "foo@foo.com" );
         user.setPassword( ADMIN_TEST_PWD );
 
         user.setLocked( false );

@@ -18,7 +18,7 @@ package org.codehaus.redback.rest.services;
  * under the License.
  */
 
-import org.apache.cxf.jaxrs.client.ServerWebApplicationException;
+import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
 import org.codehaus.redback.rest.api.model.User;
 import org.codehaus.redback.rest.api.services.UserService;
 import org.junit.Test;
@@ -26,75 +26,41 @@ import org.junit.Test;
 /**
  * @author Olivier Lamy
  */
-public class RoleManagementServiceTest
+public class LoginServiceTest
     extends AbstractRestServicesTest
 {
-
-
     @Test
-    public void roleExist()
+    public void loginAdmin()
         throws Exception
     {
-        assertTrue( getRoleManagementService( authorizationHeader ).roleExists( "guest" ) );
-        assertFalse( getRoleManagementService( authorizationHeader ).roleExists( "foo" ) );
+        assertTrue( getLoginService( null ).logIn( RedbackRoleConstants.ADMINISTRATOR_ACCOUNT_NAME,
+                                                   FakeCreateAdminService.ADMIN_TEST_PWD ) );
     }
 
-    @Test( expected = ServerWebApplicationException.class )
-    public void roleExistBadAuthz()
+    @Test
+    public void createUserThenLog()
         throws Exception
     {
         try
         {
-            assertTrue( getRoleManagementService( null ).roleExists( "guest" ) );
-        }
-        catch ( ServerWebApplicationException e )
-        {
-            assertEquals( 403, e.getStatus() );
-            throw e;
-        }
-    }
 
-    @Test
-    public void createUserThenAssignRole()
-        throws Exception
-    {
-        try
-        {
             User user = new User( "toto", "toto the king", "toto@toto.fr", false, false );
             user.setPassword( "foo123" );
             UserService userService = getUserService( authorizationHeader );
             userService.createUser( user );
             user = userService.getUser( "toto" );
-            user.setPasswordChangeRequired( false );
-            userService.updateUser( user );
             assertNotNull( user );
             assertEquals( "toto the king", user.getFullName() );
             assertEquals( "toto@toto.fr", user.getEmail() );
-
-            // should fail toto doesn't have karma
-            try
-            {
-                getUserService( encode( "toto", "foo123" ) ).getUsers();
-                fail( "should fail with 403" );
-            }
-            catch ( ServerWebApplicationException e )
-            {
-                assertEquals( 403, e.getStatus() );
-
-            }
-
-            // assign the role and retry
-            getRoleManagementService( authorizationHeader ).assignRole( "edit-users-list", "toto" );
-
-            userService.removeFromCache( "toto" );
-
-            getUserService( encode( "toto", "foo123" ) ).getUsers();
+            //getLoginService( null ).logIn( "toto", "foo123" );
+            //getLoginService( null ).ping();
+            getLoginService( null ).pingWithAutz();
         }
-        finally
+        catch ( Exception e )
         {
             getUserService( authorizationHeader ).deleteUser( "toto" );
             assertNull( getUserService( authorizationHeader ).findUser( "toto" ) );
         }
-
     }
+
 }

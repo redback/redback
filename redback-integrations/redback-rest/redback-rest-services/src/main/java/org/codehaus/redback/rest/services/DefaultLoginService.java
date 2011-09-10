@@ -16,26 +16,22 @@ package org.codehaus.redback.rest.services;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.cache.Cache;
-import org.codehaus.plexus.redback.authorization.RedbackAuthorization;
+import org.codehaus.plexus.redback.authentication.AuthenticationException;
+import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.keys.KeyManager;
 import org.codehaus.plexus.redback.keys.jdo.JdoAuthenticationKey;
 import org.codehaus.plexus.redback.keys.memory.MemoryAuthenticationKey;
 import org.codehaus.plexus.redback.keys.memory.MemoryKeyManager;
+import org.codehaus.plexus.redback.policy.AccountLockedException;
+import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 import org.codehaus.plexus.redback.system.SecuritySystem;
+import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.redback.rest.api.services.LoginService;
 import org.codehaus.redback.rest.api.services.RedbackServiceException;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import java.net.URL;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -48,25 +44,6 @@ public class DefaultLoginService
     implements LoginService
 {
     private SecuritySystem securitySystem;
-
-    /**
-     * cache used for user assignments
-     */
-    @Inject
-    @Named( value = "cache#userAssignments" )
-    private Cache userAssignmentsCache;
-
-    /**
-     * cache used for user permissions
-     */
-    @Named( value = "cache#userPermissions" )
-    private Cache userPermissionsCache;
-
-    /**
-     * Cache used for users
-     */
-    @Named( value = "cache#users" )
-    private Cache usersCache;
 
     @Inject
     public DefaultLoginService( SecuritySystem securitySystem )
@@ -109,31 +86,43 @@ public class DefaultLoginService
         return key.getKey();
     }
 
-
-    public int removeFromCache( String userName )
-        throws RedbackServiceException
-    {
-        if ( userAssignmentsCache != null )
-        {
-            userAssignmentsCache.remove( userName );
-        }
-        if ( userPermissionsCache != null )
-        {
-            userPermissionsCache.remove( userName );
-        }
-        if ( usersCache != null )
-        {
-            usersCache.remove( userName );
-        }
-
-        return 0;
-    }
-
-    @RedbackAuthorization( noRestriction = true )
     public Boolean ping()
         throws RedbackServiceException
     {
         return Boolean.TRUE;
+    }
+
+    public Boolean pingWithAutz()
+        throws RedbackServiceException
+    {
+        return Boolean.TRUE;
+    }
+
+    public Boolean logIn( String userName, String password )
+        throws RedbackServiceException
+    {
+        PasswordBasedAuthenticationDataSource authDataSource =
+            new PasswordBasedAuthenticationDataSource( userName, password );
+        try
+        {
+            return securitySystem.authenticate( authDataSource ).getAuthenticationResult().isAuthenticated();
+        }
+        catch ( AuthenticationException e )
+        {
+            throw new RedbackServiceException( e.getMessage() );
+        }
+        catch ( UserNotFoundException e )
+        {
+            throw new RedbackServiceException( e.getMessage() );
+        }
+        catch ( AccountLockedException e )
+        {
+            throw new RedbackServiceException( e.getMessage() );
+        }
+        catch ( MustChangePasswordException e )
+        {
+            throw new RedbackServiceException( e.getMessage() );
+        }
     }
 
     private Calendar getNowGMT()

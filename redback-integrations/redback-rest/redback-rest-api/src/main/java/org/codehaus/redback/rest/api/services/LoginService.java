@@ -16,12 +16,11 @@ package org.codehaus.redback.rest.api.services;
  * limitations under the License.
  */
 
+import org.apache.cxf.jaxrs.model.wadl.Description;
 import org.codehaus.plexus.redback.authorization.RedbackAuthorization;
-import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -39,18 +38,27 @@ public interface LoginService
                                  @QueryParam( "expirationMinutes" ) int expirationMinutes )
         throws RedbackServiceException;
 
-    @Path( "removeFromCache/{userName}" )
-    @GET
-    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
-    int removeFromCache( @PathParam( "userName" ) String username )
-        throws RedbackServiceException;
-
 
     @Path( "ping" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
     @RedbackAuthorization( noRestriction = true )
     Boolean ping()
+        throws RedbackServiceException;
+
+
+    @Path( "pingWithAutz" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( noRestriction = false, noPermission = true )
+    Boolean pingWithAutz()
+        throws RedbackServiceException;
+
+    @Path( "logIn" )
+    @GET
+    @Description( "only to test if username/password can connect" )
+    @RedbackAuthorization( noRestriction = true, noPermission = true )
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    Boolean logIn( @QueryParam( "userName" ) String userName, @QueryParam( "password" ) String password )
         throws RedbackServiceException;
 }
