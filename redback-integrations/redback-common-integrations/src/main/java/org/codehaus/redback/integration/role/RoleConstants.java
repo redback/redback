@@ -16,49 +16,60 @@ package org.codehaus.redback.integration.role;
  * limitations under the License.
  */
 
+import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
+
 /**
  * RoleConstants:
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
  * @version: $Id$
+ * @deprecated use RedbackRoleConstants
  */
 public class RoleConstants
 {
-    public static final String ADMINISTRATOR_ACCOUNT_NAME = "admin";
+    public static final String ADMINISTRATOR_ACCOUNT_NAME = RedbackRoleConstants.ADMINISTRATOR_ACCOUNT_NAME;
 
     // roles
-    public static final String SYSTEM_ADMINISTRATOR_ROLE = "System Administrator";
+    public static final String SYSTEM_ADMINISTRATOR_ROLE = RedbackRoleConstants.SYSTEM_ADMINISTRATOR_ROLE;
 
-    public static final String USER_ADMINISTRATOR_ROLE = "User Administrator";
+    public static final String USER_ADMINISTRATOR_ROLE = RedbackRoleConstants.USER_ADMINISTRATOR_ROLE;
 
-    public static final String REGISTERED_USER_ROLE = "Registered User";
+    public static final String REGISTERED_USER_ROLE = RedbackRoleConstants.REGISTERED_USER_ROLE;
 
-    public static final String GUEST_ROLE = "Guest";
+    public static final String GUEST_ROLE = RedbackRoleConstants.GUEST_ROLE;
 
     // guest access operation
-    public static final String GUEST_ACCESS_OPERATION = "guest-access";
+    public static final String GUEST_ACCESS_OPERATION = RedbackRoleConstants.GUEST_ACCESS_OPERATION;
 
     // operations against configuration
-    public static final String CONFIGURATION_EDIT_OPERATION = "configuration-edit";
+    public static final String CONFIGURATION_EDIT_OPERATION = RedbackRoleConstants.CONFIGURATION_EDIT_OPERATION;
 
     // operations against user
-    public static final String USER_MANAGEMENT_USER_CREATE_OPERATION = "user-management-user-create";
+    public static final String USER_MANAGEMENT_USER_CREATE_OPERATION =
+        RedbackRoleConstants.USER_MANAGEMENT_USER_CREATE_OPERATION;
 
-    public static final String USER_MANAGEMENT_USER_EDIT_OPERATION = "user-management-user-edit";
+    public static final String USER_MANAGEMENT_USER_EDIT_OPERATION =
+        RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION;
 
-    public static final String USER_MANAGEMENT_USER_ROLE_OPERATION = "user-management-user-role";
+    public static final String USER_MANAGEMENT_USER_ROLE_OPERATION =
+        RedbackRoleConstants.USER_MANAGEMENT_USER_ROLE_OPERATION;
 
-    public static final String USER_MANAGEMENT_USER_DELETE_OPERATION = "user-management-user-delete";
+    public static final String USER_MANAGEMENT_USER_DELETE_OPERATION =
+        RedbackRoleConstants.USER_MANAGEMENT_USER_DELETE_OPERATION;
 
-    public static final String USER_MANAGEMENT_USER_LIST_OPERATION = "user-management-user-list";
+    public static final String USER_MANAGEMENT_USER_LIST_OPERATION =
+        RedbackRoleConstants.USER_MANAGEMENT_USER_LIST_OPERATION;
 
     // operations against user assignment.
-    public static final String USER_MANAGEMENT_ROLE_GRANT_OPERATION = "user-management-role-grant";
+    public static final String USER_MANAGEMENT_ROLE_GRANT_OPERATION =
+        RedbackRoleConstants.USER_MANAGEMENT_ROLE_GRANT_OPERATION;
 
-    public static final String USER_MANAGEMENT_ROLE_DROP_OPERATION = "user-management-role-drop";
+    public static final String USER_MANAGEMENT_ROLE_DROP_OPERATION =
+        RedbackRoleConstants.USER_MANAGEMENT_ROLE_DROP_OPERATION;
 
     // operations against rbac objects.
-    public static final String USER_MANAGEMENT_RBAC_ADMIN_OPERATION = "user-management-rbac-admin";
-    
-    public static final String USER_MANAGEMENT_MANAGE_DATA = "user-management-manage-data";
+    public static final String USER_MANAGEMENT_RBAC_ADMIN_OPERATION =
+        RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION;
+
+    public static final String USER_MANAGEMENT_MANAGE_DATA = RedbackRoleConstants.USER_MANAGEMENT_MANAGE_DATA;
 }
