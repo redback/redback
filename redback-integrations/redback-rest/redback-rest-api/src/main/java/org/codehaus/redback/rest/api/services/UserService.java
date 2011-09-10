@@ -19,6 +19,7 @@ package org.codehaus.redback.rest.api.services;
 import org.apache.cxf.jaxrs.model.wadl.Description;
 import org.apache.cxf.jaxrs.model.wadl.DocTarget;
 import org.codehaus.plexus.redback.authorization.RedbackAuthorization;
+import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
 import org.codehaus.redback.rest.api.model.User;
 
 import javax.ws.rs.GET;
@@ -36,21 +37,21 @@ public interface UserService
     @Path( "getUser/{userName}" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    @RedbackAuthorization( permission = "user-management-user-edit" )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
     User getUser( @PathParam( "userName" ) String username )
         throws RedbackServiceException;
 
     @Path( "getUsers" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    @RedbackAuthorization( permission = "user-management-user-list" )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_LIST_OPERATION )
     List<User> getUsers()
         throws RedbackServiceException;
 
     @Path( "createUser" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = "user-management-user-create" )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_CREATE_OPERATION )
     Boolean createUser( @Description( value = "the user name to create", target = DocTarget.PARAM ) @QueryParam(
         "userName" ) String userName, @QueryParam( "fullName" ) String fullName, @QueryParam( "email" ) String email )
         throws RedbackServiceException;
@@ -58,14 +59,14 @@ public interface UserService
     @Path( "deleteUser/{userName}" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = "user-management-user-delete" )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_DELETE_OPERATION )
     Boolean deleteUser( @PathParam( "userName" ) String username )
         throws RedbackServiceException;
 
     @Path( "updateUser" )
     @POST
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = "user-management-user-edit" )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
     Boolean updateUser( User user )
         throws RedbackServiceException;
 
