@@ -36,14 +36,14 @@ public interface LoginService
     String addAuthenticationKey( @QueryParam( "providerKey" ) String providedKey,
                                  @QueryParam( "principal" ) String principal, @QueryParam( "purpose" ) String purpose,
                                  @QueryParam( "expirationMinutes" ) int expirationMinutes )
-        throws Exception;
+        throws RedbackServiceException;
 
     @Path( "removeFromCache/{userName}" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
     @RedbackAuthorization( permission = "user-management-user-create" )
     int removeFromCache( @PathParam( "userName" ) String username )
-        throws Exception;
+        throws RedbackServiceException;
 
 
     @Path( "ping" )
@@ -51,5 +51,5 @@ public interface LoginService
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
     @RedbackAuthorization( noRestriction = true )
     Boolean ping()
-        throws Exception;
+        throws RedbackServiceException;
 }

@@ -36,16 +36,16 @@ public interface UserService
     @Path( "getUser/{userName}" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    @RedbackAuthorization( permission = "user-management-user-create" )
+    @RedbackAuthorization( permission = "user-management-user-edit" )
     User getUser( @PathParam( "userName" ) String username )
-        throws Exception;
+        throws RedbackServiceException;
 
     @Path( "getUsers" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    @RedbackAuthorization( permission = "user-management-user-create" )
+    @RedbackAuthorization( permission = "user-management-user-list" )
     List<User> getUsers()
-        throws Exception;
+        throws RedbackServiceException;
 
     @Path( "createUser" )
     @GET
@@ -53,26 +53,26 @@ public interface UserService
     @RedbackAuthorization( permission = "user-management-user-create" )
     Boolean createUser( @Description( value = "the user name to create", target = DocTarget.PARAM ) @QueryParam(
         "userName" ) String userName, @QueryParam( "fullName" ) String fullName, @QueryParam( "email" ) String email )
-        throws Exception;
+        throws RedbackServiceException;
 
     @Path( "deleteUser/{userName}" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = "user-management-user-create" )
+    @RedbackAuthorization( permission = "user-management-user-delete" )
     Boolean deleteUser( @PathParam( "userName" ) String username )
-        throws Exception;
+        throws RedbackServiceException;
 
     @Path( "updateUser" )
     @POST
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = "user-management-user-create" )
+    @RedbackAuthorization( permission = "user-management-user-edit" )
     Boolean updateUser( User user )
-        throws Exception;
+        throws RedbackServiceException;
 
     @Path( "ping" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
     @RedbackAuthorization( noRestriction = true )
     Boolean ping()
-        throws Exception;
+        throws RedbackServiceException;
 }

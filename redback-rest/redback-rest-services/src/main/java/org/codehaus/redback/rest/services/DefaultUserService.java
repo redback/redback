@@ -16,18 +16,15 @@ package org.codehaus.redback.rest.services;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.redback.authorization.RedbackAuthorization;
 import org.codehaus.plexus.redback.users.UserManager;
+import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.redback.rest.api.model.User;
+import org.codehaus.redback.rest.api.services.RedbackServiceException;
 import org.codehaus.redback.rest.api.services.UserService;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +42,7 @@ public class DefaultUserService
 
 
     public Boolean createUser( String userName, String fullName, String email )
-        throws Exception
+        throws RedbackServiceException
     {
         org.codehaus.plexus.redback.users.User user = userManager.createUser( userName, fullName, email );
         userManager.addUser( user );
@@ -53,25 +50,39 @@ public class DefaultUserService
     }
 
     public Boolean deleteUser( String username )
-        throws Exception
+        throws RedbackServiceException
     {
-        userManager.deleteUser( username );
-        return Boolean.TRUE;
+        try
+        {
+            userManager.deleteUser( username );
+            return Boolean.TRUE;
+        }
+        catch ( UserNotFoundException e )
+        {
+            throw new RedbackServiceException( e.getMessage() );
+        }
     }
 
 
     public User getUser( String username )
-        throws Exception
+        throws RedbackServiceException
     {
-        org.codehaus.plexus.redback.users.User user = userManager.findUser( username );
-        User simpleUser =
-            new User( user.getUsername(), user.getFullName(), user.getEmail(), user.isValidated(), user.isLocked() );
-        return simpleUser;
+        try
+        {
+            org.codehaus.plexus.redback.users.User user = userManager.findUser( username );
+            User simpleUser = new User( user.getUsername(), user.getFullName(), user.getEmail(), user.isValidated(),
+                                        user.isLocked() );
+            return simpleUser;
+        }
+        catch ( UserNotFoundException e )
+        {
+            throw new RedbackServiceException( e.getMessage() );
+        }
     }
 
 
     public List<User> getUsers()
-        throws Exception
+        throws RedbackServiceException
     {
         List<org.codehaus.plexus.redback.users.User> users = userManager.getUsers();
         List<User> simpleUsers = new ArrayList<User>();
@@ -86,21 +97,28 @@ public class DefaultUserService
     }
 
     public Boolean updateUser( User user )
-        throws Exception
+        throws RedbackServiceException
     {
-        org.codehaus.plexus.redback.users.User rawUser = userManager.findUser( user.getUsername() );
-        rawUser.setFullName( user.getFullname() );
-        rawUser.setEmail( user.getEmail() );
-        rawUser.setValidated( user.isValidated() );
-        rawUser.setLocked( user.isLocked() );
+        try
+        {
+            org.codehaus.plexus.redback.users.User rawUser = userManager.findUser( user.getUsername() );
+            rawUser.setFullName( user.getFullname() );
+            rawUser.setEmail( user.getEmail() );
+            rawUser.setValidated( user.isValidated() );
+            rawUser.setLocked( user.isLocked() );
 
-        userManager.updateUser( rawUser );
-        return Boolean.TRUE;
+            userManager.updateUser( rawUser );
+            return Boolean.TRUE;
+        }
+        catch ( UserNotFoundException e )
+        {
+            throw new RedbackServiceException( e.getMessage() );
+        }
     }
 
 
     public Boolean ping()
-        throws Exception
+        throws RedbackServiceException
     {
         return Boolean.TRUE;
     }

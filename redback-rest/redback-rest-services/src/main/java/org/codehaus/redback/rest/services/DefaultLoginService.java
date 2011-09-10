@@ -25,6 +25,7 @@ import org.codehaus.plexus.redback.keys.memory.MemoryAuthenticationKey;
 import org.codehaus.plexus.redback.keys.memory.MemoryKeyManager;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.redback.rest.api.services.LoginService;
+import org.codehaus.redback.rest.api.services.RedbackServiceException;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -75,7 +76,7 @@ public class DefaultLoginService
 
 
     public String addAuthenticationKey( String providedKey, String principal, String purpose, int expirationMinutes )
-        throws Exception
+        throws RedbackServiceException
     {
         KeyManager keyManager = securitySystem.getKeyManager();
         AuthenticationKey key;
@@ -110,7 +111,7 @@ public class DefaultLoginService
 
 
     public int removeFromCache( String userName )
-        throws Exception
+        throws RedbackServiceException
     {
         if ( userAssignmentsCache != null )
         {
@@ -130,7 +131,7 @@ public class DefaultLoginService
 
     @RedbackAuthorization( noRestriction = true )
     public Boolean ping()
-        throws Exception
+        throws RedbackServiceException
     {
         return Boolean.TRUE;
     }
