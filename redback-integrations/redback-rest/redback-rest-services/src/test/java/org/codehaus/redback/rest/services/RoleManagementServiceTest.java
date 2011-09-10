@@ -93,6 +93,7 @@ public class RoleManagementServiceTest
         finally
         {
             getUserService( authorizationHeader ).deleteUser( "toto" );
+            getUserService( authorizationHeader ).removeFromCache( "toto" );
             assertNull( getUserService( authorizationHeader ).findUser( "toto" ) );
         }
 
