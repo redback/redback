@@ -16,8 +16,8 @@
   -->
 <project>
   <parent>
-    <artifactId>redback</artifactId>
     <groupId>org.codehaus.redback</groupId>
+    <artifactId>redback-integrations</artifactId>
     <version>1.3-SNAPSHOT</version>
   </parent>
   
