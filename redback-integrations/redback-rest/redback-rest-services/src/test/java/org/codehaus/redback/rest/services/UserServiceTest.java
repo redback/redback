@@ -32,11 +32,7 @@ public class UserServiceTest
     extends AbstractRestServicesTest
 {
 
-    UserService getUserService()
-    {
-        return JAXRSClientFactory.create( "http://localhost:" + port + "/services/redbackServices/",
-                                          UserService.class );
-    }
+
 
 
     @Test

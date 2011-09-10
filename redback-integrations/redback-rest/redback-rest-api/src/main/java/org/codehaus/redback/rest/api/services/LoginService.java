@@ -17,6 +17,7 @@ package org.codehaus.redback.rest.api.services;
  */
 
 import org.codehaus.plexus.redback.authorization.RedbackAuthorization;
+import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -41,7 +42,7 @@ public interface LoginService
     @Path( "removeFromCache/{userName}" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = "user-management-user-create" )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
     int removeFromCache( @PathParam( "userName" ) String username )
         throws RedbackServiceException;
 

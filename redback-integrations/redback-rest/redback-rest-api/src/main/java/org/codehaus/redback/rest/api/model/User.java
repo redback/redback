@@ -17,12 +17,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-@XmlRootElement(name = "user")
+@XmlRootElement( name = "user" )
 public class User
 {
     private String username;
 
-    private String fullname;
+    private String fullName;
 
     private String email;
 
@@ -30,15 +30,21 @@ public class User
 
     private boolean isLocked;
 
+    private String password;
+
+    private boolean passwordChangeRequired;
+
+    private boolean permanent;
+
     public User()
     {
         // no op
     }
 
-    public User( String username, String fullname, String email, boolean isValidated, boolean isLocked )
+    public User( String username, String fullName, String email, boolean isValidated, boolean isLocked )
     {
         this.username = username;
-        this.fullname = fullname;
+        this.fullName = fullName;
         this.email = email;
         this.isValidated = isValidated;
         this.isLocked = isLocked;
@@ -54,14 +60,14 @@ public class User
         this.username = username;
     }
 
-    public String getFullname()
+    public String getFullName()
     {
-        return fullname;
+        return fullName;
     }
 
-    public void setFullname( String fullname )
+    public void setFullName( String fullName )
     {
-        this.fullname = fullname;
+        this.fullName = fullName;
     }
 
     public String getEmail()
@@ -92,5 +98,35 @@ public class User
     public void setLocked( boolean isLocked )
     {
         this.isLocked = isLocked;
+    }
+
+    public String getPassword()
+    {
+        return password;
+    }
+
+    public void setPassword( String password )
+    {
+        this.password = password;
+    }
+
+    public boolean isPasswordChangeRequired()
+    {
+        return passwordChangeRequired;
+    }
+
+    public void setPasswordChangeRequired( boolean passwordChangeRequired )
+    {
+        this.passwordChangeRequired = passwordChangeRequired;
+    }
+
+    public boolean isPermanent()
+    {
+        return permanent;
+    }
+
+    public void setPermanent( boolean permanent )
+    {
+        this.permanent = permanent;
     }
 }

@@ -17,9 +17,13 @@ package org.codehaus.redback.rest.services;
  */
 
 import junit.framework.TestCase;
+import org.apache.cxf.common.util.Base64Utility;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
+import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.transport.servlet.CXFServlet;
-import org.codehaus.redback.integration.role.RoleConstants;
+import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
+import org.codehaus.redback.rest.api.services.RoleManagementService;
+import org.codehaus.redback.rest.api.services.UserService;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.session.SessionHandler;
@@ -47,8 +51,14 @@ public abstract class AbstractRestServicesTest
 
     public int port;
 
-    public String authorizationHeader = "Basic " + org.apache.cxf.common.util.Base64Utility.encode(
-        ( RoleConstants.ADMINISTRATOR_ACCOUNT_NAME + ":" + FakeCreateAdminService.ADMIN_TEST_PWD ).getBytes() );
+    public String authorizationHeader =
+        encode( RedbackRoleConstants.ADMINISTRATOR_ACCOUNT_NAME, FakeCreateAdminService.ADMIN_TEST_PWD );
+
+
+    public static String encode( String uid, String password )
+    {
+        return "Basic " + Base64Utility.encode( ( uid + ":" + password ).getBytes() );
+    }
 
     protected String getSpringConfigLocation()
     {
@@ -105,5 +115,37 @@ public abstract class AbstractRestServicesTest
         {
             this.server.stop();
         }
+    }
+
+    protected UserService getUserService()
+    {
+        return getUserService( null );
+    }
+
+    protected UserService getUserService( String authzHeader )
+    {
+        UserService service =
+            JAXRSClientFactory.create( "http://localhost:" + port + "/services/redbackServices/", UserService.class );
+
+        if ( authzHeader != null )
+        {
+            WebClient.client( service ).header( "Authorization", authzHeader );
+        }
+        return service;
+    }
+
+    protected RoleManagementService getRoleManagementService( String authzHeader )
+    {
+        RoleManagementService service =
+            JAXRSClientFactory.create( "http://localhost:" + port + "/services/redbackServices/",
+                                       RoleManagementService.class );
+
+        WebClient.getConfig( service ).getHttpConduit().getClient().setReceiveTimeout( 3000 );
+
+        if ( authzHeader != null )
+        {
+            WebClient.client( service ).header( "Authorization", authzHeader );
+        }
+        return service;
     }
 }

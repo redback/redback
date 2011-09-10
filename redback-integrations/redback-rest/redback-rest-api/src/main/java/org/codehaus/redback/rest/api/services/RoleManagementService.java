@@ -18,7 +18,14 @@ package org.codehaus.redback.rest.api.services;
  * under the License.
  */
 
+import org.codehaus.plexus.redback.authorization.RedbackAuthorization;
+import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
+
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 
 /**
  * @author Olivier Lamy
@@ -26,7 +33,13 @@ import javax.ws.rs.Path;
 @Path( "/roleManagementService/" )
 public interface RoleManagementService
 {
-    void createTemplatedRole( String templateId, String resource )
+
+    @Path( "createTemplatedRole" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    Boolean createTemplatedRole( @QueryParam( "templateId" ) String templateId,
+                                 @QueryParam( "resource" ) String resource )
         throws RedbackServiceException;
 
     /**
@@ -38,7 +51,12 @@ public interface RoleManagementService
      * @param resource
      * @throws Exception
      */
-    void removeTemplatedRole( String templateId, String resource )
+    @Path( "removeTemplatedRole" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    Boolean removeTemplatedRole( @QueryParam( "templateId" ) String templateId,
+                                 @QueryParam( "resource" ) String resource )
         throws RedbackServiceException;
 
 
@@ -53,7 +71,12 @@ public interface RoleManagementService
      * @param newResource
      * @throws Exception
      */
-    void updateRole( String templateId, String oldResource, String newResource )
+    @Path( "updateRole" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    Boolean updateRole( @QueryParam( "templateId" ) String templateId, @QueryParam( "oldResource" ) String oldResource,
+                        @QueryParam( "newResource" ) String newResource )
         throws RedbackServiceException;
 
 
@@ -64,7 +87,11 @@ public interface RoleManagementService
      * @param principal
      * @throws Exception
      */
-    void assignRole( String roleId, String principal )
+    @Path( "assignRole" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    Boolean assignRole( @QueryParam( "roleId" ) String roleId, @QueryParam( "principal" ) String principal )
         throws RedbackServiceException;
 
     /**
@@ -74,7 +101,11 @@ public interface RoleManagementService
      * @param principal
      * @throws Exception
      */
-    void assignRoleByName( String roleName, String principal )
+    @Path( "assignRoleByName" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    Boolean assignRoleByName( @QueryParam( "roleName" ) String roleName, @QueryParam( "principal" ) String principal )
         throws RedbackServiceException;
 
     /**
@@ -86,7 +117,13 @@ public interface RoleManagementService
      * @param resource
      * @param principal
      */
-    void assignTemplatedRole( String templateId, String resource, String principal )
+    @Path( "assignTemplatedRole" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    Boolean assignTemplatedRole( @QueryParam( "templateId" ) String templateId,
+                                 @QueryParam( "resource" ) String resource,
+                                 @QueryParam( "principal" ) String principal )
         throws RedbackServiceException;
 
     /**
@@ -96,7 +133,11 @@ public interface RoleManagementService
      * @param principal
      * @throws Exception
      */
-    void unassignRole( String roleId, String principal )
+    @Path( "unassignRole" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    Boolean unassignRole( @QueryParam( "roleId" ) String roleId, @QueryParam( "principal" ) String principal )
         throws RedbackServiceException;
 
     /**
@@ -106,7 +147,11 @@ public interface RoleManagementService
      * @param principal
      * @throws Exception
      */
-    void unassignRoleByName( String roleName, String principal )
+    @Path( "unassignRoleByName" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    Boolean unassignRoleByName( @QueryParam( "roleName" ) String roleName, @QueryParam( "principal" ) String principal )
         throws RedbackServiceException;
 
     /**
@@ -116,7 +161,11 @@ public interface RoleManagementService
      * @return
      * @throws Exception
      */
-    boolean roleExists( String roleId )
+    @Path( "roleExists" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    Boolean roleExists( @QueryParam( "roleId" ) String roleId )
         throws RedbackServiceException;
 
     /**
@@ -127,17 +176,27 @@ public interface RoleManagementService
      * @return
      * @throws Exception
      */
-    boolean templatedRoleExists( String templateId, String resource )
+    @Path( "templatedRoleExists" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    Boolean templatedRoleExists( @QueryParam( "templateId" ) String templateId,
+                                 @QueryParam( "resource" ) String resource )
         throws RedbackServiceException;
 
 
     /**
      * Check a role template is complete in the RBAC store.
      *
-     * @param templateID the templated role
+     * @param templateId the templated role
      * @param resource   the resource to verify
      * @throws Exception
      */
-    void verifyTemplatedRole( String templateID, String resource )
+    @Path( "verifyTemplatedRole" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    Boolean verifyTemplatedRole( @QueryParam( "templateId" ) String templateId,
+                                 @QueryParam( "resource" ) String resource )
         throws RedbackServiceException;
 }

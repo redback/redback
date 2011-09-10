@@ -16,18 +16,16 @@ package org.codehaus.redback.rest.api.services;
  * limitations under the License.
  */
 
-import org.apache.cxf.jaxrs.model.wadl.Description;
-import org.apache.cxf.jaxrs.model.wadl.DocTarget;
 import org.codehaus.plexus.redback.authorization.RedbackAuthorization;
 import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
 import org.codehaus.redback.rest.api.model.User;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -49,11 +47,11 @@ public interface UserService
         throws RedbackServiceException;
 
     @Path( "createUser" )
-    @GET
+    @POST
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @Consumes( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
     @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_CREATE_OPERATION )
-    Boolean createUser( @Description( value = "the user name to create", target = DocTarget.PARAM ) @QueryParam(
-        "userName" ) String userName, @QueryParam( "fullName" ) String fullName, @QueryParam( "email" ) String email )
+    Boolean createUser( User user )
         throws RedbackServiceException;
 
     @Path( "deleteUser/{userName}" )

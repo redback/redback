@@ -41,11 +41,16 @@ public class DefaultUserService
     }
 
 
-    public Boolean createUser( String userName, String fullName, String email )
+    public Boolean createUser( User user )
         throws RedbackServiceException
     {
-        org.codehaus.plexus.redback.users.User user = userManager.createUser( userName, fullName, email );
-        userManager.addUser( user );
+        org.codehaus.plexus.redback.users.User u =
+            userManager.createUser( user.getUsername(), user.getFullName(), user.getEmail() );
+        u.setPassword( user.getPassword() );
+        u.setLocked( user.isLocked() );
+        u.setPasswordChangeRequired( user.isPasswordChangeRequired() );
+        u.setPermanent( user.isPermanent() );
+        userManager.addUser( u );
         return Boolean.TRUE;
     }
 
@@ -102,10 +107,13 @@ public class DefaultUserService
         try
         {
             org.codehaus.plexus.redback.users.User rawUser = userManager.findUser( user.getUsername() );
-            rawUser.setFullName( user.getFullname() );
+            rawUser.setFullName( user.getFullName() );
             rawUser.setEmail( user.getEmail() );
             rawUser.setValidated( user.isValidated() );
             rawUser.setLocked( user.isLocked() );
+            rawUser.setPassword( user.getPassword() );
+            rawUser.setPasswordChangeRequired( user.isPasswordChangeRequired() );
+            rawUser.setPermanent( user.isPermanent() );
 
             userManager.updateUser( rawUser );
             return Boolean.TRUE;
