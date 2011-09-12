@@ -132,6 +132,7 @@ public abstract class AbstractUserManager
         User user = createUser( GUEST_USERNAME, "Guest", "" );
         user.setPermanent( true );
         user.setPasswordChangeRequired( false );
+
         user = addUser( user );
         return user;
     }

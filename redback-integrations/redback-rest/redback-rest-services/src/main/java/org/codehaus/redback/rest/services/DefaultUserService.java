@@ -17,6 +17,7 @@ package org.codehaus.redback.rest.services;
  */
 
 import org.codehaus.plexus.cache.Cache;
+import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.redback.rest.api.model.User;
@@ -34,6 +35,9 @@ public class DefaultUserService
     implements UserService
 {
     private UserManager userManager;
+
+
+    private SecuritySystem securitySystem;
 
     /**
      * cache used for user assignments
@@ -55,9 +59,11 @@ public class DefaultUserService
     private Cache usersCache;
 
     @Inject
-    public DefaultUserService( @Named( value = "userManager#cached" ) UserManager userManager )
+    public DefaultUserService( @Named( value = "userManager#cached" ) UserManager userManager,
+                               SecuritySystem securitySystem )
     {
         this.userManager = userManager;
+        this.securitySystem = securitySystem;
     }
 
 
@@ -176,7 +182,26 @@ public class DefaultUserService
     public User createGuestUser()
         throws RedbackServiceException
     {
-        return getSimpleUser( userManager.createGuestUser() );
+        User u = getGuestUser();
+        if ( u != null )
+        {
+            return u;
+        }
+        // temporary disable pocilty during guest creation as no password !
+        try
+        {
+            securitySystem.getPolicy().setEnabled( true );
+            org.codehaus.plexus.redback.users.User user = userManager.createGuestUser();
+            return getSimpleUser( user );
+        }
+        finally
+        {
+
+            if ( securitySystem.getPolicy().isEnabled() )
+            {
+                securitySystem.getPolicy().setEnabled( true );
+            }
+        }
     }
 
     public Boolean ping()
