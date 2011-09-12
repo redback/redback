@@ -187,7 +187,7 @@ public class DefaultUserService
         {
             return u;
         }
-        // temporary disable pocilty during guest creation as no password !
+        // temporary disable policy during guest creation as no password !
         try
         {
             securitySystem.getPolicy().setEnabled( true );
