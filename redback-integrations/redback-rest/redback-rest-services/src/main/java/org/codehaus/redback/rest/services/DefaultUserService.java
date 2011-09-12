@@ -190,14 +190,14 @@ public class DefaultUserService
         // temporary disable policy during guest creation as no password !
         try
         {
-            securitySystem.getPolicy().setEnabled( true );
+            securitySystem.getPolicy().setEnabled( false );
             org.codehaus.plexus.redback.users.User user = userManager.createGuestUser();
             return getSimpleUser( user );
         }
         finally
         {
 
-            if ( securitySystem.getPolicy().isEnabled() )
+            if ( !securitySystem.getPolicy().isEnabled() )
             {
                 securitySystem.getPolicy().setEnabled( true );
             }
