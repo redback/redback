@@ -111,4 +111,13 @@ public class UserServiceTest
         }
     }
 
+    public void guestUserCreate()
+        throws Exception
+    {
+        UserService userService = getUserService( authorizationHeader );
+        assertNull( userService.getGuestUser() );
+        assertNull( userService.createGuestUser() );
+
+    }
+
 }

@@ -95,32 +95,13 @@ public class DefaultUserService
         try
         {
             org.codehaus.plexus.redback.users.User user = userManager.findUser( username );
-            User simpleUser = new User( user.getUsername(), user.getFullName(), user.getEmail(), user.isValidated(),
-                                        user.isLocked() );
-            return simpleUser;
-        }
-        catch ( UserNotFoundException e )
-        {
-            throw new RedbackServiceException( e.getMessage() );
-        }
-    }
-
-    public User findUser( String username )
-        throws RedbackServiceException
-    {
-        try
-        {
-            org.codehaus.plexus.redback.users.User user = userManager.findUser( username );
-            User simpleUser = new User( user.getUsername(), user.getFullName(), user.getEmail(), user.isValidated(),
-                                        user.isLocked() );
-            return simpleUser;
+            return getSimpleUser( user );
         }
         catch ( UserNotFoundException e )
         {
             return null;
         }
     }
-
 
     public List<User> getUsers()
         throws RedbackServiceException
@@ -130,8 +111,7 @@ public class DefaultUserService
 
         for ( org.codehaus.plexus.redback.users.User user : users )
         {
-            simpleUsers.add( new User( user.getUsername(), user.getFullName(), user.getEmail(), user.isValidated(),
-                                       user.isLocked() ) );
+            simpleUsers.add( getSimpleUser( user ) );
         }
 
         return simpleUsers;
@@ -179,9 +159,38 @@ public class DefaultUserService
         return 0;
     }
 
+    public User getGuestUser()
+        throws RedbackServiceException
+    {
+        try
+        {
+            org.codehaus.plexus.redback.users.User user = userManager.getGuestUser();
+            return getSimpleUser( user );
+        }
+        catch ( UserNotFoundException e )
+        {
+            return null;
+        }
+    }
+
+    public User createGuestUser()
+        throws RedbackServiceException
+    {
+        return getSimpleUser( userManager.createGuestUser() );
+    }
+
     public Boolean ping()
         throws RedbackServiceException
     {
         return Boolean.TRUE;
+    }
+
+    private User getSimpleUser( org.codehaus.plexus.redback.users.User user )
+    {
+        if ( user == null )
+        {
+            return null;
+        }
+        return new User( user.getUsername(), user.getFullName(), user.getEmail(), user.isValidated(), user.isLocked() );
     }
 }

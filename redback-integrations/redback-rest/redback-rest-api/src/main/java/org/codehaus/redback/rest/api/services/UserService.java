@@ -39,18 +39,6 @@ public interface UserService
     User getUser( @PathParam( "userName" ) String username )
         throws RedbackServiceException;
 
-    /**
-     * doesn't throw Exception if the user doesn't exist
-     * @param username
-     * @return
-     * @throws RedbackServiceException
-     */
-    @Path( "findUser/{userName}" )
-    @GET
-    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
-    User findUser( @PathParam( "userName" ) String username )
-        throws RedbackServiceException;
 
     @Path( "getUsers" )
     @GET
@@ -93,5 +81,19 @@ public interface UserService
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
     @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
     int removeFromCache( @PathParam( "userName" ) String username )
+        throws RedbackServiceException;
+
+    @Path( "getGuestUser" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
+    User getGuestUser()
+        throws RedbackServiceException;
+
+    @Path( "createGuestUser" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
+    User createGuestUser()
         throws RedbackServiceException;
 }
