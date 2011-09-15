@@ -66,6 +66,13 @@ public abstract class AbstractRestServicesTest
         return "classpath*:META-INF/spring-context.xml";
     }
 
+
+    protected String getRestServicesPath()
+    {
+        return "restServices";
+    }
+
+
     @Before
     public void startServer()
         throws Exception
@@ -89,7 +96,7 @@ public abstract class AbstractRestServicesTest
 
         context.setSessionHandler( sessionHandler );
 
-        context.addServlet( sh, "/services/*" );
+        context.addServlet( sh, "/" + getRestServicesPath() + "/*" );
         server.setHandler( context );
         this.server.start();
         Connector connector = this.server.getConnectors()[0];
@@ -104,8 +111,9 @@ public abstract class AbstractRestServicesTest
 
     protected FakeCreateAdminService getFakeCreateAdminService()
     {
-        return JAXRSClientFactory.create( "http://localhost:" + port + "/services/fakeCreateAdminService/",
-                                          FakeCreateAdminService.class );
+        return JAXRSClientFactory.create(
+            "http://localhost:" + port + "/" + getRestServicesPath() + "/fakeCreateAdminService/",
+            FakeCreateAdminService.class );
     }
 
     @After
@@ -126,7 +134,8 @@ public abstract class AbstractRestServicesTest
     protected UserService getUserService( String authzHeader )
     {
         UserService service =
-            JAXRSClientFactory.create( "http://localhost:" + port + "/services/redbackServices/", UserService.class );
+            JAXRSClientFactory.create( "http://localhost:" + port + "/" + getRestServicesPath() + "/redbackServices/",
+                                       UserService.class );
 
         // for debuging purpose
         WebClient.getConfig( service ).getHttpConduit().getClient().setReceiveTimeout( 100000 );
@@ -141,7 +150,7 @@ public abstract class AbstractRestServicesTest
     protected RoleManagementService getRoleManagementService( String authzHeader )
     {
         RoleManagementService service =
-            JAXRSClientFactory.create( "http://localhost:" + port + "/services/redbackServices/",
+            JAXRSClientFactory.create( "http://localhost:" + port + "/" + getRestServicesPath() + "/redbackServices/",
                                        RoleManagementService.class );
 
         // for debuging purpose
@@ -157,7 +166,8 @@ public abstract class AbstractRestServicesTest
     protected LoginService getLoginService( String authzHeader )
     {
         LoginService service =
-            JAXRSClientFactory.create( "http://localhost:" + port + "/services/redbackServices/", LoginService.class );
+            JAXRSClientFactory.create( "http://localhost:" + port + "/" + getRestServicesPath() + "/redbackServices/",
+                                       LoginService.class );
 
         // for debuging purpose
         WebClient.getConfig( service ).getHttpConduit().getClient().setReceiveTimeout( 100000 );
