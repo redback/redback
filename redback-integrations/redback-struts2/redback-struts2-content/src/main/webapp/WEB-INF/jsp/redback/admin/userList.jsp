@@ -160,7 +160,7 @@
       <div class="task createUser">
         <s:form action="usercreate!show" namespace="/security" theme="simple" method="post">
           <s:token/>
-          <s:submit cssClass="button" value="%{getText('user.list.create.new.user')}" />
+          <s:submit cssClass="button" value="%{getText('user.list.create.new.user')}" id="userCreateButton"/>
         </s:form>
       </div>
     </redback:ifAuthorized>
