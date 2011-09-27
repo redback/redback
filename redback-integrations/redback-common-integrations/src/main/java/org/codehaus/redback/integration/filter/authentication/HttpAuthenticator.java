@@ -16,15 +16,6 @@ package org.codehaus.redback.integration.filter.authentication;
  * limitations under the License.
  */
 
-import java.io.IOException;
-
-import javax.annotation.Resource;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.codehaus.plexus.redback.authentication.AuthenticationDataSource;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
@@ -32,11 +23,18 @@ import org.codehaus.plexus.redback.policy.AccountLockedException;
 import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySystem;
+import org.codehaus.plexus.redback.system.SecuritySystemConstants;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 /**
  * HttpAuthenticator
@@ -141,7 +139,6 @@ public abstract class HttpAuthenticator
         throws AuthenticationException, AccountLockedException, MustChangePasswordException;
 
 
-
     public User getSessionUser( HttpSession httpSession )
     {
         return (User) httpSession.getAttribute( SecuritySession.USERKEY );
@@ -156,10 +153,16 @@ public abstract class HttpAuthenticator
 
     public SecuritySession getSecuritySession( HttpSession httpSession )
     {
-        return (SecuritySession) httpSession.getAttribute( SecuritySession.ROLE );
+        SecuritySession securitySession = (SecuritySession) httpSession.getAttribute( SecuritySession.ROLE );
+        if ( securitySession != null )
+        {
+            return securitySession;
+        }
+        return (SecuritySession) httpSession.getAttribute( SecuritySystemConstants.SECURITY_SESSION_KEY );
+
     }
 
-    
+
     public void setSecuritySession( SecuritySession session, HttpSession httpSession )
     {
         httpSession.setAttribute( SecuritySession.ROLE, session );
