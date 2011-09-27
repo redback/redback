@@ -16,7 +16,8 @@ package org.codehaus.redback.integration.filter.authentication.digest;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.util.Base64;
+
+import org.apache.commons.codec.binary.Base64;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.redback.integration.HttpUtils;
 import org.codehaus.redback.integration.filter.authentication.HttpAuthenticationException;

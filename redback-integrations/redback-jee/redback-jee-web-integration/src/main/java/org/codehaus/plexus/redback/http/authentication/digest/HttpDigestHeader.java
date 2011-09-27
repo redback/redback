@@ -16,9 +16,9 @@ package org.codehaus.plexus.redback.http.authentication.digest;
  * limitations under the License.
  */
 
+import org.apache.commons.codec.binary.Base64;
 import org.codehaus.plexus.redback.http.HttpUtils;
 import org.codehaus.plexus.redback.http.authentication.HttpAuthenticationException;
-import org.codehaus.plexus.util.Base64;
 import org.codehaus.plexus.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

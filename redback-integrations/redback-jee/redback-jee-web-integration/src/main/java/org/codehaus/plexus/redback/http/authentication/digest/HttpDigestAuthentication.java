@@ -16,13 +16,7 @@ package org.codehaus.plexus.redback.http.authentication.digest;
  * limitations under the License.
  */
 
-import java.io.IOException;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
+import org.apache.commons.codec.binary.Base64;
 import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authentication.TokenBasedAuthenticationDataSource;
@@ -33,9 +27,14 @@ import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
-import org.codehaus.plexus.util.Base64;
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 /**
  * HttpDigestAuthentication methods for working with <a href="http://www.faqs.org/rfcs/rfc2617.html">RFC 2617 HTTP Authentication</a>.
@@ -44,11 +43,11 @@ import org.springframework.stereotype.Service;
  * @author Andrew Williams
  * @version $Id$
  */
-@Service("attpAuthenticator#digest")
+@Service( "attpAuthenticator#digest" )
 public class HttpDigestAuthentication
     extends SessionBasedHttpAuthenticator
 {
-    @Resource(name="userManager#configurable")
+    @Resource( name = "userManager#configurable" )
     private UserManager userManager;
 
     /**
@@ -58,8 +57,6 @@ public class HttpDigestAuthentication
 
     /**
      * NOTE: Must be alphanumeric.
-     *
-     *
      */
     private String digestKey = "OrycteropusAfer";
 
@@ -86,9 +83,9 @@ public class HttpDigestAuthentication
         // in tomcat this is : authorization=Basic YWRtaW46TWFuYWdlMDc=
         if ( authHeader == null )
         {
-            authHeader = request.getHeader("authorization");
+            authHeader = request.getHeader( "authorization" );
         }
-        
+
         if ( ( authHeader != null ) && authHeader.startsWith( "Digest " ) )
         {
             String rawDigestHeader = authHeader.substring( 7 );
@@ -133,14 +130,14 @@ public class HttpDigestAuthentication
      * @param response  the response to use.
      * @param realmName the realm name to state.
      * @param exception the exception to base the message off of.
-     * @throws IOException if there was a problem with the {@link HttpServletResponse#sendError(int,String)} call.
+     * @throws IOException if there was a problem with the {@link HttpServletResponse#sendError(int, String)} call.
      */
     public void challenge( HttpServletRequest request, HttpServletResponse response, String realmName,
                            AuthenticationException exception )
         throws IOException
     {
         // The Challenge Header
-        StringBuffer authHeader = new StringBuffer();
+        StringBuilder authHeader = new StringBuilder();
         authHeader.append( "Digest " );
         // [REQUIRED] The name to appear in the dialog box to the user.
         authHeader.append( "realm=\"" ).append( realmName ).append( "\"" );
@@ -187,8 +184,8 @@ public class HttpDigestAuthentication
         }
         else if ( StringUtils.equals( "auth", digestHeader.qop ) )
         {
-            digest = a1 + ":" + digestHeader.nonce + ":" + digestHeader.nc + ":" + digestHeader.cnonce + ":" +
-                digestHeader.qop + ":" + a2;
+            digest = a1 + ":" + digestHeader.nonce + ":" + digestHeader.nc + ":" + digestHeader.cnonce + ":"
+                + digestHeader.qop + ":" + a2;
         }
         else
         {
