@@ -31,5 +31,6 @@ public class SecuritySystemConstants
 
     private SecuritySystemConstants()
     {
+        // no op
     }
 }

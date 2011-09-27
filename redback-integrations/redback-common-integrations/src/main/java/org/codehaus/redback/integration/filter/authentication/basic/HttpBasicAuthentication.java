@@ -28,6 +28,7 @@ import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authentication.PasswordBasedAuthenticationDataSource;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
 import org.codehaus.plexus.redback.policy.MustChangePasswordException;
+import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.redback.integration.filter.authentication.HttpAuthenticator;
 import org.springframework.stereotype.Service;
@@ -52,9 +53,10 @@ public class HttpBasicAuthentication
         throws AuthenticationException, AccountLockedException, MustChangePasswordException
     {
         HttpSession httpSession = request.getSession( true );
-        if ( isAlreadyAuthenticated( httpSession ) )
+        SecuritySession securitySession = getSecuritySession( httpSession );
+        if ( securitySession != null )
         {
-            return getSecuritySession( httpSession ).getAuthenticationResult();
+            return securitySession.getAuthenticationResult();
         }
 
         PasswordBasedAuthenticationDataSource authDataSource;
