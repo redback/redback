@@ -408,4 +408,10 @@ public class DefaultUserSecurityPolicy
     {
         this.config = config;
     }
+
+
+    public void setPasswordEncoder( PasswordEncoder passwordEncoder )
+    {
+        this.passwordEncoder = passwordEncoder;
+    }
 }
