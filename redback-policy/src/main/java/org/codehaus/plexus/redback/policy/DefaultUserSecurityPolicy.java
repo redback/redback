@@ -414,4 +414,24 @@ public class DefaultUserSecurityPolicy
     {
         this.passwordEncoder = passwordEncoder;
     }
+
+    public void setRememberMeCookieSettings( CookieSettings rememberMeCookieSettings )
+    {
+        this.rememberMeCookieSettings = rememberMeCookieSettings;
+    }
+
+    public void setSignonCookieSettings( CookieSettings signonCookieSettings )
+    {
+        this.signonCookieSettings = signonCookieSettings;
+    }
+
+    public void setRules( List<PasswordRule> rules )
+    {
+        this.rules = rules;
+    }
+
+    public void setDefaultPasswordRule( PasswordRule defaultPasswordRule )
+    {
+        this.defaultPasswordRule = defaultPasswordRule;
+    }
 }
