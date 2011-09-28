@@ -17,6 +17,7 @@ package org.codehaus.redback.rest.services;
  */
 
 import junit.framework.TestCase;
+import org.apache.commons.lang.StringUtils;
 import org.apache.cxf.common.util.Base64Utility;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.apache.cxf.jaxrs.client.WebClient;
@@ -52,13 +53,22 @@ public abstract class AbstractRestServicesTest
 
     public int port;
 
-    public String authorizationHeader =
-        encode( RedbackRoleConstants.ADMINISTRATOR_ACCOUNT_NAME, FakeCreateAdminService.ADMIN_TEST_PWD );
+    public String authorizationHeader = getAdminAuthzHeader();
 
 
     public static String encode( String uid, String password )
     {
         return "Basic " + Base64Utility.encode( ( uid + ":" + password ).getBytes() );
+    }
+
+    public static String getAdminAuthzHeader()
+    {
+        String adminPwdSysProps = System.getProperty( "rest.admin.pwd" );
+        if ( StringUtils.isBlank( adminPwdSysProps ) )
+        {
+            return encode( RedbackRoleConstants.ADMINISTRATOR_ACCOUNT_NAME, FakeCreateAdminService.ADMIN_TEST_PWD );
+        }
+        return encode( RedbackRoleConstants.ADMINISTRATOR_ACCOUNT_NAME, adminPwdSysProps );
     }
 
     protected String getSpringConfigLocation()
