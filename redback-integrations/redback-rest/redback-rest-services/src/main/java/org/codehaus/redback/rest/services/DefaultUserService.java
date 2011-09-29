@@ -16,6 +16,8 @@ package org.codehaus.redback.rest.services;
  * limitations under the License.
  */
 
+import net.sf.ehcache.CacheManager;
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.plexus.cache.Cache;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.UserManager;
@@ -162,6 +164,16 @@ public class DefaultUserService
         if ( usersCache != null )
         {
             usersCache.remove( userName );
+        }
+
+        CacheManager cacheManager = CacheManager.getInstance();
+        String[] caches = cacheManager.getCacheNames();
+        for (String cacheName : caches)
+        {
+            if ( StringUtils.startsWith( cacheName, "org.codehaus.plexus.redback.rbac.jdo" ))
+            {
+                cacheManager.getCache( cacheName ).removeAll();
+            }
         }
 
         return 0;
