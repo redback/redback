@@ -59,10 +59,6 @@ public class DefaultUserService
     private Cache usersCache;
 
     @Inject
-    @Named( value = "cache#userPermissions" )
-    private Cache userPermissionsCache;
-
-    @Inject
     public DefaultUserService( @Named( value = "userManager#cached" ) UserManager userManager,
                                SecuritySystem securitySystem )
     {
@@ -165,10 +161,7 @@ public class DefaultUserService
         {
             usersCache.remove( userName );
         }
-        if (userPermissionsCache != null)
-        {
-            userPermissionsCache.remove( userName );
-        }
+
 
         return 0;
     }
