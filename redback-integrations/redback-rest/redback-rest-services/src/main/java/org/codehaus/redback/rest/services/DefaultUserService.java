@@ -49,12 +49,14 @@ public class DefaultUserService
     /**
      * cache used for user permissions
      */
+    @Inject
     @Named( value = "cache#userPermissions" )
     private Cache userPermissionsCache;
 
     /**
      * Cache used for users
      */
+    @Inject
     @Named( value = "cache#users" )
     private Cache usersCache;
 
@@ -161,7 +163,6 @@ public class DefaultUserService
         {
             usersCache.remove( userName );
         }
-
 
         return 0;
     }
