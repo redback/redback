@@ -1,6 +1,7 @@
 package org.codehaus.redback.rest.api.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 /*
 * Copyright 2009 The Codehaus.
@@ -19,6 +20,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 */
 @XmlRootElement( name = "user" )
 public class User
+    implements Serializable
 {
     private String username;
 
