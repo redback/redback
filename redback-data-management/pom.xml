@@ -71,7 +71,8 @@
           <forkMode>once</forkMode>
           <systemPropertyVariables>
             <basedir>${basedir}</basedir>
-            <plexus.home>${basedir}/target</plexus.home>
+            <derby.system.home>${project.build.directory}/test-home</derby.system.home>
+            <plexus.home>${project.build.directory}/test-home</plexus.home>
           </systemPropertyVariables>
         </configuration>
       </plugin>

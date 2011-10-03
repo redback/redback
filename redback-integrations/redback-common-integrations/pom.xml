@@ -206,6 +206,7 @@
           <forkMode>once</forkMode>
           <systemPropertyVariables>
             <basedir>${basedir}</basedir>
+            <derby.system.home>${project.build.directory}/test-home</derby.system.home>
           </systemPropertyVariables>
         </configuration>
       </plugin>

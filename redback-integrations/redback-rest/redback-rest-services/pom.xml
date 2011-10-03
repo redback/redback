@@ -160,7 +160,8 @@
             <exclude>**/FakeCreateAdminService**.java</exclude>
           </excludes>
           <systemPropertyVariables>
-            <plexus.home>${project.build.outputDirectory}</plexus.home>
+            <plexus.home>${project.build.directory}/test-home</plexus.home>
+            <derby.system.home>${project.build.directory}/test-home</derby.system.home>
           </systemPropertyVariables>
         </configuration>
       </plugin>
