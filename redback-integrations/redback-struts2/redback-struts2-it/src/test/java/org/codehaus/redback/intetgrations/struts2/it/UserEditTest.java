@@ -122,7 +122,7 @@ public class UserEditTest
         assert selenium.getTitle().contains( "[Admin] User Edit - Confirm Administrator Password" );
 
         selenium.type( "userEditForm_userAdminPassword", ADMIN_PASSWORD );
-        selenium.click( "userEditForm__confirmAdminPassword" );
+        selenium.click( "confirmUserAdminSubmit" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
         //assert selenium.getTitle().contains( "[Admin] User List" );
 

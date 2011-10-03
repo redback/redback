@@ -61,14 +61,14 @@ public class LoginTest
         doLogin( ADMIN_USERNAME, ADMIN_PASSWORD );
 
         selenium.open( "/security/userlist.action" );
-        selenium.click( "usercreate_0" );
+        selenium.click( "id=userCreateButton" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
         selenium.type( "userCreateForm_user_username", "user1" );
         selenium.type( "userCreateForm_user_fullName", "User" );
         selenium.type( "userCreateForm_user_email", "user@localhost" );
         selenium.type( "userCreateForm_user_password", "user1" );
         selenium.type( "userCreateForm_user_confirmPassword", "user1" );
-        selenium.click( "userCreateForm_0" );
+        selenium.click( "id=userCreateSubmit" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
         selenium.click( "addRolesToUser_submitRolesButton" );
         selenium.waitForPageToLoad( PAGE_TIMEOUT );
