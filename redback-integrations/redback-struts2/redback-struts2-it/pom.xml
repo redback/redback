@@ -127,6 +127,10 @@
               <value>${basedir}/target/appserver-base</value>
             </systemProperty>
             <systemProperty>
+              <name>derby.system.home</name>
+              <value>${basedir}/target/appserver-base</value>
+            </systemProperty>
+            <systemProperty>
               <name>plexus.home</name>
               <value>${basedir}/target/appserver-base</value>
             </systemProperty>
