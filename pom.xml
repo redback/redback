@@ -857,7 +857,6 @@
                     <exclude>net.sf.ehcache:ehcache</exclude>
                     <exclude>velocity:velocity</exclude>
                     <exclude>stax:stax-api</exclude>
-                    <exclude>org.codehaus.woodstox:stax2-api</exclude>
                   </excludes>
                 </bannedDependencies>
               </rules>
