@@ -30,7 +30,7 @@ public class LoginServiceTest
     extends AbstractRestServicesTest
 {
     @Test
-    public void loginAdmin()
+    public void loginAdmin( )
         throws Exception
     {
         assertTrue( getLoginService( null ).logIn( RedbackRoleConstants.ADMINISTRATOR_ACCOUNT_NAME,
@@ -38,25 +38,28 @@ public class LoginServiceTest
     }
 
     @Test
-    public void createUserThenLog()
+    public void createUserThenLog( )
         throws Exception
     {
         try
         {
 
+            // START SNIPPET: create-user
             User user = new User( "toto", "toto the king", "toto@toto.fr", false, false );
             user.setPassword( "foo123" );
+            user.setPermanent( false );
+            user.setPasswordChangeRequired( false );
+            user.setLocked( false );
             UserService userService = getUserService( authorizationHeader );
             userService.createUser( user );
+            // END SNIPPET: create-user
             user = userService.getUser( "toto" );
             assertNotNull( user );
-            assertEquals( "toto the king", user.getFullName() );
-            assertEquals( "toto@toto.fr", user.getEmail() );
-            //getLoginService( null ).logIn( "toto", "foo123" );
-            //getLoginService( null ).ping();
-            getLoginService( null ).pingWithAutz();
+            assertEquals( "toto the king", user.getFullName( ) );
+            assertEquals( "toto@toto.fr", user.getEmail( ) );
+            getLoginService( encode( "toto", "foo123" ) ).pingWithAutz( );
         }
-        catch ( Exception e )
+        finally
         {
             getUserService( authorizationHeader ).deleteUser( "toto" );
             getUserService( authorizationHeader ).removeFromCache( "toto" );

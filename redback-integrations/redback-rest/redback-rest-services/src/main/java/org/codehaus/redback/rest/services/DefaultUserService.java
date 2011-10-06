@@ -63,49 +63,61 @@ public class DefaultUserService
     private Cache usersCache;
 
     @Inject
-    public DefaultUserService( @Named( value = "userManager#cached" ) UserManager userManager,
-                               SecuritySystem securitySystem )
+    public DefaultUserService(@Named( value = "userManager#cached" ) UserManager userManager,
+                              SecuritySystem securitySystem)
     {
         this.userManager = userManager;
         this.securitySystem = securitySystem;
     }
 
 
-    public Boolean createUser( User user )
+    public Boolean createUser(User user)
         throws RedbackServiceException
     {
         org.codehaus.plexus.redback.users.User u =
-            userManager.createUser( user.getUsername(), user.getFullName(), user.getEmail() );
-        u.setPassword( user.getPassword() );
-        u.setLocked( user.isLocked() );
-        u.setPasswordChangeRequired( user.isPasswordChangeRequired() );
-        u.setPermanent( user.isPermanent() );
-        u = userManager.addUser( u );
+            userManager.createUser(user.getUsername(), user.getFullName(), user.getEmail());
+        u.setPassword(user.getPassword());
+        u.setLocked(user.isLocked());
+        u.setPasswordChangeRequired(user.isPasswordChangeRequired());
+        u.setPermanent(user.isPermanent());
+        u = userManager.addUser(u);
+        if ( !user.isPasswordChangeRequired() )
+        {
+            u.setPasswordChangeRequired(false);
+            try
+            {
+                userManager.updateUser(u);
+            }
+            catch ( UserNotFoundException e )
+            {
+                throw new RedbackServiceException(e.getMessage());
+            }
+        }
         return Boolean.TRUE;
     }
 
-    public Boolean deleteUser( String username )
+    public Boolean deleteUser(String username)
         throws RedbackServiceException
     {
         try
         {
-            userManager.deleteUser( username );
+            userManager.deleteUser(username);
             return Boolean.TRUE;
         }
         catch ( UserNotFoundException e )
         {
-            throw new RedbackServiceException( e.getMessage() );
+            throw new RedbackServiceException(e.getMessage());
         }
     }
 
 
-    public User getUser( String username )
+    public User getUser(String username)
         throws RedbackServiceException
     {
         try
         {
-            org.codehaus.plexus.redback.users.User user = userManager.findUser( username );
-            return getSimpleUser( user );
+            org.codehaus.plexus.redback.users.User user = userManager.findUser(username);
+            return getSimpleUser(user);
         }
         catch ( UserNotFoundException e )
         {
@@ -121,58 +133,58 @@ public class DefaultUserService
 
         for ( org.codehaus.plexus.redback.users.User user : users )
         {
-            simpleUsers.add( getSimpleUser( user ) );
+            simpleUsers.add(getSimpleUser(user));
         }
 
         return simpleUsers;
     }
 
-    public Boolean updateUser( User user )
+    public Boolean updateUser(User user)
         throws RedbackServiceException
     {
         try
         {
-            org.codehaus.plexus.redback.users.User rawUser = userManager.findUser( user.getUsername() );
-            rawUser.setFullName( user.getFullName() );
-            rawUser.setEmail( user.getEmail() );
-            rawUser.setValidated( user.isValidated() );
-            rawUser.setLocked( user.isLocked() );
-            rawUser.setPassword( user.getPassword() );
-            rawUser.setPasswordChangeRequired( user.isPasswordChangeRequired() );
-            rawUser.setPermanent( user.isPermanent() );
+            org.codehaus.plexus.redback.users.User rawUser = userManager.findUser(user.getUsername());
+            rawUser.setFullName(user.getFullName());
+            rawUser.setEmail(user.getEmail());
+            rawUser.setValidated(user.isValidated());
+            rawUser.setLocked(user.isLocked());
+            rawUser.setPassword(user.getPassword());
+            rawUser.setPasswordChangeRequired(user.isPasswordChangeRequired());
+            rawUser.setPermanent(user.isPermanent());
 
-            userManager.updateUser( rawUser );
+            userManager.updateUser(rawUser);
             return Boolean.TRUE;
         }
         catch ( UserNotFoundException e )
         {
-            throw new RedbackServiceException( e.getMessage() );
+            throw new RedbackServiceException(e.getMessage());
         }
     }
 
-    public int removeFromCache( String userName )
+    public int removeFromCache(String userName)
         throws RedbackServiceException
     {
         if ( userAssignmentsCache != null )
         {
-            userAssignmentsCache.remove( userName );
+            userAssignmentsCache.remove(userName);
         }
         if ( userPermissionsCache != null )
         {
-            userPermissionsCache.remove( userName );
+            userPermissionsCache.remove(userName);
         }
         if ( usersCache != null )
         {
-            usersCache.remove( userName );
+            usersCache.remove(userName);
         }
 
         CacheManager cacheManager = CacheManager.getInstance();
         String[] caches = cacheManager.getCacheNames();
-        for (String cacheName : caches)
+        for ( String cacheName : caches )
         {
-            if ( StringUtils.startsWith( cacheName, "org.codehaus.plexus.redback.rbac.jdo" ))
+            if ( StringUtils.startsWith(cacheName, "org.codehaus.plexus.redback.rbac.jdo") )
             {
-                cacheManager.getCache( cacheName ).removeAll();
+                cacheManager.getCache(cacheName).removeAll();
             }
         }
 
@@ -185,7 +197,7 @@ public class DefaultUserService
         try
         {
             org.codehaus.plexus.redback.users.User user = userManager.getGuestUser();
-            return getSimpleUser( user );
+            return getSimpleUser(user);
         }
         catch ( UserNotFoundException e )
         {
@@ -204,16 +216,16 @@ public class DefaultUserService
         // temporary disable policy during guest creation as no password !
         try
         {
-            securitySystem.getPolicy().setEnabled( false );
+            securitySystem.getPolicy().setEnabled(false);
             org.codehaus.plexus.redback.users.User user = userManager.createGuestUser();
-            return getSimpleUser( user );
+            return getSimpleUser(user);
         }
         finally
         {
 
             if ( !securitySystem.getPolicy().isEnabled() )
             {
-                securitySystem.getPolicy().setEnabled( true );
+                securitySystem.getPolicy().setEnabled(true);
             }
         }
     }
@@ -224,12 +236,12 @@ public class DefaultUserService
         return Boolean.TRUE;
     }
 
-    private User getSimpleUser( org.codehaus.plexus.redback.users.User user )
+    private User getSimpleUser(org.codehaus.plexus.redback.users.User user)
     {
         if ( user == null )
         {
             return null;
         }
-        return new User( user.getUsername(), user.getFullName(), user.getEmail(), user.isValidated(), user.isLocked() );
+        return new User(user.getUsername(), user.getFullName(), user.getEmail(), user.isValidated(), user.isLocked());
     }
 }

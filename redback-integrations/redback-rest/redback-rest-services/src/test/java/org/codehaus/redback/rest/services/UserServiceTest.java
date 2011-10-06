@@ -36,9 +36,6 @@ public class UserServiceTest
     public void ping()
         throws Exception
     {
-        // 1000000L
-        //WebClient.getConfig( userService ).getHttpConduit().getClient().setReceiveTimeout(3000);
-
         Boolean res = getUserService().ping();
         assertTrue( res.booleanValue() );
     }
@@ -47,9 +44,6 @@ public class UserServiceTest
     public void getUsers()
         throws Exception
     {
-        // 1000000L
-        //WebClient.getConfig( userService ).getHttpConduit().getClient().setReceiveTimeout(3000);
-
         UserService userService = getUserService();
 
         WebClient.client( userService ).header( "Authorization", authorizationHeader );
