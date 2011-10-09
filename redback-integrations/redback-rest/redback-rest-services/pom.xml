@@ -27,6 +27,8 @@
 
   <properties>
     <jettyVersion>7.4.5.v20110725</jettyVersion>
+    <tomcatVersion>7.0.21</tomcatVersion>
+    <test.useTomcat>false</test.useTomcat>
   </properties>
 
   <dependencies>
@@ -45,9 +47,17 @@
       <artifactId>redback-common-integrations</artifactId>
     </dependency>
 
+    <!--
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    -->
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-servlet-api</artifactId>
+      <version>${tomcatVersion}</version>
       <scope>provided</scope>
     </dependency>
 
@@ -107,14 +117,27 @@
       <version>${jettyVersion}</version>
       <scope>test</scope>
     </dependency>
-    <!--
     <dependency>
-      <groupId>org.mortbay.jetty</groupId>
-      <artifactId>jetty-client</artifactId>
-      <version>${jettyVersion}</version>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-core</artifactId>
+      <version>${tomcatVersion}</version>
       <scope>test</scope>
     </dependency>
-    -->
+
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-juli</artifactId>
+      <version>${tomcatVersion}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-logging-juli</artifactId>
+      <version>${tomcatVersion}</version>
+      <scope>test</scope>
+    </dependency>
+
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
@@ -158,6 +181,7 @@
           <systemPropertyVariables>
             <plexus.home>${project.build.directory}/test-home</plexus.home>
             <derby.system.home>${project.build.directory}/test-home</derby.system.home>
+            <test.useTomcat>${test.useTomcat}</test.useTomcat>
           </systemPropertyVariables>
         </configuration>
       </plugin>
