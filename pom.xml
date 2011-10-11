@@ -191,7 +191,7 @@
     <slf4jVersion>1.6.1</slf4jVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <gpg.useagent>true</gpg.useagent>
-    <cxfVersion>2.4.2</cxfVersion>
+    <cxfVersion>2.4.3</cxfVersion>
   </properties>
 
   <repositories>
