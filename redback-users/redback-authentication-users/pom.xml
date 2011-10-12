@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-authentication-providers</artifactId>
-    <version>1.3</version>
+    <version>1.4-SNAPSHOT</version>
     <relativePath>../../redback-authentication/redback-authentication-providers/pom.xml</relativePath>
   </parent>
   <artifactId>redback-authentication-users</artifactId>

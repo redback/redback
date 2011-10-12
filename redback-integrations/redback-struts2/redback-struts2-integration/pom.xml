@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-struts2</artifactId>
-    <version>1.3</version>
+    <version>1.4-SNAPSHOT</version>
   </parent>
   <artifactId>redback-struts2-integration</artifactId>
   <name>Redback :: Integration :: Struts 2 Integration</name>
