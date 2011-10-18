@@ -231,10 +231,10 @@
           <path>/</path>
           <contextFile>${basedir}/src/test/tomcat/tomcat-context.xml</contextFile>
           <systemProperties>
-            <plexus.home>${basedir}/appserver-base</plexus.home>
-            <appserver.base>${basedir}/appserver-base</appserver.base>
+            <plexus.home>${project.build.directory}/appserver-base</plexus.home>
+            <appserver.base>${project.build.directory}/appserver-base</appserver.base>
             <appserver.home>${project.build.directory}/appserver-home</appserver.home>
-            <derby.system.home>${basedir}/appserver-base/logs</derby.system.home>
+            <derby.system.home>${project.build.directory}/appserver-base/logs</derby.system.home>
           </systemProperties>
         </configuration>
         <dependencies>
@@ -335,7 +335,7 @@
                 </goals>
                 <configuration>
                   <tasks>
-                    <copy overwrite="true" file="${basedir}/src/test/resources/log4j.xml" todir="${basedir}/src/main/webapp/WEB-INF/classes" />
+                    <copy overwrite="true" file="${basedir}/src/test/log4j.xml" todir="${basedir}/src/main/webapp/WEB-INF/classes" />
                   </tasks>
                 </configuration>
               </execution>
