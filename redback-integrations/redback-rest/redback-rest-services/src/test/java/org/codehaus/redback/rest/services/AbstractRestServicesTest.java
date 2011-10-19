@@ -58,7 +58,7 @@ import java.net.ServerSocket;
 public abstract class AbstractRestServicesTest
     extends TestCase
 {
-    protected Logger log = LoggerFactory.getLogger(getClass());
+    protected Logger log = LoggerFactory.getLogger( getClass() );
 
     public Server server = null;
 
@@ -69,19 +69,19 @@ public abstract class AbstractRestServicesTest
     public String authorizationHeader = getAdminAuthzHeader();
 
 
-    public static String encode(String uid, String password)
+    public static String encode( String uid, String password )
     {
-        return "Basic " + Base64Utility.encode(( uid + ":" + password ).getBytes());
+        return "Basic " + Base64Utility.encode( ( uid + ":" + password ).getBytes() );
     }
 
     public static String getAdminAuthzHeader()
     {
-        String adminPwdSysProps = System.getProperty("rest.admin.pwd");
-        if ( StringUtils.isBlank(adminPwdSysProps) )
+        String adminPwdSysProps = System.getProperty( "rest.admin.pwd" );
+        if ( StringUtils.isBlank( adminPwdSysProps ) )
         {
-            return encode(RedbackRoleConstants.ADMINISTRATOR_ACCOUNT_NAME, FakeCreateAdminService.ADMIN_TEST_PWD);
+            return encode( RedbackRoleConstants.ADMINISTRATOR_ACCOUNT_NAME, FakeCreateAdminService.ADMIN_TEST_PWD );
         }
-        return encode(RedbackRoleConstants.ADMINISTRATOR_ACCOUNT_NAME, adminPwdSysProps);
+        return encode( RedbackRoleConstants.ADMINISTRATOR_ACCOUNT_NAME, adminPwdSysProps );
     }
 
     protected String getSpringConfigLocation()
@@ -95,7 +95,7 @@ public abstract class AbstractRestServicesTest
         return "restServices";
     }
 
-    static boolean useTomcat = Boolean.getBoolean("test.useTomcat");
+    static boolean useTomcat = Boolean.getBoolean( "test.useTomcat" );
 
     @Before
     public void startServer()
@@ -105,14 +105,14 @@ public abstract class AbstractRestServicesTest
         if ( useTomcat )
         {
             tomcat = new Tomcat();
-            tomcat.setBaseDir(System.getProperty("java.io.tmpdir"));
+            tomcat.setBaseDir( System.getProperty( "java.io.tmpdir" ) );
 
             Connector connector = new Connector()
             {
                 protected void startInternal()
                     throws LifecycleException
                 {
-                    setState(LifecycleState.STARTING);
+                    setState( LifecycleState.STARTING );
 
                     try
                     {
@@ -127,75 +127,75 @@ public abstract class AbstractRestServicesTest
                         }
 
                         throw new LifecycleException(
-                            errPrefix + " " + sm.getString("coyoteConnector.protocolHandlerStartFailed"), e);
+                            errPrefix + " " + sm.getString( "coyoteConnector.protocolHandlerStartFailed" ), e );
                     }
                     mapperListener.start();
                 }
             };
-            connector.setPort(0);
+            connector.setPort( 0 );
 
-            tomcat.setConnector(connector);
-            tomcat.getService().addConnector(connector);
+            tomcat.setConnector( connector );
+            tomcat.getService().addConnector( connector );
 
-            Context context = tomcat.addContext("", System.getProperty("java.io.tmpdir"));
+            Context context = tomcat.addContext( "", System.getProperty( "java.io.tmpdir" ) );
 
             ApplicationParameter applicationParameter = new ApplicationParameter();
-            applicationParameter.setName("contextConfigLocation");
-            applicationParameter.setValue(getSpringConfigLocation());
-            context.addApplicationParameter(applicationParameter);
+            applicationParameter.setName( "contextConfigLocation" );
+            applicationParameter.setValue( getSpringConfigLocation() );
+            context.addApplicationParameter( applicationParameter );
 
-            context.addApplicationListener(ContextLoaderListener.class.getName());
+            context.addApplicationListener( ContextLoaderListener.class.getName() );
 
-            Tomcat.addServlet(context, "cxf", new CXFServlet());
-            context.addServletMapping("/" + getRestServicesPath() + "/*", "cxf");
+            Tomcat.addServlet( context, "cxf", new CXFServlet() );
+            context.addServletMapping( "/" + getRestServicesPath() + "/*", "cxf" );
 
             tomcat.start();
 
             Http11Protocol http11Protocol = ( (Http11Protocol) tomcat.getConnector().getProtocolHandler() );
 
-            Field fieldEndpoint = ReflectionUtils.findField(Http11Protocol.class, "endpoint");
-            fieldEndpoint.setAccessible(true);
-            JIoEndpoint jIoEndpoint = (JIoEndpoint) fieldEndpoint.get(http11Protocol);
+            Field fieldEndpoint = ReflectionUtils.findField( Http11Protocol.class, "endpoint" );
+            fieldEndpoint.setAccessible( true );
+            JIoEndpoint jIoEndpoint = (JIoEndpoint) fieldEndpoint.get( http11Protocol );
 
-            Field serverSocketField = ReflectionUtils.findField(JIoEndpoint.class, "serverSocket");
-            serverSocketField.setAccessible(true);
-            ServerSocket serverSocket = (ServerSocket) serverSocketField.get(jIoEndpoint);
+            Field serverSocketField = ReflectionUtils.findField( JIoEndpoint.class, "serverSocket" );
+            serverSocketField.setAccessible( true );
+            ServerSocket serverSocket = (ServerSocket) serverSocketField.get( jIoEndpoint );
 
             this.port = serverSocket.getLocalPort();
         }
         else
         {
-            this.server = new Server(0);
+            this.server = new Server( 0 );
 
             ServletContextHandler context = new ServletContextHandler();
 
-            context.setContextPath("/");
+            context.setContextPath( "/" );
 
-            context.setInitParameter("contextConfigLocation", getSpringConfigLocation());
+            context.setInitParameter( "contextConfigLocation", getSpringConfigLocation() );
 
             ContextLoaderListener contextLoaderListener = new ContextLoaderListener();
 
-            context.addEventListener(contextLoaderListener);
+            context.addEventListener( contextLoaderListener );
 
-            ServletHolder sh = new ServletHolder(CXFServlet.class);
+            ServletHolder sh = new ServletHolder( CXFServlet.class );
 
             SessionHandler sessionHandler = new SessionHandler();
 
-            context.setSessionHandler(sessionHandler);
+            context.setSessionHandler( sessionHandler );
 
-            context.addServlet(sh, "/" + getRestServicesPath() + "/*");
-            server.setHandler(context);
+            context.addServlet( sh, "/" + getRestServicesPath() + "/*" );
+            server.setHandler( context );
             this.server.start();
             org.eclipse.jetty.server.Connector connector = this.server.getConnectors()[0];
             this.port = connector.getLocalPort();
 
         }
 
-        log.info("start server on port " + this.port);
+        log.info( "start server on port " + this.port );
         FakeCreateAdminService fakeCreateAdminService = getFakeCreateAdminService();
 
         Boolean res = fakeCreateAdminService.createAdminIfNeeded();
-        assertTrue(res.booleanValue());
+        assertTrue( res.booleanValue() );
 
 
     }
@@ -204,7 +204,7 @@ public abstract class AbstractRestServicesTest
     {
         return JAXRSClientFactory.create(
             "http://localhost:" + port + "/" + getRestServicesPath() + "/fakeCreateAdminService/",
-            FakeCreateAdminService.class);
+            FakeCreateAdminService.class );
     }
 
     @After
@@ -227,53 +227,53 @@ public abstract class AbstractRestServicesTest
 
     protected UserService getUserService()
     {
-        return getUserService(null);
+        return getUserService( null );
     }
 
-    protected UserService getUserService(String authzHeader)
+    protected UserService getUserService( String authzHeader )
     {
         UserService service =
-            JAXRSClientFactory.create("http://localhost:" + port + "/" + getRestServicesPath() + "/redbackServices/",
-                                      UserService.class);
+            JAXRSClientFactory.create( "http://localhost:" + port + "/" + getRestServicesPath() + "/redbackServices/",
+                                       UserService.class );
 
         // for debuging purpose
-        WebClient.getConfig(service).getHttpConduit().getClient().setReceiveTimeout(100000);
+        WebClient.getConfig( service ).getHttpConduit().getClient().setReceiveTimeout( 100000 );
 
         if ( authzHeader != null )
         {
-            WebClient.client(service).header("Authorization", authzHeader);
+            WebClient.client( service ).header( "Authorization", authzHeader );
         }
         return service;
     }
 
-    protected RoleManagementService getRoleManagementService(String authzHeader)
+    protected RoleManagementService getRoleManagementService( String authzHeader )
     {
         RoleManagementService service =
-            JAXRSClientFactory.create("http://localhost:" + port + "/" + getRestServicesPath() + "/redbackServices/",
-                                      RoleManagementService.class);
+            JAXRSClientFactory.create( "http://localhost:" + port + "/" + getRestServicesPath() + "/redbackServices/",
+                                       RoleManagementService.class );
 
         // for debuging purpose
-        WebClient.getConfig(service).getHttpConduit().getClient().setReceiveTimeout(100000);
+        WebClient.getConfig( service ).getHttpConduit().getClient().setReceiveTimeout( 100000 );
 
         if ( authzHeader != null )
         {
-            WebClient.client(service).header("Authorization", authzHeader);
+            WebClient.client( service ).header( "Authorization", authzHeader );
         }
         return service;
     }
 
-    protected LoginService getLoginService(String authzHeader)
+    protected LoginService getLoginService( String authzHeader )
     {
         LoginService service =
-            JAXRSClientFactory.create("http://localhost:" + port + "/" + getRestServicesPath() + "/redbackServices/",
-                                      LoginService.class);
+            JAXRSClientFactory.create( "http://localhost:" + port + "/" + getRestServicesPath() + "/redbackServices/",
+                                       LoginService.class );
 
         // for debuging purpose
-        WebClient.getConfig(service).getHttpConduit().getClient().setReceiveTimeout(100000);
+        WebClient.getConfig( service ).getHttpConduit().getClient().setReceiveTimeout( 100000 );
 
         if ( authzHeader != null )
         {
-            WebClient.client(service).header("Authorization", authzHeader);
+            WebClient.client( service ).header( "Authorization", authzHeader );
         }
         return service;
     }
