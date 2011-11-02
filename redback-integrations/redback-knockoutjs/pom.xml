@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright 2011 The Codehaus.
   ~
@@ -28,4 +28,7 @@
   <name>Redback :: KnockoutJs</name>
   
 
+  <modules>
+    <module>redback-knockoutjs-example</module>
+  </modules>
 </project>

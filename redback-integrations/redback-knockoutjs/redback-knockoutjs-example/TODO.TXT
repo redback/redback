@@ -1,0 +1,6 @@
+Pages todo:
+* user list (crud)
+* operations list (remove ?)
+* permissions list (remove ?)
+* resources list (remove ?)
+* roles list (crud)
