@@ -31,6 +31,7 @@ import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.apache.tomcat.util.net.JIoEndpoint;
 import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
+import org.codehaus.redback.rest.api.model.User;
 import org.codehaus.redback.rest.api.services.LoginService;
 import org.codehaus.redback.rest.api.services.RoleManagementService;
 import org.codehaus.redback.rest.api.services.UserService;
@@ -54,7 +55,6 @@ import java.net.ServerSocket;
  * @author Olivier Lamy
  */
 @RunWith( JUnit4.class )
-//ContextConfiguration( locations = { "classpath*:/META-INF/spring-context.xml" } )
 public abstract class AbstractRestServicesTest
     extends TestCase
 {
@@ -194,8 +194,16 @@ public abstract class AbstractRestServicesTest
         log.info( "start server on port " + this.port );
         FakeCreateAdminService fakeCreateAdminService = getFakeCreateAdminService();
 
-        Boolean res = fakeCreateAdminService.createAdminIfNeeded();
-        assertTrue( res.booleanValue() );
+        UserService userService = getUserService();
+
+        User adminUser = new User(  );
+        adminUser.setUsername( RedbackRoleConstants.ADMINISTRATOR_ACCOUNT_NAME );
+        adminUser.setPassword( FakeCreateAdminServiceImpl.ADMIN_TEST_PWD );
+        adminUser.setFullName( "the admin user" );
+        adminUser.setEmail( "toto@toto.fr" );
+        Boolean res = userService.createAdminUser( adminUser );
+
+        //assertTrue( res.booleanValue() );
 
 
     }

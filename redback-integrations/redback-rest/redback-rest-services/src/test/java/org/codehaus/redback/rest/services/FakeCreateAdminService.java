@@ -34,13 +34,6 @@ public interface FakeCreateAdminService
 
     public static final String ADMIN_TEST_PWD = "rose210208";
 
-    @Path( "/createAdminIfNeeded" )
-    @GET
-    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( noRestriction = true )
-    Boolean createAdminIfNeeded()
-        throws Exception;
-
     @Path( "/testAuthzWithoutKarmasNeeded" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )

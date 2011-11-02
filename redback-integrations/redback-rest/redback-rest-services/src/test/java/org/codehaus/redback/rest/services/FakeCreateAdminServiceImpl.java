@@ -23,6 +23,7 @@ import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
+import org.codehaus.redback.rest.api.services.UserService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -48,37 +49,8 @@ public class FakeCreateAdminServiceImpl
     @Inject
     private RoleManager roleManager;
 
-    public Boolean createAdminIfNeeded()
-        throws Exception
-    {
-        try
-        {
-            userManager.findUser( config.getString( "redback.default.admin" ) );
-            return Boolean.TRUE;
-        }
-        catch ( UserNotFoundException e )
-        {
-            // ignore
-        }
-        User user =
-            userManager.createUser( RedbackRoleConstants.ADMINISTRATOR_ACCOUNT_NAME, "root user", "foo@foo.com" );
-        user.setPassword( ADMIN_TEST_PWD );
-
-        user.setLocked( false );
-        user.setPasswordChangeRequired( false );
-        user.setPermanent( true );
-
-        userManager.addUser( user );
-
-        roleManager.assignRole( "system-administrator", user.getPrincipal().toString() );
-
-        /*
-        UserAssignment userAssignment = rbacManager.createUserAssignment( RoleConstants.ADMINISTRATOR_ACCOUNT_NAME );
-        userAssignment.setRoleNames( Collections.singletonList( RoleConstants.USER_ADMINISTRATOR_ROLE ) );
-        rbacManager.saveUserAssignment( userAssignment );
-        */
-        return Boolean.TRUE;
-    }
+    @Inject
+    private UserService userService;
 
     public Boolean testAuthzWithoutKarmasNeededButAuthz()
     {

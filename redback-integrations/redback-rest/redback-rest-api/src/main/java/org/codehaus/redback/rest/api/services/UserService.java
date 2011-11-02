@@ -55,6 +55,18 @@ public interface UserService
     Boolean createUser( User user )
         throws RedbackServiceException;
 
+    @Path( "createAdminUser" )
+    @POST
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @Consumes( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
+    @RedbackAuthorization( noRestriction = true )
+    /**
+     * will create admin user only if not exists !! if exists will return false
+     */
+    Boolean createAdminUser( User user )
+        throws RedbackServiceException;
+
+
     @Path( "deleteUser/{userName}" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
