@@ -56,5 +56,6 @@
     <module>redback-jsecurity</module>
     <module>redback-integrations-security</module>
     <module>redback-xmlrpc</module>
+    <module>redback-knockoutjs</module>
   </modules>
 </project>
