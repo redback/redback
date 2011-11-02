@@ -17,7 +17,6 @@ package org.codehaus.redback.rest.services.interceptors;
 */
 
 import org.apache.cxf.jaxrs.model.OperationResourceInfo;
-import org.apache.cxf.jaxrs.utils.JAXRSUtils;
 import org.apache.cxf.message.Message;
 import org.codehaus.plexus.redback.authorization.RedbackAuthorization;
 import org.slf4j.Logger;
@@ -51,6 +50,10 @@ public class AbstractInterceptor
     public RedbackAuthorization getRedbackAuthorization( Message message )
     {
         OperationResourceInfo operationResourceInfo = message.getExchange().get( OperationResourceInfo.class );
+        if ( operationResourceInfo == null )
+        {
+            return null;
+        }
         // FIXME provide a patch to cxf to have it as a constant in Message
         //Method method = operationResourceInfo.getMethodToInvoke();
         Method method = operationResourceInfo.getAnnotatedMethod();
