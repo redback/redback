@@ -48,18 +48,4 @@
 
   <bean name="fakeCreateAdminService" class="org.codehaus.redback.rest.services.FakeCreateAdminServiceImpl"/>
 
-  <bean name="jdoFactory#users" class="org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory">
-    <property name="driverName" value="org.hsqldb.jdbcDriver"/>
-    <property name="url" value="jdbc:hsqldb:mem:redback-users-tests" />
-    <property name="userName" value="sa"/>
-    <property name="password" value=""/>
-    <property name="persistenceManagerFactoryClass" value="org.jpox.PersistenceManagerFactoryImpl"/>
-    <property name="otherProperties">
-      <props>
-        <prop key="org.jpox.rdbms.dateTimezone">JDK_DEFAULT_TIMEZONE</prop>
-        <prop key="org.jpox.autoCreateTables">true</prop>
-      </props>
-    </property>
-  </bean>
-
 </beans>

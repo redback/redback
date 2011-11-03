@@ -193,8 +193,6 @@
             <plexus.home>${project.build.directory}/test-home</plexus.home>
             <derby.system.home>${project.build.directory}/test-home</derby.system.home>
             <test.useTomcat>${test.useTomcat}</test.useTomcat>
-            <redback.jdbc.url>jdbc:hsqldb:mem:redback-users-tests</redback.jdbc.url>
-            <redback.jdbc.driver.name>org.hsqldb.jdbcDriver</redback.jdbc.driver.name>
           </systemPropertyVariables>
         </configuration>
       </plugin>
