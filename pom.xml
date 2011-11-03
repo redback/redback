@@ -387,6 +387,11 @@
       </dependency>
       <dependency>
         <groupId>org.codehaus.redback</groupId>
+        <artifactId>redback-common-test-resources</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.redback</groupId>
         <artifactId>redback-data-management</artifactId>
         <version>${project.version}</version>
       </dependency>
