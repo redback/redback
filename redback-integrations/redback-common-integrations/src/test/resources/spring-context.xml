@@ -28,12 +28,18 @@
 
   <context:property-placeholder system-properties-mode="OVERRIDE"/>
 
-  <bean name="jdoFactory#users" class="org.codehaus.plexus.redback.common.jdo.UserConfigurableJdoFactory">
-    <property name="config" ref="userConfiguration"/>
+  <bean name="jdoFactory#users" class="org.codehaus.plexus.jdo.DefaultConfigurableJdoFactory">
     <property name="driverName" value="org.hsqldb.jdbcDriver"/>
-    <property name="url" value="jdbc:hsqldb:mem:MailGeneratorTest" />
+    <property name="url" value="jdbc:hsqldb:mem:redback-users-tests" />
     <property name="userName" value="sa"/>
     <property name="password" value=""/>
+    <property name="persistenceManagerFactoryClass" value="org.jpox.PersistenceManagerFactoryImpl"/>
+    <property name="otherProperties">
+      <props>
+        <prop key="org.jpox.rdbms.dateTimezone">JDK_DEFAULT_TIMEZONE</prop>
+        <prop key="org.jpox.autoCreateTables">true</prop>
+      </props>
+    </property>
   </bean>
 
   <bean name="userConfiguration#custom-url" class="org.codehaus.plexus.redback.configuration.UserConfiguration">

@@ -33,6 +33,11 @@ public class UserConfigurableJdoFactory
 
     private String getConfigString( String key, String currentValue, String defaultValue )
     {
+        String valueFromSysProps = System.getProperty( "redback." + key );
+        if (StringUtils.isNotEmpty( valueFromSysProps ))
+        {
+            return valueFromSysProps;
+        }
         String value = null;
         if ( StringUtils.isNotEmpty( currentValue ) )
         {
