@@ -24,9 +24,7 @@
   <artifactId>redback-struts2-integration</artifactId>
   <name>Redback :: Integration :: Struts 2 Integration</name>
   <packaging>jar</packaging>
-  <properties>
-    <logbackVersion>0.9.28</logbackVersion>
-  </properties>
+
   <dependencies> 
     <!-- ================================================================ -->
     <!-- Core Plexus Security Dependencies -->
