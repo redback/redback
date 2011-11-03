@@ -189,7 +189,7 @@
   <properties>
     <springVersion>3.0.6.RELEASE</springVersion>
     <slf4jVersion>1.6.4</slf4jVersion>
-    <logbackVersion>0.9.28</logbackVersion>
+    <logbackVersion>1.0.0</logbackVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <gpg.useagent>true</gpg.useagent>
     <cxfVersion>2.4.3</cxfVersion>
