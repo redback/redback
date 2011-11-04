@@ -16,15 +16,19 @@ package org.codehaus.plexus.redback.role.processor;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.redback.rbac.RBACManager;
-import org.codehaus.plexus.redback.rbac.Resource;
-import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.Operation;
-import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.rbac.Permission;
-
+import org.codehaus.plexus.redback.rbac.RBACManager;
+import org.codehaus.plexus.redback.rbac.RbacManagerException;
+import org.codehaus.plexus.redback.rbac.Resource;
+import org.codehaus.plexus.redback.rbac.Role;
 import org.codehaus.plexus.redback.role.RoleManagerException;
-import org.codehaus.plexus.redback.role.model.*;
+import org.codehaus.plexus.redback.role.model.ModelApplication;
+import org.codehaus.plexus.redback.role.model.ModelOperation;
+import org.codehaus.plexus.redback.role.model.ModelPermission;
+import org.codehaus.plexus.redback.role.model.ModelResource;
+import org.codehaus.plexus.redback.role.model.ModelRole;
+import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
 import org.codehaus.plexus.redback.role.util.RoleModelUtils;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 import org.slf4j.Logger;
@@ -33,22 +37,25 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * DefaultRoleModelProcessor: inserts the components of the model that can be populated into the rbac manager
- * 
+ *
  * @author: Jesse McConnell <jesse@codehaus.org>
  * @version: $Id$
- * 
  */
-@Service("roleModelProcessor")
+@Service( "roleModelProcessor" )
 public class DefaultRoleModelProcessor
     implements RoleModelProcessor
 {
     private Logger log = LoggerFactory.getLogger( DefaultRoleModelProcessor.class );
-    
-    @Inject @Named(value = "rBACManager#cached")
+
+    @Inject
+    @Named( value = "rBACManager#cached" )
     private RBACManager rbacManager;
 
     private Map<String, Resource> resourceMap = new HashMap<String, Resource>();
@@ -66,7 +73,7 @@ public class DefaultRoleModelProcessor
         processRoles( model );
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     private void processResources( RedbackRoleModel model )
         throws RoleManagerException
     {
@@ -89,7 +96,8 @@ public class DefaultRoleModelProcessor
                     }
                     else
                     {
-                        resourceMap.put( profileResource.getId(), rbacManager.getResource( profileResource.getName() ) );
+                        resourceMap.put( profileResource.getId(),
+                                         rbacManager.getResource( profileResource.getName() ) );
                     }
                 }
                 catch ( RbacManagerException e )
@@ -100,7 +108,7 @@ public class DefaultRoleModelProcessor
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     private void processOperations( RedbackRoleModel model )
         throws RoleManagerException
     {
@@ -124,19 +132,20 @@ public class DefaultRoleModelProcessor
                     }
                     else
                     {
-                        operationMap.put( profileOperation.getId(), rbacManager.getOperation( profileOperation
-                            .getName() ) );
+                        operationMap.put( profileOperation.getId(),
+                                          rbacManager.getOperation( profileOperation.getName() ) );
                     }
                 }
                 catch ( RbacManagerException e )
                 {
-                    throw new RoleManagerException( "error creating operation '" + profileOperation.getName() + "'", e );
+                    throw new RoleManagerException( "error creating operation '" + profileOperation.getName() + "'",
+                                                    e );
                 }
             }
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     private void processRoles( RedbackRoleModel model )
         throws RoleManagerException
     {
@@ -212,19 +221,22 @@ public class DefaultRoleModelProcessor
                     {
                         if ( !role.getPermissions().contains( permission ) )
                         {
-                            log.info( "Adding new permission '" + permission.getName() + "' to role '" + role.getName() + "'" );
+                            log.info( "Adding new permission '" + permission.getName() + "' to role '" + role.getName()
+                                          + "'" );
                             role.addPermission( permission );
                             changed = true;
                         }
                     }
-                    
+
                     // Copy list to avoid concurrent modification [REDBACK-220]
                     List<Permission> oldPermissions = new ArrayList<Permission>( role.getPermissions() );
                     for ( Permission permission : oldPermissions )
                     {
                         if ( !permissions.contains( permission ) )
                         {
-                            log.info( "Removing old permission '" + permission.getName() + "' from role '" + role.getName() + "'" );
+                            log.info(
+                                "Removing old permission '" + permission.getName() + "' from role '" + role.getName()
+                                    + "'" );
                             role.removePermission( permission );
                             changed = true;
                         }
