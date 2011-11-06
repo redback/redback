@@ -17,19 +17,11 @@ package org.codehaus.redback.rest.services;
  */
 
 import junit.framework.TestCase;
-import org.apache.catalina.Context;
-import org.apache.catalina.LifecycleException;
-import org.apache.catalina.LifecycleState;
-import org.apache.catalina.connector.Connector;
-import org.apache.catalina.deploy.ApplicationParameter;
-import org.apache.catalina.startup.Tomcat;
 import org.apache.commons.lang.StringUtils;
-import org.apache.coyote.http11.Http11Protocol;
 import org.apache.cxf.common.util.Base64Utility;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.transport.servlet.CXFServlet;
-import org.apache.tomcat.util.net.JIoEndpoint;
 import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
 import org.codehaus.redback.rest.api.model.User;
 import org.codehaus.redback.rest.api.services.LoginService;
@@ -45,11 +37,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.web.context.ContextLoaderListener;
-
-import java.lang.reflect.Field;
-import java.net.ServerSocket;
 
 /**
  * @author Olivier Lamy
@@ -62,7 +50,7 @@ public abstract class AbstractRestServicesTest
 
     public Server server = null;
 
-    private Tomcat tomcat;
+    //private Tomcat tomcat;
 
     public int port;
 
@@ -102,6 +90,7 @@ public abstract class AbstractRestServicesTest
         throws Exception
     {
 
+        /*
         if ( useTomcat )
         {
             tomcat = new Tomcat();
@@ -164,7 +153,7 @@ public abstract class AbstractRestServicesTest
             this.port = serverSocket.getLocalPort();
         }
         else
-        {
+        {*/
             this.server = new Server( 0 );
 
             ServletContextHandler context = new ServletContextHandler();
@@ -189,7 +178,7 @@ public abstract class AbstractRestServicesTest
             org.eclipse.jetty.server.Connector connector = this.server.getConnectors()[0];
             this.port = connector.getLocalPort();
 
-        }
+        //}
 
         log.info( "start server on port " + this.port );
         FakeCreateAdminService fakeCreateAdminService = getFakeCreateAdminService();
@@ -220,7 +209,7 @@ public abstract class AbstractRestServicesTest
         throws Exception
     {
 
-        if ( useTomcat )
+        /*if ( useTomcat )
         {
             tomcat.stop();
         }
@@ -230,6 +219,10 @@ public abstract class AbstractRestServicesTest
             {
                 this.server.stop();
             }
+        }*/
+        if ( this.server != null && this.server.isRunning() )
+        {
+            this.server.stop();
         }
     }
 
