@@ -26,7 +26,7 @@
   <artifactId>redback-knockoutjs-example</artifactId>
   <packaging>war</packaging>
 
-  <name>redback-knockoutjs-example Maven Webapp</name>
+  <name>Redback :: KnockoutJs Example webapp</name>
 
   <dependencies>
     <dependency>
@@ -98,6 +98,7 @@
             <appserver.home>${project.build.directory}/appserver-home</appserver.home>
             <derby.system.home>${project.build.directory}/appserver-base/logs</derby.system.home>
             <redback.admin.creation.file>${basedir}/target/auto-admin-creation.properties</redback.admin.creation.file>
+            <java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
           </systemProperties>
         </configuration>
         <dependencies>
@@ -163,6 +164,7 @@
                 <appserver.home>${project.build.directory}/appserver-home</appserver.home>
                 <derby.system.home>${project.build.directory}/appserver-base/logs</derby.system.home>
                 <redback.admin.creation.file>${basedir}/target/auto-admin-creation.properties</redback.admin.creation.file>
+                <java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
               </systemProperties>
             </configuration>
             <dependencies>
@@ -192,6 +194,7 @@
                 <appserver.home>${project.build.directory}/appserver-home</appserver.home>
                 <derby.system.home>${project.build.directory}/appserver-base/logs</derby.system.home>
                 <redback.admin.creation.file>${basedir}/target/auto-admin-creation.properties</redback.admin.creation.file>
+                <java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
               </systemProperties>
             </configuration>
             <dependencies>

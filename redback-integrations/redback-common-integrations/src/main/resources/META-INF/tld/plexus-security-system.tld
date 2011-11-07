@@ -4,7 +4,7 @@
   <tlibversion>1.1</tlibversion>
   <jspversion>1.2</jspversion>
   <shortname>redback</shortname>
-  <uri>http://plexus.codehaus.org/redback/taglib-1.0</uri>
+  <uri>/redback/taglib-1.0</uri>
 
   <tag>
     <name>ifConfigured</name>

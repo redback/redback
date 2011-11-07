@@ -16,7 +16,7 @@
 
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib prefix="redback" uri="http://plexus.codehaus.org/redback/taglib-1.0"%>
+<%@ taglib prefix="redback" uri="/redback/taglib-1.0"%>
 
 <html>
 <s:i18n name="org.codehaus.plexus.redback.struts2.default">

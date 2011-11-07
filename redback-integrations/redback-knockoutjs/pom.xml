@@ -22,7 +22,6 @@
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.codehaus.redback</groupId>
   <artifactId>redback-knockoutjs</artifactId>
   <packaging>pom</packaging>
   <name>Redback :: KnockoutJs</name>
