@@ -1,15 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.1//EN" "http://java.sun.com/j2ee/dtds/web-jsptaglibrary_1_1.dtd">
-<taglib>
-  <tlibversion>1.1</tlibversion>
-  <jspversion>1.2</jspversion>
-  <shortname>redback</shortname>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd">
+  <tlib-version>2.2.3</tlib-version>
+  <short-name>redback</short-name>
   <uri>/redback/taglib-1.0</uri>
 
   <tag>
     <name>ifConfigured</name>
-    <tagclass>org.codehaus.redback.integration.taglib.jsp.IfConfiguredTag</tagclass>
-    <bodycontent>JSP</bodycontent>
+    <tag-class>org.codehaus.redback.integration.taglib.jsp.IfConfiguredTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
       <name>option</name>
       <required>true</required>
@@ -24,20 +22,20 @@
 
   <tag>
     <name>isReadOnlyUserManager</name>
-    <tagclass>org.codehaus.redback.integration.taglib.jsp.IsReadOnlyUserManagerTag</tagclass>
-    <bodycontent>JSP</bodycontent>
+    <tag-class>org.codehaus.redback.integration.taglib.jsp.IsReadOnlyUserManagerTag</tag-class>
+    <body-content>JSP</body-content>
   </tag>
   
   <tag>
     <name>isNotReadOnlyUserManager</name>
-    <tagclass>org.codehaus.redback.integration.taglib.jsp.IsNotReadOnlyUserManagerTag</tagclass>
-    <bodycontent>JSP</bodycontent>
+    <tag-class>org.codehaus.redback.integration.taglib.jsp.IsNotReadOnlyUserManagerTag</tag-class>
+    <body-content>JSP</body-content>
   </tag>
 
   <tag>
     <name>ifAuthorized</name>
-    <tagclass>org.codehaus.redback.integration.taglib.jsp.IfAuthorizedTag</tagclass>
-    <bodycontent>JSP</bodycontent>
+    <tag-class>org.codehaus.redback.integration.taglib.jsp.IfAuthorizedTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
       <name>permission</name>
       <required>true</required>
@@ -52,8 +50,8 @@
   
   <tag>
     <name>ifAnyAuthorized</name>
-    <tagclass>org.codehaus.redback.integration.taglib.jsp.IfAnyAuthorizedTag</tagclass>
-    <bodycontent>JSP</bodycontent>
+    <tag-class>org.codehaus.redback.integration.taglib.jsp.IfAnyAuthorizedTag</tag-class>
+    <body-content>JSP</body-content>
     <attribute>
       <name>permissions</name>
       <required>true</required>
@@ -68,8 +66,8 @@
 
   <tag>
     <name>elseAuthorized</name>
-    <tagclass>org.codehaus.redback.integration.taglib.jsp.ElseAuthorizedTag</tagclass>
-    <bodycontent>JSP</bodycontent>
+    <tag-class>org.codehaus.redback.integration.taglib.jsp.ElseAuthorizedTag</tag-class>
+    <body-content>JSP</body-content>
   </tag>
 
 </taglib>
