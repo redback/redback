@@ -46,17 +46,9 @@
       <artifactId>redback-common-integrations</artifactId>
     </dependency>
 
-    <!--
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    -->
-    <dependency>
-      <groupId>org.apache.tomcat</groupId>
-      <artifactId>tomcat-servlet-api</artifactId>
-      <version>${tomcatVersion}</version>
       <scope>provided</scope>
     </dependency>
 

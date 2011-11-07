@@ -28,6 +28,7 @@ import org.codehaus.plexus.redback.users.UserManagerException;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.plexus.redback.users.UserQuery;
 import org.codehaus.plexus.util.StringUtils;
+import org.jpox.JDOClassLoaderResolver;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -384,6 +385,7 @@ public class JdoUserManager
     @PostConstruct
     public void initialize()
     {
+        JDOClassLoaderResolver d;
         pmf = jdoFactory.getPersistenceManagerFactory();
     }
 
