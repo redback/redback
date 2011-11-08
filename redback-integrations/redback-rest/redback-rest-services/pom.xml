@@ -40,6 +40,10 @@
       <groupId>javax.inject</groupId>
       <artifactId>javax.inject</artifactId>
     </dependency>
+    <dependency>
+      <groupId>javax.annotation</groupId>
+      <artifactId>jsr250-api</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>org.codehaus.redback</groupId>
@@ -114,26 +118,27 @@
       <version>${jettyVersion}</version>
       <scope>test</scope>
     </dependency>
+
+    <!--
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-core</artifactId>
       <version>${tomcatVersion}</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>org.apache.tomcat</groupId>
       <artifactId>tomcat-juli</artifactId>
       <version>${tomcatVersion}</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-logging-juli</artifactId>
       <version>${tomcatVersion}</version>
       <scope>test</scope>
     </dependency>
+    -->
 
     <dependency>
       <groupId>org.slf4j</groupId>
