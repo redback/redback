@@ -192,7 +192,7 @@
     <logbackVersion>1.0.0</logbackVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <gpg.useagent>true</gpg.useagent>
-    <cxfVersion>2.4.3</cxfVersion>
+    <cxfVersion>2.4.4</cxfVersion>
     <derbyVersion>10.8.2.2</derbyVersion>
 
     <redbackTestJdbcUrl>jdbc:derby:memory:users-test;create=true</redbackTestJdbcUrl>
