@@ -258,15 +258,11 @@ public class DefaultUserService
     public Boolean createAdminUser( User adminUser )
         throws RedbackServiceException
     {
-        try
+        if ( isAdminUserExists() )
         {
-            userManager.findUser( config.getString( "redback.default.admin" ) );
             return Boolean.FALSE;
         }
-        catch ( UserNotFoundException e )
-        {
-            // ignore
-        }
+
         org.codehaus.plexus.redback.users.User user =
             userManager.createUser( RedbackRoleConstants.ADMINISTRATOR_ACCOUNT_NAME, adminUser.getFullName(),
                                     adminUser.getEmail() );
@@ -292,5 +288,20 @@ public class DefaultUserService
         rbacManager.saveUserAssignment( userAssignment );
         */
         return Boolean.TRUE;
+    }
+
+    public Boolean isAdminUserExists()
+        throws RedbackServiceException
+    {
+        try
+        {
+            userManager.findUser( config.getString( "redback.default.admin" ) );
+            return Boolean.TRUE;
+        }
+        catch ( UserNotFoundException e )
+        {
+            // ignore
+        }
+        return Boolean.FALSE;
     }
 }
