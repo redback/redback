@@ -28,9 +28,9 @@ public class User
 
     private String email;
 
-    private boolean isValidated;
+    private boolean validated;
 
-    private boolean isLocked;
+    private boolean locked;
 
     private String password;
 
@@ -43,13 +43,13 @@ public class User
         // no op
     }
 
-    public User( String username, String fullName, String email, boolean isValidated, boolean isLocked )
+    public User( String username, String fullName, String email, boolean validated, boolean locked )
     {
         this.username = username;
         this.fullName = fullName;
         this.email = email;
-        this.isValidated = isValidated;
-        this.isLocked = isLocked;
+        this.validated = validated;
+        this.locked = locked;
     }
 
     public String getUsername()
@@ -84,22 +84,22 @@ public class User
 
     public boolean isValidated()
     {
-        return isValidated;
+        return validated;
     }
 
-    public void setValidated( boolean isValidated )
+    public void setValidated( boolean validated )
     {
-        this.isValidated = isValidated;
+        this.validated = validated;
     }
 
     public boolean isLocked()
     {
-        return isLocked;
+        return locked;
     }
 
     public void setLocked( boolean isLocked )
     {
-        this.isLocked = isLocked;
+        this.locked = isLocked;
     }
 
     public String getPassword()
