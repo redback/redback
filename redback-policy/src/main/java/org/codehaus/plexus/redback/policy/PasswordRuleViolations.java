@@ -31,11 +31,16 @@ public class PasswordRuleViolations
 {
     private List<MessageReference> violations;
 
-    class MessageReference
+    public class MessageReference
     {
         String key;
 
         Object args[];
+
+        public String getKey()
+        {
+            return key;
+        }
     }
 
     /**
@@ -103,5 +108,10 @@ public class PasswordRuleViolations
     public boolean hasViolations()
     {
         return !violations.isEmpty();
+    }
+
+    public List<MessageReference> getViolations()
+    {
+        return violations;
     }
 }

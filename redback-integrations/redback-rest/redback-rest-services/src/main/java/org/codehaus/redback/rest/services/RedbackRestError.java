@@ -21,6 +21,8 @@ package org.codehaus.redback.rest.services;
 import org.codehaus.redback.rest.api.services.RedbackServiceException;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Olivier Lamy
@@ -32,7 +34,7 @@ public class RedbackRestError
 
     private int httpErrorCode;
 
-    private String errorKey;
+    private List<String> errorKeys = new ArrayList<String>();
 
     private String errorMessage;
 
@@ -44,7 +46,7 @@ public class RedbackRestError
     public RedbackRestError( RedbackServiceException e )
     {
         httpErrorCode = e.getHttpErrorCode();
-        errorKey = e.getErrorKey();
+        errorKeys.add( e.getErrorKey() );
         errorMessage = e.getMessage();
     }
 
@@ -58,15 +60,6 @@ public class RedbackRestError
         this.httpErrorCode = httpErrorCode;
     }
 
-    public String getErrorKey()
-    {
-        return errorKey;
-    }
-
-    public void setErrorKey( String errorKey )
-    {
-        this.errorKey = errorKey;
-    }
 
     public String getErrorMessage()
     {
@@ -77,4 +70,15 @@ public class RedbackRestError
     {
         this.errorMessage = errorMessage;
     }
+
+    public List<String> getErrorKeys()
+    {
+        return errorKeys;
+    }
+
+    public void setErrorKeys( List<String> errorKeys )
+    {
+        this.errorKeys = errorKeys;
+    }
+
 }

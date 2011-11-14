@@ -18,28 +18,37 @@ package org.codehaus.redback.rest.services.interceptors;
  * under the License.
  */
 
-import org.codehaus.redback.rest.api.services.RedbackServiceException;
+import org.codehaus.plexus.redback.policy.PasswordRuleViolationException;
+import org.codehaus.plexus.redback.policy.PasswordRuleViolations;
 import org.codehaus.redback.rest.services.RedbackRestError;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Olivier Lamy
- * @since 1.4-M2
+ * @since 1.4
  */
 @Provider
-@Service( "redbackServiceExceptionMapper" )
-public class RedbackServiceExceptionMapper
-    implements ExceptionMapper<RedbackServiceException>
+@Service( "passwordRuleViolationExceptionMapper" )
+public class PasswordRuleViolationExceptionMapper
+    implements ExceptionMapper<PasswordRuleViolationException>
 {
-    public Response toResponse( RedbackServiceException e )
+    public Response toResponse( PasswordRuleViolationException e )
     {
-        RedbackRestError restError = new RedbackRestError( e );
+        RedbackRestError restError = new RedbackRestError();
         restError.setErrorMessage( e.getMessage() );
-        Response.ResponseBuilder responseBuilder = Response.status( e.getHttpErrorCode() ).entity( restError );
+        List<String> errorKeys = new ArrayList<String>();
+        for ( PasswordRuleViolations.MessageReference messageReference : e.getViolations().getViolations() )
+        {
+            errorKeys.add( messageReference.getKey() );
+        }
+        restError.setErrorKeys( errorKeys );
+        Response.ResponseBuilder responseBuilder = Response.status( 500 ).entity( restError );
         return responseBuilder.build();
     }
 }

@@ -20,6 +20,7 @@ import net.sf.ehcache.CacheManager;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.plexus.cache.Cache;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
+import org.codehaus.plexus.redback.policy.PasswordRuleViolationException;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.system.SecuritySystem;
@@ -271,8 +272,14 @@ public class DefaultUserService
         user.setLocked( false );
         user.setPasswordChangeRequired( false );
         user.setPermanent( true );
-
-        userManager.addUser( user );
+        //try
+        //{
+            userManager.addUser( user );
+        //}
+        //catch ( PasswordRuleViolationException e )
+        //{
+        //    throw new RedbackServiceException( e.getMessage() );
+        //}
 
         try
         {
