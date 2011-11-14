@@ -1,0 +1,123 @@
+<html>
+<head>
+  <link rel="stylesheet" href="css/bootstrap.1.4.0.css"/>
+  <!--
+  <script type="text/javascript" src="js/head.0.96.js"></script>
+  -->
+  <script type="text/javascript" src="js/jquery-1.7.min.js"></script>
+  <script data-main="js/main" src="js/require.1.0.1.js"></script>
+  <script type="text/javascript">
+
+  </script>
+
+</head>
+
+<body style="padding-top: 40px;">
+
+<div id="menu"></div>
+
+<div class="container">
+  <div class="row" id="main-content">
+
+    <h2>Users list</h2>
+
+    <table class="zebra-striped" data-bind='simpleGrid: gridViewModel' id="usersTable"></table>
+
+    <button data-bind='click: addUser'>
+        Add User
+    </button>
+
+    <button data-bind='click: sortByName'>
+        Sort by name
+    </button>
+
+    <button data-bind='click: function() { gridViewModel.currentPageIndex(0) }'>
+        Jump to first page
+    </button>
+
+
+    <h2>User creation</h2>
+
+  </div>
+
+</div>
+
+<script id='ko_simpleGrid_grid' type='text/html'>
+  <thead>
+      <tr>
+          {{each(i, columnDefinition) columns}}
+              <th>${ columnDefinition.headerText }</th>
+          {{/each}}
+          <th>Edit</th>
+      </tr>
+  </thead>
+  <tbody>
+      {{each(i, row) itemsOnCurrentPage()}}
+          <tr>
+              {{each(j, columnDefinition) columns}}
+                  <td>${ typeof columnDefinition.rowText == 'function' ? columnDefinition.rowText(row) : row[columnDefinition.rowText] }</td>
+              {{/each}}
+              <td>Edit</td>
+          </tr>
+      {{/each}}
+  </tbody>
+</script>
+
+<script id="ko_simpleGrid_pageLinks" type="text/html">
+  <div class="ko-grid-pageLinks">
+      <span>Page:</span>
+      {{each(i) ko.utils.range(1, maxPageIndex)}}
+          <a href="#" data-bind="click: function() { currentPageIndex(i) }, css: { selected: i == currentPageIndex() }">
+              ${ i + 1 }
+          </a>\
+      {{/each}}
+  </div>
+</script>
+
+<script id='user-create-tmpl' type='text/html'>
+    <form id="user-create">
+      <fieldset>
+        <div class="clearfix">
+          <label for="username">Username</label>
+          <div class="input">
+            <input type="text" id="username" name="username" size="30" data-bind="value: username"/>
+          </div>
+        </div>
+        <div class="clearfix">
+          <label for="fullname">Full Name</label>
+          <div class="input">
+            <input type="text" id="fullname" name="fullname" size="30" data-bind="value: fullName"/>
+          </div>
+        </div>
+        <div class="clearfix">
+          <label for="password">Password</label>
+          <div class="input">
+            <input type="password" id="password" name="password"/>
+          </div>
+        </div>
+        <div class="clearfix">
+          <label for="confirmPassword">Confirm Password</label>
+          <div class="input">
+            <input type="password" id="confirmPassword" name="confirmPassword"/>
+          </div>
+        </div>
+        <div class="clearfix">
+          <label for="email">Email</label>
+          <div class="input">
+            <input type="text" id="email" name="email"/>
+          </div>
+        </div>
+      </fieldset>
+      <button data-bind="click: create" class="btn">Create</button>
+    </form>
+</script>
+
+<div id="html-fragments" class="hide"></div>
+
+</body>
+
+<script type="text/javascript">
+
+</script>
+
+</html>

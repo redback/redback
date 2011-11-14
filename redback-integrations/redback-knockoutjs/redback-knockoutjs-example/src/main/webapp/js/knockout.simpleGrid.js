@@ -43,7 +43,7 @@
 
     // Templates used to render the grid
     var templateEngine = new ko.jqueryTmplTemplateEngine();
-    templateEngine.addTemplate("ko_simpleGrid_grid", "\
+    /*templateEngine.addTemplate("ko_simpleGrid_grid", "\
                         <thead>\
                             <tr>\
                                 {{each(i, columnDefinition) columns}}\
@@ -71,7 +71,7 @@
                                 ${ i + 1 }\
                             </a>\
                         {{/each}}\
-                    </div>");
+                    </div>");*/
 
     // The "simpleGrid" binding
     ko.bindingHandlers.simpleGrid = {
