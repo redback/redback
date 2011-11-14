@@ -32,8 +32,6 @@ import java.util.List;
 public class RedbackRestError
 {
 
-    private int httpErrorCode;
-
     private List<String> errorKeys = new ArrayList<String>();
 
     private String errorMessage;
@@ -45,21 +43,9 @@ public class RedbackRestError
 
     public RedbackRestError( RedbackServiceException e )
     {
-        httpErrorCode = e.getHttpErrorCode();
         errorKeys.add( e.getErrorKey() );
         errorMessage = e.getMessage();
     }
-
-    public int getHttpErrorCode()
-    {
-        return httpErrorCode;
-    }
-
-    public void setHttpErrorCode( int httpErrorCode )
-    {
-        this.httpErrorCode = httpErrorCode;
-    }
-
 
     public String getErrorMessage()
     {
