@@ -1,4 +1,4 @@
-package org.codehaus.redback.rest.api.services;
+package org.codehaus.redback.rest.services.interceptors;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,45 +18,27 @@ package org.codehaus.redback.rest.api.services;
  * under the License.
  */
 
+import org.codehaus.redback.rest.api.services.RedbackServiceException;
+import org.codehaus.redback.rest.services.RedbackRestError;
+import org.springframework.stereotype.Service;
+
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
+
 /**
  * @author Olivier Lamy
- * @since 1.3
+ * @since 1.4-M2
  */
-public class RedbackServiceException
-    extends Exception
+@Provider
+@Service( "redbackServiceExceptionMapper" )
+public class RedbackServiceExceptionMapper
+    implements ExceptionMapper<RedbackServiceException>
 {
-    private int httpErrorCode = 500;
-
-    private String errorKey;
-
-    public RedbackServiceException( String s )
+    public Response toResponse( RedbackServiceException e )
     {
-        super( s );
-    }
-
-    public RedbackServiceException( String s, int httpErrorCode )
-    {
-        super( s );
-        this.httpErrorCode = httpErrorCode;
-    }
-
-    public int getHttpErrorCode()
-    {
-        return httpErrorCode;
-    }
-
-    public void setHttpErrorCode( int httpErrorCode )
-    {
-        this.httpErrorCode = httpErrorCode;
-    }
-
-    public String getErrorKey()
-    {
-        return errorKey;
-    }
-
-    public void setErrorKey( String errorKey )
-    {
-        this.errorKey = errorKey;
+        RedbackRestError restError = new RedbackRestError( e );
+        Response.ResponseBuilder responseBuilder = Response.status( e.getHttpErrorCode() ).entity( restError );
+        return responseBuilder.build();
     }
 }

@@ -1,4 +1,4 @@
-package org.codehaus.redback.rest.api.services;
+package org.codehaus.redback.rest.services;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,26 +18,34 @@ package org.codehaus.redback.rest.api.services;
  * under the License.
  */
 
+import org.codehaus.redback.rest.api.services.RedbackServiceException;
+
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @author Olivier Lamy
- * @since 1.3
+ * @since 1.4
  */
-public class RedbackServiceException
-    extends Exception
+@XmlRootElement( name = "redbackRestError" )
+public class RedbackRestError
 {
-    private int httpErrorCode = 500;
+
+    private int httpErrorCode;
 
     private String errorKey;
 
-    public RedbackServiceException( String s )
+    private String errorMessage;
+
+    public RedbackRestError()
     {
-        super( s );
+        // no op
     }
 
-    public RedbackServiceException( String s, int httpErrorCode )
+    public RedbackRestError( RedbackServiceException e )
     {
-        super( s );
-        this.httpErrorCode = httpErrorCode;
+        httpErrorCode = e.getHttpErrorCode();
+        errorKey = e.getErrorKey();
+        errorMessage = e.getMessage();
     }
 
     public int getHttpErrorCode()
@@ -58,5 +66,15 @@ public class RedbackServiceException
     public void setErrorKey( String errorKey )
     {
         this.errorKey = errorKey;
+    }
+
+    public String getErrorMessage()
+    {
+        return errorMessage;
+    }
+
+    public void setErrorMessage( String errorMessage )
+    {
+        this.errorMessage = errorMessage;
     }
 }

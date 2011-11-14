@@ -54,10 +54,9 @@ public class AbstractInterceptor
         {
             return null;
         }
-        // FIXME provide a patch to cxf to have it as a constant in Message
-        //Method method = operationResourceInfo.getMethodToInvoke();
+
         Method method = operationResourceInfo.getAnnotatedMethod();
-        // ( (Method) message.get( "org.apache.cxf.resource.method" ) );
+
         log.debug( " method name {}", method == null ? "null" : method.getName() );
         RedbackAuthorization redbackAuthorization = method.getAnnotation( RedbackAuthorization.class );
         return redbackAuthorization;
