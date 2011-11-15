@@ -9,8 +9,8 @@ function($) {
             type: "GET",
             dataType: 'json',
             success: function(data) {
-              var adminExists = new Boolean(data);
-              if (!adminExists) {
+              var adminExists = JSON.parse(data);
+              if (adminExists == false) {
                 $("#create-admin-link").show();
               }
             }
@@ -22,5 +22,16 @@ function($) {
     // load browser locale
     var browserLang = $.i18n.browserLang();
     loadAndParseFile("/restServices/redbackServices/utilServices/getBundleResources?locale="+browserLang, {cache:false, mode: 'map',encoding:'utf-8'});
+
+  customShowError=function(validator, errorMap, errorList) {
+      $( "div.clearfix" ).removeClass( "error" );
+      $( "span.help-inline" ).remove();
+      for ( var i = 0; errorList[i]; i++ ) {
+        var error = errorList[i];
+        var field = $("#"+error.element.id);
+        field.parents( "div.clearfix" ).addClass( "error" );
+        field.parent().append( "<span class=\"help-inline\">" + error.message + "</span>" )
+      }
+  }
 
 });

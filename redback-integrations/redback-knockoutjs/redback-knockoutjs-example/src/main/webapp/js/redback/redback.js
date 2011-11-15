@@ -1,4 +1,4 @@
-require(["redback/user","jquery.i18n.properties-1.0.9"],
+require(["jquery","redback/user","jquery.i18n.properties-1.0.9"],
 function($) {
 
   displayRedbackError=function(obj) {
@@ -11,5 +11,14 @@ function($) {
       alert($.i18n.prop( obj.redbackRestError.errorMessages.errorKey, obj.redbackRestError.errorMessages.args ));
     }
   }
-  ko.applyBindings(new userViewModel());
+
+  // template loading
+  $("<div>").load("js/redback/templates/user-create.tmpl", function() {
+    $("#html-fragments").append($(this).html());
+  });
+  $("<div>").load("js/redback/templates/user-grids.tmpl", function() {
+    $("#html-fragments").append($(this).html());
+    ko.applyBindings(new userViewModel());
+  });
+
 });

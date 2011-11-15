@@ -32,7 +32,12 @@
               type: "POST",
               dataType: 'json',
               success: function(result) {
-                alert(ko.toJSON(result))
+                var created = JSON.parse(result);
+                if (created == true) {
+                  alert("admin user created");
+                } else {
+                  alert("admin user not created");
+                }
               },
               error: function(result) {
                 var obj = jQuery.parseJSON(result.responseText);
@@ -88,7 +93,7 @@
   }
 
   function adminUserViewModel() {
-    this.user = new user("admin","rd","rd","olamy","a@toto.fr");
+    this.user = new user("admin");
 
   }
 
@@ -110,14 +115,5 @@
 
   }
 
-  function customShowError(validator, errorMap, errorList) {
-      $( "div.clearfix" ).removeClass( "error" );
-      $( "span.help-inline" ).remove();
-      for ( var i = 0; errorList[i]; i++ ) {
-        var error = errorList[i];
-        var field = $("#"+error.element.id);
-        field.parents( "div.clearfix" ).addClass( "error" );
-        field.parent().append( "<span class=\"help-inline\">" + error.message + "</span>" )
-      }
-  }
+
 
