@@ -94,7 +94,6 @@
 
   function adminUserViewModel() {
     this.user = new user("admin");
-
   }
 
   function adminCreateBox() {
