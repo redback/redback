@@ -47,31 +47,32 @@ public class DefaultUtilServices
     {
 
         Properties properties = new Properties();
-        InputStream is = null;
 
+        // load redback user api messages
+        StringBuilder resourceName = new StringBuilder( "org/codehaus/plexus/redback/users/messages" );
         try
         {
-            StringBuilder resourceName = new StringBuilder( "org/codehaus/redback/i18n/default" );
-            if ( StringUtils.isNotEmpty( locale ) )
-            {
-                resourceName.append( "_" + locale );
-            }
-            resourceName.append( ".properties" );
 
-            is = Thread.currentThread().getContextClassLoader().getResourceAsStream( resourceName.toString() );
-            if ( is != null )
-            {
-                properties.load( is );
-            }
+            loadResource( properties, resourceName, locale );
+
         }
         catch ( IOException e )
         {
-            log.warn( "skip error loading properties with locale {}", locale );
+            log.warn( "skip error loading properties {}", resourceName.toString() );
         }
-        finally
+
+        resourceName = new StringBuilder( "org/codehaus/redback/i18n/default" );
+        try
         {
-            IOUtils.closeQuietly( is );
+
+            loadResource( properties, resourceName, locale );
+
         }
+        catch ( IOException e )
+        {
+            log.warn( "skip error loading properties {}", resourceName.toString() );
+        }
+
         StringBuilder output = new StringBuilder();
         //return properties.toString();
 
@@ -82,5 +83,30 @@ public class DefaultUtilServices
         }
 
         return output.toString();
+    }
+
+    private void loadResource( Properties properties, StringBuilder resourceName, String locale )
+        throws IOException
+    {
+        InputStream is = null;
+
+        try
+        {
+            if ( StringUtils.isNotEmpty( locale ) )
+            {
+                resourceName.append( "_" + locale );
+            }
+            resourceName.append( ".properties" );
+            is = Thread.currentThread().getContextClassLoader().getResourceAsStream( resourceName.toString() );
+            if ( is != null )
+            {
+                properties.load( is );
+            }
+        }
+        finally
+        {
+            IOUtils.closeQuietly( is );
+        }
+
     }
 }

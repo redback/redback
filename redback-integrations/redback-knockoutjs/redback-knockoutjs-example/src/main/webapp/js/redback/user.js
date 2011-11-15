@@ -35,7 +35,10 @@
                 alert(ko.toJSON(result))
               },
               error: function(result) {
-                alert(result.text);
+                // var obj = jQuery.parseJSON('{"name":"John"}');
+                // {"redbackRestError":{"errorKeys":"user.password.violation.numeric"}}
+                var obj = jQuery.parseJSON(result.responseText);
+                alert($.i18n.prop( obj.redbackRestError.errorKeys ));
               }
           });
       };
