@@ -21,8 +21,15 @@ function($) {
 
     ko.applyBindings(new userViewModel());
 
-    loadAndParseFile("/restServices/redbackServices/utilServices/getBundleResources", {cache:false, mode: 'map'});
+    // load default
+    loadAndParseFile("/restServices/redbackServices/utilServices/getBundleResources", {cache:false, mode: 'map',encoding:'utf-8'});
+    // load browser locale
+    var browserLang = $.i18n.browserLang();
+    loadAndParseFile("/restServices/redbackServices/utilServices/getBundleResources?locale="+browserLang, {cache:false, mode: 'map',encoding:'utf-8'});
 
+    //alert($.i18n.prop("cannot.remove.user.role","foo","bar"));
+
+    /*
     jQuery.i18n.properties({
         name:[],
         path:'bundle/',
@@ -42,7 +49,7 @@ function($) {
             // Accessing a value with placeholders through a JS function
             alert(msg_complex('John'));
         }
-    });
+    });*/
 
 
 

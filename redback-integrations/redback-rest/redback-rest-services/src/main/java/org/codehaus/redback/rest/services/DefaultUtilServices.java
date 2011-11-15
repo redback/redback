@@ -72,12 +72,15 @@ public class DefaultUtilServices
         {
             IOUtils.closeQuietly( is );
         }
-        return properties.toString();
-        /*
-        for (Map.Entry<Object,Object> entry : properties.entrySet() )
+        StringBuilder output = new StringBuilder();
+        //return properties.toString();
+
+        for ( Map.Entry<Object, Object> entry : properties.entrySet() )
         {
-            
-        } */
-        
+            output.append( (String) entry.getKey() ).append( '=' ).append( (String) entry.getValue() );
+            output.append( '\n' );
+        }
+
+        return output.toString();
     }
 }
