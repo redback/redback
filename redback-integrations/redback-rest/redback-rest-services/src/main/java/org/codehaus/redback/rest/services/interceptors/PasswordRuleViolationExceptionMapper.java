@@ -20,6 +20,7 @@ package org.codehaus.redback.rest.services.interceptors;
 
 import org.codehaus.plexus.redback.policy.PasswordRuleViolationException;
 import org.codehaus.plexus.redback.policy.PasswordRuleViolations;
+import org.codehaus.redback.rest.services.ErrorMessage;
 import org.codehaus.redback.rest.services.RedbackRestError;
 import org.springframework.stereotype.Service;
 
@@ -41,13 +42,14 @@ public class PasswordRuleViolationExceptionMapper
     public Response toResponse( PasswordRuleViolationException e )
     {
         RedbackRestError restError = new RedbackRestError();
-        restError.setErrorMessage( e.getMessage() );
-        List<String> errorKeys = new ArrayList<String>();
+
+        List<ErrorMessage> errorMessages = new ArrayList<ErrorMessage>();
+        errorMessages.add( new ErrorMessage( e.getMessage(), null ) );
         for ( PasswordRuleViolations.MessageReference messageReference : e.getViolations().getViolations() )
         {
-            errorKeys.add( messageReference.getKey() );
+            errorMessages.add( new ErrorMessage( messageReference.getKey(), messageReference.getArgs() ) );
         }
-        restError.setErrorKeys( errorKeys );
+        restError.setErrorMessages( errorMessages );
         Response.ResponseBuilder responseBuilder = Response.status( 500 ).entity( restError );
         return responseBuilder.build();
     }

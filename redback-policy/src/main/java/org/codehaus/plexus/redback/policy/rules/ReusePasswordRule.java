@@ -108,7 +108,7 @@ public class ReusePasswordRule
         if ( hasReusedPassword( user, password ) )
         {
             violations.addViolation( REUSE_VIOLATION,
-                                     new Object[]{String.valueOf( getPreviousPasswordCount() )} ); //$NON-NLS-1$
+                                     new String[]{String.valueOf( getPreviousPasswordCount() )} ); //$NON-NLS-1$
         }
     }
 

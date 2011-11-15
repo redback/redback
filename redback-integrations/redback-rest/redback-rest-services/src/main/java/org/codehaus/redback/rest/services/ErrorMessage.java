@@ -18,48 +18,49 @@ package org.codehaus.redback.rest.services;
  * under the License.
  */
 
-import org.codehaus.redback.rest.api.services.RedbackServiceException;
-
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Olivier Lamy
  * @since 1.4
  */
-@XmlRootElement( name = "redbackRestError" )
-public class RedbackRestError
+@XmlRootElement( name = "errorMessage" )
+public class ErrorMessage
     implements Serializable
 {
+    private String errorKey;
 
-    private List<ErrorMessage> errorMessages = new ArrayList<ErrorMessage>();
+    private String[] args;
 
-    public RedbackRestError()
+    public ErrorMessage()
     {
         // no op
     }
 
-    public RedbackRestError( RedbackServiceException e )
+    public ErrorMessage( String errorKey, String[] args )
     {
-        errorMessages.add( new ErrorMessage( e.getErrorKey(), null ) );
-        errorMessages.add( new ErrorMessage( e.getMessage(), null ) );
+        this.errorKey = errorKey;
+        this.args = args;
     }
 
-
-    public List<ErrorMessage> getErrorMessages()
+    public String getErrorKey()
     {
-        return errorMessages;
+        return errorKey;
     }
 
-    public void setErrorMessages( List<ErrorMessage> errorMessages )
+    public void setErrorKey( String errorKey )
     {
-        this.errorMessages = errorMessages;
+        this.errorKey = errorKey;
     }
 
-    public void addErrorMessage(ErrorMessage errorMessage)
+    public String[] getArgs()
     {
-        this.errorMessages.add( errorMessage );
+        return args;
+    }
+
+    public void setArgs( String[] args )
+    {
+        this.args = args;
     }
 }

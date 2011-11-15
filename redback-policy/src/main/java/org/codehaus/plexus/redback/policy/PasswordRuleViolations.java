@@ -35,11 +35,16 @@ public class PasswordRuleViolations
     {
         String key;
 
-        Object args[];
+        String[] args;
 
         public String getKey()
         {
             return key;
+        }
+
+        public String[] getArgs()
+        {
+            return args;
         }
     }
 
@@ -75,7 +80,7 @@ public class PasswordRuleViolations
      * @param key the bundle/localization key for the message.
      * @param args the arguments for the message.
      */
-    public void addViolation( String key, Object args[] )
+    public void addViolation( String key, String[] args )
     {
         MessageReference mesgref = new MessageReference();
         mesgref.key = key;

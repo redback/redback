@@ -19,6 +19,7 @@ package org.codehaus.redback.rest.services.interceptors;
  */
 
 import org.codehaus.redback.rest.api.services.RedbackServiceException;
+import org.codehaus.redback.rest.services.ErrorMessage;
 import org.codehaus.redback.rest.services.RedbackRestError;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +39,7 @@ public class RedbackServiceExceptionMapper
     public Response toResponse( RedbackServiceException e )
     {
         RedbackRestError restError = new RedbackRestError( e );
-        restError.setErrorMessage( e.getMessage() );
+        restError.addErrorMessage( new ErrorMessage( e.getMessage(), null ) );
         Response.ResponseBuilder responseBuilder = Response.status( e.getHttpErrorCode() ).entity( restError );
         return responseBuilder.build();
     }
