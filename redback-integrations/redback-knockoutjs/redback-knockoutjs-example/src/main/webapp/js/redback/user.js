@@ -35,10 +35,8 @@
                 alert(ko.toJSON(result))
               },
               error: function(result) {
-                // var obj = jQuery.parseJSON('{"name":"John"}');
-                // {"redbackRestError":{"errorKeys":"user.password.violation.numeric"}}
                 var obj = jQuery.parseJSON(result.responseText);
-                alert($.i18n.prop( obj.redbackRestError.errorKeys ));
+                displayRedbackError(obj);
               }
           });
       };
@@ -90,7 +88,7 @@
   }
 
   function adminUserViewModel() {
-    this.user = new user("admin");
+    this.user = new user("admin","rd","rd","olamy","a@toto.fr");
 
   }
 
