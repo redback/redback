@@ -22,7 +22,6 @@
       };
       this.create = function() {
           var valid = $("#user-create").valid();
-          //alert("valid:"+valid);
           if (!valid) {
               return;
           }
@@ -41,18 +40,7 @@
           });
       };
   }
-  /*
-  function validateUserCreateForm() {
-      validitySetup();
-      $("#user-create").validity(function() {
-        $("fullname").require();
-        $("#password").require();
-        $("#confirmPassword").require();
-        $("input:password").equal("Passwords do not match.");
-        $("#email").require();
-        $("#email").match("email");
-      });
-  }*/
+
 
   function userViewModel() {
     this.users = ko.observableArray([]);
@@ -108,30 +96,16 @@
       jQuery("#main-content").attr("data-bind",'template: {name:"user-create-tmpl",data: user}');
       var viewModel = new adminUserViewModel();
       ko.applyBindings(viewModel);
-      //validateUserCreateForm();
       $("#user-create").validate({
         rules: {
-          fullname: "required",
-          password: "required",
           confirmPassword: {
             equalTo: "#password"
-          },
-          email: "email"
+          }
         },
         showErrors: function(validator, errorMap, errorList) {
           customShowError(validator,errorMap,errorMap);
         }
       });
-
-      /*
-
-      jQuery("#main-content").load("user-create.html", function() {
-          jQuery.tmpl(jQuery("#user-create-tmpl"), null).appendTo( "#main-content");
-          $("#username").val("admin");
-          $("#username").attr("readonly") == true;
-          $("#username").attr("disabled", true);
-      */
-
 
   }
 

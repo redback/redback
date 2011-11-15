@@ -29,30 +29,7 @@ function($) {
 
     //alert($.i18n.prop("cannot.remove.user.role","foo","bar"));
 
-    /*
-    jQuery.i18n.properties({
-        name:[],
-        path:'bundle/',
-        mode:'map',
-        //language:'pt_PT',
-        callback: function() {
-            // We specified mode: 'both' so translated values will be
-            // available as JS vars/functions and as a map
-
-            // Accessing a simple value through the map
-            jQuery.i18n.prop('msg_hello');
-            // Accessing a value with placeholders through the map
-            jQuery.i18n.prop('msg_complex', 'John');
-
-            // Accessing a simple value through a JS variable
-            alert(msg_hello +' '+ msg_world);
-            // Accessing a value with placeholders through a JS function
-            alert(msg_complex('John'));
-        }
-    });*/
 
 
 
 });
-
-// "jQuery.validity","setup-validity"
