@@ -84,7 +84,7 @@ public class RoleManagementServiceTest
             }
 
             // assign the role and retry
-            getRoleManagementService( authorizationHeader ).assignRole( "edit-users-list", "toto" );
+            getRoleManagementService( authorizationHeader ).assignRole( "user-administrator", "toto" );
 
             userService.removeFromCache( "toto" );
 
