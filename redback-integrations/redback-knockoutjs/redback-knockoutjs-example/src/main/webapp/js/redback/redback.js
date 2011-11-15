@@ -1,4 +1,4 @@
-require(["redback/user"],
+require(["redback/user","jquery.i18n.properties-1.0.9"],
 function($) {
 
   displayRedbackError=function(obj) {
