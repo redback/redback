@@ -25,8 +25,10 @@ import org.codehaus.plexus.redback.keys.memory.MemoryAuthenticationKey;
 import org.codehaus.plexus.redback.keys.memory.MemoryKeyManager;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
 import org.codehaus.plexus.redback.policy.MustChangePasswordException;
+import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.codehaus.redback.rest.api.model.User;
 import org.codehaus.redback.rest.api.services.LoginService;
 import org.codehaus.redback.rest.api.services.RedbackServiceException;
 import org.springframework.stereotype.Service;
@@ -46,13 +48,13 @@ public class DefaultLoginService
     private SecuritySystem securitySystem;
 
     @Inject
-    public DefaultLoginService(SecuritySystem securitySystem)
+    public DefaultLoginService( SecuritySystem securitySystem )
     {
         this.securitySystem = securitySystem;
     }
 
 
-    public String addAuthenticationKey(String providedKey, String principal, String purpose, int expirationMinutes)
+    public String addAuthenticationKey( String providedKey, String principal, String purpose, int expirationMinutes )
         throws RedbackServiceException
     {
         KeyManager keyManager = securitySystem.getKeyManager();
@@ -67,21 +69,21 @@ public class DefaultLoginService
             key = new JdoAuthenticationKey();
         }
 
-        key.setKey(providedKey);
-        key.setForPrincipal(principal);
-        key.setPurpose(purpose);
+        key.setKey( providedKey );
+        key.setForPrincipal( principal );
+        key.setPurpose( purpose );
 
         Calendar now = getNowGMT();
-        key.setDateCreated(now.getTime());
+        key.setDateCreated( now.getTime() );
 
         if ( expirationMinutes >= 0 )
         {
             Calendar expiration = getNowGMT();
-            expiration.add(Calendar.MINUTE, expirationMinutes);
-            key.setDateExpires(expiration.getTime());
+            expiration.add( Calendar.MINUTE, expirationMinutes );
+            key.setDateExpires( expiration.getTime() );
         }
 
-        keyManager.addKey(key);
+        keyManager.addKey( key );
 
         return key.getKey();
     }
@@ -98,35 +100,48 @@ public class DefaultLoginService
         return Boolean.TRUE;
     }
 
-    public Boolean logIn(String userName, String password)
+    public User logIn( String userName, String password )
         throws RedbackServiceException
     {
         PasswordBasedAuthenticationDataSource authDataSource =
-            new PasswordBasedAuthenticationDataSource(userName, password);
+            new PasswordBasedAuthenticationDataSource( userName, password );
         try
         {
-            return securitySystem.authenticate(authDataSource).getAuthenticationResult().isAuthenticated();
+            SecuritySession securitySession = securitySystem.authenticate( authDataSource );
+            if ( securitySession.getAuthenticationResult().isAuthenticated() )
+            {
+                org.codehaus.plexus.redback.users.User user = securitySession.getUser();
+                User restUser = new User();
+                restUser.setEmail( user.getEmail() );
+                restUser.setUsername( user.getUsername() );
+                restUser.setPasswordChangeRequired( user.isPasswordChangeRequired() );
+                restUser.setLocked( user.isLocked() );
+                restUser.setValidated( user.isValidated() );
+                restUser.setFullName( user.getFullName() );
+                return restUser;
+            }
+            return null;
         }
         catch ( AuthenticationException e )
         {
-            throw new RedbackServiceException(e.getMessage());
+            throw new RedbackServiceException( e.getMessage() );
         }
         catch ( UserNotFoundException e )
         {
-            throw new RedbackServiceException(e.getMessage());
+            throw new RedbackServiceException( e.getMessage() );
         }
         catch ( AccountLockedException e )
         {
-            throw new RedbackServiceException(e.getMessage());
+            throw new RedbackServiceException( e.getMessage() );
         }
         catch ( MustChangePasswordException e )
         {
-            throw new RedbackServiceException(e.getMessage());
+            throw new RedbackServiceException( e.getMessage() );
         }
     }
 
     private Calendar getNowGMT()
     {
-        return Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        return Calendar.getInstance( TimeZone.getTimeZone( "GMT" ) );
     }
 }

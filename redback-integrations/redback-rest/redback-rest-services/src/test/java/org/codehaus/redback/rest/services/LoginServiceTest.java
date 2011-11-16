@@ -33,7 +33,7 @@ public class LoginServiceTest
     public void loginAdmin( )
         throws Exception
     {
-        assertTrue( getLoginService( null ).logIn( RedbackRoleConstants.ADMINISTRATOR_ACCOUNT_NAME,
+        assertNotNull( getLoginService( null ).logIn( RedbackRoleConstants.ADMINISTRATOR_ACCOUNT_NAME,
                                                    FakeCreateAdminService.ADMIN_TEST_PWD ) );
     }
 

@@ -18,6 +18,7 @@ package org.codehaus.redback.rest.api.services;
 
 import org.apache.cxf.jaxrs.model.wadl.Description;
 import org.codehaus.plexus.redback.authorization.RedbackAuthorization;
+import org.codehaus.redback.rest.api.model.User;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -59,6 +60,6 @@ public interface LoginService
     @Description( "only to test if username/password can connect" )
     @RedbackAuthorization( noRestriction = true, noPermission = true )
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    Boolean logIn( @QueryParam( "userName" ) String userName, @QueryParam( "password" ) String password )
+    User logIn( @QueryParam( "userName" ) String userName, @QueryParam( "password" ) String password )
         throws RedbackServiceException;
 }
