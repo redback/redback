@@ -1,4 +1,4 @@
-require(["jquery", "jquery.tmpl", "knockout-1.3.0beta.debug", "head.0.96","bootstrap-modal", "redback/redback",
+require(["jquery", "bootstrap-modal", "jquery.tmpl", "knockout-1.3.0beta.debug", "head.0.96", "redback/redback",
         "jquery.json-2.3.min","jquery.validate","jquery.i18n.properties-1.0.9", "knockout.simpleGrid",
         "jquery.cookie.1.0.0"],
 function($) {

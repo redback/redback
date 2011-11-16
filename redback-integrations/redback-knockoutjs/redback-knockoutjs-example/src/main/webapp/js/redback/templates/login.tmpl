@@ -1,0 +1,30 @@
+
+    <div id="modal-login" class="modal hide fade">
+      <div class="modal-header">
+        <a href="#" class="close">&times;</a>
+        <h3>Login</h3>
+      </div>
+      <div class="modal-body" id="modal-login-content">
+        <p>
+          <form id="user-login-form">
+          <fieldset>
+            <div class="clearfix">
+              <label for="username">Username</label>
+              <div class="input">
+                <input type="text" id="user-login-form-username" name="user-login-form-username" class="required" />
+              </div>
+            </div>
+            <div class="clearfix">
+              <label for="password">Password</label>
+              <div class="input">
+                <input type="password" id="user-login-form-password" name="user-login-form-password" class="required" />
+              </div>
+            </div>
+          </fieldset>
+          </form>
+        </p>
+      </div>
+      <div class="modal-footer" id="modal-login-footer">
+        <button class="btn primary" onclick="return login();" id="modal-login-ok">Ok</button>
+      </div>
+    </div>

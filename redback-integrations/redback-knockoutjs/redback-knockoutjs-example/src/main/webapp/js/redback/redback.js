@@ -19,6 +19,9 @@ function($) {
   $("<div>").load("js/redback/templates/user-grids.tmpl", function() {
     $("#html-fragments").append($(this).html());
   });
+  $("<div>").load("js/redback/templates/login.tmpl", function() {
+    $("#html-fragments").append($(this).html());
+  });
   // ko.applyBindings(new userViewModel());
 
 

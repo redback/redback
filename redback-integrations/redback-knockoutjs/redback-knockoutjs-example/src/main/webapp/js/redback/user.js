@@ -1,4 +1,4 @@
-  function user(username, password, confirmPassword,fullName,email,permanent,validated,timestampAccountCreation,timestampLastLogin,timestampLastPasswordChange,locked,passwordChangeRequired,ownerViewModel) {
+  user=function(username, password, confirmPassword,fullName,email,permanent,validated,timestampAccountCreation,timestampLastLogin,timestampLastPasswordChange,locked,passwordChangeRequired,ownerViewModel) {
       // Potentially Editable Field.
       this.username = ko.observable(username);
       // Editable Fields.
@@ -48,7 +48,7 @@
   }
 
 
-  function userViewModel() {
+  userViewModel=function() {
     this.users = ko.observableArray([]);
     var self = this;
     $.ajax("/restServices/redbackServices/userService/getUsers", {
@@ -96,7 +96,7 @@
     this.user = new user("admin");
   }
 
-  function adminCreateBox() {
+  adminCreateBox=function() {
 
       jQuery("#main-content").attr("data-bind",'template: {name:"user-create-tmpl",data: user}');
       var viewModel = new adminUserViewModel();
@@ -111,6 +111,49 @@
           customShowError(validator,errorMap,errorMap);
         }
       });
+
+  }
+  loginBox=function(){
+    window.console && console.debug( "loginBox");
+    if (window.modalLoginWindow==null) {
+      window.modalLoginWindow = $("#modal-login").modal({backdrop:'static',show:false});
+    }
+    window.modalLoginWindow.modal('show');
+    $("#user-login-form").validate({
+      showErrors: function(validator, errorMap, errorList) {
+        customShowError(validator,errorMap,errorMap);
+      }
+    });
+    $("#modal-login").delegate("#modal-login-ok", "click keydown", function(e) {
+      e.preventDefault();
+      login();
+    });
+  }
+
+  login=function(){
+    var valid = $("#user-login-form").valid();
+    if (!valid) {
+        return;
+    }
+    $("#modal-login-ok").attr("disabled","disabled");
+
+    //#modal-login-footer
+    $('#modal-login-footer').append("<img id=\"login-spinner\" src='images/spinner.gif'/>")
+
+    var url = '/restServices/redbackServices/loginService/logIn?userName='+$("#user-login-form-username").val();
+    url += "&password="+$("#user-login-form-password").val();
+
+    $.ajax({
+      url: url,
+      success: function(){
+        window.modalLoginWindow.modal('hide');
+      },
+      complete: function(){
+        $("#modal-login-ok").removeAttr("disabled");
+        $("#login-spinner").remove();
+      }
+    });
+    // removeAttr disabled
 
   }
 
