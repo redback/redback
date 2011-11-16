@@ -24,6 +24,8 @@ function($) {
 
   logout=function(){
     deleteLoginCookie();
+    $("#login-link").show();
+    $("#logout-link").hide();
   }
 
   $.get('menu.html', function(data) {

@@ -33,6 +33,7 @@
               dataType: 'json',
               success: function(result) {
                 var created = JSON.parse(result);
+                // TODO use a message not an alert
                 if (created == true) {
                   alert("admin user created");
                 } else {
@@ -117,6 +118,9 @@
     window.console && console.debug( "loginBox");
     if (window.modalLoginWindow==null) {
       window.modalLoginWindow = $("#modal-login").modal({backdrop:'static',show:false});
+      window.modalLoginWindow.bind('hidden', function () {
+        $("#modal-login-err-message").hide();
+      })
     }
     window.modalLoginWindow.modal('show');
     $("#user-login-form").validate({
@@ -145,8 +149,26 @@
 
     $.ajax({
       url: url,
-      success: function(){
-        window.modalLoginWindow.modal('hide');
+      success: function(result){
+        var logged = false;//JSON.parse(result);
+        if (result == null) {
+          logged = false;
+        } else {
+          if (result.user) {
+            logged = true;
+          }
+        }
+        if (logged == true) {
+          var user = mapUser(result.user);
+          reccordLoginCookie(user);
+          // TODO check password change required locked etc....
+          window.modalLoginWindow.modal('hide');
+          $("#login-link").hide();
+          $("#logout-link").show();
+          return;
+        }
+        $("#modal-login-err-message").html($.i18n.prop("incorrect.username.password"));
+        $("#modal-login-err-message").show();
       },
       complete: function(){
         $("#modal-login-ok").removeAttr("disabled");
@@ -155,6 +177,16 @@
     });
     // removeAttr disabled
 
+  }
+
+  /**
+   *
+   * @param data User response from redback rest api
+   */
+  mapUser=function(data) {
+
+    // {"user":{"email":"a@de.fr","fullName":"olamy","locked":false,"passwordChangeRequired":false,"permanent":false,"username":"admin","validated":false}}
+    return new user(data.username, data.password, null,data.fullName,data.email,data.permanent,data.validated,data.timestampAccountCreation,data.timestampLastLogin,data.timestampLastPasswordChange,data.locked,data.passwordChangeRequired,self);
   }
 
 
