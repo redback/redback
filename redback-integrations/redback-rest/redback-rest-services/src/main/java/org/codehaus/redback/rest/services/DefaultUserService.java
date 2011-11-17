@@ -293,6 +293,7 @@ public class DefaultUserService
         user.setLocked( false );
         user.setPasswordChangeRequired( false );
         user.setPermanent( true );
+        user.setValidated( true );
 
         userManager.addUser( user );
 

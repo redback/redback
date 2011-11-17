@@ -111,6 +111,10 @@ public class DefaultLoginService
             if ( securitySession.getAuthenticationResult().isAuthenticated() )
             {
                 org.codehaus.plexus.redback.users.User user = securitySession.getUser();
+                if ( !user.isValidated() )
+                {
+                    return null;
+                }
                 User restUser = new User();
                 restUser.setEmail( user.getEmail() );
                 restUser.setUsername( user.getUsername() );

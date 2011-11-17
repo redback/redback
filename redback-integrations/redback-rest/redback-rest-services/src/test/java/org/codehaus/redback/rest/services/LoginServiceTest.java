@@ -50,6 +50,7 @@ public class LoginServiceTest
             user.setPermanent( false );
             user.setPasswordChangeRequired( false );
             user.setLocked( false );
+            user.setValidated( true );
             UserService userService = getUserService( authorizationHeader );
             userService.createUser( user );
             // END SNIPPET: create-user
