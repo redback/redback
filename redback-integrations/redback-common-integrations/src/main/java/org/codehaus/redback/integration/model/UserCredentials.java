@@ -20,6 +20,8 @@ import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.util.StringUtils;
 
+import java.io.Serializable;
+
 /**
  * UserCredentials
  *
@@ -27,6 +29,7 @@ import org.codehaus.plexus.util.StringUtils;
  * @version $Id$
  */
 public abstract class UserCredentials
+    implements Serializable
 {
     // Potentially Editable Field.
     private String username;

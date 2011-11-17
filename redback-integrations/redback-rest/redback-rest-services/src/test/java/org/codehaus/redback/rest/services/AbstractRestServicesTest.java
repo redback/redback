@@ -276,6 +276,7 @@ public abstract class AbstractRestServicesTest
         {
             WebClient.client( service ).header( "Authorization", authzHeader );
         }
+
         return service;
     }
 

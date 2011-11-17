@@ -1,5 +1,7 @@
 package org.codehaus.redback.rest.api.model;
 
+import org.codehaus.redback.integration.util.DateUtils;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
@@ -38,6 +40,15 @@ public class User
 
     private boolean permanent;
 
+    private String confirmPassword;
+
+    // Display Only Fields.
+    private String timestampAccountCreation;
+
+    private String timestampLastLogin;
+
+    private String timestampLastPasswordChange;
+
     public User()
     {
         // no op
@@ -51,6 +62,23 @@ public class User
         this.validated = validated;
         this.locked = locked;
     }
+
+    public User( org.codehaus.plexus.redback.users.User user )
+    {
+        setUsername( user.getUsername() );
+        this.setEmail( user.getEmail() );
+        this.setFullName( user.getFullName() );
+        this.setLocked( user.isLocked() );
+        this.setPassword( user.getPassword() );
+        this.setValidated( user.isValidated() );
+        this.setPasswordChangeRequired( user.isPasswordChangeRequired() );
+        this.setPermanent( user.isPermanent() );
+        
+        setTimestampAccountCreation( DateUtils.formatWithAge( user.getAccountCreationDate(), "ago" ) );
+        setTimestampLastLogin( DateUtils.formatWithAge( user.getLastLoginDate(), "ago" ) );
+        setTimestampLastPasswordChange( DateUtils.formatWithAge( user.getLastPasswordChange(), "ago" ) );
+    }
+
 
     public String getUsername()
     {
@@ -130,5 +158,45 @@ public class User
     public void setPermanent( boolean permanent )
     {
         this.permanent = permanent;
+    }
+
+    public String getConfirmPassword()
+    {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword( String confirmPassword )
+    {
+        this.confirmPassword = confirmPassword;
+    }
+
+    public String getTimestampAccountCreation()
+    {
+        return timestampAccountCreation;
+    }
+
+    public void setTimestampAccountCreation( String timestampAccountCreation )
+    {
+        this.timestampAccountCreation = timestampAccountCreation;
+    }
+
+    public String getTimestampLastLogin()
+    {
+        return timestampLastLogin;
+    }
+
+    public void setTimestampLastLogin( String timestampLastLogin )
+    {
+        this.timestampLastLogin = timestampLastLogin;
+    }
+
+    public String getTimestampLastPasswordChange()
+    {
+        return timestampLastPasswordChange;
+    }
+
+    public void setTimestampLastPasswordChange( String timestampLastPasswordChange )
+    {
+        this.timestampLastPasswordChange = timestampLastPasswordChange;
     }
 }

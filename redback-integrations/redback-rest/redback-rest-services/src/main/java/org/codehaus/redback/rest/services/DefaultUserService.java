@@ -253,7 +253,7 @@ public class DefaultUserService
         {
             return null;
         }
-        return new User( user.getUsername(), user.getFullName(), user.getEmail(), user.isValidated(), user.isLocked() );
+        return new User( user );
     }
 
     public Boolean createAdminUser( User adminUser )
