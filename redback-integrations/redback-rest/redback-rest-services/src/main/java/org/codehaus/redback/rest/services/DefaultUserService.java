@@ -110,13 +110,15 @@ public class DefaultUserService
         u.setLocked( user.isLocked() );
         u.setPasswordChangeRequired( user.isPasswordChangeRequired() );
         u.setPermanent( user.isPermanent() );
+        u.setValidated( user.isValidated() );
         u = userManager.addUser( u );
         if ( !user.isPasswordChangeRequired() )
         {
             u.setPasswordChangeRequired( false );
             try
             {
-                userManager.updateUser( u );
+                u = userManager.updateUser( u );
+                log.debug( "user {} created", u.getUsername() );
             }
             catch ( UserNotFoundException e )
             {
