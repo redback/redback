@@ -35,6 +35,9 @@
   -->
   <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
 
+  <context:annotation-config/>
+  <context:component-scan base-package="org.codehaus.redback.rest.services.mock"/>
+
   <jaxrs:server id="testServices" address="/fakeCreateAdminService">
     <jaxrs:serviceBeans>
       <ref bean="fakeCreateAdminService"/>
@@ -47,5 +50,7 @@
    </jaxrs:server>
 
   <bean name="fakeCreateAdminService" class="org.codehaus.redback.rest.services.FakeCreateAdminServiceImpl"/>
+
+  <alias name="mockJavaMailSender" alias="mailSender"/>
 
 </beans>

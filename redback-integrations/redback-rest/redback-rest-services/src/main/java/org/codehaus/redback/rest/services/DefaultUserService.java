@@ -291,14 +291,8 @@ public class DefaultUserService
         user.setLocked( false );
         user.setPasswordChangeRequired( false );
         user.setPermanent( true );
-        //try
-        //{
+
         userManager.addUser( user );
-        //}
-        //catch ( PasswordRuleViolationException e )
-        //{
-        //    throw new RedbackServiceException( e.getMessage() );
-        //}
 
         try
         {

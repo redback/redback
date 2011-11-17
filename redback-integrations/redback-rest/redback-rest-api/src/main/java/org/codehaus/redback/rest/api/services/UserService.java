@@ -120,7 +120,7 @@ public interface UserService
     @Path( "registerUser" )
     @POST
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
+    @RedbackAuthorization( noRestriction = true, noPermission = true )
     User registerUser( User user )
         throws RedbackServiceException;
 }

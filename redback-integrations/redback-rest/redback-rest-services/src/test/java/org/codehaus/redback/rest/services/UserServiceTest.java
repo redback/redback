@@ -105,6 +105,29 @@ public class UserServiceTest
         }
     }
 
+    @Test
+    public void register()
+        throws Exception
+    {
+        try
+        {
+            UserService service = getUserService();
+            User u = new User();
+            u.setFullName( "the toto" );
+            u.setUsername( "toto" );
+            u.setEmail( "toto@toto.fr" );
+            u.setPassword( "toto123" );
+            u.setConfirmPassword( "toto123" );
+            u = service.registerUser( u );
+        }
+        catch ( Exception e )
+        {
+            log.error( e.getMessage(), e );
+            throw e;
+        }
+
+    }
+
     public void guestUserCreate()
         throws Exception
     {
