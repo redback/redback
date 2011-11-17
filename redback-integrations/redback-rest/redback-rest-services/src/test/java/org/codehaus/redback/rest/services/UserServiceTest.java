@@ -131,7 +131,7 @@ public class UserServiceTest
             List<EmailMessage> emailMessages = assertService.getEmailMessageSended();
             assertEquals( 1, emailMessages.size() );
             assertEquals( "toto@toto.fr", emailMessages.get( 0 ).getTos().get( 0 ) );
-            assertEquals( "olamy@localhost", emailMessages.get( 0 ).getFrom() );
+
             assertEquals( "Welcome", emailMessages.get( 0 ).getSubject() );
             assertTrue(
                 emailMessages.get( 0 ).getText().contains( "Use the following URL to validate your account." ) );
