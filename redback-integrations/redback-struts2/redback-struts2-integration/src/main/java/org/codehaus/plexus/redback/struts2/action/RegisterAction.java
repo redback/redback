@@ -16,8 +16,6 @@ package org.codehaus.plexus.redback.struts2.action;
  * limitations under the License.
  */
 
-import java.util.Arrays;
-
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.keys.KeyManagerException;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
@@ -30,10 +28,12 @@ import org.codehaus.redback.integration.interceptor.SecureActionBundle;
 import org.codehaus.redback.integration.interceptor.SecureActionException;
 import org.codehaus.redback.integration.mail.Mailer;
 import org.codehaus.redback.integration.model.CreateUserCredentials;
+import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
+import java.util.Arrays;
 
 /**
  * RegisterAction
@@ -52,7 +52,7 @@ public class RegisterAction
     private static final String VALIDATION_NOTE = "validation-note";
 
     private static final String RESEND_VALIDATION_EMAIL = "security-resend-validation-email";
-    
+
     // ------------------------------------------------------------------
     //  Component Requirements
     // ------------------------------------------------------------------
@@ -74,7 +74,7 @@ public class RegisterAction
     private boolean emailValidationRequired;
 
     private String username;
-    
+
     // ------------------------------------------------------------------
     // Action Entry Points - (aka Names)
     // ------------------------------------------------------------------
@@ -122,7 +122,7 @@ public class RegisterAction
         {
             // Means that the role name doesn't exist.
             // We need to fail fast and return to the previous page.
-            addActionError( getText( "user.already.exists", Arrays.asList( ( Object ) user.getUsername() ) ) );
+            addActionError( getText( "user.already.exists", Arrays.asList( (Object) user.getUsername() ) ) );
         }
 
         if ( hasActionErrors() || hasFieldErrors() )
@@ -137,7 +137,7 @@ public class RegisterAction
 
         try
         {
-            roleManager.assignRole( "registered-user", u.getPrincipal().toString() );
+            roleManager.assignRole( RedbackRoleConstants.REGISTERED_USER_ROLE_ID, u.getPrincipal().toString() );
         }
         catch ( RoleManagerException rpe )
         {
@@ -152,9 +152,9 @@ public class RegisterAction
 
             try
             {
-                AuthenticationKey authkey = securitySystem.getKeyManager().createKey( u.getPrincipal().toString(),
-                                                                                      "New User Email Validation",
-                                                                                      securityPolicy.getUserValidationSettings().getEmailValidationTimeout() );
+                AuthenticationKey authkey =
+                    securitySystem.getKeyManager().createKey( u.getPrincipal().toString(), "New User Email Validation",
+                                                              securityPolicy.getUserValidationSettings().getEmailValidationTimeout() );
 
                 mailer.sendAccountValidationEmail( Arrays.asList( u.getEmail() ), authkey, getBaseUrl() );
 
@@ -182,22 +182,22 @@ public class RegisterAction
         AuditEvent event = new AuditEvent( getText( "log.account.create" ) );
         event.setAffectedUser( username );
         event.log();
-        
+
         return REGISTER_SUCCESS;
     }
 
     public String resendRegistrationEmail()
     {
-    	UserSecurityPolicy securityPolicy = securitySystem.getPolicy();
-    	   	
+        UserSecurityPolicy securityPolicy = securitySystem.getPolicy();
+
         try
         {
-        	User user = super.securitySystem.getUserManager().findUser( username );        	
-        	
-            AuthenticationKey authkey = securitySystem.getKeyManager().createKey( user.getPrincipal().toString(),
-                                                                                  "New User Email Validation",
-                                                                                  securityPolicy.getUserValidationSettings().getEmailValidationTimeout() );
-            
+            User user = super.securitySystem.getUserManager().findUser( username );
+
+            AuthenticationKey authkey =
+                securitySystem.getKeyManager().createKey( user.getPrincipal().toString(), "New User Email Validation",
+                                                          securityPolicy.getUserValidationSettings().getEmailValidationTimeout() );
+
             mailer.sendAccountValidationEmail( Arrays.asList( user.getEmail() ), authkey, getBaseUrl() );
 
             return RESEND_VALIDATION_EMAIL;
@@ -207,15 +207,15 @@ public class RegisterAction
             addActionError( getText( "cannot.register.user" ) );
             log.error( "Unable to register a new user.", e );
             return ERROR;
-        } 
-        catch ( UserNotFoundException e ) 
+        }
+        catch ( UserNotFoundException e )
         {
-			addActionError( getText( "cannot.find.user" ) );
+            addActionError( getText( "cannot.find.user" ) );
             log.error( "Unable to find user.", e );
             return ERROR;
-		} 	
+        }
     }
-    
+
     public String cancel()
     {
         return CANCEL;
@@ -244,16 +244,18 @@ public class RegisterAction
     {
         this.emailValidationRequired = emailValidationRequired;
     }
-    
-    public String getUsername() {
-		return username;
-	}
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public String getUsername()
+    {
+        return username;
+    }
 
-	public SecureActionBundle initSecureActionBundle()
+    public void setUsername( String username )
+    {
+        this.username = username;
+    }
+
+    public SecureActionBundle initSecureActionBundle()
         throws SecureActionException
     {
         return SecureActionBundle.OPEN;

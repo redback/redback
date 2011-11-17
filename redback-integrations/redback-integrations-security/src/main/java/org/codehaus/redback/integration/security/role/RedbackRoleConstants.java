@@ -33,6 +33,11 @@ public interface RedbackRoleConstants
 
     public static final String REGISTERED_USER_ROLE = "Registered User";
 
+    /**
+     * @since 1.4
+     */
+    public static final String REGISTERED_USER_ROLE_ID = "Registered User";
+
     public static final String GUEST_ROLE = "Guest";
 
     // guest access operation
