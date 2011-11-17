@@ -35,22 +35,27 @@
   -->
   <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
 
-  <context:annotation-config/>
-  <context:component-scan base-package="org.codehaus.redback.rest.services.mock"/>
 
   <jaxrs:server id="testServices" address="/fakeCreateAdminService">
     <jaxrs:serviceBeans>
       <ref bean="fakeCreateAdminService"/>
     </jaxrs:serviceBeans>
-    <!--
-    <jaxrs:outInterceptors>
-      <ref bean="threadLocalUserCleaner#rest"/>
-    </jaxrs:outInterceptors>
-    -->
+
+   </jaxrs:server>
+
+  <jaxrs:server id="services" address="/testsService">
+    <jaxrs:serviceBeans>
+      <ref bean="servicesAssert"/>
+    </jaxrs:serviceBeans>
+
    </jaxrs:server>
 
   <bean name="fakeCreateAdminService" class="org.codehaus.redback.rest.services.FakeCreateAdminServiceImpl"/>
 
+  <bean name="mockJavaMailSender" class="org.codehaus.redback.rest.services.mock.MockJavaMailSender"/>
+
   <alias name="mockJavaMailSender" alias="mailSender"/>
+
+  <bean name="servicesAssert" class="org.codehaus.redback.rest.services.mock.DefaultServicesAssert"/>
 
 </beans>

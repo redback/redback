@@ -16,10 +16,13 @@ package org.codehaus.redback.rest.services;
  * limitations under the License.
  */
 
+import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.apache.cxf.jaxrs.client.ServerWebApplicationException;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.redback.rest.api.model.User;
 import org.codehaus.redback.rest.api.services.UserService;
+import org.codehaus.redback.rest.services.mock.EmailMessage;
+import org.codehaus.redback.rest.services.mock.ServicesAssert;
 import org.junit.Test;
 
 import java.util.List;
@@ -119,6 +122,20 @@ public class UserServiceTest
             u.setPassword( "toto123" );
             u.setConfirmPassword( "toto123" );
             u = service.registerUser( u );
+
+            ServicesAssert assertService =
+                JAXRSClientFactory.create( "http://localhost:" + port + "/" + getRestServicesPath() + "/testsService/",
+                                           ServicesAssert.class );
+
+            //log.info( "emails " + assertService.getEmailMessageSended() );
+            List<EmailMessage> emailMessages = assertService.getEmailMessageSended();
+            assertEquals( 1, emailMessages.size() );
+            assertEquals( "toto@toto.fr", emailMessages.get( 0 ).getTos().get( 0 ) );
+            assertEquals( "olamy@localhost", emailMessages.get( 0 ).getFrom() );
+            assertEquals( "Welcome", emailMessages.get( 0 ).getSubject() );
+            assertTrue(
+                emailMessages.get( 0 ).getText().contains( "Use the following URL to validate your account." ) );
+
         }
         catch ( Exception e )
         {

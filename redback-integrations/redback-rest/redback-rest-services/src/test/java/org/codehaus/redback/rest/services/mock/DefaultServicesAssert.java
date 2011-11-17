@@ -1,5 +1,4 @@
 package org.codehaus.redback.rest.services.mock;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,46 +18,34 @@ package org.codehaus.redback.rest.services.mock;
  * under the License.
  */
 
-import org.springframework.mail.MailException;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.stereotype.Service;
-
+import javax.inject.Inject;
 import javax.mail.internet.MimeMessage;
+import javax.ws.rs.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author <a href="mailto:olamy@apache.org">olamy</a>
- * @since 26 sept. 2008
- * @version $Id$
+ * a rest which contains some methods to do some assert
+ *
+ * @author Olivier Lamy
  */
-@Service("mockJavaMailSender")
-public class MockJavaMailSender
-    extends JavaMailSenderImpl
-    implements JavaMailSender
+public class DefaultServicesAssert
+    implements ServicesAssert
 {
 
-    List<MimeMessage> sendedEmails = new ArrayList<MimeMessage>();
-    
-    /**
-     * 
-     */
-    public MockJavaMailSender()
+    @Inject
+    MockJavaMailSender mockJavaMailSender;
+
+    public List<EmailMessage> getEmailMessageSended()
+        throws Exception
     {
-      // no op
+        List<EmailMessage> emailMessages = new ArrayList<EmailMessage>();
+        for ( MimeMessage mimeMessage : mockJavaMailSender.getSendedEmails() )
+        {
+            emailMessages.add( new EmailMessage( mimeMessage ) );
+        }
+        return emailMessages;
     }
 
-    @Override
-    public void send( MimeMessage mimeMessage )
-        throws MailException
-    {
-        sendedEmails.add( mimeMessage );
-    }
-    
-    public List<MimeMessage> getSendedEmails()
-    {
-        return sendedEmails;
-    }
 
 }
