@@ -1,4 +1,4 @@
-package org.codehaus.redback.rest.services;
+package org.codehaus.redback.rest.services.interceptors;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,49 +18,31 @@ package org.codehaus.redback.rest.services;
  * under the License.
  */
 
-import javax.xml.bind.annotation.XmlRootElement;
-import java.io.Serializable;
+import org.apache.cxf.jaxrs.ext.RequestHandler;
+import org.apache.cxf.jaxrs.model.ClassResourceInfo;
+import org.apache.cxf.message.Message;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Response;
 
 /**
  * @author Olivier Lamy
  * @since 1.4
  */
-@XmlRootElement( name = "errorMessage" )
-public class ErrorMessage
-    implements Serializable
+@Service( "httpContextThreadLocalInterceptor#redback" )
+public class HttpContextThreadLocalInterceptor
+    implements RequestHandler
 {
-    private String errorKey;
-
-    private String[] args;
-
-    public ErrorMessage()
+    public Response handleRequest( Message m, ClassResourceInfo resourceClass )
     {
-        // no op
+        HttpContextThreadLocal.set( new HttpContext().setHttpServletRequest( getHttpServletRequest( m ) ) );
+        return null;
     }
 
-    public ErrorMessage( String errorKey, String[] args )
+    public HttpServletRequest getHttpServletRequest( Message message )
     {
-        this.errorKey = errorKey;
-        this.args = args;
-    }
-
-    public String getErrorKey()
-    {
-        return errorKey;
-    }
-
-    public void setErrorKey( String errorKey )
-    {
-        this.errorKey = errorKey;
-    }
-
-    public String[] getArgs()
-    {
-        return args;
-    }
-
-    public void setArgs( String[] args )
-    {
-        this.args = args;
+        // FIXME use a constant from cxf
+        return (HttpServletRequest) message.get( "HTTP.REQUEST" );
     }
 }

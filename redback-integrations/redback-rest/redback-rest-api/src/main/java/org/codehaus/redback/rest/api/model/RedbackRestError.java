@@ -1,4 +1,4 @@
-package org.codehaus.redback.rest.services;
+package org.codehaus.redback.rest.api.model;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -43,7 +43,7 @@ public class RedbackRestError
 
     public RedbackRestError( RedbackServiceException e )
     {
-        errorMessages.add( new ErrorMessage( e.getErrorKey(), null ) );
+        errorMessages.addAll( e.getErrorMessages() );
         errorMessages.add( new ErrorMessage( e.getMessage(), null ) );
     }
 

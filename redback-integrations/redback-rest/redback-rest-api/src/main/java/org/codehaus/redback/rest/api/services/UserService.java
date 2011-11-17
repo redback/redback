@@ -116,4 +116,11 @@ public interface UserService
     @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
     User createGuestUser()
         throws RedbackServiceException;
+
+    @Path( "registerUser" )
+    @POST
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
+    User registerUser( User user )
+        throws RedbackServiceException;
 }

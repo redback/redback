@@ -189,5 +189,20 @@
     return new user(data.username, data.password, null,data.fullName,data.email,data.permanent,data.validated,data.timestampAccountCreation,data.timestampLastLogin,data.timestampLastPasswordChange,data.locked,data.passwordChangeRequired,self);
   }
 
+  $.urlParam = function(name){
+      var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
+      if (results) {
+        return results[1] || 0;
+      }
+      return null;
+  }
+
+
+  // handle url with registration link
+  $(document).ready(function() {
+    var paramFoo = $.urlParam('foo');
+    //alert(paramFoo);
+  });
+
 
 

@@ -18,29 +18,31 @@ package org.codehaus.redback.rest.services.interceptors;
  * under the License.
  */
 
-import org.codehaus.redback.rest.api.model.ErrorMessage;
-import org.codehaus.redback.rest.api.model.RedbackRestError;
-import org.codehaus.redback.rest.api.services.RedbackServiceException;
-import org.springframework.stereotype.Service;
-
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
+import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 
 /**
  * @author Olivier Lamy
- * @since 1.4-M2
+ * @since 1.4
  */
-@Provider
-@Service( "redbackServiceExceptionMapper" )
-public class RedbackServiceExceptionMapper
-    implements ExceptionMapper<RedbackServiceException>
+public class HttpContext
+    implements Serializable
 {
-    public Response toResponse( RedbackServiceException e )
+    private HttpServletRequest httpServletRequest;
+
+    public HttpContext()
     {
-        RedbackRestError restError = new RedbackRestError( e );
-        restError.addErrorMessage( new ErrorMessage( e.getMessage(), null ) );
-        Response.ResponseBuilder responseBuilder = Response.status( e.getHttpErrorCode() ).entity( restError );
-        return responseBuilder.build();
+        // no op
+    }
+
+    public HttpServletRequest getHttpServletRequest()
+    {
+        return httpServletRequest;
+    }
+
+    public HttpContext setHttpServletRequest( HttpServletRequest httpServletRequest )
+    {
+        this.httpServletRequest = httpServletRequest;
+        return this;
     }
 }

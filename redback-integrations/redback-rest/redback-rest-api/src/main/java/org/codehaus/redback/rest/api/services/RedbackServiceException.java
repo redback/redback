@@ -18,6 +18,11 @@ package org.codehaus.redback.rest.api.services;
  * under the License.
  */
 
+import org.codehaus.redback.rest.api.model.ErrorMessage;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Olivier Lamy
  * @since 1.3
@@ -27,7 +32,7 @@ public class RedbackServiceException
 {
     private int httpErrorCode = 500;
 
-    private String errorKey;
+    private List<ErrorMessage> errorMessages = new ArrayList<ErrorMessage>();
 
     public RedbackServiceException( String s )
     {
@@ -40,6 +45,11 @@ public class RedbackServiceException
         this.httpErrorCode = httpErrorCode;
     }
 
+    public RedbackServiceException( ErrorMessage errorMessage )
+    {
+        errorMessages.add( errorMessage );
+    }
+
     public int getHttpErrorCode()
     {
         return httpErrorCode;
@@ -50,13 +60,18 @@ public class RedbackServiceException
         this.httpErrorCode = httpErrorCode;
     }
 
-    public String getErrorKey()
+    public List<ErrorMessage> getErrorMessages()
     {
-        return errorKey;
+        return errorMessages;
     }
 
-    public void setErrorKey( String errorKey )
+    public void setErrorMessages( List<ErrorMessage> errorMessages )
     {
-        this.errorKey = errorKey;
+        this.errorMessages = errorMessages;
+    }
+
+    public void addErrorMessage( ErrorMessage errorMessage )
+    {
+        this.errorMessages.add( errorMessage );
     }
 }

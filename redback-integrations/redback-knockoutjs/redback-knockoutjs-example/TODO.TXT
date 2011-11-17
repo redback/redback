@@ -4,3 +4,9 @@ Pages todo:
 * permissions list (remove ?)
 * resources list (remove ?)
 * roles list (crud)
+
+Links:
+
+* register page
+* password reset/reinit
+* register validation page with link validate key -> ask password init.

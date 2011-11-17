@@ -20,29 +20,45 @@ import net.sf.ehcache.CacheManager;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.plexus.cache.Cache;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
-import org.codehaus.plexus.redback.policy.PasswordRuleViolationException;
+import org.codehaus.plexus.redback.keys.AuthenticationKey;
+import org.codehaus.plexus.redback.keys.KeyManagerException;
+import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.codehaus.redback.integration.mail.Mailer;
 import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
+import org.codehaus.redback.rest.api.model.ErrorMessage;
 import org.codehaus.redback.rest.api.model.User;
 import org.codehaus.redback.rest.api.services.RedbackServiceException;
 import org.codehaus.redback.rest.api.services.UserService;
+import org.codehaus.redback.rest.services.interceptors.HttpContext;
+import org.codehaus.redback.rest.services.interceptors.HttpContextThreadLocal;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service( "userService#rest" )
 public class DefaultUserService
     implements UserService
 {
-    private UserManager userManager;
 
+    private Logger log = LoggerFactory.getLogger( getClass() );
+
+    private static final String VALID_USERNAME_CHARS = "[a-zA-Z_0-9\\-.@]*";
+
+    private UserManager userManager;
 
     private SecuritySystem securitySystem;
 
@@ -72,6 +88,9 @@ public class DefaultUserService
     @Inject
     @Named( value = "cache#users" )
     private Cache usersCache;
+
+    @Inject
+    private Mailer mailer;
 
     @Inject
     public DefaultUserService( @Named( value = "userManager#cached" ) UserManager userManager,
@@ -274,7 +293,7 @@ public class DefaultUserService
         user.setPermanent( true );
         //try
         //{
-            userManager.addUser( user );
+        userManager.addUser( user );
         //}
         //catch ( PasswordRuleViolationException e )
         //{
@@ -310,5 +329,175 @@ public class DefaultUserService
             // ignore
         }
         return Boolean.FALSE;
+    }
+
+    public User registerUser( User user )
+        throws RedbackServiceException
+    {
+        if ( user == null )
+        {
+            throw new RedbackServiceException( new ErrorMessage( "invalid.user.credentials", null ) );
+
+        }
+
+        UserSecurityPolicy securityPolicy = securitySystem.getPolicy();
+
+        boolean emailValidationRequired = securityPolicy.getUserValidationSettings().isEmailValidationRequired();
+
+        if ( emailValidationRequired )
+        {
+            validateCredentialsLoose( user );
+        }
+        else
+        {
+            validateCredentialsStrict( user );
+        }
+
+        // NOTE: Do not perform Password Rules Validation Here.
+
+        if ( userManager.userExists( user.getUsername() ) )
+        {
+            throw new RedbackServiceException(
+                new ErrorMessage( "user.already.exists", new String[]{ user.getUsername() } ) );
+        }
+
+        org.codehaus.plexus.redback.users.User u =
+            userManager.createUser( user.getUsername(), user.getFullName(), user.getEmail() );
+        u.setPassword( user.getPassword() );
+        u.setValidated( false );
+        u.setLocked( false );
+
+        try
+        {
+            roleManager.assignRole( RedbackRoleConstants.REGISTERED_USER_ROLE_ID, u.getPrincipal().toString() );
+        }
+        catch ( RoleManagerException rpe )
+        {
+            log.error( "RoleProfile Error: " + rpe.getMessage(), rpe );
+            throw new RedbackServiceException( new ErrorMessage( "assign.role.failure", null ) );
+        }
+
+        if ( emailValidationRequired )
+        {
+            u.setLocked( true );
+
+            try
+            {
+                AuthenticationKey authkey =
+                    securitySystem.getKeyManager().createKey( u.getPrincipal().toString(), "New User Email Validation",
+                                                              securityPolicy.getUserValidationSettings().getEmailValidationTimeout() );
+
+                mailer.sendAccountValidationEmail( Arrays.asList( u.getEmail() ), authkey, getBaseUrl() );
+
+                securityPolicy.setEnabled( false );
+                return new User( userManager.addUser( u ) );
+
+            }
+            catch ( KeyManagerException e )
+            {
+                log.error( "Unable to register a new user.", e );
+                throw new RedbackServiceException( new ErrorMessage( "cannot.register.user", null ) );
+            }
+            finally
+            {
+                securityPolicy.setEnabled( true );
+            }
+        }
+        else
+        {
+            return new User( userManager.addUser( u ) );
+        }
+
+        // FIXME log this event
+        /*
+        AuditEvent event = new AuditEvent( getText( "log.account.create" ) );
+        event.setAffectedUser( username );
+        event.log();
+        */
+
+    }
+
+
+    public void validateCredentialsLoose( User user )
+        throws RedbackServiceException
+    {
+        RedbackServiceException redbackServiceException =
+            new RedbackServiceException( "issues during validating user" );
+        if ( org.codehaus.plexus.util.StringUtils.isEmpty( user.getUsername() ) )
+        {
+            redbackServiceException.addErrorMessage( new ErrorMessage( "username.required", null ) );
+        }
+        else
+        {
+            if ( !user.getUsername().matches( VALID_USERNAME_CHARS ) )
+            {
+                redbackServiceException.addErrorMessage( new ErrorMessage( "username.invalid.characters", null ) );
+            }
+        }
+
+        if ( org.codehaus.plexus.util.StringUtils.isEmpty( user.getFullName() ) )
+        {
+            redbackServiceException.addErrorMessage( new ErrorMessage( "fullName.required", null ) );
+        }
+
+        if ( org.codehaus.plexus.util.StringUtils.isEmpty( user.getEmail() ) )
+        {
+            redbackServiceException.addErrorMessage( new ErrorMessage( "email.required", null ) );
+        }
+
+        if ( !org.codehaus.plexus.util.StringUtils.equals( user.getPassword(), user.getConfirmPassword() ) )
+        {
+            redbackServiceException.addErrorMessage( new ErrorMessage( "passwords.does.not.match", null ) );
+        }
+
+        try
+        {
+            if ( !org.codehaus.plexus.util.StringUtils.isEmpty( user.getEmail() ) )
+            {
+                new InternetAddress( user.getEmail(), true );
+            }
+        }
+        catch ( AddressException e )
+        {
+            redbackServiceException.addErrorMessage( new ErrorMessage( "email.invalid", null ) );
+        }
+        if ( !redbackServiceException.getErrorMessages().isEmpty() )
+        {
+            throw redbackServiceException;
+        }
+    }
+
+    public void validateCredentialsStrict( User user )
+        throws RedbackServiceException
+    {
+        validateCredentialsLoose( user );
+
+        org.codehaus.plexus.redback.users.User tmpuser =
+            userManager.createUser( user.getUsername(), user.getFullName(), user.getEmail() );
+
+        user.setPassword( user.getPassword() );
+
+        securitySystem.getPolicy().validatePassword( tmpuser );
+
+        if ( ( org.codehaus.plexus.util.StringUtils.isEmpty( user.getPassword() ) ) )
+        {
+            throw new RedbackServiceException( new ErrorMessage( "password.required", null ) );
+        }
+    }
+
+    private String getBaseUrl()
+    {
+        HttpContext httpContext = HttpContextThreadLocal.get();
+        if ( httpContext != null )
+        {
+            HttpServletRequest req = httpContext.getHttpServletRequest();
+            if ( req != null )
+            {
+                return req.getScheme() + "://" + req.getServerName() + ( req.getServerPort() == 80
+                    ? ""
+                    : ":" + req.getServerPort() ) + req.getContextPath();
+            }
+        }
+        return null;
     }
 }

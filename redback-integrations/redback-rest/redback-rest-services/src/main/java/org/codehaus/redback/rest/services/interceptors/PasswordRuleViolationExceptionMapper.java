@@ -20,8 +20,8 @@ package org.codehaus.redback.rest.services.interceptors;
 
 import org.codehaus.plexus.redback.policy.PasswordRuleViolationException;
 import org.codehaus.plexus.redback.policy.PasswordRuleViolations;
-import org.codehaus.redback.rest.services.ErrorMessage;
-import org.codehaus.redback.rest.services.RedbackRestError;
+import org.codehaus.redback.rest.api.model.ErrorMessage;
+import org.codehaus.redback.rest.api.model.RedbackRestError;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.core.Response;
