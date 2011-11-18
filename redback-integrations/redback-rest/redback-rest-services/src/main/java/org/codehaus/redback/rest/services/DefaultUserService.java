@@ -125,6 +125,15 @@ public class DefaultUserService
                 throw new RedbackServiceException( e.getMessage() );
             }
         }
+        try
+        {
+            roleManager.assignRole( RedbackRoleConstants.REGISTERED_USER_ROLE_ID, u.getPrincipal().toString() );
+        }
+        catch ( RoleManagerException rpe )
+        {
+            log.error( "RoleProfile Error: " + rpe.getMessage(), rpe );
+            throw new RedbackServiceException( new ErrorMessage( "assign.role.failure", null ) );
+        }
         return Boolean.TRUE;
     }
 
