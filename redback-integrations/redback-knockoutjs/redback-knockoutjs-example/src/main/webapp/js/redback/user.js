@@ -1,3 +1,5 @@
+require(["order!jquery","order!redback/user","order!jquery.i18n.properties-1.0.9"],
+function($) {
   user=function(username, password, confirmPassword,fullName,email,permanent,validated,timestampAccountCreation,timestampLastLogin,timestampLastPasswordChange,locked,passwordChangeRequired,ownerViewModel) {
       // Potentially Editable Field.
       this.username = ko.observable(username);
@@ -93,7 +95,7 @@
     }
   }
 
-  function adminUserViewModel() {
+  adminUserViewModel=function() {
     this.user = new user("admin");
   }
 
@@ -204,5 +206,6 @@
     //alert(paramFoo);
   });
 
+});
 
 

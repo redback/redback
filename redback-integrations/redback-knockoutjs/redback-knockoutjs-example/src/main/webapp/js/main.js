@@ -1,7 +1,7 @@
-require(["jquery", "bootstrap-modal", "jquery.tmpl", "knockout-1.3.0beta.debug", "head.0.96", "redback/redback",
-        "jquery.json-2.3.min","jquery.validate","jquery.i18n.properties-1.0.9", "knockout.simpleGrid",
-        "jquery.cookie.1.0.0"],
-function($) {
+require(["order!jquery", "order!bootstrap-modal", "order!jquery.tmpl", "order!head.0.96",
+        "order!jquery.json-2.3.min","order!jquery.validate","jquery.i18n.properties-1.0.9", "order!knockout-1.3.0beta.debug",
+          "order!knockout.simpleGrid", "jquery.cookie.1.0.0","order!redback/redback","order!require.domReady.1.0.0"],
+function(domReady) {
 
   /**
    * return a user see user.js if user logged otherwise null
