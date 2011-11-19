@@ -1,37 +1,37 @@
-<script id='user-create-tmpl' type='text/html'>
+<script id='redback/user-create-tmpl' type='text/x-jquery-tmpl'>
     <form id="user-create">
       <fieldset>
         <div class="clearfix">
-          <label for="username">Username</label>
+          <label for="username">${username}</label>
           <div class="input">
             <input type="text" id="username" name="username" size="30" class="required" data-bind="value: username"/>
           </div>
         </div>
         <div class="clearfix">
-          <label for="fullname">Full Name</label>
+          <label for="fullname">${full_name}</label>
           <div class="input">
             <input type="text" id="fullname" name="fullname" size="30" class="required" data-bind="value: fullName"/>
           </div>
         </div>
         <div class="clearfix">
-          <label for="password">Password</label>
+          <label for="password">${password}</label>
           <div class="input">
             <input type="password" id="password" name="password" class="required" data-bind="value: password"/>
           </div>
         </div>
         <div class="clearfix">
-          <label for="confirmPassword">Confirm Password</label>
+          <label for="confirmPassword">${confirm_password}</label>
           <div class="input">
             <input type="password" id="confirmPassword" name="confirmPassword" data-bind="value: confirmPassword"/>
           </div>
         </div>
         <div class="clearfix">
-          <label for="email">Email</label>
+          <label for="email">${email_address}</label>
           <div class="input">
             <input type="text" id="email" name="email" class="required email" data-bind="value: email"/>
           </div>
         </div>
       </fieldset>
-      <button data-bind="click: create" class="btn">Create</button>
+      <button data-bind="click: create" class="btn">${register}</button>
     </form>
 </script>

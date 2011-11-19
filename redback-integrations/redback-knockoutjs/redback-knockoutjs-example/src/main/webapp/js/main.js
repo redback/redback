@@ -51,11 +51,6 @@ function(domReady) {
         }
   });
 
-  // load default
-  loadAndParseFile("/restServices/redbackServices/utilServices/getBundleResources", {cache:false, mode: 'map',encoding:'utf-8'});
-  // load browser locale
-  var browserLang = $.i18n.browserLang();
-  loadAndParseFile("/restServices/redbackServices/utilServices/getBundleResources?locale="+browserLang, {cache:false, mode: 'map',encoding:'utf-8'});
 
   customShowError=function(validator, errorMap, errorList) {
     $( "div.clearfix" ).removeClass( "error" );

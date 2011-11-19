@@ -101,7 +101,7 @@ function($) {
 
   adminCreateBox=function() {
 
-      jQuery("#main-content").attr("data-bind",'template: {name:"user-create-tmpl",data: user}');
+      jQuery("#main-content").attr("data-bind",'template: {name:"redback/user-create-tmpl",data: user}');
       var viewModel = new adminUserViewModel();
       ko.applyBindings(viewModel);
       $("#user-create").validate({

@@ -1,21 +1,13 @@
-require(["text!redback/templates/user-create.tmpl", "text!redback/templates/user-grids.tmpl", "text!redback/templates/login.tmpl"],
+require(["text!redback/templates/user-create.html", "text!redback/templates/user-grids.html", "text!redback/templates/login.html"],
     function(usercreate, usergrids, login) {
 
-
       // template loading
-      /*
-      $("<div>").load("js/redback/templates/user-create.tmpl", function() {
-        $("#html-fragments").append($(this).html());
-      });
-      $("<div>").load("js/redback/templates/user-grids.tmpl", function() {
-        $("#html-fragments").append($(this).html());
-      });
-      $("<div>").load("js/redback/templates/login.tmpl", function() {
-        $("#html-fragments").append($(this).html());
-      });*/
-      $("#html-fragments").append(usercreate);
+      //$("#html-fragments").append(usercreate);
+      $.tmpl( login, $.i18n.map ).appendTo("#html-fragments");
+      $.tmpl( usercreate, $.i18n.map ).appendTo("#html-fragments");
+
+      //$.tmpl( usergrids, $.i18n.map ).appendTo("#html-fragments");
       $("#html-fragments").append(usergrids);
-      $("#html-fragments").append(login);
 
     }
 );
