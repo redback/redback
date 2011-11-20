@@ -1,4 +1,4 @@
-require(["order!jquery","order!redback/redback-tmpl","order!redback/user","order!jquery.i18n.properties-1.0.9"],
+require(["order!jquery","order!redback/user","order!jquery.i18n.properties-1.0.9"],
 function($) {
 
 
@@ -7,6 +7,9 @@ function($) {
   // load browser locale
   var browserLang = $.i18n.browserLang();
   loadAndParseFile("/restServices/redbackServices/utilServices/getBundleResources?locale="+browserLang, {cache:false, mode: 'map',encoding:'utf-8'});
+
+  // load template only when i18n has been loaded
+
 
   displayRedbackError=function(obj) {
     // {"redbackRestError":{"errorMessages":{"args":1,"errorKey":"user.password.violation.numeric"}}}

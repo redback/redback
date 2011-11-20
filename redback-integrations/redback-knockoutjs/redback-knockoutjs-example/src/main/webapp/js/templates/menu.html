@@ -1,20 +1,19 @@
-<div class="topbar">
+<div id="main-menu">
+<div class="topbar-wrapper" style="z-index: 5;">
+<div class="topbar" data-dropdown="dropdown">
   <div class="topbar-inner">
     <div class="container">
 
       <ul class="nav">
-        <li class="active"><a href="index.html">Home</a></li>
-        <li><a href="#">Link1</a></li>
-        <li><a href="#">Link2</a></li>
-        <li><a href="#">Link3</a></li>
+        <li class="active"><a href="/index.html">Home</a></li>
         <li id="create-admin-link" style="display: none">
           <a href="#" onclick="adminCreateBox();">Admin User Creation</a>
         </li>
         <li id="login-link" style="display: none">
-          <a href="#" onclick="loginBox();">Login</a>
+          <a href="#" onclick="loginBox();">${login}</a>
         </li>
         <li id="logout-link" style="display: none">
-          <a href="#" onclick="logout();">Logout</a>
+          <a href="#" onclick="logout();">${logout}</a>
         </li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle">Dropdown1</a>
@@ -30,18 +29,9 @@
       <form class="pull-right" action="">
         <input type="text" placeholder="Search" />
       </form>
-      <ul class="nav secondary-nav">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">Dropdown2</a>
-          <ul class="dropdown-menu">
 
-            <li><a href="#">Secondary link</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li class="divider"></li>
-            <li><a href="#">Another link</a></li>
-          </ul>
-        </li>
-      </ul>
     </div>
   </div>
+</div>
+</div>
 </div>
