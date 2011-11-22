@@ -1,10 +1,19 @@
 require(["order!jquery","order!jquery.i18n.properties-1.0.9"],
 function($) {
 
-
-
   this.addUser = function() {
-    ko.renderTemplate("translationsEdit", this, null, jQuery("#editTranslationDiv"), "replaceNode");
+    ko.renderTemplate("redback/user-create-tmpl", new user(), null, jQuery("#createUserForm"), "replaceNode");
+    $('#user-create').show();
+    $("#user-create").validate({
+      rules: {
+        confirmPassword: {
+          equalTo: "#password"
+        }
+      },
+      showErrors: function(validator, errorMap, errorList) {
+        customShowError(validator,errorMap,errorMap);
+      }
+    });
   }
 
   usersViewModel=function() {
@@ -47,6 +56,7 @@ function($) {
   }
 
   displayUsersGrid=function() {
+    $("#main-content").attr("data-bind","");
     $("#main-content").html($("#usersGrid").html());
 
     ko.applyBindings(new usersViewModel());//,$("#"));

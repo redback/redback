@@ -2,36 +2,37 @@
     <form id="user-create">
       <fieldset>
         <div class="clearfix">
-          <label for="username">${username}</label>
+          <label for="username">${i18n('username')}</label>
           <div class="input">
             <input type="text" id="username" name="username" size="30" class="required" data-bind="value: username"/>
           </div>
         </div>
         <div class="clearfix">
-          <label for="fullname">${full_name}</label>
+          <label for="fullname">${i18n('full_name')}</label>
           <div class="input">
             <input type="text" id="fullname" name="fullname" size="30" class="required" data-bind="value: fullName"/>
           </div>
         </div>
         <div class="clearfix">
-          <label for="password">${password}</label>
+          <label for="password">${i18n('password')}</label>
           <div class="input">
             <input type="password" id="password" name="password" class="required" data-bind="value: password"/>
           </div>
         </div>
         <div class="clearfix">
-          <label for="confirmPassword">${confirm_password}</label>
+          <label for="confirmPassword">${i18n('confirm_password')}</label>
           <div class="input">
             <input type="password" id="confirmPassword" name="confirmPassword" data-bind="value: confirmPassword"/>
           </div>
         </div>
         <div class="clearfix">
-          <label for="email">${email_address}</label>
+          <label for="email">${i18n('email_address')}</label>
           <div class="input">
             <input type="text" id="email" name="email" class="required email" data-bind="value: email"/>
           </div>
         </div>
       </fieldset>
-      <button data-bind="click: create" class="btn">${register}</button>
+      <button data-bind="click: create" class="btn">${i18n('register')}</button>
+      <button onclick="$('#user-create').hide()" class="btn" id="user-create-form-cancel-button">${i18n('cancel')}</button>
     </form>
 </script>

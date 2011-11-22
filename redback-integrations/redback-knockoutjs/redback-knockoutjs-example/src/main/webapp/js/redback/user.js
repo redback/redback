@@ -23,31 +23,40 @@ function($) {
         }
       };
       this.create = function() {
-          var valid = $("#user-create").valid();
-          if (!valid) {
-              return;
+          if (username == 'admin') {
+            this.createAdmin();
+          } else {
+            alert("create simple user");
           }
+      };
 
-          $.ajax("/restServices/redbackServices/userService/createAdminUser", {
-              data: "{\"user\": " +  ko.toJSON(this)+"}",
-              contentType: 'application/json',
-              type: "POST",
-              dataType: 'json',
-              success: function(result) {
-                var created = JSON.parse(result);
-                // TODO use a message not an alert
-                if (created == true) {
-                  alert("admin user created");
-                } else {
-                  alert("admin user not created");
-                }
-              },
-              error: function(result) {
-                var obj = jQuery.parseJSON(result.responseText);
-                displayRedbackError(obj);
+      this.createAdmin = function() {
+        var valid = $("#user-create").valid();
+        if (!valid) {
+            return;
+        }
+
+        $.ajax("/restServices/redbackServices/userService/createAdminUser", {
+            data: "{\"user\": " +  ko.toJSON(this)+"}",
+            contentType: 'application/json',
+            type: "POST",
+            dataType: 'json',
+            success: function(result) {
+              var created = JSON.parse(result);
+              // TODO use a message not an alert
+              if (created == true) {
+                alert("admin user created");
+              } else {
+                alert("admin user not created");
               }
+            },
+            error: function(result) {
+              var obj = jQuery.parseJSON(result.responseText);
+              displayRedbackError(obj);
+            }
           });
       };
+      this.i18n = $.i18n.prop;
   }
 
 
@@ -56,22 +65,24 @@ function($) {
   }
 
   adminCreateBox=function() {
-
-      jQuery("#main-content").attr("data-bind",'template: {name:"redback/user-create-tmpl",data: user}');
-      var viewModel = new adminUserViewModel();
-      ko.applyBindings(viewModel);
-      $("#user-create").validate({
-        rules: {
-          confirmPassword: {
-            equalTo: "#password"
-          }
-        },
-        showErrors: function(validator, errorMap, errorList) {
-          customShowError(validator,errorMap,errorMap);
+    jQuery("#main-content").attr("data-bind",'template: {name:"redback/user-create-tmpl",data: user}');
+    var viewModel = new adminUserViewModel();
+    ko.applyBindings(viewModel);
+    $("#user-create").validate({
+      rules: {
+        confirmPassword: {
+          equalTo: "#password"
         }
-      });
+      },
+      showErrors: function(validator, errorMap, errorList) {
+        customShowError(validator,errorMap,errorMap);
+      }
+    });
 
   }
+
+
+
   loginBox=function(){
     window.console && console.debug( "loginBox");
     if (window.modalLoginWindow==null) {
