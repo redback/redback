@@ -19,6 +19,7 @@
   <groupId>org.codehaus.redback</groupId>
   <artifactId>redback</artifactId>
   <version>1.4-SNAPSHOT</version>
+<!-- pooo -->
 
   <packaging>pom</packaging>
   <name>Redback</name>

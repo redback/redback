@@ -62,4 +62,14 @@ public interface LoginService
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
     User logIn( @QueryParam( "userName" ) String userName, @QueryParam( "password" ) String password )
         throws RedbackServiceException;
+
+    @Path( "isLogged" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( noRestriction = true )
+    /**
+     * simply check if current user has an http session opened with authz passed
+     */
+    Boolean isLogged()
+        throws RedbackServiceException;
 }

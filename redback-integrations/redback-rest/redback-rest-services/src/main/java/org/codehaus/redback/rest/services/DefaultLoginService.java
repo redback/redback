@@ -28,12 +28,17 @@ import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.codehaus.redback.integration.filter.authentication.HttpAuthenticator;
 import org.codehaus.redback.rest.api.model.User;
 import org.codehaus.redback.rest.api.services.LoginService;
 import org.codehaus.redback.rest.api.services.RedbackServiceException;
+import org.codehaus.redback.rest.services.interceptors.HttpContextThreadLocal;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -45,12 +50,19 @@ import java.util.TimeZone;
 public class DefaultLoginService
     implements LoginService
 {
+
+    private Logger log = LoggerFactory.getLogger( getClass() );
+
     private SecuritySystem securitySystem;
 
+    private HttpAuthenticator httpAuthenticator;
+
     @Inject
-    public DefaultLoginService( SecuritySystem securitySystem )
+    public DefaultLoginService( SecuritySystem securitySystem,
+                                @Named( "httpAuthenticator#basic" ) HttpAuthenticator httpAuthenticator )
     {
         this.securitySystem = securitySystem;
+        this.httpAuthenticator = httpAuthenticator;
     }
 
 
@@ -122,6 +134,11 @@ public class DefaultLoginService
                 restUser.setLocked( user.isLocked() );
                 restUser.setValidated( user.isValidated() );
                 restUser.setFullName( user.getFullName() );
+
+                // here create an http session
+                httpAuthenticator.authenticate( authDataSource,
+                                                HttpContextThreadLocal.get().getHttpServletRequest().getSession(
+                                                    true ) );
                 return restUser;
             }
             return null;
@@ -142,6 +159,15 @@ public class DefaultLoginService
         {
             throw new RedbackServiceException( e.getMessage() );
         }
+    }
+
+    public Boolean isLogged()
+        throws RedbackServiceException
+    {
+        Boolean isLogged = httpAuthenticator.getSecuritySession(
+            HttpContextThreadLocal.get().getHttpServletRequest().getSession( true ) ) != null;
+        log.debug( "isLogged {}", isLogged );
+        return isLogged;
     }
 
     private Calendar getNowGMT()

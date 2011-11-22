@@ -1,4 +1,4 @@
-require(["order!jquery","order!redback/user","order!jquery.i18n.properties-1.0.9"],
+require(["order!jquery","order!jquery.i18n.properties-1.0.9","order!redback/user","order!redback/users"],
 function($) {
 
 
@@ -21,10 +21,6 @@ function($) {
       alert($.i18n.prop( obj.redbackRestError.errorMessages.errorKey, obj.redbackRestError.errorMessages.args ));
     }
   }
-
-
-  // ko.applyBindings(new userViewModel());
-
 
 
 });
