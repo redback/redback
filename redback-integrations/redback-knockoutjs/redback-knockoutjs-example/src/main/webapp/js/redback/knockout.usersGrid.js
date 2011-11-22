@@ -20,7 +20,7 @@
         return columns;
     }
 
-    ko.simpleGrid = {
+    ko.usersGrid = {
         // Defines a view model class you can use to populate a grid
         viewModel: function (configuration) {
             this.data = configuration.data;
@@ -38,6 +38,21 @@
             this.maxPageIndex = ko.dependentObservable(function () {
                 return Math.ceil(ko.utils.unwrapObservable(this.data).length / this.pageSize);
             }, this);
+            this.addUser=function() {
+              ko.renderTemplate("redback/user-create-tmpl", new user(), null, jQuery("#createUserForm"), "replaceNode");
+              $('#user-create').show();
+              $("#user-create").validate({
+                rules: {
+                  confirmPassword: {
+                    equalTo: "#password"
+                  }
+                },
+                showErrors: function(validator, errorMap, errorList) {
+                  customShowError(validator,errorMap,errorMap);
+                }
+              });
+            }
+
         }
     };
 
@@ -46,7 +61,7 @@
 
 
     // The "simpleGrid" binding
-    ko.bindingHandlers.simpleGrid = {
+    ko.bindingHandlers.usersGrid = {
         // This method is called to initialize the node, and will also be called again if you change what the grid is bound to
         update: function (element, viewModelAccessor, allBindingsAccessor) {
             var viewModel = viewModelAccessor(), allBindings = allBindingsAccessor();
@@ -56,8 +71,8 @@
                 ko.removeNode(element.firstChild);
 
             // Allow the default templates to be overridden
-            var gridTemplateName      = allBindings.simpleGridTemplate || "ko_simpleGrid_grid",
-                pageLinksTemplateName = allBindings.simpleGridPagerTemplate || "ko_simpleGrid_pageLinks";
+            var gridTemplateName      = allBindings.simpleGridTemplate || "ko_usersGrid_grid",
+                pageLinksTemplateName = allBindings.simpleGridPagerTemplate || "ko_usersGrid_pageLinks";
 
             // Render the main grid
             var gridContainer = element.appendChild(document.createElement("DIV"));

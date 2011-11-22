@@ -1,4 +1,4 @@
-<script id='ko_simpleGrid_grid' type='text/x-jquery-tmpl'>
+<script id='ko_usersGrid_grid' type='text/x-jquery-tmpl'>
   <thead>
       <tr>
           {{each(i, columnDefinition) columns}}
@@ -19,7 +19,7 @@
   </tbody>
 </script>
 
-<script id="ko_simpleGrid_pageLinks" type="text/x-jquery-tmpl">
+<script id="ko_usersGrid_pageLinks" type="text/x-jquery-tmpl">
   <div class="ko-grid-pageLinks">
       <span>Page:</span>
       {{each(i) ko.utils.range(1, maxPageIndex)}}
@@ -33,9 +33,9 @@
 <script id="usersGrid"  type="text/x-jquery-tmpl">
     <h2>Users list</h2>
 
-    <table class="zebra-striped" data-bind='simpleGrid: gridViewModel' id="usersTable"></table>
+    <table class="zebra-striped" data-bind='usersGrid: gridViewModel' id="usersTable"></table>
 
-    <button data-bind='click: addUser'>
+    <button data-bind='click: gridViewModel.addUser'>
         Add User
     </button>
 
@@ -47,4 +47,4 @@
         Jump to first page
     </button>
     <div id="createUserForm"></div>
-</script>        
+</script>

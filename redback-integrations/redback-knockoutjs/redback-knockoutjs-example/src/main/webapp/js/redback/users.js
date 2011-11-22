@@ -1,20 +1,5 @@
-require(["order!jquery","order!jquery.i18n.properties-1.0.9"],
+require(["order!jquery","order!jquery.i18n.properties-1.0.9","order!redback/knockout.usersGrid" ],
 function($) {
-
-  this.addUser = function() {
-    ko.renderTemplate("redback/user-create-tmpl", new user(), null, jQuery("#createUserForm"), "replaceNode");
-    $('#user-create').show();
-    $("#user-create").validate({
-      rules: {
-        confirmPassword: {
-          equalTo: "#password"
-        }
-      },
-      showErrors: function(validator, errorMap, errorList) {
-        customShowError(validator,errorMap,errorMap);
-      }
-    });
-  }
 
   usersViewModel=function() {
     this.users = ko.observableArray([]);
@@ -23,15 +8,14 @@ function($) {
         type: "GET",
         dataType: 'json',
         success: function(data) {
-            //alert(data);
             var mappedUsers = $.map(data.user, function(item) {
-                return new user(item.username, item.password, null,item.fullName,item.email,item.permanent,item.isValidated,item.timestampAccountCreation,item.timestampLastLogin,item.timestampLastPasswordChange,item.isLocked,item.passwordChangeRequired,self);
+                return mapUser(item);
             });
             self.users(mappedUsers);
         }
       }
     );
-    this.gridViewModel = new ko.simpleGrid.viewModel({
+    this.gridViewModel = new ko.usersGrid.viewModel({
       data: this.users,
       columns: [
         {
@@ -45,21 +29,23 @@ function($) {
           rowText: "email"}
       ],
       pageSize: 2
-
-    });
+      }
+    );
 
     this.sortByName = function() {
       this.users.sort(function(a, b) {
           return a.username < b.username ? -1 : 1;
       });
     };
+
+
   }
 
   displayUsersGrid=function() {
     $("#main-content").attr("data-bind","");
     $("#main-content").html($("#usersGrid").html());
 
-    ko.applyBindings(new usersViewModel());//,$("#"));
+    ko.applyBindings(new usersViewModel());
   }
 
 });

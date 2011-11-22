@@ -22,5 +22,13 @@ function($) {
     }
   }
 
+  // unbinding
+  $("#user-create-form-cancel-button").on("click", function(){
+    $('#user-create').hide();
+  });
+
+  $("#user-create").on("submit",function(){
+    //nothing
+  });
 
 });

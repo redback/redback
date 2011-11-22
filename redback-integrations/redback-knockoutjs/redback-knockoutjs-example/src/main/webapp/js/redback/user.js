@@ -26,8 +26,35 @@ function($) {
           if (username == 'admin') {
             this.createAdmin();
           } else {
-            alert("create simple user");
+            this.createUser();
           }
+      };
+      this.createUser = function() {
+        var valid = $("#user-create").valid();
+        if (!valid) {
+            return;
+        }
+
+        $.ajax("/restServices/redbackServices/userService/createUser", {
+            data: "{\"user\": " +  ko.toJSON(this)+"}",
+            contentType: 'application/json',
+            type: "POST",
+            dataType: 'json',
+            success: function(result) {
+              var created = JSON.parse(result);
+              // TODO use a message not an alert
+              if (created == true) {
+                alert("user created");
+                return this;
+              } else {
+                alert("user cannot created");
+              }
+            },
+            error: function(result) {
+              var obj = jQuery.parseJSON(result.responseText);
+              displayRedbackError(obj);
+            }
+          });
       };
 
       this.createAdmin = function() {
@@ -46,6 +73,7 @@ function($) {
               // TODO use a message not an alert
               if (created == true) {
                 alert("admin user created");
+                return this;
               } else {
                 alert("admin user not created");
               }
@@ -153,8 +181,6 @@ function($) {
    * @param data User response from redback rest api
    */
   mapUser=function(data) {
-
-    // {"user":{"email":"a@de.fr","fullName":"olamy","locked":false,"passwordChangeRequired":false,"permanent":false,"username":"admin","validated":false}}
     return new user(data.username, data.password, null,data.fullName,data.email,data.permanent,data.validated,data.timestampAccountCreation,data.timestampLastLogin,data.timestampLastPasswordChange,data.locked,data.passwordChangeRequired,self);
   }
 
