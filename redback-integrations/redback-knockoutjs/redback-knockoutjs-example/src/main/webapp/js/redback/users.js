@@ -14,8 +14,9 @@ function($) {
         type: "GET",
         dataType: 'json',
         success: function(data) {
-            var mappedUsers = $.map(data.translation, function(item) {
-                return new user(username, password, null,fullName,email,permanent,isValidated,timestampAccountCreation,timestampLastLogin,timestampLastPasswordChange,isLocked,passwordChangeRequired,self);
+            //alert(data);
+            var mappedUsers = $.map(data.user, function(item) {
+                return new user(item.username, item.password, null,item.fullName,item.email,item.permanent,item.isValidated,item.timestampAccountCreation,item.timestampLastLogin,item.timestampLastPasswordChange,item.isLocked,item.passwordChangeRequired,self);
             });
             self.users(mappedUsers);
         }
@@ -39,13 +40,15 @@ function($) {
     });
 
     this.sortByName = function() {
-      this.translations.sort(function(a, b) {
+      this.users.sort(function(a, b) {
           return a.username < b.username ? -1 : 1;
       });
     };
   }
 
   displayUsersGrid=function() {
+    $("#main-content").html($("#usersGrid").html());
+
     ko.applyBindings(new usersViewModel());//,$("#"));
   }
 

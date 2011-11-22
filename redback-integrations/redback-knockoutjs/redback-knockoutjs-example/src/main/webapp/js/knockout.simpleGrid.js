@@ -43,35 +43,7 @@
 
     // Templates used to render the grid
     var templateEngine = new ko.jqueryTmplTemplateEngine();
-    /*templateEngine.addTemplate("ko_simpleGrid_grid", "\
-                        <thead>\
-                            <tr>\
-                                {{each(i, columnDefinition) columns}}\
-                                    <th>${ columnDefinition.headerText }</th>\
-                                {{/each}}\
-                                <th>Edit</th>\
-                            </tr>\
-                        </thead>\
-                        <tbody>\
-                            {{each(i, row) itemsOnCurrentPage()}}\
-                                ////<tr class=\"${ i % 2 == 0 ? 'even' : 'odd' }\">\
-                                <tr>\
-                                    {{each(j, columnDefinition) columns}}\
-                                        <td>${ typeof columnDefinition.rowText == 'function' ? columnDefinition.rowText(row) : row[columnDefinition.rowText] }</td>\
-                                    {{/each}}\
-                                    <td>Edit</td>\
-                                </tr>\
-                            {{/each}}\
-                        </tbody>");
-    templateEngine.addTemplate("ko_simpleGrid_pageLinks", "\
-                    <div class=\"ko-grid-pageLinks\">\
-                        <span>Page:</span>\
-                        {{each(i) ko.utils.range(1, maxPageIndex)}}\
-                            <a href=\"#\" data-bind=\"click: function() { currentPageIndex(i) }, css: { selected: i == currentPageIndex() }\">\
-                                ${ i + 1 }\
-                            </a>\
-                        {{/each}}\
-                    </div>");*/
+
 
     // The "simpleGrid" binding
     ko.bindingHandlers.simpleGrid = {
