@@ -28,7 +28,6 @@ function(domReady) {
         async: false,
         success: function(data) {
           userLogged = JSON.parse(data);
-          alert("isLogged " + data + "," + userLogged);
         }
       });
       if (userLogged == false)

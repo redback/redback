@@ -1,8 +1,10 @@
 require(["order!jquery","order!jquery.i18n.properties-1.0.9"],
 function($) {
 
-  displayUsersGrid=function() {
-    ko.applyBindings(new usersViewModel());
+
+
+  this.addUser = function() {
+    ko.renderTemplate("translationsEdit", this, null, jQuery("#editTranslationDiv"), "replaceNode");
   }
 
   usersViewModel=function() {
@@ -19,7 +21,6 @@ function($) {
         }
       }
     );
-
     this.gridViewModel = new ko.simpleGrid.viewModel({
       data: this.users,
       columns: [
@@ -42,13 +43,11 @@ function($) {
           return a.username < b.username ? -1 : 1;
       });
     };
-
-    this.addUser = function() {
-      ko.renderTemplate("translationsEdit", this, null, jQuery("#editTranslationDiv"), "replaceNode");
-      this.translations.push({ sourceLanguage: "", sourceText: "", targetLanguage: "" } );
-    }
   }
 
+  displayUsersGrid=function() {
+    ko.applyBindings(new usersViewModel());//,$("#"));
+  }
 
 });
 
