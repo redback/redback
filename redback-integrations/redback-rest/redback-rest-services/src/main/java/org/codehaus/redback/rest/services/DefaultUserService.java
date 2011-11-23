@@ -34,8 +34,6 @@ import org.codehaus.redback.rest.api.model.ErrorMessage;
 import org.codehaus.redback.rest.api.model.User;
 import org.codehaus.redback.rest.api.services.RedbackServiceException;
 import org.codehaus.redback.rest.api.services.UserService;
-import org.codehaus.redback.rest.services.interceptors.HttpContext;
-import org.codehaus.redback.rest.services.interceptors.HttpContextThreadLocal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -45,6 +43,7 @@ import javax.inject.Named;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -91,6 +90,9 @@ public class DefaultUserService
 
     @Inject
     private Mailer mailer;
+
+    @Context
+    private HttpServletRequest httpServletRequest;
 
     @Inject
     public DefaultUserService( @Named( value = "userManager#cached" ) UserManager userManager,
@@ -493,15 +495,14 @@ public class DefaultUserService
 
     private String getBaseUrl()
     {
-        HttpContext httpContext = HttpContextThreadLocal.get();
-        if ( httpContext != null )
+        if ( httpServletRequest != null )
         {
-            HttpServletRequest req = httpContext.getHttpServletRequest();
-            if ( req != null )
+            if ( httpServletRequest != null )
             {
-                return req.getScheme() + "://" + req.getServerName() + ( req.getServerPort() == 80
-                    ? ""
-                    : ":" + req.getServerPort() ) + req.getContextPath();
+                return httpServletRequest.getScheme() + "://" + httpServletRequest.getServerName() + (
+                    httpServletRequest.getServerPort() == 80
+                        ? ""
+                        : ":" + httpServletRequest.getServerPort() ) + httpServletRequest.getContextPath();
             }
         }
         return null;

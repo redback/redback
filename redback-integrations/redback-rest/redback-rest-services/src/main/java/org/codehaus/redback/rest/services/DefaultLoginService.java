@@ -32,13 +32,14 @@ import org.codehaus.redback.integration.filter.authentication.HttpAuthenticator;
 import org.codehaus.redback.rest.api.model.User;
 import org.codehaus.redback.rest.api.services.LoginService;
 import org.codehaus.redback.rest.api.services.RedbackServiceException;
-import org.codehaus.redback.rest.services.interceptors.HttpContextThreadLocal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -56,6 +57,9 @@ public class DefaultLoginService
     private SecuritySystem securitySystem;
 
     private HttpAuthenticator httpAuthenticator;
+
+    @Context
+    private HttpServletRequest httpServletRequest;
 
     @Inject
     public DefaultLoginService( SecuritySystem securitySystem,
@@ -136,9 +140,7 @@ public class DefaultLoginService
                 restUser.setFullName( user.getFullName() );
 
                 // here create an http session
-                httpAuthenticator.authenticate( authDataSource,
-                                                HttpContextThreadLocal.get().getHttpServletRequest().getSession(
-                                                    true ) );
+                httpAuthenticator.authenticate( authDataSource, httpServletRequest.getSession( true ) );
                 return restUser;
             }
             return null;
@@ -164,8 +166,7 @@ public class DefaultLoginService
     public Boolean isLogged()
         throws RedbackServiceException
     {
-        Boolean isLogged = httpAuthenticator.getSecuritySession(
-            HttpContextThreadLocal.get().getHttpServletRequest().getSession( true ) ) != null;
+        Boolean isLogged = httpAuthenticator.getSecuritySession( httpServletRequest.getSession( true ) ) != null;
         log.debug( "isLogged {}", isLogged );
         return isLogged;
     }

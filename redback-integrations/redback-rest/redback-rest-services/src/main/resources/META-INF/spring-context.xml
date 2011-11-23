@@ -49,12 +49,10 @@
     </jaxrs:serviceBeans>
     <jaxrs:outInterceptors>
       <ref bean="threadLocalUserCleaner#rest"/>
-      <ref bean="httpContextThreadLocalCleaner#redback"/>
     </jaxrs:outInterceptors>
     <jaxrs:providers>
       <ref bean="authenticationInterceptor#rest"/>
       <ref bean="permissionInterceptor#rest"/>
-      <ref bean="httpContextThreadLocalInterceptor#redback"/>
       <ref bean="redbackServiceExceptionMapper"/>
       <ref bean="passwordRuleViolationExceptionMapper"/>
     </jaxrs:providers>
