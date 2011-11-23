@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.Context;
 import java.lang.reflect.Method;
 
 /**
@@ -35,16 +36,20 @@ public class AbstractInterceptor
 
     private Logger log = LoggerFactory.getLogger( getClass() );
 
+    @Context
+    private HttpServletRequest httpServletRequest;
+
+    @Context
+    private HttpServletResponse httpServletResponse;
+
     public HttpServletRequest getHttpServletRequest( Message message )
     {
-        // FIXME use a constant from cxf
-        return (HttpServletRequest) message.get( "HTTP.REQUEST" );
+        return httpServletRequest;
     }
 
     public HttpServletResponse getHttpServletResponse( Message message )
     {
-        // FIXME use a constant from cxf
-        return (HttpServletResponse) message.get( "HTTP.RESPONSE" );
+        return httpServletResponse;
     }
 
     public RedbackAuthorization getRedbackAuthorization( Message message )
