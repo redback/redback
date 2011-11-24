@@ -24,8 +24,8 @@
   <div class="pagination">
       <ul>
       {{each(i) ko.utils.range(1, maxPageIndex)}}
-          <li>
-            <a href="#" data-bind="click: function() { currentPageIndex(i) }, css: { active: i == currentPageIndex() }">
+          <li data-bind="css: { active: i == currentPageIndex() }">
+            <a href="#" data-bind="click: function() { currentPageIndex(i) }">
               ${ i + 1 }
             </a>
           </li>

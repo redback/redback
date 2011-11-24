@@ -31,7 +31,7 @@ function($) {
           headerText: "Email",
           rowText: "email"}
       ],
-      pageSize: 2
+      pageSize: 10
       },
       this.addUser=function() {
         ko.renderTemplate("redback/user-create-tmpl", new user(), null, jQuery("#createUserForm"), "replaceNode");
