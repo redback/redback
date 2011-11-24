@@ -1,4 +1,4 @@
-require(["order!jquery","order!jquery.i18n.properties-1.0.9","order!redback/user","order!redback/users"],
+require(["order!jquery","order!jquery.dataTables","order!jquery.i18n.properties-1.0.9","order!redback/user","order!redback/users"],
 function($) {
 
 
