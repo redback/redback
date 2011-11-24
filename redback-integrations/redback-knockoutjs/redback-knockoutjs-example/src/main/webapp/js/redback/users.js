@@ -4,17 +4,20 @@ function($) {
   usersViewModel=function() {
     this.users = ko.observableArray([]);
     var self = this;
-    $.ajax("/restServices/redbackServices/userService/getUsers", {
-        type: "GET",
-        dataType: 'json',
-        success: function(data) {
-            var mappedUsers = $.map(data.user, function(item) {
-                return mapUser(item);
-            });
-            self.users(mappedUsers);
+
+    this.loadUsers = function() {
+      $.ajax("/restServices/redbackServices/userService/getUsers", {
+          type: "GET",
+          dataType: 'json',
+          success: function(data) {
+              var mappedUsers = $.map(data.user, function(item) {
+                  return mapUser(item);
+              });
+              self.users(mappedUsers);
+          }
         }
-      }
-    );
+      );
+    };
     this.gridViewModel = new ko.usersGrid.viewModel({
       data: this.users,
       columns: [
@@ -41,11 +44,16 @@ function($) {
 
   }
 
+
+
   displayUsersGrid=function() {
     $("#main-content").attr("data-bind","");
     $("#main-content").html($("#usersGrid").html());
-
-    ko.applyBindings(new usersViewModel());
+    if (window.redbackModel.usersViewModel == null ) {
+      window.redbackModel.usersViewModel = new usersViewModel();
+    }
+    window.redbackModel.usersViewModel.loadUsers();
+    ko.applyBindings(window.redbackModel.usersViewModel);
   }
 
 });

@@ -154,29 +154,29 @@ public abstract class AbstractRestServicesTest
         }
         else
         {*/
-            this.server = new Server( 0 );
+        this.server = new Server( 0 );
 
-            ServletContextHandler context = new ServletContextHandler();
+        ServletContextHandler context = new ServletContextHandler();
 
-            context.setContextPath( "/" );
+        context.setContextPath( "/" );
 
-            context.setInitParameter( "contextConfigLocation", getSpringConfigLocation() );
+        context.setInitParameter( "contextConfigLocation", getSpringConfigLocation() );
 
-            ContextLoaderListener contextLoaderListener = new ContextLoaderListener();
+        ContextLoaderListener contextLoaderListener = new ContextLoaderListener();
 
-            context.addEventListener( contextLoaderListener );
+        context.addEventListener( contextLoaderListener );
 
-            ServletHolder sh = new ServletHolder( CXFServlet.class );
+        ServletHolder sh = new ServletHolder( CXFServlet.class );
 
-            SessionHandler sessionHandler = new SessionHandler();
+        SessionHandler sessionHandler = new SessionHandler();
 
-            context.setSessionHandler( sessionHandler );
+        context.setSessionHandler( sessionHandler );
 
-            context.addServlet( sh, "/" + getRestServicesPath() + "/*" );
-            server.setHandler( context );
-            this.server.start();
-            org.eclipse.jetty.server.Connector connector = this.server.getConnectors()[0];
-            this.port = connector.getLocalPort();
+        context.addServlet( sh, "/" + getRestServicesPath() + "/*" );
+        server.setHandler( context );
+        this.server.start();
+        org.eclipse.jetty.server.Connector connector = this.server.getConnectors()[0];
+        this.port = connector.getLocalPort();
 
         //}
 
@@ -185,7 +185,7 @@ public abstract class AbstractRestServicesTest
 
         UserService userService = getUserService();
 
-        User adminUser = new User(  );
+        User adminUser = new User();
         adminUser.setUsername( RedbackRoleConstants.ADMINISTRATOR_ACCOUNT_NAME );
         adminUser.setPassword( FakeCreateAdminServiceImpl.ADMIN_TEST_PWD );
         adminUser.setFullName( "the admin user" );
@@ -193,7 +193,6 @@ public abstract class AbstractRestServicesTest
         Boolean res = userService.createAdminUser( adminUser );
 
         //assertTrue( res.booleanValue() );
-
 
     }
 

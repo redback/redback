@@ -31,4 +31,6 @@ function($) {
     //nothing
   });
 
+  window.redbackModel = {usersViewModel:null};
+
 });

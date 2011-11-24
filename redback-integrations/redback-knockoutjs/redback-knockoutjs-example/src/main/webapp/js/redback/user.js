@@ -45,6 +45,8 @@ function($) {
               // TODO use a message not an alert
               if (created == true) {
                 alert("user created");
+                window.redbackModel.usersViewModel.users.push(this);
+                window.redbackModel.usersViewModel.loadUsers();
                 return this;
               } else {
                 alert("user cannot created");
