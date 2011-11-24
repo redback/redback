@@ -36,6 +36,10 @@ function($) {
       this.addUser=function() {
         ko.renderTemplate("redback/user-create-tmpl", new user(), null, jQuery("#createUserForm"), "replaceNode");
         $('#user-create').show();
+        $("#user-create").delegate("#user-create-form-cancel-button", "click keydown", function(e) {
+          e.preventDefault();
+          $('#user-create').hide();
+        });
         $("#user-create").validate({
           rules: {
             confirmPassword: {
@@ -54,23 +58,6 @@ function($) {
           return a.username < b.username ? -1 : 1;
       });
     };
-
-    /*
-    this.addUser=function() {
-      ko.renderTemplate("redback/user-create-tmpl", new user(), null, jQuery("#createUserForm"), "replaceNode");
-      $('#user-create').show();
-      $("#user-create").validate({
-        rules: {
-          confirmPassword: {
-            equalTo: "#password"
-          }
-        },
-        showErrors: function(validator, errorMap, errorList) {
-          customShowError(validator,errorMap,errorMap);
-        }
-      });
-    }*/
-
 
   }
 
