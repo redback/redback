@@ -10,15 +10,7 @@
 //  ... etc
 
 (function () {
-    // Private function
-    function getColumnsForScaffolding(data) {
-        if ((typeof data.length != 'number') || data.length == 0)
-            return [];
-        var columns = [];
-        for (var propertyName in data[0])
-            columns.push({ headerText: propertyName, rowText: propertyName });
-        return columns;
-    }
+
 
     ko.simpleGrid = {
         // Defines a view model class you can use to populate a grid
@@ -27,8 +19,7 @@
             this.currentPageIndex = ko.observable(0);
             this.pageSize = configuration.pageSize || 5;
 
-            // If you don't specify columns configuration, we'll use scaffolding
-            this.columns = configuration.columns || getColumnsForScaffolding(ko.utils.unwrapObservable(this.data)); 
+            this.columns = configuration.columns;
 
             this.itemsOnCurrentPage = ko.dependentObservable(function () {
                 var startIndex = this.pageSize * this.currentPageIndex();
