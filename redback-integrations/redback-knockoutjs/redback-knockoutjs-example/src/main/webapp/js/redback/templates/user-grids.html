@@ -20,13 +20,17 @@
 </script>
 
 <script id="ko_usersGrid_pageLinks" type="text/x-jquery-tmpl">
-  <div class="ko-grid-pageLinks">
-      <span>Page:</span>
+  Pages:
+  <div class="pagination">
+      <ul>
       {{each(i) ko.utils.range(1, maxPageIndex)}}
-          <a href="#" data-bind="click: function() { currentPageIndex(i) }, css: { selected: i == currentPageIndex() }">
+          <li>
+            <a href="#" data-bind="click: function() { currentPageIndex(i) }, css: { active: i == currentPageIndex() }">
               ${ i + 1 }
-          </a>\
+            </a>
+          </li>
       {{/each}}
+      </ul>
   </div>
 </script>
 
