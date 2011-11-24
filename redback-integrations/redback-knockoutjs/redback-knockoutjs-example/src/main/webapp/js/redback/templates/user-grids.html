@@ -47,9 +47,9 @@
 <script id="usersGrid"  type="text/x-jquery-tmpl">
     <h2>Users list</h2>
 
-    <table class="zebra-striped" data-bind='usersGrid: gridViewModel' id="usersTable"></table>
+    <table class="zebra-striped" data-bind='simpleGrid: gridViewModel' id="usersTable"></table>
 
-    <button data-bind='click: gridViewModel.addUser'>
+    <button data-bind='click: addUser'>
         Add User
     </button>
 

@@ -1,4 +1,4 @@
-require(["order!jquery","order!jquery.i18n.properties-1.0.9","order!redback/knockout.usersGrid" ],
+require(["order!jquery","order!jquery.i18n.properties-1.0.9","order!knockout.simpleGrid" ],
 function($) {
 
   usersViewModel=function() {
@@ -18,7 +18,7 @@ function($) {
         }
       );
     };
-    this.gridViewModel = new ko.usersGrid.viewModel({
+    this.gridViewModel = new ko.simpleGrid.viewModel({
       data: this.users,
       columns: [
         {
@@ -32,6 +32,20 @@ function($) {
           rowText: "email"}
       ],
       pageSize: 2
+      },
+      this.addUser=function() {
+        ko.renderTemplate("redback/user-create-tmpl", new user(), null, jQuery("#createUserForm"), "replaceNode");
+        $('#user-create').show();
+        $("#user-create").validate({
+          rules: {
+            confirmPassword: {
+              equalTo: "#password"
+            }
+          },
+          showErrors: function(validator, errorMap, errorList) {
+            customShowError(validator,errorMap,errorMap);
+          }
+        });
       }
     );
 
@@ -40,6 +54,22 @@ function($) {
           return a.username < b.username ? -1 : 1;
       });
     };
+
+    /*
+    this.addUser=function() {
+      ko.renderTemplate("redback/user-create-tmpl", new user(), null, jQuery("#createUserForm"), "replaceNode");
+      $('#user-create').show();
+      $("#user-create").validate({
+        rules: {
+          confirmPassword: {
+            equalTo: "#password"
+          }
+        },
+        showErrors: function(validator, errorMap, errorList) {
+          customShowError(validator,errorMap,errorMap);
+        }
+      });
+    }*/
 
 
   }

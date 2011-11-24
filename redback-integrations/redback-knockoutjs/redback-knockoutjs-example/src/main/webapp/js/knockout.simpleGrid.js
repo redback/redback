@@ -20,7 +20,7 @@
         return columns;
     }
 
-    ko.usersGrid = {
+    ko.simpleGrid = {
         // Defines a view model class you can use to populate a grid
         viewModel: function (configuration) {
             this.data = configuration.data;
@@ -38,21 +38,6 @@
             this.maxPageIndex = ko.dependentObservable(function () {
                 return Math.ceil(ko.utils.unwrapObservable(this.data).length / this.pageSize);
             }, this);
-            this.addUser=function() {
-              ko.renderTemplate("redback/user-create-tmpl", new user(), null, jQuery("#createUserForm"), "replaceNode");
-              $('#user-create').show();
-              $("#user-create").validate({
-                rules: {
-                  confirmPassword: {
-                    equalTo: "#password"
-                  }
-                },
-                showErrors: function(validator, errorMap, errorList) {
-                  customShowError(validator,errorMap,errorMap);
-                }
-              });
-            }
-
         }
     };
 
@@ -61,7 +46,7 @@
 
 
     // The "simpleGrid" binding
-    ko.bindingHandlers.usersGrid = {
+    ko.bindingHandlers.simpleGrid = {
         // This method is called to initialize the node, and will also be called again if you change what the grid is bound to
         update: function (element, viewModelAccessor, allBindingsAccessor) {
             var viewModel = viewModelAccessor(), allBindings = allBindingsAccessor();
