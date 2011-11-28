@@ -18,7 +18,7 @@
         this.data = configuration.data;
         this.currentPageIndex = ko.observable(0);
         this.pageSize = configuration.pageSize || 5;
-
+        this.pageLinksId = configuration.pageLinksId;
         this.columns = configuration.columns;
 
         this.itemsOnCurrentPage = ko.dependentObservable(function () {
@@ -55,7 +55,7 @@
           ko.renderTemplate(gridTemplateName, viewModel, { templateEngine: templateEngine }, gridContainer, "replaceNode");
 
           // Render the page links
-          var pageLinksContainer = element.appendChild(document.createElement("DIV"));
+          var pageLinksContainer = $("#"+viewModel.pageLinksId).get(0);//.appendChild(document.createElement("DIV"));
           ko.renderTemplate(pageLinksTemplateName, viewModel, { templateEngine: templateEngine }, pageLinksContainer, "replaceNode");
         }
     };

@@ -5,6 +5,7 @@
               <th>${ columnDefinition.headerText }</th>
           {{/each}}
           <th>Edit</th>
+          <th>Delete</th>
       </tr>
   </thead>
   <tbody>
@@ -14,13 +15,17 @@
               <td>${ typeof columnDefinition.rowText == 'function' ? columnDefinition.rowText(row) : row[columnDefinition.rowText] }</td>
               {{/each}}
               <td><a href="#" data-bind="click: function(){ editUserBox(row) }">Edit</a></td>
+              <td>
+                  <a href="#" data-bind="click: function(){ deleteUser(row) }">
+                    <img src="images/delete.png" alt="Delete"/>
+                  </a>
+              </td>
           </tr>
       {{/each}}
   </tbody>
 </script>
 
 <script id="ko_usersGrid_pageLinks" type="text/x-jquery-tmpl">
-  Pages:
   <div class="pagination">
       <ul>
       {{each(i) ko.utils.range(1, maxPageIndex)}}
@@ -38,17 +43,17 @@
 <script id="usersGrid"  type="text/x-jquery-tmpl">
     <h2>Users list</h2>
 
-    <table class="zebra-striped" data-bind="simpleGrid: gridViewModel" id="usersTable"></table>
-
-    <button data-bind='click: addUser'>
+    <table class="bordered-table zebra-striped" data-bind="simpleGrid: gridViewModel" id="usersTable"></table>
+    <div id="usersPagination"></div>
+    <button data-bind='click: addUser' class="btn">
         Add User
     </button>
 
-    <button data-bind='click: sortByName'>
+    <button data-bind='click: sortByName'  class="btn">
         Sort by name
     </button>
 
-    <button data-bind='click: function() { gridViewModel.currentPageIndex(0) }'>
+    <button data-bind='click: function() { gridViewModel.currentPageIndex(0) }'  class="btn">
         Jump to first page
     </button>
     <div id="createUserForm"></div>

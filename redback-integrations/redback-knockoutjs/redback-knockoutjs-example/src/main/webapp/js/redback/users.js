@@ -21,6 +21,7 @@ function($) {
     this.gridViewModel = new ko.simpleGrid.viewModel({
       data: this.users,
       viewModel: this,
+      pageLinksId: "usersPagination",
       columns: [
         {
           headerText: "User Name",
@@ -32,7 +33,7 @@ function($) {
           headerText: "Email",
           rowText: "email"}
       ],
-      pageSize: 10
+      pageSize: 5
     });
 
     this.addUser=function() {
@@ -62,8 +63,18 @@ function($) {
 
   }
 
+  displayUsersGrid=function() {
+    jQuery("#main-content").attr("data-bind","");
+    jQuery("#main-content").html($("#usersGrid").html());
+    if (window.redbackModel.usersViewModel == null ) {
+      window.redbackModel.usersViewModel = new usersViewModel();
+    }
+    window.redbackModel.usersViewModel.loadUsers();
+    ko.applyBindings(window.redbackModel.usersViewModel,jQuery("#main-content").get(0));
+  }
+
   userViewModel=function(user) {
-    this.user=user;
+      this.user=user;
   }
 
   this.editUserBox=function(user) {
@@ -72,7 +83,7 @@ function($) {
     var viewModel = new userViewModel(user);
 
     ko.applyBindings(viewModel,jQuery("#main-content #user-edit").get(0));
-    $("#main-content #user-create").validate({
+    jQuery("#main-content #user-create").validate({
       rules: {
         confirmPassword: {
           equalTo: "#password"
@@ -82,11 +93,11 @@ function($) {
         customShowError(validator,errorMap,errorMap);
       }
     });
-    $("#main-content #user-create").delegate("#user-create-form-cancel-button", "click keydown", function(e) {
+    jQuery("#main-content #user-create").delegate("#user-create-form-cancel-button", "click keydown", function(e) {
       e.preventDefault();
-      $('#main-content #user-create').hide();
+      jQuery('#main-content #user-create').hide();
     });
-    $("#main-content #user-create").validate({
+    jQuery("#main-content #user-create").validate({
       rules: {
         confirmPassword: {
           equalTo: "#password"
@@ -96,24 +107,20 @@ function($) {
         customShowError(validator,errorMap,errorMap);
       }
     });
-    $("#main-content #user-create").delegate("#user-create-form-register-button", "click keydown", function(e) {
+    jQuery("#main-content #user-create").delegate("#user-create-form-register-button", "click keydown", function(e) {
       e.preventDefault();
-      alert("update user");
+      var valid = $("#user-create").valid();
+      if (!valid) {
+          return;
+      }
     });
   }
 
-
-
-
-  displayUsersGrid=function() {
-    $("#main-content").attr("data-bind","");
-    $("#main-content").html($("#usersGrid").html());
-    if (window.redbackModel.usersViewModel == null ) {
-      window.redbackModel.usersViewModel = new usersViewModel();
-    }
-    window.redbackModel.usersViewModel.loadUsers();
-    ko.applyBindings(window.redbackModel.usersViewModel);
+  deleteUser=function(user) {
+    alert(user.username());
   }
+
+
 
 });
 
