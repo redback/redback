@@ -72,7 +72,7 @@ function($) {
     var viewModel = new userViewModel(user);
 
     ko.applyBindings(viewModel,jQuery("#main-content #user-edit").get(0));
-    $("#user-create").validate({
+    $("#main-content #user-create").validate({
       rules: {
         confirmPassword: {
           equalTo: "#password"
@@ -81,6 +81,24 @@ function($) {
       showErrors: function(validator, errorMap, errorList) {
         customShowError(validator,errorMap,errorMap);
       }
+    });
+    $("#main-content #user-create").delegate("#user-create-form-cancel-button", "click keydown", function(e) {
+      e.preventDefault();
+      $('#main-content #user-create').hide();
+    });
+    $("#main-content #user-create").validate({
+      rules: {
+        confirmPassword: {
+          equalTo: "#password"
+        }
+      },
+      showErrors: function(validator, errorMap, errorList) {
+        customShowError(validator,errorMap,errorMap);
+      }
+    });
+    $("#main-content #user-create").delegate("#user-create-form-register-button", "click keydown", function(e) {
+      e.preventDefault();
+      alert("update user");
     });
   }
 

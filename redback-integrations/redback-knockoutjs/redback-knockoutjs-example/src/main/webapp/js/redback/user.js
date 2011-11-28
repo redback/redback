@@ -141,7 +141,7 @@ function($) {
     $("#modal-login-ok").attr("disabled","disabled");
 
     //#modal-login-footer
-    $('#modal-login-footer').append("<img id=\"login-spinner\" src='images/spinner.gif'/>")
+    $('#modal-login-footer').append("<img id=\"login-spinner\" src='images/small-spinner.gif'/>")
 
     var url = '/restServices/redbackServices/loginService/logIn?userName='+$("#user-login-form-username").val();
     url += "&password="+$("#user-login-form-password").val();
