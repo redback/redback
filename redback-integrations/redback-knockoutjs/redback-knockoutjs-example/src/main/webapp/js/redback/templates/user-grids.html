@@ -15,6 +15,7 @@
               <td>${ typeof columnDefinition.rowText == 'function' ? columnDefinition.rowText(row) : row[columnDefinition.rowText] }</td>
               {{/each}}
               <td><a href="#" data-bind="click: function(){ editUserBox(row) }">Edit</a></td>
+              <!-- FIXME not delete admin user -->
               <td>
                   <a href="#" data-bind="click: function(){ deleteUser(row) }">
                     <img src="images/delete.png" alt="Delete"/>

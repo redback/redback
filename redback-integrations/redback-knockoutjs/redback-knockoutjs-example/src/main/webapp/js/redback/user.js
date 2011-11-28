@@ -44,9 +44,9 @@ function($) {
               var created = JSON.parse(result);
               // TODO use a message not an alert
               if (created == true) {
-                alert("user created");
-                window.redbackModel.usersViewModel.users.push(this);
-                window.redbackModel.usersViewModel.loadUsers();
+                alert("user created"+this.username);
+                window.redbackModel.usersViewModel.users.push(ko.observable(this));
+                //window.redbackModel.usersViewModel.loadUsers();
                 return this;
               } else {
                 alert("user cannot created");
