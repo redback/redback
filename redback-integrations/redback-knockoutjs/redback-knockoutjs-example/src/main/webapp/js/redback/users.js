@@ -20,6 +20,7 @@ function($) {
     };
     this.gridViewModel = new ko.simpleGrid.viewModel({
       data: this.users,
+      viewModel: this,
       columns: [
         {
           headerText: "User Name",
@@ -32,26 +33,26 @@ function($) {
           rowText: "email"}
       ],
       pageSize: 10
-      },
-      this.addUser=function() {
-        ko.renderTemplate("redback/user-create-tmpl", new user(), null, jQuery("#createUserForm"), "replaceNode");
-        $('#user-create').show();
-        $("#user-create").delegate("#user-create-form-cancel-button", "click keydown", function(e) {
-          e.preventDefault();
-          $('#user-create').hide();
-        });
-        $("#user-create").validate({
-          rules: {
-            confirmPassword: {
-              equalTo: "#password"
-            }
-          },
-          showErrors: function(validator, errorMap, errorList) {
-            customShowError(validator,errorMap,errorMap);
+    });
+
+    this.addUser=function() {
+      ko.renderTemplate("redback/user-create-tmpl", new user(), null, jQuery("#createUserForm"), "replaceNode");
+      $('#user-create').show();
+      $("#user-create").delegate("#user-create-form-cancel-button", "click keydown", function(e) {
+        e.preventDefault();
+        $('#user-create').hide();
+      });
+      $("#user-create").validate({
+        rules: {
+          confirmPassword: {
+            equalTo: "#password"
           }
-        });
-      }
-    );
+        },
+        showErrors: function(validator, errorMap, errorList) {
+          customShowError(validator,errorMap,errorMap);
+        }
+      });
+    };
 
     this.sortByName = function() {
       this.users.sort(function(a, b) {
@@ -60,6 +61,29 @@ function($) {
     };
 
   }
+
+  userViewModel=function(user) {
+    this.user=user;
+  }
+
+  this.editUserBox=function(user) {
+    jQuery("#main-content").append("<div id='user-edit'></div>");
+    jQuery("#main-content #user-edit").attr("data-bind",'template: {name:"redback/user-create-tmpl",data: user}');
+    var viewModel = new userViewModel(user);
+
+    ko.applyBindings(viewModel,jQuery("#main-content #user-edit").get(0));
+    $("#user-create").validate({
+      rules: {
+        confirmPassword: {
+          equalTo: "#password"
+        }
+      },
+      showErrors: function(validator, errorMap, errorList) {
+        customShowError(validator,errorMap,errorMap);
+      }
+    });
+  }
+
 
 
 

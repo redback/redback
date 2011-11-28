@@ -11,9 +11,9 @@
       {{each(i, row) itemsOnCurrentPage()}}
           <tr>
               {{each(j, columnDefinition) columns}}
-                  <td>${ typeof columnDefinition.rowText == 'function' ? columnDefinition.rowText(row) : row[columnDefinition.rowText] }</td>
+              <td>${ typeof columnDefinition.rowText == 'function' ? columnDefinition.rowText(row) : row[columnDefinition.rowText] }</td>
               {{/each}}
-              <td>Edit</td>
+              <td><a href="#" data-bind="click: function(){ editUserBox(row) }">Edit</a></td>
           </tr>
       {{/each}}
   </tbody>
@@ -34,24 +34,11 @@
   </div>
 </script>
 
-<script id="usersGridDataTable"  type="text/x-jquery-tmpl">
-<table data-bind="dataTable: { dataSource: users, columns: ['username', 'fullName', 'email'] }">
-    <thead>
-        <tr>
-            <td>Column 1</td>
-            <td>Column 2</td>
-            <td>Column 3</td>
-        </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
-</script>
 
 <script id="usersGrid"  type="text/x-jquery-tmpl">
     <h2>Users list</h2>
 
-    <table class="zebra-striped" data-bind='simpleGrid: gridViewModel' id="usersTable"></table>
+    <table class="zebra-striped" data-bind="simpleGrid: gridViewModel" id="usersTable"></table>
 
     <button data-bind='click: addUser'>
         Add User
@@ -65,4 +52,19 @@
         Jump to first page
     </button>
     <div id="createUserForm"></div>
+</script>
+
+
+<script id="usersGridDataTable"  type="text/x-jquery-tmpl">
+  <table data-bind="dataTable: { dataSource: users, columns: ['username', 'fullName', 'email'] }">
+    <thead>
+        <tr>
+            <td>Column 1</td>
+            <td>Column 2</td>
+            <td>Column 3</td>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
 </script>
