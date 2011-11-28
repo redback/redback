@@ -46,6 +46,7 @@ function($) {
               if (created == true) {
                 alert("user created:"+currentUser.username());
                 window.redbackModel.usersViewModel.users.push(currentUser);
+                $("#main-content #user-create #user-create-fieldset :input").val("");
                 $("#main-content #user-create").hide();
                 return this;
               } else {

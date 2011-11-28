@@ -1,12 +1,16 @@
 Pages todo:
+* admin creation
 * user list (crud)
 * operations list (remove ?)
 * permissions list (remove ?)
 * resources list (remove ?)
 * roles list (crud)
 
-Links:
 
+Links to wrap:
 * register page
 * password reset/reinit
 * register validation page with link validate key -> ask password init.
+
+TODO:
+* user update by admin: no need of password only datas ?
