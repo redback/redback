@@ -34,7 +34,7 @@ function($) {
         if (!valid) {
             return;
         }
-
+        var currentUser = this;
         $.ajax("/restServices/redbackServices/userService/createUser", {
             data: "{\"user\": " +  ko.toJSON(this)+"}",
             contentType: 'application/json',
@@ -42,11 +42,10 @@ function($) {
             dataType: 'json',
             success: function(result) {
               var created = JSON.parse(result);
-              // TODO use a message not an alert
+              // FIXME use a message div and i18n
               if (created == true) {
-                alert("user created"+this.username);
-                window.redbackModel.usersViewModel.users.push(ko.observable(this));
-                //window.redbackModel.usersViewModel.loadUsers();
+                alert("user created:"+currentUser.username());
+                window.redbackModel.usersViewModel.users.push(currentUser);
                 return this;
               } else {
                 alert("user cannot created");
@@ -86,6 +85,22 @@ function($) {
             }
           });
       };
+
+      this.deleteUser=function() {
+        // FIXME ask confirmation !
+        var currentUser = this;
+        $.ajax("/restServices/redbackServices/userService/deleteUser/"+currentUser.username(), {
+            type: "GET",
+            dataType: 'json',
+            success: function(data) {
+                // FIXME i18n and use a messages div
+              window.redbackModel.usersViewModel.users.remove(currentUser);
+              alert("user " + currentUser.username() + " deleted");
+            }
+          }
+        );
+      };
+
       this.i18n = $.i18n.prop;
   }
 

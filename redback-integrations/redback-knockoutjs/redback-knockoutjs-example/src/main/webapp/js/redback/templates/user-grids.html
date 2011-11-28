@@ -17,7 +17,7 @@
               <td><a href="#" data-bind="click: function(){ editUserBox(row) }">Edit</a></td>
               <!-- FIXME not delete admin user -->
               <td>
-                  <a href="#" data-bind="click: function(){ deleteUser(row) }">
+                  <a href="#" data-bind="click: function(){ row.deleteUser() }">
                     <img src="images/delete.png" alt="Delete"/>
                   </a>
               </td>

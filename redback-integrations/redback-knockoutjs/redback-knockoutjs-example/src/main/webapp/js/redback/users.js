@@ -116,18 +116,7 @@ function($) {
     });
   }
 
-  deleteUser=function(user) {
-    $.ajax("/restServices/redbackServices/userService/deleteUser/"+user.username(), {
-        type: "GET",
-        dataType: 'json',
-        success: function(data) {
-            // FIXME i18n and use a messages div
-          window.redbackModel.usersViewModel.users.remove(user);
-          alert("user " + user.username() + " deleted");
-        }
-      }
-    );
-  }
+
 
 
 
