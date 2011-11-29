@@ -49,9 +49,11 @@ import javax.inject.Named;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -436,8 +438,24 @@ public class DefaultUserService
 
     }
 
+    public Collection<Operation> getUserOperations( String userName )
+        throws RedbackServiceException
+    {
+        Collection<Permission> permissions = getUserPermissions( userName );
+        List<Operation> operations = new ArrayList<Operation>( permissions.size() );
+        for ( Permission permission : permissions )
+        {
+            if ( permission.getOperation() != null )
+            {
+                Operation operation = new Operation();
+                operation.setName( permission.getOperation().getName() );
+                operations.add( operation );
+            }
+        }
+        return operations;
+    }
 
-    public List<Permission> getUserPermissions( String userName )
+    public Collection<Permission> getUserPermissions( String userName )
         throws RedbackServiceException
     {
         try

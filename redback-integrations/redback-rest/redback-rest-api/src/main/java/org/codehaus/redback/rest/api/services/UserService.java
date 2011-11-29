@@ -18,6 +18,7 @@ package org.codehaus.redback.rest.api.services;
 
 import org.codehaus.plexus.redback.authorization.RedbackAuthorization;
 import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
+import org.codehaus.redback.rest.api.model.Operation;
 import org.codehaus.redback.rest.api.model.Permission;
 import org.codehaus.redback.rest.api.model.User;
 
@@ -28,6 +29,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.Collection;
 import java.util.List;
 
 @Path( "/userService/" )
@@ -129,6 +131,13 @@ public interface UserService
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
     @RedbackAuthorization( noRestriction = true, noPermission = true )
-    List<Permission> getUserPermissions( @PathParam( "userName" ) String userName )
+    Collection<Permission> getUserPermissions( @PathParam( "userName" ) String userName )
+        throws RedbackServiceException;
+
+    @Path( "getUserOperations/{userName}" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( noRestriction = true, noPermission = true )
+    Collection<Operation> getUserOperations( @PathParam( "userName" ) String userName )
         throws RedbackServiceException;
 }

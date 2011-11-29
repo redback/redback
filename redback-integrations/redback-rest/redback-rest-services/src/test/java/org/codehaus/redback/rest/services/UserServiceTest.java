@@ -19,6 +19,7 @@ package org.codehaus.redback.rest.services;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.apache.cxf.jaxrs.client.ServerWebApplicationException;
 import org.apache.cxf.jaxrs.client.WebClient;
+import org.codehaus.redback.rest.api.model.Operation;
 import org.codehaus.redback.rest.api.model.Permission;
 import org.codehaus.redback.rest.api.model.User;
 import org.codehaus.redback.rest.api.services.UserService;
@@ -26,6 +27,7 @@ import org.codehaus.redback.rest.services.mock.EmailMessage;
 import org.codehaus.redback.rest.services.mock.ServicesAssert;
 import org.junit.Test;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -147,11 +149,19 @@ public class UserServiceTest
     }
 
     @Test
-    public void getUserPermissions()
+    public void getAdminPermissions()
         throws Exception
     {
-        List<Permission> permissions = getUserService().getUserPermissions( "admin" );
+        Collection<Permission> permissions = getUserService().getUserPermissions( "admin" );
         log.info( "admin permisssions:" + permissions );
+    }
+
+    @Test
+    public void getAdminOperations()
+        throws Exception
+    {
+        Collection<Operation> operations = getUserService().getUserOperations( "admin" );
+        log.info( "admin operations:" + operations );
     }
 
     public void guestUserCreate()
