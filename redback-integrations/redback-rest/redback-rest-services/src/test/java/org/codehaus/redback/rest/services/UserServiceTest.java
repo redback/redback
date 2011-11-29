@@ -157,11 +157,29 @@ public class UserServiceTest
     }
 
     @Test
+    public void getGuestPermissions()
+        throws Exception
+    {
+        createGuestIfNeeded();
+        Collection<Permission> permissions = getUserService().getUserPermissions( "guest" );
+        log.info( "guest permisssions:" + permissions );
+    }
+
+    @Test
     public void getAdminOperations()
         throws Exception
     {
         Collection<Operation> operations = getUserService().getUserOperations( "admin" );
         log.info( "admin operations:" + operations );
+    }
+
+    @Test
+    public void getGuestOperations()
+        throws Exception
+    {
+        createGuestIfNeeded();
+        Collection<Operation> operations = getUserService().getUserOperations( "guest" );
+        log.info( "guest operations:" + operations );
     }
 
     public void guestUserCreate()
@@ -171,6 +189,16 @@ public class UserServiceTest
         assertNull( userService.getGuestUser() );
         assertNull( userService.createGuestUser() );
 
+    }
+
+    protected void createGuestIfNeeded()
+        throws Exception
+    {
+        UserService userService = getUserService( authorizationHeader );
+        if ( userService.getGuestUser() == null )
+        {
+            userService.createGuestUser();
+        }
     }
 
 }

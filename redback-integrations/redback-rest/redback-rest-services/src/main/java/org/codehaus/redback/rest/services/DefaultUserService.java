@@ -49,7 +49,6 @@ import javax.inject.Named;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -255,7 +254,7 @@ public class DefaultUserService
             org.codehaus.plexus.redback.users.User user = userManager.getGuestUser();
             return getSimpleUser( user );
         }
-        catch ( UserNotFoundException e )
+        catch ( Exception e )
         {
             return null;
         }
@@ -274,7 +273,20 @@ public class DefaultUserService
         {
             securitySystem.getPolicy().setEnabled( false );
             org.codehaus.plexus.redback.users.User user = userManager.createGuestUser();
+            user.setPasswordChangeRequired( false );
+            user = userManager.updateUser( user, false );
+            roleManager.assignRole( "guest", user.getPrincipal().toString() );
             return getSimpleUser( user );
+        } catch ( RoleManagerException e )
+        {
+            log.error( e.getMessage(), e );
+            throw new RedbackServiceException( e.getMessage() );
+        }
+        catch ( UserNotFoundException e )
+        {
+            // olamy I wonder how this can happen :-)
+            log.error( e.getMessage(), e );
+            throw new RedbackServiceException( e.getMessage() );
         }
         finally
         {
@@ -490,10 +502,12 @@ public class DefaultUserService
         }
         catch ( RbacObjectNotFoundException e )
         {
+            log.error( e.getMessage(), e );
             throw new RedbackServiceException( e.getMessage() );
         }
         catch ( RbacManagerException e )
         {
+            log.error( e.getMessage(), e );
             throw new RedbackServiceException( e.getMessage() );
         }
     }
