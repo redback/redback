@@ -144,10 +144,11 @@ function($) {
         customShowError(validator,errorMap,errorMap);
       }
     });
-    $("#modal-login").delegate("#modal-login-ok", "click keydown", function(e) {
+    $("#modal-login").delegate("#modal-login-ok", "click keydown keypress", function(e) {
       e.preventDefault();
       login();
     });
+    $("#modal-login").focus();
   }
 
   login=function(){

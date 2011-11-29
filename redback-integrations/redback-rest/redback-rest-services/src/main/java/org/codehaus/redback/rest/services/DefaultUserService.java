@@ -23,6 +23,9 @@ import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.keys.KeyManagerException;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
+import org.codehaus.plexus.redback.rbac.RBACManager;
+import org.codehaus.plexus.redback.rbac.RbacManagerException;
+import org.codehaus.plexus.redback.rbac.RbacObjectNotFoundException;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.system.SecuritySystem;
@@ -31,6 +34,9 @@ import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.redback.integration.mail.Mailer;
 import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
 import org.codehaus.redback.rest.api.model.ErrorMessage;
+import org.codehaus.redback.rest.api.model.Operation;
+import org.codehaus.redback.rest.api.model.Permission;
+import org.codehaus.redback.rest.api.model.Resource;
 import org.codehaus.redback.rest.api.model.User;
 import org.codehaus.redback.rest.api.services.RedbackServiceException;
 import org.codehaus.redback.rest.api.services.UserService;
@@ -47,6 +53,7 @@ import javax.ws.rs.core.Context;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @Service( "userService#rest" )
 public class DefaultUserService
@@ -90,6 +97,10 @@ public class DefaultUserService
 
     @Inject
     private Mailer mailer;
+
+    @Inject
+    @Named( value = "rBACManager#cached" )
+    private RBACManager rbacManager;
 
     @Context
     private HttpServletRequest httpServletRequest;
@@ -425,6 +436,49 @@ public class DefaultUserService
 
     }
 
+
+    public List<Permission> getUserPermissions( String userName )
+        throws RedbackServiceException
+    {
+        try
+        {
+            Set<org.codehaus.plexus.redback.rbac.Permission> permissions =
+                rbacManager.getAssignedPermissions( userName );
+            // FIXME return guest permissions !!
+            List<Permission> userPermissions = new ArrayList<Permission>( permissions.size() );
+            for ( org.codehaus.plexus.redback.rbac.Permission p : permissions )
+            {
+                Permission permission = new Permission();
+                permission.setName( p.getName() );
+
+                if ( p.getOperation() != null )
+                {
+                    Operation operation = new Operation();
+                    operation.setName( p.getOperation().getName() );
+                    permission.setOperation( operation );
+                }
+
+                if ( p.getResource() != null )
+                {
+                    Resource resource = new Resource();
+                    resource.setIdentifier( p.getResource().getIdentifier() );
+                    resource.setPattern( p.getResource().isPattern() );
+                    permission.setResource( resource );
+                }
+
+                userPermissions.add( permission );
+            }
+            return userPermissions;
+        }
+        catch ( RbacObjectNotFoundException e )
+        {
+            throw new RedbackServiceException( e.getMessage() );
+        }
+        catch ( RbacManagerException e )
+        {
+            throw new RedbackServiceException( e.getMessage() );
+        }
+    }
 
     public void validateCredentialsLoose( User user )
         throws RedbackServiceException

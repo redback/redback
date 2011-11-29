@@ -28,6 +28,7 @@ function($) {
     $('#user-create').hide();
   });
 
+
   $("#user-create").on("submit",function(){
     //nothing
   });
