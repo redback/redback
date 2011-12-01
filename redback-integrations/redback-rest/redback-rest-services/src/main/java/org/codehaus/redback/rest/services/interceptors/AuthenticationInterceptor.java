@@ -25,6 +25,7 @@ import org.codehaus.plexus.redback.authentication.AuthenticationResult;
 import org.codehaus.plexus.redback.authorization.RedbackAuthorization;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
 import org.codehaus.plexus.redback.policy.MustChangePasswordException;
+import org.codehaus.plexus.redback.system.SecuritySession;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
@@ -77,13 +78,23 @@ public class AuthenticationInterceptor
             // it must be marked as it's exposed
             return Response.status( Response.Status.FORBIDDEN ).build();
         }
+        HttpServletRequest request = getHttpServletRequest( message );
 
         if ( redbackAuthorization.noRestriction() )
         {
+            // maybe session exists so put it in threadLocal
+            // some services need the current user if logged
+            SecuritySession securitySession = httpAuthenticator.getSecuritySession( request.getSession( true ) );
+
+            if ( securitySession != null )
+            {
+                RedbackRequestInformation redbackRequestInformation =
+                    new RedbackRequestInformation( securitySession.getUser(), request.getRemoteAddr() );
+                RedbackAuthenticationThreadLocal.set( redbackRequestInformation );
+            }
             return null;
         }
 
-        HttpServletRequest request = getHttpServletRequest( message );
         HttpServletResponse response = getHttpServletResponse( message );
 
         try

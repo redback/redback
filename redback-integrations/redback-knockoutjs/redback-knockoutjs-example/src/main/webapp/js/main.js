@@ -61,7 +61,7 @@ function(domReady) {
         if ($.isFunction(username)){
           username = user.username();
         }
-        var url = '/restServices/redbackServices/userService/getCurrentUserPermissions;
+        var url = '/restServices/redbackServices/userService/getCurrentUserOperations';
         $.ajax({
           url: url,
           success: function(data){

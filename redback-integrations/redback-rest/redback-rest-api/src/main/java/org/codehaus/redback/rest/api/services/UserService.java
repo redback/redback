@@ -151,7 +151,7 @@ public interface UserService
     Collection<Permission> getCurrentUserPermissions()
         throws RedbackServiceException;
 
-    @Path( "getCurrentUserPermissions" )
+    @Path( "getCurrentUserOperations" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
     @RedbackAuthorization( noRestriction = true, noPermission = true )
