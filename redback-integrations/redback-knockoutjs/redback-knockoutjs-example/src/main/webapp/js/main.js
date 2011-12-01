@@ -52,6 +52,7 @@ function(domReady) {
     logout=function(){
       deleteLoginCookie();
       $("#login-link").show();
+      $("#register-link").show();
       $("#logout-link").hide();
     }
 
@@ -114,13 +115,11 @@ function(domReady) {
     var user = userLogged();
     if (!user) {
       $("#login-link").show();
+      $("#register-link").show();
     } else {
       $("#logout-link").show();
       decorateMenuWithKarma(user);
     }
-
-
-
 
 
   });

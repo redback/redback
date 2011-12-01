@@ -1,0 +1,29 @@
+<div id="modal-register" class="modal hide fade">
+  <div class="modal-header">
+    <a href="#" class="close">&times;</a>
+    <h3>${register_section_title}</h3>
+  </div>
+  <div class="modal-body" id="modal-register-content">
+      <form id="user-register-form">
+        <div id="modal-register-err-message" class="alert-message error" style="display:none"></div>
+        <fieldset>
+          <div class="clearfix">
+            <label for="user-register-form-username">${username}</label>
+            <div class="input">
+              <input type="text" id="user-register-form-username" name="user-register-form-username" class="required" />
+            </div>
+          </div>
+            <div class="clearfix">
+              <label for="user-register-form-fullname">${fullname}</label>
+              <div class="input">
+                <input type="text" id="user-register-form-fullname" name="user-register-form-fullname" class="required" />
+              </div>
+            </div>
+
+        </fieldset>
+      </form>
+  </div>
+  <div class="modal-footer" id="modal-register-footer">
+      <button class="btn primary" onclick="return register();" id="modal-register-ok">${register}</button>
+  </div>
+</div>
