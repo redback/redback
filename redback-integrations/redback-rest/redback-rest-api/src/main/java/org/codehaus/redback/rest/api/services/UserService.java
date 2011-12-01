@@ -130,14 +130,28 @@ public interface UserService
     @Path( "getUserPermissions/{userName}" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( noRestriction = true, noPermission = true )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_LIST_OPERATION )
     Collection<Permission> getUserPermissions( @PathParam( "userName" ) String userName )
         throws RedbackServiceException;
 
     @Path( "getUserOperations/{userName}" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( noRestriction = true, noPermission = true )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_LIST_OPERATION )
     Collection<Operation> getUserOperations( @PathParam( "userName" ) String userName )
+        throws RedbackServiceException;
+
+    @Path( "getCurrentUserPermissions" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( noRestriction = true, noPermission = true )
+    Collection<Permission> getCurrentUserPermissions()
+        throws RedbackServiceException;
+
+    @Path( "getCurrentUserPermissions" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( noRestriction = true, noPermission = true )
+    Collection<Operation> getCurrentUserOperations()
         throws RedbackServiceException;
 }

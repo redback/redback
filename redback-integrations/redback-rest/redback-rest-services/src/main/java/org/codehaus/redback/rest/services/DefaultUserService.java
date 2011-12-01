@@ -277,7 +277,8 @@ public class DefaultUserService
             user = userManager.updateUser( user, false );
             roleManager.assignRole( "guest", user.getPrincipal().toString() );
             return getSimpleUser( user );
-        } catch ( RoleManagerException e )
+        }
+        catch ( RoleManagerException e )
         {
             log.error( e.getMessage(), e );
             throw new RedbackServiceException( e.getMessage() );
@@ -448,6 +449,33 @@ public class DefaultUserService
         event.log();
         */
 
+    }
+
+
+    public Collection<Permission> getCurrentUserPermissions()
+        throws RedbackServiceException
+    {
+        RedbackRequestInformation redbackRequestInformation = RedbackAuthenticationThreadLocal.get();
+        String userName = UserManager.GUEST_USERNAME;
+        if ( redbackRequestInformation != null && redbackRequestInformation.getUser() != null )
+        {
+            userName = redbackRequestInformation.getUser().getUsername();
+        }
+
+        return getUserPermissions( userName );
+    }
+
+    public Collection<Operation> getCurrentUserOperations()
+        throws RedbackServiceException
+    {
+        RedbackRequestInformation redbackRequestInformation = RedbackAuthenticationThreadLocal.get();
+        String userName = UserManager.GUEST_USERNAME;
+        if ( redbackRequestInformation != null && redbackRequestInformation.getUser() != null )
+        {
+            userName = redbackRequestInformation.getUser().getUsername();
+        }
+
+        return getUserOperations( userName );
     }
 
     public Collection<Operation> getUserOperations( String userName )

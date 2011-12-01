@@ -61,7 +61,7 @@ function(domReady) {
         if ($.isFunction(username)){
           username = user.username();
         }
-        var url = '/restServices/redbackServices/userService/getUserOperations/'+username;
+        var url = '/restServices/redbackServices/userService/getCurrentUserPermissions;
         $.ajax({
           url: url,
           success: function(data){
@@ -72,7 +72,6 @@ function(domReady) {
               return item.name;
             });
 
-            //alert($.inArray("user-management-user-list", window.redbackModel.operatioNames));
             $("#menu #main-menu [redback-permissions]").each(function(element){
               var bindingValue = $(this).attr("redback-permissions");
               $(this).hide();
