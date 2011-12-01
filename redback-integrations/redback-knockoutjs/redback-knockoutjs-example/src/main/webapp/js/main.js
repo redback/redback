@@ -55,7 +55,46 @@ function(domReady) {
       $("#logout-link").hide();
     }
 
-    $('#menu').html($("#main-menu"));
+    decorateMenuWithKarma=function(user) {
+        var username = user.username;
+        // we can receive an observable user so take if it's a function or not
+        if ($.isFunction(username)){
+          username = user.username();
+        }
+        var url = '/restServices/redbackServices/userService/getUserOperations/'+username;
+        $.ajax({
+          url: url,
+          success: function(data){
+            var mappedOperations = $.map(data.operation, function(item) {
+                return mapOperation(item);
+            });
+            window.redbackModel.operatioNames = $.map(mappedOperations, function(item){
+              return item.name;
+            });
+
+            //alert($.inArray("user-management-user-list", window.redbackModel.operatioNames));
+            $("#menu #main-menu [redback-permissions]").each(function(element){
+              var bindingValue = $(this).attr("redback-permissions");
+              $(this).hide();
+              var neededKarmas = $(eval(bindingValue)).toArray();
+              var karmaOk = false;
+              $(neededKarmas).each(function(value){
+                //alert(neededKarmas[value]);
+                if ($.inArray(neededKarmas[value],window.redbackModel.operatioNames)>=0) {
+                  karmaOk = true;
+                }
+              });
+              if (karmaOk == false) {
+                $(this).hide();
+              } else {
+                $(this).show();
+              }
+            });
+          }
+        });
+      }
+
+
 
     $.ajax("/restServices/redbackServices/userService/isAdminUserExists", {
       type: "GET",
@@ -68,11 +107,17 @@ function(domReady) {
       }
     });
 
+    $('#menu').html($("#main-menu"));
+    $("#menu #main-menu [redback-permissions]").each(function(element){
+      $(this).hide();
+    });
+
     var user = userLogged();
     if (!user) {
       $("#login-link").show();
     } else {
       $("#logout-link").show();
+      decorateMenuWithKarma(user);
     }
 
 

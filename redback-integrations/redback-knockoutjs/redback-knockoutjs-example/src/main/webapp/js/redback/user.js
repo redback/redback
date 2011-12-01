@@ -1,4 +1,4 @@
-require(["order!jquery","order!jquery.i18n.properties-1.0.9"],
+require(["order!jquery","order!redback/operation","order!jquery.i18n.properties-1.0.9"],
 function($) {
   user=function(username, password, confirmPassword,fullName,email,permanent,validated,timestampAccountCreation,timestampLastLogin,timestampLastPasswordChange,locked,passwordChangeRequired,ownerViewModel) {
       // Potentially Editable Field.
@@ -182,6 +182,7 @@ function($) {
           window.modalLoginWindow.modal('hide');
           $("#login-link").hide();
           $("#logout-link").show();
+          decorateMenuWithKarma(user);
           return;
         }
         $("#modal-login-err-message").html($.i18n.prop("incorrect.username.password"));
@@ -196,8 +197,11 @@ function($) {
 
   }
 
+
+
+
+
   /**
-   *
    * @param data User response from redback rest api
    */
   mapUser=function(data) {

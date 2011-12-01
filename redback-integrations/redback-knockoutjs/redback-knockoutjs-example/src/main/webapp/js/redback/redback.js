@@ -2,6 +2,9 @@ require(["order!jquery","order!jquery.dataTables","order!cog.javascript","order!
           "order!jquery.i18n.properties-1.0.9","order!redback/user","order!redback/users"],
 function($) {
 
+  // define a container object with various datas
+  window.redbackModel = {usersViewModel:null,userOperationNames:null};
+
 
   // load default
   loadAndParseFile("/restServices/redbackServices/utilServices/getBundleResources", {cache:false, mode: 'map',encoding:'utf-8'});
@@ -33,6 +36,5 @@ function($) {
     //nothing
   });
 
-  window.redbackModel = {usersViewModel:null};
 
 });

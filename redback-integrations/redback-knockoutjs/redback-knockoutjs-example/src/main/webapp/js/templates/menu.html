@@ -19,8 +19,8 @@
           <a href="#" class="dropdown-toggle">User Management</a>
           <ul class="dropdown-menu">
             <!-- check user management karma -->
-            <li><a href="#" onclick="displayUsersGrid()">User List</a></li>
-            <li><a href="#">Something else here</a></li>
+            <li><a href="#" onclick="displayUsersGrid()" redback-permissions="{permissions: ['archiva-manage-users']}">User List</a></li>
+              <li><a href="#" onclick="displayRolesGrid()" redback-permissions="{permissions: ['archiva-manage-users']}">Role List</a></li>
             <li class="divider"></li>
             <li><a href="#">Another link</a></li>
           </ul>
