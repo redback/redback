@@ -145,6 +145,9 @@ public interface UserService
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
     @RedbackAuthorization( noRestriction = true, noPermission = true )
+    /**
+     * return the current logged user permissions, if no logged user guest permissions are returned
+     */
     Collection<Permission> getCurrentUserPermissions()
         throws RedbackServiceException;
 
@@ -152,6 +155,9 @@ public interface UserService
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
     @RedbackAuthorization( noRestriction = true, noPermission = true )
+    /**
+     * return the current logged user operations, if no logged user guest operations are returned
+     */
     Collection<Operation> getCurrentUserOperations()
         throws RedbackServiceException;
 }

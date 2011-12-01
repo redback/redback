@@ -161,7 +161,7 @@ public class UserServiceTest
         throws Exception
     {
         createGuestIfNeeded();
-        Collection<Permission> permissions = getUserService( authorizationHeader ).getUserPermissions( "guest" );
+        Collection<Permission> permissions = getUserService().getCurrentUserPermissions();
         log.info( "guest permisssions:" + permissions );
     }
 
@@ -178,7 +178,7 @@ public class UserServiceTest
         throws Exception
     {
         createGuestIfNeeded();
-        Collection<Operation> operations = getUserService( authorizationHeader ).getUserOperations( "guest" );
+        Collection<Operation> operations = getUserService().getCurrentUserOperations();
         log.info( "guest operations:" + operations );
     }
 
