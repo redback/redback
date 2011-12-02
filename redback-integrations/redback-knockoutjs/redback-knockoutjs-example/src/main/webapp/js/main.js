@@ -54,6 +54,8 @@ function(domReady) {
       $("#login-link").show();
       $("#register-link").show();
       $("#logout-link").hide();
+      hideElementWithKarma();
+      $("#main-content").html("");
     }
 
     decorateMenuWithKarma=function(user) {
@@ -73,7 +75,7 @@ function(domReady) {
               return item.name;
             });
 
-            $("#menu #main-menu [redback-permissions]").each(function(element){
+            $("[redback-permissions]").each(function(element){
               var bindingValue = $(this).attr("redback-permissions");
               $(this).hide();
               var neededKarmas = $(eval(bindingValue)).toArray();
@@ -107,10 +109,9 @@ function(domReady) {
       }
     });
 
-    $('#menu').html($("#main-menu"));
-    $("#menu #main-menu [redback-permissions]").each(function(element){
-      $(this).hide();
-    });
+    $('#topbar-menu-container').html($("#topbar-menu"));
+    $('#sidebar-content').html($("#main-menu"));
+
 
     var user = userLogged();
     if (!user) {
@@ -121,6 +122,13 @@ function(domReady) {
       decorateMenuWithKarma(user);
     }
 
+    hideElementWithKarma=function(){
+      $("[redback-permissions]").each(function(element){
+        $(this).hide();
+      });
+    }
+
+    hideElementWithKarma();
 
   });
 

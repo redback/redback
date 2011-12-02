@@ -1,44 +1,7 @@
-<div id="main-menu">
-<div class="topbar-wrapper" style="z-index: 5;">
-<div class="topbar" data-dropdown="dropdown">
-  <div class="topbar-inner">
-    <div class="container">
 
-      <ul class="nav">
-        <li class="active"><a href="/index.html">Home</a></li>
-        <li id="create-admin-link" style="display: none">
-          <a href="#" onclick="adminCreateBox();">Admin User Creation</a>
-        </li>
-        <li id="login-link" style="display: none">
-          <a href="#" onclick="loginBox();">${login}</a>
-        </li>
-        <li id="logout-link" style="display: none">
-          <a href="#" onclick="logout();">${logout}</a>
-        </li>
-        <li id="change-password-link" style="">
-          <a href="#" onclick="changePasswordBox();">change password</a>
-        </li>
-        <li id="register-link" style="display: none">
-          <a href="#" onclick="registerBox();">${register}</a>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">User Management</a>
-          <ul class="dropdown-menu">
-            <!-- check user management karma -->
-            <li><a href="#" onclick="displayUsersGrid()" redback-permissions="{permissions: ['archiva-manage-users']}">User List</a></li>
-              <li><a href="#" onclick="displayRolesGrid()" redback-permissions="{permissions: ['archiva-manage-users']}">Role List</a></li>
-            <li class="divider"></li>
-            <li><a href="#">Another link</a></li>
-          </ul>
-        </li>
-
-      </ul>
-      <form class="pull-right" action="">
-        <input type="text" placeholder="Search" />
-      </form>
-
-    </div>
+  <div class='well' id="main-menu" redback-permissions="{permissions: ['archiva-manage-users']}">
+    <ul class="navigation">
+      <li redback-permissions="{permissions: ['archiva-manage-users']}"><a href="#" onclick="displayUsersGrid()">User List</a></li>
+      <li redback-permissions="{permissions: ['archiva-manage-users']}"><a href="#" onclick="displayRolesGrid()">Role List</a></li>
+    </ul>
   </div>
-</div>
-</div>
-</div>
