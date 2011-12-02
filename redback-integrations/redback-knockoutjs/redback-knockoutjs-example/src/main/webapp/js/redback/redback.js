@@ -36,5 +36,8 @@ function($) {
     //nothing
   });
 
+  smallSpinnerImg=function(){
+    return "<img id=\"login-spinner\" src='images/small-spinner.gif'/>";
+  };
 
 });

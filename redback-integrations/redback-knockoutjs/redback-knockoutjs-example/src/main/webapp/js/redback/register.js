@@ -22,6 +22,44 @@ function($) {
   }
 
   register=function(){
+    var valid = $("#user-register-form").valid();
+    if (!valid) {
+        return;
+    }
+    jQuery("#modal-register-ok").attr("disabled","disabled");
+
+    jQuery('#modal-register-footer').append(smallSpinnerImg());
+
+    var user = {};
+    user.username = $("#user-register-form-username").val();
+    user.fullName = $("#user-register-form-fullname").val();
+    user.email = $("#user-register-form-email").val();
+    jQuery.ajax({
+      url:  '/restServices/redbackServices/userService/registerUser',
+      data:  '{"user":'+JSON.stringify(user)+'}',
+      type: 'POST',
+      contentType: "application/json",
+      success: function(result){
+        var registered = false;//JSON.parse(result);
+        if (result == null) {
+          registered = false;
+        } else {
+          if (result.user) {
+            registered = true;
+          }
+        }
+        if (registered == true) {
+          var user = mapUser(result.user);
+          window.modalRegisterWindow.modal('hide');
+          $("#register-link").hide();
+          return;
+        }
+      },
+      complete: function(){
+        $("#modal-register-ok").removeAttr("disabled");
+        $("#login-spinner").remove();
+      }
+    })
 
   }
 
