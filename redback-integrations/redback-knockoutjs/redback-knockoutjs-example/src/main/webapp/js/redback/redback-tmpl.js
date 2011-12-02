@@ -8,9 +8,6 @@ require(["text!redback/templates/user-create.html", "text!redback/templates/user
       $.tmpl( passwordchange, $.i18n.map ).appendTo("#html-fragments");
       // template loading
       $("#html-fragments").append(usercreate);
-      //$.tmpl( usercreate, $.i18n.map ).appendTo("#html-fragments");
-
-      //$.tmpl( usergrids, $.i18n.map ).appendTo("#html-fragments");
       $("#html-fragments").append(usergrids);
 
     }

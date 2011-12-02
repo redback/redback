@@ -120,6 +120,21 @@ public class DefaultUserService
     public Boolean createUser( User user )
         throws RedbackServiceException
     {
+
+        try
+        {
+            org.codehaus.plexus.redback.users.User u = userManager.findUser( user.getUsername() );
+            if ( u != null )
+            {
+                throw new RedbackServiceException(
+                    new ErrorMessage( "user " + user.getUsername() + " already exists" ) );
+            }
+        }
+        catch ( UserNotFoundException e )
+        {
+            //ignore we just want to prevent non human readable error message from backend :-)
+            log.debug( "user {} not exists", user.getUsername() );
+        }
         org.codehaus.plexus.redback.users.User u =
             userManager.createUser( user.getUsername(), user.getFullName(), user.getEmail() );
         u.setPassword( user.getPassword() );

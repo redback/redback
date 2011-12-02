@@ -20,11 +20,11 @@ function($) {
     if ($.isArray(obj.redbackRestError.errorMessages)) {
       for(var i=0; i<obj.redbackRestError.errorMessages.length; i++ ) {
         if(obj.redbackRestError.errorMessages[i].errorKey) {
-          alert($.i18n.prop( obj.redbackRestError.errorMessages[i].errorKey, obj.redbackRestError.errorMessages[i].args ));
+          displayErrorMessage($.i18n.prop( obj.redbackRestError.errorMessages[i].errorKey, obj.redbackRestError.errorMessages[i].args ));
         }
       }
     } else {
-      alert($.i18n.prop( obj.redbackRestError.errorMessages.errorKey, obj.redbackRestError.errorMessages.args ));
+      displayErrorMessage($.i18n.prop( obj.redbackRestError.errorMessages.errorKey, obj.redbackRestError.errorMessages.args ));
     }
   }
 

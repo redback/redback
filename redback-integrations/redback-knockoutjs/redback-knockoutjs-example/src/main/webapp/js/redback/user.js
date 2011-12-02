@@ -44,13 +44,13 @@ function($) {
               var created = JSON.parse(result);
               // FIXME use a message div and i18n
               if (created == true) {
-                alert("user created:"+currentUser.username());
+                displaySuccessMessage("user created:"+currentUser.username());
                 window.redbackModel.usersViewModel.users.push(currentUser);
                 $("#main-content #user-create #user-create-fieldset :input").val("");
                 $("#main-content #user-create").hide();
                 return this;
               } else {
-                alert("user cannot created");
+                displayErrorMessage("user cannot created");
               }
             },
             error: function(result) {
@@ -73,12 +73,11 @@ function($) {
             dataType: 'json',
             success: function(result) {
               var created = JSON.parse(result);
-              // TODO use a message not an alert
               if (created == true) {
-                alert("admin user created");
+                displaySuccessMessage("admin user created");
                 return this;
               } else {
-                alert("admin user not created");
+                displayErrorMessage("admin user not created");
               }
             },
             error: function(result) {
