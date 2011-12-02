@@ -33,9 +33,17 @@ public class ErrorMessage
 
     private String[] args;
 
+    private static final String[] EMPTY = new String[0];
+
     public ErrorMessage()
     {
         // no op
+    }
+
+    public ErrorMessage( String errorKey )
+    {
+        this.errorKey = errorKey;
+        this.args = EMPTY;
     }
 
     public ErrorMessage( String errorKey, String[] args )

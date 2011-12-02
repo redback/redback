@@ -124,13 +124,14 @@ public class UserServiceTest
             u.setEmail( "toto@toto.fr" );
             u.setPassword( "toto123" );
             u.setConfirmPassword( "toto123" );
-            u = service.registerUser( u );
+            String key = service.registerUser( u );
+
+            assertFalse( key.equals( "-1" ) );
 
             ServicesAssert assertService =
                 JAXRSClientFactory.create( "http://localhost:" + port + "/" + getRestServicesPath() + "/testsService/",
                                            ServicesAssert.class );
 
-            //log.info( "emails " + assertService.getEmailMessageSended() );
             List<EmailMessage> emailMessages = assertService.getEmailMessageSended();
             assertEquals( 1, emailMessages.size() );
             assertEquals( "toto@toto.fr", emailMessages.get( 0 ).getTos().get( 0 ) );
@@ -138,6 +139,16 @@ public class UserServiceTest
             assertEquals( "Welcome", emailMessages.get( 0 ).getSubject() );
             assertTrue(
                 emailMessages.get( 0 ).getText().contains( "Use the following URL to validate your account." ) );
+
+            assertTrue( service.validateUserFromKey( key ) );
+
+            service = getUserService( authorizationHeader );
+
+            u = service.getUser( "toto" );
+
+            assertNotNull( u );
+            assertTrue( u.isValidated() );
+            assertTrue( u.isPasswordChangeRequired() );
 
         }
         catch ( Exception e )

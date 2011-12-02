@@ -19,9 +19,11 @@ package org.codehaus.redback.rest.services;
 import net.sf.ehcache.CacheManager;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.plexus.cache.Cache;
+import org.codehaus.plexus.redback.authentication.TokenBasedAuthenticationDataSource;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.keys.KeyManagerException;
+import org.codehaus.plexus.redback.keys.KeyNotFoundException;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
@@ -365,7 +367,7 @@ public class DefaultUserService
         return Boolean.FALSE;
     }
 
-    public User registerUser( User user )
+    public String registerUser( User user )
         throws RedbackServiceException
     {
         if ( user == null )
@@ -424,7 +426,8 @@ public class DefaultUserService
                 mailer.sendAccountValidationEmail( Arrays.asList( u.getEmail() ), authkey, getBaseUrl() );
 
                 securityPolicy.setEnabled( false );
-                return new User( userManager.addUser( u ) );
+                userManager.addUser( u );
+                return authkey.getKey();
 
             }
             catch ( KeyManagerException e )
@@ -439,7 +442,8 @@ public class DefaultUserService
         }
         else
         {
-            return new User( userManager.addUser( u ) );
+            userManager.addUser( u );
+            return "-1";
         }
 
         // FIXME log this event
@@ -451,6 +455,53 @@ public class DefaultUserService
 
     }
 
+    public Boolean validateUserFromKey( String key )
+        throws RedbackServiceException
+    {
+        try
+        {
+            AuthenticationKey authkey = securitySystem.getKeyManager().findKey( key );
+
+            org.codehaus.plexus.redback.users.User user =
+                securitySystem.getUserManager().findUser( authkey.getForPrincipal() );
+
+            user.setValidated( true );
+            user.setLocked( false );
+            user.setPasswordChangeRequired( true );
+            user.setEncodedPassword( "" );
+
+            TokenBasedAuthenticationDataSource authsource = new TokenBasedAuthenticationDataSource();
+            authsource.setPrincipal( user.getPrincipal().toString() );
+            authsource.setToken( authkey.getKey() );
+            authsource.setEnforcePasswordChange( false );
+
+            securitySystem.getUserManager().updateUser( user );
+
+            log.info( "account validated for user {}", user.getUsername() );
+
+            return Boolean.TRUE;
+        }
+        catch ( KeyNotFoundException e )
+        {
+            log.info( "Invalid key requested: {}", key );
+            RedbackServiceException exception = new RedbackServiceException( "Invalid key requested" );
+            exception.addErrorMessage( new ErrorMessage( "cannot.find.key" ) );
+            throw exception;
+        }
+        catch ( KeyManagerException e )
+        {
+            RedbackServiceException exception = new RedbackServiceException( e.getMessage() );
+            exception.addErrorMessage( new ErrorMessage( "cannot.find.key.at.the.momment" ) );
+            throw exception;
+
+        }
+        catch ( UserNotFoundException e )
+        {
+            RedbackServiceException exception = new RedbackServiceException( e.getMessage() );
+            exception.addErrorMessage( new ErrorMessage( "cannot.find.user" ) );
+            throw exception;
+        }
+    }
 
     public Collection<Permission> getCurrentUserPermissions()
         throws RedbackServiceException

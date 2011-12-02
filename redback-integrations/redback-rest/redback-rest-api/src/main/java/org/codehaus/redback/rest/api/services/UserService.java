@@ -124,7 +124,22 @@ public interface UserService
     @POST
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
     @RedbackAuthorization( noRestriction = true, noPermission = true )
-    User registerUser( User user )
+    /**
+     * if redback is not configured for email validation is required. -1 is returned.
+     */
+    String registerUser( User user )
+        throws RedbackServiceException;
+
+
+    @Path( "validateKey/{key}" )
+    @POST
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( noRestriction = true, noPermission = true )
+    /**
+     * validate the key and the user with forcing a password change for next login
+     * @param key authentication key
+     */
+    Boolean validateUserFromKey( @PathParam( "key" ) String key )
         throws RedbackServiceException;
 
     @Path( "getUserPermissions/{userName}" )
