@@ -150,6 +150,8 @@ public class UserServiceTest
             assertTrue( u.isValidated() );
             assertTrue( u.isPasswordChangeRequired() );
 
+            assertTrue( service.validateUserFromKey( key ) );
+
         }
         catch ( Exception e )
         {

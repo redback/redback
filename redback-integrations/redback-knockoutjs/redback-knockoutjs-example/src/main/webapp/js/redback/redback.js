@@ -1,5 +1,5 @@
 require(["order!jquery","order!jquery.dataTables","order!cog.javascript","order!cog.knockout.bindings.dataTables",
-          "order!jquery.i18n.properties-1.0.9","order!redback/user","order!redback/users"],
+          "order!jquery.i18n.properties-1.0.9","order!redback/user","order!redback/users","jquery-ui-1.8.16.custom.min"],
 function($) {
 
   // define a container object with various datas

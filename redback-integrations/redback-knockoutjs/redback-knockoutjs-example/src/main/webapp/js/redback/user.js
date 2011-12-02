@@ -131,7 +131,6 @@ function($) {
 
 
   loginBox=function(){
-    window.console && console.debug( "loginBox");
     if (window.modalLoginWindow==null) {
       window.modalLoginWindow = $("#modal-login").modal({backdrop:'static',show:false});
       window.modalLoginWindow.bind('hidden', function () {
@@ -178,7 +177,7 @@ function($) {
         if (logged == true) {
           var user = mapUser(result.user);
           reccordLoginCookie(user);
-          // TODO check password change required locked etc....
+          // FIXME check password change required, locked etc....
           window.modalLoginWindow.modal('hide');
           $("#login-link").hide();
           $("#logout-link").show();
@@ -197,7 +196,25 @@ function($) {
 
   }
 
-
+  changePasswordBox=function(){
+    if (window.modalChangePasswordBox == null) {
+      window.modalChangePasswordBox = $("#modal-password-change").modal({backdrop:'static',show:false});
+      window.modalChangePasswordBox.bind('hidden', function () {
+        $("#modal-password-change-err-message").hide();
+      })
+    }
+    window.modalChangePasswordBox.modal('show');
+    $("#password-change-form").validate({
+      showErrors: function(validator, errorMap, errorList) {
+        customShowError(validator,errorMap,errorMap);
+      }
+    });
+    $("#modal-password-change").delegate("#modal-password-change-ok", "click keydown keypress", function(e) {
+      e.preventDefault();
+      changedPassword();
+    });
+    $("#modal-password-change").focus();
+  }
 
 
 

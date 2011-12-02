@@ -44,12 +44,12 @@ function($) {
         if (result == null) {
           registered = false;
         } else {
-          if (result.user) {
+          //if (result.user) {
             registered = true;
-          }
+          //}
         }
+
         if (registered == true) {
-          var user = mapUser(result.user);
           window.modalRegisterWindow.modal('hide');
           $("#register-link").hide();
           return;
@@ -74,6 +74,13 @@ function($) {
         return results[1] || 0;
       }
       return null;
+  }
+  /**
+   * validate a registration key and go to change password key
+   * @param key
+   */
+  validateKey=function(key) {
+
   }
 
 
