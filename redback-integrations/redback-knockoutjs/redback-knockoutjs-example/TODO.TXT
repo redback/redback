@@ -1,14 +1,15 @@
 Pages todo:
-* admin creation
-* user list (crud)
+* admin creation (done)
+* user list (crud) (done)
 * operations list (remove ?)
 * permissions list (remove ?)
 * resources list (remove ?)
 * roles list (crud)
-
+* register form (done)
+* password change
+* user details edit
 
 Links to wrap:
-* register page
 * password reset/reinit
 * register validation page with link validate key -> ask password init.
 
