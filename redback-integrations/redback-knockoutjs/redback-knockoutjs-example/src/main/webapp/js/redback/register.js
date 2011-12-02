@@ -1,4 +1,4 @@
-require(["order!jquery","order!jquery.i18n.properties-1.0.9"],
+require(["order!jquery","order!jquery.i18n.properties-1.0.9","order!redback/redback"],
 function($) {
 
   registerBox=function(){
@@ -58,6 +58,10 @@ function($) {
       complete: function(){
         $("#modal-register-ok").removeAttr("disabled");
         $("#login-spinner").remove();
+      },
+      error: function(result) {
+        var obj = jQuery.parseJSON(result.responseText);
+        displayRedbackError(obj);
       }
     })
 
