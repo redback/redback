@@ -57,9 +57,12 @@ public interface LoginService
 
     @Path( "logIn" )
     @GET
-    @Description( "only to test if username/password can connect" )
     @RedbackAuthorization( noRestriction = true, noPermission = true )
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    /**
+     * check username/password and create a http session.
+     * So no more need of reuse username/password for all ajaxRequest
+     */
     User logIn( @QueryParam( "userName" ) String userName, @QueryParam( "password" ) String password )
         throws RedbackServiceException;
 
