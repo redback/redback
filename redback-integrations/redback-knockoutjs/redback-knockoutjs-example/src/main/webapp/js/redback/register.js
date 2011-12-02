@@ -79,8 +79,12 @@ function($) {
 
   // handle url with registration link
   $(document).ready(function() {
-    var paramFoo = $.urlParam('foo');
-    //alert(paramFoo);
+    var validateMeId = $.urlParam('validateMe');
+    if (validateMeId) {
+      alert("validateMeId:"+validateMeId);
+      // validate the account, connect the user
+      // password form with password and confirmed one
+    }
   });
 
 });
