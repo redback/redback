@@ -286,9 +286,10 @@ parseData = function(data, mode) {
                      }
                    }
                    // add to map
+                   $.i18n.map[name] = value;
                    // olamy hack replace . with _
-                   var nName = name.replace (/\./g, '_');
-                   $.i18n.map[nName] = value;
+                   //var nName = name.replace (/\./g, '_');
+                   //$.i18n.map[nName] = value;
                }
                
                /** Mode: bundle keys as vars/functions */
