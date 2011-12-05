@@ -130,6 +130,7 @@ public class DefaultLoginService
                 org.codehaus.plexus.redback.users.User user = securitySession.getUser();
                 if ( !user.isValidated() )
                 {
+                    log.info( "user {} not validated", user.getUsername() );
                     return null;
                 }
                 User restUser = new User();
