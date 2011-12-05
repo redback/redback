@@ -88,26 +88,37 @@ function($) {
       };
 
       this.deleteUser=function() {
-        // FIXME ask confirmation !
+        screenChange();
+        // FIXME i18n
         var currentUser = this;
-        $.ajax("/restServices/redbackServices/userService/deleteUser/"+currentUser.username(), {
-            type: "GET",
-            dataType: 'json',
-            success: function(data) {
-                // FIXME i18n and use a messages div
-              window.redbackModel.usersViewModel.users.remove(currentUser);
-              displaySuccessMessage("user " + currentUser.username() + " deleted");
-            },
-            error: function(result) {
-             var obj = jQuery.parseJSON(result.responseText);
-             displayRedbackError(obj);
-            }
+        openDialogConfirm(function(){
+          $.ajax("/restServices/redbackServices/userService/deleteUser/"+currentUser.username(), {
+                      type: "GET",
+                      dataType: 'json',
+                      success: function(data) {
+                          // FIXME i18n and use a messages div
+                        window.redbackModel.usersViewModel.users.remove(currentUser);
+                        displaySuccessMessage("user " + currentUser.username() + " deleted");
+                      },
+                      error: function(result) {
+                       var obj = jQuery.parseJSON(result.responseText);
+                       displayRedbackError(obj);
+                      },
+                      complete: function() {
+                        closeDialogConfirm();
+                      }
+                    }
+                  );
           }
-        );
+          ,"Ok", $.i18n.prop("cancel"), $.i18n.prop("user.delete.message") + ": " + currentUser.username());
+
       };
 
       this.i18n = $.i18n.prop;
   }
+
+
+
 
 
   adminUserViewModel=function() {

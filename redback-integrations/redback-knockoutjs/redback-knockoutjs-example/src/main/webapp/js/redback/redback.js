@@ -42,4 +42,26 @@ function($) {
     return "<img id=\"login-spinner\" src=\"images/small-spinner.gif\"/>";
   };
 
+  openDialogConfirm=function(okFn, okMessage, cancelMessage, title){
+    $("#dialog-confirm" ).dialog({
+      resizable: false,
+      title: title,
+      modal: true,
+      show: 'slide',
+      buttons: [{
+        text: okMessage,
+        click: okFn},
+        {
+        text: cancelMessage,
+        click:function() {
+          $(this).dialog( "close" );
+        }
+      }]
+    });
+  }
+
+  closeDialogConfirm=function(){
+    $("#dialog-confirm" ).dialog("close");
+  }
+
 });
