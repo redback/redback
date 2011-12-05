@@ -61,6 +61,7 @@ public class SimpleUser
 
     public SimpleUser()
     {
+        // no op
     }
 
     public void addPreviousEncodedPassword( String encodedPassword )

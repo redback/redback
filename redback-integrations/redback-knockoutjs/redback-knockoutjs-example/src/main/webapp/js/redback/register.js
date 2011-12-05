@@ -40,13 +40,11 @@ function($) {
       type: 'POST',
       contentType: "application/json",
       success: function(result){
-        var registered = false;//JSON.parse(result);
+        var registered = false;
         if (result == null) {
           registered = false;
         } else {
-          //if (result.user) {
-            registered = true;
-          //}
+          registered = true;
         }
 
         if (registered == true) {
@@ -80,7 +78,22 @@ function($) {
    * @param key
    */
   validateKey=function(key) {
-
+    // spinner display
+    $.ajax({
+      url: '/restServices/redbackServices/userService/validateKey/'+key,
+      type: 'GET',
+       success: function(result){
+         window.redbackModel=key;
+         changePasswordBox(false);
+       },
+       complete: function(){
+         // hide spinner
+       },
+       error: function(result) {
+         var obj = jQuery.parseJSON(result.responseText);
+         displayRedbackError(obj);
+       }
+    })
   }
 
 
@@ -88,9 +101,7 @@ function($) {
   $(document).ready(function() {
     var validateMeId = $.urlParam('validateMe');
     if (validateMeId) {
-      alert("validateMeId:"+validateMeId);
-      // validate the account, connect the user
-      // password form with password and confirmed one
+      validateKey(validateMeId);
     }
   });
 

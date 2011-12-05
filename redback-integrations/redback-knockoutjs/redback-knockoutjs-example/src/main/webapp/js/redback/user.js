@@ -195,7 +195,19 @@ function($) {
 
   }
 
-  changePasswordBox=function(){
+  /**
+   *
+   * @param previousPassword display and validate previous password text field
+   * @param registration are we in registration mode ?
+   */
+  changePasswordBox=function(previousPassword,registration){
+    if (previousPassword==true){
+      $("#password-change-form-current-password-div").show();
+      $("#password-change-form-current-password").addClass("required");
+    }else{
+      $("#password-change-form-current-password-div").hide();
+      $("#password-change-form-current-password").removeClass("required");
+    }
     if (window.modalChangePasswordBox == null) {
       window.modalChangePasswordBox = $("#modal-password-change").modal({backdrop:'static',show:false});
       window.modalChangePasswordBox.bind('hidden', function () {
@@ -204,18 +216,42 @@ function($) {
     }
     window.modalChangePasswordBox.modal('show');
     $("#password-change-form").validate({
+      rules: {
+        passwordChangeFormNewPasswordConfirm : {
+          equalTo: "#password-change-form-new-password"
+        }
+      },
       showErrors: function(validator, errorMap, errorList) {
         customShowError(validator,errorMap,errorMap);
       }
     });
-    $("#modal-password-change").delegate("#modal-password-change-ok", "click keydown keypress", function(e) {
+    $("#modal-password-change").delegate("#modal-change-password-ok", "click keydown keypress", function(e) {
       e.preventDefault();
-      changedPassword();
+      changePassword(previousPassword,registration);
     });
+
     $("#modal-password-change").focus();
   }
 
+  /**
+   *
+   * @param previousPassword display and validate previous password text field
+   * @param registration are we in registration mode ?
+   */
+  changePassword=function(previousPassword,registration){
+    var valid = $("#password-change-form").valid();
+    if (!valid) {
+        return;
+    }
+    var url = '/restServices/redbackServices/passwordService?';
+    url += "password="+$("#password-change-form-new-password").val();
+    url += "passwordConfirmation="+$("#passwordChangeFormNewPasswordConfirm").val();
+    url += "key="+window.redbackModel;
+    alert(url);
 
+    //$.urlParam('validateMe')
+    // for success i18n key change.password.success.section.title
+  }
 
   /**
    * @param data User response from redback rest api

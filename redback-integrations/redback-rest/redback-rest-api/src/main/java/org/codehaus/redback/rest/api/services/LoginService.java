@@ -72,6 +72,7 @@ public interface LoginService
     @RedbackAuthorization( noRestriction = true )
     /**
      * simply check if current user has an http session opened with authz passed
+     * @since 1.4
      */
     Boolean isLogged()
         throws RedbackServiceException;

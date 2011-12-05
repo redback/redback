@@ -126,19 +126,21 @@ public interface UserService
     @RedbackAuthorization( noRestriction = true, noPermission = true )
     /**
      * if redback is not configured for email validation is required. -1 is returned.
+     * @since 1.4
      */
     String registerUser( User user )
         throws RedbackServiceException;
 
 
     @Path( "validateKey/{key}" )
-    @POST
+    @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
     @RedbackAuthorization( noRestriction = true, noPermission = true )
     /**
      * validate the key and the user with forcing a password change for next login.
      * http session is created.
      * @param key authentication key
+     * @since 1.4
      */
     Boolean validateUserFromKey( @PathParam( "key" ) String key )
         throws RedbackServiceException;
@@ -147,6 +149,9 @@ public interface UserService
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
     @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_LIST_OPERATION )
+    /**
+     * @since 1.4
+     */
     Collection<Permission> getUserPermissions( @PathParam( "userName" ) String userName )
         throws RedbackServiceException;
 
@@ -154,6 +159,9 @@ public interface UserService
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
     @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_LIST_OPERATION )
+    /**
+     * @since 1.4
+     */
     Collection<Operation> getUserOperations( @PathParam( "userName" ) String userName )
         throws RedbackServiceException;
 
@@ -163,6 +171,7 @@ public interface UserService
     @RedbackAuthorization( noRestriction = true, noPermission = true )
     /**
      * return the current logged user permissions, if no logged user guest permissions are returned
+     * @since 1.4
      */
     Collection<Permission> getCurrentUserPermissions()
         throws RedbackServiceException;
@@ -173,6 +182,7 @@ public interface UserService
     @RedbackAuthorization( noRestriction = true, noPermission = true )
     /**
      * return the current logged user operations, if no logged user guest operations are returned
+     * @since 1.4
      */
     Collection<Operation> getCurrentUserOperations()
         throws RedbackServiceException;
