@@ -83,7 +83,7 @@ function($) {
       url: '/restServices/redbackServices/userService/validateKey/'+key,
       type: 'GET',
        success: function(result){
-         window.redbackModel=key;
+         window.redbackModel.key=key;
          changePasswordBox(false);
        },
        complete: function(){

@@ -165,7 +165,7 @@ function($) {
     $.ajax({
       url: url,
       success: function(result){
-        var logged = false;//JSON.parse(result);
+        var logged = false;
         if (result == null) {
           logged = false;
         } else {
@@ -218,7 +218,7 @@ function($) {
     $("#password-change-form").validate({
       rules: {
         passwordChangeFormNewPasswordConfirm : {
-          equalTo: "#password-change-form-new-password"
+          equalTo: "#passwordChangeFormNewPassword"
         }
       },
       showErrors: function(validator, errorMap, errorList) {
@@ -243,11 +243,29 @@ function($) {
     if (!valid) {
         return;
     }
-    var url = '/restServices/redbackServices/passwordService?';
-    url += "password="+$("#password-change-form-new-password").val();
-    url += "passwordConfirmation="+$("#passwordChangeFormNewPasswordConfirm").val();
-    url += "key="+window.redbackModel;
+    var url = '/restServices/redbackServices/passwordService/changePasswordWithKey?';
+    url += "password="+$("#passwordChangeFormNewPassword").val();
+    url += "&passwordConfirmation="+$("#passwordChangeFormNewPasswordConfirm").val();
+    url += "&key="+window.redbackModel.key;
     alert(url);
+
+    $.ajax({
+      url: url,
+      success: function(result){
+        var ok = JSON.parse(data);
+        if (ok == true) {
+          window.modalChangePasswordBox.modal('hide');
+          displaySuccessMessage($.i18n.prop('change.password.success.section.title'));
+        } else {
+          displayErrorMessage("issue appended");
+        }
+        // menu etc....
+
+      },
+      complete: function(){
+        //
+      }
+    });
 
     //$.urlParam('validateMe')
     // for success i18n key change.password.success.section.title

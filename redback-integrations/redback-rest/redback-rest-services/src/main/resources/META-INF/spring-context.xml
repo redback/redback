@@ -46,6 +46,7 @@
       <ref bean="loginService#rest"/>
       <ref bean="roleManagementService#rest"/>
       <ref bean="utilServices#rest"/>
+      <ref bean="passwordService#rest"/>
     </jaxrs:serviceBeans>
     <jaxrs:outInterceptors>
       <ref bean="threadLocalUserCleaner#rest"/>
