@@ -36,11 +36,31 @@ import javax.ws.rs.ext.Provider;
 public class RedbackServiceExceptionMapper
     implements ExceptionMapper<RedbackServiceException>
 {
-    public Response toResponse( RedbackServiceException e )
+    public Response toResponse( final RedbackServiceException e )
     {
         RedbackRestError restError = new RedbackRestError( e );
         restError.addErrorMessage( new ErrorMessage( e.getMessage(), null ) );
         Response.ResponseBuilder responseBuilder = Response.status( e.getHttpErrorCode() ).entity( restError );
+        if ( e.getMessage() != null )
+        {
+            responseBuilder = responseBuilder.status( new Response.StatusType()
+            {
+                public int getStatusCode()
+                {
+                    return e.getHttpErrorCode();
+                }
+
+                public Response.Status.Family getFamily()
+                {
+                    return Response.Status.Family.SERVER_ERROR;
+                }
+
+                public String getReasonPhrase()
+                {
+                    return e.getMessage();
+                }
+            } );
+        }
         return responseBuilder.build();
     }
 }

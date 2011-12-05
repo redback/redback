@@ -136,7 +136,8 @@ public interface UserService
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
     @RedbackAuthorization( noRestriction = true, noPermission = true )
     /**
-     * validate the key and the user with forcing a password change for next login
+     * validate the key and the user with forcing a password change for next login.
+     * http session is created.
      * @param key authentication key
      */
     Boolean validateUserFromKey( @PathParam( "key" ) String key )

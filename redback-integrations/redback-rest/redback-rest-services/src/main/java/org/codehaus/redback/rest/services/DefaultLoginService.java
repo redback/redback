@@ -40,6 +40,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -147,7 +148,7 @@ public class DefaultLoginService
         }
         catch ( AuthenticationException e )
         {
-            throw new RedbackServiceException( e.getMessage() );
+            throw new RedbackServiceException( e.getMessage(), Response.Status.FORBIDDEN.getStatusCode() );
         }
         catch ( UserNotFoundException e )
         {

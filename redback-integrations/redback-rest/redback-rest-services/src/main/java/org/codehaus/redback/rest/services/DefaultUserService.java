@@ -19,11 +19,14 @@ package org.codehaus.redback.rest.services;
 import net.sf.ehcache.CacheManager;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.plexus.cache.Cache;
+import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.TokenBasedAuthenticationDataSource;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.keys.KeyManagerException;
 import org.codehaus.plexus.redback.keys.KeyNotFoundException;
+import org.codehaus.plexus.redback.policy.AccountLockedException;
+import org.codehaus.plexus.redback.policy.MustChangePasswordException;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
@@ -33,6 +36,7 @@ import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.system.SecuritySystem;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.codehaus.redback.integration.filter.authentication.HttpAuthenticator;
 import org.codehaus.redback.integration.mail.Mailer;
 import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
 import org.codehaus.redback.rest.api.model.ErrorMessage;
@@ -52,6 +56,7 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -105,15 +110,19 @@ public class DefaultUserService
     @Named( value = "rBACManager#cached" )
     private RBACManager rbacManager;
 
+    private HttpAuthenticator httpAuthenticator;
+
     @Context
     private HttpServletRequest httpServletRequest;
 
     @Inject
     public DefaultUserService( @Named( value = "userManager#cached" ) UserManager userManager,
-                               SecuritySystem securitySystem )
+                               SecuritySystem securitySystem,
+                               @Named( "httpAuthenticator#basic" ) HttpAuthenticator httpAuthenticator )
     {
         this.userManager = userManager;
         this.securitySystem = securitySystem;
+        this.httpAuthenticator = httpAuthenticator;
     }
 
 
@@ -359,11 +368,6 @@ public class DefaultUserService
         {
             throw new RedbackServiceException( e.getMessage() );
         }
-        /*
-        UserAssignment userAssignment = rbacManager.createUserAssignment( RoleConstants.ADMINISTRATOR_ACCOUNT_NAME );
-        userAssignment.setRoleNames( Collections.singletonList( RoleConstants.USER_ADMINISTRATOR_ROLE ) );
-        rbacManager.saveUserAssignment( userAssignment );
-        */
         return Boolean.TRUE;
     }
 
@@ -492,9 +496,15 @@ public class DefaultUserService
 
             securitySystem.getUserManager().updateUser( user );
 
+            httpAuthenticator.authenticate( authsource, httpServletRequest.getSession( true ) );
+
             log.info( "account validated for user {}", user.getUsername() );
 
             return Boolean.TRUE;
+        }
+        catch ( MustChangePasswordException e )
+        {
+            throw new RedbackServiceException( e.getMessage(), Response.Status.FORBIDDEN.getStatusCode() );
         }
         catch ( KeyNotFoundException e )
         {
@@ -515,6 +525,14 @@ public class DefaultUserService
             RedbackServiceException exception = new RedbackServiceException( e.getMessage() );
             exception.addErrorMessage( new ErrorMessage( "cannot.find.user" ) );
             throw exception;
+        }
+        catch ( AccountLockedException e )
+        {
+            throw new RedbackServiceException( e.getMessage(), Response.Status.FORBIDDEN.getStatusCode() );
+        }
+        catch ( AuthenticationException e )
+        {
+            throw new RedbackServiceException( e.getMessage(), Response.Status.FORBIDDEN.getStatusCode() );
         }
     }
 
