@@ -26,9 +26,10 @@ function($) {
     if (!valid) {
         return;
     }
-    jQuery("#modal-register-ok").attr("disabled","disabled");
+    clearUserMessages();
+    $("#modal-register-ok").attr("disabled","disabled");
 
-    jQuery('#modal-register-footer').append(smallSpinnerImg());
+    $('#modal-register-footer').append(smallSpinnerImg());
 
     var user = {};
     user.username = $("#user-register-form-username").val();
@@ -41,7 +42,7 @@ function($) {
       contentType: "application/json",
       success: function(result){
         var registered = false;
-        if (result == null) {
+        if (result == "-1") {
           registered = false;
         } else {
           registered = true;
@@ -50,7 +51,8 @@ function($) {
         if (registered == true) {
           window.modalRegisterWindow.modal('hide');
           $("#register-link").hide();
-          return;
+          // FIXME i18n
+          displaySuccessMessage("registered your key has been sent");
         }
       },
       complete: function(){
@@ -60,6 +62,7 @@ function($) {
       error: function(result) {
         var obj = jQuery.parseJSON(result.responseText);
         displayRedbackError(obj);
+        window.modalRegisterWindow.modal('hide');
       }
     })
 

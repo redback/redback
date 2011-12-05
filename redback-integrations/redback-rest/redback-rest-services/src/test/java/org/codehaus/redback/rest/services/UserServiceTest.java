@@ -124,7 +124,7 @@ public class UserServiceTest
             u.setEmail( "toto@toto.fr" );
             u.setPassword( "toto123" );
             u.setConfirmPassword( "toto123" );
-            String key = service.registerUser( u );
+            String key = service.registerUser( u ).getKey();
 
             assertFalse( key.equals( "-1" ) );
 

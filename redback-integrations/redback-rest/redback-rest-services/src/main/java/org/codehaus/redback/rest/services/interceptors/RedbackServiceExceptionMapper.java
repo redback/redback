@@ -39,7 +39,10 @@ public class RedbackServiceExceptionMapper
     public Response toResponse( final RedbackServiceException e )
     {
         RedbackRestError restError = new RedbackRestError( e );
-        restError.addErrorMessage( new ErrorMessage( e.getMessage(), null ) );
+        if ( e.getErrorMessages().isEmpty() )
+        {
+            restError.addErrorMessage( new ErrorMessage( e.getMessage(), null ) );
+        }
         Response.ResponseBuilder responseBuilder = Response.status( e.getHttpErrorCode() ).entity( restError );
         if ( e.getMessage() != null )
         {

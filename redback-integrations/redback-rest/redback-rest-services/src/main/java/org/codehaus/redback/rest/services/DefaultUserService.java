@@ -42,6 +42,7 @@ import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
 import org.codehaus.redback.rest.api.model.ErrorMessage;
 import org.codehaus.redback.rest.api.model.Operation;
 import org.codehaus.redback.rest.api.model.Permission;
+import org.codehaus.redback.rest.api.model.RegistrationKey;
 import org.codehaus.redback.rest.api.model.Resource;
 import org.codehaus.redback.rest.api.model.User;
 import org.codehaus.redback.rest.api.services.RedbackServiceException;
@@ -386,7 +387,7 @@ public class DefaultUserService
         return Boolean.FALSE;
     }
 
-    public String registerUser( User user )
+    public RegistrationKey registerUser( User user )
         throws RedbackServiceException
     {
         if ( user == null )
@@ -446,7 +447,7 @@ public class DefaultUserService
 
                 securityPolicy.setEnabled( false );
                 userManager.addUser( u );
-                return authkey.getKey();
+                return new RegistrationKey( authkey.getKey() );
 
             }
             catch ( KeyManagerException e )
@@ -462,7 +463,7 @@ public class DefaultUserService
         else
         {
             userManager.addUser( u );
-            return "-1";
+            return new RegistrationKey( "-1" );
         }
 
         // FIXME log this event
@@ -477,6 +478,7 @@ public class DefaultUserService
     public Boolean validateUserFromKey( String key )
         throws RedbackServiceException
     {
+        String principal = null;
         try
         {
             AuthenticationKey authkey = securitySystem.getKeyManager().findKey( key );
@@ -489,8 +491,10 @@ public class DefaultUserService
             user.setPasswordChangeRequired( true );
             user.setEncodedPassword( "" );
 
+            principal = user.getPrincipal().toString();
+
             TokenBasedAuthenticationDataSource authsource = new TokenBasedAuthenticationDataSource();
-            authsource.setPrincipal( user.getPrincipal().toString() );
+            authsource.setPrincipal( principal );
             authsource.setToken( authkey.getKey() );
             authsource.setEnforcePasswordChange( false );
 
@@ -509,22 +513,17 @@ public class DefaultUserService
         catch ( KeyNotFoundException e )
         {
             log.info( "Invalid key requested: {}", key );
-            RedbackServiceException exception = new RedbackServiceException( "Invalid key requested" );
-            exception.addErrorMessage( new ErrorMessage( "cannot.find.key" ) );
-            throw exception;
+            throw new RedbackServiceException( new ErrorMessage( "cannot.find.key" ) );
         }
         catch ( KeyManagerException e )
         {
-            RedbackServiceException exception = new RedbackServiceException( e.getMessage() );
-            exception.addErrorMessage( new ErrorMessage( "cannot.find.key.at.the.momment" ) );
-            throw exception;
+            throw new RedbackServiceException( new ErrorMessage( "cannot.find.key.at.the.momment" ) );
 
         }
         catch ( UserNotFoundException e )
         {
-            RedbackServiceException exception = new RedbackServiceException( e.getMessage() );
-            exception.addErrorMessage( new ErrorMessage( "cannot.find.user" ) );
-            throw exception;
+            throw new RedbackServiceException( new ErrorMessage( "cannot.find.user", new String[]{ principal } ) );
+
         }
         catch ( AccountLockedException e )
         {

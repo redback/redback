@@ -96,7 +96,11 @@ function($) {
             success: function(data) {
                 // FIXME i18n and use a messages div
               window.redbackModel.usersViewModel.users.remove(currentUser);
-              alert("user " + currentUser.username() + " deleted");
+              displaySuccessMessage("user " + currentUser.username() + " deleted");
+            },
+            error: function(result) {
+             var obj = jQuery.parseJSON(result.responseText);
+             displayRedbackError(obj);
             }
           }
         );
@@ -130,6 +134,7 @@ function($) {
 
 
   loginBox=function(){
+    screenChange();
     if (window.modalLoginWindow==null) {
       window.modalLoginWindow = $("#modal-login").modal({backdrop:'static',show:false});
       window.modalLoginWindow.bind('hidden', function () {
@@ -150,6 +155,7 @@ function($) {
   }
 
   login=function(){
+    screenChange();
     var valid = $("#user-login-form").valid();
     if (!valid) {
         return;
@@ -157,7 +163,7 @@ function($) {
     $("#modal-login-ok").attr("disabled","disabled");
 
     //#modal-login-footer
-    $('#modal-login-footer').append(smallSpinnerImg);
+    $('#modal-login-footer').append(smallSpinnerImg());
 
     var url = '/restServices/redbackServices/loginService/logIn?userName='+$("#user-login-form-username").val();
     url += "&password="+$("#user-login-form-password").val();
@@ -201,6 +207,7 @@ function($) {
    * @param registration are we in registration mode ?
    */
   changePasswordBox=function(previousPassword,registration){
+    screenChange();
     if (previousPassword==true){
       $("#password-change-form-current-password-div").show();
       $("#password-change-form-current-password").addClass("required");
@@ -243,16 +250,17 @@ function($) {
     if (!valid) {
         return;
     }
+    $('#modal-password-change-footer').append(smallSpinnerImg());
+
     var url = '/restServices/redbackServices/passwordService/changePasswordWithKey?';
     url += "password="+$("#passwordChangeFormNewPassword").val();
     url += "&passwordConfirmation="+$("#passwordChangeFormNewPasswordConfirm").val();
     url += "&key="+window.redbackModel.key;
-    alert(url);
 
     $.ajax({
       url: url,
       success: function(result){
-        var ok = JSON.parse(data);
+        var ok = JSON.parse(result);
         if (ok == true) {
           window.modalChangePasswordBox.modal('hide');
           displaySuccessMessage($.i18n.prop('change.password.success.section.title'));
@@ -263,7 +271,11 @@ function($) {
 
       },
       complete: function(){
-        //
+        $("#login-spinner").remove();
+      },
+      error: function(result) {
+       var obj = jQuery.parseJSON(result.responseText);
+       displayRedbackError(obj);
       }
     });
 

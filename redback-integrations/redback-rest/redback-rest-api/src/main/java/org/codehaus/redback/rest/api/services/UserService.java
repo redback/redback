@@ -20,6 +20,7 @@ import org.codehaus.plexus.redback.authorization.RedbackAuthorization;
 import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
 import org.codehaus.redback.rest.api.model.Operation;
 import org.codehaus.redback.rest.api.model.Permission;
+import org.codehaus.redback.rest.api.model.RegistrationKey;
 import org.codehaus.redback.rest.api.model.User;
 
 import javax.ws.rs.Consumes;
@@ -125,10 +126,10 @@ public interface UserService
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
     @RedbackAuthorization( noRestriction = true, noPermission = true )
     /**
-     * if redback is not configured for email validation is required. -1 is returned.
+     * if redback is not configured for email validation is required, -1 is returned as key
      * @since 1.4
      */
-    String registerUser( User user )
+    RegistrationKey registerUser( User user )
         throws RedbackServiceException;
 
 

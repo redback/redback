@@ -64,6 +64,7 @@ function($) {
   }
 
   displayUsersGrid=function() {
+    screenChange();
     jQuery("#main-content").attr("data-bind","");
     jQuery("#main-content").html($("#usersGrid").html());
     if (window.redbackModel.usersViewModel == null ) {
@@ -78,6 +79,7 @@ function($) {
   }
 
   this.editUserBox=function(user) {
+    screenChange();
     jQuery("#main-content").append("<div id='user-edit'></div>");
     jQuery("#main-content #user-edit").attr("data-bind",'template: {name:"redback/user-create-tmpl",data: user}');
     var viewModel = new userViewModel(user);

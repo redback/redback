@@ -54,6 +54,7 @@ function(domReady) {
       $("#register-link").show();
       $("#logout-link").hide();
       hideElementWithKarma();
+      screenChange();
       $("#main-content").html("");
     }
 
@@ -140,6 +141,11 @@ function(domReady) {
       $(textId).focus();
     }
 
+    clearUserMessages=function(idToAppend){
+      var textId = idToAppend ? $("#"+idToAppend) : $("#user-messages");
+      $(textId).html('');
+    }
+
     /**
      * display an error message
      * @param text the success text
@@ -161,6 +167,11 @@ function(domReady) {
       $.tmpl($("#alert-message-warning").html(), { "message" : text }).appendTo( textId );
       $(textId).focus();
     }
+
+    screenChange=function(){
+      clearUserMessages();
+    }
+
 
   });
 

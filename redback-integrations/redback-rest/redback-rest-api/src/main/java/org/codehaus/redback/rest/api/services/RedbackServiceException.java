@@ -67,6 +67,10 @@ public class RedbackServiceException
 
     public List<ErrorMessage> getErrorMessages()
     {
+        if ( errorMessages == null )
+        {
+            this.errorMessages = new ArrayList<ErrorMessage>();
+        }
         return errorMessages;
     }
 
