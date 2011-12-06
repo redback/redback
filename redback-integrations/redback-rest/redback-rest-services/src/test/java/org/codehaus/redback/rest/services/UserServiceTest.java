@@ -158,6 +158,10 @@ public class UserServiceTest
             log.error( e.getMessage(), e );
             throw e;
         }
+        finally
+        {
+            getUserService( authorizationHeader ).deleteUser( "toto" );
+        }
 
     }
 
@@ -193,6 +197,32 @@ public class UserServiceTest
         createGuestIfNeeded();
         Collection<Operation> operations = getUserService().getCurrentUserOperations();
         log.info( "guest operations:" + operations );
+    }
+
+    @Test
+    public void updateMe()
+        throws Exception
+    {
+        User u = new User();
+        u.setFullName( "the toto" );
+        u.setUsername( "toto" );
+        u.setEmail( "toto@toto.fr" );
+        u.setPassword( "toto123" );
+        u.setConfirmPassword( "toto123" );
+        u.setValidated( true );
+        getUserService( authorizationHeader ).createUser( u );
+
+        u.setFullName( "the toto123" );
+        u.setEmail( "toto@titi.fr" );
+        u.setPassword( "toto1234" );
+
+        getUserService( encode( "toto", "toto123" ) ).updateMe( u );
+
+        u = getUserService( authorizationHeader ).getUser( "toto" );
+        assertEquals( "the toto123", u.getFullName() );
+        assertEquals( "toto@titi.fr", u.getEmail() );
+
+        getUserService( authorizationHeader ).deleteUser( "toto" );
     }
 
     public void guestUserCreate()

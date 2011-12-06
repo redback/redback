@@ -93,6 +93,18 @@ public interface UserService
     Boolean updateUser( User user )
         throws RedbackServiceException;
 
+    @Path( "updateMe" )
+    @POST
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( noRestriction = false, noPermission = true )
+    /**
+     * update only the current user and this fields: fullname, email, password.
+     * the service verify the curent logged user with the one passed in the method
+     * @since 1.4
+     */
+    Boolean updateMe( User user )
+        throws RedbackServiceException;
+
     @Path( "ping" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )

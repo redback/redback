@@ -221,6 +221,39 @@ public class DefaultUserService
         return simpleUsers;
     }
 
+    public Boolean updateMe( User user )
+        throws RedbackServiceException
+    {
+        // check username == one in the session
+        RedbackRequestInformation redbackRequestInformation = RedbackAuthenticationThreadLocal.get();
+        if ( redbackRequestInformation == null || redbackRequestInformation.getUser() == null )
+        {
+            throw new RedbackServiceException( "you must be logged to update your profile",
+                                               Response.Status.FORBIDDEN.getStatusCode() );
+        }
+        if ( user == null )
+        {
+            throw new RedbackServiceException( "user parameter is mandatory",
+                                               Response.Status.BAD_REQUEST.getStatusCode() );
+        }
+        if ( !StringUtils.equals( redbackRequestInformation.getUser().getUsername(), user.getUsername() ) )
+        {
+            throw new RedbackServiceException( "you can update only your profile",
+                                               Response.Status.FORBIDDEN.getStatusCode() );
+        }
+
+        User realUser = getUser( user.getUsername() );
+
+        // only 3 fields to update
+        realUser.setFullName( user.getFullName() );
+        realUser.setEmail( user.getEmail() );
+        realUser.setPassword( user.getPassword() );
+
+        updateUser( realUser );
+
+        return Boolean.TRUE;
+    }
+
     public Boolean updateUser( User user )
         throws RedbackServiceException
     {
