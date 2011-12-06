@@ -235,7 +235,6 @@ function($) {
           var user = mapUser(result.user);
           reccordLoginCookie(user);
           // FIXME check password change required, locked etc....
-          window.modalLoginWindow.modal('hide');
           $("#login-link").hide();
           $("#logout-link").show();
           $("#register-link").hide();
@@ -246,10 +245,15 @@ function($) {
         $("#modal-login-err-message").html($.i18n.prop("incorrect.username.password"));
         $("#modal-login-err-message").show();
       },
+      error: function(result) {
+       var obj = jQuery.parseJSON(result.responseText);
+       displayRedbackError(obj);
+      },
       complete: function(){
         clearForm("#user-login-form");
         $("#modal-login-ok").removeAttr("disabled");
         $("#login-spinner").remove();
+        window.modalLoginWindow.modal('hide');
       }
     });
 
@@ -274,6 +278,10 @@ function($) {
       window.modalChangePasswordBox.bind('hidden', function () {
         $("#modal-password-change-err-message").hide();
       })
+      $("#modal-password-change").delegate("#modal-change-password-ok", "click keydown keypress", function(e) {
+        e.preventDefault();
+        changePassword(previousPassword,registration);
+      });
     }
     window.modalChangePasswordBox.modal('show');
     $("#password-change-form").validate({
@@ -286,10 +294,7 @@ function($) {
         customShowError(validator,errorMap,errorMap);
       }
     });
-    $("#modal-password-change").delegate("#modal-change-password-ok", "click keydown keypress", function(e) {
-      e.preventDefault();
-      changePassword(previousPassword,registration);
-    });
+
 
     $("#modal-password-change").focus();
   }
