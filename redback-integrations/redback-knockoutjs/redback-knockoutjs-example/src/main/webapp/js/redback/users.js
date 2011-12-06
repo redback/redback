@@ -37,7 +37,7 @@ function($) {
     });
 
     this.addUser=function() {
-      ko.renderTemplate("redback/user-create-tmpl", new user(), null, jQuery("#createUserForm"), "replaceNode");
+      ko.renderTemplate("redback/user-edit-tmpl", new user(), null, jQuery("#createUserForm"), "replaceNode");
       $('#user-create').show();
       $("#user-create").delegate("#user-create-form-cancel-button", "click keydown", function(e) {
         e.preventDefault();
@@ -81,7 +81,9 @@ function($) {
   this.editUserBox=function(user) {
     screenChange();
     jQuery("#main-content").append("<div id='user-edit'></div>");
-    jQuery("#main-content #user-edit").attr("data-bind",'template: {name:"redback/user-create-tmpl",data: user}');
+    jQuery("#main-content #user-edit").attr("data-bind",'template: {name:"redback/user-edit-tmpl",data: user}');
+    //ko.renderTemplate("redback/user-edit-tmpl", user, null, jQuery("#createUserForm"), "replaceNode");
+
     var viewModel = new userViewModel(user);
 
     ko.applyBindings(viewModel,jQuery("#main-content #user-edit").get(0));

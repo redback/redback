@@ -126,7 +126,7 @@ function($) {
   }
 
   adminCreateBox=function() {
-    jQuery("#main-content").attr("data-bind",'template: {name:"redback/user-create-tmpl",data: user}');
+    jQuery("#main-content").attr("data-bind",'template: {name:"redback/user-edit-tmpl",data: user}');
     var viewModel = new adminUserViewModel();
     ko.applyBindings(viewModel);
     $("#user-create").validate({
@@ -198,6 +198,7 @@ function($) {
           $("#login-link").hide();
           $("#logout-link").show();
           $("#register-link").hide();
+          $("#change-password-link").show();
           decorateMenuWithKarma(user);
           return;
         }

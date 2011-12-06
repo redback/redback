@@ -53,6 +53,7 @@ function(domReady) {
       $("#login-link").show();
       $("#register-link").show();
       $("#logout-link").hide();
+      $("#change-password-link").hide();
       hideElementWithKarma();
       screenChange();
       $("#main-content").html("");
@@ -117,7 +118,9 @@ function(domReady) {
     if (!user) {
       $("#login-link").show();
       $("#register-link").show();
+      $("#change-password-link").hide();
     } else {
+      $("#change-password-link").show();
       $("#logout-link").show();
       decorateMenuWithKarma(user);
     }
