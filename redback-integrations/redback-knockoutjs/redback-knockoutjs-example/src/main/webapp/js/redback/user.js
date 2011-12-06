@@ -42,7 +42,7 @@ function($) {
               if (created == true) {
                 displaySuccessMessage("user created:"+currentUser.username());
                 window.redbackModel.usersViewModel.users.push(currentUser);
-                $("#main-content #user-create #user-create-fieldset :input").val("");
+                clearForm("#main-content #user-create");
                 $("#main-content #user-create").hide();
                 return this;
               } else {
@@ -210,6 +210,7 @@ function($) {
         $("#modal-login-err-message").show();
       },
       complete: function(){
+        clearForm("#user-login-form");
         $("#modal-login-ok").removeAttr("disabled");
         $("#login-spinner").remove();
       }

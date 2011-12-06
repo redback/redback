@@ -175,6 +175,19 @@ function(domReady) {
       clearUserMessages();
     }
 
+    /**
+     * clear all input text and password found in the the selector
+     * @param selectorStr
+     */
+    clearForm=function(selectorStr){
+      $(selectorStr+" input[type='text']").each(function(ele){
+        $(this).val("");
+      });
+      $(selectorStr+" input[type='password']").each(function(ele){
+        $(this).val("");
+      });
+
+    }
 
   });
 
