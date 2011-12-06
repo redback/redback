@@ -294,7 +294,15 @@ function($) {
         if (!valid) {
             return;
         }
-        editUserDetails();
+        var user = {
+          username:currentUser.username,
+          fullName:$("#modal-user-edit #fullname").val(),
+          email:$("#modal-user-edit #email").val(),
+          previousPassword:$("#modal-user-edit #userEditFormCurrentPassword").val(),
+          password:$("#modal-user-edit #userEditFormNewPassword").val(),
+          confirmPassword:$("#modal-user-edit #userEditFormNewPasswordConfirm").val()
+        };
+        editUserDetails(user);
       });
     }
     var currentUser = getUserFromLoginCookie();
@@ -318,7 +326,7 @@ function($) {
   }
 
   editUserDetails=function(user){
-
+    $("#modal-user-edit-err-message").html("");
     $.ajax("/restServices/redbackServices/userService/updateMe", {
         data: "{\"user\": " +  ko.toJSON(user)+"}",
         contentType: 'application/json',
@@ -329,9 +337,12 @@ function($) {
           // FIXME use a message div and i18n
           if (created == true) {
             displaySuccessMessage("details updated.");
+            window.modalEditUserBox.modal('hide');
+            reccordLoginCookie(user);
+            clearForm("#user-edit-form");
             return this;
           } else {
-            displayErrorMessage("details cannot be updated");
+            displayErrorMessage("details cannot be updated","modal-user-edit-err-message");
           }
         },
         error: function(result) {

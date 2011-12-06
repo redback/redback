@@ -36,6 +36,7 @@ import java.util.List;
 
 /**
  * @author Olivier Lamy
+ * @since 1.4
  */
 @Service( "passwordValidator#rest" )
 public class PasswordValidator
@@ -50,7 +51,7 @@ public class PasswordValidator
      *
      * @param password
      * @param principal
-     * @return encoded passwor
+     * @return encoded password
      * @throws RedbackServiceException
      */
     public String validatePassword( String password, String principal )
