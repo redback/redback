@@ -6,6 +6,8 @@
           {{/each}}
           <th>Edit</th>
           <th>Delete</th>
+          <th>Locked</th>
+          <th>Change password required</th>
       </tr>
   </thead>
   <tbody>
@@ -16,13 +18,23 @@
               {{/each}}
               <td><a href="#" data-bind="click: function(){ editUserBox(row) }">Edit</a></td>
               {{if row.username()=="admin" || row.username()=="guest"}}
-              <td></td>
+                <td></td>
               {{else}}
-              <td>
+                <td>
                   <a href="#" data-bind="click: function(){ row.deleteUser() }">
                     <img src="images/delete.png" alt="Delete"/>
                   </a>
-              </td>
+                </td>
+              {{/if}}
+              {{if row.locked()==true}}
+                <td><img src="images/system-lock-screen.png"/></td>
+              {{else}}
+              <td><img src="images/weather-clear.png"/></td>
+              {{/if}}
+              {{if row.passwordChangeRequired()==true}}
+                <td><img src="images/dialog-error.png"/></td>
+              {{else}}
+              <td><img src="images/weather-clear.png"/></td>
               {{/if}}
           </tr>
       {{/each}}
