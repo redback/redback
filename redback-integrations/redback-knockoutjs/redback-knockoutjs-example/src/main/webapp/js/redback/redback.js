@@ -3,7 +3,7 @@ require(["order!jquery","order!jquery.dataTables","order!cog.javascript","order!
 function($) {
 
   // define a container object with various datas
-  window.redbackModel = {usersViewModel:null,userOperationNames:null,key:null};
+  window.redbackModel = {usersViewModel:null,userOperationNames:null,key:null,userCreate:false};
 
 
   // load default

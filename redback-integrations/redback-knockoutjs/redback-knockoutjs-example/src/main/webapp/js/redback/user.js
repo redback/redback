@@ -23,17 +23,13 @@ function($) {
         }
       };
       this.create = function() {
-          if (username == 'admin') {
-            this.createAdmin();
-          } else {
-            this.createUser();
-          }
+        if (username == 'admin') {
+          this.createAdmin();
+        } else {
+          this.createUser();
+        }
       };
       this.createUser = function() {
-        var valid = $("#user-create").valid();
-        if (!valid) {
-            return;
-        }
         var currentUser = this;
         $.ajax("/restServices/redbackServices/userService/createUser", {
             data: "{\"user\": " +  ko.toJSON(this)+"}",
@@ -93,26 +89,39 @@ function($) {
         var currentUser = this;
         openDialogConfirm(function(){
           $.ajax("/restServices/redbackServices/userService/deleteUser/"+currentUser.username(), {
-                      type: "GET",
-                      dataType: 'json',
-                      success: function(data) {
-                          // FIXME i18n and use a messages div
-                        window.redbackModel.usersViewModel.users.remove(currentUser);
-                        displaySuccessMessage("user " + currentUser.username() + " deleted");
-                      },
-                      error: function(result) {
-                       var obj = jQuery.parseJSON(result.responseText);
-                       displayRedbackError(obj);
-                      },
-                      complete: function() {
-                        closeDialogConfirm();
-                      }
-                    }
-                  );
+                type: "GET",
+                dataType: 'json',
+                success: function(data) {
+                    // FIXME i18n and use a messages div
+                  window.redbackModel.usersViewModel.users.remove(currentUser);
+                  displaySuccessMessage("user " + currentUser.username() + " deleted");
+                },
+                error: function(result) {
+                 var obj = jQuery.parseJSON(result.responseText);
+                 displayRedbackError(obj);
+                },
+                complete: function() {
+                  closeDialogConfirm();
+                }
+              }
+            );
           }
           ,"Ok", $.i18n.prop("cancel"), $.i18n.prop("user.delete.message") + ": " + currentUser.username());
 
       };
+
+      this.update=function(){
+        alert("update user");
+      }
+
+      this.save=function(){
+        if (window.redbackModel.createUser==true){
+          return this.createUser();
+        } else {
+          this.update();
+        }
+
+      }
 
       this.i18n = $.i18n.prop;
   }

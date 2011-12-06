@@ -37,6 +37,8 @@ function($) {
     });
 
     this.addUser=function() {
+      screenChange();
+      window.redbackModel.createUser=true;
       $("#main-content #user-edit").remove();
       $('#main-content #user-create').show();
       ko.renderTemplate("redback/user-edit-tmpl", new user(), null, $("#createUserForm").get(0),"replaceChildren");
@@ -53,6 +55,14 @@ function($) {
         showErrors: function(validator, errorMap, errorList) {
           customShowError(validator,errorMap,errorMap);
         }
+      });
+      $("#createUserForm #user-create").delegate("#user-create-form-save-button", "click keydown", function(e) {
+        e.preventDefault();
+        var valid = $("#user-create").valid();
+        if (!valid) {
+            return;
+        }
+        user.createUser();
       });
     };
 
@@ -80,6 +90,7 @@ function($) {
   }
 
   this.editUserBox=function(user) {
+    window.redbackModel.createUser=false;
     screenChange();
     $("#main-content #user-edit").remove();
     $("#main-content").append("<div id='user-edit'></div>");
@@ -100,11 +111,11 @@ function($) {
         customShowError(validator,errorMap,errorMap);
       }
     });
-    jQuery("#main-content #user-create").delegate("#user-create-form-cancel-button", "click keydown", function(e) {
+    $("#main-content #user-create").delegate("#user-create-form-cancel-button", "click keydown", function(e) {
       e.preventDefault();
-      jQuery('#main-content #user-create').hide();
+      $('#main-content #user-create').remove();
     });
-    jQuery("#main-content #user-create").validate({
+    $("#main-content #user-create").validate({
       rules: {
         confirmPassword: {
           equalTo: "#password"
@@ -114,12 +125,13 @@ function($) {
         customShowError(validator,errorMap,errorMap);
       }
     });
-    jQuery("#main-content #user-create").delegate("#user-create-form-register-button", "click keydown", function(e) {
+    $("#main-content #user-create").delegate("#user-create-form-save-button", "click keydown", function(e) {
       e.preventDefault();
       var valid = $("#user-create").valid();
       if (!valid) {
           return;
       }
+      user.update();
     });
   }
 
