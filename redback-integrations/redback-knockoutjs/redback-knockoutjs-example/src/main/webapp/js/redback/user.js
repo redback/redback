@@ -118,9 +118,6 @@ function($) {
   }
 
 
-
-
-
   adminUserViewModel=function() {
     this.user = new user("admin");
   }
@@ -141,8 +138,6 @@ function($) {
     });
 
   }
-
-
 
   loginBox=function(){
     screenChange();

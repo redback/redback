@@ -37,8 +37,9 @@ function($) {
     });
 
     this.addUser=function() {
-      ko.renderTemplate("redback/user-edit-tmpl", new user(), null, jQuery("#createUserForm"), "replaceNode");
-      $('#user-create').show();
+      $("#main-content #user-edit").remove();
+      $('#main-content #user-create').show();
+      ko.renderTemplate("redback/user-edit-tmpl", new user(), null, $("#createUserForm").get(0),"replaceChildren");
       $("#user-create").delegate("#user-create-form-cancel-button", "click keydown", function(e) {
         e.preventDefault();
         $('#user-create').hide();
@@ -80,13 +81,15 @@ function($) {
 
   this.editUserBox=function(user) {
     screenChange();
-    jQuery("#main-content").append("<div id='user-edit'></div>");
-    jQuery("#main-content #user-edit").attr("data-bind",'template: {name:"redback/user-edit-tmpl",data: user}');
-    //ko.renderTemplate("redback/user-edit-tmpl", user, null, jQuery("#createUserForm"), "replaceNode");
+    $("#main-content #user-edit").remove();
+    $("#main-content").append("<div id='user-edit'></div>");
+    $("#main-content #user-edit").attr("data-bind",'template: {name:"redback/user-edit-tmpl",data: user}');
+    $("#main-content #user-create").remove();
+    $("#main-content #user-edit").show();
 
     var viewModel = new userViewModel(user);
 
-    ko.applyBindings(viewModel,jQuery("#main-content #user-edit").get(0));
+    ko.applyBindings(viewModel,$("#main-content #user-edit").get(0));
     jQuery("#main-content #user-create").validate({
       rules: {
         confirmPassword: {

@@ -52,28 +52,9 @@
         Sort by name
     </button>
 
-    <button data-bind='click: function() { gridViewModel.currentPageIndex(0) }'  class="btn">
-        Jump to first page
-    </button>
-
     <div id="usersPagination"></div>
 
     <table class="bordered-table zebra-striped" data-bind="simpleGrid: gridViewModel" id="usersTable"></table>
 
     <div id="createUserForm"></div>
-</script>
-
-
-<script id="usersGridDataTable"  type="text/x-jquery-tmpl">
-  <table data-bind="dataTable: { dataSource: users, columns: ['username', 'fullName', 'email'] }">
-    <thead>
-        <tr>
-            <td>Column 1</td>
-            <td>Column 2</td>
-            <td>Column 3</td>
-        </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
 </script>
