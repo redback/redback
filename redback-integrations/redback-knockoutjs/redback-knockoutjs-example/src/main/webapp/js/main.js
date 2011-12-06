@@ -44,6 +44,10 @@ function(domReady) {
       $.cookie('redback_login', ko.toJSON(user));
     }
 
+    getUserFromLoginCookie=function(){
+      return $.parseJSON($.cookie('redback_login'));
+    }
+
     deleteLoginCookie=function(){
       $.cookie('redback_login', null);
     }

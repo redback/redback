@@ -279,6 +279,71 @@ function($) {
     $("#modal-password-change").focus();
   }
 
+  editUserDetailsBox=function(){
+    screenChange();
+    $("#modal-user-edit-err-message").hide();
+    $("#modal-user-edit-err-message").html("");
+    if (window.modalEditUserBox == null) {
+      window.modalEditUserBox = $("#modal-user-edit").modal({backdrop:'static',show:false});
+      window.modalEditUserBox.bind('hidden', function () {
+        $("#modal-user-edit-err-message").hide();
+      })
+      $("#modal-user-edit #modal-user-edit-ok").on( "click keydown keypress", function(e) {
+        e.preventDefault();
+        var valid = $("#user-edit-form").valid();
+        if (!valid) {
+            return;
+        }
+        editUserDetails();
+      });
+    }
+    var currentUser = getUserFromLoginCookie();
+    $("#modal-user-edit #username").html(currentUser.username);
+    $("#modal-user-edit #fullname").val(currentUser.fullName);
+    $("#modal-user-edit #email").val(currentUser.email);
+    window.modalEditUserBox.modal('show');
+    $("#user-edit-form").validate({
+      rules: {
+        userEditFormNewPasswordConfirm : {
+          equalTo: "#userEditFormNewPassword"
+        }
+      },
+      showErrors: function(validator, errorMap, errorList) {
+        customShowError(validator,errorMap,errorMap);
+      }
+    });
+
+
+    $("#modal-user-edit").focus();
+  }
+
+  editUserDetails=function(user){
+
+    $.ajax("/restServices/redbackServices/userService/updateMe", {
+        data: "{\"user\": " +  ko.toJSON(user)+"}",
+        contentType: 'application/json',
+        type: "POST",
+        dataType: 'json',
+        success: function(result) {
+          var created = JSON.parse(result);
+          // FIXME use a message div and i18n
+          if (created == true) {
+            displaySuccessMessage("details updated.");
+            return this;
+          } else {
+            displayErrorMessage("details cannot be updated");
+          }
+        },
+        error: function(result) {
+          var obj = jQuery.parseJSON(result.responseText);
+          $("#modal-user-edit-err-message").show();
+          displayRedbackError(obj,"modal-user-edit-err-message");
+        }
+      });
+
+  }
+
+
   /**
    *
    * @param previousPassword display and validate previous password text field

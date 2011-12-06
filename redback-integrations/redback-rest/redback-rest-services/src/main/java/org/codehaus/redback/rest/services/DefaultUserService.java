@@ -27,6 +27,7 @@ import org.codehaus.plexus.redback.keys.KeyManagerException;
 import org.codehaus.plexus.redback.keys.KeyNotFoundException;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
 import org.codehaus.plexus.redback.policy.MustChangePasswordException;
+import org.codehaus.plexus.redback.policy.PasswordEncoder;
 import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
@@ -47,6 +48,7 @@ import org.codehaus.redback.rest.api.model.Resource;
 import org.codehaus.redback.rest.api.model.User;
 import org.codehaus.redback.rest.api.services.RedbackServiceException;
 import org.codehaus.redback.rest.api.services.UserService;
+import org.codehaus.redback.rest.services.utils.PasswordValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -112,6 +114,9 @@ public class DefaultUserService
     private RBACManager rbacManager;
 
     private HttpAuthenticator httpAuthenticator;
+
+    @Inject
+    private PasswordValidator passwordValidator;
 
     @Context
     private HttpServletRequest httpServletRequest;
@@ -228,26 +233,58 @@ public class DefaultUserService
         RedbackRequestInformation redbackRequestInformation = RedbackAuthenticationThreadLocal.get();
         if ( redbackRequestInformation == null || redbackRequestInformation.getUser() == null )
         {
-            throw new RedbackServiceException( "you must be logged to update your profile",
+            throw new RedbackServiceException( new ErrorMessage( "you must be logged to update your profile" ),
                                                Response.Status.FORBIDDEN.getStatusCode() );
         }
         if ( user == null )
         {
-            throw new RedbackServiceException( "user parameter is mandatory",
+            throw new RedbackServiceException( new ErrorMessage( "user parameter is mandatory" ),
                                                Response.Status.BAD_REQUEST.getStatusCode() );
         }
         if ( !StringUtils.equals( redbackRequestInformation.getUser().getUsername(), user.getUsername() ) )
         {
-            throw new RedbackServiceException( "you can update only your profile",
+            throw new RedbackServiceException( new ErrorMessage( "you can update only your profile" ),
                                                Response.Status.FORBIDDEN.getStatusCode() );
         }
 
-        User realUser = getUser( user.getUsername() );
+        if ( StringUtils.isEmpty( user.getPreviousPassword() ) )
+        {
+            throw new RedbackServiceException( new ErrorMessage( "previous password is empty" ),
+                                               Response.Status.BAD_REQUEST.getStatusCode() );
+        }
 
+        User realUser = getUser( user.getUsername() );
+        try
+        {
+            String previousEncodedPassword =
+                securitySystem.getUserManager().findUser( user.getUsername() ).getEncodedPassword();
+
+            // check oldPassword with the current one
+
+            PasswordEncoder encoder = securitySystem.getPolicy().getPasswordEncoder();
+
+            if ( !encoder.isPasswordValid( previousEncodedPassword, user.getPreviousPassword() ) )
+            {
+
+                throw new RedbackServiceException( new ErrorMessage( "password.provided.does.not.match.existing" ),
+                                                   Response.Status.BAD_REQUEST.getStatusCode() );
+            }
+        }
+        catch ( UserNotFoundException e )
+        {
+            throw new RedbackServiceException( new ErrorMessage( "user not found" ),
+                                               Response.Status.BAD_REQUEST.getStatusCode() );
+        }
         // only 3 fields to update
         realUser.setFullName( user.getFullName() );
         realUser.setEmail( user.getEmail() );
-        realUser.setPassword( user.getPassword() );
+        // ui can limit to not update password
+        if ( StringUtils.isNotBlank( user.getPassword() ) )
+        {
+            passwordValidator.validatePassword( user.getPassword(), user.getUsername() );
+
+            realUser.setPassword( user.getPassword() );
+        }
 
         updateUser( realUser );
 

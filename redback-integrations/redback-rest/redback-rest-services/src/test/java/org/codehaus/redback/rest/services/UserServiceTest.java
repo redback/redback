@@ -215,12 +215,22 @@ public class UserServiceTest
         u.setFullName( "the toto123" );
         u.setEmail( "toto@titi.fr" );
         u.setPassword( "toto1234" );
-
+        u.setPreviousPassword( "toto123" );
         getUserService( encode( "toto", "toto123" ) ).updateMe( u );
 
         u = getUserService( authorizationHeader ).getUser( "toto" );
         assertEquals( "the toto123", u.getFullName() );
         assertEquals( "toto@titi.fr", u.getEmail() );
+
+        u.setFullName( "the toto1234" );
+        u.setEmail( "toto@tititi.fr" );
+        u.setPassword( "toto12345" );
+        u.setPreviousPassword( "toto1234" );
+        getUserService( encode( "toto", "toto1234" ) ).updateMe( u );
+
+        u = getUserService( authorizationHeader ).getUser( "toto" );
+        assertEquals( "the toto1234", u.getFullName() );
+        assertEquals( "toto@tititi.fr", u.getEmail() );
 
         getUserService( authorizationHeader ).deleteUser( "toto" );
     }

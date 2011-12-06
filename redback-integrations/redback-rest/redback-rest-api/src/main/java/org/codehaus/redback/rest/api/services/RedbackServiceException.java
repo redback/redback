@@ -50,6 +50,12 @@ public class RedbackServiceException
         errorMessages.add( errorMessage );
     }
 
+    public RedbackServiceException( ErrorMessage errorMessage, int httpErrorCode )
+    {
+        this.httpErrorCode = httpErrorCode;
+        errorMessages.add( errorMessage );
+    }
+
     public RedbackServiceException( List<ErrorMessage> errorMessage )
     {
         errorMessages.addAll( errorMessage );

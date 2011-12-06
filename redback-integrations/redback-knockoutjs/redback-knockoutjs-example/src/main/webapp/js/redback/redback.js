@@ -15,16 +15,16 @@ function($) {
   // load template only when i18n has been loaded
 
 
-  displayRedbackError=function(obj) {
+  displayRedbackError=function(obj,idToAppend) {
     // {"redbackRestError":{"errorMessages":{"args":1,"errorKey":"user.password.violation.numeric"}}}
     if ($.isArray(obj.redbackRestError.errorMessages)) {
       for(var i=0; i<obj.redbackRestError.errorMessages.length; i++ ) {
         if(obj.redbackRestError.errorMessages[i].errorKey) {
-          displayErrorMessage($.i18n.prop( obj.redbackRestError.errorMessages[i].errorKey, obj.redbackRestError.errorMessages[i].args ));
+          displayErrorMessage($.i18n.prop( obj.redbackRestError.errorMessages[i].errorKey, obj.redbackRestError.errorMessages[i].args ),idToAppend);
         }
       }
     } else {
-      displayErrorMessage($.i18n.prop( obj.redbackRestError.errorMessages.errorKey, obj.redbackRestError.errorMessages.args ));
+      displayErrorMessage($.i18n.prop( obj.redbackRestError.errorMessages.errorKey, obj.redbackRestError.errorMessages.args ),idToAppend);
     }
   }
 

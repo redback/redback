@@ -49,6 +49,12 @@ public class User
 
     private String timestampLastPasswordChange;
 
+    /**
+     * for password change only
+     * @since 1.4
+     */
+    private String previousPassword;
+
     public User()
     {
         // no op
@@ -198,5 +204,15 @@ public class User
     public void setTimestampLastPasswordChange( String timestampLastPasswordChange )
     {
         this.timestampLastPasswordChange = timestampLastPasswordChange;
+    }
+
+    public String getPreviousPassword()
+    {
+        return previousPassword;
+    }
+
+    public void setPreviousPassword( String previousPassword )
+    {
+        this.previousPassword = previousPassword;
     }
 }

@@ -21,7 +21,6 @@ package org.codehaus.redback.rest.services;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.keys.KeyManagerException;
-import org.codehaus.plexus.redback.policy.PasswordEncoder;
 import org.codehaus.plexus.redback.policy.PasswordRuleViolationException;
 import org.codehaus.plexus.redback.policy.PasswordRuleViolations;
 import org.codehaus.plexus.redback.system.SecuritySystem;
@@ -31,6 +30,7 @@ import org.codehaus.redback.integration.filter.authentication.HttpAuthenticator;
 import org.codehaus.redback.rest.api.model.ErrorMessage;
 import org.codehaus.redback.rest.api.services.PasswordService;
 import org.codehaus.redback.rest.api.services.RedbackServiceException;
+import org.codehaus.redback.rest.services.utils.PasswordValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -41,7 +41,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -59,15 +58,19 @@ public class DefaultPasswordService
 
     private HttpAuthenticator httpAuthenticator;
 
+    private PasswordValidator passwordValidator;
+
     @Context
     private HttpServletRequest httpServletRequest;
 
     @Inject
     public DefaultPasswordService( SecuritySystem securitySystem,
-                                   @Named( "httpAuthenticator#basic" ) HttpAuthenticator httpAuthenticator )
+                                   @Named( "httpAuthenticator#basic" ) HttpAuthenticator httpAuthenticator,
+                                   PasswordValidator passwordValidator )
     {
         this.securitySystem = securitySystem;
         this.httpAuthenticator = httpAuthenticator;
+        this.passwordValidator = passwordValidator;
     }
 
     public Boolean changePasswordWithKey( String password, String passwordConfirmation, String key )
@@ -105,19 +108,11 @@ public class DefaultPasswordService
 
             principal = authKey.getForPrincipal();
 
-            // password validation with a tmp user
-            User tempUser = securitySystem.getUserManager().createUser( "temp", "temp", "temp" );
-            tempUser.setPassword( password );
-            securitySystem.getPolicy().validatePassword( tempUser );
-
-            PasswordEncoder encoder = securitySystem.getPolicy().getPasswordEncoder();
-
+            String encodedPassword = passwordValidator.validatePassword( password, principal );
+            
             User user = securitySystem.getUserManager().findUser( principal );
-            String encodedPassword = encoder.encodePassword( password );
-            user.setEncodedPassword( encodedPassword );
             user.setPassword( password );
-
-            securitySystem.getPolicy().validatePassword( user );
+            user.setEncodedPassword( encodedPassword );
             securitySystem.getUserManager().updateUser( user );
 
         }

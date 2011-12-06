@@ -18,6 +18,7 @@ package org.codehaus.redback.rest.api.model;
  * under the License.
  */
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.redback.rest.api.services.RedbackServiceException;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -44,7 +45,10 @@ public class RedbackRestError
     public RedbackRestError( RedbackServiceException e )
     {
         errorMessages.addAll( e.getErrorMessages() );
-        errorMessages.add( new ErrorMessage( e.getMessage(), null ) );
+        if ( e.getErrorMessages().isEmpty() && StringUtils.isNotEmpty( e.getMessage() ) )
+        {
+            errorMessages.add( new ErrorMessage( e.getMessage(), null ) );
+        }
     }
 
 
@@ -58,7 +62,7 @@ public class RedbackRestError
         this.errorMessages = errorMessages;
     }
 
-    public void addErrorMessage(ErrorMessage errorMessage)
+    public void addErrorMessage( ErrorMessage errorMessage )
     {
         this.errorMessages.add( errorMessage );
     }
