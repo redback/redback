@@ -111,7 +111,29 @@ function($) {
       };
 
       this.update=function(){
-        alert("update user");
+        var currentUser = this;
+        $.ajax("/restServices/redbackServices/userService/updateUser", {
+            data: "{\"user\": " +  ko.toJSON(this)+"}",
+            contentType: 'application/json',
+            type: "POST",
+            dataType: 'json',
+            success: function(result) {
+              var created = JSON.parse(result);
+              // FIXME use a message div and i18n
+              if (created == true) {
+                displaySuccessMessage("user updated:"+currentUser.username());
+                clearForm("#main-content #user-create");
+                $("#main-content #user-create").hide();
+                return this;
+              } else {
+                displayErrorMessage("user cannot be updated");
+              }
+            },
+            error: function(result) {
+              var obj = jQuery.parseJSON(result.responseText);
+              displayRedbackError(obj);
+            }
+          });
       }
 
       this.save=function(){
