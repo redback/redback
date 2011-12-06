@@ -46,4 +46,17 @@ public interface PasswordService
                                    @QueryParam( "passwordConfirmation" ) String passwordConfirmation,
                                    @QueryParam( "key" ) String key )
         throws RedbackServiceException;
+
+    @GET
+    @Path( "changePassword" )
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( noRestriction = true, noPermission = true )
+    /**
+     * used to change the password on passwordChangeRequired state.
+     */
+    Boolean changePassword( @QueryParam( "userName" ) String userName,
+                            @QueryParam( "previousPassword" ) String previousPassword,
+                            @QueryParam( "password" ) String password,
+                            @QueryParam( "passwordConfirmation" ) String passwordConfirmation )
+        throws RedbackServiceException;
 }

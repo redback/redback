@@ -133,13 +133,7 @@ public class DefaultLoginService
                     log.info( "user {} not validated", user.getUsername() );
                     return null;
                 }
-                User restUser = new User();
-                restUser.setEmail( user.getEmail() );
-                restUser.setUsername( user.getUsername() );
-                restUser.setPasswordChangeRequired( user.isPasswordChangeRequired() );
-                restUser.setLocked( user.isLocked() );
-                restUser.setValidated( user.isValidated() );
-                restUser.setFullName( user.getFullName() );
+                User restUser = buildRestUser( user );
 
                 // here create an http session
                 httpAuthenticator.authenticate( authDataSource, httpServletRequest.getSession( true ) );
@@ -161,8 +155,20 @@ public class DefaultLoginService
         }
         catch ( MustChangePasswordException e )
         {
-            throw new RedbackServiceException( e.getMessage() );
+            return buildRestUser( e.getUser() );
         }
+    }
+    
+    private User buildRestUser(org.codehaus.plexus.redback.users.User user)
+    {
+        User restUser = new User();
+        restUser.setEmail( user.getEmail() );
+        restUser.setUsername( user.getUsername() );
+        restUser.setPasswordChangeRequired( user.isPasswordChangeRequired() );
+        restUser.setLocked( user.isLocked() );
+        restUser.setValidated( user.isValidated() );
+        restUser.setFullName( user.getFullName() );
+        return restUser;
     }
 
     public Boolean isLogged()

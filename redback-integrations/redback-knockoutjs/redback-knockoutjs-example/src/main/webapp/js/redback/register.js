@@ -102,7 +102,7 @@ function($) {
       type: 'GET',
        success: function(result){
          window.redbackModel.key=key;
-         changePasswordBox(false);
+         changePasswordBox(false,true);
        },
        complete: function(){
          // hide spinner

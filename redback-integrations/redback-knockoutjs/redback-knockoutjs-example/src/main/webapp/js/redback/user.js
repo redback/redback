@@ -233,8 +233,12 @@ function($) {
         }
         if (logged == true) {
           var user = mapUser(result.user);
+          if (user.passwordChangeRequired==true){
+            changePasswordBox(true,false,user);
+            return;
+          }
+          // FIXME check locked etc....
           reccordLoginCookie(user);
-          // FIXME check password change required, locked etc....
           $("#login-link").hide();
           $("#logout-link").show();
           $("#register-link").hide();
@@ -264,7 +268,7 @@ function($) {
    * @param previousPassword display and validate previous password text field
    * @param registration are we in registration mode ?
    */
-  changePasswordBox=function(previousPassword,registration){
+  changePasswordBox=function(previousPassword,registration,user){
     screenChange();
     if (previousPassword==true){
       $("#password-change-form-current-password-div").show();
@@ -280,7 +284,7 @@ function($) {
       })
       $("#modal-password-change").delegate("#modal-change-password-ok", "click keydown keypress", function(e) {
         e.preventDefault();
-        changePassword(previousPassword,registration);
+        changePassword(previousPassword,registration,user);
       });
     }
     window.modalChangePasswordBox.modal('show');
@@ -380,17 +384,25 @@ function($) {
    * @param previousPassword display and validate previous password text field
    * @param registration are we in registration mode ?
    */
-  changePassword=function(previousPassword,registration){
+  changePassword=function(previousPassword,registration,user){
     var valid = $("#password-change-form").valid();
     if (!valid) {
         return;
     }
     $('#modal-password-change-footer').append(smallSpinnerImg());
 
-    var url = '/restServices/redbackServices/passwordService/changePasswordWithKey?';
-    url += "password="+$("#passwordChangeFormNewPassword").val();
-    url += "&passwordConfirmation="+$("#passwordChangeFormNewPasswordConfirm").val();
-    url += "&key="+window.redbackModel.key;
+    if (registration==true) {
+      var url = '/restServices/redbackServices/passwordService/changePasswordWithKey?';
+      url += "password="+$("#passwordChangeFormNewPassword").val();
+      url += "&passwordConfirmation="+$("#passwordChangeFormNewPasswordConfirm").val();
+      url += "&key="+window.redbackModel.key;
+    } else {
+      var url = '/restServices/redbackServices/passwordService/changePassword?';
+      url += "password="+$("#passwordChangeFormNewPassword").val();
+      url += "&passwordConfirmation="+$("#passwordChangeFormNewPasswordConfirm").val();
+      url += "&previousPassword="+$("#password-change-form-current-password").val();
+      url += "&userName="+user.username();
+    }
 
     $.ajax({
       url: url,
@@ -407,6 +419,7 @@ function($) {
       },
       complete: function(){
         $("#login-spinner").remove();
+        window.modalChangePasswordBox.modal('hide');
       },
       error: function(result) {
        var obj = jQuery.parseJSON(result.responseText);

@@ -21,6 +21,7 @@ package org.codehaus.redback.rest.services;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
 import org.codehaus.plexus.redback.keys.KeyManagerException;
+import org.codehaus.plexus.redback.policy.PasswordEncoder;
 import org.codehaus.plexus.redback.policy.PasswordRuleViolationException;
 import org.codehaus.plexus.redback.policy.PasswordRuleViolations;
 import org.codehaus.plexus.redback.system.SecuritySystem;
@@ -109,7 +110,7 @@ public class DefaultPasswordService
             principal = authKey.getForPrincipal();
 
             String encodedPassword = passwordValidator.validatePassword( password, principal );
-            
+
             User user = securitySystem.getUserManager().findUser( principal );
             user.setPassword( password );
             user.setEncodedPassword( encodedPassword );
@@ -146,5 +147,63 @@ public class DefaultPasswordService
         }
 
         return true;
+    }
+
+    public Boolean changePassword( String userName, String previousPassword, String password,
+                                   String passwordConfirmation )
+        throws RedbackServiceException
+    {
+        if ( StringUtils.isEmpty( userName ) )
+        {
+            throw new RedbackServiceException( "user cannot be empty", Response.Status.BAD_REQUEST.getStatusCode() );
+        }
+        if ( StringUtils.isEmpty( previousPassword ) )
+        {
+            throw new RedbackServiceException( "previousPassword cannot be empty",
+                                               Response.Status.BAD_REQUEST.getStatusCode() );
+        }
+        if ( StringUtils.isEmpty( password ) )
+        {
+            throw new RedbackServiceException( "password cannot be empty",
+                                               Response.Status.BAD_REQUEST.getStatusCode() );
+        }
+        if ( StringUtils.isEmpty( passwordConfirmation ) )
+        {
+            throw new RedbackServiceException( "passwordConfirmation cannot be empty",
+                                               Response.Status.BAD_REQUEST.getStatusCode() );
+        }
+
+        if ( !StringUtils.equals( password, passwordConfirmation ) )
+        {
+            throw new RedbackServiceException( "password and passwordConfirmation must be the same",
+                                               Response.Status.BAD_REQUEST.getStatusCode() );
+        }
+        try
+        {
+            User u = securitySystem.getUserManager().findUser( userName );
+
+            String previousEncodedPassword = u.getEncodedPassword();
+
+            // check oldPassword with the current one
+
+            PasswordEncoder encoder = securitySystem.getPolicy().getPasswordEncoder();
+
+            if ( !encoder.isPasswordValid( previousEncodedPassword, previousPassword ) )
+            {
+
+                throw new RedbackServiceException( new ErrorMessage( "password.provided.does.not.match.existing" ),
+                                                   Response.Status.BAD_REQUEST.getStatusCode() );
+            }
+
+            u.setPassword( password );
+
+            securitySystem.getUserManager().updateUser( u );
+        }
+        catch ( UserNotFoundException e )
+        {
+            throw new RedbackServiceException( new ErrorMessage( "user not found" ),
+                                               Response.Status.BAD_REQUEST.getStatusCode() );
+        }
+        return Boolean.TRUE;
     }
 }
