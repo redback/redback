@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-require(["order!jquery", "order!bootstrap-modal", "order!bootstrap-dropdown", "order!jquery.tmpl", "order!head.0.96",
-        "order!jquery.json-2.3.min","order!jquery.validate","jquery.i18n.properties-1.0.9","order!redback/redback", "order!knockout-debug",
-        "jquery.cookie.1.0.0","order!require.domReady.1.0.0","order!redback/redback-tmpl","order!main-tmpl", "order!bootstrap-alerts"],
+require(["order!jquery", "order!bootstrap-modal", "order!bootstrap-dropdown", "order!bootstrap-alerts", "order!jquery.tmpl"
+         , "order!head.0.96", "order!jquery.json-2.3.min","order!jquery.validate","jquery.i18n.properties-1.0.9"
+         , "order!knockout-debug","order!redback/i18nload","order!main-tmpl"
+         ,"order!redback/redback-tmpl","jquery.cookie.1.0.0","order!require.domReady.1.0.0","order!redback/redback"],
 function(domReady) {
   domReady(function () {
 
