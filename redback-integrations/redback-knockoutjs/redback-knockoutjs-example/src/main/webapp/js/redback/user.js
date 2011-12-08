@@ -154,17 +154,17 @@ $(function() {
         if (window.redbackModel.createUser==true){
           return this.createUser();
         } else {
-          this.update();
+          return this.update();
         }
       }
 
       this.lock=function(){
         this.locked=true;
-        this.save();
+        return ko.observable( this.save() );
       }
       this.unlock=function(){
         this.locked=false;
-        this.save();
+        return ko.observable( this.save() );
       }
 
       this.i18n = $.i18n.prop;
