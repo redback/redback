@@ -233,7 +233,8 @@ function($) {
         }
         if (logged == true) {
           var user = mapUser(result.user);
-          if (user.passwordChangeRequired==true){
+          window.console.log("user.passwordChangeRequired:"+user.passwordChangeRequired());
+          if (user.passwordChangeRequired()==true){
             changePasswordBox(true,false,user);
             return;
           }

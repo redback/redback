@@ -80,6 +80,9 @@ function($) {
         hideElementWithKarma();
         screenChange();
         $("#main-content").html("");
+        $.ajax({
+          url: '/restServices/redbackServices/loginService/logout'
+        });
       }
 
       decorateMenuWithKarma=function(user) {
@@ -142,11 +145,7 @@ function($) {
         }
       });
 
-
-
       hideElementWithKarma();
-
-
 
       var user = userLogged();
       if (!user) {

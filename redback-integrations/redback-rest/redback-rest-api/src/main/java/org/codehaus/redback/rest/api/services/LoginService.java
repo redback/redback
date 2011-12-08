@@ -76,4 +76,15 @@ public interface LoginService
      */
     Boolean isLogged()
         throws RedbackServiceException;
+
+    @Path( "logout" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( noRestriction = true, noPermission = true )
+    /**
+     * clear user http session
+     * @since 1.4
+     */
+    Boolean logout()
+        throws RedbackServiceException;
 }

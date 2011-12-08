@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-require(["order!jquery", "order!bootstrap-modal"],
+require(["order!jquery"],
 function($) {
 
   registerBox=function(){

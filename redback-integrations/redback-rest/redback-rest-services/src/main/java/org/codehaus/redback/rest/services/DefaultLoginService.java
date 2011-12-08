@@ -39,6 +39,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.util.Calendar;
@@ -158,18 +159,6 @@ public class DefaultLoginService
             return buildRestUser( e.getUser() );
         }
     }
-    
-    private User buildRestUser(org.codehaus.plexus.redback.users.User user)
-    {
-        User restUser = new User();
-        restUser.setEmail( user.getEmail() );
-        restUser.setUsername( user.getUsername() );
-        restUser.setPasswordChangeRequired( user.isPasswordChangeRequired() );
-        restUser.setLocked( user.isLocked() );
-        restUser.setValidated( user.isValidated() );
-        restUser.setFullName( user.getFullName() );
-        return restUser;
-    }
 
     public Boolean isLogged()
         throws RedbackServiceException
@@ -179,8 +168,31 @@ public class DefaultLoginService
         return isLogged;
     }
 
+    public Boolean logout()
+        throws RedbackServiceException
+    {
+        HttpSession httpSession = httpServletRequest.getSession();
+        if ( httpSession != null )
+        {
+            httpSession.invalidate();
+        }
+        return Boolean.TRUE;
+    }
+
     private Calendar getNowGMT()
     {
         return Calendar.getInstance( TimeZone.getTimeZone( "GMT" ) );
+    }
+
+    private User buildRestUser( org.codehaus.plexus.redback.users.User user )
+    {
+        User restUser = new User();
+        restUser.setEmail( user.getEmail() );
+        restUser.setUsername( user.getUsername() );
+        restUser.setPasswordChangeRequired( user.isPasswordChangeRequired() );
+        restUser.setLocked( user.isLocked() );
+        restUser.setValidated( user.isValidated() );
+        restUser.setFullName( user.getFullName() );
+        return restUser;
     }
 }
