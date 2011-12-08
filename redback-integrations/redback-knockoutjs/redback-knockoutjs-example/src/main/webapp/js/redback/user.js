@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-require(["order!jquery","order!redback/operation","redback/register"],
-function($) {
+$(function() {
   user=function(username, password, confirmPassword,fullName,email,permanent,validated,timestampAccountCreation,timestampLastLogin,timestampLastPasswordChange,locked,passwordChangeRequired,ownerViewModel) {
       // Potentially Editable Field.
       this.username = ko.observable(username);
@@ -157,7 +156,15 @@ function($) {
         } else {
           this.update();
         }
+      }
 
+      this.lock=function(){
+        this.locked=true;
+        this.save();
+      }
+      this.unlock=function(){
+        this.locked=false;
+        this.save();
       }
 
       this.i18n = $.i18n.prop;
@@ -238,7 +245,13 @@ function($) {
             changePasswordBox(true,false,user);
             return;
           }
-          // FIXME check locked etc....
+          // not really needed as an exception is returned but "ceintures et bretelles" as we said in French :-)
+          if (user.locked()==true){
+            window.console.log("user locked");
+            displayErrorMessage($.i18n.prop("accout.locked"));
+            return
+          }          
+          // FIXME check validated
           reccordLoginCookie(user);
           $("#login-link").hide();
           $("#logout-link").show();

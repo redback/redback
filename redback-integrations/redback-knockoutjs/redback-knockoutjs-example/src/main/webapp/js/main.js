@@ -13,15 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-require( ["order!jquery", "order!bootstrap-dropdown", "order!bootstrap-alerts", "order!jquery.tmpl"
-         , "order!head.0.96", "order!jquery.json-2.3.min","order!jquery.validate"
-         , "order!knockout-debug"
-         ,"order!redback/redback-tmpl","jquery.cookie.1.0.0","order!redback/redback"],
+require( ["order!jquery" ,"order!redback/redback"],
 function($) {
 
   $(function() {
 
-    $LAB.script("main-tmpl.js").wait(function(){
+    //$LAB.script("main-tmpl.js").wait(function(){
       window.console.log("main karma");
       customShowError=function(validator, errorMap, errorList) {
         $( "div.clearfix" ).removeClass( "error" );
@@ -216,6 +213,6 @@ function($) {
 
       }
     });
-  });
+  //});
 
 });

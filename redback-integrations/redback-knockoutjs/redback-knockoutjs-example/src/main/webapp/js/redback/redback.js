@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-require(["order!jquery","order!redback/user",
-          "order!redback/users","jquery-ui-1.8.16.custom.min"],
-function($) {
+$(function() {
 
   // define a container object with various datas
   window.redbackModel = {usersViewModel:null,userOperationNames:null,key:null,userCreate:false};

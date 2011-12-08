@@ -27,14 +27,14 @@
                 </td>
               {{/if}}
               {{if row.locked()==true}}
-                <td><img src="images/system-lock-screen.png"/></td>
+                <td><a href="#" data-bind="click: function(){ row.unlock() }"><img src="images/system-lock-screen.png"/></a></td>
               {{else}}
-              <td><img src="images/weather-clear.png"/></td>
+                <td><a href="#" data-bind="click: function(){ row.lock() }"><img src="images/weather-clear.png"/></a></td>
               {{/if}}
               {{if row.passwordChangeRequired()==true}}
                 <td><img src="images/dialog-error.png"/></td>
               {{else}}
-              <td><img src="images/weather-clear.png"/></td>
+                <td><img src="images/weather-clear.png"/></td>
               {{/if}}
           </tr>
       {{/each}}
