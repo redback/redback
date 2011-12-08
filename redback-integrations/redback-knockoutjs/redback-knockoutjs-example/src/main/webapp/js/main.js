@@ -19,7 +19,7 @@ function($) {
   $(function() {
 
     //$LAB.script("main-tmpl.js").wait(function(){
-      window.console.log("main karma");
+      $.log("main karma");
       customShowError=function(validator, errorMap, errorList) {
         $( "div.clearfix" ).removeClass( "error" );
         $( "span.help-inline" ).remove();
@@ -216,3 +216,4 @@ function($) {
   //});
 
 });
+

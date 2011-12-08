@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.1.4.0.css">
 
   <script type="text/javascript" src="js/jquery-1.7.js"></script>
+
   <script type="text/javascript" src="js/lab.js"></script>
   <script type="text/javascript" src="js/require.1.0.1.js"></script>
 
@@ -37,10 +38,10 @@
 <script type="text/javascript">
     require.config({
         baseUrl: "js/"
-
       });
     $LAB.setGlobalDefaults({AlwaysPreserveOrder:true,BasePath:"js/",explicit_preloading:false});
     $LAB
+       .script("log.js").wait()
        .script("jquery.tmpl.js").wait()
        .script("jquery.cookie.1.0.0.js").wait()
        .script("knockout-debug.js").wait()

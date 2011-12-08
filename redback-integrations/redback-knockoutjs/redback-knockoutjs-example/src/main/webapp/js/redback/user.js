@@ -240,14 +240,14 @@ $(function() {
         }
         if (logged == true) {
           var user = mapUser(result.user);
-          window.console.log("user.passwordChangeRequired:"+user.passwordChangeRequired());
+          $.log("user.passwordChangeRequired:"+user.passwordChangeRequired());
           if (user.passwordChangeRequired()==true){
             changePasswordBox(true,false,user);
             return;
           }
           // not really needed as an exception is returned but "ceintures et bretelles" as we said in French :-)
           if (user.locked()==true){
-            window.console.log("user locked");
+            $.log("user locked");
             displayErrorMessage($.i18n.prop("accout.locked"));
             return
           }          

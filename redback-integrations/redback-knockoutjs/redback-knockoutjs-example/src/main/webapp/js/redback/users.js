@@ -80,6 +80,17 @@ $(function() {
       });
     };
 
+    this.lock = function(user){
+
+      clearUserMessages();
+      user.lock();
+    }
+
+    this.unlock = function(user){
+      clearUserMessages();
+      user.unlock();
+    }
+
     this.sortByName = function() {
       this.users.sort(function(a, b) {
           return a.username < b.username ? -1 : 1;

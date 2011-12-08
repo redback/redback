@@ -27,9 +27,9 @@
                 </td>
               {{/if}}
               {{if row.locked()==true}}
-                <td><a href="#" data-bind="click: function(){ row = row.unlock() }"><img src="images/system-lock-screen.png"/></a></td>
+                <td><a href="#" data-bind="click: function(){ unlock(row) }"><img src="images/system-lock-screen.png"/></a></td>
               {{else}}
-                <td><a href="#" data-bind="click: function(){ row = row.lock() }"><img src="images/weather-clear.png"/></a></td>
+                <td><a href="#" data-bind="click: function(){ lock(row) }"><img src="images/weather-clear.png"/></a></td>
               {{/if}}
               {{if row.passwordChangeRequired()==true}}
                 <td><img src="images/dialog-error.png"/></td>

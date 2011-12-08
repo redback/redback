@@ -20,6 +20,6 @@ require(["text!templates/menu.html","text!templates/topbar.html","text!templates
     $.tmpl( menu, $.i18n.map ).appendTo("#html-fragments");
     $.tmpl( topbar, $.i18n.map ).appendTo("#html-fragments");
     $("#html-fragments").append(message);
-    window.console.log("main-tmpl.js menu loaded");
+    $.log("main-tmpl.js menu loaded");
   }
 );
