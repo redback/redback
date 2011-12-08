@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-require(["order!jquery","order!jquery.i18n.properties-1.0.9","order!redback/i18nload","order!redback/user",
+require(["order!jquery","order!redback/user",
           "order!redback/users","jquery-ui-1.8.16.custom.min"],
 function($) {
 

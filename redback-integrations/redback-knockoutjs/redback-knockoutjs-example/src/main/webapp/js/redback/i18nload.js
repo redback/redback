@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-require(["order!jquery", "jquery.i18n.properties-1.0.9"],
-function($) {
+
+$(function() {
   // load default
   loadAndParseFile("/restServices/redbackServices/utilServices/getBundleResources", {cache:false, mode: 'map',encoding:'utf-8'});
   // load browser locale
