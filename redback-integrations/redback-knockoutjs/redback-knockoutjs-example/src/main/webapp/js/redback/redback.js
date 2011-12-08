@@ -13,21 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-require(["order!jquery","order!jquery.dataTables","order!cog.javascript","order!cog.knockout.bindings.dataTables",
-          "order!jquery.i18n.properties-1.0.9","order!redback/user","order!redback/users","jquery-ui-1.8.16.custom.min"],
+require(["order!jquery","order!jquery.i18n.properties-1.0.9","order!redback/i18nload","order!redback/user",
+          "order!redback/users","jquery-ui-1.8.16.custom.min"],
 function($) {
 
   // define a container object with various datas
   window.redbackModel = {usersViewModel:null,userOperationNames:null,key:null,userCreate:false};
-
-
-  // load default
-  loadAndParseFile("/restServices/redbackServices/utilServices/getBundleResources", {cache:false, mode: 'map',encoding:'utf-8'});
-  // load browser locale
-  var browserLang = $.i18n.browserLang();
-  loadAndParseFile("/restServices/redbackServices/utilServices/getBundleResources?locale="+browserLang, {cache:false, mode: 'map',encoding:'utf-8'});
-
-  // load template only when i18n has been loaded
 
 
   displayRedbackError=function(obj,idToAppend) {
