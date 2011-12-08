@@ -81,14 +81,21 @@ $(function() {
     };
 
     this.lock = function(user){
-
       clearUserMessages();
-      user.lock();
+      user.locked(true);
+      user.save();
     }
 
     this.unlock = function(user){
       clearUserMessages();
-      user.unlock();
+      user.locked(false);
+      user.save();
+    }
+
+    this.passwordChangeRequire = function(user,forceChangedPassword){
+      clearUserMessages();
+      user.passwordChangeRequired(forceChangedPassword);
+      user.save();
     }
 
     this.sortByName = function() {
@@ -97,15 +104,60 @@ $(function() {
       });
     };
 
+
+    this.editUserBox=function(user) {
+      window.redbackModel.createUser=false;
+      screenChange();
+      $("#main-content #user-edit").remove();
+      $("#main-content").append("<div id='user-edit'></div>");
+      $("#main-content #user-edit").attr("data-bind",'template: {name:"redback/user-edit-tmpl",data: user}');
+      $("#main-content #user-create").remove();
+      $("#main-content #user-edit").show();
+
+      var viewModel = new userViewModel(user);
+
+      ko.applyBindings(viewModel,$("#main-content #user-edit").get(0));
+      jQuery("#main-content #user-create").validate({
+        rules: {
+          confirmPassword: {
+            equalTo: "#password"
+          }
+        },
+        showErrors: function(validator, errorMap, errorList) {
+          customShowError(validator,errorMap,errorMap);
+        }
+      });
+      $("#main-content #user-create").delegate("#user-create-form-cancel-button", "click keydown", function(e) {
+        e.preventDefault();
+        $('#main-content #user-create').remove();
+      });
+      $("#main-content #user-create").validate({
+        rules: {
+          confirmPassword: {
+            equalTo: "#password"
+          }
+        },
+        showErrors: function(validator, errorMap, errorList) {
+          customShowError(validator,errorMap,errorMap);
+        }
+      });
+      $("#main-content #user-create").delegate("#user-create-form-save-button", "click keydown", function(e) {
+        e.preventDefault();
+        var valid = $("#user-create").valid();
+        if (!valid) {
+            return;
+        }
+        user.update();
+      });
+    }
+
   }
 
   displayUsersGrid=function() {
     screenChange();
     jQuery("#main-content").attr("data-bind","");
     jQuery("#main-content").html($("#usersGrid").html());
-    if (window.redbackModel.usersViewModel == null ) {
-      window.redbackModel.usersViewModel = new usersViewModel();
-    }
+    window.redbackModel.usersViewModel = new usersViewModel();
     window.redbackModel.usersViewModel.loadUsers();
     ko.applyBindings(window.redbackModel.usersViewModel,jQuery("#main-content").get(0));
   }
@@ -114,53 +166,21 @@ $(function() {
       this.user=user;
   }
 
-  this.editUserBox=function(user) {
-    window.redbackModel.createUser=false;
-    screenChange();
-    $("#main-content #user-edit").remove();
-    $("#main-content").append("<div id='user-edit'></div>");
-    $("#main-content #user-edit").attr("data-bind",'template: {name:"redback/user-edit-tmpl",data: user}');
-    $("#main-content #user-create").remove();
-    $("#main-content #user-edit").show();
 
-    var viewModel = new userViewModel(user);
 
-    ko.applyBindings(viewModel,$("#main-content #user-edit").get(0));
-    jQuery("#main-content #user-create").validate({
-      rules: {
-        confirmPassword: {
-          equalTo: "#password"
-        }
-      },
-      showErrors: function(validator, errorMap, errorList) {
-        customShowError(validator,errorMap,errorMap);
+  $(document).ready(function() {
+    // url ends with /users/list
+    // and current has archiva-manage-users karma
+    // so display users list
+    var pathContent = window.location.pathname.split("/");
+    var usersIndex = $.inArray("users", pathContent);
+    if (usersIndex>=0 && pathContent[usersIndex+1]=="list") {
+      if ($.inArray("archiva-manage-users",window.redbackModel.operatioNames)>=0){
+        displayUsersGrid();
       }
-    });
-    $("#main-content #user-create").delegate("#user-create-form-cancel-button", "click keydown", function(e) {
-      e.preventDefault();
-      $('#main-content #user-create').remove();
-    });
-    $("#main-content #user-create").validate({
-      rules: {
-        confirmPassword: {
-          equalTo: "#password"
-        }
-      },
-      showErrors: function(validator, errorMap, errorList) {
-        customShowError(validator,errorMap,errorMap);
-      }
-    });
-    $("#main-content #user-create").delegate("#user-create-form-save-button", "click keydown", function(e) {
-      e.preventDefault();
-      var valid = $("#user-create").valid();
-      if (!valid) {
-          return;
-      }
-      user.update();
-    });
-  }
+    }
 
-
+  });
 
 
 

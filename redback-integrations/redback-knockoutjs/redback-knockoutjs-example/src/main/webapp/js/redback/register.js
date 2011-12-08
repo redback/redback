@@ -82,14 +82,6 @@ $(function() {
 
   }
 
-  // TODO move to a util.js
-  $.urlParam = function(name){
-      var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
-      if (results) {
-        return results[1] || 0;
-      }
-      return null;
-  }
   /**
    * validate a registration key and go to change password key
    * @param key

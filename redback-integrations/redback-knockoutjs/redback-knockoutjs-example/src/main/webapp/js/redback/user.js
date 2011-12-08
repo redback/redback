@@ -158,15 +158,6 @@ $(function() {
         }
       }
 
-      this.lock=function(){
-        this.locked=true;
-        return ko.observable( this.save() );
-      }
-      this.unlock=function(){
-        this.locked=false;
-        return ko.observable( this.save() );
-      }
-
       this.i18n = $.i18n.prop;
   }
 

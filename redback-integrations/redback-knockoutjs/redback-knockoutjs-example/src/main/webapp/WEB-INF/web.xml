@@ -45,5 +45,9 @@
     <servlet-name>CXFServlet</servlet-name>
     <url-pattern>/restServices/*</url-pattern>
   </servlet-mapping>
+  
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
 
 </web-app>
