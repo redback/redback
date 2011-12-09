@@ -23,6 +23,7 @@ import org.codehaus.plexus.redback.authentication.AuthenticationException;
 import org.codehaus.plexus.redback.authentication.TokenBasedAuthenticationDataSource;
 import org.codehaus.plexus.redback.configuration.UserConfiguration;
 import org.codehaus.plexus.redback.keys.AuthenticationKey;
+import org.codehaus.plexus.redback.keys.KeyManager;
 import org.codehaus.plexus.redback.keys.KeyManagerException;
 import org.codehaus.plexus.redback.keys.KeyNotFoundException;
 import org.codehaus.plexus.redback.policy.AccountLockedException;
@@ -58,6 +59,7 @@ import javax.inject.Named;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -455,6 +457,43 @@ public class DefaultUserService
             // ignore
         }
         return Boolean.FALSE;
+    }
+
+    public Boolean resetPassword( String username )
+        throws RedbackServiceException
+    {
+        if ( StringUtils.isEmpty( username ) )
+        {
+            throw new RedbackServiceException( new ErrorMessage( "username.cannot.be.empty" ) );
+        }
+
+        UserManager userManager = securitySystem.getUserManager();
+        KeyManager keyManager = securitySystem.getKeyManager();
+        UserSecurityPolicy policy = securitySystem.getPolicy();
+
+        try
+        {
+            org.codehaus.plexus.redback.users.User user = userManager.findUser( username );
+
+            AuthenticationKey authkey = keyManager.createKey( username, "Password Reset Request",
+                                                              policy.getUserValidationSettings().getEmailValidationTimeout() );
+
+            mailer.sendPasswordResetEmail( Arrays.asList( user.getEmail() ), authkey, getBaseUrl() );
+
+            log.info( "password reset request" );
+        }
+        catch ( UserNotFoundException e )
+        {
+            log.info( "Password Reset on non-existant user [{}].", username );
+            throw new RedbackServiceException( new ErrorMessage( "password.reset.failure" ) );
+        }
+        catch ( KeyManagerException e )
+        {
+            log.info( "Unable to issue password reset.", e );
+            throw new RedbackServiceException( new ErrorMessage( "password.reset.email.generation.failure" ) );
+        }
+
+        return Boolean.TRUE;
     }
 
     public RegistrationKey registerUser( User user )

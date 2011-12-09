@@ -166,6 +166,70 @@ public class UserServiceTest
     }
 
     @Test
+    public void resetPassword()
+        throws Exception
+    {
+        try
+        {
+            UserService service = getUserService();
+            User u = new User();
+            u.setFullName( "the toto" );
+            u.setUsername( "toto" );
+            u.setEmail( "toto@toto.fr" );
+            u.setPassword( "toto123" );
+            u.setConfirmPassword( "toto123" );
+            String key = service.registerUser( u ).getKey();
+
+            assertFalse( key.equals( "-1" ) );
+
+            ServicesAssert assertService =
+                JAXRSClientFactory.create( "http://localhost:" + port + "/" + getRestServicesPath() + "/testsService/",
+                                           ServicesAssert.class );
+
+            List<EmailMessage> emailMessages = assertService.getEmailMessageSended();
+            assertEquals( 1, emailMessages.size() );
+            assertEquals( "toto@toto.fr", emailMessages.get( 0 ).getTos().get( 0 ) );
+
+            assertEquals( "Welcome", emailMessages.get( 0 ).getSubject() );
+            assertTrue(
+                emailMessages.get( 0 ).getText().contains( "Use the following URL to validate your account." ) );
+
+            assertTrue( service.validateUserFromKey( key ) );
+
+            service = getUserService( authorizationHeader );
+
+            u = service.getUser( "toto" );
+
+            assertNotNull( u );
+            assertTrue( u.isValidated() );
+            assertTrue( u.isPasswordChangeRequired() );
+
+            assertTrue( service.validateUserFromKey( key ) );
+
+            assertTrue( service.resetPassword( "toto" ) );
+
+            emailMessages = assertService.getEmailMessageSended();
+            assertEquals( 2, emailMessages.size() );
+            assertEquals( "toto@toto.fr", emailMessages.get( 1 ).getTos().get( 0 ) );
+
+            assertTrue( emailMessages.get( 1 ).getText().contains( "Password Reset" ) );
+            assertTrue( emailMessages.get( 1 ).getText().contains( "Username: toto" ) );
+
+
+        }
+        catch ( Exception e )
+        {
+            log.error( e.getMessage(), e );
+            throw e;
+        }
+        finally
+        {
+            getUserService( authorizationHeader ).deleteUser( "toto" );
+        }
+
+    }
+
+    @Test
     public void getAdminPermissions()
         throws Exception
     {

@@ -158,6 +158,18 @@ public interface UserService
     Boolean validateUserFromKey( @PathParam( "key" ) String key )
         throws RedbackServiceException;
 
+    @Path( "resetPassword/{user}" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( noRestriction = true, noPermission = true )
+    /**
+     *
+     * @param user username for send a password reset email
+     * @since 1.4
+     */
+    Boolean resetPassword( @PathParam( "user" ) String user )
+        throws RedbackServiceException;
+
     @Path( "getUserPermissions/{userName}" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
