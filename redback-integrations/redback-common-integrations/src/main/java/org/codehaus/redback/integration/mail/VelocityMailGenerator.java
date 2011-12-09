@@ -50,7 +50,8 @@ public class VelocityMailGenerator
     private UserConfiguration config;
 
     // FIXME use the spring directly 
-    @Inject @Named(value = "velocityEngine#redback")
+    @Inject
+    @Named( value = "velocityEngine#redback" )
     private VelocityEngine velocityEngine;
 
     public String generateMail( String templateName, AuthenticationKey authkey, String baseUrl )
@@ -103,6 +104,8 @@ public class VelocityMailGenerator
 
             context.put( "feedback", feedback );
         }
+
+        context.put( "urlPath", config.getString( "email.url.path", "security/login!login.action" ) );
 
         context.put( "authkey", authkey.getKey() );
 
