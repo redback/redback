@@ -18,10 +18,10 @@ package org.codehaus.plexus.redback.rbac;
 
 /**
  * Permission
- *
+ * <p/>
  * A permission is the wrapper for an operation and a resource effectively saying
  * that the operation is authorized for that resource.
- *
+ * <p/>
  * P(Operation, Resource)
  *
  * @author Jesse McConnell <jmcconnell@apache.org>
@@ -30,77 +30,72 @@ package org.codehaus.plexus.redback.rbac;
  */
 public interface Permission
 {
-    /**
-     * Plexus Role Name
-     */
-    public static final String ROLE = Permission.class.getName();
 
     /**
      * Long description of the Permission
      */
-    public String getDescription();
+    String getDescription();
 
     /**
      * Get the short name of the permission.
-     * 
+     * <p/>
      * NOTE: This field is considered the Primary Key for this object.
-     * 
+     *
      * @return the short name for this permission.
      */
-    public String getName();
+    String getName();
 
     /**
      * Operation that this permission is authorizing
      */
-    public Operation getOperation();
+    Operation getOperation();
 
     /**
      * This is the resource associated with this permission.
-     *
+     * <p/>
      * Implementors must always supply a Resource.
      *
      * @return the Resource.
      */
-    public Resource getResource();
+    Resource getResource();
 
     /**
      * Set null
      *
      * @param description
      */
-    public void setDescription( String description );
+    void setDescription( String description );
 
     /**
      * Set the short name for this permission.
      *
      * @param name
      */
-    public void setName( String name );
+    void setName( String name );
 
     /**
      * Set null
      *
      * @param operation
      */
-    public void setOperation( Operation operation );
+    void setOperation( Operation operation );
 
     /**
-     *
      * @param resource
      */
-    public void setResource( Resource resource );
+    void setResource( Resource resource );
 
     /**
      * Test to see if the object is a permanent object or not.
-     * 
+     *
      * @return true if the object is permanent.
      */
-    public boolean isPermanent();
+    boolean isPermanent();
 
     /**
      * Set flag indicating if the object is a permanent object or not.
-     * 
+     *
      * @param permanent true if the object is permanent.
      */
-    public void setPermanent( boolean permanent );
+    void setPermanent( boolean permanent );
 }

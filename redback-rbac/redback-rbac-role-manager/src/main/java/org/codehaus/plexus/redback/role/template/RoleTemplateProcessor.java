@@ -26,9 +26,10 @@ import org.codehaus.plexus.redback.role.model.RedbackRoleModel;
  */
 public interface RoleTemplateProcessor
 {
-    public static final String ROLE = RoleTemplateProcessor.class.getName();
-    
-    void create( RedbackRoleModel model, String templateId, String resource ) throws RoleManagerException;
-    
-    void remove( RedbackRoleModel model, String templateId, String resource ) throws RoleManagerException;
+
+    void create( RedbackRoleModel model, String templateId, String resource )
+        throws RoleManagerException;
+
+    void remove( RedbackRoleModel model, String templateId, String resource )
+        throws RoleManagerException;
 }

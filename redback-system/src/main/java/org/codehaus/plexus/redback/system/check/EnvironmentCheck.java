@@ -26,12 +26,11 @@ import java.util.List;
  */
 public interface EnvironmentCheck
 {
-    public static final String ROLE = EnvironmentCheck.class.getName();
 
     /**
      * Validate the environment.
      *
      * @param violations list to populate with environment violations.
      */
-    public void validateEnvironment( List<String> violations );
+    void validateEnvironment( List<String> violations );
 }

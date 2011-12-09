@@ -26,11 +26,7 @@ import org.codehaus.plexus.redback.users.User;
  */
 public interface PasswordRule
 {
-    /**
-     * Provide the Plexus Component Role.
-     */
-    public static final String ROLE = PasswordRule.class.getName();
-    
+
     /**
      * Tests if rule is enabled (or not)
      */

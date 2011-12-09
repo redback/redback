@@ -27,12 +27,10 @@ import org.codehaus.plexus.redback.policy.MustChangePasswordException;
  */
 public interface Authenticator
 {
-    public static final String ROLE = Authenticator.class.getName();
+    String getId();
 
-    public String getId();
+    boolean supportsDataSource( AuthenticationDataSource source );
 
-    public boolean supportsDataSource( AuthenticationDataSource source );
-
-    public AuthenticationResult authenticate( AuthenticationDataSource source )
+    AuthenticationResult authenticate( AuthenticationDataSource source )
         throws AccountLockedException, AuthenticationException, MustChangePasswordException;
 }

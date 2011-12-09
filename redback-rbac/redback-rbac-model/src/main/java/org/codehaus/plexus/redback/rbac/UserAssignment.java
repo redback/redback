@@ -31,10 +31,7 @@ import java.util.List;
  */
 public interface UserAssignment
 {
-    /**
-     * Plexus Role Name
-     */
-    public static final String ROLE = UserAssignment.class.getName();
+
     
     /**
      * The principal for the User that the set of roles is associated with.
@@ -43,42 +40,42 @@ public interface UserAssignment
      * 
      * @return the principal for the User.
      */
-    public String getPrincipal();
+    String getPrincipal();
 
     /**
      * Get the roles for this user.
      * 
      * @return List of &lt;{@link String}&gt; objects representing the Role Names.
      */
-    public List<String> getRoleNames();
+    List<String> getRoleNames();
     
     /**
      * Add a rolename to this assignment.
      * 
      * @param role the role.
      */
-    public void addRoleName( Role role );
+    void addRoleName( Role role );
     
     /**
      * Add a rolename to this assignment.
      * 
      * @param roleName the role name.
      */
-    public void addRoleName( String roleName );
+    void addRoleName( String roleName );
     
     /**
      * Remove a rolename from this assignment.
      * 
      * @param role the role who's name is to be removed.
      */
-    public void removeRoleName( Role role );
+    void removeRoleName( Role role );
     
     /**
      * Remove a role name from this assignment.
      * 
      * @param roleName the role name to be removed.
      */
-    public void removeRoleName( String roleName );
+    void removeRoleName( String roleName );
 
     /**
      * Set the user principal object for this association.
@@ -87,26 +84,26 @@ public interface UserAssignment
      * 
      * @param principal
      */
-    public void setPrincipal( String principal );
+    void setPrincipal( String principal );
 
     /**
      * Set the roles names for this user.
      * 
      * @param roles the List of &lt;{@link String}&gt; objects representing the Role Names.
      */
-    public void setRoleNames( List<String> roles );
+    void setRoleNames( List<String> roles );
     
     /**
      * Test to see if the object is a permanent object or not.
      * 
      * @return true if the object is permanent.
      */
-    public boolean isPermanent();
+    boolean isPermanent();
 
     /**
      * Set flag indicating if the object is a permanent object or not.
      * 
      * @param permanent true if the object is permanent.
      */
-    public void setPermanent( boolean permanent );
+    void setPermanent( boolean permanent );
 }

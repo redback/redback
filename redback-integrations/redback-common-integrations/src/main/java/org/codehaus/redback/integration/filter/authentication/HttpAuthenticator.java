@@ -46,8 +46,6 @@ public abstract class HttpAuthenticator
 {
     protected Logger log = LoggerFactory.getLogger( getClass() );
 
-    public static final String ROLE = HttpAuthenticator.class.getName();
-
     @Inject
     protected SecuritySystem securitySystem;
 
@@ -153,7 +151,7 @@ public abstract class HttpAuthenticator
 
     public SecuritySession getSecuritySession( HttpSession httpSession )
     {
-        SecuritySession securitySession = (SecuritySession) httpSession.getAttribute( SecuritySession.ROLE );
+        SecuritySession securitySession = (SecuritySession) httpSession.getAttribute( SecuritySession.SESSION_KEY );
         if ( securitySession != null )
         {
             return securitySession;
@@ -165,19 +163,19 @@ public abstract class HttpAuthenticator
 
     public void setSecuritySession( SecuritySession session, HttpSession httpSession )
     {
-        httpSession.setAttribute( SecuritySession.ROLE, session );
+        httpSession.setAttribute( SecuritySession.SESSION_KEY, session );
         httpSession.setAttribute( SecuritySession.USERKEY, session.getUser() );
     }
 
     public void setSessionUser( User user, HttpSession httpSession )
     {
-        httpSession.setAttribute( SecuritySession.ROLE, null );
+        httpSession.setAttribute( SecuritySession.SESSION_KEY, null );
         httpSession.setAttribute( SecuritySession.USERKEY, user );
     }
 
     public String storeDefaultUser( String principal, HttpSession httpSession )
     {
-        httpSession.setAttribute( SecuritySession.ROLE, null );
+        httpSession.setAttribute( SecuritySession.SESSION_KEY, null );
         httpSession.setAttribute( SecuritySession.USERKEY, null );
 
         if ( StringUtils.isEmpty( principal ) )

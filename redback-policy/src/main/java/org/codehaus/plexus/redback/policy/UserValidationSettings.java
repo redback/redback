@@ -17,33 +17,31 @@ package org.codehaus.plexus.redback.policy;
  */
 
 /**
- * UserValidationSettings 
+ * UserValidationSettings
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
 public interface UserValidationSettings
 {
-    public static final String ROLE = UserValidationSettings.class.getName();
-    
     /**
      * Get the flag indicating if a new users require email validation or not.
-     * 
+     *
      * @return
      */
     boolean isEmailValidationRequired();
-    
+
     /**
      * Gets the number of minutes until the email validation message key
      * should expire.
-     *  
+     *
      * @return the email validation timeout (in minutes).
      */
     int getEmailValidationTimeout();
-    
+
     /**
      * Get the subject line for the validation email.
-     * 
+     *
      * @return the subject line for the validation email.
      */
     String getEmailSubject();

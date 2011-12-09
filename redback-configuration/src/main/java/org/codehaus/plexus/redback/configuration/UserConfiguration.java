@@ -41,8 +41,6 @@ import java.util.List;
 @Service( "userConfiguration" )
 public class UserConfiguration
 {
-    public static final String ROLE = UserConfiguration.class.getName();
-
     private static final String DEFAULT_CONFIG_RESOURCE = "org/codehaus/plexus/redback/config-defaults.properties";
 
     protected Logger log = LoggerFactory.getLogger( getClass() );

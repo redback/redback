@@ -26,16 +26,15 @@ import java.util.List;
  */
 public interface UserManager
 {
-    public static final String ROLE = UserManager.class.getName();
-
-    public static final String GUEST_USERNAME = "guest";
+    
+    static final String GUEST_USERNAME = "guest";
 
     /**
      * Is the UserManager read only?  if so then create and modify actions are to be disabled
      *
      * @return boolean true if user manager is disabled
      */
-    public boolean isReadOnly();
+    boolean isReadOnly();
 
     /**
      * An Identifier for the UserManager.

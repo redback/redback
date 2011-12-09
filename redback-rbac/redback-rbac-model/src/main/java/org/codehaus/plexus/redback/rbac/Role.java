@@ -19,12 +19,12 @@ package org.codehaus.plexus.redback.rbac;
 import java.util.List;
 
 /**
- * Role 
- *
+ * Role
+ * <p/>
  * A role is assignable to a user and effectively grants that user all of the
  * permissions that are present in that role.  A role can also contain other roles
  * which add the permissions in those roles to the available permissions for authorization.
- *
+ * <p/>
  * A role can contain any number of permissions
  * A role can contain any number of other roles
  * A role can be assigned to any number of users
@@ -35,114 +35,110 @@ import java.util.List;
  */
 public interface Role
 {
-    /**
-     * Plexus Role Name
-     */
-    public static final String ROLE = Role.class.getName();
 
     /**
      * Method addPermission
      *
      * @param permission
      */
-    public void addPermission( Permission permission );
-    
+    void addPermission( Permission permission );
+
     /**
      * Method addChildRoleName
-     * 
+     *
      * @param name the name of the child role.
      */
-    public void addChildRoleName( String name );
+    void addChildRoleName( String name );
 
     /**
      * Method getChildRoleNames
      */
-    public List<String> getChildRoleNames();
-    
+    List<String> getChildRoleNames();
+
     /**
      * Convienence method to see if Role has Child Roles.
-     * 
+     *
      * @return true if child roles exists and has any roles being tracked.
      */
-    public boolean hasChildRoles();
+    boolean hasChildRoles();
 
     /**
      * Long description of the role.
      */
-    public String getDescription();
+    String getDescription();
 
     /**
      * Get the name.
-     * 
+     * <p/>
      * NOTE: This field is considered the Primary Key for this object.
      */
-    public String getName();
+    String getName();
 
     /**
      * Method getPermissions
      */
-    public List<Permission> getPermissions();
+    List<Permission> getPermissions();
 
     /**
      * true if this role is available to be assigned to a user
      */
-    public boolean isAssignable();
+    boolean isAssignable();
 
     /**
      * Method removePermission
      *
      * @param permission
      */
-    public void removePermission( Permission permission );
+    void removePermission( Permission permission );
 
     /**
      * true if this role is available to be assigned to a user
      *
      * @param assignable
      */
-    public void setAssignable( boolean assignable );
+    void setAssignable( boolean assignable );
 
     /**
      * The names of the roles that will inherit the permissions of this role
      *
      * @param names the list of names of other roles.
      */
-    public void setChildRoleNames( List<String> names );
+    void setChildRoleNames( List<String> names );
 
     /**
      * Set the Description
      *
      * @param description
      */
-    public void setDescription( String description );
+    void setDescription( String description );
 
     /**
      * Set Name
-     * 
+     * <p/>
      * NOTE: This field is considered the Primary Key for this object.
      *
      * @param name
      */
-    public void setName( String name );
+    void setName( String name );
 
     /**
      * Set Permissions
      *
      * @param permissions
      */
-    public void setPermissions( List<Permission> permissions );
-    
+    void setPermissions( List<Permission> permissions );
+
     /**
      * Test to see if the object is a permanent object or not.
-     * 
+     *
      * @return true if the object is permanent.
      */
-    public boolean isPermanent();
+    boolean isPermanent();
 
     /**
      * Set flag indicating if the object is a permanent object or not.
-     * 
+     *
      * @param permanent true if the object is permanent.
      */
-    public void setPermanent( boolean permanent );
+    void setPermanent( boolean permanent );
 }

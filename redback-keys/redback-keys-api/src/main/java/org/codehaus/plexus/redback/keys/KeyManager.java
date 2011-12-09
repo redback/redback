@@ -26,14 +26,14 @@ import java.util.List;
  */
 public interface KeyManager
 {
-    public static final String ROLE = KeyManager.class.getName();
+
 
     /**
      * String identifying the key manager implementation.
      *
      * @return the key manager implementation id.
      */
-    public String getId();
+    String getId();
 
     /**
      * Attempt to find a specific key in the store.
@@ -45,7 +45,7 @@ public interface KeyManager
      * @throws KeyNotFoundException when the requested, unexpired, key cannot be found.
      * @throws KeyManagerException  when there is a fundamental problem with the KeyManager implementation.
      */
-    public AuthenticationKey findKey( String key )
+    AuthenticationKey findKey( String key )
         throws KeyNotFoundException, KeyManagerException;
 
     /**
@@ -58,7 +58,7 @@ public interface KeyManager
      * @return the key created
      * @throws KeyManagerException if there is a fundamental problem with the KeyManager implementation.
      */
-    public AuthenticationKey createKey( String principal, String purpose, int expirationMinutes )
+    AuthenticationKey createKey( String principal, String purpose, int expirationMinutes )
         throws KeyManagerException;
 
     /**
@@ -66,7 +66,7 @@ public interface KeyManager
      *
      * @param key the key to delete.
      */
-    public void deleteKey( AuthenticationKey key )
+    void deleteKey( AuthenticationKey key )
         throws KeyManagerException;
 
     /**
@@ -74,7 +74,7 @@ public interface KeyManager
      *
      * @param key the key to delete.
      */
-    public void deleteKey( String key )
+    void deleteKey( String key )
         throws KeyManagerException;
 
     List<AuthenticationKey> getAllKeys();
@@ -86,6 +86,6 @@ public interface KeyManager
     /**
      * Remove all keys that are expired.
      */
-    public void removeExpiredKeys()
+    void removeExpiredKeys()
         throws KeyManagerException;
 }

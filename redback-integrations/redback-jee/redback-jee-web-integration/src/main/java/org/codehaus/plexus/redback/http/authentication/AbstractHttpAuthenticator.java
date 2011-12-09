@@ -29,8 +29,6 @@ public abstract class AbstractHttpAuthenticator
 {
     protected Logger log = LoggerFactory.getLogger( getClass() );
 
-    public static final String ROLE = AbstractHttpAuthenticator.class.getName();
-
     @Inject
     protected SecuritySystem securitySystem;
 
@@ -115,24 +113,24 @@ public abstract class AbstractHttpAuthenticator
 
     protected SecuritySession getSecuritySession( Object session )
     {
-        return (SecuritySession) getSessionValue( session, SecuritySession.ROLE );
+        return (SecuritySession) getSessionValue( session, SecuritySession.SESSION_KEY );
     }
 
     protected void setSecuritySession( SecuritySession session, Object sessionObj )
     {
-        setSessionValue( sessionObj, SecuritySession.ROLE, session );
+        setSessionValue( sessionObj, SecuritySession.SESSION_KEY, session );
         setSessionValue( sessionObj, SecuritySession.USERKEY, session.getUser() );
     }
 
     protected void setSessionUser( User user, Object session )
     {
-        setSessionValue( session, SecuritySession.ROLE, null );
+        setSessionValue( session, SecuritySession.SESSION_KEY, null );
         setSessionValue( session, SecuritySession.USERKEY, user );
     }
 
     protected String storeDefaultUser( String principal, Object session )
     {
-        setSessionValue( session, SecuritySession.ROLE, null );
+        setSessionValue( session, SecuritySession.SESSION_KEY, null );
         setSessionValue( session, SecuritySession.USERKEY, null );
 
         if ( StringUtils.isEmpty( principal ) )

@@ -18,7 +18,7 @@ package org.codehaus.plexus.redback.rbac;
 
 /**
  * Operation
- *
+ * <p/>
  * In RBAC the operation is an action or functionality that can be linked with a
  * particular resource into an assignable Permission.  Operations don't exist outside
  * Permissions.
@@ -29,57 +29,53 @@ package org.codehaus.plexus.redback.rbac;
  */
 public interface Operation
 {
-    /**
-     * Plexus Role Name
-     */
-    public static final String ROLE = Operation.class.getName();
+
 
     /**
      * Long description of an operation.
      *
      * @return String
      */
-    public String getDescription();
+    String getDescription();
 
     /**
      * name of the operation that is used in the act of authorization
-     *
+     * <p/>
      * 'modify-foo', 'change-password'
-     * 
+     * <p/>
      * NOTE: This field is considered the Primary Key for this object.
-     * 
+     *
      * @return the name of the operation.
      */
-    public String getName();
+    String getName();
 
     /**
-     *
      * @param description
      */
-    public void setDescription( String description );
+    void setDescription( String description );
 
     /**
      * Set name of the operation that is used in the act of authorization
-     * 
+     * <p/>
      * 'modify-foo', 'change-password'
-     * 
+     * <p/>
      * NOTE: This field is considered the Primary Key for this object.
-     * 
+     *
      * @param name
      */
-    public void setName( String name );
-    
+    void setName( String name );
+
     /**
      * Test to see if the object is a permanent object or not.
-     * 
+     *
      * @return true if the object is permanent.
      */
-    public boolean isPermanent();
+    boolean isPermanent();
 
     /**
      * Set flag indicating if the object is a permanent object or not.
-     * 
+     *
      * @param permanent true if the object is permanent.
      */
-    public void setPermanent( boolean permanent );
+    void setPermanent( boolean permanent );
 }

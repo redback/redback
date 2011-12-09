@@ -25,8 +25,6 @@ import javax.naming.directory.Attributes;
  */
 public interface UserMapper
 {
-    public static final String ROLE = UserMapper.class.getName();
-
     LdapUser getUser( Attributes attributes )
         throws MappingException;
 
@@ -57,7 +55,7 @@ public interface UserMapper
     LdapUser newUserInstance( String username, String fullName, String email );
 
     LdapUser newTemplateUserInstance();
-    
+
     String[] getReturningAttributes();
 
 }

@@ -29,11 +29,7 @@ package org.codehaus.plexus.redback.policy;
  */
 public interface PasswordEncoder
 {
-    /**
-     * Provide the Plexus Component Role.
-     */
-    public static final String ROLE = PasswordEncoder.class.getName();
-    
+
     /**
      * <p>
      * Sets the system wide salt to use in the encoder.

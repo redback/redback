@@ -27,9 +27,10 @@ import java.io.Serializable;
 public interface SecuritySession
     extends Serializable
 {
-    public static final String ROLE = SecuritySession.class.getName();
 
-    public static final String USERKEY = "SecuritySessionUser";
+    static final String SESSION_KEY = SecuritySession.class.getName();
+
+    static final String USERKEY = "SecuritySessionUser";
 
     AuthenticationResult getAuthenticationResult();
 

@@ -16,42 +16,39 @@ package org.codehaus.plexus.redback.users.ldap.ctl;
  * limitations under the License.
  */
 
-import java.util.Collection;
-import java.util.List;
-
-import javax.naming.directory.DirContext;
-
 import org.codehaus.plexus.redback.common.ldap.LdapUser;
 import org.codehaus.plexus.redback.common.ldap.MappingException;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.ldap.LdapUserQuery;
 
+import javax.naming.directory.DirContext;
+import java.util.Collection;
+import java.util.List;
+
 /**
  * @version $Id$
  */
-public interface LdapController {
+public interface LdapController
+{
 
-	public static final String ROLE = LdapController.class.getName();
-	
-	public abstract void removeUser(Object principal, DirContext context)
-			throws LdapControllerException;
+    void removeUser( Object principal, DirContext context )
+        throws LdapControllerException;
 
-	public abstract void updateUser(User user, DirContext context)
-			throws LdapControllerException, MappingException;
+    void updateUser( User user, DirContext context )
+        throws LdapControllerException, MappingException;
 
-	public abstract boolean userExists(Object key, DirContext context)
-			throws LdapControllerException;
+    boolean userExists( Object key, DirContext context )
+        throws LdapControllerException;
 
-	public abstract Collection<User> getUsers(DirContext context)
-			throws LdapControllerException, MappingException;
+    Collection<User> getUsers( DirContext context )
+        throws LdapControllerException, MappingException;
 
-	public abstract void createUser(User user, DirContext context,
-			boolean encodePasswordIfChanged) throws LdapControllerException,
-			MappingException;
+    void createUser( User user, DirContext context, boolean encodePasswordIfChanged )
+        throws LdapControllerException, MappingException;
 
-	public abstract LdapUser getUser(Object key, DirContext context)
-			throws LdapControllerException, MappingException;
+    LdapUser getUser( Object key, DirContext context )
+        throws LdapControllerException, MappingException;
 
-    public abstract List<User> getUsersByQuery(LdapUserQuery query, DirContext context)
-            throws LdapControllerException, MappingException;
+    List<User> getUsersByQuery( LdapUserQuery query, DirContext context )
+        throws LdapControllerException, MappingException;
 }

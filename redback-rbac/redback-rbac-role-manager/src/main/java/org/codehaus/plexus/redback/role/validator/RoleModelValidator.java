@@ -29,10 +29,9 @@ import java.util.List;
  */
 public interface RoleModelValidator
 {
-    public static final String ROLE = RoleModelValidator.class.getName();
-    
     List<String> getValidationErrors();
-    
-    boolean validate( RedbackRoleModel model ) throws RoleManagerException;
-    
+
+    boolean validate( RedbackRoleModel model )
+        throws RoleManagerException;
+
 }

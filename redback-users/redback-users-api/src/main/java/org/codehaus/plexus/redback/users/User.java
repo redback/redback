@@ -29,10 +29,6 @@ import java.util.List;
 public interface User
     extends Serializable
 {
-    /**
-     * The Plexus ROLE for this interface.
-     */
-    public static final String ROLE = User.class.getName();
 
     /**
      * This is the object used to track the user within the provider.
