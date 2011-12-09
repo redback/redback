@@ -41,8 +41,9 @@ public interface PasswordService
      * used to change the password on first user connection after registration use.
      * the key is mandatory and a control will be done on the username provided.
      * <b>need to be logged by {@link UserService#validateUserFromKey(String)}</b>
+     * @return username
      */
-    Boolean changePasswordWithKey( @QueryParam( "password" ) String password,
+    String changePasswordWithKey( @QueryParam( "password" ) String password,
                                    @QueryParam( "passwordConfirmation" ) String passwordConfirmation,
                                    @QueryParam( "key" ) String key )
         throws RedbackServiceException;

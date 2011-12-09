@@ -74,7 +74,7 @@ public class DefaultPasswordService
         this.passwordValidator = passwordValidator;
     }
 
-    public Boolean changePasswordWithKey( String password, String passwordConfirmation, String key )
+    public String changePasswordWithKey( String password, String passwordConfirmation, String key )
         throws RedbackServiceException
     {
         Boolean isLogged = httpAuthenticator.getSecuritySession( httpServletRequest.getSession( true ) ) != null;
@@ -116,6 +116,8 @@ public class DefaultPasswordService
             user.setEncodedPassword( encodedPassword );
             securitySystem.getUserManager().updateUser( user );
 
+            return user.getUsername();
+
         }
         catch ( KeyManagerException e )
         {
@@ -146,7 +148,6 @@ public class DefaultPasswordService
             throw new RedbackServiceException( errorMessages );
         }
 
-        return true;
     }
 
     public Boolean changePassword( String userName, String previousPassword, String password,
