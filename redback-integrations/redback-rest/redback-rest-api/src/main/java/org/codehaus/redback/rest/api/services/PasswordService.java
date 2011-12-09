@@ -19,6 +19,7 @@ package org.codehaus.redback.rest.api.services;
  */
 
 import org.codehaus.plexus.redback.authorization.RedbackAuthorization;
+import org.codehaus.redback.rest.api.model.User;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -43,9 +44,9 @@ public interface PasswordService
      * <b>need to be logged by {@link UserService#validateUserFromKey(String)}</b>
      * @return username
      */
-    String changePasswordWithKey( @QueryParam( "password" ) String password,
-                                   @QueryParam( "passwordConfirmation" ) String passwordConfirmation,
-                                   @QueryParam( "key" ) String key )
+    User changePasswordWithKey( @QueryParam( "password" ) String password,
+                                  @QueryParam( "passwordConfirmation" ) String passwordConfirmation,
+                                  @QueryParam( "key" ) String key )
         throws RedbackServiceException;
 
     @GET
@@ -55,7 +56,7 @@ public interface PasswordService
     /**
      * used to change the password on passwordChangeRequired state.
      */
-    Boolean changePassword( @QueryParam( "userName" ) String userName,
+    User changePassword( @QueryParam( "userName" ) String userName,
                             @QueryParam( "previousPassword" ) String previousPassword,
                             @QueryParam( "password" ) String password,
                             @QueryParam( "passwordConfirmation" ) String passwordConfirmation )

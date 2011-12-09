@@ -74,7 +74,8 @@ public class DefaultPasswordService
         this.passwordValidator = passwordValidator;
     }
 
-    public String changePasswordWithKey( String password, String passwordConfirmation, String key )
+    public org.codehaus.redback.rest.api.model.User changePasswordWithKey( String password, String passwordConfirmation,
+                                                                           String key )
         throws RedbackServiceException
     {
         Boolean isLogged = httpAuthenticator.getSecuritySession( httpServletRequest.getSession( true ) ) != null;
@@ -114,9 +115,9 @@ public class DefaultPasswordService
             User user = securitySystem.getUserManager().findUser( principal );
             user.setPassword( password );
             user.setEncodedPassword( encodedPassword );
-            securitySystem.getUserManager().updateUser( user );
+            user = securitySystem.getUserManager().updateUser( user );
 
-            return user.getUsername();
+            return new org.codehaus.redback.rest.api.model.User( user );
 
         }
         catch ( KeyManagerException e )
@@ -150,8 +151,8 @@ public class DefaultPasswordService
 
     }
 
-    public Boolean changePassword( String userName, String previousPassword, String password,
-                                   String passwordConfirmation )
+    public org.codehaus.redback.rest.api.model.User changePassword( String userName, String previousPassword,
+                                                                    String password, String passwordConfirmation )
         throws RedbackServiceException
     {
         if ( StringUtils.isEmpty( userName ) )
@@ -198,13 +199,14 @@ public class DefaultPasswordService
 
             u.setPassword( password );
 
-            securitySystem.getUserManager().updateUser( u );
+            u = securitySystem.getUserManager().updateUser( u );
+            return new org.codehaus.redback.rest.api.model.User( u );
         }
         catch ( UserNotFoundException e )
         {
             throw new RedbackServiceException( new ErrorMessage( "user not found" ),
                                                Response.Status.BAD_REQUEST.getStatusCode() );
         }
-        return Boolean.TRUE;
+
     }
 }
