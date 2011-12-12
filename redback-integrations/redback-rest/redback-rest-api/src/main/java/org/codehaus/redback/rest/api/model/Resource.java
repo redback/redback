@@ -23,6 +23,7 @@ import java.io.Serializable;
 
 /**
  * @author Olivier Lamy
+ * @since 1.4
  */
 @XmlRootElement( name = "resource" )
 public class Resource
@@ -32,9 +33,18 @@ public class Resource
 
     private boolean pattern;
 
+    private boolean permanent;
+
     public Resource()
     {
         // no op
+    }
+
+    public Resource( org.codehaus.plexus.redback.rbac.Resource resource )
+    {
+        this.identifier = resource.getIdentifier();
+        this.pattern = resource.isPattern();
+        this.permanent = resource.isPermanent();
     }
 
     public String getIdentifier()
@@ -57,6 +67,16 @@ public class Resource
         this.pattern = pattern;
     }
 
+    public boolean isPermanent()
+    {
+        return permanent;
+    }
+
+    public void setPermanent( boolean permanent )
+    {
+        this.permanent = permanent;
+    }
+
     @Override
     public String toString()
     {
@@ -64,6 +84,7 @@ public class Resource
         sb.append( "Resource" );
         sb.append( "{identifier='" ).append( identifier ).append( '\'' );
         sb.append( ", pattern=" ).append( pattern );
+        sb.append( ", permanent=" ).append( permanent );
         sb.append( '}' );
         return sb.toString();
     }

@@ -199,4 +199,6 @@ public interface RoleManagementService
     Boolean verifyTemplatedRole( @QueryParam( "templateId" ) String templateId,
                                  @QueryParam( "resource" ) String resource )
         throws RedbackServiceException;
+
+    getEffectivelyAssignedRoles
 }

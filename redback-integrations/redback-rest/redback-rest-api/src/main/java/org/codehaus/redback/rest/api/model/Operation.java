@@ -23,6 +23,7 @@ import java.io.Serializable;
 
 /**
  * @author Olivier Lamy
+ * @since 1.4
  */
 @XmlRootElement( name = "operation" )
 public class Operation
@@ -30,9 +31,20 @@ public class Operation
 {
     private String name;
 
+    private String description;
+
+    private boolean permanent;
+
     public Operation()
     {
         // no op
+    }
+
+    public Operation( org.codehaus.plexus.redback.rbac.Operation operation )
+    {
+        this.name = operation.getName();
+        this.description = operation.getDescription();
+        this.permanent = operation.isPermanent();
     }
 
     public String getName()
@@ -45,12 +57,34 @@ public class Operation
         this.name = name;
     }
 
+    public String getDescription()
+    {
+        return description;
+    }
+
+    public void setDescription( String description )
+    {
+        this.description = description;
+    }
+
+    public boolean isPermanent()
+    {
+        return permanent;
+    }
+
+    public void setPermanent( boolean permanent )
+    {
+        this.permanent = permanent;
+    }
+
     @Override
     public String toString()
     {
         final StringBuilder sb = new StringBuilder();
         sb.append( "Operation" );
         sb.append( "{name='" ).append( name ).append( '\'' );
+        sb.append( ", description='" ).append( description ).append( '\'' );
+        sb.append( ", permanent=" ).append( permanent );
         sb.append( '}' );
         return sb.toString();
     }

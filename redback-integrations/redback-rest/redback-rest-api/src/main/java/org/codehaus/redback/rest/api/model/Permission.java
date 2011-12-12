@@ -23,6 +23,7 @@ import java.io.Serializable;
 
 /**
  * @author Olivier Lamy
+ * @since 1.4
  */
 @XmlRootElement( name = "permission" )
 public class Permission
@@ -30,13 +31,26 @@ public class Permission
 {
     private String name;
 
+    private String description;
+
     private Operation operation;
 
     private Resource resource;
 
+    private boolean permanent;
+
     public Permission()
     {
         // no op
+    }
+
+    public Permission( org.codehaus.plexus.redback.rbac.Permission permission )
+    {
+        this.name = permission.getName();
+        this.description = permission.getDescription();
+        this.operation = permission.getOperation() == null ? null : new Operation( permission.getOperation() );
+        this.resource = permission.getResource() == null ? null : new Resource( permission.getResource() );
+        this.permanent = permission.isPermanent();
     }
 
     public String getName()
@@ -75,8 +89,10 @@ public class Permission
         final StringBuilder sb = new StringBuilder();
         sb.append( "Permission" );
         sb.append( "{name='" ).append( name ).append( '\'' );
+        sb.append( ", description='" ).append( description ).append( '\'' );
         sb.append( ", operation=" ).append( operation );
         sb.append( ", resource=" ).append( resource );
+        sb.append( ", permanent=" ).append( permanent );
         sb.append( '}' );
         return sb.toString();
     }
