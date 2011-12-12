@@ -19,9 +19,12 @@ package org.codehaus.redback.rest.services;
  */
 
 import org.apache.cxf.jaxrs.client.ServerWebApplicationException;
+import org.codehaus.redback.rest.api.model.Role;
 import org.codehaus.redback.rest.api.model.User;
 import org.codehaus.redback.rest.api.services.UserService;
 import org.junit.Test;
+
+import java.util.List;
 
 /**
  * @author Olivier Lamy
@@ -89,6 +92,12 @@ public class RoleManagementServiceTest
             userService.removeFromCache( "toto" );
 
             getUserService( encode( "toto", "foo123" ) ).getUsers();
+
+            List<Role> roles = getRoleManagementService( authorizationHeader ).getEffectivelyAssignedRoles( "toto" );
+
+            log.info( "toto roles:" + roles );
+
+            assertTrue( roles.contains( new Role( "User Administrator" ) ) );
         }
         finally
         {

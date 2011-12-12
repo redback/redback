@@ -20,12 +20,15 @@ package org.codehaus.redback.rest.api.services;
 
 import org.codehaus.plexus.redback.authorization.RedbackAuthorization;
 import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
+import org.codehaus.redback.rest.api.model.Role;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 /**
  * @author Olivier Lamy
@@ -200,5 +203,13 @@ public interface RoleManagementService
                                  @QueryParam( "resource" ) String resource )
         throws RedbackServiceException;
 
-    //getEffectivelyAssignedRoles
+    @Path( "getEffectivelyAssignedRoles/{username}" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_ROLE_GRANT_OPERATION )
+    /**
+     * @since 1.4
+     */
+    List<Role> getEffectivelyAssignedRoles( @PathParam( "username" ) String username )
+        throws RedbackServiceException;
 }

@@ -66,6 +66,11 @@ public class Role
         // no op
     }
 
+    public Role( String name )
+    {
+        this.name = name;
+    }
+
     public Role( org.codehaus.plexus.redback.rbac.Role role )
     {
         this.name = role.getName();
@@ -161,5 +166,34 @@ public class Role
         sb.append( ", permanent=" ).append( permanent );
         sb.append( '}' );
         return sb.toString();
+    }
+
+
+    @Override
+    public boolean equals( Object o )
+    {
+        if ( this == o )
+        {
+            return true;
+        }
+        if ( o == null || getClass() != o.getClass() )
+        {
+            return false;
+        }
+
+        Role role = (Role) o;
+
+        if ( name != null ? !name.equals( role.name ) : role.name != null )
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return name != null ? name.hashCode() : 0;
     }
 }
