@@ -59,7 +59,6 @@ import javax.inject.Named;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -152,6 +151,23 @@ public class DefaultUserService
             //ignore we just want to prevent non human readable error message from backend :-)
             log.debug( "user {} not exists", user.getUsername() );
         }
+
+        // data validation
+        if ( StringUtils.isEmpty( user.getUsername() ) )
+        {
+            throw new RedbackServiceException( new ErrorMessage( "username cannot be empty" ) );
+        }
+
+        if ( StringUtils.isEmpty( user.getFullName() ) )
+        {
+            throw new RedbackServiceException( new ErrorMessage( "fullName cannot be empty" ) );
+        }
+
+        if ( StringUtils.isEmpty( user.getEmail() ) )
+        {
+            throw new RedbackServiceException( new ErrorMessage( "email cannot be empty" ) );
+        }
+
         org.codehaus.plexus.redback.users.User u =
             userManager.createUser( user.getUsername(), user.getFullName(), user.getEmail() );
         u.setPassword( user.getPassword() );

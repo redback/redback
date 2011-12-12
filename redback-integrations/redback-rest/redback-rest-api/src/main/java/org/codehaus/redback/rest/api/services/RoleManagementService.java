@@ -200,5 +200,5 @@ public interface RoleManagementService
                                  @QueryParam( "resource" ) String resource )
         throws RedbackServiceException;
 
-    getEffectivelyAssignedRoles
+    //getEffectivelyAssignedRoles
 }

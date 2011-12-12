@@ -16,12 +16,6 @@ package org.codehaus.plexus.redback.users.cached;
  * limitations under the License.
  */
 
-import java.util.List;
-
-import javax.annotation.Resource;
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import org.codehaus.plexus.cache.Cache;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
@@ -32,23 +26,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.List;
+
 /**
  * CachedUserManager
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
-@Service("userManager#cached")
+@Service( "userManager#cached" )
 public class CachedUserManager
     implements UserManager, UserManagerListener
 {
-    
+
     private Logger log = LoggerFactory.getLogger( getClass() );
-    
-    @Inject @Named(value="userManager#jdo")
+
+    @Inject
+    @Named( value = "userManager#jdo" )
     private UserManager userImpl;
 
-    @Inject @Named(value="cache#users")
+    @Inject
+    @Named( value = "cache#users" )
     private Cache usersCache;
 
     public boolean isReadOnly()
