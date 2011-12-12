@@ -23,7 +23,7 @@ import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
  *
  * @author: Jesse McConnell <jesse@codehaus.org>
  * @version: $Id$
- * @deprecated use RedbackRoleConstants
+ * @deprecated use {@link RedbackRoleConstants}
  */
 public class RoleConstants
 {

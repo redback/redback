@@ -27,6 +27,7 @@ import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.redback.integration.model.UserCredentials;
 import org.codehaus.redback.integration.role.RoleConstants;
+import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
 import org.codehaus.redback.integration.util.RoleSorter;
 
 import javax.inject.Inject;
@@ -160,7 +161,7 @@ public abstract class AbstractUserCredentialsAction
     }
 
     /**
-     * this is a hack. this is a hack around the requirements of putting RBAC constraits into the model. this adds one
+     * this is a hack. this is a hack around the requirements of putting RBAC constraints into the model. this adds one
      * very major restriction to this security system, that a role name must contain the identifiers of the resource
      * that is being constrained for adding and granting of roles, this is unacceptable in the long term and we need to
      * get the model refactored to include this RBAC concept
@@ -180,10 +181,10 @@ public abstract class AbstractUserCredentialsAction
         Map<String, List<Permission>> assignedPermissionMap = manager.getAssignedPermissionMap( currentUser );
         List<String> resourceGrants = new ArrayList<String>();
 
-        if ( assignedPermissionMap.containsKey( RoleConstants.USER_MANAGEMENT_ROLE_GRANT_OPERATION ) )
+        if ( assignedPermissionMap.containsKey( RedbackRoleConstants.USER_MANAGEMENT_ROLE_GRANT_OPERATION ) )
         {
             List<Permission> roleGrantPermissions =
-                assignedPermissionMap.get( RoleConstants.USER_MANAGEMENT_ROLE_GRANT_OPERATION );
+                assignedPermissionMap.get( RedbackRoleConstants.USER_MANAGEMENT_ROLE_GRANT_OPERATION );
 
             for ( Permission permission : roleGrantPermissions )
             {

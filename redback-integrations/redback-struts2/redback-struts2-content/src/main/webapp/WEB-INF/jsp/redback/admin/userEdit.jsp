@@ -30,47 +30,47 @@
 
 <h2><s:text name="user.edit.section.title"/></h2>
 
-<redback:ifAuthorized permission="user-management-user-edit" resource="${user.username}">
-  <s:form action="useredit" namespace="/security" theme="xhtml"
-         id="userEditForm" method="post" name="useredit" cssClass="security userEdit">
-    <%@ include file="/WEB-INF/jsp/redback/include/userCredentials.jsp" %>
-    <redback:isNotReadOnlyUserManager>
-      <s:checkbox label="%{getText('user.edit.locked.user')}" name="user.locked" />
-      <s:checkbox label="%{getText('user.edit.force.user.change.password')}" name="user.passwordChangeRequired" />    
-      <s:hidden label="Username"    name="username" />
-      <s:submit value="%{getText('update')}" method="submit" />
-      <s:submit value="%{getText('cancel')}" method="cancel" />
-    </redback:isNotReadOnlyUserManager>
-  </s:form>
-  
-  <c:if test="${ emailValidationRequired}">
-  <p>
-    <s:form action="register!resendRegistrationEmail" namespace="/security" theme="xhtml"
-         id="resendRegistationForm" method="post" name="resendRegistration" cssClass="security userEdit">
-         <s:hidden label="Username"    name="username" />
-         <s:submit value="Resend Validation" method="submit" />
+  <redback:ifAuthorized permission="user-management-user-edit" resource="${user.username}">
+    <s:form action="useredit" namespace="/security" theme="xhtml"
+           id="userEditForm" method="post" name="useredit" cssClass="security userEdit">
+      <%@ include file="/WEB-INF/jsp/redback/include/userCredentials.jsp" %>
+      <redback:isNotReadOnlyUserManager>
+        <s:checkbox label="%{getText('user.edit.locked.user')}" name="user.locked" />
+        <s:checkbox label="%{getText('user.edit.force.user.change.password')}" name="user.passwordChangeRequired" />
+        <s:hidden label="Username"    name="username" />
+        <s:submit value="%{getText('update')}" method="submit" />
+        <s:submit value="%{getText('cancel')}" method="cancel" />
+      </redback:isNotReadOnlyUserManager>
     </s:form>
-  </p>
-  </c:if>
-</redback:ifAuthorized>
 
-<redback:ifAuthorized permission="user-management-user-role" resource="${user.username}">
-  <c:if test="${!empty effectivelyAssignedRoles}">
-  <h3><s:text name="effective.roles"/></h3>
+    <c:if test="${ emailValidationRequired}">
+    <p>
+      <s:form action="register!resendRegistrationEmail" namespace="/security" theme="xhtml"
+           id="resendRegistationForm" method="post" name="resendRegistration" cssClass="security userEdit">
+           <s:hidden label="Username"    name="username" />
+           <s:submit value="Resend Validation" method="submit" />
+      </s:form>
+    </p>
+    </c:if>
+  </redback:ifAuthorized>
 
-  <ul>
-    <s:iterator id="role" value="effectivelyAssignedRoles">
-      <li>${role.name}</li>
-    </s:iterator>
-  </ul>
+  <redback:ifAuthorized permission="user-management-user-role" resource="${user.username}">
+    <c:if test="${!empty effectivelyAssignedRoles}">
+      <h3><s:text name="effective.roles"/></h3>
 
-</c:if>
+      <ul>
+        <s:iterator id="role" value="effectivelyAssignedRoles">
+          <li>${role.name}</li>
+        </s:iterator>
+      </ul>
 
-  <s:url id="assignmentUrl" action="assignments" includeParams="none">
-    <s:param name="username">${user.username}</s:param>
-  </s:url>
-  <s:a href="%{assignmentUrl}"><s:text name="user.edit.roles"/></s:a>
-</redback:ifAuthorized>
+    </c:if>
+
+    <s:url id="assignmentUrl" action="assignments" includeParams="none">
+      <s:param name="username">${user.username}</s:param>
+    </s:url>
+    <s:a href="%{assignmentUrl}"><s:text name="user.edit.roles"/></s:a>
+  </redback:ifAuthorized>
 </body>
 </s:i18n>
 </html>
