@@ -19,11 +19,11 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-common</artifactId>
-    <version>1.4</version>
+    <version>1.5-SNAPSHOT</version>
   </parent>
 
   <artifactId>redback-common-test-resources</artifactId>
-  <version>1.4</version>
+  <version>1.5-SNAPSHOT</version>
   <name>Redback :: Common TestResources</name>
 
 </project>

@@ -19,7 +19,7 @@
   <parent>
     <artifactId>redback-rest</artifactId>
     <groupId>org.codehaus.redback</groupId>
-    <version>1.4</version>
+    <version>1.5-SNAPSHOT</version>
   </parent>
   <artifactId>redback-rest-services</artifactId>
   <name>Redback :: REST :: Services</name>

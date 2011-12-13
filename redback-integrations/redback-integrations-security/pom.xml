@@ -4,7 +4,7 @@
   <parent>
     <artifactId>redback-integrations</artifactId>
     <groupId>org.codehaus.redback</groupId>
-    <version>1.4</version>
+    <version>1.5-SNAPSHOT</version>
   </parent>
   <artifactId>redback-integrations-security</artifactId>
   <name>Redback :: Integration :: Security</name>
