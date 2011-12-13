@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-authorization-providers</artifactId>
-    <version>1.4-SNAPSHOT</version>
+    <version>1.4</version>
     <relativePath>../../redback-authorization/redback-authorization-providers/pom.xml</relativePath>
   </parent>
   <artifactId>redback-authorization-rbac</artifactId>
