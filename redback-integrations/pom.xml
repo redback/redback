@@ -55,6 +55,5 @@
     <module>redback-jee</module>
     <module>redback-jsecurity</module>
     <module>redback-integrations-security</module>
-    <module>redback-xmlrpc</module>
   </modules>
 </project>
