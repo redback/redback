@@ -92,10 +92,6 @@
       <groupId>org.codehaus.redback</groupId>
       <artifactId>redback-common-integrations</artifactId>
     </dependency>    
-    <dependency>
-      <groupId>org.codehaus.redback</groupId>
-      <artifactId>redback-xmlrpc-services</artifactId>
-    </dependency>
 
     <dependency>
       <groupId>org.codehaus.redback</groupId>
