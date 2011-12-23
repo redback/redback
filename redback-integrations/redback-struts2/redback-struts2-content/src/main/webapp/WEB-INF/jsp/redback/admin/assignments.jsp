@@ -50,70 +50,70 @@
           <p><i><c:out value="${application.description}" /></i></p>
         </c:if>
 
-          <c:if test="${!empty assignedRoles}">
+        <c:if test="${!empty assignedRoles}">
 
-       <h5><s:text name="assignments.assigned.roles"/></h5>
-        <table>
-        <s:iterator id="assignedRole" value="assignedRoles">
+         <h5><s:text name="assignments.assigned.roles"/></h5>
+         <table>
+         <s:iterator id="assignedRole" value="assignedRoles">
            <s:checkbox label="%{assignedRole}" name="addNDSelectedRoles" fieldValue="%{assignedRole}"/>
-        </s:iterator>
-        </table>
+         </s:iterator>
+         </table>
 
-           </c:if>
-          <c:if test="${!empty availableRoles}">
-        <h5><s:text name="assignments.available.roles"/></h5>
-        <table>
-        <s:iterator id="availableRole" value="availableRoles">
-           <s:checkbox label="%{availableRole}" name="addNDSelectedRoles" value="false" fieldValue="%{availableRole}"/>
-        </s:iterator>
-        </table>
-          </c:if>
+        </c:if>
+        <c:if test="${!empty availableRoles}">
+          <h5><s:text name="assignments.available.roles"/></h5>
+          <table>
+          <s:iterator id="availableRole" value="availableRoles">
+            <s:checkbox label="%{availableRole}" name="addNDSelectedRoles" value="false" fieldValue="%{availableRole}"/>
+          </s:iterator>
+          </table>
+        </c:if>
 
         <c:if test="${!empty table}">
-        <h5><s:text name="assignments.resource.roles"/></h5>
-        <table>
+          <h5><s:text name="assignments.resource.roles"/></h5>
+          <table>
             <tr>
-                <td></td>
-                <s:iterator id="column" value="tableHeader">
-                    <td>${column.namePrefix}</td>
-                </s:iterator>
+              <td></td>
+              <s:iterator id="column" value="tableHeader">
+                <td>${column.namePrefix}</td>
+              </s:iterator>
             </tr>
 
             <c:forEach var="row" items="${table}">
-                <tr>
-                    <c:forEach var="column" items="${row}">
+              <tr>
+                <c:forEach var="column" items="${row}">
 
-                        <c:choose>
-                            <c:when test="${column.label}">
-                                <td>${column.name}</td>
-                            </c:when>
-                            <c:when test="${column.assigned}">
-                                <td>
-                                    <center>
-                                  <input type="checkbox" name="addDSelectedRoles" value="${column.name}" checked="checked"/>
-                                        </center>
-                                </td>
-                            </c:when>
-                            <c:when test="${column.effectivelyAssigned}">
-                                <td>
-                                    <center>
-                                  <input type="checkbox" name="addDSelectedRoles" value="${column.name}" disabled="disabled"/>
-                                        </center>
-                                </td>
-                            </c:when>
-                            <c:otherwise>
-                                <td>
-                                    <center>
-                                  <input type="checkbox" name="addDSelectedRoles" value="${column.name}"/>
-                                        </center>
-                                </td>
-                            </c:otherwise>
-                        </c:choose>
+                  <c:choose>
+                    <c:when test="${column.label}">
+                      <td>${column.name}</td>
+                    </c:when>
+                    <c:when test="${column.assigned}">
+                      <td>
+                        <center>
+                          <input type="checkbox" name="addDSelectedRoles" value="${column.name}" checked="checked"/>
+                        </center>
+                      </td>
+                    </c:when>
+                    <c:when test="${column.effectivelyAssigned}">
+                      <td>
+                        <center>
+                          <input type="checkbox" name="addDSelectedRoles" value="${column.name}" disabled="disabled"/>
+                        </center>
+                      </td>
+                    </c:when>
+                    <c:otherwise>
+                      <td>
+                        <center>
+                          <input type="checkbox" name="addDSelectedRoles" value="${column.name}"/>
+                        </center>
+                      </td>
+                     </c:otherwise>
+                   </c:choose>
 
-                    </c:forEach>
-                </tr>
+                </c:forEach>
+              </tr>
             </c:forEach>
-        </table>
+          </table>
         </c:if>
       </s:iterator>
    <%--
