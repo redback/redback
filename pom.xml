@@ -431,27 +431,6 @@
         <version>2.5</version>
         <scope>provided</scope>
       </dependency>
-
-      <dependency>
-        <groupId>org.codehaus.redback</groupId>
-        <artifactId>redback-xmlrpc-api</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.redback</groupId>
-        <artifactId>redback-xmlrpc-client</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.redback</groupId>
-        <artifactId>redback-xmlrpc-services</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.redback</groupId>
-        <artifactId>redback-xmlrpc-security</artifactId>
-        <version>${project.version}</version>
-      </dependency>
       <dependency>
         <groupId>org.codehaus.redback</groupId>
         <artifactId>plexus-spring</artifactId>
