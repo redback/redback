@@ -25,8 +25,10 @@ import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.Resource;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
+import org.codehaus.plexus.redback.role.model.ModelApplication;
 import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
 import org.codehaus.redback.integration.util.RoleSorter;
+import org.codehaus.redback.rest.api.model.Application;
 import org.codehaus.redback.rest.api.model.ErrorMessage;
 import org.codehaus.redback.rest.api.model.Role;
 import org.codehaus.redback.rest.api.services.RedbackServiceException;
@@ -242,6 +244,57 @@ public class DefaultRoleManagementService
         return new ArrayList<Role>( 0 );
     }
 
+
+    public List<Application> getApplications( String username )
+        throws RedbackServiceException
+    {
+
+        List<ModelApplication> modelApplications = roleManager.getModel().getApplications();
+
+        List<Application> applications = new ArrayList<Application>( modelApplications.size() );
+
+        for ( ModelApplication modelApplication : modelApplications )
+        {
+            Application application = new Application();
+            application.setDescription( modelApplication.getDescription() );
+            application.setId( modelApplication.getId() );
+            application.setLongDescription( modelApplication.getLongDescription() );
+            application.setVersion( modelApplication.getVersion() );
+            applications.add( application );
+        }
+
+        return applications;
+    }
+
+    public List<Role> getAllRoles()
+        throws RedbackServiceException
+    {
+        try
+        {
+            List<org.codehaus.plexus.redback.rbac.Role> roles = rbacManager.getAllRoles();
+
+            if ( roles == null )
+            {
+                return Collections.emptyList();
+            }
+
+            roles = filterRolesForCurrentUserAccess( roles );
+
+            List<Role> res = new ArrayList<Role>( roles.size() );
+
+            for ( org.codehaus.plexus.redback.rbac.Role r : roles )
+            {
+                res.add( new Role( r ) );
+            }
+            return res;
+
+        }
+        catch ( RbacManagerException e )
+        {
+            throw new RedbackServiceException( e.getMessage() );
+        }
+    }
+
     private List<org.codehaus.plexus.redback.rbac.Role> filterAssignableRoles(
         Collection<org.codehaus.plexus.redback.rbac.Role> roles )
     {
@@ -339,5 +392,6 @@ public class DefaultRoleManagementService
         Collections.sort( filteredRoleList, new RoleSorter() );
         return filteredRoleList;
     }
+
 
 }

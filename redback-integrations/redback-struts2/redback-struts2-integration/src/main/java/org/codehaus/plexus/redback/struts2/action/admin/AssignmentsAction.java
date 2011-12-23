@@ -130,7 +130,7 @@ public class AssignmentsAction
      */
     @SuppressWarnings( "unchecked" )
     public String show()
-        throws RbacObjectNotFoundException, RbacManagerException
+        throws RbacManagerException
     {
         this.addNDSelectedRoles = new ArrayList<String>();
         this.addDSelectedRoles = new ArrayList<String>();
@@ -183,7 +183,7 @@ public class AssignmentsAction
 
     @SuppressWarnings( "unchecked" )
     private List<ApplicationRoleDetails> lookupAppRoleDetails( String principal, List<Role> assignableRoles )
-        throws RbacObjectNotFoundException, RbacManagerException
+        throws RbacManagerException
     {
         List<ApplicationRoleDetails> appRoleDetails = new ArrayList<ApplicationRoleDetails>();
         for ( Iterator<ModelApplication> i = rmanager.getModel().getApplications().iterator(); i.hasNext(); )

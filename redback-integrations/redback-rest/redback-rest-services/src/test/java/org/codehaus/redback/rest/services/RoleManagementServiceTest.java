@@ -107,4 +107,13 @@ public class RoleManagementServiceTest
         }
 
     }
+
+    @Test
+    public void allRoles()
+        throws Exception
+    {
+        List<Role> roles = getRoleManagementService( authorizationHeader ).getAllRoles();
+
+        log.info( "all roles:" + roles );
+    }
 }

@@ -100,7 +100,7 @@ public class ApplicationRoleDetails
         availableRoles = new ArrayList<String>();
         for ( Iterator<ModelRole> i = applicationRoles.iterator(); i.hasNext(); )
         {
-            ModelRole role = (ModelRole) i.next();
+            ModelRole role =  i.next();
 
             if ( isInList( role.getName(), allAssignedRoles ) )
             {
