@@ -235,4 +235,16 @@ public interface RoleManagementService
      */
     List<Application> getApplications( @PathParam( "username" ) String username )
         throws RedbackServiceException;
+
+
+    @Path( "getRole/{roleName}" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_ROLE_GRANT_OPERATION )
+    /**
+     * @since 1.5
+     */
+    Role getRole( @PathParam( "roleName" ) String roleName )
+        throws RedbackServiceException;
+
 }

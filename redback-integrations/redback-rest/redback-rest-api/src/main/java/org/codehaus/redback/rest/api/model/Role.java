@@ -57,6 +57,23 @@ public class Role
     private List<Permission> permissions = new ArrayList<Permission>();
 
     /**
+     * some services doesn't populate this field getAllRoles in RoleManagementService
+     */
+    private List<String> parentRoleNames = new ArrayList<String>();
+
+    /**
+     * user names with a parent role
+     * some services doesn't populate this field getAllRoles in RoleManagementService
+     */
+    private List<String> parentsRolesUsers = new ArrayList<String>();
+
+    /**
+     * user names with this role
+     * some services doesn't populate this field getAllRoles in RoleManagementService
+     */
+    private List<String> users = new ArrayList<String>();
+
+    /**
      * Field permanent
      */
     private boolean permanent = false;
@@ -153,6 +170,36 @@ public class Role
         this.permanent = permanent;
     }
 
+    public List<String> getParentRoleNames()
+    {
+        return parentRoleNames;
+    }
+
+    public void setParentRoleNames( List<String> parentRoleNames )
+    {
+        this.parentRoleNames = parentRoleNames;
+    }
+
+    public List<String> getParentsRolesUsers()
+    {
+        return parentsRolesUsers;
+    }
+
+    public void setParentsRolesUsers( List<String> parentsRolesUsers )
+    {
+        this.parentsRolesUsers = parentsRolesUsers;
+    }
+
+    public List<String> getUsers()
+    {
+        return users;
+    }
+
+    public void setUsers( List<String> users )
+    {
+        this.users = users;
+    }
+
     @Override
     public String toString()
     {
@@ -163,6 +210,9 @@ public class Role
         sb.append( ", assignable=" ).append( assignable );
         sb.append( ", childRoleNames=" ).append( childRoleNames );
         sb.append( ", permissions=" ).append( permissions );
+        sb.append( ", parentRoleNames=" ).append( parentRoleNames );
+        sb.append( ", parentsRolesUsers=" ).append( parentsRolesUsers );
+        sb.append( ", users=" ).append( users );
         sb.append( ", permanent=" ).append( permanent );
         sb.append( '}' );
         return sb.toString();

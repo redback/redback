@@ -310,6 +310,26 @@ public class DefaultRoleManagementService
         return assignableRoles;
     }
 
+    public Role getRole( String roleName )
+        throws RedbackServiceException
+    {
+        try
+        {
+            org.codehaus.plexus.redback.rbac.Role rbacRole = rbacManager.getRole( roleName );
+            Role role = new Role( rbacRole );
+
+            return role;
+        }
+        catch ( RbacManagerException e )
+        {
+            throw new RedbackServiceException( e.getMessage() );
+        }
+    }
+
+    //----------------------------------------------------------------
+    // Internal methods
+    //----------------------------------------------------------------
+
     /**
      * this is a hack. this is a hack around the requirements of putting RBAC constraints into the model. this adds one
      * very major restriction to this security system, that a role name must contain the identifiers of the resource

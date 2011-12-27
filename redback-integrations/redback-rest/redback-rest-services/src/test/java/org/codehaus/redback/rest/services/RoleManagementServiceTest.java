@@ -114,6 +114,21 @@ public class RoleManagementServiceTest
     {
         List<Role> roles = getRoleManagementService( authorizationHeader ).getAllRoles();
 
-        log.info( "all roles:" + roles );
+        log.info( "all roles" );
+
+        for ( Role role : roles )
+        {
+            log.info( "role:" + role );
+        }
+    }
+
+    @Test
+    public void getRole()
+        throws Exception
+    {
+        Role role = getRoleManagementService( authorizationHeader ).getRole( "User Administrator" );
+
+        log.info( "role:" + role );
+
     }
 }
