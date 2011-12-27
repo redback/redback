@@ -65,13 +65,13 @@ public class Role
      * user names with a parent role
      * some services doesn't populate this field getAllRoles in RoleManagementService
      */
-    private List<String> parentsRolesUsers = new ArrayList<String>();
+    private List<User> parentsRolesUsers = new ArrayList<User>();
 
     /**
      * user names with this role
      * some services doesn't populate this field getAllRoles in RoleManagementService
      */
-    private List<String> users = new ArrayList<String>();
+    private List<User> users = new ArrayList<User>();
 
     /**
      * Field permanent
@@ -180,22 +180,22 @@ public class Role
         this.parentRoleNames = parentRoleNames;
     }
 
-    public List<String> getParentsRolesUsers()
+    public List<User> getParentsRolesUsers()
     {
         return parentsRolesUsers;
     }
 
-    public void setParentsRolesUsers( List<String> parentsRolesUsers )
+    public void setParentsRolesUsers( List<User> parentsRolesUsers )
     {
         this.parentsRolesUsers = parentsRolesUsers;
     }
 
-    public List<String> getUsers()
+    public List<User> getUsers()
     {
         return users;
     }
 
-    public void setUsers( List<String> users )
+    public void setUsers( List<User> users )
     {
         this.users = users;
     }

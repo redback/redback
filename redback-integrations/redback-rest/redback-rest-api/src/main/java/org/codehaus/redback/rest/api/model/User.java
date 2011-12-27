@@ -215,4 +215,26 @@ public class User
     {
         this.previousPassword = previousPassword;
     }
+
+    @Override
+    public String toString()
+    {
+        final StringBuilder sb = new StringBuilder();
+        sb.append( "User" );
+        sb.append( "{username='" ).append( username ).append( '\'' );
+        sb.append( ", fullName='" ).append( fullName ).append( '\'' );
+        sb.append( ", email='" ).append( email ).append( '\'' );
+        sb.append( ", validated=" ).append( validated );
+        sb.append( ", locked=" ).append( locked );
+        sb.append( ", password='" ).append( password ).append( '\'' );
+        sb.append( ", passwordChangeRequired=" ).append( passwordChangeRequired );
+        sb.append( ", permanent=" ).append( permanent );
+        sb.append( ", confirmPassword='" ).append( confirmPassword ).append( '\'' );
+        sb.append( ", timestampAccountCreation='" ).append( timestampAccountCreation ).append( '\'' );
+        sb.append( ", timestampLastLogin='" ).append( timestampLastLogin ).append( '\'' );
+        sb.append( ", timestampLastPasswordChange='" ).append( timestampLastPasswordChange ).append( '\'' );
+        sb.append( ", previousPassword='" ).append( previousPassword ).append( '\'' );
+        sb.append( '}' );
+        return sb.toString();
+    }
 }

@@ -23,9 +23,13 @@ import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.Resource;
+import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.role.model.ModelApplication;
+import org.codehaus.plexus.redback.users.User;
+import org.codehaus.plexus.redback.users.UserManager;
+import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
 import org.codehaus.redback.integration.util.RoleSorter;
 import org.codehaus.redback.rest.api.model.Application;
@@ -33,11 +37,14 @@ import org.codehaus.redback.rest.api.model.ErrorMessage;
 import org.codehaus.redback.rest.api.model.Role;
 import org.codehaus.redback.rest.api.services.RedbackServiceException;
 import org.codehaus.redback.rest.api.services.RoleManagementService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -51,16 +58,23 @@ import java.util.Map;
 public class DefaultRoleManagementService
     implements RoleManagementService
 {
+
+    private Logger log = LoggerFactory.getLogger( getClass() );
+
     private RoleManager roleManager;
 
     private RBACManager rbacManager;
 
+    private UserManager userManager;
+
     @Inject
     public DefaultRoleManagementService( RoleManager roleManager,
-                                         @Named( value = "rBACManager#cached" ) RBACManager rbacManager )
+                                         @Named( value = "rBACManager#cached" ) RBACManager rbacManager,
+                                         @Named( value = "userManager#cached" ) UserManager userManager )
     {
         this.roleManager = roleManager;
         this.rbacManager = rbacManager;
+        this.userManager = userManager;
     }
 
     public Boolean createTemplatedRole( String templateId, String resource )
@@ -317,6 +331,51 @@ public class DefaultRoleManagementService
         {
             org.codehaus.plexus.redback.rbac.Role rbacRole = rbacManager.getRole( roleName );
             Role role = new Role( rbacRole );
+
+            Map<String, org.codehaus.plexus.redback.rbac.Role> parentRoles = rbacManager.getParentRoles( rbacRole );
+            for ( String parentRoleName : parentRoles.keySet() )
+            {
+                role.getParentRoleNames().add( parentRoleName );
+            }
+
+            List<UserAssignment> userAssignments = rbacManager.getUserAssignmentsForRoles( Arrays.asList( roleName ) );
+
+            if ( userAssignments != null )
+            {
+                for ( UserAssignment userAssignment : userAssignments )
+                {
+                    try
+                    {
+                        User user = userManager.findUser( userAssignment.getPrincipal() );
+                        role.getUsers().add( new org.codehaus.redback.rest.api.model.User( user ) );
+                    }
+                    catch ( UserNotFoundException e )
+                    {
+                        log.warn( "User '" + userAssignment.getPrincipal() + "' doesn't exist.", e );
+                    }
+                }
+            }
+
+            if ( !role.getParentRoleNames().isEmpty() )
+            {
+                List<UserAssignment> userParentAssignments =
+                    rbacManager.getUserAssignmentsForRoles( parentRoles.keySet() );
+                if ( userParentAssignments != null )
+                {
+                    for ( UserAssignment userAssignment : userParentAssignments )
+                    {
+                        try
+                        {
+                            User user = userManager.findUser( userAssignment.getPrincipal() );
+                            role.getParentsRolesUsers().add( new org.codehaus.redback.rest.api.model.User( user ) );
+                        }
+                        catch ( UserNotFoundException e )
+                        {
+                            log.warn( "User '" + userAssignment.getPrincipal() + "' doesn't exist.", e );
+                        }
+                    }
+                }
+            }
 
             return role;
         }
