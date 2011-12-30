@@ -381,8 +381,24 @@ public class DefaultRoleManagementService
         }
         catch ( RbacManagerException e )
         {
-            throw new RedbackServiceException( e.getMessage() );
+            throw new RedbackServiceException( new ErrorMessage( e.getMessage() ) );
         }
+    }
+
+    public Boolean updateRoleDescription( String roleName, String description )
+        throws RedbackServiceException
+    {
+        try
+        {
+            org.codehaus.plexus.redback.rbac.Role rbacRole = rbacManager.getRole( roleName );
+            rbacRole.setDescription( description );
+            rbacManager.saveRole( rbacRole );
+        }
+        catch ( RbacManagerException e )
+        {
+            throw new RedbackServiceException( new ErrorMessage( e.getMessage() ) );
+        }
+        return Boolean.TRUE;
     }
 
     //----------------------------------------------------------------

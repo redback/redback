@@ -207,7 +207,7 @@ public interface RoleManagementService
     @Path( "getEffectivelyAssignedRoles/{username}" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_ROLE_GRANT_OPERATION )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
     /**
      * @since 1.4
      */
@@ -218,7 +218,7 @@ public interface RoleManagementService
     @Path( "allRoles" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_ROLE_GRANT_OPERATION )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
     /**
      * @since 1.5
      */
@@ -229,7 +229,7 @@ public interface RoleManagementService
     @Path( "getApplications/{username}" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_ROLE_GRANT_OPERATION )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
     /**
      * @since 1.5
      */
@@ -240,11 +240,22 @@ public interface RoleManagementService
     @Path( "getRole/{roleName}" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_ROLE_GRANT_OPERATION )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
     /**
      * @since 1.5
      */
     Role getRole( @PathParam( "roleName" ) String roleName )
+        throws RedbackServiceException;
+
+    @Path( "updateRoleDescription" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    /**
+     * @since 1.5
+     */
+    Boolean updateRoleDescription( @QueryParam( "roleName" ) String roleName,
+                                   @QueryParam( "roleDescription" ) String description )
         throws RedbackServiceException;
 
 }
