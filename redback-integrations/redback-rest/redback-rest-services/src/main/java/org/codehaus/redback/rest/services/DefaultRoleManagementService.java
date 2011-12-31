@@ -309,6 +309,35 @@ public class DefaultRoleManagementService
         }
     }
 
+    public List<Role> getDetailedAllRoles()
+        throws RedbackServiceException
+    {
+        try
+        {
+            List<org.codehaus.plexus.redback.rbac.Role> roles = rbacManager.getAllRoles();
+
+            if ( roles == null )
+            {
+                return Collections.emptyList();
+            }
+
+            roles = filterRolesForCurrentUserAccess( roles );
+
+            List<Role> res = new ArrayList<Role>( roles.size() );
+
+            for ( org.codehaus.plexus.redback.rbac.Role r : roles )
+            {
+                res.add( getRole( r.getName() ) );
+            }
+            return res;
+
+        }
+        catch ( RbacManagerException e )
+        {
+            throw new RedbackServiceException( e.getMessage() );
+        }
+    }
+
     private List<org.codehaus.plexus.redback.rbac.Role> filterAssignableRoles(
         Collection<org.codehaus.plexus.redback.rbac.Role> roles )
     {

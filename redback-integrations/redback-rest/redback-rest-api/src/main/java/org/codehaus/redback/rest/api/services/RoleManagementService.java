@@ -225,6 +225,16 @@ public interface RoleManagementService
     List<Role> getAllRoles()
         throws RedbackServiceException;
 
+    @Path( "detailledAllRoles" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    /**
+     * @since 1.5
+     */
+    List<Role> getDetailedAllRoles()
+        throws RedbackServiceException;
+
 
     @Path( "getApplications/{username}" )
     @GET
