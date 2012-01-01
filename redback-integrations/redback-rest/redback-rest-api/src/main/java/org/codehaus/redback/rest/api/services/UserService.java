@@ -39,7 +39,7 @@ public interface UserService
     @Path( "getUser/{userName}" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
     User getUser( @PathParam( "userName" ) String username )
         throws RedbackServiceException;
 
@@ -47,7 +47,7 @@ public interface UserService
     @Path( "getUsers" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_LIST_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_USER_LIST_OPERATION )
     List<User> getUsers()
         throws RedbackServiceException;
 
@@ -55,7 +55,7 @@ public interface UserService
     @POST
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
     @Consumes( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_CREATE_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_USER_CREATE_OPERATION )
     Boolean createUser( User user )
         throws RedbackServiceException;
 
@@ -82,14 +82,14 @@ public interface UserService
     @Path( "deleteUser/{userName}" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_DELETE_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_USER_DELETE_OPERATION )
     Boolean deleteUser( @PathParam( "userName" ) String username )
         throws RedbackServiceException;
 
     @Path( "updateUser" )
     @POST
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
     Boolean updateUser( User user )
         throws RedbackServiceException;
 
@@ -115,21 +115,21 @@ public interface UserService
     @Path( "removeFromCache/{userName}" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
     int removeFromCache( @PathParam( "userName" ) String username )
         throws RedbackServiceException;
 
     @Path( "getGuestUser" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
     User getGuestUser()
         throws RedbackServiceException;
 
     @Path( "createGuestUser" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
     User createGuestUser()
         throws RedbackServiceException;
 
@@ -173,7 +173,7 @@ public interface UserService
     @Path( "getUserPermissions/{userName}" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_LIST_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_USER_LIST_OPERATION )
     /**
      * @since 1.4
      */
@@ -183,7 +183,7 @@ public interface UserService
     @Path( "getUserOperations/{userName}" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_USER_LIST_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_USER_LIST_OPERATION )
     /**
      * @since 1.4
      */

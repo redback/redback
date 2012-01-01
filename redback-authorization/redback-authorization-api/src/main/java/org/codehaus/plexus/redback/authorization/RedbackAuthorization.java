@@ -29,10 +29,11 @@ import java.lang.annotation.Target;
 @Retention( RetentionPolicy.RUNTIME )
 public @interface RedbackAuthorization
 {
+
     /**
-     * @return the redback role needed
+     * @return at least one of those redback roles is needed
      */
-    String permission() default ( "" );
+    String[] permissions() default ( "" );
 
     /**
      * @return the redback ressource karma needed

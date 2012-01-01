@@ -41,7 +41,7 @@ public interface RoleManagementService
     @Path( "createTemplatedRole" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
     Boolean createTemplatedRole( @QueryParam( "templateId" ) String templateId,
                                  @QueryParam( "resource" ) String resource )
         throws RedbackServiceException;
@@ -58,7 +58,7 @@ public interface RoleManagementService
     @Path( "removeTemplatedRole" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
     Boolean removeTemplatedRole( @QueryParam( "templateId" ) String templateId,
                                  @QueryParam( "resource" ) String resource )
         throws RedbackServiceException;
@@ -78,7 +78,7 @@ public interface RoleManagementService
     @Path( "updateRole" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
     Boolean updateRole( @QueryParam( "templateId" ) String templateId, @QueryParam( "oldResource" ) String oldResource,
                         @QueryParam( "newResource" ) String newResource )
         throws RedbackServiceException;
@@ -94,7 +94,7 @@ public interface RoleManagementService
     @Path( "assignRole" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
     Boolean assignRole( @QueryParam( "roleId" ) String roleId, @QueryParam( "principal" ) String principal )
         throws RedbackServiceException;
 
@@ -108,7 +108,7 @@ public interface RoleManagementService
     @Path( "assignRoleByName" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
     Boolean assignRoleByName( @QueryParam( "roleName" ) String roleName, @QueryParam( "principal" ) String principal )
         throws RedbackServiceException;
 
@@ -124,7 +124,7 @@ public interface RoleManagementService
     @Path( "assignTemplatedRole" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
     Boolean assignTemplatedRole( @QueryParam( "templateId" ) String templateId,
                                  @QueryParam( "resource" ) String resource,
                                  @QueryParam( "principal" ) String principal )
@@ -140,7 +140,7 @@ public interface RoleManagementService
     @Path( "unassignRole" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
     Boolean unassignRole( @QueryParam( "roleId" ) String roleId, @QueryParam( "principal" ) String principal )
         throws RedbackServiceException;
 
@@ -154,7 +154,7 @@ public interface RoleManagementService
     @Path( "unassignRoleByName" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
     Boolean unassignRoleByName( @QueryParam( "roleName" ) String roleName, @QueryParam( "principal" ) String principal )
         throws RedbackServiceException;
 
@@ -168,7 +168,7 @@ public interface RoleManagementService
     @Path( "roleExists" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
     Boolean roleExists( @QueryParam( "roleId" ) String roleId )
         throws RedbackServiceException;
 
@@ -183,7 +183,7 @@ public interface RoleManagementService
     @Path( "templatedRoleExists" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
     Boolean templatedRoleExists( @QueryParam( "templateId" ) String templateId,
                                  @QueryParam( "resource" ) String resource )
         throws RedbackServiceException;
@@ -199,7 +199,7 @@ public interface RoleManagementService
     @Path( "verifyTemplatedRole" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
     Boolean verifyTemplatedRole( @QueryParam( "templateId" ) String templateId,
                                  @QueryParam( "resource" ) String resource )
         throws RedbackServiceException;
@@ -207,7 +207,7 @@ public interface RoleManagementService
     @Path( "getEffectivelyAssignedRoles/{username}" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
     /**
      * @since 1.4
      */
@@ -218,7 +218,7 @@ public interface RoleManagementService
     @Path( "allRoles" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
     /**
      * @since 1.5
      */
@@ -228,7 +228,7 @@ public interface RoleManagementService
     @Path( "detailledAllRoles" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
     /**
      * @since 1.5
      */
@@ -239,7 +239,7 @@ public interface RoleManagementService
     @Path( "getApplications/{username}" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
     /**
      * @since 1.5
      */
@@ -250,7 +250,7 @@ public interface RoleManagementService
     @Path( "getRole/{roleName}" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
     /**
      * @since 1.5
      */
@@ -260,7 +260,7 @@ public interface RoleManagementService
     @Path( "updateRoleDescription" )
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
-    @RedbackAuthorization( permission = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
     /**
      * @since 1.5
      */

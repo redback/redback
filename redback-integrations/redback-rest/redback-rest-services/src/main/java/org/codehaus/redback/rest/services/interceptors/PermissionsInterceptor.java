@@ -67,33 +67,42 @@ public class PermissionsInterceptor
                 // we are fine this services is marked as non restrictive acces
                 return null;
             }
-            String permission = redbackAuthorization.permission();
-            if ( StringUtils.isNotBlank( permission ) )
+            String[] permissions = redbackAuthorization.permissions();
+            //olamy: no value is an array with an empty String
+            if ( permissions != null && permissions.length > 0 && !( permissions.length == 1 && StringUtils.isEmpty(
+                permissions[0] ) ) )
             {
                 HttpServletRequest request = getHttpServletRequest( message );
                 SecuritySession session = httpAuthenticator.getSecuritySession( request.getSession() );
                 AuthenticationResult authenticationResult = message.get( AuthenticationResult.class );
                 if ( authenticationResult != null && authenticationResult.isAuthenticated() )
                 {
-                    try
+                    for ( String permission : permissions )
                     {
-                        if ( securitySystem.isAuthorized( session, permission,
-                                                          StringUtils.isBlank( redbackAuthorization.resource() )
-                                                              ? null
-                                                              : redbackAuthorization.resource() ) )
+                        if ( StringUtils.isBlank( permission ) )
                         {
-                            return null;
+                            continue;
                         }
-                        else
+                        try
                         {
-                            log.debug( "user {} not authorized for permission {}", session.getUser().getPrincipal(),
-                                       permission );
+                            if ( securitySystem.isAuthorized( session, permission,
+                                                              StringUtils.isBlank( redbackAuthorization.resource() )
+                                                                  ? null
+                                                                  : redbackAuthorization.resource() ) )
+                            {
+                                return null;
+                            }
+                            else
+                            {
+                                log.debug( "user {} not authorized for permission {}", session.getUser().getPrincipal(),
+                                           permission );
+                            }
                         }
-                    }
-                    catch ( AuthorizationException e )
-                    {
-                        log.debug( e.getMessage(), e );
-                        return Response.status( Response.Status.FORBIDDEN ).build();
+                        catch ( AuthorizationException e )
+                        {
+                            log.debug( e.getMessage(), e );
+                            return Response.status( Response.Status.FORBIDDEN ).build();
+                        }
                     }
 
                 }
