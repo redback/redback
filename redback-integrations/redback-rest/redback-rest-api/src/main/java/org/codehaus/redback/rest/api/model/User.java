@@ -51,6 +51,7 @@ public class User
 
     /**
      * for password change only
+     *
      * @since 1.4
      */
     private String previousPassword;
@@ -79,7 +80,7 @@ public class User
         this.setValidated( user.isValidated() );
         this.setPasswordChangeRequired( user.isPasswordChangeRequired() );
         this.setPermanent( user.isPermanent() );
-        
+
         setTimestampAccountCreation( DateUtils.formatWithAge( user.getAccountCreationDate(), "ago" ) );
         setTimestampLastLogin( DateUtils.formatWithAge( user.getLastLoginDate(), "ago" ) );
         setTimestampLastPasswordChange( DateUtils.formatWithAge( user.getLastPasswordChange(), "ago" ) );
@@ -236,5 +237,33 @@ public class User
         sb.append( ", previousPassword='" ).append( previousPassword ).append( '\'' );
         sb.append( '}' );
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals( Object o )
+    {
+        if ( this == o )
+        {
+            return true;
+        }
+        if ( !( o instanceof User ) )
+        {
+            return false;
+        }
+
+        User user = (User) o;
+
+        if ( !username.equals( user.username ) )
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return username.hashCode();
     }
 }

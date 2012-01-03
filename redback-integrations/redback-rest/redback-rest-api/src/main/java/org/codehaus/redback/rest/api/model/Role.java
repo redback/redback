@@ -62,16 +62,22 @@ public class Role
     private List<String> parentRoleNames = new ArrayList<String>();
 
     /**
-     * user names with a parent role
+     * user with a parent role
      * some services doesn't populate this field getAllRoles in RoleManagementService
      */
     private List<User> parentsRolesUsers = new ArrayList<User>();
 
     /**
-     * user names with this role
+     * user with this role
      * some services doesn't populate this field getAllRoles in RoleManagementService
      */
     private List<User> users = new ArrayList<User>();
+
+    /**
+     * users without this role or parent role
+     * some services doesn't populate this field getAllRoles in RoleManagementService
+     */
+    private List<User> otherUsers = new ArrayList<User>();
 
     /**
      * Field permanent
@@ -200,6 +206,16 @@ public class Role
         this.users = users;
     }
 
+    public List<User> getOtherUsers()
+    {
+        return otherUsers;
+    }
+
+    public void setOtherUsers( List<User> otherUsers )
+    {
+        this.otherUsers = otherUsers;
+    }
+
     @Override
     public String toString()
     {
@@ -213,6 +229,7 @@ public class Role
         sb.append( ", parentRoleNames=" ).append( parentRoleNames );
         sb.append( ", parentsRolesUsers=" ).append( parentsRolesUsers );
         sb.append( ", users=" ).append( users );
+        sb.append( ", otherUsers=" ).append( otherUsers );
         sb.append( ", permanent=" ).append( permanent );
         sb.append( '}' );
         return sb.toString();

@@ -406,6 +406,24 @@ public class DefaultRoleManagementService
                 }
             }
 
+            List<org.codehaus.redback.rest.api.model.User> otherUsers =
+                new ArrayList<org.codehaus.redback.rest.api.model.User>();
+            for ( User u : userManager.getUsers() )
+            {
+                org.codehaus.redback.rest.api.model.User user = new org.codehaus.redback.rest.api.model.User( u );
+                if ( role.getParentsRolesUsers().contains( user ) )
+                {
+                    continue;
+                }
+                if ( role.getUsers().contains( user ) )
+                {
+                    continue;
+                }
+                otherUsers.add( user );
+            }
+
+            role.setOtherUsers( otherUsers );
+
             return role;
         }
         catch ( RbacManagerException e )
