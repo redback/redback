@@ -80,6 +80,11 @@ public class Role
     private List<User> otherUsers = new ArrayList<User>();
 
     /**
+     * users to remove assignement to this role
+     */
+    private List<User> removedUsers = new ArrayList<User>();
+
+    /**
      * Field permanent
      */
     private boolean permanent = false;
@@ -216,6 +221,16 @@ public class Role
         this.otherUsers = otherUsers;
     }
 
+    public List<User> getRemovedUsers()
+    {
+        return removedUsers;
+    }
+
+    public void setRemovedUsers( List<User> removedUsers )
+    {
+        this.removedUsers = removedUsers;
+    }
+
     @Override
     public String toString()
     {
@@ -230,6 +245,7 @@ public class Role
         sb.append( ", parentsRolesUsers=" ).append( parentsRolesUsers );
         sb.append( ", users=" ).append( users );
         sb.append( ", otherUsers=" ).append( otherUsers );
+        sb.append( ", removedUsers=" ).append( removedUsers );
         sb.append( ", permanent=" ).append( permanent );
         sb.append( '}' );
         return sb.toString();

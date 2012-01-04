@@ -485,6 +485,41 @@ public class DefaultRoleManagementService
                     new ErrorMessage( "error.assign.role.user", new String[]{ role.getName(), username } ) );
             }
         }
+
+        for ( org.codehaus.redback.rest.api.model.User user : role.getRemovedUsers() )
+        {
+            String username = user.getUsername();
+            if ( !userManager.userExists( username ) )
+            {
+                log.error( "user {} not exits", username );
+                throw new RedbackServiceException( new ErrorMessage( "user.not.exists", new String[]{ username } ) );
+            }
+
+            try
+            {
+                UserAssignment assignment;
+
+                if ( rbacManager.userAssignmentExists( username ) )
+                {
+                    assignment = rbacManager.getUserAssignment( username );
+                }
+                else
+                {
+                    assignment = rbacManager.createUserAssignment( username );
+                }
+
+                assignment.removeRoleName( role.getName() );
+                assignment = rbacManager.saveUserAssignment( assignment );
+                log.info( "{} role unassigned to {}", role.getName(), username );
+            }
+            catch ( RbacManagerException e )
+            {
+                log.error( "error during unassign role " + role.getName() + " to user " + username, e );
+                throw new RedbackServiceException(
+                    new ErrorMessage( "error.unassign.role.user", new String[]{ role.getName(), username } ) );
+            }
+        }
+
         return Boolean.TRUE;
     }
 
