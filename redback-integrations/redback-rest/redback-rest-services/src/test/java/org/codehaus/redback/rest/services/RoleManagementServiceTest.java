@@ -25,6 +25,8 @@ import org.codehaus.redback.rest.api.model.User;
 import org.codehaus.redback.rest.api.services.UserService;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -140,7 +142,7 @@ public class RoleManagementServiceTest
         String name = "User Administrator";
         Role role = getRoleManagementService( authorizationHeader ).getRole( name );
         assertTrue( StringUtils.isEmpty( role.getDescription() ) );
-        
+
         getRoleManagementService( authorizationHeader ).updateRoleDescription( name, "foo" );
 
         role = getRoleManagementService( authorizationHeader ).getRole( name );
@@ -152,6 +154,34 @@ public class RoleManagementServiceTest
         role = getRoleManagementService( authorizationHeader ).getRole( name );
 
         assertTrue( StringUtils.isEmpty( role.getDescription() ) );
+
+    }
+
+    @Test
+    public void updateRoleUsers()
+        throws Exception
+    {
+        String name = "User Administrator";
+        Role role = getRoleManagementService( authorizationHeader ).getRole( name );
+
+        assertEquals( 0, role.getUsers().size() );
+
+        role.setUsers( Arrays.asList( getUserService( authorizationHeader ).getUser( "admin" ) ) );
+
+        getRoleManagementService( authorizationHeader ).updateRoleUsers( role );
+
+        role = getRoleManagementService( authorizationHeader ).getRole( name );
+
+        assertEquals( 1, role.getUsers().size() );
+
+        role.setRemovedUsers( Arrays.asList( getUserService( authorizationHeader ).getUser( "admin" ) ) );
+        role.setUsers( Collections.<User>emptyList() );
+
+        getRoleManagementService( authorizationHeader ).updateRoleUsers( role );
+
+        role = getRoleManagementService( authorizationHeader ).getRole( name );
+
+        assertEquals( 0, role.getUsers().size() );
 
     }
 }
