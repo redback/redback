@@ -18,6 +18,7 @@ package org.codehaus.redback.rest.services;
  * under the License.
  */
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.cxf.jaxrs.client.ServerWebApplicationException;
 import org.codehaus.redback.rest.api.model.Role;
 import org.codehaus.redback.rest.api.model.User;
@@ -129,6 +130,28 @@ public class RoleManagementServiceTest
         Role role = getRoleManagementService( authorizationHeader ).getRole( "User Administrator" );
 
         log.info( "role:" + role );
+
+    }
+
+    @Test
+    public void updateRoleDescription()
+        throws Exception
+    {
+        String name = "User Administrator";
+        Role role = getRoleManagementService( authorizationHeader ).getRole( name );
+        assertTrue( StringUtils.isEmpty( role.getDescription() ) );
+        
+        getRoleManagementService( authorizationHeader ).updateRoleDescription( name, "foo" );
+
+        role = getRoleManagementService( authorizationHeader ).getRole( name );
+
+        assertEquals( "foo", role.getDescription() );
+
+        getRoleManagementService( authorizationHeader ).updateRoleDescription( name, null );
+
+        role = getRoleManagementService( authorizationHeader ).getRole( name );
+
+        assertTrue( StringUtils.isEmpty( role.getDescription() ) );
 
     }
 }
