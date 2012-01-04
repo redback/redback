@@ -448,6 +448,46 @@ public class DefaultRoleManagementService
         return Boolean.TRUE;
     }
 
+    public Boolean updateRoleUsers( Role role )
+        throws RedbackServiceException
+    {
+
+        for ( org.codehaus.redback.rest.api.model.User user : role.getUsers() )
+        {
+            String username = user.getUsername();
+            if ( !userManager.userExists( username ) )
+            {
+                log.error( "user {} not exits", username );
+                throw new RedbackServiceException( new ErrorMessage( "user.not.exists", new String[]{ username } ) );
+            }
+
+            try
+            {
+                UserAssignment assignment;
+
+                if ( rbacManager.userAssignmentExists( username ) )
+                {
+                    assignment = rbacManager.getUserAssignment( username );
+                }
+                else
+                {
+                    assignment = rbacManager.createUserAssignment( username );
+                }
+
+                assignment.addRoleName( role.getName() );
+                assignment = rbacManager.saveUserAssignment( assignment );
+                log.info( "{} role assigned to {}", role.getName(), username );
+            }
+            catch ( RbacManagerException e )
+            {
+                log.error( "error during assign role " + role.getName() + " to user " + username, e );
+                throw new RedbackServiceException(
+                    new ErrorMessage( "error.assign.role.user", new String[]{ role.getName(), username } ) );
+            }
+        }
+        return Boolean.TRUE;
+    }
+
     //----------------------------------------------------------------
     // Internal methods
     //----------------------------------------------------------------

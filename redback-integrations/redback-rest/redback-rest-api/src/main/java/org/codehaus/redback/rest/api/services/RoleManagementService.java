@@ -23,7 +23,9 @@ import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
 import org.codehaus.redback.rest.api.model.Application;
 import org.codehaus.redback.rest.api.model.Role;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -266,6 +268,18 @@ public interface RoleManagementService
      */
     Boolean updateRoleDescription( @QueryParam( "roleName" ) String roleName,
                                    @QueryParam( "roleDescription" ) String description )
+        throws RedbackServiceException;
+
+    @Path( "updateRoleUsers" )
+    @POST
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
+    @Consumes( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
+    /**
+     * update users assigned to a role
+     * @since 1.5
+     */
+    Boolean updateRoleUsers( Role role )
         throws RedbackServiceException;
 
 }
