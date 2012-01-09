@@ -49,32 +49,30 @@ public class DefaultUtilServices
         Properties properties = new Properties();
 
         // load redback user api messages
-        StringBuilder resourceName = new StringBuilder( "org/codehaus/plexus/redback/users/messages" );
         try
         {
 
             // load default first then requested locale
-            loadResource( properties, resourceName, null );
-            loadResource( properties, resourceName, locale );
+            loadResource( properties, "org/codehaus/plexus/redback/users/messages", null );
+            loadResource( properties, "org/codehaus/plexus/redback/users/messages", locale );
 
         }
         catch ( IOException e )
         {
-            log.warn( "skip error loading properties {}", resourceName.toString() );
+            log.warn( "skip error loading properties {}", "org/codehaus/plexus/redback/users/messages" );
         }
 
-        resourceName = new StringBuilder( "org/codehaus/redback/i18n/default" );
         try
         {
 
             // load default first then requested locale
-            loadResource( properties, resourceName, null );
-            loadResource( properties, resourceName, locale );
+            loadResource( properties, "org/codehaus/redback/i18n/default", null );
+            loadResource( properties, "org/codehaus/redback/i18n/default", locale );
 
         }
         catch ( IOException e )
         {
-            log.warn( "skip error loading properties {}", resourceName.toString() );
+            log.warn( "skip error loading properties {}", "org/codehaus/redback/i18n/default" );
         }
 
         StringBuilder output = new StringBuilder();
@@ -88,7 +86,7 @@ public class DefaultUtilServices
         return output.toString();
     }
 
-    private void loadResource( final Properties finalProperties, StringBuilder resourceName, String locale )
+    private void loadResource( final Properties finalProperties, String resourceName, String locale )
         throws IOException
     {
         InputStream is = null;
@@ -97,9 +95,9 @@ public class DefaultUtilServices
         {
             if ( StringUtils.isNotEmpty( locale ) )
             {
-                resourceName.append( "_" + locale );
+                resourceName = resourceName + "_" + locale;
             }
-            resourceName.append( ".properties" );
+            resourceName = resourceName + ".properties";
             is = Thread.currentThread().getContextClassLoader().getResourceAsStream( resourceName.toString() );
             if ( is != null )
             {
