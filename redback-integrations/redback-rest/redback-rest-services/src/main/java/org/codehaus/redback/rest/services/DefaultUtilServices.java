@@ -106,7 +106,7 @@ public class DefaultUtilServices
             }
             else
             {
-                log.warn( "cannot load resource {}", resourceName );
+                log.info( "cannot load resource {}", resourceName );
             }
         }
         finally
