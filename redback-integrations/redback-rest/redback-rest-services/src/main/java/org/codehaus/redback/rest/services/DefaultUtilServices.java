@@ -104,6 +104,10 @@ public class DefaultUtilServices
                 properties.load( is );
                 finalProperties.putAll( properties );
             }
+            else
+            {
+                log.warn( "cannot load resource {}", resourceName );
+            }
         }
         finally
         {
