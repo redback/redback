@@ -257,7 +257,7 @@ public class DefaultRoleModelProcessor
     private List<Permission> processPermissions( List<ModelPermission> permissions )
         throws RoleManagerException
     {
-        List<Permission> rbacPermissions = new ArrayList<Permission>();
+        List<Permission> rbacPermissions = new ArrayList<Permission>( permissions.size() );
 
         for ( ModelPermission profilePermission : permissions )
         {

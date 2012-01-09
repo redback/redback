@@ -24,13 +24,12 @@ package org.codehaus.plexus.redback.common.ldap.connection;
 
 import org.apache.commons.lang.StringUtils;
 
+import javax.naming.InvalidNameException;
+import javax.naming.ldap.LdapName;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.TreeMap;
-
-import javax.naming.InvalidNameException;
-import javax.naming.ldap.LdapName;
 
 /**
  * This class contains the configuration for a ldap connection.
@@ -108,9 +107,8 @@ public class LdapConnectionConfiguration
         check();
     }
 
-    public LdapConnectionConfiguration( String hostname, int port, String baseDn, String contextFactory,
-                                        String bindDn, String password, String authenticationMethod,
-                                        Properties extraProperties )
+    public LdapConnectionConfiguration( String hostname, int port, String baseDn, String contextFactory, String bindDn,
+                                        String password, String authenticationMethod, Properties extraProperties )
         throws InvalidNameException, LdapException
     {
         this.hostname = hostname;
@@ -257,7 +255,7 @@ public class LdapConnectionConfiguration
     {
         if ( objectFactories == null )
         {
-            objectFactories = new ArrayList<Class<?>>();
+            objectFactories = new ArrayList<Class<?>>( 0 );
         }
 
         return objectFactories;
@@ -272,7 +270,7 @@ public class LdapConnectionConfiguration
     {
         if ( stateFactories == null )
         {
-            stateFactories = new ArrayList<Class<?>>();
+            stateFactories = new ArrayList<Class<?>>( 0 );
         }
 
         return stateFactories;
@@ -335,16 +333,16 @@ public class LdapConnectionConfiguration
     public String toString()
     {
         return "{LdapConnectionConfiguration: " +
-               "hostname: " + getHostname() + ", " +
-               "port: " + getPort() + ", " +
-               "ssl: " + isSsl() + ", " +
-               "baseDn: " + getBaseDn() + ", " +
-               "contextFactory: " + getContextFactory() + ", " +
-               "bindDn: " + getBindDn() + ", " +
-               "password: " + getPassword() + ", " +
-               "authenticationMethod: " + getAuthenticationMethod() + ", " +
-               "objectFactories: " + getObjectFactories() + ", " +
-               "stateFactories: " + getStateFactories() + ", " +
-               "extraProperties: " + new TreeMap<Object, Object>( extraProperties ).toString() + "}";
+            "hostname: " + getHostname() + ", " +
+            "port: " + getPort() + ", " +
+            "ssl: " + isSsl() + ", " +
+            "baseDn: " + getBaseDn() + ", " +
+            "contextFactory: " + getContextFactory() + ", " +
+            "bindDn: " + getBindDn() + ", " +
+            "password: " + getPassword() + ", " +
+            "authenticationMethod: " + getAuthenticationMethod() + ", " +
+            "objectFactories: " + getObjectFactories() + ", " +
+            "stateFactories: " + getStateFactories() + ", " +
+            "extraProperties: " + new TreeMap<Object, Object>( extraProperties ).toString() + "}";
     }
 }

@@ -43,7 +43,7 @@ public class PasswordRuleViolationExceptionMapper
     {
         RedbackRestError restError = new RedbackRestError();
 
-        List<ErrorMessage> errorMessages = new ArrayList<ErrorMessage>();
+        List<ErrorMessage> errorMessages = new ArrayList<ErrorMessage>( e.getViolations().getViolations().size() );
         for ( PasswordRuleViolations.MessageReference messageReference : e.getViolations().getViolations() )
         {
             errorMessages.add( new ErrorMessage( messageReference.getKey(), messageReference.getArgs() ) );

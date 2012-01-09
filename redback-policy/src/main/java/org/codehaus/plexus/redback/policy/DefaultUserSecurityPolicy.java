@@ -88,7 +88,7 @@ public class DefaultUserSecurityPolicy
      * The List of {@link PasswordRule} objects.
      */
     @Inject
-    private List<PasswordRule> rules = new ArrayList<PasswordRule>();
+    private List<PasswordRule> rules = new ArrayList<PasswordRule>( 0 );
 
     private int previousPasswordsCount;
 
@@ -117,7 +117,7 @@ public class DefaultUserSecurityPolicy
         if ( rules == null )
         {
             // Set rules to prevent downstream NPE.
-            rules = new ArrayList<PasswordRule>();
+            rules = new ArrayList<PasswordRule>( 1 );
         }
 
         if ( rules.isEmpty() )
@@ -161,7 +161,7 @@ public class DefaultUserSecurityPolicy
     {
         if ( unlockableAccounts == null )
         {
-            unlockableAccounts = new ArrayList<String>();
+            unlockableAccounts = new ArrayList<String>( 0 );
         }
         return unlockableAccounts;
     }
@@ -316,7 +316,7 @@ public class DefaultUserSecurityPolicy
         user.setPassword( null );
 
         // push new password onto list of previous password.
-        List<String> previousPasswords = new ArrayList<String>();
+        List<String> previousPasswords = new ArrayList<String>( 1 );
         previousPasswords.add( user.getEncodedPassword() );
 
         if ( !user.getPreviousEncodedPasswords().isEmpty() )

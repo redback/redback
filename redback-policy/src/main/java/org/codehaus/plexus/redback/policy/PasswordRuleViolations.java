@@ -16,14 +16,14 @@ package org.codehaus.plexus.redback.policy;
  * limitations under the License.
  */
 
+import org.codehaus.plexus.redback.users.Messages;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.plexus.redback.users.Messages;
-
 /**
  * Password Rule Violations
- * 
+ *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
@@ -53,7 +53,7 @@ public class PasswordRuleViolations
      */
     public PasswordRuleViolations()
     {
-        violations = new ArrayList<MessageReference>();
+        violations = new ArrayList<MessageReference>( 0 );
     }
 
     /**
@@ -66,18 +66,18 @@ public class PasswordRuleViolations
 
     /**
      * Add a violation to the underlying list.
-     * 
+     *
      * @param key the bundle/localization key for the message.
      */
     public void addViolation( String key )
     {
-        addViolation(key, null);
+        addViolation( key, null );
     }
-    
+
     /**
      * Add a violation to the underlying list.
-     * 
-     * @param key the bundle/localization key for the message.
+     *
+     * @param key  the bundle/localization key for the message.
      * @param args the arguments for the message.
      */
     public void addViolation( String key, String[] args )
@@ -87,15 +87,15 @@ public class PasswordRuleViolations
         mesgref.args = args;
         violations.add( mesgref );
     }
-    
+
     /**
      * Get the List of Violations as localized and post-processed {@link String}s.
-     * 
+     *
      * @return the List of {@link String} objects.
      */
     public List<String> getLocalizedViolations()
     {
-        List<String> msgs = new ArrayList<String>();
+        List<String> msgs = new ArrayList<String>( violations.size() );
 
         for ( MessageReference msgref : violations )
         {
@@ -107,7 +107,7 @@ public class PasswordRuleViolations
 
     /**
      * Simple test to see if there are any violations.
-     * 
+     *
      * @return true if there are any violations.
      */
     public boolean hasViolations()

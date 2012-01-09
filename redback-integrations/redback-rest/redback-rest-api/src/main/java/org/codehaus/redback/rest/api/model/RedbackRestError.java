@@ -35,7 +35,7 @@ public class RedbackRestError
     implements Serializable
 {
 
-    private List<ErrorMessage> errorMessages = new ArrayList<ErrorMessage>();
+    private List<ErrorMessage> errorMessages = new ArrayList<ErrorMessage>( 1 );
 
     public RedbackRestError()
     {

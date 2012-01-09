@@ -16,10 +16,6 @@ package org.codehaus.plexus.redback.role.util;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.codehaus.plexus.redback.role.model.ModelApplication;
 import org.codehaus.plexus.redback.role.model.ModelOperation;
 import org.codehaus.plexus.redback.role.model.ModelResource;
@@ -30,19 +26,23 @@ import org.codehaus.plexus.util.dag.CycleDetectedException;
 import org.codehaus.plexus.util.dag.DAG;
 import org.codehaus.plexus.util.dag.TopologicalSorter;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * RoleModelUtils:
- * 
+ *
  * @author: Jesse McConnell <jesse@codehaus.org>
  * @version: $Id$
  */
 public class RoleModelUtils
 {
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public static List<ModelRole> getRoles( RedbackRoleModel model )
     {
-        List<ModelRole> roleList = new ArrayList<ModelRole>();
+        List<ModelRole> roleList = new ArrayList<ModelRole>( );
 
         for ( ModelApplication application : (List<ModelApplication>) model.getApplications() )
         {
@@ -52,7 +52,7 @@ public class RoleModelUtils
         return roleList;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public static List<ModelTemplate> getTemplates( RedbackRoleModel model )
     {
         List<ModelTemplate> templateList = new ArrayList<ModelTemplate>();
@@ -65,7 +65,7 @@ public class RoleModelUtils
         return templateList;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public static List<String> getOperationIdList( RedbackRoleModel model )
     {
         List<String> operationsIdList = new ArrayList<String>();
@@ -81,7 +81,7 @@ public class RoleModelUtils
         return operationsIdList;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public static List<String> getResourceIdList( RedbackRoleModel model )
     {
         List<String> resourceIdList = new ArrayList<String>();
@@ -97,7 +97,7 @@ public class RoleModelUtils
         return resourceIdList;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public static List<String> getRoleIdList( RedbackRoleModel model )
     {
         List<String> roleIdList = new ArrayList<String>();
@@ -113,7 +113,7 @@ public class RoleModelUtils
         return roleIdList;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public static List<String> getTemplateIdList( RedbackRoleModel model )
     {
         List<String> templateIdList = new ArrayList<String>();
@@ -132,12 +132,12 @@ public class RoleModelUtils
 
     /**
      * WARNING: can return null
-     * 
+     *
      * @param model
      * @param roleId
      * @return
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public static ModelRole getModelRole( RedbackRoleModel model, String roleId )
     {
         ModelRole mrole = null;
@@ -158,12 +158,12 @@ public class RoleModelUtils
 
     /**
      * WARNING: can return null
-     * 
+     *
      * @param model
      * @param templateId
      * @return
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public static ModelTemplate getModelTemplate( RedbackRoleModel model, String templateId )
     {
         ModelTemplate mtemplate = null;
@@ -184,12 +184,12 @@ public class RoleModelUtils
 
     /**
      * WARNING: can return null
-     * 
+     *
      * @param model
      * @param operationId
      * @return
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public static ModelOperation getModelOperation( RedbackRoleModel model, String operationId )
     {
         ModelOperation moperation = null;

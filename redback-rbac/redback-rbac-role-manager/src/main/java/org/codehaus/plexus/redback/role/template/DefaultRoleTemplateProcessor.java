@@ -16,10 +16,6 @@ package org.codehaus.plexus.redback.role.template;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.codehaus.plexus.redback.rbac.Operation;
 import org.codehaus.plexus.redback.rbac.Permission;
 import org.codehaus.plexus.redback.rbac.RBACManager;
@@ -41,30 +37,32 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * DefaultRoleTemplateProcessor: inserts the components of a template into the rbac manager
- * 
+ *
  * @author: Jesse McConnell <jesse@codehaus.org>
- * 
  * @version: $Id$
- * 
  */
-@Service("roleTemplateProcessor")
+@Service( "roleTemplateProcessor" )
 public class DefaultRoleTemplateProcessor
     implements RoleTemplateProcessor
 {
     private Logger log = LoggerFactory.getLogger( DefaultRoleTemplateProcessor.class );
-    
+
     @Inject
-    @Named(value = "rBACManager#cached")
+    @Named( value = "rBACManager#cached" )
     private RBACManager rbacManager;
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public void create( RedbackRoleModel model, String templateId, String resource )
         throws RoleManagerException
     {
-        for ( ModelApplication application: (List<ModelApplication>) model.getApplications() )
+        for ( ModelApplication application : (List<ModelApplication>) model.getApplications() )
         {
             for ( ModelTemplate template : (List<ModelTemplate>) application.getTemplates() )
             {
@@ -84,11 +82,11 @@ public class DefaultRoleTemplateProcessor
         throw new RoleManagerException( "unknown template '" + templateId + "'" );
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public void remove( RedbackRoleModel model, String templateId, String resource )
         throws RoleManagerException
     {
-        for ( ModelApplication application: (List<ModelApplication>) model.getApplications() )
+        for ( ModelApplication application : (List<ModelApplication>) model.getApplications() )
         {
             for ( ModelTemplate template : (List<ModelTemplate>) application.getTemplates() )
             {
@@ -173,7 +171,7 @@ public class DefaultRoleTemplateProcessor
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     private void processTemplate( RedbackRoleModel model, ModelTemplate template, String resource )
         throws RoleManagerException
     {
@@ -217,12 +215,13 @@ public class DefaultRoleTemplateProcessor
 
                         if ( childModelTemplate == null )
                         {
-                            throw new RoleManagerException( "error obtaining child template from model: template "
-                                + templateName + " # child template: " + childTemplateId );
+                            throw new RoleManagerException(
+                                "error obtaining child template from model: template " + templateName
+                                    + " # child template: " + childTemplateId );
                         }
 
-                        String childRoleName = childModelTemplate.getNamePrefix() + childModelTemplate.getDelimiter()
-                            + resource;
+                        String childRoleName =
+                            childModelTemplate.getNamePrefix() + childModelTemplate.getDelimiter() + resource;
 
                         // check if the role exists, if it does then add it as a child, otherwise make it and add it
                         // this should be safe since validation should protect us from template cycles
@@ -267,12 +266,13 @@ public class DefaultRoleTemplateProcessor
 
                         if ( parentModelTemplate == null )
                         {
-                            throw new RoleManagerException( "error obtaining parent template from model: template "
-                                + templateName + " # child template: " + parentTemplateId );
+                            throw new RoleManagerException(
+                                "error obtaining parent template from model: template " + templateName
+                                    + " # child template: " + parentTemplateId );
                         }
 
-                        String parentRoleName = parentModelTemplate.getNamePrefix()
-                            + parentModelTemplate.getDelimiter() + resource;
+                        String parentRoleName =
+                            parentModelTemplate.getNamePrefix() + parentModelTemplate.getDelimiter() + resource;
 
                         // check if the role exists, if it does then add it as a child, otherwise make it and add it
                         // this should be safe since validation should protect us from template cycles
@@ -312,7 +312,8 @@ public class DefaultRoleTemplateProcessor
                 {
                     if ( !role.getPermissions().contains( permission ) )
                     {
-                        log.info( "Adding new permission '" + permission.getName() + "' to role '" + role.getName() + "'" );
+                        log.info(
+                            "Adding new permission '" + permission.getName() + "' to role '" + role.getName() + "'" );
                         role.addPermission( permission );
                         changed = true;
                     }
@@ -324,7 +325,8 @@ public class DefaultRoleTemplateProcessor
                 {
                     if ( !permissions.contains( permission ) )
                     {
-                        log.info( "Removing old permission '" + permission.getName() + "' from role '" + role.getName() + "'" );
+                        log.info( "Removing old permission '" + permission.getName() + "' from role '" + role.getName()
+                                      + "'" );
                         role.removePermission( permission );
                         changed = true;
                     }
@@ -341,30 +343,32 @@ public class DefaultRoleTemplateProcessor
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     private List<Permission> processPermissions( RedbackRoleModel model, ModelTemplate template, String resource )
         throws RoleManagerException
     {
-        List<Permission> rbacPermissions = new ArrayList<Permission>();
 
         if ( template.getPermissions() != null )
         {
             // copy list to avoid concurrent modifications
             List<ModelPermission> templatePermissions = new ArrayList<ModelPermission>( template.getPermissions() );
+            List<Permission> rbacPermissions = new ArrayList<Permission>( templatePermissions.size() );
             for ( ModelPermission profilePermission : templatePermissions )
             {
                 try
                 {
-                    String permissionName = profilePermission.getName() + template.getDelimiter()
-                        + resolvePermissionResource( model, profilePermission, resource );
+                    String permissionName =
+                        profilePermission.getName() + template.getDelimiter() + resolvePermissionResource( model,
+                                                                                                           profilePermission,
+                                                                                                           resource );
 
                     if ( !rbacManager.permissionExists( permissionName ) )
                     {
 
                         Permission permission = rbacManager.createPermission( permissionName );
 
-                        ModelOperation modelOperation = RoleModelUtils.getModelOperation( model, profilePermission
-                            .getOperation() );
+                        ModelOperation modelOperation =
+                            RoleModelUtils.getModelOperation( model, profilePermission.getOperation() );
                         Operation rbacOperation = rbacManager.getOperation( modelOperation.getName() );
 
                         String permissionResource = resolvePermissionResource( model, profilePermission, resource );
@@ -399,9 +403,10 @@ public class DefaultRoleTemplateProcessor
                     throw new RoleManagerException( "unable to resolve resource: " + resource, e );
                 }
             }
+            return rbacPermissions;
         }
 
-        return rbacPermissions;
+        return Collections.emptyList();
     }
 
     private String resolvePermissionResource( RedbackRoleModel model, ModelPermission permission, String resource )

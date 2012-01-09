@@ -49,40 +49,40 @@ public class Role
     /**
      * Field childRoleNames
      */
-    private List<String> childRoleNames = new ArrayList<String>();
+    private List<String> childRoleNames = new ArrayList<String>(0);
 
     /**
      * Field permissions
      */
-    private List<Permission> permissions = new ArrayList<Permission>();
+    private List<Permission> permissions = new ArrayList<Permission>(0);
 
     /**
      * some services doesn't populate this field getAllRoles in RoleManagementService
      */
-    private List<String> parentRoleNames = new ArrayList<String>();
+    private List<String> parentRoleNames = new ArrayList<String>(0);
 
     /**
      * user with a parent role
      * some services doesn't populate this field getAllRoles in RoleManagementService
      */
-    private List<User> parentsRolesUsers = new ArrayList<User>();
+    private List<User> parentsRolesUsers = new ArrayList<User>(0);
 
     /**
      * user with this role
      * some services doesn't populate this field getAllRoles in RoleManagementService
      */
-    private List<User> users = new ArrayList<User>();
+    private List<User> users = new ArrayList<User>(0);
 
     /**
      * users without this role or parent role
      * some services doesn't populate this field getAllRoles in RoleManagementService
      */
-    private List<User> otherUsers = new ArrayList<User>();
+    private List<User> otherUsers = new ArrayList<User>(0);
 
     /**
      * users to remove assignement to this role
      */
-    private List<User> removedUsers = new ArrayList<User>();
+    private List<User> removedUsers = new ArrayList<User>(0);
 
     /**
      * Field permanent

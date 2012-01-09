@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * MemoryUserAssignment 
+ * MemoryUserAssignment
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
@@ -41,8 +41,8 @@ public class MemoryUserAssignment
     /**
      * Field roles
      */
-    private List<String> roles = new ArrayList<String>();
-    
+    private List<String> roles = new ArrayList<String>( 0 );
+
     /**
      * Field permanent
      */
@@ -50,7 +50,7 @@ public class MemoryUserAssignment
 
     /**
      * Method equals
-     * 
+     *
      * @param other
      */
     public boolean equals( Object other )
@@ -67,8 +67,9 @@ public class MemoryUserAssignment
 
         MemoryUserAssignment that = (MemoryUserAssignment) other;
         boolean result = true;
-        result = result
-            && ( getPrincipal() == null ? that.getPrincipal() == null : getPrincipal().equals( that.getPrincipal() ) );
+        result = result && ( getPrincipal() == null
+            ? that.getPrincipal() == null
+            : getPrincipal().equals( that.getPrincipal() ) );
         return result;
     }
 
@@ -87,7 +88,7 @@ public class MemoryUserAssignment
     {
         if ( this.roles == null )
         {
-            this.roles = new ArrayList<String>();
+            this.roles = new ArrayList<String>( 0 );
         }
 
         return this.roles;
@@ -105,7 +106,7 @@ public class MemoryUserAssignment
 
     /**
      * Set null
-     * 
+     *
      * @param principal
      */
     public void setPrincipal( String principal )
@@ -115,7 +116,7 @@ public class MemoryUserAssignment
 
     /**
      * Set null
-     * 
+     *
      * @param roles
      */
     public void setRoleNames( List<String> roles )

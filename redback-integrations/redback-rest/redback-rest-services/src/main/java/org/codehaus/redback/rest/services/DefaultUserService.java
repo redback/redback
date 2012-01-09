@@ -234,7 +234,7 @@ public class DefaultUserService
         throws RedbackServiceException
     {
         List<org.codehaus.plexus.redback.users.User> users = userManager.getUsers();
-        List<User> simpleUsers = new ArrayList<User>();
+        List<User> simpleUsers = new ArrayList<User>( users.size() );
 
         for ( org.codehaus.plexus.redback.users.User user : users )
         {

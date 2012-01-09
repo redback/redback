@@ -66,7 +66,7 @@ public class LdapUser
     {
         key = username;
         this.username = username;
-        previousEncodedPasswords = new ArrayList<String>();
+        previousEncodedPasswords = new ArrayList<String>( 0 );
         failedLoginAttempts = 0;
     }
 
@@ -79,7 +79,7 @@ public class LdapUser
 
     public LdapUser()
     {
-        previousEncodedPasswords = new ArrayList<String>();
+        previousEncodedPasswords = new ArrayList<String>( 0 );
         failedLoginAttempts = Integer.MIN_VALUE;
     }
 

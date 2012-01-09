@@ -32,7 +32,7 @@ public class RedbackServiceException
 {
     private int httpErrorCode = 500;
 
-    private List<ErrorMessage> errorMessages = new ArrayList<ErrorMessage>();
+    private List<ErrorMessage> errorMessages = new ArrayList<ErrorMessage>(0);
 
     public RedbackServiceException( String s )
     {

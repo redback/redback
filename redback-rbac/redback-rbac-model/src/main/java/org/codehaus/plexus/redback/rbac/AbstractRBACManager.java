@@ -41,8 +41,8 @@ public abstract class AbstractRBACManager
     implements RBACManager
 {
     protected Logger log = LoggerFactory.getLogger( getClass() );
-    
-    private List<RBACManagerListener> listeners = new ArrayList<RBACManagerListener>();
+
+    private List<RBACManagerListener> listeners = new ArrayList<RBACManagerListener>( 0 );
 
     private Resource globalResource;
 
@@ -128,8 +128,8 @@ public abstract class AbstractRBACManager
             }
             catch ( Exception e )
             {
-                log.warn(
-                    "Unable to trigger .rbacPermissionSaved( Permission ) to " + listener.getClass().getName(), e );
+                log.warn( "Unable to trigger .rbacPermissionSaved( Permission ) to " + listener.getClass().getName(),
+                          e );
             }
         }
     }
@@ -146,8 +146,8 @@ public abstract class AbstractRBACManager
             }
             catch ( Exception e )
             {
-                log.warn(
-                    "Unable to trigger .rbacPermissionRemoved( Permission ) to " + listener.getClass().getName(), e );
+                log.warn( "Unable to trigger .rbacPermissionRemoved( Permission ) to " + listener.getClass().getName(),
+                          e );
             }
         }
     }
@@ -183,8 +183,8 @@ public abstract class AbstractRBACManager
             }
             catch ( Exception e )
             {
-                log.warn( "Unable to trigger .rbacUserAssignmentRemoved( UserAssignment ) to " +
-                    listener.getClass().getName(), e );
+                log.warn( "Unable to trigger .rbacUserAssignmentRemoved( UserAssignment ) to "
+                              + listener.getClass().getName(), e );
             }
         }
     }
@@ -454,7 +454,7 @@ public abstract class AbstractRBACManager
             }
             else
             {
-                List<Permission> newPermList = new ArrayList<Permission>();
+                List<Permission> newPermList = new ArrayList<Permission>( permissions.size() );
                 newPermList.add( permission );
                 userPermMap.put( permission.getOperation().getName(), newPermList );
             }
@@ -661,7 +661,7 @@ public abstract class AbstractRBACManager
      * @throws RbacManagerException
      * @throws RbacObjectNotFoundException
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public Collection<Role> getEffectivelyUnassignedRoles( String principal )
         throws RbacManagerException, RbacObjectNotFoundException
     {
@@ -681,7 +681,7 @@ public abstract class AbstractRBACManager
      * @throws RbacManagerException
      * @throws RbacObjectNotFoundException
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public Collection<Role> getUnassignedRoles( String principal )
         throws RbacManagerException, RbacObjectNotFoundException
     {

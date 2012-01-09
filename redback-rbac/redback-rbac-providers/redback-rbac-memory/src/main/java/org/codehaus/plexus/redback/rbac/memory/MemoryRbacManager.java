@@ -16,13 +16,6 @@ package org.codehaus.plexus.redback.rbac.memory;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.codehaus.plexus.redback.rbac.AbstractRBACManager;
 import org.codehaus.plexus.redback.rbac.Operation;
 import org.codehaus.plexus.redback.rbac.Permission;
@@ -38,6 +31,13 @@ import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.util.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * MemoryRbacManager: a very quick and dirty implementation of a rbac store
  * <p/>
@@ -47,7 +47,7 @@ import org.springframework.stereotype.Service;
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
  */
-@Service("rBACManager#memory")
+@Service( "rBACManager#memory" )
 public class MemoryRbacManager
     extends AbstractRBACManager
     implements RBACManager
@@ -250,8 +250,10 @@ public class MemoryRbacManager
             if ( StringUtils.equals( operationName, permission.getOperation().getName() ) )
             {
                 throw new RbacManagerException( "Attempted to create a permission named '" + name +
-                    "' with an operation named '" + operationName + "', but that overides the existing '" + name +
-                    "' permission with operation '" + permission.getOperation().getName() + "'" );
+                                                    "' with an operation named '" + operationName
+                                                    + "', but that overides the existing '" + name +
+                                                    "' permission with operation '"
+                                                    + permission.getOperation().getName() + "'" );
             }
 
         }
@@ -475,9 +477,11 @@ public class MemoryRbacManager
     public List<UserAssignment> getUserAssignmentsForRoles( Collection<String> roleNames )
         throws RbacManagerException
     {
-        List<UserAssignment> userAssignments = new ArrayList<UserAssignment>();
 
-        for ( UserAssignment ua : getAllUserAssignments() )
+        List<UserAssignment> allUserAssignments = getAllUserAssignments();
+        List<UserAssignment> userAssignments = new ArrayList<UserAssignment>( allUserAssignments.size() );
+
+        for ( UserAssignment ua : allUserAssignments )
         {
             for ( String roleName : roleNames )
             {

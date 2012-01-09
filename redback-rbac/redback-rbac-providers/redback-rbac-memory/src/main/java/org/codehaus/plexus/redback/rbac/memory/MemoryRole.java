@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * MemoryRole 
+ * MemoryRole
  *
  * @author <a href="mailto:joakim@erdfelt.com">Joakim Erdfelt</a>
  * @version $Id$
@@ -52,13 +52,13 @@ public class MemoryRole
     /**
      * Field childRoleNames
      */
-    private List<String> childRoleNames = new ArrayList<String>();
+    private List<String> childRoleNames = new ArrayList<String>( 0 );
 
     /**
      * Field permissions
      */
-    private List<Permission> permissions = new ArrayList<Permission>();
-    
+    private List<Permission> permissions = new ArrayList<Permission>( 0 );
+
     /**
      * Field permanent
      */
@@ -66,7 +66,7 @@ public class MemoryRole
 
     /**
      * Method addPermission
-     * 
+     *
      * @param memoryPermission
      */
     public void addPermission( Permission memoryPermission )
@@ -74,14 +74,14 @@ public class MemoryRole
         if ( !( memoryPermission instanceof MemoryPermission ) )
         {
             throw new ClassCastException( "MemoryRole.addPermissions(memoryPermission) parameter must be instanceof "
-                + MemoryPermission.class.getName() );
+                                              + MemoryPermission.class.getName() );
         }
         getPermissions().add( ( (MemoryPermission) memoryPermission ) );
     }
 
     /**
      * Method equals
-     * 
+     *
      * @param other
      */
     public boolean equals( Object other )
@@ -145,10 +145,9 @@ public class MemoryRole
     }
 
     /**
-     * Get 
-     *             true if this role is available to be assigned to
+     * Get
+     * true if this role is available to be assigned to
      * a user
-     *           
      */
     public boolean isAssignable()
     {
@@ -157,7 +156,7 @@ public class MemoryRole
 
     /**
      * Method removePermission
-     * 
+     *
      * @param memoryPermission
      */
     public void removePermission( Permission memoryPermission )
@@ -171,11 +170,10 @@ public class MemoryRole
     }
 
     /**
-     * Set 
-     *             true if this role is available to be assigned to
+     * Set
+     * true if this role is available to be assigned to
      * a user
-     *           
-     * 
+     *
      * @param assignable
      */
     public void setAssignable( boolean assignable )
@@ -185,7 +183,7 @@ public class MemoryRole
 
     /**
      * Set null
-     * 
+     *
      * @param description
      */
     public void setDescription( String description )
@@ -195,7 +193,7 @@ public class MemoryRole
 
     /**
      * Set null
-     * 
+     *
      * @param name
      */
     public void setName( String name )
@@ -205,14 +203,14 @@ public class MemoryRole
 
     /**
      * Set null
-     * 
+     *
      * @param permissions
      */
     public void setPermissions( List<Permission> permissions )
     {
         this.permissions = permissions;
     }
-    
+
     /**
      * Method toString
      */
@@ -231,7 +229,7 @@ public class MemoryRole
 
     public void setChildRoleNames( List<String> names )
     {
-        if(names == null)
+        if ( names == null )
         {
             this.childRoleNames.clear();
         }

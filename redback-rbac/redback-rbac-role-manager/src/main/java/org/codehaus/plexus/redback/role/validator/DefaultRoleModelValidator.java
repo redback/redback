@@ -77,7 +77,7 @@ public class DefaultRoleModelValidator
     {
         if ( validationErrors == null )
         {
-            validationErrors = new ArrayList<String>();
+            validationErrors = new ArrayList<String>(0);
         }
 
         validationErrors.add( error );
