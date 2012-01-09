@@ -53,6 +53,8 @@ public class DefaultUtilServices
         try
         {
 
+            // load default first then requested locale
+            loadResource( properties, resourceName, null );
             loadResource( properties, resourceName, locale );
 
         }
@@ -65,6 +67,8 @@ public class DefaultUtilServices
         try
         {
 
+            // load default first then requested locale
+            loadResource( properties, resourceName, null );
             loadResource( properties, resourceName, locale );
 
         }
@@ -74,7 +78,6 @@ public class DefaultUtilServices
         }
 
         StringBuilder output = new StringBuilder();
-        //return properties.toString();
 
         for ( Map.Entry<Object, Object> entry : properties.entrySet() )
         {
@@ -85,11 +88,11 @@ public class DefaultUtilServices
         return output.toString();
     }
 
-    private void loadResource( Properties properties, StringBuilder resourceName, String locale )
+    private void loadResource( final Properties finalProperties, StringBuilder resourceName, String locale )
         throws IOException
     {
         InputStream is = null;
-
+        Properties properties = new Properties();
         try
         {
             if ( StringUtils.isNotEmpty( locale ) )
@@ -101,6 +104,7 @@ public class DefaultUtilServices
             if ( is != null )
             {
                 properties.load( is );
+                finalProperties.putAll( properties );
             }
         }
         finally
