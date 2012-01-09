@@ -106,7 +106,10 @@ public class DefaultUtilServices
             }
             else
             {
-                log.info( "cannot load resource {}", resourceName );
+                if ( !StringUtils.equalsIgnoreCase( locale, "en" ) )
+                {
+                    log.info( "cannot load resource {}", resourceName );
+                }
             }
         }
         finally
