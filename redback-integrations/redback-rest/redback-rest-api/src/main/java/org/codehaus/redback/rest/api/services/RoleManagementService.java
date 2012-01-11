@@ -284,9 +284,8 @@ public interface RoleManagementService
         throws RedbackServiceException;
 
     @Path( "getApplicationRoles/{username}" )
-    @POST
+    @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
-    @Consumes( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML } )
     @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_RBAC_ADMIN_OPERATION )
     /**
      * @since 1.5
