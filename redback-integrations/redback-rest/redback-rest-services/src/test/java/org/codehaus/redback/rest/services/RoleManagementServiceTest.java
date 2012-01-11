@@ -193,9 +193,6 @@ public class RoleManagementServiceTest
     {
         RoleManagementService roleManagementService = getRoleManagementService( authorizationHeader );
 
-        List<ApplicationRoles> applicationRoleList = roleManagementService.getApplicationRoles( "guest" );
-
-        assertNotNull( applicationRoleList );
 
         List<Role> allRoles = roleManagementService.getAllRoles();
 
@@ -211,7 +208,7 @@ public class RoleManagementServiceTest
 
         assertEquals( initialSize + 1, allRoles.size() );
 
-        assertRoleExist( "Repository Observer - internal" , allRoles );
+        assertRoleExist( "Repository Observer - internal", allRoles );
 
         roleManagementService.createTemplatedRole( "archiva-repository-manager", "internal" );
 
@@ -221,7 +218,7 @@ public class RoleManagementServiceTest
 
         assertEquals( initialSize + 2, allRoles.size() );
 
-        assertRoleExist( "Repository Manager - internal" , allRoles );
+        assertRoleExist( "Repository Manager - internal", allRoles );
 
         roleManagementService.createTemplatedRole( "archiva-repository-observer", "snapshots" );
 
@@ -231,7 +228,7 @@ public class RoleManagementServiceTest
 
         assertEquals( initialSize + 3, allRoles.size() );
 
-        assertRoleExist( "Repository Observer - snapshots" , allRoles );
+        assertRoleExist( "Repository Observer - snapshots", allRoles );
 
         roleManagementService.createTemplatedRole( "archiva-repository-manager", "snapshots" );
 
@@ -241,7 +238,16 @@ public class RoleManagementServiceTest
 
         assertEquals( initialSize + 4, allRoles.size() );
 
-        assertRoleExist( "Repository Manager - snapshots" , allRoles );
+        assertRoleExist( "Repository Manager - snapshots", allRoles );
+
+        List<ApplicationRoles> applicationRoleList = roleManagementService.getApplicationRoles( "guest" );
+
+        assertNotNull( applicationRoleList );
+
+        for ( ApplicationRoles applicationRoles : applicationRoleList )
+        {
+            log.info( "applicationRoles:" + applicationRoles );
+        }
     }
 
     private void assertRoleExist( String roleName, List<Role> allRoles )

@@ -20,7 +20,8 @@ package org.codehaus.redback.rest.api.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
+
 
 /**
  * @author Olivier Lamy
@@ -34,11 +35,11 @@ public class ApplicationRoles
 
     private String description;
 
-    private List<String> globalRoles;
+    private Collection<String> globalRoles;
 
-    private List<RoleTemplate> roleTemplates;
+    private Collection<RoleTemplate> roleTemplates;
 
-    private List<String> resources;
+    private Collection<String> resources;
 
 
     public ApplicationRoles()
@@ -46,8 +47,8 @@ public class ApplicationRoles
         // no op
     }
 
-    public ApplicationRoles( String name, String description, List<String> globalRoles,
-                             List<RoleTemplate> roleTemplates, List<String> resources )
+    public ApplicationRoles( String name, String description, Collection<String> globalRoles,
+                             Collection<RoleTemplate> roleTemplates, Collection<String> resources )
     {
         this.name = name;
         this.description = description;
@@ -76,32 +77,32 @@ public class ApplicationRoles
         this.description = description;
     }
 
-    public List<String> getGlobalRoles()
+    public Collection<String> getGlobalRoles()
     {
         return globalRoles;
     }
 
-    public void setGlobalRoles( List<String> globalRoles )
+    public void setGlobalRoles( Collection<String> globalRoles )
     {
         this.globalRoles = globalRoles;
     }
 
-    public List<RoleTemplate> getRoleTemplates()
+    public Collection<RoleTemplate> getRoleTemplates()
     {
         return roleTemplates;
     }
 
-    public void setRoleTemplates( List<RoleTemplate> roleTemplates )
+    public void setRoleTemplates( Collection<RoleTemplate> roleTemplates )
     {
         this.roleTemplates = roleTemplates;
     }
 
-    public List<String> getResources()
+    public Collection<String> getResources()
     {
         return resources;
     }
 
-    public void setResources( List<String> resources )
+    public void setResources( Collection<String> resources )
     {
         this.resources = resources;
     }

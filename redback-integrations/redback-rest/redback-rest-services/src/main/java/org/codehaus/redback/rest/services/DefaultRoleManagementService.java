@@ -27,15 +27,19 @@ import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.role.model.ModelApplication;
+import org.codehaus.plexus.redback.role.model.ModelRole;
+import org.codehaus.plexus.redback.role.model.ModelTemplate;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.codehaus.redback.integration.model.AdminEditUserCredentials;
 import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
 import org.codehaus.redback.integration.util.RoleSorter;
 import org.codehaus.redback.rest.api.model.Application;
 import org.codehaus.redback.rest.api.model.ApplicationRoles;
 import org.codehaus.redback.rest.api.model.ErrorMessage;
 import org.codehaus.redback.rest.api.model.Role;
+import org.codehaus.redback.rest.api.model.RoleTemplate;
 import org.codehaus.redback.rest.api.services.RedbackServiceException;
 import org.codehaus.redback.rest.api.services.RoleManagementService;
 import org.slf4j.Logger;
@@ -44,12 +48,15 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Olivier Lamy
@@ -527,24 +534,171 @@ public class DefaultRoleManagementService
     public List<ApplicationRoles> getApplicationRoles( String username )
         throws RedbackServiceException
     {
-        return Collections.emptyList();
+        AdminEditUserCredentials user = null;
+        if ( StringUtils.isEmpty( username ) )
+        {
+            throw new RedbackServiceException( new ErrorMessage( "rbac.edit.user.empty.principal" ) );
+        }
+
+        if ( !userManager.userExists( username ) )
+        {
+            throw new RedbackServiceException( new ErrorMessage( "user.does.not.exist", new String[]{ username } ) );
+        }
+
+        try
+        {
+            User u = userManager.findUser( username );
+
+            if ( u == null )
+            {
+                throw new RedbackServiceException( new ErrorMessage( "cannot.operate.on.null.user" ) );
+            }
+
+            user = new AdminEditUserCredentials( u );
+        }
+        catch ( UserNotFoundException e )
+        {
+            throw new RedbackServiceException(
+                new ErrorMessage( "user.does.not.exist", new String[]{ username, e.getMessage() } ) );
+        }
+        try
+        {
+            // check first if role assignments for user exist
+            if ( !rbacManager.userAssignmentExists( username ) )
+            {
+                UserAssignment assignment = rbacManager.createUserAssignment( username );
+                rbacManager.saveUserAssignment( assignment );
+            }
+
+            List<org.codehaus.plexus.redback.rbac.Role> allRoles =
+                filterRolesForCurrentUserAccess( rbacManager.getAllRoles() );
+
+            List<ModelApplication> modelApplications = roleManager.getModel().getApplications();
+
+            List<ApplicationRoles> applicationRolesList = new ArrayList<ApplicationRoles>( modelApplications.size() );
+
+            for ( ModelApplication modelApplication : modelApplications )
+            {
+                ApplicationRoles applicationRoles = new ApplicationRoles();
+
+                applicationRoles.setDescription( modelApplication.getDescription() );
+                applicationRoles.setName( modelApplication.getId() );
+
+                List<org.codehaus.plexus.redback.rbac.Role> appRoles =
+                    filterApplicationRoles( modelApplication, allRoles );
+
+                applicationRoles.setGlobalRoles( toRoleNames( appRoles ) );
+
+                Set<String> resources = discoverResources( modelApplication.getTemplates(), allRoles );
+
+                applicationRoles.setResources( resources );
+
+                applicationRoles.setRoleTemplates( toRoleTemplates( modelApplication.getTemplates() ) );
+
+                applicationRolesList.add( applicationRoles );
+            }
+
+            return applicationRolesList;
+
+        }
+        catch ( RbacManagerException e )
+        {
+            RedbackServiceException redbackServiceException =
+                new RedbackServiceException( new ErrorMessage( e.getMessage() ) );
+            redbackServiceException.setHttpErrorCode( Response.Status.INTERNAL_SERVER_ERROR.getStatusCode() );
+            throw redbackServiceException;
+        }
     }
 
     //----------------------------------------------------------------
     // Internal methods
     //----------------------------------------------------------------
 
-    private boolean isInList( String roleName,
-                              Collection<org.codehaus.plexus.redback.rbac.Role> effectivelyAssignedRoles )
+    private org.codehaus.plexus.redback.rbac.Role isInList( String roleName,
+                                                            Collection<org.codehaus.plexus.redback.rbac.Role> roles )
     {
-        for ( org.codehaus.plexus.redback.rbac.Role role : effectivelyAssignedRoles )
+        for ( org.codehaus.plexus.redback.rbac.Role role : roles )
         {
             if ( roleName.equals( role.getName() ) )
             {
-                return true;
+                return role;
             }
         }
-        return false;
+        return null;
+    }
+
+    private List<org.codehaus.plexus.redback.rbac.Role> filterApplicationRoles( ModelApplication application,
+                                                                                List<org.codehaus.plexus.redback.rbac.Role> allRoles )
+    {
+        List<org.codehaus.plexus.redback.rbac.Role> applicationRoles =
+            new ArrayList<org.codehaus.plexus.redback.rbac.Role>();
+        List<ModelRole> roles = application.getRoles();
+
+        for ( ModelRole modelRole : roles )
+        {
+            org.codehaus.plexus.redback.rbac.Role r = isInList( modelRole.getName(), allRoles );
+            if ( r != null )
+            {
+                applicationRoles.add( r );
+            }
+        }
+
+        return applicationRoles;
+    }
+
+    private List<String> toRoleNames( Collection<org.codehaus.plexus.redback.rbac.Role> roles )
+    {
+        List<String> names = new ArrayList<String>( roles.size() );
+
+        for ( org.codehaus.plexus.redback.rbac.Role r : roles )
+        {
+            names.add( r.getName() );
+        }
+
+        return names;
+    }
+
+    private List<RoleTemplate> toRoleTemplates( List<ModelTemplate> modelTemplates )
+    {
+        if ( modelTemplates == null || modelTemplates.isEmpty() )
+        {
+            return new ArrayList<RoleTemplate>( 0 );
+        }
+
+        List<RoleTemplate> roleTemplates = new ArrayList<RoleTemplate>( modelTemplates.size() );
+
+        for ( ModelTemplate modelTemplate : modelTemplates )
+        {
+            RoleTemplate roleTemplate = new RoleTemplate();
+
+            roleTemplate.setDelimiter( modelTemplate.getDelimiter() );
+            roleTemplate.setDescription( modelTemplate.getDescription() );
+            roleTemplate.setId( modelTemplate.getId() );
+            roleTemplate.setNamePrefix( modelTemplate.getNamePrefix() );
+
+            roleTemplates.add( roleTemplate );
+        }
+
+        return roleTemplates;
+    }
+
+    private Set<String> discoverResources( List<ModelTemplate> applicationTemplates,
+                                           List<org.codehaus.plexus.redback.rbac.Role> roles )
+    {
+        Set<String> resources = new HashSet<String>();
+        for ( ModelTemplate modelTemplate : applicationTemplates )
+        {
+            for ( org.codehaus.plexus.redback.rbac.Role role : roles )
+            {
+                String roleName = role.getName();
+                if ( roleName.startsWith( modelTemplate.getNamePrefix() ) )
+                {
+                    String delimiter = modelTemplate.getDelimiter();
+                    resources.add( roleName.substring( roleName.indexOf( delimiter ) + delimiter.length() ) );
+                }
+            }
+        }
+        return resources;
     }
 
     /**
