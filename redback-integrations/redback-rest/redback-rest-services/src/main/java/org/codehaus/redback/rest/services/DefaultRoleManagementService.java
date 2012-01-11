@@ -584,12 +584,12 @@ public class DefaultRoleManagementService
                 applicationRoles.setDescription( modelApplication.getDescription() );
                 applicationRoles.setName( modelApplication.getId() );
 
-                List<org.codehaus.plexus.redback.rbac.Role> appRoles =
-                    filterApplicationRoles( modelApplication, allRoles );
+                Collection<org.codehaus.plexus.redback.rbac.Role> appRoles =
+                    filterApplicationRoles( modelApplication, allRoles, modelApplication.getTemplates() );
 
                 applicationRoles.setGlobalRoles( toRoleNames( appRoles ) );
 
-                Set<String> resources = discoverResources( modelApplication.getTemplates(), allRoles );
+                Set<String> resources = discoverResources( modelApplication.getTemplates(), appRoles );
 
                 applicationRoles.setResources( resources );
 
@@ -627,11 +627,12 @@ public class DefaultRoleManagementService
         return null;
     }
 
-    private List<org.codehaus.plexus.redback.rbac.Role> filterApplicationRoles( ModelApplication application,
-                                                                                List<org.codehaus.plexus.redback.rbac.Role> allRoles )
+    private Collection<org.codehaus.plexus.redback.rbac.Role> filterApplicationRoles( ModelApplication application,
+                                                                                      List<org.codehaus.plexus.redback.rbac.Role> allRoles,
+                                                                                      List<ModelTemplate> applicationTemplates )
     {
-        List<org.codehaus.plexus.redback.rbac.Role> applicationRoles =
-            new ArrayList<org.codehaus.plexus.redback.rbac.Role>();
+        Set<org.codehaus.plexus.redback.rbac.Role> applicationRoles =
+            new HashSet<org.codehaus.plexus.redback.rbac.Role>();
         List<ModelRole> roles = application.getRoles();
 
         for ( ModelRole modelRole : roles )
@@ -640,6 +641,20 @@ public class DefaultRoleManagementService
             if ( r != null )
             {
                 applicationRoles.add( r );
+            }
+        }
+
+        List<String> roleNames = toRoleNames( allRoles );
+
+        for ( ModelTemplate modelTemplate : applicationTemplates )
+        {
+            for ( org.codehaus.plexus.redback.rbac.Role r : allRoles )
+            {
+                if ( StringUtils.startsWith( r.getName(),
+                                             modelTemplate.getNamePrefix() + modelTemplate.getDelimiter() ) )
+                {
+                  applicationRoles.add( r );
+                }
             }
         }
 
@@ -683,7 +698,7 @@ public class DefaultRoleManagementService
     }
 
     private Set<String> discoverResources( List<ModelTemplate> applicationTemplates,
-                                           List<org.codehaus.plexus.redback.rbac.Role> roles )
+                                           Collection<org.codehaus.plexus.redback.rbac.Role> roles )
     {
         Set<String> resources = new HashSet<String>();
         for ( ModelTemplate modelTemplate : applicationTemplates )
