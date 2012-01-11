@@ -33,6 +33,7 @@ import org.codehaus.plexus.redback.users.UserNotFoundException;
 import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
 import org.codehaus.redback.integration.util.RoleSorter;
 import org.codehaus.redback.rest.api.model.Application;
+import org.codehaus.redback.rest.api.model.ApplicationRoles;
 import org.codehaus.redback.rest.api.model.ErrorMessage;
 import org.codehaus.redback.rest.api.model.Role;
 import org.codehaus.redback.rest.api.services.RedbackServiceException;
@@ -523,9 +524,28 @@ public class DefaultRoleManagementService
         return Boolean.TRUE;
     }
 
+    public List<ApplicationRoles> getApplicationRoles( String username )
+        throws RedbackServiceException
+    {
+        return Collections.emptyList();
+    }
+
     //----------------------------------------------------------------
     // Internal methods
     //----------------------------------------------------------------
+
+    private boolean isInList( String roleName,
+                              Collection<org.codehaus.plexus.redback.rbac.Role> effectivelyAssignedRoles )
+    {
+        for ( org.codehaus.plexus.redback.rbac.Role role : effectivelyAssignedRoles )
+        {
+            if ( roleName.equals( role.getName() ) )
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * this is a hack. this is a hack around the requirements of putting RBAC constraints into the model. this adds one

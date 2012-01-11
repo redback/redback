@@ -20,8 +20,10 @@ package org.codehaus.redback.rest.services;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.cxf.jaxrs.client.ServerWebApplicationException;
+import org.codehaus.redback.rest.api.model.ApplicationRoles;
 import org.codehaus.redback.rest.api.model.Role;
 import org.codehaus.redback.rest.api.model.User;
+import org.codehaus.redback.rest.api.services.RoleManagementService;
 import org.codehaus.redback.rest.api.services.UserService;
 import org.junit.Test;
 
@@ -183,5 +185,74 @@ public class RoleManagementServiceTest
 
         assertEquals( 0, role.getUsers().size() );
 
+    }
+
+    @Test
+    public void applicationRoles()
+        throws Exception
+    {
+        RoleManagementService roleManagementService = getRoleManagementService( authorizationHeader );
+
+        List<ApplicationRoles> applicationRoleList = roleManagementService.getApplicationRoles( "guest" );
+
+        assertNotNull( applicationRoleList );
+
+        List<Role> allRoles = roleManagementService.getAllRoles();
+
+        assertNotNull( allRoles );
+
+        int initialSize = allRoles.size();
+
+        roleManagementService.createTemplatedRole( "archiva-repository-observer", "internal" );
+
+        allRoles = roleManagementService.getAllRoles();
+
+        assertNotNull( allRoles );
+
+        assertEquals( initialSize + 1, allRoles.size() );
+
+        assertRoleExist( "Repository Observer - internal" , allRoles );
+
+        roleManagementService.createTemplatedRole( "archiva-repository-manager", "internal" );
+
+        allRoles = roleManagementService.getAllRoles();
+
+        assertNotNull( allRoles );
+
+        assertEquals( initialSize + 2, allRoles.size() );
+
+        assertRoleExist( "Repository Manager - internal" , allRoles );
+
+        roleManagementService.createTemplatedRole( "archiva-repository-observer", "snapshots" );
+
+        allRoles = roleManagementService.getAllRoles();
+
+        assertNotNull( allRoles );
+
+        assertEquals( initialSize + 3, allRoles.size() );
+
+        assertRoleExist( "Repository Observer - snapshots" , allRoles );
+
+        roleManagementService.createTemplatedRole( "archiva-repository-manager", "snapshots" );
+
+        allRoles = roleManagementService.getAllRoles();
+
+        assertNotNull( allRoles );
+
+        assertEquals( initialSize + 4, allRoles.size() );
+
+        assertRoleExist( "Repository Manager - snapshots" , allRoles );
+    }
+
+    private void assertRoleExist( String roleName, List<Role> allRoles )
+    {
+        for ( Role role : allRoles )
+        {
+            if ( StringUtils.equals( roleName, role.getName() ) )
+            {
+                return;
+            }
+        }
+        fail( "role " + roleName + " not exists" );
     }
 }
