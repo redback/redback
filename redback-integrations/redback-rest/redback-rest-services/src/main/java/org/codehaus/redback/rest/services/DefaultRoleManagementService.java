@@ -595,6 +595,19 @@ public class DefaultRoleManagementService
 
                 applicationRoles.setRoleTemplates( toRoleTemplates( modelApplication.getTemplates() ) );
 
+                // cleanup app roles remove roles coming from templates
+                
+                List<String> appRoleNames = new ArrayList<String>( appRoles.size() );
+                
+                for (String appRoleName : applicationRoles.getGlobalRoles())
+                {
+                    if (!roleFromTemplate( appRoleName, modelApplication.getTemplates() )){
+                        appRoleNames.add( appRoleName );
+                    }
+                }
+                
+                applicationRoles.setGlobalRoles( appRoleNames );
+                
                 applicationRolesList.add( applicationRoles );
             }
 
@@ -722,6 +735,20 @@ public class DefaultRoleManagementService
         }
 
         return applicationRoles;
+    }
+
+    private boolean roleFromTemplate( String roleName, List<ModelTemplate> applicationTemplates )
+    {
+
+        for ( ModelTemplate modelTemplate : applicationTemplates )
+        {
+            if ( StringUtils.startsWith( roleName, modelTemplate.getNamePrefix() + modelTemplate.getDelimiter() ) )
+            {
+                return true;
+            }
+
+        }
+        return false;
     }
 
     private List<String> toRoleNames( Collection<org.codehaus.plexus.redback.rbac.Role> roles )
