@@ -4,6 +4,7 @@ import org.codehaus.redback.integration.util.DateUtils;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.List;
 
 /*
 * Copyright 2009 The Codehaus.
@@ -55,6 +56,12 @@ public class User
      * @since 1.4
      */
     private String previousPassword;
+
+    /**
+     * for roles update only <b>not return on user read</b>
+     * @since 1.5
+     */
+    private List<String> assignedRoles;
 
     public User()
     {
@@ -217,6 +224,16 @@ public class User
         this.previousPassword = previousPassword;
     }
 
+    public List<String> getAssignedRoles()
+    {
+        return assignedRoles;
+    }
+
+    public void setAssignedRoles( List<String> assignedRoles )
+    {
+        this.assignedRoles = assignedRoles;
+    }
+
     @Override
     public String toString()
     {
@@ -235,6 +252,7 @@ public class User
         sb.append( ", timestampLastLogin='" ).append( timestampLastLogin ).append( '\'' );
         sb.append( ", timestampLastPasswordChange='" ).append( timestampLastPasswordChange ).append( '\'' );
         sb.append( ", previousPassword='" ).append( previousPassword ).append( '\'' );
+        sb.append( ", assignedRoles=" ).append( assignedRoles );
         sb.append( '}' );
         return sb.toString();
     }

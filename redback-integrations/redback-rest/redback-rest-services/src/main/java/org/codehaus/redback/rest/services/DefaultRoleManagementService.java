@@ -610,6 +610,69 @@ public class DefaultRoleManagementService
         }
     }
 
+    public Boolean updateUserRoles( org.codehaus.redback.rest.api.model.User user )
+        throws RedbackServiceException
+    {
+
+        String username = user.getUsername();
+
+        if ( StringUtils.isEmpty( username ) )
+        {
+            throw new RedbackServiceException( new ErrorMessage( "rbac.edit.user.empty.principal" ) );
+        }
+
+        if ( !userManager.userExists( username ) )
+        {
+            throw new RedbackServiceException( new ErrorMessage( "user.does.not.exist", new String[]{ username } ) );
+        }
+
+        try
+        {
+            User u = userManager.findUser( username );
+
+            if ( u == null )
+            {
+                throw new RedbackServiceException( new ErrorMessage( "cannot.operate.on.null.user" ) );
+            }
+
+        }
+        catch ( UserNotFoundException e )
+        {
+            throw new RedbackServiceException(
+                new ErrorMessage( "user.does.not.exist", new String[]{ username, e.getMessage() } ) );
+        }
+
+        try
+        {
+
+            UserAssignment assignment;
+
+            if ( rbacManager.userAssignmentExists( username ) )
+            {
+                assignment = rbacManager.getUserAssignment( username );
+            }
+            else
+            {
+                assignment = rbacManager.createUserAssignment( username );
+            }
+
+            assignment.setRoleNames( user.getAssignedRoles() );
+
+            assignment = rbacManager.saveUserAssignment( assignment );
+
+        }
+        catch ( RbacManagerException e )
+        {
+            RedbackServiceException redbackServiceException =
+                new RedbackServiceException( new ErrorMessage( e.getMessage() ) );
+            redbackServiceException.setHttpErrorCode( Response.Status.INTERNAL_SERVER_ERROR.getStatusCode() );
+            throw redbackServiceException;
+        }
+
+        return Boolean.TRUE;
+
+    }
+
     //----------------------------------------------------------------
     // Internal methods
     //----------------------------------------------------------------
@@ -653,7 +716,7 @@ public class DefaultRoleManagementService
                 if ( StringUtils.startsWith( r.getName(),
                                              modelTemplate.getNamePrefix() + modelTemplate.getDelimiter() ) )
                 {
-                  applicationRoles.add( r );
+                    applicationRoles.add( r );
                 }
             }
         }
