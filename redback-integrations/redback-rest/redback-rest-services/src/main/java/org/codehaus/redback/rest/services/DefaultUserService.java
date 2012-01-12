@@ -212,6 +212,8 @@ public class DefaultUserService
         catch ( UserNotFoundException e )
         {
             throw new RedbackServiceException( e.getMessage() );
+        } finally {
+            removeFromCache( username );
         }
     }
 
