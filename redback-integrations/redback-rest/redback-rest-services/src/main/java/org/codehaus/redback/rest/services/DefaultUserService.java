@@ -878,4 +878,30 @@ public class DefaultUserService
         }
         return Boolean.FALSE;
     }
+
+    public Boolean passwordChangeRequired(  String username )
+        throws RedbackServiceException
+    {
+        User user = getUser( username );
+        if (user == null)
+        {
+            user.setPasswordChangeRequired( true );
+            updateUser( user );
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
+
+    public Boolean passwordChangeNotRequired(  String username )
+        throws RedbackServiceException
+    {
+        User user = getUser( username );
+        if (user == null)
+        {
+            user.setPasswordChangeRequired( false );
+            updateUser( user );
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
 }

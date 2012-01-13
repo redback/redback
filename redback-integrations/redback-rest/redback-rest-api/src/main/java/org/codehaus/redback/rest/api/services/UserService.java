@@ -113,6 +113,28 @@ public interface UserService
     Boolean unlockUser( @PathParam( "username" ) String username )
         throws RedbackServiceException;
 
+
+    @Path( "passwordChangeRequired/{username}" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
+    /**
+     * @since 1.5
+     */
+    Boolean passwordChangeRequired( @PathParam( "username" ) String username )
+        throws RedbackServiceException;
+
+    @Path( "passwordChangeNotRequired/{username}" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
+    /**
+     * @since 1.5
+     */
+    Boolean passwordChangeNotRequired( @PathParam( "username" ) String username )
+        throws RedbackServiceException;
+
+
     @Path( "updateMe" )
     @POST
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
