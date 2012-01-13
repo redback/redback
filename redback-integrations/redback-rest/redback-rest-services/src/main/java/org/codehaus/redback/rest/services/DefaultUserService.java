@@ -33,6 +33,7 @@ import org.codehaus.plexus.redback.policy.UserSecurityPolicy;
 import org.codehaus.plexus.redback.rbac.RBACManager;
 import org.codehaus.plexus.redback.rbac.RbacManagerException;
 import org.codehaus.plexus.redback.rbac.RbacObjectNotFoundException;
+import org.codehaus.plexus.redback.rbac.UserAssignment;
 import org.codehaus.plexus.redback.role.RoleManager;
 import org.codehaus.plexus.redback.role.RoleManagerException;
 import org.codehaus.plexus.redback.system.SecuritySystem;
@@ -204,6 +205,22 @@ public class DefaultUserService
     public Boolean deleteUser( String username )
         throws RedbackServiceException
     {
+
+        try
+        {
+
+            if ( rbacManager.userAssignmentExists( username ) )
+            {
+                UserAssignment assignment = rbacManager.getUserAssignment( username );
+                rbacManager.removeUserAssignment( assignment );
+            }
+
+        }
+        catch ( RbacManagerException e )
+        {
+            log.error( e.getMessage(), e );
+            throw new RedbackServiceException( e.getMessage() );
+        }
         try
         {
             userManager.deleteUser( username );
@@ -211,8 +228,11 @@ public class DefaultUserService
         }
         catch ( UserNotFoundException e )
         {
+            log.error( e.getMessage(), e );
             throw new RedbackServiceException( e.getMessage() );
-        } finally {
+        }
+        finally
+        {
             removeFromCache( username );
         }
     }
