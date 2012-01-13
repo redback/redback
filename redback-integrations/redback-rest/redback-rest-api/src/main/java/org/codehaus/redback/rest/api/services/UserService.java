@@ -97,6 +97,9 @@ public interface UserService
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
     @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
+    /**
+     * @since 1.5
+     */
     Boolean lockUser( @PathParam( "username" ) String username )
         throws RedbackServiceException;
 
@@ -104,6 +107,9 @@ public interface UserService
     @GET
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
     @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
+    /**
+     * @since 1.5
+     */
     Boolean unlockUser( @PathParam( "username" ) String username )
         throws RedbackServiceException;
 
