@@ -853,7 +853,7 @@ public class DefaultUserService
         return null;
     }
 
-    public Boolean unlockUser( @PathParam( "username" ) String username )
+    public Boolean unlockUser( String username )
         throws RedbackServiceException
     {
         User user = getUser( username );
@@ -866,7 +866,7 @@ public class DefaultUserService
         return Boolean.FALSE;
     }
 
-    public Boolean lockUser( @PathParam( "username" ) String username )
+    public Boolean lockUser( String username )
         throws RedbackServiceException
     {
         User user = getUser( username );
