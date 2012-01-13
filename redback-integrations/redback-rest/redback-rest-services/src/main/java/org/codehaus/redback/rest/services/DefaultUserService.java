@@ -60,6 +60,7 @@ import javax.inject.Named;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -850,5 +851,31 @@ public class DefaultUserService
             }
         }
         return null;
+    }
+
+    public Boolean unlockUser( @PathParam( "username" ) String username )
+        throws RedbackServiceException
+    {
+        User user = getUser( username );
+        if (user == null)
+        {
+            user.setLocked( false );
+            updateUser( user );
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
+
+    public Boolean lockUser( @PathParam( "username" ) String username )
+        throws RedbackServiceException
+    {
+        User user = getUser( username );
+        if (user == null)
+        {
+            user.setLocked( true );
+            updateUser( user );
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
     }
 }

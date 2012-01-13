@@ -93,6 +93,20 @@ public interface UserService
     Boolean updateUser( User user )
         throws RedbackServiceException;
 
+    @Path( "lockUser/{username}" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
+    Boolean lockUser( @PathParam( "username" ) String username )
+        throws RedbackServiceException;
+
+    @Path( "unlockUser/{username}" )
+    @GET
+    @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
+    @RedbackAuthorization( permissions = RedbackRoleConstants.USER_MANAGEMENT_USER_EDIT_OPERATION )
+    Boolean unlockUser( @PathParam( "username" ) String username )
+        throws RedbackServiceException;
+
     @Path( "updateMe" )
     @POST
     @Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN } )
