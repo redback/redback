@@ -95,6 +95,9 @@ public class DefaultUtilServices
             // load default first then requested locale
             loadResource( properties, "org/codehaus/plexus/redback/users/messages", null );
             loadResource( properties, "org/codehaus/plexus/redback/users/messages", locale );
+
+            loadResource( properties, "org/codehaus/redback/i18n/default", null );
+            loadResource( properties, "org/codehaus/redback/i18n/default", locale );
             return properties;
         }
         catch ( IOException e )
