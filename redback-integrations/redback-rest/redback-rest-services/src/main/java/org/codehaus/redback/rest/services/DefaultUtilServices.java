@@ -86,6 +86,23 @@ public class DefaultUtilServices
         return output.toString();
     }
 
+    public Properties getI18nProperties( String locale )
+        throws RedbackServiceException
+    {
+        try
+        {
+            Properties properties = new Properties();
+            // load default first then requested locale
+            loadResource( properties, "org/codehaus/plexus/redback/users/messages", null );
+            loadResource( properties, "org/codehaus/plexus/redback/users/messages", locale );
+            return properties;
+        }
+        catch ( IOException e )
+        {
+            throw new RedbackServiceException( e.getMessage() );
+        }
+    }
+
     private void loadResource( final Properties finalProperties, String resourceName, String locale )
         throws IOException
     {
@@ -118,4 +135,6 @@ public class DefaultUtilServices
         }
 
     }
+
+
 }
