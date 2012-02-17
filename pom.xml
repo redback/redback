@@ -187,7 +187,7 @@
   </distributionManagement>
   
   <properties>
-    <springVersion>3.1.0.RELEASE</springVersion>
+    <springVersion>3.1.1.RELEASE</springVersion>
     <slf4jVersion>1.6.4</slf4jVersion>
     <logbackVersion>1.0.0</logbackVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
