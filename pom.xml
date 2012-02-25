@@ -192,7 +192,7 @@
     <logbackVersion>1.0.0</logbackVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <gpg.useagent>true</gpg.useagent>
-    <cxfVersion>2.5.1</cxfVersion>
+    <cxfVersion>2.5.2</cxfVersion>
     <derbyVersion>10.8.2.2</derbyVersion>
 
     <redbackTestJdbcUrl>jdbc:derby:memory:users-test;create=true</redbackTestJdbcUrl>
@@ -746,6 +746,11 @@
         <groupId>javax.ws.rs</groupId>
         <artifactId>jsr311-api</artifactId>
         <version>1.1.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.jackson</groupId>
+        <artifactId>jackson-jaxrs</artifactId>
+        <version>1.9.5</version>
       </dependency>
       <dependency>
         <groupId>org.apache.cxf</groupId>

@@ -52,6 +52,10 @@
       <ref bean="threadLocalUserCleaner#rest"/>
     </jaxrs:outInterceptors>
     <jaxrs:providers>
+      <!--
+      some unit test failed with jackson as json provider
+      <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+      -->
       <ref bean="authenticationInterceptor#rest"/>
       <ref bean="permissionInterceptor#rest"/>
       <ref bean="redbackServiceExceptionMapper"/>

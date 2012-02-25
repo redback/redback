@@ -73,6 +73,13 @@
       <groupId>org.codehaus.redback</groupId>
       <artifactId>redback-keys-memory</artifactId>
     </dependency>
+    <!--
+    some issues with jackson as jaxrs provider
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-jaxrs</artifactId>
+    </dependency>
+    -->
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-bundle-jaxrs</artifactId>
