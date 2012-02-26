@@ -79,6 +79,7 @@ public class AuthenticationInterceptor
             return Response.status( Response.Status.FORBIDDEN ).build();
         }
         HttpServletRequest request = getHttpServletRequest( message );
+        HttpServletResponse response = getHttpServletResponse( message );
 
         if ( redbackAuthorization.noRestriction() )
         {
@@ -92,10 +93,33 @@ public class AuthenticationInterceptor
                     new RedbackRequestInformation( securitySession.getUser(), request.getRemoteAddr() );
                 RedbackAuthenticationThreadLocal.set( redbackRequestInformation );
             }
+            else
+            {
+                // maybe there is some authz in the request so try it but not fail so catch Exception !
+                try
+                {
+                    AuthenticationResult authenticationResult =
+                        httpAuthenticator.getAuthenticationResult( request, response );
+
+                    if ( ( authenticationResult == null ) || ( !authenticationResult.isAuthenticated() ) )
+                    {
+                        return null;
+                    }
+                    // FIXME this is already called previously but authenticationResult doesn't return that
+                    User user = userManager.findUser( (String) authenticationResult.getPrincipal() );
+                    RedbackRequestInformation redbackRequestInformation =
+                        new RedbackRequestInformation( user, request.getRemoteAddr() );
+
+                    RedbackAuthenticationThreadLocal.set( redbackRequestInformation );
+                    message.put( AuthenticationResult.class, authenticationResult );
+                }
+                catch ( Exception e )
+                {
+                    // ignore here
+                }
+            }
             return null;
         }
-
-        HttpServletResponse response = getHttpServletResponse( message );
 
         try
         {
