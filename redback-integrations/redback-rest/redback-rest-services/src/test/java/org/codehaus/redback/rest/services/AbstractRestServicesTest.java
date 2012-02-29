@@ -22,11 +22,13 @@ import org.apache.cxf.common.util.Base64Utility;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.transport.servlet.CXFServlet;
+import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.codehaus.redback.integration.security.role.RedbackRoleConstants;
 import org.codehaus.redback.rest.api.model.User;
 import org.codehaus.redback.rest.api.services.LoginService;
 import org.codehaus.redback.rest.api.services.RoleManagementService;
 import org.codehaus.redback.rest.api.services.UserService;
+import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -38,6 +40,9 @@ import org.junit.runners.JUnit4;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.ContextLoaderListener;
+
+import javax.ws.rs.core.MediaType;
+import java.util.Collections;
 
 /**
  * @author Olivier Lamy
@@ -90,70 +95,6 @@ public abstract class AbstractRestServicesTest
         throws Exception
     {
 
-        /*
-        if ( useTomcat )
-        {
-            tomcat = new Tomcat();
-            tomcat.setBaseDir( System.getProperty( "java.io.tmpdir" ) );
-
-            Connector connector = new Connector()
-            {
-                protected void startInternal()
-                    throws LifecycleException
-                {
-                    setState( LifecycleState.STARTING );
-
-                    try
-                    {
-                        protocolHandler.start();
-                    }
-                    catch ( Exception e )
-                    {
-                        String errPrefix = "";
-                        if ( this.service != null )
-                        {
-                            errPrefix += "service.getName(): \"" + this.service.getName() + "\"; ";
-                        }
-
-                        throw new LifecycleException(
-                            errPrefix + " " + sm.getString( "coyoteConnector.protocolHandlerStartFailed" ), e );
-                    }
-                    mapperListener.start();
-                }
-            };
-            connector.setPort( 0 );
-
-            tomcat.setConnector( connector );
-            tomcat.getService().addConnector( connector );
-
-            Context context = tomcat.addContext( "", System.getProperty( "java.io.tmpdir" ) );
-
-            ApplicationParameter applicationParameter = new ApplicationParameter();
-            applicationParameter.setName( "contextConfigLocation" );
-            applicationParameter.setValue( getSpringConfigLocation() );
-            context.addApplicationParameter( applicationParameter );
-
-            context.addApplicationListener( ContextLoaderListener.class.getName() );
-
-            Tomcat.addServlet( context, "cxf", new CXFServlet() );
-            context.addServletMapping( "/" + getRestServicesPath() + "/*", "cxf" );
-
-            tomcat.start();
-
-            Http11Protocol http11Protocol = ( (Http11Protocol) tomcat.getConnector().getProtocolHandler() );
-
-            Field fieldEndpoint = ReflectionUtils.findField( Http11Protocol.class, "endpoint" );
-            fieldEndpoint.setAccessible( true );
-            JIoEndpoint jIoEndpoint = (JIoEndpoint) fieldEndpoint.get( http11Protocol );
-
-            Field serverSocketField = ReflectionUtils.findField( JIoEndpoint.class, "serverSocket" );
-            serverSocketField.setAccessible( true );
-            ServerSocket serverSocket = (ServerSocket) serverSocketField.get( jIoEndpoint );
-
-            this.port = serverSocket.getLocalPort();
-        }
-        else
-        {*/
         this.server = new Server( 0 );
 
         ServletContextHandler context = new ServletContextHandler();
@@ -175,13 +116,10 @@ public abstract class AbstractRestServicesTest
         context.addServlet( sh, "/" + getRestServicesPath() + "/*" );
         server.setHandler( context );
         this.server.start();
-        org.eclipse.jetty.server.Connector connector = this.server.getConnectors()[0];
+        Connector connector = this.server.getConnectors()[0];
         this.port = connector.getLocalPort();
 
-        //}
-
         log.info( "start server on port " + this.port );
-        FakeCreateAdminService fakeCreateAdminService = getFakeCreateAdminService();
 
         UserService userService = getUserService();
 
@@ -192,6 +130,7 @@ public abstract class AbstractRestServicesTest
         adminUser.setEmail( "toto@toto.fr" );
         Boolean res = userService.createAdminUser( adminUser );
 
+        FakeCreateAdminService fakeCreateAdminService = getFakeCreateAdminService();
         //assertTrue( res.booleanValue() );
 
     }
@@ -200,25 +139,13 @@ public abstract class AbstractRestServicesTest
     {
         return JAXRSClientFactory.create(
             "http://localhost:" + port + "/" + getRestServicesPath() + "/fakeCreateAdminService/",
-            FakeCreateAdminService.class );
+            FakeCreateAdminService.class, Collections.singletonList( new JacksonJaxbJsonProvider() ) );
     }
 
     @After
     public void stopServer()
         throws Exception
     {
-
-        /*if ( useTomcat )
-        {
-            tomcat.stop();
-        }
-        else
-        {
-            if ( this.server != null && this.server.isRunning() )
-            {
-                this.server.stop();
-            }
-        }*/
         if ( this.server != null && this.server.isRunning() )
         {
             this.server.stop();
@@ -234,7 +161,7 @@ public abstract class AbstractRestServicesTest
     {
         UserService service =
             JAXRSClientFactory.create( "http://localhost:" + port + "/" + getRestServicesPath() + "/redbackServices/",
-                                       UserService.class );
+                                       UserService.class, Collections.singletonList( new JacksonJaxbJsonProvider() ) );
 
         // for debuging purpose
         WebClient.getConfig( service ).getHttpConduit().getClient().setReceiveTimeout( 100000 );
@@ -243,6 +170,9 @@ public abstract class AbstractRestServicesTest
         {
             WebClient.client( service ).header( "Authorization", authzHeader );
         }
+        WebClient.client( service ).accept( MediaType.APPLICATION_JSON_TYPE );
+        WebClient.client( service ).type( MediaType.APPLICATION_JSON_TYPE );
+
         return service;
     }
 
@@ -250,7 +180,8 @@ public abstract class AbstractRestServicesTest
     {
         RoleManagementService service =
             JAXRSClientFactory.create( "http://localhost:" + port + "/" + getRestServicesPath() + "/redbackServices/",
-                                       RoleManagementService.class );
+                                       RoleManagementService.class,
+                                       Collections.singletonList( new JacksonJaxbJsonProvider() ) );
 
         // for debuging purpose
         WebClient.getConfig( service ).getHttpConduit().getClient().setReceiveTimeout( 100000 );
@@ -266,7 +197,7 @@ public abstract class AbstractRestServicesTest
     {
         LoginService service =
             JAXRSClientFactory.create( "http://localhost:" + port + "/" + getRestServicesPath() + "/redbackServices/",
-                                       LoginService.class );
+                                       LoginService.class, Collections.singletonList( new JacksonJaxbJsonProvider() ) );
 
         // for debuging purpose
         WebClient.getConfig( service ).getHttpConduit().getClient().setReceiveTimeout( 100000 );
