@@ -39,6 +39,13 @@
   <context:component-scan
     base-package="org.codehaus.redback.rest.services"/>
 
+  <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider">
+    <property name="mapper" ref="redbackJacksonMapper"/>
+  </bean>
+
+  <bean id="redbackJacksonMapper" class="org.codehaus.jackson.map.ObjectMapper">
+  </bean>
+
   <jaxrs:server id="redbackServices" address="/redbackServices">
 
     <jaxrs:serviceBeans>
@@ -52,7 +59,7 @@
       <ref bean="threadLocalUserCleaner#rest"/>
     </jaxrs:outInterceptors>
     <jaxrs:providers>
-      <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+      <ref bean="jsonProvider"/>
       <ref bean="authenticationInterceptor#rest"/>
       <ref bean="permissionInterceptor#rest"/>
       <ref bean="redbackServiceExceptionMapper"/>
