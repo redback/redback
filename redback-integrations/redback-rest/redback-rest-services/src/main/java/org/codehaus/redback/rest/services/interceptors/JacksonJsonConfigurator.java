@@ -32,7 +32,7 @@ import javax.inject.Inject;
  * @author Olivier Lamy
  * @since 1.5
  */
-@Service
+@Service("redbackJacksonJsonConfigurator")
 public class JacksonJsonConfigurator
 {
     private Logger log = LoggerFactory.getLogger( getClass() );
