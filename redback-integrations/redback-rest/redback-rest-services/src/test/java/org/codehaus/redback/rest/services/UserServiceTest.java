@@ -19,6 +19,7 @@ package org.codehaus.redback.rest.services;
 import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
 import org.apache.cxf.jaxrs.client.ServerWebApplicationException;
 import org.apache.cxf.jaxrs.client.WebClient;
+import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.codehaus.redback.rest.api.model.Operation;
 import org.codehaus.redback.rest.api.model.Permission;
 import org.codehaus.redback.rest.api.model.User;
@@ -27,7 +28,9 @@ import org.codehaus.redback.rest.services.mock.EmailMessage;
 import org.codehaus.redback.rest.services.mock.ServicesAssert;
 import org.junit.Test;
 
+import javax.ws.rs.core.MediaType;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -130,7 +133,8 @@ public class UserServiceTest
 
             ServicesAssert assertService =
                 JAXRSClientFactory.create( "http://localhost:" + port + "/" + getRestServicesPath() + "/testsService/",
-                                           ServicesAssert.class );
+                                           ServicesAssert.class,
+                                           Collections.singletonList( new JacksonJaxbJsonProvider() ) );
 
             List<EmailMessage> emailMessages = assertService.getEmailMessageSended();
             assertEquals( 1, emailMessages.size() );
@@ -184,7 +188,11 @@ public class UserServiceTest
 
             ServicesAssert assertService =
                 JAXRSClientFactory.create( "http://localhost:" + port + "/" + getRestServicesPath() + "/testsService/",
-                                           ServicesAssert.class );
+                                           ServicesAssert.class,
+                                           Collections.singletonList( new JacksonJaxbJsonProvider() ) );
+
+            WebClient.client( assertService ).accept( MediaType.APPLICATION_JSON_TYPE );
+            WebClient.client( assertService ).type( MediaType.APPLICATION_JSON_TYPE );
 
             List<EmailMessage> emailMessages = assertService.getEmailMessageSended();
             assertEquals( 1, emailMessages.size() );

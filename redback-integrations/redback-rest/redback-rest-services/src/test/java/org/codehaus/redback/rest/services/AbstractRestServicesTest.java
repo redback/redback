@@ -190,6 +190,10 @@ public abstract class AbstractRestServicesTest
         {
             WebClient.client( service ).header( "Authorization", authzHeader );
         }
+
+        WebClient.client( service ).accept( MediaType.APPLICATION_JSON_TYPE );
+        WebClient.client( service ).type( MediaType.APPLICATION_JSON_TYPE );
+
         return service;
     }
 
@@ -206,6 +210,9 @@ public abstract class AbstractRestServicesTest
         {
             WebClient.client( service ).header( "Authorization", authzHeader );
         }
+
+        WebClient.client( service ).accept( MediaType.APPLICATION_JSON_TYPE );
+        WebClient.client( service ).type( MediaType.APPLICATION_JSON_TYPE );
 
         return service;
     }

@@ -53,7 +53,6 @@
     </jaxrs:outInterceptors>
     <jaxrs:providers>
       <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
-
       <ref bean="authenticationInterceptor#rest"/>
       <ref bean="permissionInterceptor#rest"/>
       <ref bean="redbackServiceExceptionMapper"/>

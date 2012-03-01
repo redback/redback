@@ -47,6 +47,9 @@
     <jaxrs:serviceBeans>
       <ref bean="servicesAssert"/>
     </jaxrs:serviceBeans>
+    <jaxrs:providers>
+      <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+    </jaxrs:providers>
 
    </jaxrs:server>
 
