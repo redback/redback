@@ -30,6 +30,7 @@ import org.codehaus.plexus.redback.system.SecuritySystemConstants;
 import org.codehaus.plexus.redback.users.User;
 import org.codehaus.plexus.redback.users.UserManager;
 import org.codehaus.plexus.redback.users.UserNotFoundException;
+import org.codehaus.redback.integration.checks.security.AdminAutoCreateCheck;
 import org.codehaus.redback.integration.util.AutoLoginCookies;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,17 +56,9 @@ import java.util.Properties;
 public class ForceAdminUserInterceptor
     implements Interceptor
 {
-    private Logger log = LoggerFactory.getLogger( ForceAdminUserInterceptor.class );
+    private Logger log = LoggerFactory.getLogger( getClass() );
 
     private static final String SECURITY_ADMIN_USER_NEEDED = "security-admin-user-needed";
-
-    private static final String FORCE_ADMIN_FILE_PATH = "redback.admin.creation.file";
-
-    private static final String ADMIN_FULL_NAME_KEY = "redback.admin.fullname";
-
-    private static final String ADMIN_EMAIL_KEY = "redback.admin.email";
-
-    private static final String ADMIN_PASSWORD_KEY = "redback.admin.password";
 
     private static boolean checked = false;
 
@@ -156,16 +149,16 @@ public class ForceAdminUserInterceptor
     {
         try
         {
-            String forceAdminFilePath = System.getProperty( FORCE_ADMIN_FILE_PATH );
+            String forceAdminFilePath = System.getProperty( AdminAutoCreateCheck.FORCE_ADMIN_FILE_PATH );
             if ( StringUtils.isBlank( forceAdminFilePath ) )
             {
-                log.info( FORCE_ADMIN_FILE_PATH + " system props is empty don't use an auto creation admin " );
+                log.info( AdminAutoCreateCheck.FORCE_ADMIN_FILE_PATH + " system props is empty don't use an auto creation admin " );
                 return null;
             }
             File file = new File( forceAdminFilePath );
             if ( !file.exists() )
             {
-                log.warn( "file set in sysprops " + FORCE_ADMIN_FILE_PATH + " not exists skip admin auto creation" );
+                log.warn( "file set in sysprops " + AdminAutoCreateCheck.FORCE_ADMIN_FILE_PATH + " not exists skip admin auto creation" );
                 return null;
             }
             Properties properties = new Properties();
@@ -181,25 +174,25 @@ public class ForceAdminUserInterceptor
             }
 
             // ensure we have all properties
-            String password = properties.getProperty( ADMIN_PASSWORD_KEY );
-            String email = properties.getProperty( ADMIN_EMAIL_KEY );
-            String fullName = properties.getProperty( ADMIN_FULL_NAME_KEY );
+            String password = properties.getProperty( AdminAutoCreateCheck.ADMIN_PASSWORD_KEY );
+            String email = properties.getProperty( AdminAutoCreateCheck.ADMIN_EMAIL_KEY );
+            String fullName = properties.getProperty( AdminAutoCreateCheck.ADMIN_FULL_NAME_KEY );
 
             if ( StringUtils.isBlank( password ) )
             {
-                log.warn( "property " + ADMIN_PASSWORD_KEY + " not set skip auto admin creation" );
+                log.warn( "property " + AdminAutoCreateCheck.ADMIN_PASSWORD_KEY + " not set skip auto admin creation" );
                 return null;
             }
 
             if ( StringUtils.isBlank( email ) )
             {
-                log.warn( "property " + ADMIN_EMAIL_KEY + " not set skip auto admin creation" );
+                log.warn( "property " + AdminAutoCreateCheck.ADMIN_EMAIL_KEY + " not set skip auto admin creation" );
                 return null;
             }
 
             if ( StringUtils.isBlank( fullName ) )
             {
-                log.warn( "property " + ADMIN_FULL_NAME_KEY + " not set skip auto admin creation" );
+                log.warn( "property " + AdminAutoCreateCheck.ADMIN_FULL_NAME_KEY + " not set skip auto admin creation" );
                 return null;
             }
 
