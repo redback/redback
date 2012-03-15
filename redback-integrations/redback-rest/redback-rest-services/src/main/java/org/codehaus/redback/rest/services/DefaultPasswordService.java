@@ -78,16 +78,11 @@ public class DefaultPasswordService
                                                                            String key )
         throws RedbackServiceException
     {
-        Boolean isLogged = httpAuthenticator.getSecuritySession( httpServletRequest.getSession( true ) ) != null;
+
 
         //RedbackRequestInformation redbackRequestInformation = RedbackAuthenticationThreadLocal.get();
 
         String principal = null;
-
-        if ( !isLogged )
-        {
-            throw new RedbackServiceException( "you must be logged", Response.Status.FORBIDDEN.getStatusCode() );
-        }
 
         if ( StringUtils.isEmpty( password ) )
         {
