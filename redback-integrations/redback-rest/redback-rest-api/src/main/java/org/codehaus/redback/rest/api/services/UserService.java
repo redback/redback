@@ -253,4 +253,5 @@ public interface UserService
      */
     Collection<Operation> getCurrentUserOperations()
         throws RedbackServiceException;
+
 }

@@ -60,7 +60,6 @@ import javax.inject.Named;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -519,7 +518,7 @@ public class DefaultUserService
 
             mailer.sendPasswordResetEmail( Arrays.asList( user.getEmail() ), authkey, getBaseUrl() );
 
-            log.info( "password reset request" );
+            log.info( "password reset request for username {}", username );
         }
         catch ( UserNotFoundException e )
         {
@@ -857,7 +856,7 @@ public class DefaultUserService
         throws RedbackServiceException
     {
         User user = getUser( username );
-        if (user == null)
+        if ( user == null )
         {
             user.setLocked( false );
             updateUser( user );
@@ -870,7 +869,7 @@ public class DefaultUserService
         throws RedbackServiceException
     {
         User user = getUser( username );
-        if (user == null)
+        if ( user == null )
         {
             user.setLocked( true );
             updateUser( user );
@@ -879,11 +878,11 @@ public class DefaultUserService
         return Boolean.FALSE;
     }
 
-    public Boolean passwordChangeRequired(  String username )
+    public Boolean passwordChangeRequired( String username )
         throws RedbackServiceException
     {
         User user = getUser( username );
-        if (user == null)
+        if ( user == null )
         {
             user.setPasswordChangeRequired( true );
             updateUser( user );
@@ -892,11 +891,11 @@ public class DefaultUserService
         return Boolean.FALSE;
     }
 
-    public Boolean passwordChangeNotRequired(  String username )
+    public Boolean passwordChangeNotRequired( String username )
         throws RedbackServiceException
     {
         User user = getUser( username );
-        if (user == null)
+        if ( user == null )
         {
             user.setPasswordChangeRequired( false );
             updateUser( user );
