@@ -157,27 +157,28 @@ public class DefaultPasswordService
     {
         if ( StringUtils.isEmpty( userName ) )
         {
-            throw new RedbackServiceException( "user cannot be empty", Response.Status.BAD_REQUEST.getStatusCode() );
+            throw new RedbackServiceException( new ErrorMessage( "username.cannot.be.empty" ),
+                                               Response.Status.BAD_REQUEST.getStatusCode() );
         }
         if ( StringUtils.isEmpty( previousPassword ) )
         {
-            throw new RedbackServiceException( "previousPassword cannot be empty",
+            throw new RedbackServiceException( new ErrorMessage( "password.previous.empty" ),
                                                Response.Status.BAD_REQUEST.getStatusCode() );
         }
         if ( StringUtils.isEmpty( password ) )
         {
-            throw new RedbackServiceException( "password cannot be empty",
+            throw new RedbackServiceException( new ErrorMessage( "password.empty" ),
                                                Response.Status.BAD_REQUEST.getStatusCode() );
         }
         if ( StringUtils.isEmpty( passwordConfirmation ) )
         {
-            throw new RedbackServiceException( "passwordConfirmation cannot be empty",
+            throw new RedbackServiceException( new ErrorMessage( "password.confirmation.empty" ),
                                                Response.Status.BAD_REQUEST.getStatusCode() );
         }
 
         if ( !StringUtils.equals( password, passwordConfirmation ) )
         {
-            throw new RedbackServiceException( "password and passwordConfirmation must be the same",
+            throw new RedbackServiceException( new ErrorMessage( "password.confirmation.same" ),
                                                Response.Status.BAD_REQUEST.getStatusCode() );
         }
         try
@@ -204,7 +205,7 @@ public class DefaultPasswordService
         }
         catch ( UserNotFoundException e )
         {
-            throw new RedbackServiceException( new ErrorMessage( "user not found" ),
+            throw new RedbackServiceException( new ErrorMessage( "user.not.found" ),
                                                Response.Status.BAD_REQUEST.getStatusCode() );
         }
 
