@@ -26,10 +26,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Olivier Lamy
@@ -42,9 +44,26 @@ public class DefaultUtilServices
 
     private Logger log = LoggerFactory.getLogger( getClass() );
 
+    private Map<String, String> cachei18n = new ConcurrentHashMap<String, String>();
+
+    @PostConstruct
+    public void init()
+        throws RedbackServiceException
+    {
+
+        // preload i18n en and fr
+        getI18nProperties( "en" );
+        getI18nProperties( "fr" );
+    }
+
     public String getI18nResources( String locale )
         throws RedbackServiceException
     {
+        String cachedi18n = cachei18n.get( StringUtils.isEmpty( locale ) ? "en" : StringUtils.lowerCase( locale ) );
+        if ( cachedi18n != null )
+        {
+            return cachedi18n;
+        }
 
         Properties properties = new Properties();
 
@@ -82,6 +101,8 @@ public class DefaultUtilServices
             output.append( (String) entry.getKey() ).append( '=' ).append( (String) entry.getValue() );
             output.append( '\n' );
         }
+
+        cachei18n.put( StringUtils.isEmpty( locale ) ? "en" : StringUtils.lowerCase( locale ), output.toString() );
 
         return output.toString();
     }
