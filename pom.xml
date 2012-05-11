@@ -143,7 +143,7 @@
     <springVersion>2.5.6</springVersion>
     <slf4jVersion>1.5.8</slf4jVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties
+  </properties>
 
   <repositories>
     <!-- only needed for these two artifacts that can't be redistributed
@@ -739,7 +739,6 @@
     <module>plexus-spring</module>
     <module>redback-xmlrpc</module>
   </modules>
->
 
   <contributors>
     <contributor>
