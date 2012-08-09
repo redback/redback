@@ -34,7 +34,7 @@
       <artifactId>jpox</artifactId>
       <scope>compile</scope>
       <exclusions>
-        <!-- targeting JDK 1.4 we don't need this -->
+        <!-- targeting JDK 1.5 we don't need this -->
         <exclusion>
           <groupId>javax.sql</groupId>
           <artifactId>jdbc-stdext</artifactId>
