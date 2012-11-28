@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-rbac-providers</artifactId>
-    <version>1.3-M2-SNAPSHOT</version>
+    <version>1.3-M2</version>
   </parent>
   <artifactId>redback-rbac-jdo</artifactId>
   <name>Redback :: RBAC Provider :: JDO</name>
