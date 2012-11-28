@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-keys-providers</artifactId>
-    <version>1.3-M2</version>
+    <version>1.3-M3-SNAPSHOT</version>
   </parent>
   <artifactId>redback-keys-cached</artifactId>
   <name>Redback :: Key Management Provider :: Cached</name>

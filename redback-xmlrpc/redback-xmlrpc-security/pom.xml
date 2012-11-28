@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.codehaus.redback</groupId>
     <artifactId>redback-xmlrpc</artifactId>
-    <version>1.3-M2</version>
+    <version>1.3-M3-SNAPSHOT</version>
   </parent>
   <artifactId>redback-xmlrpc-security</artifactId>
   <name>Redback :: XML-RPC Security</name>
